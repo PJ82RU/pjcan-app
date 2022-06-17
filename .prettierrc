@@ -1,0 +1,9 @@
+{
+	"disableLanguages": [],
+	"tabWidth": 4,
+	"useTabs": true,
+	"quoteProps": "preserve",
+	"singleQuote": true,
+	"printWidth": 120,
+	"trailingComma": "none"
+}
