@@ -77,7 +77,8 @@ module.exports = configure(function (ctx) {
 					'@/mixins': path.resolve(__dirname, './src/mixins'),
 					'@/router': path.resolve(__dirname, './src/router'),
 					'@/css': path.resolve(__dirname, './src/css'),
-					'@/store': path.resolve(__dirname, './src/store')
+					'@/store': path.resolve(__dirname, './src/store'),
+					'@/boot': path.resolve(__dirname, './src/boot')
 				};
 			}
 		},
