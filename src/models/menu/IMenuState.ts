@@ -5,6 +5,7 @@ interface IMenuState {
 	main: IItemMenuState[];
 	actions: IItemMenuState[];
 	footer: IItemMenuState[];
+	popup: IItemMenuState[];
 }
 
 export { IMenuState };

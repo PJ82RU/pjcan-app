@@ -6,7 +6,9 @@
 				<q-toolbar-title>PJ CAN</q-toolbar-title>
 				<q-space />
 				<q-btn flat round dense icon="bluetooth" class="q-mr-sm" />
-				<q-btn flat round dense icon="more_vert" @click="onToggleLeftMenuOpen" />
+				<q-btn flat round dense icon="more_vert">
+					<RightMenuMain />
+				</q-btn>
 			</q-toolbar>
 		</q-header>
 
@@ -37,10 +39,11 @@ import { ref } from 'vue';
 import { useQuasar } from 'quasar';
 
 import LeftMenuMain from '@/components/menu/LeftMenuMain.vue';
+import RightMenuMain from '@/components/menu/RightMenuMain.vue';
 
 export default {
 	name: 'Main',
-	components: { LeftMenuMain },
+	components: { LeftMenuMain, RightMenuMain },
 	setup() {
 		const $q = useQuasar();
 		const leftMenuOpen = ref(false);

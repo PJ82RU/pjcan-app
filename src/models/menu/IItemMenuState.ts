@@ -1,7 +1,7 @@
 interface IItemMenuState {
-	name: string;
+	name?: string;
 	lang: string;
-	size: string | number;
+	size?: string | number;
 }
 
 export { IItemMenuState };

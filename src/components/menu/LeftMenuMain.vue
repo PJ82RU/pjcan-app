@@ -11,12 +11,11 @@
 </template>
 
 <script lang="ts">
-import IconCustom from '@/components/common/IconCustom';
 import MenuItem from './MenuItem.vue';
 
 export default {
 	name: 'LeftMenuMain',
-	components: { IconCustom, MenuItem },
+	components: { MenuItem },
 	setup() {
 		const onClickItem = (e: any) => {
 			console.log(e);

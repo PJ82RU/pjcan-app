@@ -8,8 +8,8 @@ export default {
 	SetTime: 'Установка времени',
 	Setting: 'Настройки',
 
-	MainMenu_About: 'О программе',
-	MainMenu_ViewLCD: 'Настройки отображения на LCD',
+	About: 'О программе',
+	DeviceInfo: 'Об устройстве',
 
 	BluetoothConnection_BtnConnect: 'Подключиться',
 	BluetoothConnection_NoConnected: 'Вы не подключены ни к одному устройству Bluetooth.',

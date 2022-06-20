@@ -8,8 +8,8 @@ export default {
 	SetTime: 'Set time',
 	Setting: 'Setting',
 
-	MainMenu_About: 'About',
-	MainMenu_ViewLCD: 'LCD display settings',
+	About: 'About',
+	DeviceInfo: 'Device info',
 
 	BluetoothConnection_BtnConnect: 'Сonnect',
 	BluetoothConnection_NoConnected: 'You are currently not connected to any Bluetooth device.',

@@ -1,6 +1,6 @@
 <template>
 	<q-item clickable v-ripple class="MenuItem" v-for="item in items" @click="$emit('click', item)">
-		<q-item-section avatar>
+		<q-item-section avatar v-if="item.name">
 			<div class="MenuItem-icon">
 				<IconCustom :name="item.name" color="primary" color-secondary="secondary" :size="item.size" />
 			</div>
