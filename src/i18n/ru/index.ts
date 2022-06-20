@@ -1,5 +1,12 @@
 export default {
 	Onboard: 'Бортовой компьютер',
+	Fuel: 'Расход топлива',
+	Engine: 'ДВС',
+	Doors: 'Двери',
+	Speedometer: 'Спидометр',
+	Climate: 'Климат',
+	SetTime: 'Установка времени',
+	Setting: 'Настройки',
 
 	MainMenu_About: 'О программе',
 	MainMenu_ViewLCD: 'Настройки отображения на LCD',
