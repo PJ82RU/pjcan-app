@@ -1,6 +1,8 @@
 <template>
 	<q-menu auto-close class="RightMenuMain" anchor="bottom left" transition-show="jump-down" transition-hide="jump-up">
-		<MenuItem name="popup" @click="onClickItem" />
+		<MenuItem name="popupDevice" @click="onClickItem" />
+		<q-separator />
+		<MenuItem name="popupMain" @click="onClickItem" />
 	</q-menu>
 </template>
 
@@ -24,5 +26,5 @@ export default {
 
 <style lang="sass">
 .RightMenuMain
-	min-width: 180px !important
+	min-width: 200px !important
 </style>

@@ -12,7 +12,9 @@
 
 <script lang="ts">
 import IconCustom from '@/components/common/IconCustom';
-import { i18n } from '@/boot/i18n';
+
+import { lang } from '@/boot/i18n';
+
 import menuState from '@/store/menuState';
 import { IItemMenuState, IMenuState } from '@/models/menu';
 
@@ -28,7 +30,7 @@ export default {
 	emits: ['click'],
 	setup(props: any) {
 		const name: keyof IMenuState = props.name as keyof IMenuState;
-		const items = menuState[name]?.map((x: IItemMenuState) => ({ ...x, lang: i18n.global.t(x.lang) }));
+		const items = menuState[name]?.map((x: IItemMenuState) => ({ ...x, lang: lang(x.lang) }));
 		return { items };
 	}
 };

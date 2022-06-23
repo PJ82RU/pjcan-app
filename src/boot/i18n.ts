@@ -18,4 +18,5 @@ export default boot(({ app }) => {
 	app.use(i18n);
 });
 
-export { i18n };
+const lang = (name: string) => i18n.global.t(name);
+export { i18n, lang };

@@ -11,7 +11,9 @@ const menuState: IMenuState = {
 	],
 	actions: [{ name: 'options2', lang: 'SetTime', size: 24 }],
 	footer: [{ name: 'options', lang: 'Setting', size: 24 }],
-	popup: [{ lang: 'About' }, { lang: 'DeviceInfo' }]
+
+	popupDevice: [{ lang: 'DeviceUpdate' }, { lang: 'DeviceInfo' }],
+	popupMain: [{ lang: 'About' }]
 };
 
 export default menuState;

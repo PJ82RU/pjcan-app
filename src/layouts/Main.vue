@@ -5,7 +5,7 @@
 				<q-btn flat dense round icon="menu" aria-label="Menu" @click="onToggleLeftMenuOpen" />
 				<q-toolbar-title>PJ CAN</q-toolbar-title>
 				<q-space />
-				<q-btn flat round dense icon="bluetooth" class="q-mr-sm" />
+				<BluetoothBtn />
 				<q-btn flat round dense icon="more_vert">
 					<RightMenuMain />
 				</q-btn>
@@ -40,10 +40,11 @@ import { useQuasar } from 'quasar';
 
 import LeftMenuMain from '@/components/menu/LeftMenuMain.vue';
 import RightMenuMain from '@/components/menu/RightMenuMain.vue';
+import BluetoothBtn from '@/components/bluetooth/BluetoothBtn.vue';
 
 export default {
 	name: 'Main',
-	components: { LeftMenuMain, RightMenuMain },
+	components: { LeftMenuMain, RightMenuMain, BluetoothBtn },
 	setup() {
 		const $q = useQuasar();
 		const leftMenuOpen = ref(false);

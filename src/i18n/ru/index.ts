@@ -8,14 +8,16 @@ export default {
 	SetTime: 'Установка времени',
 	Setting: 'Настройки',
 
-	About: 'О программе',
+	DeviceUpdate: 'Обновить устройство',
 	DeviceInfo: 'Об устройстве',
+	About: 'О программе',
 
-	BluetoothConnection_BtnConnect: 'Подключиться',
-	BluetoothConnection_NoConnected: 'Вы не подключены ни к одному устройству Bluetooth.',
-	BluetoothConnection_Connected: 'PJCAN подключен',
-	BluetoothConnection_LostConnected:
-		'Потеряно подключение с устройством Bluetooth PJCAN. Пытаюсь восстановить связь...',
+	Close: 'Закрыть',
+
+	BLE_BtnConnect: 'Подключиться',
+	BLE_NoConnected: 'Вы не подключены ни к одному устройству Bluetooth.',
+	BLE_Connected: 'PJCAN подключен',
+	BLE_LostConnected: 'Потеряно подключение с устройством Bluetooth PJCAN. Пытаюсь восстановить связь...',
 
 	UpdateFirmware_Later: 'Позже',
 	UpdateFirmware_Update: 'Обновить',
