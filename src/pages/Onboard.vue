@@ -1,14 +1,19 @@
 <template>
-	<div></div>
+	<div class="Onboard">
+		<InfoCard />
+	</div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import InfoCard from '@/components/onboard/InfoCard.vue';
 
-export default defineComponent({
+export default {
 	name: 'Onboard',
-	components: {}
-});
+	components: { InfoCard }
+};
 </script>
 
-<style lang="sass"></style>
+<style lang="sass">
+.Onboard
+	padding: 8px
+</style>

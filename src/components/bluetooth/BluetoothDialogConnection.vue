@@ -77,7 +77,7 @@ export default {
 		/** Событие кнопки "Закрыть" */
 		const onClose = () => {
 			updateValue(false);
-			setTimeout(() => updateValue(true), 15000);
+			//setTimeout(() => updateValue(true), 15000);
 		};
 
 		return {
@@ -93,6 +93,9 @@ export default {
 .BluetoothDialogConnection
 	.q-card__section
 		align-items: center
+
+	.q-card__actions
+		padding: 0 16px 16px 16px
 
 	.q-ml-md
 		word-break: normal
