@@ -1,4 +1,4 @@
-import Bluetooth, { BLUETOOTH_EVENT_RECEIVE } from '@/components/bluetooth/bluetooth';
+import { Bluetooth, BLUETOOTH_EVENT_RECEIVE } from '@/components/bluetooth/bluetooth';
 import ButtonsConfig, { API_EXEC_BUTTONS_CONFIG, IButtonsConfig } from '@/models/pjcan/button/config';
 import ButtonsValue, { API_EXEC_BUTTONS_VALUE, IButtonValue } from '@/models/pjcan/button/value';
 import CarConfig, { API_EXEC_CAR_CONFIG, ICarConfig } from '@/models/pjcan/car/config';

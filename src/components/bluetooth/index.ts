@@ -1,6 +1,6 @@
-import Bluetooth from './bluetooth';
+import { Bluetooth } from './bluetooth';
 import Struct from './struct';
-import DialogBluetoothConnection from './dialogs/DialogBluetoothConnection.vue';
+import BluetoothDialogConnection from './BluetoothDialogConnection.vue';
+import BluetoothBtn from './BluetoothBtn.vue';
 
-export default Bluetooth;
-export { Struct, DialogBluetoothConnection };
+export { Bluetooth, Struct, BluetoothBtn, BluetoothDialogConnection };

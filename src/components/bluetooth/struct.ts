@@ -337,6 +337,7 @@ export default class Struct {
 	 */
 	public setChars(str: string, length: number): void {
 		if (this.buffer) {
+			// noinspection SpellCheckingInspection
 			const lenstr = str.length;
 			for (let i = 0; i < length; i++) this.buffer.setInt8(this.offset++, i < lenstr ? str.charCodeAt(i) : 0);
 		}

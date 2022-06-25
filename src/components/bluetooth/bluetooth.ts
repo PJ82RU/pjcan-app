@@ -14,7 +14,7 @@ export enum EConnectedStatus {
 }
 
 /** Bluetooth */
-class Bluetooth extends EventEmitter {
+export class Bluetooth extends EventEmitter {
 	private device: any; // объект устройства
 	private characteristic: any; // характеристика
 
@@ -64,6 +64,7 @@ class Bluetooth extends EventEmitter {
 				console.log(`Выбрано ${device.name} bluetooth устройство.`);
 
 				this.device = device;
+				// noinspection SpellCheckingInspection
 				this.device.addEventListener('gattserverdisconnected', () => this.handleDisconnection());
 				return this.device;
 			});
@@ -87,6 +88,7 @@ class Bluetooth extends EventEmitter {
 			.then((characteristic: any) => {
 				console.log('Характеристика получена.');
 				this.characteristic = characteristic;
+				// noinspection SpellCheckingInspection
 				this.characteristic.addEventListener('characteristicvaluechanged', (event: any) =>
 					this.handleCharacteristicValueChanged(event)
 				);
@@ -99,7 +101,7 @@ class Bluetooth extends EventEmitter {
 	/** Включение получения уведомлений об изменении характеристики */
 	private startNotifications(characteristic: any) {
 		console.log('Запуск уведомлений ...');
-		return characteristic.startNotifications().then(() => {
+		return characteristic.startNotifications(characteristic).then(() => {
 			console.log('Уведомления запущены.');
 			this.emit(BLUETOOTH_EVENT_CONNECTED, EConnectedStatus.CONNECT);
 		});
@@ -183,5 +185,3 @@ class Bluetooth extends EventEmitter {
 		});
 	}
 }
-
-export default Bluetooth;

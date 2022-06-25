@@ -1,5 +1,5 @@
 <template>
-	<q-dialog class="DialogBluetoothConnection" v-model="visible" persistent>
+	<q-dialog class="BluetoothDialogConnection" v-model="visible" persistent>
 		<q-card>
 			<q-card-section class="row">
 				<q-avatar icon="bluetooth_disabled" color="primary" text-color="white" />
@@ -19,11 +19,11 @@ import { ref, toRefs, computed, watch } from 'vue';
 import { lang } from '@/boot/i18n';
 import { useQuasar } from 'quasar';
 
-import Store from 'src/store';
-import Bluetooth, { BLUETOOTH_EVENT_CONNECTED, EConnectedStatus } from '../bluetooth';
+import Store from '@/store';
+import { Bluetooth, BLUETOOTH_EVENT_CONNECTED, EConnectedStatus } from './bluetooth';
 
 export default {
-	name: 'DialogBluetoothConnection',
+	name: 'BluetoothDialogConnection',
 	props: {
 		modelValue: {
 			type: Boolean,
@@ -33,18 +33,24 @@ export default {
 	setup(props: any, context: any) {
 		const $q = useQuasar();
 		const { modelValue } = toRefs(props);
-		const updateValue = (val: boolean) => context.emit('update:modelValue', val);
 
 		// отображение диалога
 		const visible = ref(true);
 		// объект Bluetooth
 		const bluetooth = computed((): Bluetooth => Store.bluetooth);
 
+		// обновить значение modelValue
+		const updateValue = (val: boolean) => {
+			visible.value = val;
+			context.emit('update:modelValue', val);
+		};
 		// следим за изменениями modelValue
 		watch(modelValue, (val: boolean) => (visible.value = val));
 
 		// создаем событие подключения к Bluetooth
 		bluetooth.value.addListener(BLUETOOTH_EVENT_CONNECTED, (status: EConnectedStatus) => {
+			//console.log('BluetoothListener', status);
+
 			updateValue(status === EConnectedStatus.NO_CONNECT);
 			switch (status) {
 				case EConnectedStatus.CONNECT:
@@ -81,7 +87,7 @@ export default {
 </script>
 
 <style lang="sass">
-.DialogBluetoothConnection
+.BluetoothDialogConnection
 	.q-card__section
 		align-items: center
 

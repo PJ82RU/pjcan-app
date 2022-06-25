@@ -39,7 +39,7 @@ import { defineComponent } from 'vue';
 import Store from '@/store';
 import { Timeout } from '@/models/types';
 
-import Bluetooth from '@/components/bluetooth/bluetooth';
+import { Bluetooth } from '@/components/bluetooth';
 import UpdateFirmware from '@/components/update-firmware/update-firmware';
 import { BLUETOOTH_EVENT_CONNECTED, EConnectedStatus } from '@/components/bluetooth/bluetooth';
 import { UPDATE_UPLOAD_EVENT_RESULT } from '@/models/pjcan/update/upload';
@@ -54,7 +54,7 @@ export default defineComponent({
 		return {
 			visibleQuestion: false, // показать вопрос
 			visibleUpdate: false, // показать процесс обновления
-			timerCheckVersion: undefined as Timeout, // таймер провери обновлений
+			timerCheckVersion: undefined as Timeout, // таймер проверки обновлений
 			updated: false, // статус обновления прошивки устройства (устройство перезагружается)
 
 			indeterminate: true, // не определенное состояние загрузки
