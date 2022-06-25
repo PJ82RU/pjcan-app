@@ -1,17 +1,21 @@
 <template>
 	<q-layout view="hHh lpr lFf">
+		<!-- Шапка -->
 		<q-header bordered class="bg-primary text-white">
 			<q-toolbar class="col-8 bg-menu">
 				<q-btn flat dense round icon="menu" aria-label="Menu" @click="onToggleLeftMenuOpen" />
 				<q-toolbar-title>PJ CAN</q-toolbar-title>
 				<q-space />
+				<!-- Кнопка подключения Bluetooth -->
 				<BluetoothBtn />
+				<!-- Правое меню -->
 				<q-btn flat round dense icon="more_vert">
 					<RightMenuMain />
 				</q-btn>
 			</q-toolbar>
 		</q-header>
 
+		<!-- Левое меню -->
 		<q-drawer
 			ref="leftMenu"
 			show-if-above
@@ -28,9 +32,13 @@
 			</q-scroll-area>
 		</q-drawer>
 
+		<!-- Контейнер страницы -->
 		<q-page-container>
 			<router-view />
 		</q-page-container>
+
+		<!-- Диалог обновление прошивки устройства -->
+		<UpdateFirmwareDialog />
 	</q-layout>
 </template>
 
@@ -41,10 +49,11 @@ import { useQuasar } from 'quasar';
 import LeftMenuMain from '@/components/menu/LeftMenuMain.vue';
 import RightMenuMain from '@/components/menu/RightMenuMain.vue';
 import BluetoothBtn from '@/components/bluetooth/BluetoothBtn.vue';
+import UpdateFirmwareDialog from '@/components/updateFirmware/UpdateFirmwareDialog.vue';
 
 export default {
 	name: 'Main',
-	components: { LeftMenuMain, RightMenuMain, BluetoothBtn },
+	components: { LeftMenuMain, RightMenuMain, BluetoothBtn, UpdateFirmwareDialog },
 	setup() {
 		const $q = useQuasar();
 		const leftMenuOpen = ref(false);

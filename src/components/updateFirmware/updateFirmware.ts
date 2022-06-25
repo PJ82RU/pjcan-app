@@ -1,40 +1,37 @@
 import axios from 'axios';
 import Store from '@/store';
-import UpdateData, { IUpdateData, UPDATE_UPLOAD_EVENT_RESULT } from '@/models/pjcan/update/upload';
-import UpdateBegin, { IUpdateBegin } from '@/models/pjcan/update/begin';
+import { UpdateData, IUpdateData, UPDATE_UPLOAD_EVENT_RESULT } from '@/models/pjcan/update/upload';
+import { UpdateBegin, IUpdateBegin } from '@/models/pjcan/update/begin';
 import { IVersion, Version } from '@/models/version';
 
 const URL_FIRMWARE_VERSION = '/firmware/version.json';
 const URL_FIRMWARE_GZIP = '/firmware/firmware.bin.gz';
 
 /** Обновление прошивки устройства PJCAN */
-class UpdateFirmware {
-	/** Новая версия прошивки */ //@ts-ignore
-	public newVersion: IVersion;
-	/** Результат загрузки */ //@ts-ignore
-	public resultUpload: IUpdateData;
-	/** Результат начала обновления */ //@ts-ignore
-	public resultBegin: IUpdateBegin;
+export class UpdateFirmware {
+	/** Новая версия прошивки */
+	newVersion: IVersion = new Version();
+	/** Результат загрузки */
+	resultUpload: IUpdateData = new UpdateData();
+	/** Результат начала обновления */
+	resultBegin: IUpdateBegin = new UpdateBegin();
 	/** Процент загрузки прошивки на устройство PJCAN */
-	public get uploading(): number {
+	get uploading(): number {
 		return this.resultUpload.offset > 0 ? this.resultUpload.offset / this.resultUpload.data.byteLength : 0;
 	}
 
 	constructor() {
-		this.clear();
-	}
-
-	/** Очистить значения */
-	public clear(): void {
-		this.newVersion = new Version();
-		this.resultUpload = new UpdateData();
-		this.resultBegin = new UpdateBegin();
-
 		this.resultUpload.addListener(UPDATE_UPLOAD_EVENT_RESULT, (res) => this.onUpload(res));
 	}
 
+	/** Очистить значения */
+	clear(): void {
+		this.newVersion.clear();
+		this.resultUpload.clear();
+	}
+
 	/** Проверить версию прошивки */
-	public checkNewVersion(): Promise<void> {
+	checkNewVersion(): Promise<void> {
 		return new Promise((resolve, reject) => {
 			axios({
 				url: URL_FIRMWARE_VERSION,
@@ -60,11 +57,11 @@ class UpdateFirmware {
 	/** Пишем данные файла прошивки в устройство PJCAN */
 	private onUpload(result: boolean): void {
 		if (result && this.resultUpload.offset < this.resultUpload.data.byteLength)
-			Store.bluetooth.send(this.resultUpload.get());
+			Store.bluetooth.send(this.resultUpload.get()).then();
 	}
 
 	/** Загрузка прошивки */
-	public upload(): void {
+	upload(): void {
 		axios({
 			url: URL_FIRMWARE_GZIP,
 			method: 'GET',
@@ -72,19 +69,17 @@ class UpdateFirmware {
 			headers: { 'Content-Type': 'application/gzip' }
 		}).then((res: any) => {
 			if (res.data.byteLength > 0) {
-				setTimeout(() => {
+				setTimeout(async () => {
 					this.resultUpload.data = new Uint8Array(res.data);
 					this.resultUpload.offset = 0;
-					this.onUpload(true);
+					await this.onUpload(true);
 				}, 1000);
 			}
 		});
 	}
 
 	/** Начать прошивку устройства */
-	public begin(): void {
-		Store.bluetooth.send(this.resultBegin.get());
+	begin(): void {
+		Store.bluetooth.send(this.resultBegin.get()).then();
 	}
 }
-
-export default UpdateFirmware;

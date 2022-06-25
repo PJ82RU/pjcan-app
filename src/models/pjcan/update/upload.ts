@@ -9,26 +9,32 @@ export interface IUpdateData extends EventEmitter {
 	data: Uint8Array;
 	offset: number;
 
+	clear: () => void;
 	set: (buf: DataView) => void;
 	get: () => DataView;
 }
 
 /** Модель загрузки данных прошивки */
-export default class UpdateData extends EventEmitter implements IUpdateData {
+export class UpdateData extends EventEmitter implements IUpdateData {
 	data = new Uint8Array(0);
 	offset = 0;
 
+	/** Очистить данные */
+	clear(): void {
+		this.data = new Uint8Array(0);
+		this.offset = 0;
+	}
 	/**
 	 * Запись данных
 	 * @param {DataView} buf Буффер данных
 	 */
-	public set(buf: DataView): void {
+	set(buf: DataView): void {
 		if (buf.getUint8(0) === API_EXEC_UPDATE_UPLOAD_GZFILE && buf.byteLength === 2)
 			this.emit(UPDATE_UPLOAD_EVENT_RESULT, buf.getUint8(1) === 0);
 	}
 
 	/** Чтение данных */
-	public get(): DataView {
+	get(): DataView {
 		let size = this.data.byteLength - this.offset;
 		if (size < 0) size = 0;
 		else if (size > STRUCT_LENGTH - 1) size = STRUCT_LENGTH - 1;

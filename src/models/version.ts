@@ -1,4 +1,4 @@
-import Struct from '@/components/bluetooth/struct';
+import { Struct } from '@/components/bluetooth/struct';
 
 export const API_EXEC_VERSION = 0; // команда API
 const STRUCT_LENGTH = 5; // длина данных API
@@ -12,6 +12,7 @@ export interface IVersion {
 	is: boolean;
 	toString: string;
 
+	clear: () => void;
 	set: (buf: DataView) => void;
 	compare: (ver: IVersion) => boolean;
 }
@@ -32,6 +33,14 @@ export class Version implements IVersion {
 	minor = 0;
 	build = 0;
 	revision = 0;
+
+	/** Очистить данные */
+	clear(): void {
+		this.major = 0;
+		this.minor = 0;
+		this.build = 0;
+		this.revision = 0;
+	}
 
 	/** Наличие версии */
 	get is(): boolean {
