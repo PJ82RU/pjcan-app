@@ -12,7 +12,7 @@ const menuState: IMenuState = {
 	actions: [{ name: 'options2', lang: 'SetTime', size: 24 }],
 	footer: [{ name: 'options', lang: 'Setting', size: 24 }],
 
-	popupDevice: [{ lang: 'DeviceUpdate' }, { lang: 'DeviceInfo' }],
+	popupDevice: [{ lang: 'DeviceInfo' }],
 	popupMain: [{ lang: 'About' }]
 };
 

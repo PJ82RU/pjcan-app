@@ -1,5 +1,5 @@
-import Struct from '@/components/bluetooth/struct';
-import BaseModel, { IBaseModel } from '@/models/pjcan/base-model';
+import { Struct } from '@/components/bluetooth/struct';
+import { BaseModel, IBaseModel } from '@/models/pjcan/base-model';
 
 export const API_EXEC_VARIABLE_ENGINE = 140; // команда API
 const STRUCT_LENGTH = 21; // длина данных API
@@ -29,7 +29,7 @@ export const StructEngineValue = {
 const struct = new Struct(StructEngineValue);
 
 /** Модель значений ДВС */
-export default class EngineValue extends BaseModel implements IEngineValue {
+export class EngineValue extends BaseModel implements IEngineValue {
 	enabled = false;
 	coolant = 0;
 	rpm = 0;
@@ -42,12 +42,12 @@ export default class EngineValue extends BaseModel implements IEngineValue {
 	 * Запись данных
 	 * @param {DataView} buf Буффер данных
 	 */
-	public set(buf: DataView): boolean {
+	set(buf: DataView): boolean {
 		return this._set(this, API_EXEC_VARIABLE_ENGINE, STRUCT_LENGTH, struct, buf);
 	}
 
 	/** Чтение данных */
-	public get(): DataView | undefined {
+	get(): DataView | undefined {
 		return this._get(this, API_EXEC_VARIABLE_ENGINE, STRUCT_LENGTH, struct);
 	}
 }

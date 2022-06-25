@@ -1,15 +1,15 @@
-import Struct from '@/components/bluetooth/struct';
-import BaseModel, { IBaseModel } from '@/models/pjcan/base-model';
-import ViewConfig, { IViewConfig, StructViewConfig } from '@/models/pjcan/view/config';
-import EngineView, { IEngineView, StructEngineView } from '@/models/pjcan/variables/engine/view';
-import MovementView, { IMovementView, StructMovementView } from '@/models/pjcan/variables/movement/view';
-import SensorsView, { ISensorsView, StructSensorsView } from '@/models/pjcan/variables/sensors/view';
-import FuelView, { IFuelView, StructFuelView } from '@/models/pjcan/variables/fuel/view';
-import BoseView, { IBoseView, StructBoseView } from '@/models/pjcan/variables/bose/view';
-import ClimateView, { IClimateView, StructClimateView } from '@/models/pjcan/variables/climate/view';
-import DoorsView, { IDoorsView, StructDoorsView } from '@/models/pjcan/variables/doors/view';
-import TemperatureView, { ITemperatureView, StructTemperatureView } from '@/models/pjcan/variables/temperature/view';
-import VolumeView, { IVolumeView, StructVolumeView } from '@/models/pjcan/variables/volume/view';
+import { Struct } from '@/components/bluetooth/struct';
+import { BaseModel, IBaseModel } from '@/models/pjcan/base-model';
+import { ViewConfig, IViewConfig, StructViewConfig } from '@/models/pjcan/view/config';
+import { EngineView, IEngineView, StructEngineView } from '@/models/pjcan/variables/engine/view';
+import { MovementView, IMovementView, StructMovementView } from '@/models/pjcan/variables/movement/view';
+import { SensorsView, ISensorsView, StructSensorsView } from '@/models/pjcan/variables/sensors/view';
+import { FuelView, IFuelView, StructFuelView } from '@/models/pjcan/variables/fuel/view';
+import { BoseView, IBoseView, StructBoseView } from '@/models/pjcan/variables/bose/view';
+import { ClimateView, IClimateView, StructClimateView } from '@/models/pjcan/variables/climate/view';
+import { DoorsView, IDoorsView, StructDoorsView } from '@/models/pjcan/variables/doors/view';
+import { TemperatureView, ITemperatureView, StructTemperatureView } from '@/models/pjcan/variables/temperature/view';
+import { VolumeView, IVolumeView, StructVolumeView } from '@/models/pjcan/variables/volume/view';
 
 export const API_EXEC_VARIABLE_VIEW = 101; // команда API
 const STRUCT_LENGTH = 97; // длина данных API
@@ -45,7 +45,7 @@ export const StructVariableView = {
 const struct = new Struct(StructVariableView);
 
 /** Модель параметров отображения данных переменных */
-export default class VariableView extends BaseModel implements IVariableView {
+export class VariableView extends BaseModel implements IVariableView {
 	bose = new BoseView();
 	climate = new ClimateView();
 	clock = new ViewConfig();
@@ -61,12 +61,12 @@ export default class VariableView extends BaseModel implements IVariableView {
 	 * Запись данных
 	 * @param {DataView} buf Буффер данных
 	 */
-	public set(buf: DataView): boolean {
+	set(buf: DataView): boolean {
 		return this._set(this, API_EXEC_VARIABLE_VIEW, STRUCT_LENGTH, struct, buf);
 	}
 
 	/** Чтение данных */
-	public get(): DataView | undefined {
+	get(): DataView | undefined {
 		return this._get(this, API_EXEC_VARIABLE_VIEW, STRUCT_LENGTH, struct);
 	}
 }

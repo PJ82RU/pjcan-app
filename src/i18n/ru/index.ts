@@ -8,7 +8,6 @@ export default {
 	SetTime: 'Установка времени',
 	Setting: 'Настройки',
 
-	DeviceUpdate: 'Обновить устройство',
 	DeviceInfo: 'Об устройстве',
 	About: 'О программе',
 
@@ -19,7 +18,7 @@ export default {
 	BLE_Connected: 'PJCAN подключен',
 	BLE_LostConnected: 'Потеряно подключение с устройством Bluetooth PJCAN. Пытаюсь восстановить связь...',
 
-	UpdateFirmware_Later: 'Позже',
-	UpdateFirmware_Update: 'Обновить',
-	UpdateFirmware_Error: 'Ошибка обновления прошивки'
+	UpdFirmware_Later: 'Позже',
+	UpdFirmware_Update: 'Обновить',
+	UpdFirmware_Error: 'Ошибка обновления прошивки'
 };

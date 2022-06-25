@@ -1,5 +1,5 @@
-import Struct from '@/components/bluetooth/struct';
-import BaseModel, { IBaseModel } from '@/models/pjcan/base-model';
+import { Struct } from '@/components/bluetooth/struct';
+import { BaseModel, IBaseModel } from '@/models/pjcan/base-model';
 
 export const API_EXEC_CAR_CONFIG = 50; // команда API
 const STRUCT_LENGTH = 49; // длина данных API
@@ -23,7 +23,7 @@ export const StructCarConfig = {
 const struct = new Struct(StructCarConfig);
 
 /** Модель параметров автомобиля */
-export default class CarConfig extends BaseModel implements ICarConfig {
+export class CarConfig extends BaseModel implements ICarConfig {
 	lcd = false;
 	carModel = 0;
 	logo = '';
@@ -33,12 +33,12 @@ export default class CarConfig extends BaseModel implements ICarConfig {
 	 * Запись данных
 	 * @param {DataView} buf Буффер данных
 	 */
-	public set(buf: DataView): boolean {
+	set(buf: DataView): boolean {
 		return this._set(this, API_EXEC_CAR_CONFIG, STRUCT_LENGTH, struct, buf);
 	}
 
 	/** Чтение данных */
-	public get(): DataView | undefined {
+	get(): DataView | undefined {
 		return this._get(this, API_EXEC_CAR_CONFIG, STRUCT_LENGTH, struct);
 	}
 }

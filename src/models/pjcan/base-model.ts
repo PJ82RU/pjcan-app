@@ -1,4 +1,4 @@
-import Struct from '@/components/bluetooth/struct';
+import { Struct } from '@/components/bluetooth/struct';
 
 /** Базовый интерфейс */
 export interface IBaseModel {
@@ -7,7 +7,7 @@ export interface IBaseModel {
 }
 
 /** Базовая модель */
-export default class BaseModel {
+export class BaseModel {
 	/**
 	 * Запись данных
 	 * @param {any} th Объект модели

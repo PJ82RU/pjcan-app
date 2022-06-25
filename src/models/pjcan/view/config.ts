@@ -1,4 +1,4 @@
-import Struct from '@/components/bluetooth/struct';
+import { Struct } from '@/components/bluetooth/struct';
 
 /** Интерфейс параметров отображения */
 export interface IViewConfig {
@@ -15,7 +15,7 @@ export const StructViewConfig = {
 };
 
 /** Модель параметров отображения */
-export default class ViewConfig implements IViewConfig {
+export class ViewConfig implements IViewConfig {
 	enabled = false;
 	type = 0;
 	time = 0;

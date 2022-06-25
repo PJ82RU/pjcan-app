@@ -8,7 +8,6 @@ export default {
 	SetTime: 'Set time',
 	Setting: 'Setting',
 
-	DeviceUpdate: 'Update device',
 	DeviceInfo: 'Device info',
 	About: 'About',
 
@@ -19,7 +18,7 @@ export default {
 	BLE_Connected: 'PJCAN connected',
 	BLE_LostConnected: 'Lost connection to PJCAN Bluetooth device. Trying to reconnect...',
 
-	UpdateFirmware_Later: 'Later',
-	UpdateFirmware_Update: 'Update',
-	UpdateFirmware_Error: 'Firmware update error'
+	UpdFirmware_Later: 'Later',
+	UpdFirmware_Update: 'Update',
+	UpdFirmware_Error: 'Firmware update error'
 };

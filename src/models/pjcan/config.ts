@@ -1,9 +1,9 @@
-import Struct from '@/components/bluetooth/struct';
-import ButtonsConfig, { IButtonsConfig, StructButtonsConfig } from '@/models/pjcan/button/config';
-import CarConfig, { ICarConfig, StructCarConfig } from '@/models/pjcan/car/config';
-import TeyesConfig, { ITeyesConfig, StructTeyesConfig } from '@/models/pjcan/teyes/config';
-import VariableConfig, { IVariableConfig, StructVariableConfig } from '@/models/pjcan/variables/config';
-import BaseModel, { IBaseModel } from '@/models/pjcan/base-model';
+import { Struct } from '@/components/bluetooth/struct';
+import { ButtonsConfig, IButtonsConfig, StructButtonsConfig } from '@/models/pjcan/button/config';
+import { CarConfig, ICarConfig, StructCarConfig } from '@/models/pjcan/car/config';
+import { TeyesConfig, ITeyesConfig, StructTeyesConfig } from '@/models/pjcan/teyes/config';
+import { VariableConfig, IVariableConfig, StructVariableConfig } from '@/models/pjcan/variables/config';
+import { BaseModel, IBaseModel } from '@/models/pjcan/base-model';
 
 export const API_EXEC_CONFIG = 1;
 const STRUCT_LENGTH = 133;
@@ -24,7 +24,7 @@ export const StructConfig = {
 
 const struct = new Struct(StructConfig);
 
-export default class PJCANConfig extends BaseModel implements IPJCANConfig {
+export class PJCANConfig extends BaseModel implements IPJCANConfig {
 	buttons = new ButtonsConfig();
 	car = new CarConfig();
 	teyes = new TeyesConfig();
@@ -34,12 +34,12 @@ export default class PJCANConfig extends BaseModel implements IPJCANConfig {
 	 * Запись данных
 	 * @param {DataView} buf Буффер данных
 	 */
-	public set(buf: DataView): boolean {
+	set(buf: DataView): boolean {
 		return this._set(this, API_EXEC_CONFIG, STRUCT_LENGTH, struct, buf);
 	}
 
 	/** Чтение данных */
-	public get(): DataView | undefined {
+	get(): DataView | undefined {
 		return this._get(this, API_EXEC_CONFIG, STRUCT_LENGTH, struct);
 	}
 }

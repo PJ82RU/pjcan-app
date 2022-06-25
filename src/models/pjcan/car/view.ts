@@ -1,6 +1,6 @@
-import Struct from '@/components/bluetooth/struct';
-import ViewConfig, { IViewConfig, StructViewConfig } from '@/models/pjcan/view/config';
-import BaseModel, { IBaseModel } from '@/models/pjcan/base-model';
+import { Struct } from '@/components/bluetooth/struct';
+import { ViewConfig, IViewConfig, StructViewConfig } from '@/models/pjcan/view/config';
+import { BaseModel, IBaseModel } from '@/models/pjcan/base-model';
 
 export const API_EXEC_CAR_VIEW = 51; // команда API
 const STRUCT_LENGTH = 9; // длина данных API
@@ -20,7 +20,7 @@ export const StructCarView = {
 const struct = new Struct(StructCarView);
 
 /** Модель параметров отображения данных автомобиля */
-export default class CarView extends BaseModel implements ICarView {
+export class CarView extends BaseModel implements ICarView {
 	logo = new ViewConfig();
 	hello = new ViewConfig();
 
@@ -28,12 +28,12 @@ export default class CarView extends BaseModel implements ICarView {
 	 * Запись данных
 	 * @param {DataView} buf Буффер данных
 	 */
-	public set(buf: DataView): boolean {
+	set(buf: DataView): boolean {
 		return this._set(this, API_EXEC_CAR_VIEW, STRUCT_LENGTH, struct, buf);
 	}
 
 	/** Чтение данных */
-	public get(): DataView | undefined {
+	get(): DataView | undefined {
 		return this._get(this, API_EXEC_CAR_VIEW, STRUCT_LENGTH, struct);
 	}
 }

@@ -1,5 +1,5 @@
-import Struct from '@/components/bluetooth/struct';
-import BaseModel, { IBaseModel } from '@/models/pjcan/base-model';
+import { Struct } from '@/components/bluetooth/struct';
+import { BaseModel, IBaseModel } from '@/models/pjcan/base-model';
 
 export const API_EXEC_VARIABLE_TEMPERATURE = 180; // команда API
 const STRUCT_LENGTH = 9; // длина данных API
@@ -19,7 +19,7 @@ export const StructTemperatureValue = {
 const struct = new Struct(StructTemperatureValue);
 
 /** Модель значений температуры */
-export default class TemperatureValue extends BaseModel implements ITemperatureValue {
+export class TemperatureValue extends BaseModel implements ITemperatureValue {
 	in = 0;
 	out = 0;
 
@@ -27,12 +27,12 @@ export default class TemperatureValue extends BaseModel implements ITemperatureV
 	 * Запись данных
 	 * @param {DataView} buf Буффер данных
 	 */
-	public set(buf: DataView): boolean {
+	set(buf: DataView): boolean {
 		return this._set(this, API_EXEC_VARIABLE_TEMPERATURE, STRUCT_LENGTH, struct, buf);
 	}
 
 	/** Чтение данных */
-	public get(): DataView | undefined {
+	get(): DataView | undefined {
 		return this._get(this, API_EXEC_VARIABLE_TEMPERATURE, STRUCT_LENGTH, struct);
 	}
 }

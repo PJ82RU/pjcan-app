@@ -1,5 +1,5 @@
-import Struct from '@/components/bluetooth/struct';
-import BaseModel, { IBaseModel } from '@/models/pjcan/base-model';
+import { Struct } from '@/components/bluetooth/struct';
+import { BaseModel, IBaseModel } from '@/models/pjcan/base-model';
 
 export const API_EXEC_INFO = 5; // команда API
 const STRUCT_LENGTH = 108; // длина данных API
@@ -57,7 +57,7 @@ export const StructDeviceInfo = {
 const struct = new Struct(StructDeviceInfo);
 
 /** Модель характеристик устройства */
-export default class DeviceInfo extends BaseModel implements IDeviceInfo {
+export class DeviceInfo extends BaseModel implements IDeviceInfo {
 	chipCores = 0;
 	chipModel = '';
 	chipRevision = 0;
@@ -84,12 +84,12 @@ export default class DeviceInfo extends BaseModel implements IDeviceInfo {
 	 * Запись данных
 	 * @param {DataView} buf Буффер данных
 	 */
-	public set(buf: DataView): boolean {
+	set(buf: DataView): boolean {
 		return this._set(this, API_EXEC_INFO, STRUCT_LENGTH, struct, buf);
 	}
 
 	/** Чтение данных */
-	public get(): DataView | undefined {
+	get(): DataView | undefined {
 		return this._get(this, API_EXEC_INFO, STRUCT_LENGTH, struct);
 	}
 }

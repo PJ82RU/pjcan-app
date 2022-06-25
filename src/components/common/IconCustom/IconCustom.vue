@@ -1,3 +1,4 @@
+<!--suppress JSCheckFunctionSignatures -->
 <template>
 	<q-icon class="IconCustom q-icon" :draggable="false" :name="src" :size="iconSize" :color="fontIconColor" />
 </template>

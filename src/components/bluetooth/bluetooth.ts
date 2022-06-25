@@ -30,12 +30,12 @@ export class Bluetooth extends EventEmitter {
 	}
 
 	/** Статус подключения */
-	public get connected(): boolean {
+	get connected(): boolean {
 		return this.device !== null && this.characteristic !== null;
 	}
 
 	/** Запустить выбор Bluetooth устройства и подключиться к выбранному */
-	public connect() {
+	connect() {
 		return this.device
 			? Promise.resolve(this.device)
 			: this.requestBluetoothDevice()
@@ -48,7 +48,7 @@ export class Bluetooth extends EventEmitter {
 	}
 
 	/** Отключение от Bluetooth устройства */
-	public disconnect() {
+	disconnect() {
 		if (this.device) {
 			this.device.gatt.disconnect();
 			this.clear();
@@ -56,7 +56,7 @@ export class Bluetooth extends EventEmitter {
 	}
 
 	/** Запрос выбора Bluetooth устройства */
-	public requestBluetoothDevice() {
+	requestBluetoothDevice() {
 		//@ts-ignore
 		return navigator.bluetooth
 			.requestDevice({ filters: [{ services: [BLUETOOTH_SERVICE_UUID] }] })
@@ -167,7 +167,7 @@ export class Bluetooth extends EventEmitter {
 	 * Отправить данные
 	 * @param data Отправляемые данные
 	 */
-	public send(data: DataView | undefined) {
+	send(data: DataView | undefined): Promise<any> {
 		//console.log('Исходящие данные: ID ' + data.getUint8(0));
 		return data && this.connected
 			? this.characteristic.writeValue(data).catch(() => {

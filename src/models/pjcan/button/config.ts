@@ -1,5 +1,5 @@
-import Struct from '@/components/bluetooth/struct';
-import BaseModel, { IBaseModel } from '@/models/pjcan/base-model';
+import { Struct } from '@/components/bluetooth/struct';
+import { BaseModel, IBaseModel } from '@/models/pjcan/base-model';
 
 export const API_EXEC_BUTTONS_CONFIG = 20; // команда API
 const STRUCT_LENGTH = 63; // длина данных API
@@ -44,7 +44,7 @@ export const StructButtonsConfig = {
 const struct = new Struct(StructButtonsConfig);
 
 /** Модель конфигурации кнопок */
-export default class ButtonsConfig extends BaseModel implements IButtonsConfig {
+export class ButtonsConfig extends BaseModel implements IButtonsConfig {
 	enabled = false;
 	out = false;
 	reset = false;
@@ -64,12 +64,12 @@ export default class ButtonsConfig extends BaseModel implements IButtonsConfig {
 	 * Запись данных
 	 * @param {DataView} buf Буффер данных
 	 */
-	public set(buf: DataView): boolean {
+	set(buf: DataView): boolean {
 		return this._set(this, API_EXEC_BUTTONS_CONFIG, STRUCT_LENGTH, struct, buf);
 	}
 
 	/** Чтение данных */
-	public get(): DataView | undefined {
+	get(): DataView | undefined {
 		return this._get(this, API_EXEC_BUTTONS_CONFIG, STRUCT_LENGTH, struct);
 	}
 }

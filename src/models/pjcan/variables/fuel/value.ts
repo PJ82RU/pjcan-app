@@ -1,5 +1,5 @@
-import Struct from '@/components/bluetooth/struct';
-import BaseModel, { IBaseModel } from '@/models/pjcan/base-model';
+import { Struct } from '@/components/bluetooth/struct';
+import { BaseModel, IBaseModel } from '@/models/pjcan/base-model';
 
 export const API_EXEC_VARIABLE_FUEL = 150; // команда API
 const STRUCT_LENGTH = 17; // длина данных API
@@ -23,7 +23,7 @@ export const StructFuelValue = {
 const struct = new Struct(StructFuelValue);
 
 /** Модель значений расхода топлива */
-export default class FuelValue extends BaseModel implements IFuelValue {
+export class FuelValue extends BaseModel implements IFuelValue {
 	consumption = 0;
 	current = 0;
 	avg = 0;
@@ -33,12 +33,12 @@ export default class FuelValue extends BaseModel implements IFuelValue {
 	 * Запись данных
 	 * @param {DataView} buf Буффер данных
 	 */
-	public set(buf: DataView): boolean {
+	set(buf: DataView): boolean {
 		return this._set(this, API_EXEC_VARIABLE_FUEL, STRUCT_LENGTH, struct, buf);
 	}
 
 	/** Чтение данных */
-	public get(): DataView | undefined {
+	get(): DataView | undefined {
 		return this._get(this, API_EXEC_VARIABLE_FUEL, STRUCT_LENGTH, struct);
 	}
 }

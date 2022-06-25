@@ -22,9 +22,9 @@ export interface ILooseObject {
 }
 
 /** Парсинг структуры данных С++ */
-export default class Struct {
+export class Struct {
 	/** Прямой порядок байтов */
-	public littleEndian: boolean = true;
+	littleEndian: boolean = true;
 	/** Смещение */
 	private offset: number = 0;
 	/** Буфер данных */
@@ -34,45 +34,45 @@ export default class Struct {
 	/** Буфер бит данных */
 	private bit_buffer: BitSet | null = null;
 	/** Структура данных */
-	public readonly structData: ILooseObject;
+	readonly structData: ILooseObject;
 
-	public static bit(): any[] {
+	static bit(): any[] {
 		return [ETypeValue.TYPE_BIT];
 	}
-	public static uint8(length: number = 0): any[] {
+	static uint8(length: number = 0): any[] {
 		return [ETypeValue.TYPE_UINT8, length];
 	}
-	public static int8(length: number = 0): any[] {
+	static int8(length: number = 0): any[] {
 		return [ETypeValue.TYPE_INT8, length];
 	}
-	public static uint16(length: number = 0): any[] {
+	static uint16(length: number = 0): any[] {
 		return [ETypeValue.TYPE_UINT16, length];
 	}
-	public static int16(length: number = 0): any[] {
+	static int16(length: number = 0): any[] {
 		return [ETypeValue.TYPE_INT16, length];
 	}
-	public static uint32(length: number = 0): any[] {
+	static uint32(length: number = 0): any[] {
 		return [ETypeValue.TYPE_UINT32, length];
 	}
-	public static int32(length: number = 0): any[] {
+	static int32(length: number = 0): any[] {
 		return [ETypeValue.TYPE_INT32, length];
 	}
-	public static float32(length: number = 0): any[] {
+	static float32(length: number = 0): any[] {
 		return [ETypeValue.TYPE_FLOAT32, length];
 	}
-	public static uint64(length: number = 0): any[] {
+	static uint64(length: number = 0): any[] {
 		return [ETypeValue.TYPE_UINT64, length];
 	}
-	public static int64(length: number = 0): any[] {
+	static int64(length: number = 0): any[] {
 		return [ETypeValue.TYPE_INT64, length];
 	}
-	public static float64(length: number = 0): any[] {
+	static float64(length: number = 0): any[] {
 		return [ETypeValue.TYPE_FLOAT64, length];
 	}
-	public static char(length: number): any[] {
+	static char(length: number): any[] {
 		return [ETypeValue.TYPE_CHAR, length];
 	}
-	public static struct(data: ILooseObject, length: number = 0): any[] {
+	static struct(data: ILooseObject, length: number = 0): any[] {
 		return [ETypeValue.TYPE_STRUCT, data, length];
 	}
 
@@ -81,7 +81,7 @@ export default class Struct {
 	}
 
 	/** Очистить буфер */
-	public free(): void {
+	free(): void {
 		this.offset = 0;
 		this.buffer = null;
 		this.bit_offset = 0;
@@ -96,7 +96,7 @@ export default class Struct {
 	}
 
 	/** Чтение бита */
-	public getBit(): boolean {
+	getBit(): boolean {
 		let result: boolean = false;
 		if (this.buffer) {
 			if (!this.bit_buffer) this.bit_buffer = new BitSet(this.buffer.getUint8(this.offset));
@@ -110,7 +110,7 @@ export default class Struct {
 	 * Запись бита
 	 * @param val Значение
 	 */
-	public setBit(val: boolean): void {
+	setBit(val: boolean): void {
 		if (this.buffer) {
 			if (!this.bit_buffer) this.bit_buffer = new BitSet(this.buffer.getUint8(this.offset));
 			//@ts-ignore
@@ -124,7 +124,7 @@ export default class Struct {
 	 * @param u      UInt8
 	 * @param length Количество значений массива
 	 */
-	public getInt8(u: boolean, length: number): number[] {
+	getInt8(u: boolean, length: number): number[] {
 		let result: number[] = [];
 		if (this.buffer) {
 			for (let i = 0; i < length; i++) {
@@ -140,7 +140,7 @@ export default class Struct {
 	 * @param val    Массив значений
 	 * @param length Количество значений массива
 	 */
-	public setInt8(u: boolean, val: number[], length: number): void {
+	setInt8(u: boolean, val: number[], length: number): void {
 		if (this.buffer) {
 			for (let i = 0; i < length; i++) {
 				if (u) this.buffer.setUint8(this.offset++, val[i]);
@@ -154,7 +154,7 @@ export default class Struct {
 	 * @param u      UInt16
 	 * @param length Количество значений массива
 	 */
-	public getInt16(u: boolean, length: number): number[] {
+	getInt16(u: boolean, length: number): number[] {
 		let result: number[] = [];
 		if (this.buffer) {
 			for (let i = 0; i < length; i++) {
@@ -175,7 +175,7 @@ export default class Struct {
 	 * @param val    Значение
 	 * @param length Количество значений массива
 	 */
-	public setInt16(u: boolean, val: number[], length: number): void {
+	setInt16(u: boolean, val: number[], length: number): void {
 		if (this.buffer) {
 			for (let i = 0; i < length; i++) {
 				if (u) this.buffer.setUint16(this.offset, val[i], this.littleEndian);
@@ -190,7 +190,7 @@ export default class Struct {
 	 * @param u      UInt32
 	 * @param length Количество значений массива
 	 */
-	public getInt32(u: boolean, length: number): number[] {
+	getInt32(u: boolean, length: number): number[] {
 		let result: number[] = [];
 		if (this.buffer) {
 			for (let i = 0; i < length; i++) {
@@ -211,7 +211,7 @@ export default class Struct {
 	 * @param val    Значение
 	 * @param length Количество значений массива
 	 */
-	public setInt32(u: boolean, val: number[], length: number): void {
+	setInt32(u: boolean, val: number[], length: number): void {
 		if (this.buffer) {
 			for (let i = 0; i < length; i++) {
 				if (u) this.buffer.setUint32(this.offset, val[i], this.littleEndian);
@@ -225,7 +225,7 @@ export default class Struct {
 	 * Чтение        Float32
 	 * @param length Количество значений массива
 	 */
-	public getFloat32(length: number): number[] {
+	getFloat32(length: number): number[] {
 		let result: number[] = [];
 		if (this.buffer) {
 			for (let i = 0; i < length; i++) {
@@ -241,7 +241,7 @@ export default class Struct {
 	 * @param val    Значение
 	 * @param length Количество значений массива
 	 */
-	public setFloat32(val: number[], length: number): void {
+	setFloat32(val: number[], length: number): void {
 		if (this.buffer) {
 			for (let i = 0; i < length; i++) {
 				this.buffer.setFloat32(this.offset, val[i], this.littleEndian);
@@ -255,7 +255,7 @@ export default class Struct {
 	 * @param u      UInt64
 	 * @param length Количество значений массива
 	 */
-	public getInt64(u: boolean, length: number): bigint[] {
+	getInt64(u: boolean, length: number): bigint[] {
 		let result: bigint[] = [];
 		if (this.buffer) {
 			for (let i = 0; i < length; i++) {
@@ -276,7 +276,7 @@ export default class Struct {
 	 * @param val    Значение
 	 * @param length Количество значений массива
 	 */
-	public setInt64(u: boolean, val: bigint[], length: number): void {
+	setInt64(u: boolean, val: bigint[], length: number): void {
 		if (this.buffer) {
 			for (let i = 0; i < length; i++) {
 				if (u) this.buffer.setBigUint64(this.offset, val[i], this.littleEndian);
@@ -290,7 +290,7 @@ export default class Struct {
 	 * Чтение        Float64
 	 * @param length Количество значений массива
 	 */
-	public getFloat64(length: number): number[] {
+	getFloat64(length: number): number[] {
 		let result: number[] = [];
 		if (this.buffer) {
 			for (let i = 0; i < length; i++) {
@@ -306,7 +306,7 @@ export default class Struct {
 	 * @param val    Значение
 	 * @param length Количество значений массива
 	 */
-	public setFloat64(val: number[], length: number): void {
+	setFloat64(val: number[], length: number): void {
 		if (this.buffer) {
 			for (let i = 0; i < length; i++) {
 				this.buffer.setFloat64(this.offset, val[i], this.littleEndian);
@@ -319,7 +319,7 @@ export default class Struct {
 	 * Чтение строки
 	 * @param length Длина строки
 	 */
-	public getChars(length: number): string {
+	getChars(length: number): string {
 		let result: string = '';
 		if (this.buffer) {
 			for (let i = 0; i < length; i++) {
@@ -335,7 +335,7 @@ export default class Struct {
 	 * @param str    Строка
 	 * @param length Длина копирования
 	 */
-	public setChars(str: string, length: number): void {
+	setChars(str: string, length: number): void {
 		if (this.buffer) {
 			// noinspection SpellCheckingInspection
 			const lenstr = str.length;
@@ -349,7 +349,7 @@ export default class Struct {
 	 * @param data   Структура для данных
 	 * @param offset Начало смещения
 	 */
-	public decode(buffer: DataView, data: ILooseObject, offset: number = 0): number {
+	decode(buffer: DataView, data: ILooseObject, offset: number = 0): number {
 		this.buffer = buffer;
 		this.offset = offset;
 
@@ -429,7 +429,7 @@ export default class Struct {
 	 * @param data   Структура для данных
 	 * @param offset Начало смещения
 	 */
-	public encode(buffer: DataView, data: ILooseObject, offset: number = 0): number {
+	encode(buffer: DataView, data: ILooseObject, offset: number = 0): number {
 		this.buffer = buffer;
 		this.offset = offset;
 
