@@ -8,19 +8,19 @@
 
 			<q-card-actions align="right">
 				<q-btn :label="$t('Close')" color="grey" v-close-popup @click="onClose" />
-				<q-btn :label="$t('BLE_BtnConnect')" color="primary" v-close-popup @click="bluetooth.connect()" />
+				<q-btn :label="$t('BLE_BtnConnect')" color="primary" v-close-popup @click="onConnect" />
 			</q-card-actions>
 		</q-card>
 	</q-dialog>
 </template>
 
 <script lang="ts">
-import { ref, toRefs, computed, watch } from 'vue';
+import { ref, toRefs, watch } from 'vue';
 import { lang } from '@/boot/i18n';
 import { useQuasar } from 'quasar';
 
 import Store from '@/store';
-import { Bluetooth, BLUETOOTH_EVENT_CONNECTED, EConnectedStatus } from './bluetooth';
+import { BLUETOOTH_EVENT_CONNECTED, EConnectedStatus } from './bluetooth';
 
 export default {
 	name: 'BluetoothDialogConnection',
@@ -33,22 +33,25 @@ export default {
 	setup(props: any, context: any) {
 		const $q = useQuasar();
 		const { modelValue } = toRefs(props);
+		const { bluetooth } = Store;
 
 		// отображение диалога
 		const visible = ref(true);
-		// объект Bluetooth
-		const bluetooth = computed((): Bluetooth => Store.bluetooth);
+		// следим за изменениями modelValue
+		watch(modelValue, (val: boolean) => (visible.value = val));
 
+		// подключиться
+		const onConnect = (): void => {
+			bluetooth.connect();
+		};
 		// обновить значение modelValue
 		const updateValue = (val: boolean) => {
 			visible.value = val;
 			context.emit('update:modelValue', val);
 		};
-		// следим за изменениями modelValue
-		watch(modelValue, (val: boolean) => (visible.value = val));
 
 		// создаем событие подключения к Bluetooth
-		bluetooth.value.addListener(BLUETOOTH_EVENT_CONNECTED, (status: EConnectedStatus) => {
+		bluetooth.addListener(BLUETOOTH_EVENT_CONNECTED, (status: EConnectedStatus) => {
 			//console.log('BluetoothListener', status);
 
 			updateValue(status === EConnectedStatus.NO_CONNECT);
@@ -79,7 +82,7 @@ export default {
 
 		return {
 			visible,
-			bluetooth,
+			onConnect,
 			onClose
 		};
 	}
