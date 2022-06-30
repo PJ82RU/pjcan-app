@@ -1,13 +1,21 @@
 <template>
 	<q-card-section horizontal class="TimeCardSection">
 		<div class="TimeCardSection-title">{{ title }}</div>
-		<q-input class="TimeCardSection-input" outlined dense readonly v-model="valueTime" type="time" step="2" />
-		<q-icon class="TimeCardSection-icon" :color="iconColor" name="schedule" size="22px" />
+		<q-input
+			class="TimeCardSection-input"
+			outlined
+			dense
+			:readonly="readonly"
+			v-model="valueTime"
+			type="time"
+			step="2"
+		/>
+		<q-icon class="TimeCardSection-icon" :color="color" name="schedule" size="22px" />
 	</q-card-section>
 </template>
 
 <script lang="ts">
-import { ref, toRefs, watch, onMounted, onUnmounted } from 'vue';
+import { ref, toRefs, computed, onMounted, onUnmounted } from 'vue';
 import { Timeout } from '@/models/types';
 
 export default {
@@ -17,26 +25,34 @@ export default {
 			type: String,
 			require: true
 		},
-		value: {
-			type: [Date, String, Number],
+		modelValue: {
+			type: String,
 			default: ''
 		},
 		realtime: {
 			type: Boolean,
 			default: false
 		},
-		iconColor: {
+		color: {
 			type: String,
 			default: 'primary'
+		},
+		readonly: {
+			type: Boolean,
+			default: true
 		}
 	},
-	setup(props: any) {
-		const { value, realtime } = toRefs(props);
-		const valueTime = ref(value.value);
+	setup(props: any, context: any) {
+		const { modelValue, realtime } = toRefs(props);
+		const valueTime = computed({
+			get(): string {
+				return modelValue.value;
+			},
+			set(val: string): void {
+				context.emit('update:modelValue', val);
+			}
+		});
 		const intervalRealtime = ref(undefined as Timeout);
-
-		// следим за изменением value
-		watch(value, (val: Date | string | number) => (valueTime.value = new Date(val)));
 
 		// таймер обновления текущего времени
 		onMounted(() => {
@@ -57,13 +73,10 @@ export default {
 </script>
 
 <style lang="sass">
-.TimeCardSection
-	&-title
-		width: 100%
+@import "@/css/mixins"
 
-	&-input
-		.q-field__inner
-			width: 120px
+.TimeCardSection
+	@include card-section()
 
 	&-icon
 		position: absolute
