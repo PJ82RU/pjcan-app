@@ -1,6 +1,9 @@
 <template>
 	<q-card-section horizontal class="ToggleCardSection">
-		<div class="ToggleCardSection-title">{{ title }}</div>
+		<div class="ToggleCardSection-header">
+			<div class="ToggleCardSection-header-title">{{ title }}</div>
+			<div class="ToggleCardSection-header-comment">{{ comment }}</div>
+		</div>
 		<q-toggle class="ToggleCardSection-input" dense v-model="valueToggle" :color="color" :disable="disable" />
 	</q-card-section>
 </template>
@@ -14,6 +17,10 @@ export default {
 		title: {
 			type: String,
 			require: true
+		},
+		comment: {
+			type: String,
+			default: ''
 		},
 		modelValue: {
 			type: Boolean,

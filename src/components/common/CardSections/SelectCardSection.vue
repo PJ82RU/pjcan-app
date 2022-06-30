@@ -1,6 +1,9 @@
 <template>
 	<q-card-section horizontal class="SelectCardSection">
-		<div class="SelectCardSection-title">{{ title }}</div>
+		<div class="SelectCardSection-header">
+			<div class="SelectCardSection-header-title">{{ title }}</div>
+			<div class="SelectCardSection-header-comment">{{ comment }}</div>
+		</div>
 		<q-select
 			class="SelectCardSection-input"
 			outlined
@@ -22,6 +25,10 @@ export default {
 		title: {
 			type: String,
 			require: true
+		},
+		comment: {
+			type: String,
+			default: ''
 		},
 		modelValue: {
 			type: String,
