@@ -13,9 +13,11 @@
 			</q-card-section>
 
 			<q-card-actions vertical class="CardSection-menu">
-				<q-btn flat round color="secondary" icon="more_vert" @click="$emit('click-options')" />
-				<q-btn flat round color="primary" :icon="bookmarkIcon" @click="$emit('click-bookmark')" />
-				<q-btn flat round color="primary" icon="help_outline" @click="$emit('click-help')" />
+				<q-btn flat round color="secondary" icon="more_vert">
+					<CardSectionMenu @click="onClickOptions" />
+				</q-btn>
+				<q-btn flat round color="primary" :icon="bookmarkIcon" @click="onClickBookmark" />
+				<q-btn flat round color="primary" icon="help_outline" @click="onClickHelp" />
 			</q-card-actions>
 		</q-card-section>
 	</q-card>
@@ -23,9 +25,11 @@
 
 <script lang="ts">
 import { computed, toRefs } from 'vue';
+import CardSectionMenu from '@/components/menu/CardSectionMenu.vue';
 
 export default {
 	name: 'CardSection',
+	components: { CardSectionMenu },
 	props: {
 		title: {
 			type: String,
@@ -36,12 +40,22 @@ export default {
 			default: false
 		}
 	},
-	setup(props: any) {
+	emits: ['click-options', 'click-bookmark', 'click-help'],
+	setup(props: any, context: any) {
 		const { bookmark } = toRefs(props);
+		const { emit } = context;
+
 		const bookmarkIcon = computed(() => (bookmark.value ? 'bookmark' : 'bookmark_outline'));
 
+		const onClickOptions = (e: any) => emit('click-options', e);
+		const onClickBookmark = (e: any) => emit('click-bookmark', e);
+		const onClickHelp = (e: any) => emit('click-help', e);
+
 		return {
-			bookmarkIcon
+			bookmarkIcon,
+			onClickOptions,
+			onClickBookmark,
+			onClickHelp
 		};
 	}
 };
