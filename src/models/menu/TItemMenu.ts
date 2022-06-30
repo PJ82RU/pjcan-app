@@ -1,4 +1,4 @@
-export enum EItemMenu {
+export enum TItemMenu {
 	ONBOARD,
 	FUEL,
 	ENGINE,

@@ -1,4 +1,4 @@
-import { EItemMenu } from '@/models/menu/EItemMenu';
+import { TItemMenu } from '@/models/menu/TItemMenu';
 
-export const popupDevice = [{ type: EItemMenu.DEVICE_INFO, lang: 'DeviceInfo' }];
-export const popupMain = [{ type: EItemMenu.ABOUT, lang: 'About' }];
+export const popupDevice = [{ type: TItemMenu.DEVICE_INFO, lang: 'DeviceInfo' }];
+export const popupMain = [{ type: TItemMenu.ABOUT, lang: 'About' }];

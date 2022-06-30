@@ -1,4 +1,4 @@
 import { IItemMenu } from './IItemMenu';
-import { EItemMenu } from './EItemMenu';
+import { TItemMenu } from './TItemMenu';
 
-export { IItemMenu, EItemMenu };
+export { IItemMenu, TItemMenu };

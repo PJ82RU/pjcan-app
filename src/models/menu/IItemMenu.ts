@@ -1,7 +1,7 @@
-import { EItemMenu } from './EItemMenu';
+import { TItemMenu } from './TItemMenu';
 
 export interface IItemMenu {
-	type: EItemMenu;
+	type: TItemMenu;
 	name?: string;
 	lang: string;
 	size?: string | number;
