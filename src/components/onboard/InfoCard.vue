@@ -1,11 +1,11 @@
 <!--suppress RequiredAttributes -->
 <template>
 	<CardSection title="Информация" @click-options="onClickOptions">
-		<CardSectionToggle title="ACC" comment="Питание автомобиля" v-model="acc" />
-		<!--<CardSectionTime title="Время работы" comment="Время работы устройства с момента включения" v-model="time" />-->
+		<CardSectionToggle title="ACC" :comment="$t('InfoCard_ACC_Comment')" v-model="acc" />
+		<!--<CardSectionTime :title="$t('InfoCard_TimeWork_Title')" :comment="$t('InfoCard_TimeWork_Comment')" v-model="time" />-->
 		<CardSectionInput
-			title="Температура воздуха"
-			comment="Показания внешней температуры со штатных датчиков автомобиля"
+			:title="$t('InfoCard_Temperature_Title')"
+			:comment="$t('InfoCard_Temperature_Comment')"
 			v-model="temperature"
 		/>
 	</CardSection>
