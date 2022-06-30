@@ -363,5 +363,5 @@ export class Store {
 	}
 }
 
-const PJCANStore = new Store();
-export default PJCANStore;
+const store = new Store();
+export default store;

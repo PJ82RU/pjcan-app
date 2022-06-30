@@ -1,47 +1,42 @@
 <!--suppress RequiredAttributes -->
 <template>
-	<CardSection title="Тестовые данные" @click-options="onClickOptions">
-		<CardSectionTime title="Время работы" comment="Время туды-сюды" v-model="time" realtime />
-		<CardSectionToggle title="ACC" comment="То что током ебашит" v-model="value" />
-		<CardSectionInput title="Температура за бортом" comment="Дубак на улице" v-model="text" readonly />
-		<CardSectionInput title="Ввод числа" comment="Число число" v-model="text" type="number" :min="0" />
-		<CardSectionSelect
-			title="Список"
-			comment="Писка насяльника"
-			v-model="select"
-			:options="selectOptions"
-			width="200px"
+	<CardSection title="Информация" @click-options="onClickOptions">
+		<CardSectionToggle title="ACC" comment="Питание автомобиля" v-model="acc" />
+		<!--<CardSectionTime title="Время работы" comment="Время работы устройства с момента включения" v-model="time" />-->
+		<CardSectionInput
+			title="Температура воздуха"
+			comment="Показания внешней температуры со штатных датчиков автомобиля"
+			v-model="temperature"
 		/>
 	</CardSection>
 </template>
 
 <script lang="ts">
+import { computed } from 'vue';
+import store from '@/store';
+
 import CardSection from '@/components/cardSections/CardSection.vue';
 import CardSectionTime from '@/components/cardSections/CardSectionTime.vue';
 import CardSectionToggle from '@/components/cardSections/CardSectionToggle.vue';
 import CardSectionInput from '@/components/cardSections/CardSectionInput.vue';
-import CardSectionSelect from '@/components/cardSections/CardSectionSelect.vue';
 
 export default {
 	name: 'InfoCard',
-	components: { CardSection, CardSectionTime, CardSectionToggle, CardSectionInput, CardSectionSelect },
-	data() {
-		return {
-			value: true,
-			//text: '25°C',
-			text: '',
-			time: '10:00:22',
-			num: Number(0),
-			select: 'тест',
-			selectOptions: ['тест', 'тест2']
+	components: { CardSection, CardSectionTime, CardSectionToggle, CardSectionInput },
+	setup() {
+		const acc = computed((): boolean => store.sensorValue.acc);
+		//const time = computed((): boolean => store.);
+		const temperature = computed((): string => `${store.temperatureValue.out}°C`);
+
+		const onClickOptions = (e: any): void => {
+			console.log('InfoCard -> onClickOptions', e);
 		};
-	},
-	methods: {
-		onClickOptions(e: any): void {
-			console.log(e);
-		}
+
+		return {
+			acc,
+			temperature,
+			onClickOptions
+		};
 	}
 };
 </script>
-
-<style lang="sass"></style>
