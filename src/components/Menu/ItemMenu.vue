@@ -1,5 +1,5 @@
 <template>
-	<q-item clickable v-ripple class="ItemMenu" v-for="item in items" @click="$emit('click', item)">
+	<q-item clickable v-ripple class="ItemMenu" v-for="item in langItems" @click="$emit('click', item)">
 		<q-item-section avatar v-if="item.name">
 			<div class="ItemMenu-icon">
 				<IconCustom :name="item.name" color="primary" color-secondary="secondary" :size="item.size" />
@@ -11,27 +11,29 @@
 </template>
 
 <script lang="ts">
+import { computed, toRefs } from 'vue';
+import { lang } from '@/boot/i18n';
 import IconCustom from '@/components/common/IconCustom';
 
-import { lang } from '@/boot/i18n';
-
-import menuState from '@/store/menuState';
-import { IItemMenuState, IMenuState } from '@/models/menu';
+import { IItemMenu } from '@/models/menu';
 
 export default {
 	name: 'ItemMenu',
 	components: { IconCustom },
 	props: {
-		name: {
-			types: String,
+		items: {
+			type: Array as () => IItemMenu[],
 			require: true
 		}
 	},
 	emits: ['click'],
 	setup(props: any) {
-		const name: keyof IMenuState = props.name as keyof IMenuState;
-		const items = menuState[name]?.map((x: IItemMenuState) => ({ ...x, lang: lang(x.lang) }));
-		return { items };
+		const { items } = toRefs(props);
+		const langItems = computed(() => items.value?.map((x: IItemMenu) => ({ ...x, lang: lang(x.lang) })));
+
+		return {
+			langItems
+		};
 	}
 };
 </script>

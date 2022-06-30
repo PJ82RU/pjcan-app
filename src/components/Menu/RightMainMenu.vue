@@ -1,23 +1,26 @@
 <template>
 	<q-menu auto-close class="RightMainMenu" anchor="bottom left" transition-show="jump-down" transition-hide="jump-up">
-		<MenuItem name="popupDevice" @click="onClickItem" />
+		<ItemMenu :items="popupDevice" @click="onClickItem" />
 		<q-separator />
-		<MenuItem name="popupMain" @click="onClickItem" />
+		<ItemMenu :items="popupMain" @click="onClickItem" />
 	</q-menu>
 </template>
 
 <script lang="ts">
-import MenuItem from '@/components/menu/MenuItem.vue';
+import ItemMenu from './ItemMenu.vue';
+import { popupDevice, popupMain } from '@/store/menu/rightMainMenu';
 
 export default {
 	name: 'RightMainMenu',
-	components: { MenuItem },
+	components: { ItemMenu },
 	setup() {
 		const onClickItem = (e: any) => {
-			console.log(e);
+			console.log('RightMainMenu -> onClickItem', e);
 		};
 
 		return {
+			popupDevice,
+			popupMain,
 			onClickItem
 		};
 	}

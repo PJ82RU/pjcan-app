@@ -1,31 +1,34 @@
 <template>
 	<q-list padding>
-		<MenuItem name="header" @click="onClickItem" />
+		<ItemMenu :items="menuHeader" @click="onClickItem" />
 		<q-separator />
-		<MenuItem name="main" @click="onClickItem" />
+		<ItemMenu :items="menuMain" @click="onClickItem" />
 		<q-separator />
-		<MenuItem name="actions" @click="onClickItem" />
+		<ItemMenu :items="menuActions" @click="onClickItem" />
 		<q-separator />
-		<MenuItem name="footer" @click="onClickItem" />
+		<ItemMenu :items="menuFooter" @click="onClickItem" />
 	</q-list>
 </template>
 
 <script lang="ts">
-import MenuItem from './MenuItem.vue';
+import ItemMenu from './ItemMenu.vue';
+import { menuHeader, menuMain, menuActions, menuFooter } from '@/store/menu/leftMainMenu';
 
 export default {
 	name: 'LeftMainMenu',
-	components: { MenuItem },
+	components: { ItemMenu },
 	setup() {
 		const onClickItem = (e: any) => {
-			console.log(e);
+			console.log('LeftMainMenu -> onClickItem', e);
 		};
 
 		return {
+			menuHeader,
+			menuMain,
+			menuActions,
+			menuFooter,
 			onClickItem
 		};
 	}
 };
 </script>
-
-<style lang="sass"></style>
