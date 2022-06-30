@@ -1,6 +1,6 @@
 <template>
 	<q-menu auto-close class="RightMainMenu" anchor="bottom left" transition-show="jump-down" transition-hide="jump-up">
-		<ItemMenu :items="popupDevice" @click="onClickItem" />
+		<ItemMenu :items="popupLanguage" @click="onClickItem" />
 		<q-separator />
 		<ItemMenu :items="popupMain" @click="onClickItem" />
 	</q-menu>
@@ -8,7 +8,7 @@
 
 <script lang="ts">
 import ItemMenu from './ItemMenu.vue';
-import { popupDevice, popupMain } from '@/store/menu/MenuRightMain';
+import { popupLanguage, popupMain } from '@/store/menu/MenuRightMain';
 
 export default {
 	name: 'RightMainMenu',
@@ -19,7 +19,7 @@ export default {
 		};
 
 		return {
-			popupDevice,
+			popupLanguage,
 			popupMain,
 			onClickItem
 		};

@@ -81,9 +81,11 @@ export default {
 
 		.text-h6
 			padding-bottom: 6px
+			font-size: 22px
 
 	&-body
 		padding-bottom: 0
+		font-size: 17px
 
 		.q-card__section
 			align-items: center
