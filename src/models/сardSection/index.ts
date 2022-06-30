@@ -1,8 +1,8 @@
-import { ICardSection } from '@/models/сardSection/ICardSection';
-import { IInputCardSection } from '@/models/сardSection/IInputCardSection';
-import { ISelectCardSection } from '@/models/сardSection/ISelectCardSection';
-import { ITimeCardSection } from '@/models/сardSection/ITimeCardSection';
-import { IToggleCardSection } from '@/models/сardSection/IToggleCardSection';
-import { TCardSection } from '@/models/сardSection/TCardSection';
+import { ICardSection } from './ICardSection';
+import { IInputCardSection } from './IInputCardSection';
+import { ISelectCardSection } from './ISelectCardSection';
+import { ITimeCardSection } from './ITimeCardSection';
+import { IToggleCardSection } from './IToggleCardSection';
+import { TCardSection } from './TCardSection';
 
 export { ICardSection, IInputCardSection, ISelectCardSection, ITimeCardSection, IToggleCardSection, TCardSection };
