@@ -65,6 +65,7 @@ export default {
 .CardSection
 	width: 100%
 	max-width: 400px
+	margin-bottom: 10px
 
 	.q-card__actions
 		justify-content: flex-start
