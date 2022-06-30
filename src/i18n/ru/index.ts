@@ -13,6 +13,8 @@ export default {
 
 	Close: 'Закрыть',
 
+	SettingLCD: 'Настройки отображения на LCD',
+
 	BLE_BtnConnect: 'Подключиться',
 	BLE_NoConnected: 'Вы не подключены ни к одному устройству Bluetooth.',
 	BLE_Connected: 'PJCAN подключен',

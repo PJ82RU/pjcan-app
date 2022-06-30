@@ -13,6 +13,8 @@ export default {
 
 	Close: 'Close',
 
+	SettingLCD: 'LCD display settings',
+
 	BLE_BtnConnect: 'Connect',
 	BLE_NoConnected: 'You are currently not connected to any Bluetooth device.',
 	BLE_Connected: 'PJCAN connected',

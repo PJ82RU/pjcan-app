@@ -8,6 +8,8 @@ interface IMenuState {
 
 	popupDevice: IItemMenuState[];
 	popupMain: IItemMenuState[];
+
+	popupCardSection: IItemMenuState[];
 }
 
 export { IMenuState };

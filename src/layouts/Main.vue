@@ -10,7 +10,7 @@
 				<BluetoothBtn />
 				<!-- Правое меню -->
 				<q-btn flat round dense icon="more_vert">
-					<RightMenuMain />
+					<RightMainMenu />
 				</q-btn>
 			</q-toolbar>
 		</q-header>
@@ -28,7 +28,7 @@
 			class="bg-grey-2"
 		>
 			<q-scroll-area class="fit">
-				<LeftMenuMain />
+				<LeftMainMenu />
 			</q-scroll-area>
 		</q-drawer>
 
@@ -46,14 +46,14 @@
 import { ref } from 'vue';
 import { useQuasar } from 'quasar';
 
-import LeftMenuMain from '@/components/menu/LeftMenuMain.vue';
-import RightMenuMain from '@/components/menu/RightMenuMain.vue';
+import LeftMainMenu from '@/components/menu/LeftMainMenu.vue';
+import RightMainMenu from '@/components/menu/RightMainMenu.vue';
 import BluetoothBtn from '@/components/bluetooth/BluetoothBtn.vue';
 import UpdateFirmwareDialog from '@/components/updateFirmware/UpdateFirmwareDialog.vue';
 
 export default {
 	name: 'Main',
-	components: { LeftMenuMain, RightMenuMain, BluetoothBtn, UpdateFirmwareDialog },
+	components: { LeftMainMenu, RightMainMenu, BluetoothBtn, UpdateFirmwareDialog },
 	setup() {
 		const $q = useQuasar();
 		const leftMenuOpen = ref(false);

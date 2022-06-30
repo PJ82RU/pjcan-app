@@ -1,6 +1,6 @@
 <!--suppress RequiredAttributes -->
 <template>
-	<CardSection title="Тестовые данные">
+	<CardSection title="Тестовые данные" @click-options="onClickOptions">
 		<TimeCardSection title="Время работы" comment="Время туды-сюды" v-model="time" realtime />
 		<ToggleCardSection title="ACC" comment="То что током ебашит" v-model="value" />
 		<InputCardSection title="Температура за бортом" comment="Дубак на улице" v-model="text" readonly />
@@ -16,11 +16,11 @@
 </template>
 
 <script lang="ts">
-import CardSection from '@/components/common/CardSections/CardSection.vue';
-import TimeCardSection from '@/components/common/CardSections/TimeCardSection.vue';
-import ToggleCardSection from '@/components/common/CardSections/ToggleCardSection.vue';
-import InputCardSection from '@/components/common/CardSections/InputCardSection.vue';
-import SelectCardSection from '@/components/common/CardSections/SelectCardSection.vue';
+import CardSection from '@/components/cardSections/CardSection.vue';
+import TimeCardSection from '@/components/cardSections/TimeCardSection.vue';
+import ToggleCardSection from '@/components/cardSections/ToggleCardSection.vue';
+import InputCardSection from '@/components/cardSections/InputCardSection.vue';
+import SelectCardSection from '@/components/cardSections/SelectCardSection.vue';
 
 export default {
 	name: 'InfoCard',
@@ -35,6 +35,11 @@ export default {
 			select: 'тест',
 			selectOptions: ['тест', 'тест2']
 		};
+	},
+	methods: {
+		onClickOptions(e: any): void {
+			console.log(e);
+		}
 	}
 };
 </script>
