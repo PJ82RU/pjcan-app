@@ -1,8 +1,8 @@
 import { ICardSection } from './ICardSection';
-import { IInputCardSection } from './IInputCardSection';
-import { ISelectCardSection } from './ISelectCardSection';
-import { ITimeCardSection } from './ITimeCardSection';
-import { IToggleCardSection } from './IToggleCardSection';
+import { ICardSectionInput } from './ICardSectionInput';
+import { ICardSectionSelect } from './ICardSectionSelect';
+import { ICardSectionTime } from './ICardSectionTime';
+import { ICardSectionToggle } from './ICardSectionToggle';
 import { TCardSection } from './TCardSection';
 
-export { ICardSection, IInputCardSection, ISelectCardSection, ITimeCardSection, IToggleCardSection, TCardSection };
+export { ICardSection, ICardSectionInput, ICardSectionSelect, ICardSectionTime, ICardSectionToggle, TCardSection };

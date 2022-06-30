@@ -1,51 +1,111 @@
-import { Bluetooth, BLUETOOTH_EVENT_RECEIVE } from '@/components/bluetooth/bluetooth';
-import { ButtonsConfig, API_EXEC_BUTTONS_CONFIG, IButtonsConfig } from '@/models/pjcan/button/config';
-import { ButtonsValue, API_EXEC_BUTTONS_VALUE, IButtonValue } from '@/models/pjcan/button/value';
-import { CarConfig, API_EXEC_CAR_CONFIG, ICarConfig } from '@/models/pjcan/car/config';
-import { CarView, API_EXEC_CAR_VIEW, ICarView } from '@/models/pjcan/car/view';
-import { DeviceConfig, API_EXEC_DEVICE_CONFIG, IDeviceConfig } from '@/models/pjcan/device/config';
-import { DeviceInfo, API_EXEC_INFO, IDeviceInfo } from '@/models/pjcan/device/info';
-import { LCDValue, API_EXEC_LCD_VALUE, ILCDValue } from '@/models/pjcan/lcd/value';
-import { TeyesConfig, API_EXEC_TEYES_CONFIG, ITeyesConfig } from '@/models/pjcan/teyes/config';
-import { TeyesView, API_EXEC_TEYES_VIEW, ITeyesView } from '@/models/pjcan/teyes/view';
-import { BoseConfig, API_EXEC_VARIABLE_BOSE, IBoseConfig } from '@/models/pjcan/variables/bose/config';
-import { BoseView, API_EXEC_VARIABLE_BOSE_VIEW, IBoseView } from '@/models/pjcan/variables/bose/view';
-import { ClimateValue, API_EXEC_VARIABLE_CLIMATE, IClimateValue } from '@/models/pjcan/variables/climate/value';
-import { ClimateView, API_EXEC_VARIABLE_CLIMATE_VIEW, IClimateView } from '@/models/pjcan/variables/climate/view';
-import { DoorsValue, API_EXEC_VARIABLE_DOORS, IDoorsValue } from '@/models/pjcan/variables/doors/value';
-import { DoorsView, API_EXEC_VARIABLE_DOORS_VIEW, IDoorsView } from '@/models/pjcan/variables/doors/view';
-import { EngineConfig, API_EXEC_VARIABLE_ENGINE_CONFIG, IEngineConfig } from '@/models/pjcan/variables/engine/config';
-import { EngineValue, API_EXEC_VARIABLE_ENGINE, IEngineValue } from '@/models/pjcan/variables/engine/value';
-import { EngineView, API_EXEC_VARIABLE_ENGINE_VIEW, IEngineView } from '@/models/pjcan/variables/engine/view';
-import { FuelConfig, API_EXEC_VARIABLE_FUEL_CONFIG, IFuelConfig } from '@/models/pjcan/variables/fuel/config';
-import { FuelValue, API_EXEC_VARIABLE_FUEL, IFuelValue } from '@/models/pjcan/variables/fuel/value';
-import { FuelView, API_EXEC_VARIABLE_FUEL_VIEW, IFuelView } from '@/models/pjcan/variables/fuel/view';
-import { MovementValue, API_EXEC_VARIABLE_MOVEMENT, IMovementValue } from '@/models/pjcan/variables/movement/value';
-import { MovementView, API_EXEC_VARIABLE_MOVEMENT_VIEW, IMovementView } from '@/models/pjcan/variables/movement/view';
-import { SensorsValue, API_EXEC_VARIABLE_SENSORS, ISensorsValue } from '@/models/pjcan/variables/sensors/value';
-import { SensorsView, API_EXEC_VARIABLE_SENSORS_VIEW, ISensorsView } from '@/models/pjcan/variables/sensors/view';
-import {
-	TemperatureValue,
-	API_EXEC_VARIABLE_TEMPERATURE,
-	ITemperatureValue
-} from '@/models/pjcan/variables/temperature/value';
-import {
-	TemperatureView,
-	API_EXEC_VARIABLE_TEMPERATURE_VIEW,
-	ITemperatureView
-} from '@/models/pjcan/variables/temperature/view';
-import { VolumeConfig, API_EXEC_VARIABLE_VOLUME, IVolumeConfig } from '@/models/pjcan/variables/volume/config';
-import { VolumeView, API_EXEC_VARIABLE_VOLUME_VIEW, IVolumeView } from '@/models/pjcan/variables/volume/view';
-import { PJCANConfig, API_EXEC_CONFIG, IPJCANConfig } from '@/models/pjcan/config';
-import { PJCANView, API_EXEC_VIEW, IPJCANView } from '@/models/pjcan/view';
-import { API_EXEC_UPDATE_UPLOAD_GZFILE } from '@/models/pjcan/update/upload';
-import { API_EXEC_UPDATE_BEGIN_GZ } from '@/models/pjcan/update/begin';
-import { VariableView, API_EXEC_VARIABLE_VIEW, IVariableView } from '@/models/pjcan/variables/view';
-import { VariableConfig, API_EXEC_VARIABLE_CONFIG, IVariableConfig } from '@/models/pjcan/variables/config';
+import { Bluetooth, BLUETOOTH_EVENT_RECEIVE } from '@/components/bluetooth';
+import { UpdateFirmware } from '@/components/updateFirmware';
 import { API_EXEC_VERSION, IVersion, Version } from '@/models/version';
-import { UpdateFirmware } from '@/components/updateFirmware/updateFirmware';
+import {
+	ButtonsConfig,
+	ButtonsValue,
+	CarConfig,
+	CarView,
+	DeviceConfig,
+	DeviceInfo,
+	LCDValue,
+	TeyesConfig,
+	TeyesView,
+	BoseConfig,
+	BoseView,
+	ClimateValue,
+	ClimateView,
+	DoorsValue,
+	DoorsView,
+	EngineConfig,
+	EngineValue,
+	EngineView,
+	FuelConfig,
+	FuelValue,
+	FuelView,
+	MovementValue,
+	MovementView,
+	SensorsValue,
+	SensorsView,
+	TemperatureValue,
+	TemperatureView,
+	VolumeConfig,
+	VolumeView,
+	Config,
+	View,
+	VariableView,
+	VariableConfig,
+	API_EXEC_BUTTONS_CONFIG,
+	API_EXEC_BUTTONS_VALUE,
+	API_EXEC_CAR_CONFIG,
+	API_EXEC_CAR_VIEW,
+	API_EXEC_DEVICE_CONFIG,
+	API_EXEC_INFO,
+	API_EXEC_LCD_VALUE,
+	API_EXEC_TEYES_CONFIG,
+	API_EXEC_TEYES_VIEW,
+	API_EXEC_VARIABLE_BOSE,
+	API_EXEC_VARIABLE_BOSE_VIEW,
+	API_EXEC_VARIABLE_CLIMATE,
+	API_EXEC_VARIABLE_CLIMATE_VIEW,
+	API_EXEC_VARIABLE_DOORS,
+	API_EXEC_VARIABLE_DOORS_VIEW,
+	API_EXEC_VARIABLE_ENGINE_CONFIG,
+	API_EXEC_VARIABLE_ENGINE,
+	API_EXEC_VARIABLE_ENGINE_VIEW,
+	API_EXEC_VARIABLE_FUEL_CONFIG,
+	API_EXEC_VARIABLE_FUEL,
+	API_EXEC_VARIABLE_FUEL_VIEW,
+	API_EXEC_VARIABLE_MOVEMENT,
+	API_EXEC_VARIABLE_MOVEMENT_VIEW,
+	API_EXEC_VARIABLE_SENSORS,
+	API_EXEC_VARIABLE_SENSORS_VIEW,
+	API_EXEC_VARIABLE_TEMPERATURE,
+	API_EXEC_VARIABLE_TEMPERATURE_VIEW,
+	API_EXEC_VARIABLE_VOLUME,
+	API_EXEC_VARIABLE_VOLUME_VIEW,
+	API_EXEC_CONFIG,
+	API_EXEC_VIEW,
+	API_EXEC_UPDATE_UPLOAD_GZFILE,
+	API_EXEC_UPDATE_BEGIN_GZ,
+	API_EXEC_VARIABLE_VIEW,
+	API_EXEC_VARIABLE_CONFIG,
+	IButtonsConfig,
+	IButtonValue,
+	ICarConfig,
+	ICarView,
+	IDeviceConfig,
+	IDeviceInfo,
+	ILCDValue,
+	ITeyesConfig,
+	ITeyesView,
+	IBoseConfig,
+	IBoseView,
+	IClimateValue,
+	IClimateView,
+	IDoorsValue,
+	IDoorsView,
+	IEngineConfig,
+	IEngineValue,
+	IEngineView,
+	IFuelConfig,
+	IFuelValue,
+	IFuelView,
+	IMovementValue,
+	IMovementView,
+	ISensorsValue,
+	ISensorsView,
+	ITemperatureValue,
+	ITemperatureView,
+	IVolumeConfig,
+	IVolumeView,
+	IConfig,
+	IView,
+	IVariableView,
+	IVariableConfig
+} from '@/models/pjcan';
 
-export class PJCANStore {
+export class Store {
 	/** Bluetooth */
 	bluetooth: Bluetooth = new Bluetooth();
 	/** Объект обновление прошивки */
@@ -132,12 +192,12 @@ export class PJCANStore {
 
 	/** Загрузка конфигурации */
 	fetchConfig(): void {
-		this.bluetooth.send(new PJCANConfig().get()).then();
+		this.bluetooth.send(new Config().get()).then();
 	}
 
 	/** Загрузка конфигурации отображения значений */
 	fetchView(): void {
-		this.bluetooth.send(new PJCANView().get()).then();
+		this.bluetooth.send(new View().get()).then();
 	}
 
 	private setVariableConfig(config: IVariableConfig): void {
@@ -173,7 +233,7 @@ export class PJCANStore {
 				break;
 
 			case API_EXEC_CONFIG: {
-				let config: IPJCANConfig = new PJCANConfig();
+				let config: IConfig = new Config();
 				if (config.set(data)) {
 					this.buttonConfig = config.buttons;
 					this.carConfig = config.car;
@@ -184,7 +244,7 @@ export class PJCANStore {
 			}
 
 			case API_EXEC_VIEW: {
-				let view: IPJCANView = new PJCANView();
+				let view: IView = new View();
 				if (view.set(data)) {
 					this.carView = view.car;
 					this.teyesView = view.teyes;
@@ -303,5 +363,5 @@ export class PJCANStore {
 	}
 }
 
-const index = new PJCANStore();
-export default index;
+const PJCANStore = new Store();
+export default PJCANStore;

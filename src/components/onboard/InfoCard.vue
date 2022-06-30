@@ -1,11 +1,11 @@
 <!--suppress RequiredAttributes -->
 <template>
 	<CardSection title="Тестовые данные" @click-options="onClickOptions">
-		<TimeCardSection title="Время работы" comment="Время туды-сюды" v-model="time" realtime />
-		<ToggleCardSection title="ACC" comment="То что током ебашит" v-model="value" />
-		<InputCardSection title="Температура за бортом" comment="Дубак на улице" v-model="text" readonly />
-		<InputCardSection title="Ввод числа" comment="Число число" v-model="text" type="number" :min="0" />
-		<SelectCardSection
+		<CardSectionTime title="Время работы" comment="Время туды-сюды" v-model="time" realtime />
+		<CardSectionToggle title="ACC" comment="То что током ебашит" v-model="value" />
+		<CardSectionInput title="Температура за бортом" comment="Дубак на улице" v-model="text" readonly />
+		<CardSectionInput title="Ввод числа" comment="Число число" v-model="text" type="number" :min="0" />
+		<CardSectionSelect
 			title="Список"
 			comment="Писка насяльника"
 			v-model="select"
@@ -17,14 +17,14 @@
 
 <script lang="ts">
 import CardSection from '@/components/cardSections/CardSection.vue';
-import TimeCardSection from '@/components/cardSections/TimeCardSection.vue';
-import ToggleCardSection from '@/components/cardSections/ToggleCardSection.vue';
-import InputCardSection from '@/components/cardSections/InputCardSection.vue';
-import SelectCardSection from '@/components/cardSections/SelectCardSection.vue';
+import CardSectionTime from '@/components/cardSections/CardSectionTime.vue';
+import CardSectionToggle from '@/components/cardSections/CardSectionToggle.vue';
+import CardSectionInput from '@/components/cardSections/CardSectionInput.vue';
+import CardSectionSelect from '@/components/cardSections/CardSectionSelect.vue';
 
 export default {
 	name: 'InfoCard',
-	components: { CardSection, TimeCardSection, ToggleCardSection, InputCardSection, SelectCardSection },
+	components: { CardSection, CardSectionTime, CardSectionToggle, CardSectionInput, CardSectionSelect },
 	data() {
 		return {
 			value: true,

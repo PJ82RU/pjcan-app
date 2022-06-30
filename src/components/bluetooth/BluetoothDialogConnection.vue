@@ -20,7 +20,7 @@ import { lang } from '@/boot/i18n';
 import { useQuasar } from 'quasar';
 
 import Store from '@/store';
-import { BLUETOOTH_EVENT_CONNECTED, EConnectedStatus } from './bluetooth';
+import { BLUETOOTH_EVENT_CONNECTED, EConnectedStatus } from './Bluetooth';
 
 export default {
 	name: 'BluetoothDialogConnection',

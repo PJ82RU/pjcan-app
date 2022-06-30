@@ -41,8 +41,8 @@ import { useQuasar } from 'quasar';
 import Store from '@/store';
 import { BLUETOOTH_EVENT_CONNECTED, EConnectedStatus } from '@/components/bluetooth';
 
-import { UPDATE_UPLOAD_EVENT_RESULT } from '@/models/pjcan/update/upload';
-import { UPDATE_BEGIN_EVENT_RESULT } from '@/models/pjcan/update/begin';
+import { UPDATE_UPLOAD_EVENT_RESULT } from '@/models/pjcan/update/UpdateData';
+import { UPDATE_BEGIN_EVENT_RESULT } from '@/models/pjcan/update/UpdateBegin';
 import { Timeout } from '@/models/types';
 
 const DELAY_CHECK_VERSION = 60000;

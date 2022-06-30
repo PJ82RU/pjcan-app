@@ -12,7 +12,7 @@
 
 <script lang="ts">
 import ItemMenu from './ItemMenu.vue';
-import { popupCardSection } from '@/store/menu/cardSectionMenu';
+import { popupCardSection } from '@/store/menu/MenuCardSection';
 
 export default {
 	name: 'CardSectionMenu',

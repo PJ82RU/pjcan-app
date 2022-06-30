@@ -1,4 +1,4 @@
-import { Struct } from '@/components/bluetooth/struct';
+import { BluetoothStruct } from '@/components/bluetooth';
 
 export const API_EXEC_VERSION = 0; // команда API
 const STRUCT_LENGTH = 5; // длина данных API
@@ -19,13 +19,13 @@ export interface IVersion {
 
 /** Структура данных */
 export const StructVersion = {
-	major: Struct.uint8(),
-	minor: Struct.uint8(),
-	build: Struct.uint8(),
-	revision: Struct.uint8()
+	major: BluetoothStruct.uint8(),
+	minor: BluetoothStruct.uint8(),
+	build: BluetoothStruct.uint8(),
+	revision: BluetoothStruct.uint8()
 };
 
-const struct = new Struct(StructVersion);
+const struct = new BluetoothStruct(StructVersion);
 
 /** Модель версии */
 export class Version implements IVersion {

@@ -12,7 +12,7 @@
 
 <script lang="ts">
 import ItemMenu from './ItemMenu.vue';
-import { menuHeader, menuMain, menuActions, menuFooter } from '@/store/menu/leftMainMenu';
+import { menuHeader, menuMain, menuActions, menuFooter } from '@/store/menu/MenuLeftMain';
 
 export default {
 	name: 'LeftMainMenu',

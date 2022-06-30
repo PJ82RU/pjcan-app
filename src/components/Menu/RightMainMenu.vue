@@ -8,7 +8,7 @@
 
 <script lang="ts">
 import ItemMenu from './ItemMenu.vue';
-import { popupDevice, popupMain } from '@/store/menu/rightMainMenu';
+import { popupDevice, popupMain } from '@/store/menu/MenuRightMain';
 
 export default {
 	name: 'RightMainMenu',
