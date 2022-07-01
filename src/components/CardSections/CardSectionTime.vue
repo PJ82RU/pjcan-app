@@ -88,4 +88,5 @@ export default {
 	&-icon
 		position: absolute
 		right: 12px
+		background-color: #f5f5f5
 </style>
