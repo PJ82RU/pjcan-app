@@ -1,11 +1,11 @@
 <!--suppress RequiredAttributes -->
 <template>
-	<CardSection :title="$t('EngineCard_Title')" @click-options="onClickOptions">
+	<CardSection :title="$t('EngineCard_Title')" icon-name="engine" @click-options="onClickOptions">
 		<CardSection2Icons
 			:title="$t('EngineCard_Enabled_Title')"
 			:comment="$t('EngineCard_Enabled_Comment')"
-			icon1Name="engine"
-			:icon1Value="enabled"
+			icon1-name="start-stop"
+			:icon1-value="enabled"
 		/>
 		<CardSectionInput
 			:title="$t('EngineCard_RPM_Title')"

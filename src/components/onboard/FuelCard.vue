@@ -1,5 +1,5 @@
 <template>
-	<CardSection :title="$t('FuelCard_Title')" @click-options="onClickOptions">
+	<CardSection :title="$t('FuelCard_Title')" icon-name="fuel" @click-options="onClickOptions">
 		<CardSectionInput
 			:title="$t('FuelCard_Current_Title')"
 			:comment="$t('FuelCard_Current_Comment')"

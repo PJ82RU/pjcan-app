@@ -1,6 +1,6 @@
 <!--suppress RequiredAttributes -->
 <template>
-	<CardSection :title="$t('InfoCard_Title')" @click-options="onClickOptions">
+	<CardSection :title="$t('InfoCard_Title')" icon-name="info" @click-options="onClickOptions">
 		<CardSectionTime
 			:title="$t('InfoCard_TimeWork_Title')"
 			:comment="$t('InfoCard_TimeWork_Comment')"
@@ -14,7 +14,7 @@
 			v-model="temperature"
 			readonly
 		/>
-		<CardSection2Icons title="ACC" :comment="$t('InfoCard_ACC_Comment')" icon1Name="key" :icon1Value="acc" />
+		<CardSection2Icons title="ACC" :comment="$t('InfoCard_ACC_Comment')" icon1-name="key" :icon1-value="acc" />
 		<CardSectionToggle
 			:title="$t('InfoCard_Handbrake_Title')"
 			:comment="$t('InfoCard_Handbrake_Comment')"
@@ -28,21 +28,21 @@
 		<CardSection2Icons
 			:title="$t('InfoCard_SafetyBelt_Title')"
 			:comment="$t('InfoCard_SafetyBelt_Comment')"
-			icon1Name="safety-belt"
-			icon2Name="safety-belt"
-			iconColorOn="green"
-			iconColorOff="red"
-			:icon1Value="seatbeltDriver"
-			:icon2Value="seatbeltPassenger"
+			icon1-name="safety-belt"
+			icon2-name="safety-belt"
+			icon-color-on="green"
+			icon-color-off="red"
+			:icon1-value="seatbeltDriver"
+			:icon2-value="seatbeltPassenger"
 		/>
 		<CardSection2Icons
 			:title="$t('InfoCard_Signal_Title')"
 			:comment="$t('InfoCard_Signal_Comment')"
-			icon1Name="arrow-left"
-			icon2Name="arrow-right"
-			iconColorOn="green"
-			:icon1Value="signalLeft"
-			:icon2Value="signalRight"
+			icon1-name="arrow-left"
+			icon2-name="arrow-right"
+			icon-color-on="green"
+			:icon1-value="signalLeft"
+			:icon2-value="signalRight"
 		/>
 	</CardSection>
 </template>

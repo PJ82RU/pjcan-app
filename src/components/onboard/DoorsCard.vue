@@ -1,6 +1,6 @@
 <!--suppress RequiredAttributes -->
 <template>
-	<CardSection :title="$t('DoorsCard_Title')" @click-options="onClickOptions">
+	<CardSection :title="$t('DoorsCard_Title')" icon-name="doors" @click-options="onClickOptions">
 		<CardSectionToggle :title="$t('DoorsCard_FL_Title')" :comment="$t('DoorsCard_FL_Comment')" v-model="doorFL" />
 		<CardSectionToggle :title="$t('DoorsCard_FR_Title')" :comment="$t('DoorsCard_FR_Comment')" v-model="doorFR" />
 		<CardSectionToggle :title="$t('DoorsCard_BL_Title')" :comment="$t('DoorsCard_BL_Comment')" v-model="doorBL" />

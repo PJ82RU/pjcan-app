@@ -65,7 +65,7 @@ export default {
 		},
 		iconSize: {
 			type: String,
-			default: '32px'
+			default: '30px'
 		}
 	},
 	setup(props: any) {

@@ -3,9 +3,17 @@
 		<q-card-section horizontal>
 			<q-card-section :horizontal="false" class="CardSection-container">
 				<q-card-section class="CardSection-title">
+					<IconCustom
+						class="CardSection-title-icon"
+						v-if="iconName.length > 0"
+						:name="iconName"
+						:color="iconColor"
+						:color-secondary="iconColorSecondary"
+						:size="iconSize"
+					/>
 					<div class="text-h6">{{ title }}</div>
-					<q-separator />
 				</q-card-section>
+				<q-separator />
 
 				<q-card-section class="CardSection-body">
 					<slot />
@@ -26,10 +34,11 @@
 <script lang="ts">
 import { computed, toRefs } from 'vue';
 import CardSectionMenu from '@/components/menu/CardSectionMenu.vue';
+import IconCustom from '@/components/common/IconCustom';
 
 export default {
 	name: 'CardSection',
-	components: { CardSectionMenu },
+	components: { CardSectionMenu, IconCustom },
 	props: {
 		title: {
 			type: String,
@@ -38,6 +47,22 @@ export default {
 		bookmark: {
 			type: Boolean,
 			default: false
+		},
+		iconName: {
+			type: String,
+			default: ''
+		},
+		iconColor: {
+			type: String,
+			default: 'primary'
+		},
+		iconColorSecondary: {
+			type: String,
+			default: 'secondary'
+		},
+		iconSize: {
+			type: String,
+			default: '26px'
 		}
 	},
 	emits: ['click-options', 'click-bookmark', 'click-help'],
@@ -78,6 +103,12 @@ export default {
 	&-title
 		padding-top: 10px
 		padding-bottom: 0
+		display: flex
+		flex-direction: row
+		align-items: center
+
+		&-icon
+			margin-right: 10px
 
 		.text-h6
 			padding-bottom: 6px

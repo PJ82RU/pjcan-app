@@ -1,6 +1,6 @@
 <!--suppress RequiredAttributes -->
 <template>
-	<CardSection :title="$t('MovementCard_Title')" @click-options="onClickOptions">
+	<CardSection :title="$t('MovementCard_Title')" icon-name="speedometer" @click-options="onClickOptions">
 		<CardSectionInput
 			:title="$t('MovementCard_Speed_Title')"
 			:comment="$t('MovementCard_Speed_Comment')"
