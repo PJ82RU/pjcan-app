@@ -86,5 +86,15 @@ export default {
 	MovementCard_SpeedAVG_Title: 'Средняя скорость',
 	MovementCard_SpeedAVG_Comment: 'Значение БК, км/ч',
 	MovementCard_RestWay_Title: 'Остаток пути, км',
-	MovementCard_RestWay_Comment: 'Значение БК, км'
+	MovementCard_RestWay_Comment: 'Значение БК, км',
+
+	ClimateCard_Title: 'Климат-контроль',
+	ClimateCard_StatusWork_Title: 'Статус работы',
+	ClimateCard_StatusWork_Comment: 'Статус работы блока климат-контроля',
+	ClimateCard_AutoMode_Title: 'Auto',
+	ClimateCard_AutoMode_Comment: 'Автоматический режим работы блока климата',
+	ClimateCard_AC_Title: 'AC',
+	ClimateCard_AC_Comment: 'Работа кондиционера',
+	ClimateCard_Temperature_Title: 'Температура',
+	ClimateCard_Temperature_Comment: 'Установленное значение температуры блока климат-контроля'
 };
