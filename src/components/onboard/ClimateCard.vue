@@ -74,8 +74,8 @@ export default {
 				: 'blow-none'
 		);
 		const blowWindshield = computed((): boolean => store.climateValue.airDWindshield);
-		const speedRotation = computed(
-			(): number => 7 // ?? store.climateValue.airRate > 0 ? store.climateValue.airRate + 2 : 0
+		const speedRotation = computed((): number =>
+			store.climateValue.airRate > 0 ? store.climateValue.airRate + 2 : 0
 		);
 
 		const onClickOptions = (e: any): void => {
