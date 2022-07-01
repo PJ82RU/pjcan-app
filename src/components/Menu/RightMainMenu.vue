@@ -10,7 +10,7 @@
 import { computed } from 'vue';
 import { i18n } from '@/boot/i18n';
 import ItemMenu from './ItemMenu.vue';
-import { TItemMenu } from '@/models/menu';
+import { TItemMenu, TLangLocale } from '@/models/menu';
 
 import { popupLanguage, popupMain } from '@/store/menu/MenuRightMain';
 
@@ -18,12 +18,16 @@ export default {
 	name: 'RightMainMenu',
 	components: { ItemMenu },
 	setup() {
+		const { global } = i18n;
+
+		/** Отфильтрованный список меню */
 		const popupLanguageFilter = computed(() => {
+			// убираем из списка переключение на текущий язык
 			return popupLanguage.filter((x) => {
-				switch (i18n.global.locale) {
-					case 'ru':
+				switch (global.locale) {
+					case TLangLocale.LANG_RUSSIAN:
 						return x.type !== TItemMenu.LANG_RUSSIAN;
-					case 'en':
+					case TLangLocale.LANG_ENGLISH:
 						return x.type !== TItemMenu.LANG_ENGLISH;
 					default:
 						return true;
@@ -31,8 +35,20 @@ export default {
 			});
 		});
 
+		/** Выбор пункта меню */
 		const onClickItem = (e: any) => {
-			console.log('RightMainMenu -> onClickItem', e);
+			//console.log('RightMainMenu -> onClickItem', e);
+
+			switch (e?.type) {
+				case TItemMenu.LANG_RUSSIAN:
+					// выбор английского языка
+					global.locale = TLangLocale.LANG_RUSSIAN;
+					break;
+				case TItemMenu.LANG_ENGLISH:
+					// выбор русского языка
+					global.locale = TLangLocale.LANG_ENGLISH;
+					break;
+			}
 		};
 
 		return {
