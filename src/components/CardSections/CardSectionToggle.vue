@@ -32,7 +32,7 @@ export default {
 		},
 		disable: {
 			type: Boolean,
-			default: true
+			default: false
 		}
 	},
 	setup(props: any, context: any) {

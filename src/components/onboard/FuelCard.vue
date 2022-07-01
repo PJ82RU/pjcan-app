@@ -4,13 +4,25 @@
 			:title="$t('FuelCard_Current_Title')"
 			:comment="$t('FuelCard_Current_Comment')"
 			v-model="current"
+			readonly
 		/>
-		<CardSectionInput :title="$t('FuelCard_AVG_Title')" :comment="$t('FuelCard_AVG_Comment')" v-model="avg" />
-		<CardSectionInput :title="$t('FuelCard_Total_Title')" :comment="$t('FuelCard_Total_Comment')" v-model="total" />
+		<CardSectionInput
+			:title="$t('FuelCard_AVG_Title')"
+			:comment="$t('FuelCard_AVG_Comment')"
+			v-model="avg"
+			readonly
+		/>
+		<CardSectionInput
+			:title="$t('FuelCard_Total_Title')"
+			:comment="$t('FuelCard_Total_Comment')"
+			v-model="total"
+			readonly
+		/>
 		<CardSectionInput
 			:title="$t('FuelCard_Consumption_Title')"
 			:comment="$t('FuelCard_Consumption_Comment')"
 			v-model="consumption"
+			readonly
 		/>
 	</CardSection>
 </template>

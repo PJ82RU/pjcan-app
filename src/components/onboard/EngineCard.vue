@@ -7,16 +7,23 @@
 			icon1Name="engine"
 			:icon1Value="enabled"
 		/>
-		<CardSectionInput :title="$t('EngineCard_RPM_Title')" :comment="$t('EngineCard_RPM_Comment')" v-model="rpm" />
+		<CardSectionInput
+			:title="$t('EngineCard_RPM_Title')"
+			:comment="$t('EngineCard_RPM_Comment')"
+			v-model="rpm"
+			readonly
+		/>
 		<CardSectionInput
 			:title="$t('EngineCard_CountRPM_Title')"
 			:comment="$t('EngineCard_CountRPM_Comment')"
 			v-model="countRPM"
+			readonly
 		/>
 		<CardSectionTime
 			:title="$t('EngineCard_Motors_Title')"
 			:comment="$t('EngineCard_Motors_Comment')"
 			v-model="mseconds"
+			readonly
 		/>
 		<CardSectionProgress
 			:title="$t('EngineCard_Load_Title')"
@@ -33,6 +40,7 @@
 			:title="$t('EngineCard_Coolant_Title')"
 			:comment="$t('EngineCard_Coolant_Comment')"
 			v-model="coolant"
+			readonly
 		/>
 	</CardSection>
 </template>
@@ -60,10 +68,10 @@ export default {
 	},
 	setup() {
 		const enabled = computed((): boolean => store.engineValue.enabled);
-		const rpm = computed((): string => store.engineValue.rpm.toString());
-		const countRPM = computed((): string => store.engineValue.countRPM.toString());
-		const load = computed((): string => store.engineValue.load.toString());
-		const mseconds = computed((): string => store.engineValue.mseconds.toString());
+		const rpm = computed((): string => store.engineValue.rpm.toFixed());
+		const countRPM = computed((): string => store.engineValue.countRPM.toFixed());
+		const load = computed((): number => store.engineValue.load);
+		const mseconds = computed((): string => store.engineValue.mseconds.toFixed());
 		const throttle = computed((): number => store.engineValue.throttle);
 		const coolant = computed((): number => store.engineValue.coolant);
 

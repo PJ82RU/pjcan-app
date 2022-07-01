@@ -5,16 +5,19 @@
 			:title="$t('MovementCard_Speed_Title')"
 			:comment="$t('MovementCard_Speed_Comment')"
 			v-model="speed"
+			readonly
 		/>
 		<CardSectionInput
 			:title="$t('MovementCard_SpeedAVG_Title')"
 			:comment="$t('MovementCard_SpeedAVG_Comment')"
 			v-model="speedAVG"
+			readonly
 		/>
 		<CardSectionInput
 			:title="$t('MovementCard_RestWay_Title')"
 			:comment="$t('MovementCard_RestWay_Comment')"
 			v-model="restWay"
+			readonly
 		/>
 	</CardSection>
 </template>

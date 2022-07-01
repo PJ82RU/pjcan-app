@@ -5,12 +5,14 @@
 			:title="$t('InfoCard_TimeWork_Title')"
 			:comment="$t('InfoCard_TimeWork_Comment')"
 			v-model="timeWork"
+			readonly
 		/>
 		<CardSectionInput
 			temperature
 			:title="$t('InfoCard_Temperature_Title')"
 			:comment="$t('InfoCard_Temperature_Comment')"
 			v-model="temperature"
+			readonly
 		/>
 		<CardSection2Icons title="ACC" :comment="$t('InfoCard_ACC_Comment')" icon1Name="key" :icon1Value="acc" />
 		<CardSectionToggle
