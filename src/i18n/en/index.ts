@@ -8,7 +8,7 @@ export default {
 	SetTime: 'Set time',
 	Setting: 'Setting',
 
-	LangRussian: 'Russian language',
+	LangRussian: 'Русский язык',
 	LangEnglish: 'Английский язык',
 
 	DeviceInfo: 'Device info',

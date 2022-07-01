@@ -1,4 +1,5 @@
 import { IItemMenu } from './IItemMenu';
 import { TItemMenu } from './TItemMenu';
 
-export { IItemMenu, TItemMenu };
+export { TItemMenu };
+export type { IItemMenu };
