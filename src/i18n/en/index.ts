@@ -86,5 +86,19 @@ export default {
 	MovementCard_SpeedAVG_Title: 'Average speed',
 	MovementCard_SpeedAVG_Comment: 'The value of the on-board, km/h',
 	MovementCard_RestWay_Title: 'Rest of the path, km',
-	MovementCard_RestWay_Comment: 'The value of the on-board, km'
+	MovementCard_RestWay_Comment: 'The value of the on-board, km',
+
+	ClimateCard_Title: 'Climate control',
+	ClimateCard_StatusWork_Title: 'Operation status',
+	ClimateCard_StatusWork_Comment: 'Operation status of the climate control unit',
+	ClimateCard_AutoMode_Title: 'Auto',
+	ClimateCard_AutoMode_Comment: 'Automatic mode of operation of the climate unit',
+	ClimateCard_AC_Title: 'AC',
+	ClimateCard_AC_Comment: 'Air conditioner operation',
+	ClimateCard_Temperature_Title: 'Temperature',
+	ClimateCard_Temperature_Comment: 'Climate unit temperature setpoint',
+	ClimateCard_Air_Title: 'Cabin ventilation',
+	ClimateCard_Air_Comment: 'Air circulation inside the passenger compartment or "fresh" air intake',
+	ClimateCard_Blow_Title: 'Air flow',
+	ClimateCard_Blow_Comment: 'Direction of air flow to the legs, to the torso, to the windshield'
 };

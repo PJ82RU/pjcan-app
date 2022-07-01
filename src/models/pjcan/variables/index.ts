@@ -13,6 +13,7 @@ import {
 } from './bose';
 
 import {
+	TAir,
 	ClimateValue,
 	ClimateView,
 	API_EXEC_VARIABLE_CLIMATE,
@@ -116,6 +117,7 @@ export {
 	VariableView,
 	BoseConfig,
 	BoseView,
+	TAir,
 	ClimateValue,
 	ClimateView,
 	DoorsValue,

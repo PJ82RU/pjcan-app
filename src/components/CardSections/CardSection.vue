@@ -89,7 +89,7 @@ export default {
 <style lang="sass">
 .CardSection
 	width: 100%
-	max-width: 400px
+	max-width: 420px
 	margin-bottom: 10px
 
 	.q-card__actions

@@ -33,7 +33,7 @@ export default {
 		let numberCols: number = Math.round($q.screen.width / 400);
 		let cols: string[][] = [];
 		for (let i = 0; i < numberCols; i++) cols.push([]);
-		let cards = ['InfoCard', 'DoorsCard', 'EngineCard', 'FuelCard', 'MovementCard', 'ClimateCard'];
+		let cards = ['InfoCard', 'EngineCard', 'FuelCard', 'DoorsCard', 'MovementCard', 'ClimateCard'];
 
 		let index: number = 0;
 		cards.forEach((x) => {

@@ -6,6 +6,12 @@ import { BaseModel, IBaseModel } from '../../BaseModel';
 export const API_EXEC_VARIABLE_CLIMATE = 120; // команда API
 const STRUCT_LENGTH = 10; // длина данных API
 
+export enum TAir {
+	AIR_NONE,
+	AIR_CABIN,
+	AIR_STREET
+}
+
 /** Интерфейс значений климата */
 export interface IClimateValue extends IBaseModel {
 	enabled: boolean;
@@ -16,7 +22,7 @@ export interface IClimateValue extends IBaseModel {
 	airDWindshield: boolean;
 	visible: boolean;
 	airRate: number;
-	airType: number;
+	airType: TAir;
 	tempType: number;
 	tempDisplay: number;
 	temperature: number;

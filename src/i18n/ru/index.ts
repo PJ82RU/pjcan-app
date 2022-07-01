@@ -96,5 +96,9 @@ export default {
 	ClimateCard_AC_Title: 'AC',
 	ClimateCard_AC_Comment: 'Работа кондиционера',
 	ClimateCard_Temperature_Title: 'Температура',
-	ClimateCard_Temperature_Comment: 'Установленное значение температуры блока климат-контроля'
+	ClimateCard_Temperature_Comment: 'Установленное значение температуры блока климат-контроля',
+	ClimateCard_Air_Title: 'Вентиляция салона',
+	ClimateCard_Air_Comment: 'Циркуляция воздуха внутри салона или забор "свежего" воздуха',
+	ClimateCard_Blow_Title: 'Воздушный поток',
+	ClimateCard_Blow_Comment: 'Направление воздушного потока в ноги, в туловище, в ветровое стекло'
 };
