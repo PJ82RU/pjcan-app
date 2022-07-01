@@ -4,8 +4,16 @@
 			<div class="CardSection2Icons-header-title">{{ title }}</div>
 			<div class="CardSection2Icons-header-comment">{{ comment }}</div>
 		</div>
-		<IconCustom :name="icon1Name" :color="icon1Color" :color-secondary="icon1ColorSecondary" :size="iconSize" />
 		<IconCustom
+			class="CardSection2Icons-icon1 spin"
+			:name="icon1Name"
+			:color="icon1Color"
+			:color-secondary="icon1ColorSecondary"
+			:size="iconSize"
+			:style="styleIcon + styleRotation"
+		/>
+		<IconCustom
+			class="CardSection2Icons-icon2"
 			v-if="icon2Name?.length > 0"
 			:name="icon2Name"
 			:color="icon2Color"
@@ -66,11 +74,27 @@ export default {
 		iconSize: {
 			type: String,
 			default: '30px'
+		},
+		margin: {
+			type: String,
+			default: ''
+		},
+		speedRotation: {
+			type: Number,
+			default: 0
 		}
 	},
 	setup(props: any) {
-		const { icon1Value, icon2Value, iconColorOn, iconColorOff, iconColorSecondaryOn, iconColorSecondaryOff } =
-			toRefs(props);
+		const {
+			icon1Value,
+			icon2Value,
+			iconColorOn,
+			iconColorOff,
+			iconColorSecondaryOn,
+			iconColorSecondaryOff,
+			margin,
+			speedRotation
+		} = toRefs(props);
 
 		const icon1Color = computed((): string => (icon1Value.value ? iconColorOn.value : iconColorOff.value));
 		const icon2Color = computed((): string => (icon2Value.value ? iconColorOn.value : iconColorOff.value));
@@ -80,12 +104,23 @@ export default {
 		const icon2ColorSecondary = computed((): string =>
 			icon2Value.value ? iconColorSecondaryOn.value : iconColorSecondaryOff.value
 		);
+		const styleIcon = computed((): string | undefined =>
+			margin.value?.length > 0 ? `margin-right:${margin.value};` : undefined
+		);
+		const styleRotation = computed((): string | undefined => {
+			if (speedRotation.value > 0 && speedRotation.value < 10) {
+				const sec = 10 - speedRotation.value;
+				return `-webkit-animation:spin ${sec}s infinite linear;animation:spin ${sec}s infinite linear;`;
+			}
+		});
 
 		return {
 			icon1Color,
 			icon2Color,
 			icon1ColorSecondary,
-			icon2ColorSecondary
+			icon2ColorSecondary,
+			styleIcon,
+			styleRotation
 		};
 	}
 };
