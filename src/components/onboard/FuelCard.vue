@@ -1,4 +1,3 @@
-<!--suppress RequiredAttributes -->
 <template>
 	<CardSection :title="$t('FuelCard_Title')" @click-options="onClickOptions">
 		<CardSectionInput

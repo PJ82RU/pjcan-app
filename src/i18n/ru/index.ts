@@ -63,12 +63,20 @@ export default {
 	EngineCard_Coolant_Comment: 'Температура охлаждающей жидкости',
 
 	FuelCard_Title: 'Топливо',
-	FuelCard_Current_Title: 'Расход топлива, л/100 км',
-	FuelCard_Current_Comment: 'Значение БК',
-	FuelCard_AVG_Title: 'Средний расход, л/100 км',
-	FuelCard_AVG_Comment: 'Значение БК',
-	FuelCard_Total_Title: 'Количество топлива, л',
-	FuelCard_Total_Comment: 'Экспериментальное значение (расчетное)',
-	FuelCard_Consumption_Title: 'Расход топлива, л/ч',
-	FuelCard_Consumption_Comment: 'Экспериментальное значение (расчетное)'
+	FuelCard_Current_Title: 'Расход топлива',
+	FuelCard_Current_Comment: 'Значение БК, л/100 км',
+	FuelCard_AVG_Title: 'Средний расход',
+	FuelCard_AVG_Comment: 'Значение БК, л/100 км',
+	FuelCard_Total_Title: 'Количество топлива',
+	FuelCard_Total_Comment: 'Экспериментальное значение (расчетное), л',
+	FuelCard_Consumption_Title: 'Расход топлива',
+	FuelCard_Consumption_Comment: 'Экспериментальное значение (расчетное), л/ч',
+
+	MovementCard_Title: 'Спидометр',
+	MovementCard_Speed_Title: 'Скорость автомобиля',
+	MovementCard_Speed_Comment: 'Значение БК, км/ч',
+	MovementCard_SpeedAVG_Title: 'Средняя скорость',
+	MovementCard_SpeedAVG_Comment: 'Значение БК, км/ч',
+	MovementCard_RestWay_Title: 'Остаток пути, км',
+	MovementCard_RestWay_Comment: 'Значение БК, км'
 };
