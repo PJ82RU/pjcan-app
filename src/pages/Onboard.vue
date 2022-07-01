@@ -3,6 +3,7 @@
 		<InfoCard />
 		<DoorsCard />
 		<EngineCard />
+		<FuelCard />
 	</div>
 </template>
 
@@ -10,10 +11,11 @@
 import InfoCard from '@/components/onboard/InfoCard.vue';
 import DoorsCard from '@/components/onboard/DoorsCard.vue';
 import EngineCard from '@/components/onboard/EngineCard.vue';
+import FuelCard from '@/components/onboard/FuelCard.vue';
 
 export default {
 	name: 'Onboard',
-	components: { InfoCard, DoorsCard, EngineCard }
+	components: { InfoCard, DoorsCard, EngineCard, FuelCard }
 };
 </script>
 

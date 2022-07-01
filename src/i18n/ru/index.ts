@@ -60,5 +60,15 @@ export default {
 	EngineCard_Throttle_Title: 'Положение дрос. заслонки',
 	EngineCard_Throttle_Comment: 'Вот как ее положили, так и лежит',
 	EngineCard_Coolant_Title: 'Температура антифриза',
-	EngineCard_Coolant_Comment: 'Температура охлаждающей жидкости'
+	EngineCard_Coolant_Comment: 'Температура охлаждающей жидкости',
+
+	FuelCard_Title: 'Топливо',
+	FuelCard_Current_Title: 'Расход топлива, л/100 км',
+	FuelCard_Current_Comment: 'Значение БК',
+	FuelCard_AVG_Title: 'Средний расход, л/100 км',
+	FuelCard_AVG_Comment: 'Значение БК',
+	FuelCard_Total_Title: 'Количество топлива, л',
+	FuelCard_Total_Comment: 'Экспериментальное значение (расчетное)',
+	FuelCard_Consumption_Title: 'Расход топлива, л/ч',
+	FuelCard_Consumption_Comment: 'Экспериментальное значение (расчетное)'
 };

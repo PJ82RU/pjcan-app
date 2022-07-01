@@ -60,5 +60,15 @@ export default {
 	EngineCard_Throttle_Title: 'The position of the throttle',
 	EngineCard_Throttle_Comment: 'This is how it was laid, it lies',
 	EngineCard_Coolant_Title: 'Coolant temperature',
-	EngineCard_Coolant_Comment: 'The temperature of the antifreeze'
+	EngineCard_Coolant_Comment: 'The temperature of the antifreeze',
+
+	FuelCard_Title: 'Fuel',
+	FuelCard_Current_Title: 'Fuel consumption, l/100 km',
+	FuelCard_Current_Comment: 'The value of the on-board',
+	FuelCard_AVG_Title: 'Average consumption, l/100 km',
+	FuelCard_AVG_Comment: 'The value of the on-board',
+	FuelCard_Total_Title: 'The amount of fuel, l',
+	FuelCard_Total_Comment: 'Experimental value (calculated)',
+	FuelCard_Consumption_Title: 'Fuel consumption, l/h',
+	FuelCard_Consumption_Comment: 'Experimental value (calculated)'
 };
