@@ -4,6 +4,13 @@ import { BaseModel, IBaseModel } from '../../BaseModel';
 export const API_EXEC_VARIABLE_SENSORS = 170; // команда API
 const STRUCT_LENGTH = 3; // длина данных API
 
+export enum TSensorsSignal {
+	SIGNAL_NONE = 0,
+	SIGNAL_LEFT = 1,
+	SIGNAL_RIGHT = 2,
+	SIGNAL_EMERGENCY = 3
+}
+
 /** Интерфейс значений датчиков */
 export interface ISensorsValue extends IBaseModel {
 	acc: boolean;
@@ -11,7 +18,7 @@ export interface ISensorsValue extends IBaseModel {
 	reverse: boolean;
 	seatbeltDriver: boolean;
 	seatbeltPassenger: boolean;
-	signal: number;
+	signal: TSensorsSignal;
 }
 
 /** Структура данных */
@@ -33,7 +40,7 @@ export class SensorsValue extends BaseModel implements ISensorsValue {
 	reverse = false;
 	seatbeltDriver = false;
 	seatbeltPassenger = false;
-	signal = 0;
+	signal = TSensorsSignal.SIGNAL_NONE;
 
 	/**
 	 * Запись данных

@@ -76,6 +76,7 @@ import {
 } from './movement';
 
 import {
+	TSensorsSignal,
 	SensorsValue,
 	SensorsView,
 	API_EXEC_VARIABLE_SENSORS,
@@ -127,6 +128,7 @@ export {
 	FuelView,
 	MovementValue,
 	MovementView,
+	TSensorsSignal,
 	SensorsValue,
 	SensorsView,
 	TemperatureValue,
