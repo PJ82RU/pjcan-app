@@ -1,10 +1,11 @@
 <!--suppress RequiredAttributes -->
 <template>
 	<CardSection :title="$t('EngineCard_Title')" @click-options="onClickOptions">
-		<CardSectionToggle
+		<CardSection2Icons
 			:title="$t('EngineCard_Enabled_Title')"
 			:comment="$t('EngineCard_Enabled_Comment')"
-			v-model="enabled"
+			icon1Name="engine"
+			:icon1Value="enabled"
 		/>
 		<CardSectionInput :title="$t('EngineCard_RPM_Title')" :comment="$t('EngineCard_RPM_Comment')" v-model="rpm" />
 		<CardSectionInput
@@ -45,10 +46,18 @@ import CardSectionTime from '@/components/cardSections/CardSectionTime.vue';
 import CardSectionToggle from '@/components/cardSections/CardSectionToggle.vue';
 import CardSectionInput from '@/components/cardSections/CardSectionInput.vue';
 import CardSectionProgress from '@/components/cardSections/CardSectionProgress.vue';
+import CardSection2Icons from '@/components/cardSections/CardSection2Icons.vue';
 
 export default {
 	name: 'EngineCard',
-	components: { CardSection, CardSectionTime, CardSectionToggle, CardSectionInput, CardSectionProgress },
+	components: {
+		CardSection,
+		CardSectionTime,
+		CardSectionToggle,
+		CardSectionInput,
+		CardSectionProgress,
+		CardSection2Icons
+	},
 	setup() {
 		const enabled = computed((): boolean => store.engineValue.enabled);
 		const rpm = computed((): string => store.engineValue.rpm.toString());

@@ -5,7 +5,13 @@
 			<div class="CardSection2Icons-header-comment">{{ comment }}</div>
 		</div>
 		<IconCustom :name="icon1Name" :color="icon1Color" :color-secondary="icon1ColorSecondary" :size="iconSize" />
-		<IconCustom :name="icon2Name" :color="icon2Color" :color-secondary="icon2ColorSecondary" :size="iconSize" />
+		<IconCustom
+			v-if="icon2Name?.length > 0"
+			:name="icon2Name"
+			:color="icon2Color"
+			:color-secondary="icon2ColorSecondary"
+			:size="iconSize"
+		/>
 	</q-card-section>
 </template>
 
@@ -31,7 +37,7 @@ export default {
 		},
 		icon2Name: {
 			type: String,
-			require: true
+			default: ''
 		},
 		icon1Value: {
 			type: Boolean,
@@ -55,7 +61,7 @@ export default {
 		},
 		iconColorSecondaryOff: {
 			type: String,
-			default: 'grey-2'
+			default: 'grey-4'
 		},
 		iconSize: {
 			type: String,
