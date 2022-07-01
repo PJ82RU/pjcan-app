@@ -27,6 +27,7 @@ export default {
 	UpdFirmware_Update: 'Update',
 	UpdFirmware_Error: 'Firmware update error',
 
+	InfoCard_Title: 'Information',
 	InfoCard_ACC_Comment: 'Car power',
 	InfoCard_TimeWork_Title: 'Operating time',
 	InfoCard_TimeWork_Comment: 'Operating time of the device from the moment of switching on',
@@ -43,5 +44,21 @@ export default {
 	DoorsCard_BR_Title: 'Rear right door',
 	DoorsCard_BR_Comment: 'Current state of rear right door',
 	DoorsCard_Trunk_Title: 'Trunk',
-	DoorsCard_Trunk_Comment: 'The current state of the trunk'
+	DoorsCard_Trunk_Comment: 'The current state of the trunk',
+
+	EngineCard_Title: 'Engine',
+	EngineCard_Enabled_Title: 'Engine work',
+	EngineCard_Enabled_Comment: 'The current state of the engine',
+	EngineCard_RPM_Title: 'RPM engine',
+	EngineCard_RPM_Comment: 'The current number of full speed of the crankshaft of the engine per minute',
+	EngineCard_CountRPM_Title: 'RPM counter, th.',
+	EngineCard_CountRPM_Comment: 'The total number of full speed of the crankshaft of the engine in thousands',
+	EngineCard_Load_Title: 'The load on the engine',
+	EngineCard_Load_Comment: "The load of something for something, I don't understand how it is calculated",
+	EngineCard_Motors_Title: 'Engine time',
+	EngineCard_Motors_Comment: 'Total engine operating time',
+	EngineCard_Throttle_Title: 'The position of the throttle',
+	EngineCard_Throttle_Comment: 'This is how it was laid, it lies',
+	EngineCard_Coolant_Title: 'Coolant temperature',
+	EngineCard_Coolant_Comment: 'The temperature of the antifreeze'
 };
