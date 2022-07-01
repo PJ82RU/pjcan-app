@@ -1,9 +1,10 @@
 <!--suppress RequiredAttributes -->
 <template>
-	<CardSection title="Информация" @click-options="onClickOptions">
+	<CardSection :title="$t('InfoCard_Title')" @click-options="onClickOptions">
 		<CardSectionToggle title="ACC" :comment="$t('InfoCard_ACC_Comment')" v-model="acc" />
 		<!--<CardSectionTime :title="$t('InfoCard_TimeWork_Title')" :comment="$t('InfoCard_TimeWork_Comment')" v-model="time" />-->
 		<CardSectionInput
+			temperature
 			:title="$t('InfoCard_Temperature_Title')"
 			:comment="$t('InfoCard_Temperature_Comment')"
 			v-model="temperature"
@@ -26,7 +27,7 @@ export default {
 	setup() {
 		const acc = computed((): boolean => store.sensorValue.acc);
 		//const time = computed((): boolean => store.);
-		const temperature = computed((): string => `${store.temperatureValue.out}°C`);
+		const temperature = computed((): number => store.temperatureValue.out);
 
 		const onClickOptions = (e: any): void => {
 			console.log('InfoCard -> onClickOptions', e);

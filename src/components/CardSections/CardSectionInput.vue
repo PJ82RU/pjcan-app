@@ -58,14 +58,18 @@ export default {
 		max: {
 			type: [Number, undefined],
 			default: undefined
+		},
+		temperature: {
+			type: Boolean,
+			default: false
 		}
 	},
 	setup(props: any, context: any) {
-		const { modelValue, type, min, max } = toRefs(props);
+		const { modelValue, type, min, max, temperature } = toRefs(props);
 
 		const valueInput = computed({
 			get(): string | number {
-				return modelValue.value;
+				return temperature.value ? `${modelValue.value.toFixed(1)}°C` : modelValue.value;
 			},
 			set(value: string | number): void {
 				if (type.value === 'number') {
