@@ -22,8 +22,8 @@
 <script lang="ts">
 import { computed, inject, Ref } from 'vue';
 
-import CardSection from '@/components/cardSections/CardSection.vue';
-import CardSectionToggle from '@/components/cardSections/CardSectionToggle.vue';
+import CardSection from '@/components/cardSections_/CardSection.vue';
+import CardSectionToggle from '@/components/cardSections_/CardSectionToggle.vue';
 
 export default {
 	name: 'DoorsCard',

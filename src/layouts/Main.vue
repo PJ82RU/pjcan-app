@@ -47,8 +47,8 @@
 import { ref } from 'vue';
 import { useQuasar } from 'quasar';
 
-import LeftMainMenu from '@/components/menu/LeftMainMenu.vue';
-import RightMainMenu from '@/components/menu/RightMainMenu.vue';
+import LeftMainMenu from '@/components/menu_/LeftMainMenu.vue';
+import RightMainMenu from '@/components/menu_/RightMainMenu.vue';
 import BluetoothBtn from '@/components/bluetooth/BluetoothBtn.vue';
 import UpdateFirmwareDialog from '@/components/updateFirmware/UpdateFirmwareDialog.vue';
 

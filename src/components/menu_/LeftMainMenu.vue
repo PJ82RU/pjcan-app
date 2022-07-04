@@ -1,9 +1,6 @@
 <template>
 	<q-list padding>
 		<ItemMenu :items="menuHeader" @click="onClickItem" />
-		<q-separator />
-		<ItemMenu :items="menuMain" @click="onClickItem" />
-		<q-separator />
 		<ItemMenu :items="menuActions" @click="onClickItem" />
 		<q-separator />
 		<ItemMenu :items="menuFooter" @click="onClickItem" />
@@ -12,7 +9,7 @@
 
 <script lang="ts">
 import ItemMenu from './ItemMenu.vue';
-import { menuHeader, menuMain, menuActions, menuFooter } from '@/store/menu/MenuLeftMain';
+import { menuHeader, menuActions, menuFooter } from '@/store/menu/MenuLeftMain';
 
 export default {
 	name: 'LeftMainMenu',
@@ -24,7 +21,6 @@ export default {
 
 		return {
 			menuHeader,
-			menuMain,
 			menuActions,
 			menuFooter,
 			onClickItem

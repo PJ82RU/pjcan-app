@@ -64,10 +64,10 @@
 <script lang="ts">
 import { computed, inject, Ref } from 'vue';
 
-import CardSection from '@/components/cardSections/CardSection.vue';
-import CardSectionToggle from '@/components/cardSections/CardSectionToggle.vue';
-import CardSectionSlider from '@/components/cardSections/CardSectionSlider.vue';
-import CardSectionSelect from '@/components/cardSections/CardSectionSelect.vue';
+import CardSection from '@/components/cardSections_/CardSection.vue';
+import CardSectionToggle from '@/components/cardSections_/CardSectionToggle.vue';
+import CardSectionSlider from '@/components/cardSections_/CardSectionSlider.vue';
+import CardSectionSelect from '@/components/cardSections_/CardSectionSelect.vue';
 import { TCenterPoint } from '@/models/pjcan';
 
 export default {

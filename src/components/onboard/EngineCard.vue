@@ -54,12 +54,12 @@
 <script lang="ts">
 import { computed, inject, Ref } from 'vue';
 
-import CardSection from '@/components/cardSections/CardSection.vue';
-import CardSectionTime from '@/components/cardSections/CardSectionTime.vue';
-import CardSectionToggle from '@/components/cardSections/CardSectionToggle.vue';
-import CardSectionInput from '@/components/cardSections/CardSectionInput.vue';
-import CardSectionProgress from '@/components/cardSections/CardSectionProgress.vue';
-import CardSection2Icons from '@/components/cardSections/CardSection2Icons.vue';
+import CardSection from '@/components/cardSections_/CardSection.vue';
+import CardSectionTime from '@/components/cardSections_/CardSectionTime.vue';
+import CardSectionToggle from '@/components/cardSections_/CardSectionToggle.vue';
+import CardSectionInput from '@/components/cardSections_/CardSectionInput.vue';
+import CardSectionProgress from '@/components/cardSections_/CardSectionProgress.vue';
+import CardSection2Icons from '@/components/cardSections_/CardSection2Icons.vue';
 
 export default {
 	name: 'EngineCard',
