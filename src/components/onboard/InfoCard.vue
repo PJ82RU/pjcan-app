@@ -1,6 +1,12 @@
 <!--suppress RequiredAttributes -->
 <template>
-	<CardSection :title="$t('InfoCard_Title')" icon-name="info" @click-options="onClickOptions">
+	<CardSection
+		class="InfoCard"
+		type="InfoCard"
+		:title="$t('InfoCard_Title')"
+		icon-name="info"
+		@click-options="onClickOptions"
+	>
 		<CardSectionTime
 			:title="$t('InfoCard_TimeWork_Title')"
 			:comment="$t('InfoCard_TimeWork_Comment')"
@@ -48,8 +54,7 @@
 </template>
 
 <script lang="ts">
-import { computed } from 'vue';
-import store from '@/store';
+import { computed, inject, Ref } from 'vue';
 
 import CardSection from '@/components/cardSections/CardSection.vue';
 import CardSectionTime from '@/components/cardSections/CardSectionTime.vue';
@@ -62,22 +67,25 @@ export default {
 	name: 'InfoCard',
 	components: { CardSection, CardSectionTime, CardSectionToggle, CardSectionInput, CardSection2Icons },
 	setup() {
-		const acc = computed((): boolean => store.sensorValue.acc);
+		const store: Ref | undefined = inject('store');
+		const { sensorValue, temperatureValue } = store?.value;
+
+		const acc = computed((): boolean => sensorValue.acc);
 		const timeWork = computed((): string => '');
-		const temperature = computed((): number => store.temperatureValue.out);
-		const handbrake = computed((): boolean => store.sensorValue.handbrake);
-		const reverse = computed((): boolean => store.sensorValue.reverse);
-		const seatbeltDriver = computed((): boolean => store.sensorValue.seatbeltDriver);
-		const seatbeltPassenger = computed((): boolean => store.sensorValue.seatbeltPassenger);
+		const temperature = computed((): number => temperatureValue.out);
+		const handbrake = computed((): boolean => sensorValue.handbrake);
+		const reverse = computed((): boolean => sensorValue.reverse);
+		const seatbeltDriver = computed((): boolean => sensorValue.seatbeltDriver);
+		const seatbeltPassenger = computed((): boolean => sensorValue.seatbeltPassenger);
 		const signalLeft = computed(
 			(): boolean =>
-				store.sensorValue.signal === TSensorsSignal.SIGNAL_LEFT ||
-				store.sensorValue.signal === TSensorsSignal.SIGNAL_EMERGENCY
+				sensorValue.signal === TSensorsSignal.SIGNAL_LEFT ||
+				sensorValue.signal === TSensorsSignal.SIGNAL_EMERGENCY
 		);
 		const signalRight = computed(
 			(): boolean =>
-				store.sensorValue.signal === TSensorsSignal.SIGNAL_RIGHT ||
-				store.sensorValue.signal === TSensorsSignal.SIGNAL_EMERGENCY
+				sensorValue.signal === TSensorsSignal.SIGNAL_RIGHT ||
+				sensorValue.signal === TSensorsSignal.SIGNAL_EMERGENCY
 		);
 
 		const onClickOptions = (e: any): void => {

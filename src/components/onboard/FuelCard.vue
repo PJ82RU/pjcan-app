@@ -1,5 +1,11 @@
 <template>
-	<CardSection :title="$t('FuelCard_Title')" icon-name="fuel" @click-options="onClickOptions">
+	<CardSection
+		class="FuelCard"
+		type="FuelCard"
+		:title="$t('FuelCard_Title')"
+		icon-name="fuel"
+		@click-options="onClickOptions"
+	>
 		<CardSectionInput
 			:title="$t('FuelCard_Current_Title')"
 			:comment="$t('FuelCard_Current_Comment')"
@@ -28,8 +34,7 @@
 </template>
 
 <script lang="ts">
-import { computed } from 'vue';
-import store from '@/store';
+import { computed, inject, Ref } from 'vue';
 
 import CardSection from '@/components/cardSections/CardSection.vue';
 import CardSectionInput from '@/components/cardSections/CardSectionInput.vue';
@@ -38,10 +43,13 @@ export default {
 	name: 'FuelCard',
 	components: { CardSection, CardSectionInput },
 	setup() {
-		const current = computed((): string => store.fuelValue.current.toFixed(1));
-		const avg = computed((): string => store.fuelValue.avg.toFixed(1));
-		const total = computed((): string => store.fuelValue.total.toFixed(2));
-		const consumption = computed((): string => store.fuelValue.consumption.toFixed(2));
+		const store: Ref | undefined = inject('store');
+		const { fuelValue } = store?.value;
+
+		const current = computed((): string => fuelValue.current.toFixed(1));
+		const avg = computed((): string => fuelValue.avg.toFixed(1));
+		const total = computed((): string => fuelValue.total.toFixed(2));
+		const consumption = computed((): string => fuelValue.consumption.toFixed(2));
 
 		const onClickOptions = (e: any): void => {
 			console.log('FuelCard -> onClickOptions', e);

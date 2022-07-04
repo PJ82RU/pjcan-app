@@ -1,5 +1,5 @@
 import axios from 'axios';
-import Store from '@/store';
+import { Store } from '@/store';
 import { UpdateData, IUpdateData, UPDATE_UPLOAD_EVENT_RESULT } from '@/models/pjcan/update/UpdateData';
 import { UpdateBegin, IUpdateBegin } from '@/models/pjcan/update/UpdateBegin';
 import { IVersion, Version } from '@/models/version';
@@ -9,6 +9,8 @@ const URL_FIRMWARE_GZIP = '/firmware/firmware.bin.gz';
 
 /** Обновление прошивки устройства PJCAN */
 export class UpdateFirmware {
+	private _store: Store;
+
 	/** Новая версия прошивки */
 	newVersion: IVersion = new Version();
 	/** Результат загрузки */
@@ -20,7 +22,8 @@ export class UpdateFirmware {
 		return this.resultUpload.offset > 0 ? this.resultUpload.offset / this.resultUpload.data.byteLength : 0;
 	}
 
-	constructor() {
+	constructor(store: Store) {
+		this._store = store;
 		this.resultUpload.addListener(UPDATE_UPLOAD_EVENT_RESULT, (res) => this.onUpload(res));
 	}
 
@@ -46,7 +49,7 @@ export class UpdateFirmware {
 						this.newVersion.build = ver[2];
 						this.newVersion.revision = ver[3];
 
-						if (!Store.version.compare(this.newVersion)) resolve();
+						if (!this._store.version.compare(this.newVersion)) resolve();
 						else reject('Current version');
 					} else reject('No data');
 				})
@@ -57,7 +60,7 @@ export class UpdateFirmware {
 	/** Пишем данные файла прошивки в устройство PJCAN */
 	private onUpload(result: boolean): void {
 		if (result && this.resultUpload.offset < this.resultUpload.data.byteLength)
-			Store.bluetooth.send(this.resultUpload.get()).then();
+			this._store.bluetooth.send(this.resultUpload.get()).then();
 	}
 
 	/** Загрузка прошивки */
@@ -80,6 +83,6 @@ export class UpdateFirmware {
 
 	/** Начать прошивку устройства */
 	begin(): void {
-		Store.bluetooth.send(this.resultBegin.get()).then();
+		this._store.bluetooth.send(this.resultBegin.get()).then();
 	}
 }

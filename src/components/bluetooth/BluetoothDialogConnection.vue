@@ -15,11 +15,10 @@
 </template>
 
 <script lang="ts">
-import { ref, toRefs, watch } from 'vue';
+import { inject, Ref, ref, toRefs, watch } from 'vue';
 import { lang } from '@/boot/i18n';
 import { useQuasar } from 'quasar';
 
-import Store from '@/store';
 import { BLUETOOTH_EVENT_CONNECTED, EConnectedStatus } from './Bluetooth';
 
 export default {
@@ -33,7 +32,9 @@ export default {
 	setup(props: any, context: any) {
 		const $q = useQuasar();
 		const { modelValue } = toRefs(props);
-		const { bluetooth } = Store;
+
+		const store: Ref | undefined = inject('store');
+		const { bluetooth } = store?.value;
 
 		// отображение диалога
 		const visible = ref(true);

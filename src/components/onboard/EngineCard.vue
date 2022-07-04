@@ -1,6 +1,12 @@
 <!--suppress RequiredAttributes -->
 <template>
-	<CardSection :title="$t('EngineCard_Title')" icon-name="engine" @click-options="onClickOptions">
+	<CardSection
+		class="EngineCard"
+		type="EngineCard"
+		:title="$t('EngineCard_Title')"
+		icon-name="engine"
+		@click-options="onClickOptions"
+	>
 		<CardSection2Icons
 			:title="$t('EngineCard_Enabled_Title')"
 			:comment="$t('EngineCard_Enabled_Comment')"
@@ -46,8 +52,7 @@
 </template>
 
 <script lang="ts">
-import { computed } from 'vue';
-import store from '@/store';
+import { computed, inject, Ref } from 'vue';
 
 import CardSection from '@/components/cardSections/CardSection.vue';
 import CardSectionTime from '@/components/cardSections/CardSectionTime.vue';
@@ -67,13 +72,16 @@ export default {
 		CardSection2Icons
 	},
 	setup() {
-		const enabled = computed((): boolean => store.engineValue.enabled);
-		const rpm = computed((): string => store.engineValue.rpm.toFixed());
-		const countRPM = computed((): string => store.engineValue.countRPM.toFixed());
-		const load = computed((): number => store.engineValue.load);
-		const mseconds = computed((): string => store.engineValue.mseconds.toFixed());
-		const throttle = computed((): number => store.engineValue.throttle);
-		const coolant = computed((): number => store.engineValue.coolant);
+		const store: Ref | undefined = inject('store');
+		const { engineValue } = store?.value;
+
+		const enabled = computed((): boolean => engineValue.enabled);
+		const rpm = computed((): string => engineValue.rpm.toFixed());
+		const countRPM = computed((): string => engineValue.countRPM.toFixed());
+		const load = computed((): number => engineValue.load);
+		const mseconds = computed((): string => engineValue.mseconds.toFixed());
+		const throttle = computed((): number => engineValue.throttle);
+		const coolant = computed((): number => engineValue.coolant);
 
 		const onClickOptions = (e: any): void => {
 			console.log('EngineCard -> onClickOptions', e);

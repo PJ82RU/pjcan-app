@@ -34,11 +34,10 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed } from 'vue';
+import { defineComponent, ref, computed, inject, Ref } from 'vue';
 import { lang } from '@/boot/i18n';
 import { useQuasar } from 'quasar';
 
-import Store from '@/store';
 import { BLUETOOTH_EVENT_CONNECTED, EConnectedStatus } from '@/components/bluetooth';
 
 import { UPDATE_UPLOAD_EVENT_RESULT } from '@/models/pjcan/update/UpdateData';
@@ -51,7 +50,8 @@ export default defineComponent({
 	name: 'UpdateFirmwareDialog',
 	setup() {
 		const $q = useQuasar();
-		const { updateFirmware, bluetooth } = Store;
+		const store: Ref | undefined = inject('store');
+		const { updateFirmware, bluetooth, version } = store?.value;
 
 		const visibleQuestion = ref(false); // показать вопрос
 		const visibleUpdate = ref(false); // показать процесс обновления
@@ -73,7 +73,7 @@ export default defineComponent({
 		 */
 		const onCheckVersion = (delay: number): void => {
 			timerCheckVersion = setTimeout(() => {
-				if (bluetooth.connected && Store.version.is)
+				if (bluetooth.connected && version.is)
 					updateFirmware
 						.checkNewVersion()
 						.then(() => (visibleQuestion.value = true))

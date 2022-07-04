@@ -1,3 +1,4 @@
+<!--suppress TypeScriptValidateJSTypes -->
 <template>
 	<q-card class="CardSection">
 		<q-card-section horizontal>
@@ -32,7 +33,7 @@
 </template>
 
 <script lang="ts">
-import { computed, toRefs } from 'vue';
+import { computed, inject, Ref, toRefs } from 'vue';
 import CardSectionMenu from '@/components/menu/CardSectionMenu.vue';
 import IconCustom from '@/components/common/IconCustom';
 
@@ -44,9 +45,9 @@ export default {
 			type: String,
 			require: true
 		},
-		bookmark: {
-			type: Boolean,
-			default: false
+		type: {
+			type: String,
+			require: true
 		},
 		iconName: {
 			type: String,
@@ -67,13 +68,20 @@ export default {
 	},
 	emits: ['click-options', 'click-bookmark', 'click-help'],
 	setup(props: any, context: any) {
-		const { bookmark } = toRefs(props);
+		const { type } = toRefs(props);
 		const { emit } = context;
+		const onboard: Ref | undefined = inject('onboard');
 
-		const bookmarkIcon = computed(() => (bookmark.value ? 'bookmark' : 'bookmark_outline'));
+		// bookmark
+		const bookmarkIcon = computed(() => (onboard?.value.isCard(type.value) ? 'bookmark' : 'bookmark_outline'));
+		const onClickBookmark = (e: any) => {
+			if (onboard?.value.isCard(type.value)) onboard?.value.removeCard(type.value);
+			else onboard?.value.addCard(type.value);
+
+			emit('click-bookmark', e);
+		};
 
 		const onClickOptions = (e: any) => emit('click-options', e);
-		const onClickBookmark = (e: any) => emit('click-bookmark', e);
 		const onClickHelp = (e: any) => emit('click-help', e);
 
 		return {

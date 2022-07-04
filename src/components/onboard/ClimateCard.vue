@@ -1,6 +1,12 @@
 <!--suppress RequiredAttributes -->
 <template>
-	<CardSection :title="$t('ClimateCard_Title')" icon-name="climate" @click-options="onClickOptions">
+	<CardSection
+		class="ClimateCard"
+		type="ClimateCard"
+		:title="$t('ClimateCard_Title')"
+		icon-name="climate"
+		@click-options="onClickOptions"
+	>
 		<CardSection2Icons
 			:title="$t('ClimateCard_StatusWork_Title')"
 			:comment="$t('ClimateCard_StatusWork_Comment')"
@@ -40,8 +46,7 @@
 </template>
 
 <script lang="ts">
-import { computed } from 'vue';
-import store from '@/store';
+import { computed, inject, Ref } from 'vue';
 
 import CardSection from '@/components/cardSections/CardSection.vue';
 import CardSectionTime from '@/components/cardSections/CardSectionTime.vue';
@@ -53,30 +58,30 @@ import { TAir } from '@/models/pjcan';
 export default {
 	name: 'ClimateCard',
 	components: { CardSection, CardSectionTime, CardSectionToggle, CardSectionInput, CardSection2Icons },
+	emits: ['click-options', 'click-bookmark', 'click-help'],
 	setup() {
-		const enabled = computed((): boolean => store.climateValue.enabled);
-		const autoMode = computed((): boolean => store.climateValue.automode);
-		const ac = computed((): boolean => store.climateValue.ac);
-		const temperature = computed((): number => store.climateValue.temperature);
+		const store: Ref | undefined = inject('store');
+		const { climateValue } = store?.value;
 
-		const airEnabled = computed((): boolean => store.climateValue.airType !== TAir.AIR_NONE);
-		const airName = computed((): string =>
-			store.climateValue.airType === TAir.AIR_STREET ? 'air-fresh' : 'air-cabin'
-		);
-		const blowEnabled = computed((): boolean => store.climateValue.airDBody || store.climateValue.airDLegs);
+		const enabled = computed((): boolean => climateValue.enabled);
+		const autoMode = computed((): boolean => climateValue.automode);
+		const ac = computed((): boolean => climateValue.ac);
+		const temperature = computed((): number => climateValue.temperature);
+
+		const airEnabled = computed((): boolean => climateValue.airType !== TAir.AIR_NONE);
+		const airName = computed((): string => (climateValue.airType === TAir.AIR_STREET ? 'air-fresh' : 'air-cabin'));
+		const blowEnabled = computed((): boolean => climateValue.airDBody || climateValue.airDLegs);
 		const blowName = computed((): string =>
-			store.climateValue.airDLegs && store.climateValue.airDBody
+			climateValue.airDLegs && climateValue.airDBody
 				? 'blow-feet-body'
-				: store.climateValue.airDLegs
+				: climateValue.airDLegs
 				? 'blow-feet'
-				: store.climateValue.airDBody
+				: climateValue.airDBody
 				? 'blow-body'
 				: 'blow-none'
 		);
-		const blowWindshield = computed((): boolean => store.climateValue.airDWindshield);
-		const speedRotation = computed((): number =>
-			store.climateValue.airRate > 0 ? store.climateValue.airRate + 2 : 0
-		);
+		const blowWindshield = computed((): boolean => climateValue.airDWindshield);
+		const speedRotation = computed((): number => (climateValue.airRate > 0 ? climateValue.airRate + 2 : 0));
 
 		const onClickOptions = (e: any): void => {
 			console.log('ClimateCard -> onClickOptions', e);

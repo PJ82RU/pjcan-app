@@ -1,6 +1,12 @@
 <!--suppress RequiredAttributes -->
 <template>
-	<CardSection class="BoseCard" :title="$t('BoseCard_Title')" icon-name="volume" @click-options="onClickOptions">
+	<CardSection
+		class="BoseCard"
+		type="BoseCard"
+		:title="$t('BoseCard_Title')"
+		icon-name="volume"
+		@click-options="onClickOptions"
+	>
 		<CardSectionToggle
 			:title="$t('BoseCard_Enabled_Title')"
 			:comment="$t('BoseCard_Enabled_Comment')"
@@ -56,8 +62,7 @@
 </template>
 
 <script lang="ts">
-import { computed } from 'vue';
-import store from '@/store';
+import { computed, inject, Ref } from 'vue';
 
 import CardSection from '@/components/cardSections/CardSection.vue';
 import CardSectionToggle from '@/components/cardSections/CardSectionToggle.vue';
@@ -74,29 +79,20 @@ export default {
 		CardSectionSelect
 	},
 	setup() {
+		const store: Ref | undefined = inject('store');
+		const { boseConfig } = store?.value;
+
 		const enabled = computed({
-			get: (): boolean => store.boseConfig.enabled,
-			set: (val: boolean) => (store.boseConfig.enabled = val)
-		});
-		const mute = computed({
-			get: (): boolean => store.volumeConfig.mute,
-			set: (val: boolean) => (store.volumeConfig.mute = val)
-		});
-		const volume = computed({
-			get: (): number => store.volumeConfig.volume,
-			set: (val: number) => (store.volumeConfig.volume = val)
-		});
-		const volumeMax = computed({
-			get: (): number => 63 ?? store.volumeConfig.max,
-			set: (val: number) => (store.volumeConfig.max = val)
+			get: (): boolean => boseConfig.enabled,
+			set: (val: boolean) => (boseConfig.enabled = val)
 		});
 		const audioPLT = computed({
-			get: (): boolean => store.boseConfig.audioPLT,
-			set: (val: boolean) => (store.boseConfig.audioPLT = val)
+			get: (): boolean => boseConfig.audioPLT,
+			set: (val: boolean) => (boseConfig.audioPLT = val)
 		});
 		const centerPoint = computed({
-			get: (): number => Number(store.boseConfig.centerPoint),
-			set: (val: number) => (store.boseConfig.centerPoint = val as TCenterPoint)
+			get: (): number => Number(boseConfig.centerPoint),
+			set: (val: number) => (boseConfig.centerPoint = val as TCenterPoint)
 		});
 		const centerPointItems = computed((): any => [
 			{ label: 'OFF', value: 0 },
@@ -107,24 +103,24 @@ export default {
 			{ label: 'MAX', value: 5 }
 		]);
 		const balance = computed({
-			get: (): number => store.boseConfig.balance,
-			set: (val: number) => (store.boseConfig.balance = val)
+			get: (): number => boseConfig.balance,
+			set: (val: number) => (boseConfig.balance = val)
 		});
 		const fade = computed({
-			get: (): number => store.boseConfig.fade,
-			set: (val: number) => (store.boseConfig.fade = val)
+			get: (): number => boseConfig.fade,
+			set: (val: number) => (boseConfig.fade = val)
 		});
 		const treble = computed({
-			get: (): number => store.boseConfig.treble,
-			set: (val: number) => (store.boseConfig.treble = val)
+			get: (): number => boseConfig.treble,
+			set: (val: number) => (boseConfig.treble = val)
 		});
 		const bass = computed({
-			get: (): number => store.boseConfig.bass,
-			set: (val: number) => (store.boseConfig.bass = val)
+			get: (): number => boseConfig.bass,
+			set: (val: number) => (boseConfig.bass = val)
 		});
 		const wow = computed({
-			get: (): boolean => store.boseConfig.wow,
-			set: (val: boolean) => (store.boseConfig.wow = val)
+			get: (): boolean => boseConfig.wow,
+			set: (val: boolean) => (boseConfig.wow = val)
 		});
 
 		const onClickOptions = (e: any): void => {
@@ -133,9 +129,6 @@ export default {
 
 		return {
 			enabled,
-			mute,
-			volume,
-			volumeMax,
 			audioPLT,
 			centerPoint,
 			centerPointItems,

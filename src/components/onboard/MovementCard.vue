@@ -1,6 +1,12 @@
 <!--suppress RequiredAttributes -->
 <template>
-	<CardSection :title="$t('MovementCard_Title')" icon-name="speedometer" @click-options="onClickOptions">
+	<CardSection
+		class="MovementCard"
+		type="MovementCard"
+		:title="$t('MovementCard_Title')"
+		icon-name="speedometer"
+		@click-options="onClickOptions"
+	>
 		<CardSectionInput
 			:title="$t('MovementCard_Speed_Title')"
 			:comment="$t('MovementCard_Speed_Comment')"
@@ -23,8 +29,7 @@
 </template>
 
 <script lang="ts">
-import { computed } from 'vue';
-import store from '@/store';
+import { computed, inject, Ref } from 'vue';
 
 import CardSection from '@/components/cardSections/CardSection.vue';
 import CardSectionInput from '@/components/cardSections/CardSectionInput.vue';
@@ -33,9 +38,12 @@ export default {
 	name: 'MovementCard',
 	components: { CardSection, CardSectionInput },
 	setup() {
-		const speed = computed((): string => store.movementValue.speed.toFixed(2));
-		const speedAVG = computed((): string => store.movementValue.speedAVG.toString());
-		const restWay = computed((): string => store.movementValue.restWay.toFixed(2));
+		const store: Ref | undefined = inject('store');
+		const { movementValue } = store?.value;
+
+		const speed = computed((): string => movementValue.speed.toFixed(2));
+		const speedAVG = computed((): string => movementValue.speedAVG.toString());
+		const restWay = computed((): string => movementValue.restWay.toFixed(2));
 
 		const onClickOptions = (e: any): void => {
 			console.log('MovementCard -> onClickOptions', e);

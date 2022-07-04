@@ -1,7 +1,13 @@
 VolumeCard
 <!--suppress RequiredAttributes -->
 <template>
-	<CardSection class="VolumeCard" :title="$t('VolumeCard_Title')" icon-name="volume" @click-options="onClickOptions">
+	<CardSection
+		class="VolumeCard"
+		type="VolumeCard"
+		:title="$t('VolumeCard_Title')"
+		icon-name="volume"
+		@click-options="onClickOptions"
+	>
 		<CardSectionSlider
 			:title="$t('VolumeCard_Volume_Title')"
 			:comment="$t('VolumeCard_Volume_Comment')"
@@ -17,8 +23,7 @@ VolumeCard
 </template>
 
 <script lang="ts">
-import { computed } from 'vue';
-import store from '@/store';
+import { computed, inject, Ref } from 'vue';
 
 import CardSection from '@/components/cardSections/CardSection.vue';
 import CardSectionToggle from '@/components/cardSections/CardSectionToggle.vue';
@@ -32,17 +37,20 @@ export default {
 		CardSectionSlider
 	},
 	setup() {
+		const store: Ref | undefined = inject('store');
+		const { volumeConfig } = store?.value;
+
 		const mute = computed({
-			get: (): boolean => store.volumeConfig.mute,
-			set: (val: boolean) => (store.volumeConfig.mute = val)
+			get: (): boolean => volumeConfig.mute,
+			set: (val: boolean) => (volumeConfig.mute = val)
 		});
 		const volume = computed({
-			get: (): number => store.volumeConfig.volume,
-			set: (val: number) => (store.volumeConfig.volume = val)
+			get: (): number => volumeConfig.volume,
+			set: (val: number) => (volumeConfig.volume = val)
 		});
 		const volumeMax = computed({
-			get: (): number => store.volumeConfig.max,
-			set: (val: number) => (store.volumeConfig.max = val)
+			get: (): number => volumeConfig.max,
+			set: (val: number) => (volumeConfig.max = val)
 		});
 
 		const onClickOptions = (e: any): void => {

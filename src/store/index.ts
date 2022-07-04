@@ -109,7 +109,7 @@ export class Store {
 	/** Bluetooth */
 	bluetooth: Bluetooth = new Bluetooth();
 	/** Объект обновление прошивки */
-	updateFirmware: UpdateFirmware = new UpdateFirmware();
+	updateFirmware: UpdateFirmware = new UpdateFirmware(this);
 
 	/** Версия протокола */
 	version: IVersion = new Version();
@@ -362,6 +362,3 @@ export class Store {
 		}
 	}
 }
-
-const store = new Store();
-export default store;

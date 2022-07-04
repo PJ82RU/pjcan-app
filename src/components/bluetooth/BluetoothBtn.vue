@@ -4,16 +4,16 @@
 </template>
 
 <script>
-import { ref, computed } from 'vue';
+import { ref, computed, inject } from 'vue';
 
 import BluetoothDialogConnection from './BluetoothDialogConnection.vue';
-import Store from '@/store';
 
 export default {
 	name: 'BluetoothBtn',
 	components: { BluetoothDialogConnection },
 	setup() {
-		const { bluetooth } = Store;
+		const store = inject('store');
+		const { bluetooth } = store?.value;
 
 		// статус диалога подключения к Bluetooth
 		const dlgConnection = ref(true);
