@@ -20,7 +20,7 @@
 
 <script lang="ts">
 import { computed, toRefs } from 'vue';
-import IconCustom from '@/components/common/IconCustom';
+import IconCustom from '@/components/common/iconCustom_';
 
 export default {
 	name: 'CardSectionSlider',
