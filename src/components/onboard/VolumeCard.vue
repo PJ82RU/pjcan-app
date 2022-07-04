@@ -25,9 +25,9 @@ VolumeCard
 <script lang="ts">
 import { computed, inject, Ref } from 'vue';
 
-import CardSection from '@/components/cardSections_/CardSection.vue';
-import CardSectionToggle from '@/components/cardSections_/CardSectionToggle.vue';
-import CardSectionSlider from '@/components/cardSections_/CardSectionSlider.vue';
+import CardSection from '@/components/cardSections/CardSection.vue';
+import CardSectionToggle from '@/components/cardSections/CardSectionToggle.vue';
+import CardSectionSlider from '@/components/cardSections/CardSectionSlider.vue';
 
 export default {
 	name: 'VolumeCard',

@@ -36,8 +36,8 @@
 <script lang="ts">
 import { computed, inject, Ref } from 'vue';
 
-import CardSection from '@/components/cardSections_/CardSection.vue';
-import CardSectionInput from '@/components/cardSections_/CardSectionInput.vue';
+import CardSection from '@/components/cardSections/CardSection.vue';
+import CardSectionInput from '@/components/cardSections/CardSectionInput.vue';
 
 export default {
 	name: 'FuelCard',
