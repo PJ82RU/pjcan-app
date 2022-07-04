@@ -24,7 +24,7 @@ const struct = new BluetoothStruct(StructVolumeConfig);
 export class VolumeConfig extends BaseModel implements IVolumeConfig {
 	mute = false;
 	volume = 0;
-	max = 0;
+	max = 63;
 
 	/**
 	 * Запись данных

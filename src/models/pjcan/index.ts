@@ -67,6 +67,7 @@ import {
 import {
 	VariableConfig,
 	VariableView,
+	TCenterPoint,
 	BoseConfig,
 	BoseView,
 	TAir,
@@ -167,6 +168,7 @@ export {
 	BaseModel,
 	Config,
 	View,
+	TCenterPoint,
 	ButtonsConfig,
 	ButtonsValue,
 	CarConfig,

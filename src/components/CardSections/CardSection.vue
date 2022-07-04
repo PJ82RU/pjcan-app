@@ -102,7 +102,7 @@ export default {
 
 	&-title
 		padding-top: 10px
-		padding-bottom: 0
+		padding-bottom: 10px
 		display: flex
 		flex-direction: row
 		align-items: center
@@ -111,7 +111,6 @@ export default {
 			margin-right: 10px
 
 		.text-h6
-			padding-bottom: 6px
 			font-size: 22px
 
 	&-body
@@ -121,4 +120,5 @@ export default {
 		.q-card__section
 			align-items: center
 			margin-bottom: 10px
+			padding: 0
 </style>

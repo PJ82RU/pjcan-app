@@ -100,5 +100,31 @@ export default {
 	ClimateCard_Air_Title: 'Cabin ventilation',
 	ClimateCard_Air_Comment: 'Air circulation inside the passenger compartment or "fresh" air intake',
 	ClimateCard_Blow_Title: 'Air flow',
-	ClimateCard_Blow_Comment: 'Direction of air flow to the legs, to the torso, to the windshield'
+	ClimateCard_Blow_Comment: 'Direction of air flow to the legs, to the torso, to the windshield',
+
+	VolumeCard_Title: 'Volume',
+	VolumeCard_Mute_Title: 'Turn on the volume',
+	VolumeCard_Mute_Comment: 'Temporary inclusion/off of sound without changing the current level',
+	VolumeCard_Volume_Title: 'Volume level',
+	VolumeCard_Volume_Comment: 'The current volume level',
+
+	BoseCard_Title: 'Bose',
+	BoseCard_Enabled_Title: 'Turn on the amplifier',
+	BoseCard_Enabled_Comment: 'Sound amplifier power control',
+	BoseCard_AudioPLT_Title: 'AudioPilot',
+	BoseCard_AudioPLT_Comment:
+		'It is a noise suppression system, which continuously regulates the sound to compensate for background noise and car speed',
+	BoseCard_CenterPoint_Title: 'CenterPoint',
+	BoseCard_CenterPoint_Comment:
+		'CenterPoint technology converts stereo-signals into multi-channel audio, and at the same time creates a wider and more voluminous sound area',
+	BoseCard_Balance_Title: 'Balance',
+	BoseCard_Balance_Comment: 'Sound displacement to the right or left',
+	BoseCard_Fade_Title: 'Fade',
+	BoseCard_Fade_Comment: 'Increase the volume of the front or rear speakers',
+	BoseCard_Treble_Title: 'Treble',
+	BoseCard_Treble_Comment: 'Strengthening or weakening of high frequencies',
+	BoseCard_Bass_Title: 'Bass',
+	BoseCard_Bass_Comment: 'Strengthening or weakening of low frequencies',
+	BoseCard_Wow_Title: 'Wow',
+	BoseCard_Wow_Comment: 'Sound signal when changing parameters'
 };

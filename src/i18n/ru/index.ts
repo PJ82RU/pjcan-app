@@ -100,5 +100,31 @@ export default {
 	ClimateCard_Air_Title: 'Вентиляция салона',
 	ClimateCard_Air_Comment: 'Циркуляция воздуха внутри салона или забор "свежего" воздуха',
 	ClimateCard_Blow_Title: 'Воздушный поток',
-	ClimateCard_Blow_Comment: 'Направление воздушного потока в ноги, в туловище, в ветровое стекло'
+	ClimateCard_Blow_Comment: 'Направление воздушного потока в ноги, в туловище, в ветровое стекло',
+
+	VolumeCard_Title: 'Звук',
+	VolumeCard_Mute_Title: 'Включить звук',
+	VolumeCard_Mute_Comment: 'Временное включение/выключение звука без изменения текущего уровня',
+	VolumeCard_Volume_Title: 'Уровень звука',
+	VolumeCard_Volume_Comment: 'Текущее значение уровня звука',
+
+	BoseCard_Title: 'Bose',
+	BoseCard_Enabled_Title: 'Включить усилитель',
+	BoseCard_Enabled_Comment: 'Управление питанием усилителя звука',
+	BoseCard_AudioPLT_Title: 'AudioPilot',
+	BoseCard_AudioPLT_Comment:
+		'Представляет собой систему подавления шумов, которая непрерывно регулирует звучание для компенсации фонового шума и скорости автомобиля',
+	BoseCard_CenterPoint_Title: 'CenterPoint',
+	BoseCard_CenterPoint_Comment:
+		'Технология CenterPoint преобразует стерео-сигналы в многоканальное аудио, и одновременно создает более широкую и объемную звуковую область',
+	BoseCard_Balance_Title: 'Balance',
+	BoseCard_Balance_Comment: 'Смещение звукового баланса вправо или влево',
+	BoseCard_Fade_Title: 'Fade',
+	BoseCard_Fade_Comment: 'Увеличение громкости передних или задних динамиков',
+	BoseCard_Treble_Title: 'Treble',
+	BoseCard_Treble_Comment: 'Усиление или ослабление высоких частот',
+	BoseCard_Bass_Title: 'Bass',
+	BoseCard_Bass_Comment: 'Усиление или ослабление низких частот',
+	BoseCard_Wow_Title: 'Wow',
+	BoseCard_Wow_Comment: 'Звуковой сигнал при изменении параметров'
 };

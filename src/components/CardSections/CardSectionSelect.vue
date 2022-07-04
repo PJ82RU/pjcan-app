@@ -12,6 +12,7 @@
 			:options="options"
 			:disable="disable"
 			:readonly="readonly"
+			map-options
 		/>
 	</q-card-section>
 </template>
@@ -31,7 +32,7 @@ export default {
 			default: ''
 		},
 		modelValue: {
-			type: String,
+			type: [String, Number],
 			default: ''
 		},
 		options: {
@@ -51,10 +52,10 @@ export default {
 		const { modelValue } = toRefs(props);
 
 		const valueSelect = computed({
-			get(): string {
+			get(): string | number {
 				return modelValue.value;
 			},
-			set(value: string): void {
+			set(value: string | number): void {
 				context.emit('update:modelValue', value);
 			}
 		});

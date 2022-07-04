@@ -1,8 +1,19 @@
+// noinspection SpellCheckingInspection
+
 import { BluetoothStruct } from '@/components/bluetooth';
 import { BaseModel, IBaseModel } from '../../BaseModel';
 
 export const API_EXEC_VARIABLE_BOSE = 110; // команда API
 const STRUCT_LENGTH = 7; // длина данных API
+
+export enum TCenterPoint {
+	CENTERPOINT_OFF = 0,
+	CENTERPOINT_MIN = 1,
+	CENTERPOINT_LOW = 2,
+	CENTERPOINT_MID = 3,
+	CENTERPOINT_HI = 4,
+	CENTERPOINT_MAX = 5
+}
 
 /** Интерфейс параметров Bose */
 export interface IBoseConfig extends IBaseModel {
@@ -14,7 +25,7 @@ export interface IBoseConfig extends IBaseModel {
 	bass: number;
 	fade: number;
 	treble: number;
-	centerPoint: number;
+	centerPoint: TCenterPoint;
 }
 
 /** Структура данных */
@@ -42,7 +53,7 @@ export class BoseConfig extends BaseModel implements IBoseConfig {
 	bass = 0;
 	fade = 0;
 	treble = 0;
-	centerPoint = 0;
+	centerPoint = TCenterPoint.CENTERPOINT_OFF;
 
 	/**
 	 * Запись данных

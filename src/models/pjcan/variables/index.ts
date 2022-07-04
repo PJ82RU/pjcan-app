@@ -2,6 +2,7 @@ import { API_EXEC_VARIABLE_CONFIG, IVariableConfig, StructVariableConfig, Variab
 import { API_EXEC_VARIABLE_VIEW, IVariableView, StructVariableView, VariableView } from './VariablesView';
 
 import {
+	TCenterPoint,
 	BoseConfig,
 	BoseView,
 	API_EXEC_VARIABLE_BOSE,
@@ -115,6 +116,7 @@ import {
 export {
 	VariableConfig,
 	VariableView,
+	TCenterPoint,
 	BoseConfig,
 	BoseView,
 	TAir,
