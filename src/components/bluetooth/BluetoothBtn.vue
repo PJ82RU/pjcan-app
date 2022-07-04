@@ -5,6 +5,8 @@
 
 <script>
 import { ref, computed, inject } from 'vue';
+import { useQuasar } from 'quasar';
+import { lang } from '@/boot/i18n';
 
 import BluetoothDialogConnection from './BluetoothDialogConnection.vue';
 
@@ -12,6 +14,7 @@ export default {
 	name: 'BluetoothBtn',
 	components: { BluetoothDialogConnection },
 	setup() {
+		const $q = useQuasar();
 		const store = inject('store');
 		const { bluetooth } = store?.value;
 
@@ -23,6 +26,12 @@ export default {
 		/** Событие клика по кнопке Bluetooth */
 		const onBtnClick = () => {
 			if (!bluetooth.connected) dlgConnection.value = true;
+			else
+				$q.notify({
+					message: lang('BLE_Connected'),
+					position: 'bottom',
+					color: 'green'
+				});
 		};
 
 		return {
