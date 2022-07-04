@@ -89,8 +89,9 @@ export default {
 <style lang="sass">
 .CardSection
 	width: 100%
-	max-width: 420px
 	margin-bottom: 10px
+	box-shadow: none
+	border: 1px solid rgba(0, 0, 0, 0.12)
 
 	.q-card__actions
 		justify-content: flex-start

@@ -19,6 +19,7 @@
 		<q-drawer
 			ref="leftMenu"
 			show-if-above
+			mini-to-overlay
 			v-model="leftMenuOpen"
 			side="left"
 			:mini="leftMenuMiniState"
@@ -85,4 +86,6 @@ export default {
 <style lang="sass">
 .bg-menu
 	background-color: $menu
+.q-page-container
+	background-color: #444
 </style>
