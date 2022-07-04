@@ -13,7 +13,7 @@
 <script lang="ts">
 import { computed, toRefs } from 'vue';
 import { lang } from '@/boot/i18n';
-import IconCustom from '@/components/common/iconCustom_';
+import IconCustom from '@/components/common/iconCustom';
 
 import { IItemMenu } from '@/models/menu';
 

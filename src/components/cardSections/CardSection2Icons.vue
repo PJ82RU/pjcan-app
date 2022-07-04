@@ -25,7 +25,7 @@
 
 <script lang="ts">
 import { computed, toRefs } from 'vue';
-import IconCustom from '@/components/common/iconCustom_';
+import IconCustom from '@/components/common/iconCustom';
 
 export default {
 	name: 'CardSection2Icons',

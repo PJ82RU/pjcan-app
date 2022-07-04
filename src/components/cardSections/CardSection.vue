@@ -35,7 +35,7 @@
 <script lang="ts">
 import { computed, inject, Ref, toRefs } from 'vue';
 import CardSectionMenu from '@/components/menu/CardSectionMenu.vue';
-import IconCustom from '@/components/common/iconCustom_';
+import IconCustom from '@/components/common/iconCustom';
 
 export default {
 	name: 'CardSection',
