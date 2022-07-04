@@ -36,6 +36,11 @@ export class Bluetooth extends EventEmitter {
 
 	/** Запустить выбор Bluetooth устройства и подключиться к выбранному */
 	connect() {
+		if (!(navigator as any).bluetooth) {
+			this.emit(BLUETOOTH_EVENT_CONNECTED, EConnectedStatus.NO_CONNECT);
+			return Promise.resolve(null);
+		}
+
 		return this.device
 			? Promise.resolve(this.device)
 			: this.requestBluetoothDevice()
@@ -57,8 +62,7 @@ export class Bluetooth extends EventEmitter {
 
 	/** Запрос выбора Bluetooth устройства */
 	requestBluetoothDevice() {
-		//@ts-ignore
-		return navigator.bluetooth
+		return (navigator as any).bluetooth
 			.requestDevice({ filters: [{ services: [BLUETOOTH_SERVICE_UUID] }] })
 			.then((device: any) => {
 				console.log(`Выбрано ${device.name} bluetooth устройство.`);

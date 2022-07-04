@@ -3,8 +3,8 @@
 	<BluetoothDialogConnection v-model="dlgConnection" />
 </template>
 
-<script>
-import { ref, computed, inject } from 'vue';
+<script lang="ts">
+import { ref, computed, inject, Ref } from 'vue';
 import { useQuasar } from 'quasar';
 import { lang } from '@/boot/i18n';
 
@@ -15,7 +15,7 @@ export default {
 	components: { BluetoothDialogConnection },
 	setup() {
 		const $q = useQuasar();
-		const store = inject('store');
+		const store: Ref | undefined = inject('store');
 		const { bluetooth } = store?.value;
 
 		// статус диалога подключения к Bluetooth

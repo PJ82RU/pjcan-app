@@ -43,6 +43,7 @@ export default {
 
 		// подключиться
 		const onConnect = (): void => {
+			updateValue(false);
 			bluetooth.connect();
 		};
 		// обновить значение modelValue
@@ -57,6 +58,14 @@ export default {
 
 			updateValue(status === EConnectedStatus.NO_CONNECT);
 			switch (status) {
+				case EConnectedStatus.NO_CONNECT:
+					$q.notify({
+						message: lang('BLE_NoConnected'),
+						position: 'bottom',
+						color: 'red'
+					});
+					break;
+
 				case EConnectedStatus.CONNECT:
 					$q.notify({
 						message: lang('BLE_Connected'),
