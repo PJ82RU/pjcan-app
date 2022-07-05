@@ -47,9 +47,9 @@ export class Bluetooth extends EventEmitter {
 			? Promise.resolve()
 			: this.requestBluetoothDevice()
 					.then((device: BluetoothDevice) => this.connectDeviceAndCharacteristic(device))
-					.then((characteristic: BluetoothRemoteGATTCharacteristic | undefined) =>
-						this.startNotifications(characteristic)
-					)
+					.then((characteristic: BluetoothRemoteGATTCharacteristic | undefined) => {
+						setTimeout(() => this.startNotifications(characteristic), 100);
+					})
 					.catch((e: any) => {
 						this.emit(BLUETOOTH_EVENT_CONNECTED, EConnectedStatus.NO_CONNECT);
 						console.log('Bluetooth.connect', e);
