@@ -7,7 +7,7 @@
 	"private": true,
 	"scripts": {
 		"dev": "quasar dev",
-		"build": "quasar build"
+		"build": "quasar build && powershell ./build.ps1"
 	},
 	"dependencies": {
 		"@quasar/extras": "^1.0.0",
