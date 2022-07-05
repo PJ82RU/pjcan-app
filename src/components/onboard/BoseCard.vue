@@ -81,18 +81,28 @@ export default {
 	setup() {
 		const store: Ref | undefined = inject('store');
 		const { boseConfig } = store?.value;
+		const send = () => store?.value.send(boseConfig);
 
 		const enabled = computed({
 			get: (): boolean => boseConfig.enabled,
-			set: (val: boolean) => (boseConfig.enabled = val)
+			set: (val: boolean) => {
+				boseConfig.enabled = val;
+				send();
+			}
 		});
 		const audioPLT = computed({
 			get: (): boolean => boseConfig.audioPLT,
-			set: (val: boolean) => (boseConfig.audioPLT = val)
+			set: (val: boolean) => {
+				boseConfig.audioPLT = val;
+				send();
+			}
 		});
 		const centerPoint = computed({
 			get: (): number => Number(boseConfig.centerPoint),
-			set: (val: number) => (boseConfig.centerPoint = val as TCenterPoint)
+			set: (val: number) => {
+				boseConfig.centerPoint = val as TCenterPoint;
+				send();
+			}
 		});
 		const centerPointItems = computed((): any => [
 			{ label: 'OFF', value: 0 },
@@ -104,23 +114,38 @@ export default {
 		]);
 		const balance = computed({
 			get: (): number => boseConfig.balance,
-			set: (val: number) => (boseConfig.balance = val)
+			set: (val: number) => {
+				boseConfig.balance = val;
+				send();
+			}
 		});
 		const fade = computed({
 			get: (): number => boseConfig.fade,
-			set: (val: number) => (boseConfig.fade = val)
+			set: (val: number) => {
+				boseConfig.fade = val;
+				send();
+			}
 		});
 		const treble = computed({
 			get: (): number => boseConfig.treble,
-			set: (val: number) => (boseConfig.treble = val)
+			set: (val: number) => {
+				boseConfig.treble = val;
+				send();
+			}
 		});
 		const bass = computed({
 			get: (): number => boseConfig.bass,
-			set: (val: number) => (boseConfig.bass = val)
+			set: (val: number) => {
+				boseConfig.bass = val;
+				send();
+			}
 		});
 		const wow = computed({
 			get: (): boolean => boseConfig.wow,
-			set: (val: boolean) => (boseConfig.wow = val)
+			set: (val: boolean) => {
+				boseConfig.wow = val;
+				send();
+			}
 		});
 
 		const onClickOptions = (e: any): void => {
