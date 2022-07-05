@@ -7,7 +7,7 @@
 <script lang="ts">
 import { ref, computed, inject, Ref } from 'vue';
 import { useQuasar } from 'quasar';
-import { lang } from '@/boot/i18n';
+import { lang } from '@/i18n/i18nUtils';
 
 import BluetoothDialogConnection from './BluetoothDialogConnection.vue';
 import BluetoothDialogDisconnection from './BluetoothDialogDisconnection.vue';

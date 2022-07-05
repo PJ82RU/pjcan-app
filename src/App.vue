@@ -3,7 +3,7 @@
 </template>
 
 <script lang="ts">
-import { lang } from './boot/i18n';
+import { lang } from '@/i18n/i18nUtils';
 const { name } = require('../package.json');
 
 import '@/css/fonts.css';

@@ -35,7 +35,7 @@
 
 <script lang="ts">
 import { defineComponent, ref, computed, inject, Ref } from 'vue';
-import { lang } from '@/boot/i18n';
+import { lang } from '@/i18n/i18nUtils';
 import { useQuasar } from 'quasar';
 
 import { BLUETOOTH_EVENT_CONNECTED, EConnectedStatus } from '@/components/bluetooth';

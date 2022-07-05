@@ -11,12 +11,11 @@ export enum TCard {
 	BOSE = 'BoseCard'
 }
 
-const ONBOARD_KEY = 'Onboard';
 const CARDS_KEY = 'cards';
 
 export class Onboard {
 	/** Локальное хранилище */
-	private _storageLocal: any = new SegregateStorage(ONBOARD_KEY);
+	private _storageLocal: any = new SegregateStorage('Onboard');
 	/** Список карточек */
 	cards: string[] = [];
 

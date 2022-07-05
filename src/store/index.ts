@@ -1,4 +1,4 @@
-import { lang } from '@/boot/i18n';
+import { lang } from '@/i18n/i18nUtils';
 import { Bluetooth, BLUETOOTH_EVENT_RECEIVE } from '@/components/bluetooth';
 import { UpdateFirmware } from '@/components/updateFirmware';
 import { API_EXEC_VERSION, IVersion, Version } from '@/models/version';

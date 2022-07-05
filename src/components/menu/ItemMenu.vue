@@ -12,7 +12,7 @@
 
 <script lang="ts">
 import { computed, toRefs } from 'vue';
-import { lang } from '@/boot/i18n';
+import { lang } from '@/i18n/i18nUtils';
 import IconCustom from '@/components/common/iconCustom';
 
 import { IItemMenu } from '@/models/menu';
