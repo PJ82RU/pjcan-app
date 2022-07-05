@@ -4,8 +4,9 @@ import { UpdateData, IUpdateData, UPDATE_UPLOAD_EVENT_RESULT } from '@/models/pj
 import { UpdateBegin, IUpdateBegin } from '@/models/pjcan/update/UpdateBegin';
 import { IVersion, Version } from '@/models/version';
 
-const URL_FIRMWARE_VERSION = '/firmware/version.json';
-const URL_FIRMWARE_GZIP = '/firmware/firmware.bin.gz';
+const URL_FIRMWARE_PATH = location.href + 'firmware/';
+const URL_FIRMWARE_VERSION = URL_FIRMWARE_PATH + 'version.json';
+const URL_FIRMWARE_GZIP = URL_FIRMWARE_PATH + 'firmware.bin.gz';
 
 /** Обновление прошивки устройства PJCAN */
 export class UpdateFirmware {
