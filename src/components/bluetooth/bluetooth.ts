@@ -1,3 +1,5 @@
+// noinspection SpellCheckingInspection
+
 import EventEmitter from 'eventemitter3';
 
 export const BLUETOOTH_SERVICE_UUID = 'cc9e7b30-9834-488f-b762-aa62f5022dd4';
@@ -47,12 +49,15 @@ export class Bluetooth extends EventEmitter {
 			? Promise.resolve()
 			: this.requestBluetoothDevice()
 					.then((device: BluetoothDevice) => this.connectDeviceAndCharacteristic(device))
-					.then((characteristic: BluetoothRemoteGATTCharacteristic | undefined) => {
-						setTimeout(() => this.startNotifications(characteristic), 100);
-					})
+					.then((characteristic: BluetoothRemoteGATTCharacteristic | undefined) =>
+						this.delayPromise(100, characteristic)
+					)
+					.then((characteristic: BluetoothRemoteGATTCharacteristic | undefined) =>
+						this.startNotifications(characteristic)
+					)
 					.catch((e: any) => {
 						this.emit(BLUETOOTH_EVENT_CONNECTED, EConnectedStatus.NO_CONNECT);
-						console.log('Bluetooth.connect', e);
+						console.log(e);
 					});
 	}
 
@@ -118,11 +123,11 @@ export class Bluetooth extends EventEmitter {
 
 	/**
 	 * Переподключение к Bluetooth устройству
-	 * @param max     Максимальное кол. попыток подключения
-	 * @param delay   Таймаут подключения, сек.
-	 * @param toTry   Метод проверки подключения
-	 * @param success Метод вызываемый при успешном подключении
-	 * @param fail    Метод вызываемый при невозможности подключиться
+	 * @param {number} max Максимальное кол. попыток подключения
+	 * @param {number} delay Таймаут подключения, сек.
+	 * @param {() => any} toTry Метод проверки подключения
+	 * @param {(server: BluetoothRemoteGATTServer) => void} success Метод вызываемый при успешном подключении
+	 * @param {() => void} fail Метод вызываемый при невозможности подключиться
 	 */
 	private exponentialBackoff(
 		max: number,
@@ -187,10 +192,14 @@ export class Bluetooth extends EventEmitter {
 			: Promise.resolve(undefined);
 	}
 
-	/** Таймаут Promise */
-	private delayPromise(timeout: number): Promise<void> {
+	/**
+	 * Таймаут Promise
+	 * @param {number} timeout Время паузы, мс
+	 * @param {T} arg Передаваемые аргументы
+	 */
+	private delayPromise<T>(timeout: number, arg?: T): Promise<T> {
 		return new Promise((resolve) => {
-			setTimeout(resolve, timeout);
+			setTimeout(resolve, timeout, arg);
 		});
 	}
 }
