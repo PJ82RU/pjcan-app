@@ -15,8 +15,10 @@ export enum EConnectedStatus {
 
 /** Bluetooth */
 export class Bluetooth extends EventEmitter {
-	private device: any; // объект устройства
-	private characteristic: any; // характеристика
+	/** Объект устройства */
+	private _device: BluetoothDevice | undefined;
+	/** Характеристика устройства */
+	private _characteristic: BluetoothRemoteGATTCharacteristic | undefined;
 
 	constructor() {
 		super();
@@ -25,87 +27,90 @@ export class Bluetooth extends EventEmitter {
 
 	/** Очистка переменных */
 	private clear(): void {
-		this.device = null;
-		this.characteristic = null;
+		this._device = undefined;
+		this._characteristic = undefined;
 	}
 
 	/** Статус подключения */
 	get connected(): boolean {
-		return this.device !== null && this.characteristic !== null;
+		return !!this._device && !!this._characteristic;
 	}
 
 	/** Запустить выбор Bluetooth устройства и подключиться к выбранному */
-	connect() {
-		if (!(navigator as any).bluetooth) {
+	connect(): Promise<void> {
+		if (!navigator.bluetooth) {
 			this.emit(BLUETOOTH_EVENT_CONNECTED, EConnectedStatus.NO_CONNECT);
-			return Promise.resolve(null);
+			return Promise.resolve(undefined);
 		}
 
-		return this.device
-			? Promise.resolve(this.device)
+		return !!this._device
+			? Promise.resolve()
 			: this.requestBluetoothDevice()
-					.then((device: any) => this.connectDeviceAndCharacteristic(device))
-					.then((characteristic: any) => this.startNotifications(characteristic))
+					.then((device: BluetoothDevice) => this.connectDeviceAndCharacteristic(device))
+					.then((characteristic: BluetoothRemoteGATTCharacteristic | undefined) =>
+						this.startNotifications(characteristic)
+					)
 					.catch((e: any) => {
 						this.emit(BLUETOOTH_EVENT_CONNECTED, EConnectedStatus.NO_CONNECT);
-						console.log(e);
+						console.log('Bluetooth.connect', e);
 					});
 	}
 
 	/** Отключение от Bluetooth устройства */
-	disconnect() {
-		if (this.device) {
-			this.device.gatt.disconnect();
+	disconnect(): void {
+		if (this._device) {
+			this._device.gatt?.disconnect();
 			this.clear();
 		}
 	}
 
 	/** Запрос выбора Bluetooth устройства */
-	requestBluetoothDevice() {
-		return (navigator as any).bluetooth
+	requestBluetoothDevice(): Promise<BluetoothDevice> {
+		return navigator.bluetooth
 			.requestDevice({ filters: [{ services: [BLUETOOTH_SERVICE_UUID] }] })
-			.then((device: any) => {
+			.then((device: BluetoothDevice) => {
 				console.log(`Выбрано ${device.name} bluetooth устройство.`);
-
-				this.device = device;
-				// noinspection SpellCheckingInspection
-				this.device.addEventListener('gattserverdisconnected', () => this.handleDisconnection());
-				return this.device;
+				device.addEventListener('gattserverdisconnected', () => this.handleDisconnection());
+				this._device = device;
+				return device;
 			});
 	}
 
 	/** Подключение к определенному устройству, получение сервиса и характеристики */
-	private connectDeviceAndCharacteristic(device: any) {
-		if (device.gatt.connected && this.characteristic) return Promise.resolve(this.characteristic);
+	private connectDeviceAndCharacteristic(
+		device: BluetoothDevice
+	): Promise<BluetoothRemoteGATTCharacteristic> | undefined {
+		if (device.gatt?.connected && !!this._characteristic) return Promise.resolve(this._characteristic);
 
 		console.log('Подключение к GATT серверу ...');
 		return device.gatt
-			.connect()
-			.then((server: any) => {
+			?.connect()
+			.then((server: BluetoothRemoteGATTServer) => {
 				console.log('GATT сервер подключен, читаю сервис ...');
 				return server.getPrimaryService(BLUETOOTH_SERVICE_UUID);
 			})
-			.then((service: any) => {
+			.then((service: BluetoothRemoteGATTService) => {
 				console.log('Сервис получен, читаю характеристику ...');
 				return service.getCharacteristic(BLUETOOTH_CHARACTERISTIC_UUID);
 			})
-			.then((characteristic: any) => {
+			.then((characteristic: BluetoothRemoteGATTCharacteristic) => {
 				console.log('Характеристика получена.');
-				this.characteristic = characteristic;
-				// noinspection SpellCheckingInspection
-				this.characteristic.addEventListener('characteristicvaluechanged', (event: any) =>
-					this.handleCharacteristicValueChanged(event)
+				characteristic.addEventListener('characteristicvaluechanged', (ev: any) =>
+					this.handleCharacteristicValueChanged(ev)
 				);
 				// читаем версию протокола устройства (сообщение отправляется устройством сразу после подключения)
-				this.characteristic.readValue();
-				return this.characteristic;
+				characteristic?.readValue();
+				this._characteristic = characteristic;
+				return characteristic;
 			});
 	}
 
 	/** Включение получения уведомлений об изменении характеристики */
-	private startNotifications(characteristic: any) {
+	private startNotifications(
+		characteristic: BluetoothRemoteGATTCharacteristic | undefined
+	): Promise<void> | undefined {
 		console.log('Запуск уведомлений ...');
-		return characteristic.startNotifications(characteristic).then(() => {
+		return characteristic?.startNotifications().then(() => {
 			console.log('Уведомления запущены.');
 			this.emit(BLUETOOTH_EVENT_CONNECTED, EConnectedStatus.CONNECT);
 		});
@@ -123,11 +128,11 @@ export class Bluetooth extends EventEmitter {
 		max: number,
 		delay: number,
 		toTry: () => any,
-		success: (server: any) => void,
+		success: (server: BluetoothRemoteGATTServer) => void,
 		fail: () => void
-	) {
+	): void {
 		toTry()
-			.then((server: any) => success(server))
+			.then((server: BluetoothRemoteGATTServer) => success(server))
 			.catch(() => {
 				if (max === 0) return fail();
 				console.log('Повторная попытка через ' + delay + ' сек... (осталось ' + max + ' попыток)');
@@ -138,33 +143,33 @@ export class Bluetooth extends EventEmitter {
 	}
 
 	/** Событие отключения от устройства Bluetooth */
-	private handleDisconnection() {
-		if (this.device) {
-			// попытка подключиться повторно
-			this.exponentialBackoff(
-				3,
-				2,
-				() => {
-					this.emit(BLUETOOTH_EVENT_CONNECTED, EConnectedStatus.WAIT_CONNECT);
-					return this.connectDeviceAndCharacteristic(this.device);
-				},
-				() => {
-					console.log('Соединение с устройством Bluetooth PJCAN восстановлено.');
-					this.emit(BLUETOOTH_EVENT_CONNECTED, EConnectedStatus.CONNECT);
-				},
-				() => {
-					console.log('Связь с устройством Bluetooth PJCAN потеряна.');
-					this.emit(BLUETOOTH_EVENT_CONNECTED, EConnectedStatus.NO_CONNECT);
-					this.clear();
-				}
-			);
-		}
+	private handleDisconnection(): void {
+		if (!this._device) return;
+
+		// попытка подключиться повторно
+		this.exponentialBackoff(
+			3,
+			2,
+			() => {
+				this.emit(BLUETOOTH_EVENT_CONNECTED, EConnectedStatus.WAIT_CONNECT);
+				if (this._device) return this.connectDeviceAndCharacteristic(this._device);
+			},
+			() => {
+				console.log('Соединение с устройством Bluetooth PJCAN восстановлено.');
+				this.emit(BLUETOOTH_EVENT_CONNECTED, EConnectedStatus.CONNECT);
+			},
+			() => {
+				console.log('Связь с устройством Bluetooth PJCAN потеряна.');
+				this.emit(BLUETOOTH_EVENT_CONNECTED, EConnectedStatus.NO_CONNECT);
+				this.clear();
+			}
+		);
 	}
 
 	/** Событие входящих данных */
-	private handleCharacteristicValueChanged(event: any) {
-		console.log('Входящие данные: ID ' + event.target.value.getUint8(0));
-		this.emit(BLUETOOTH_EVENT_RECEIVE, event.target.value);
+	private handleCharacteristicValueChanged(ev: any): void {
+		console.log('Входящие данные: ID ' + ev.target.value.getUint8(0));
+		this.emit(BLUETOOTH_EVENT_RECEIVE, ev.target.value);
 	}
 
 	/**
@@ -173,17 +178,17 @@ export class Bluetooth extends EventEmitter {
 	 */
 	send(data: DataView | undefined): Promise<any> {
 		//console.log('Исходящие данные: ID ' + data.getUint8(0));
-		return data && this.connected
-			? this.characteristic.writeValue(data).catch(() => {
+		return data && !!this._characteristic
+			? this._characteristic.writeValue(data).catch(() => {
 					return Promise.resolve()
 						.then(() => this.delayPromise(100))
 						.then(() => this.send(data));
 			  })
-			: Promise.resolve(null);
+			: Promise.resolve(undefined);
 	}
 
 	/** Таймаут Promise */
-	private delayPromise(timeout: number) {
+	private delayPromise(timeout: number): Promise<void> {
 		return new Promise((resolve) => {
 			setTimeout(resolve, timeout);
 		});
