@@ -34,7 +34,7 @@ export default {
 	BLESrv_Connection_Lost: 'Связь с устройством Bluetooth PJCAN потеряна.',
 	BLESrv_Receive: 'Входящие данные: ID %',
 	BLESrv_Send: 'Исходящие данные: ID %',
-	BLESrv_Version_Protocol: 'Версия протокола: %1.%2.%3.%4',
+	BLESrv_Version_Protocol: 'Версия протокола: %0.%1.%2.%3',
 
 	UpdFirmware_Later: 'Позже',
 	UpdFirmware_Update: 'Обновить',
