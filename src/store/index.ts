@@ -1,3 +1,4 @@
+import { lang } from '@/boot/i18n';
 import { Bluetooth, BLUETOOTH_EVENT_RECEIVE } from '@/components/bluetooth';
 import { UpdateFirmware } from '@/components/updateFirmware';
 import { API_EXEC_VERSION, IVersion, Version } from '@/models/version';
@@ -227,8 +228,13 @@ export class Store {
 		switch (data.getUint8(0)) {
 			case API_EXEC_VERSION:
 				this.version.set(data);
+				const { major, minor, build, revision } = this.version;
 				console.log(
-					`Версия протокола: ${this.version.major}.${this.version.minor}.${this.version.build}.${this.version.revision}`
+					lang('BLESrv_Version_Protocol')
+						.replace('%0', major)
+						.replace('%1', minor)
+						.replace('%2', build)
+						.replace('%3', revision)
 				);
 				break;
 

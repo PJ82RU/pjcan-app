@@ -1,3 +1,4 @@
+// Секция карточки
 @mixin card-section($title: 100%, $input: 120px)
 	&-header
 		width: $title
@@ -10,3 +11,16 @@
 	&-input
 		.q-field__inner
 			width: $input
+
+// Диалоговое окно подключения/отключения Bluetooth
+@mixin bluetooth-dialog()
+	.q-card__section
+		align-items: center
+
+	.q-card__actions
+		padding: 0 16px 16px 16px
+
+	.q-ml-md
+		word-break: normal
+		width: calc(100% - 64px)
+		min-width: 300px

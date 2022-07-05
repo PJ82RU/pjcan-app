@@ -1,6 +1,7 @@
 <template>
 	<q-btn flat round dense :icon="iconClass" class="BluetoothBtn q-mr-sm" @click="onBtnClick" />
-	<BluetoothDialogConnection v-model="dlgConnection" />
+	<BluetoothDialogConnection v-model="dlgConnection" @connect="onConnect" />
+	<BluetoothDialogDisconnection v-model="dlgDisconnection" @disconnect="onDisconnect" />
 </template>
 
 <script lang="ts">
@@ -9,35 +10,82 @@ import { useQuasar } from 'quasar';
 import { lang } from '@/boot/i18n';
 
 import BluetoothDialogConnection from './BluetoothDialogConnection.vue';
+import BluetoothDialogDisconnection from './BluetoothDialogDisconnection.vue';
+import { BLUETOOTH_EVENT_CONNECTED, EConnectedStatus } from './bluetooth';
 
 export default {
 	name: 'BluetoothBtn',
-	components: { BluetoothDialogConnection },
+	components: { BluetoothDialogConnection, BluetoothDialogDisconnection },
 	setup() {
 		const $q = useQuasar();
 		const store: Ref | undefined = inject('store');
 		const { bluetooth } = store?.value;
 
-		// статус диалога подключения к Bluetooth
+		// события подключения к Bluetooth
+		bluetooth.addListener(BLUETOOTH_EVENT_CONNECTED, (status: EConnectedStatus) => {
+			switch (status) {
+				case EConnectedStatus.NO_CONNECT:
+					$q.notify({
+						message: lang('BLE_NoConnected'),
+						position: 'bottom',
+						color: 'red'
+					});
+					break;
+
+				case EConnectedStatus.CONNECT:
+					$q.notify({
+						message: lang('BLE_Connected'),
+						position: 'bottom',
+						color: 'green'
+					});
+					break;
+
+				case EConnectedStatus.WAIT_CONNECT:
+					$q.notify({
+						message: lang('BLE_LostConnected'),
+						position: 'bottom',
+						color: 'red'
+					});
+					break;
+
+				case EConnectedStatus.DISCONNECT:
+					$q.notify({
+						message: lang('BLE_Disconnected'),
+						position: 'bottom',
+						color: 'primary'
+					});
+					break;
+			}
+		});
+
+		// статус диалога подключения Bluetooth
 		const dlgConnection = ref(true);
+		// статус диалога отключения Bluetooth
+		const dlgDisconnection = ref(false);
 		// иконка кнопки подключения к Bluetooth
 		const iconClass = computed(() => (bluetooth.connected ? 'bluetooth' : 'bluetooth_disabled'));
 
 		/** Событие клика по кнопке Bluetooth */
 		const onBtnClick = () => {
 			if (!bluetooth.connected) dlgConnection.value = true;
-			else
-				$q.notify({
-					message: lang('BLE_Connected'),
-					position: 'bottom',
-					color: 'green'
-				});
+			else dlgDisconnection.value = true;
+		};
+		/** Событие подключения Bluetooth */
+		const onConnect = () => {
+			bluetooth.connect();
+		};
+		/** Событие отключения Bluetooth */
+		const onDisconnect = () => {
+			bluetooth.disconnect();
 		};
 
 		return {
 			dlgConnection,
+			dlgDisconnection,
 			iconClass,
-			onBtnClick
+			onBtnClick,
+			onConnect,
+			onDisconnect
 		};
 	}
 };

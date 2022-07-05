@@ -1,14 +1,14 @@
 <template>
-	<q-dialog class="BluetoothDialogConnection" v-model="visible" persistent>
+	<q-dialog class="BluetoothDialogDisconnection" v-model="visible" persistent>
 		<q-card>
 			<q-card-section class="row">
-				<q-avatar icon="bluetooth_disabled" color="primary" text-color="white" />
-				<span class="q-ml-md">{{ $t('BLE_NoConnected') }}</span>
+				<q-avatar icon="bluetooth" color="primary" text-color="white" />
+				<span class="q-ml-md">{{ $t('BLE_Connected') }}</span>
 			</q-card-section>
 
 			<q-card-actions align="right">
 				<q-btn :label="$t('Close')" color="grey" v-close-popup />
-				<q-btn :label="$t('BLE_BtnConnect')" color="primary" v-close-popup @click="$emit('connect')" />
+				<q-btn :label="$t('BLE_BtnDisconnect')" color="primary" v-close-popup @click="$emit('disconnect')" />
 			</q-card-actions>
 		</q-card>
 	</q-dialog>
@@ -18,14 +18,14 @@
 import { computed, toRefs } from 'vue';
 
 export default {
-	name: 'BluetoothDialogConnection',
+	name: ' BluetoothDialogDisconnection',
 	props: {
 		modelValue: {
 			type: Boolean,
 			default: false
 		}
 	},
-	emits: ['update:modelValue', 'connect'],
+	emits: ['update:modelValue', 'disconnect'],
 	setup(props: any, context: any) {
 		const { modelValue } = toRefs(props);
 		const visible = computed({
@@ -43,6 +43,6 @@ export default {
 <style lang="sass">
 @import "@/css/mixins"
 
-.BluetoothDialogConnection
+.BluetoothDialogDisconnection
 	@include bluetooth-dialog()
 </style>

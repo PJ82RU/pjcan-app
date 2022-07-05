@@ -1,6 +1,7 @@
 // noinspection SpellCheckingInspection
 
 import EventEmitter from 'eventemitter3';
+import { lang } from '@/boot/i18n';
 
 export const BLUETOOTH_SERVICE_UUID = 'cc9e7b30-9834-488f-b762-aa62f5022dd4';
 export const BLUETOOTH_CHARACTERISTIC_UUID = 'cc9e7b31-9834-488f-b762-aa62f5022dd4';
@@ -12,7 +13,8 @@ export const BLUETOOTH_EVENT_RECEIVE = 'Receive'; // Событие входящ
 export enum EConnectedStatus {
 	NO_CONNECT,
 	CONNECT,
-	WAIT_CONNECT
+	WAIT_CONNECT,
+	DISCONNECT
 }
 
 /** Bluetooth */
@@ -64,8 +66,12 @@ export class Bluetooth extends EventEmitter {
 	/** Отключение от Bluetooth устройства */
 	disconnect(): void {
 		if (this._device) {
-			this._device.gatt?.disconnect();
+			const device = this._device;
 			this.clear();
+			device.gatt?.disconnect();
+
+			console.log(lang('BLESrv_Device_Disconnected').replace('%', device.name));
+			this.emit(BLUETOOTH_EVENT_CONNECTED, EConnectedStatus.DISCONNECT);
 		}
 	}
 
@@ -74,7 +80,7 @@ export class Bluetooth extends EventEmitter {
 		return navigator.bluetooth
 			.requestDevice({ filters: [{ services: [BLUETOOTH_SERVICE_UUID] }] })
 			.then((device: BluetoothDevice) => {
-				console.log(`Выбрано ${device.name} bluetooth устройство.`);
+				console.log(lang('BLESrv_Device_Selected').replace('%', device.name));
 				device.addEventListener('gattserverdisconnected', () => this.handleDisconnection());
 				this._device = device;
 				return device;
@@ -87,19 +93,19 @@ export class Bluetooth extends EventEmitter {
 	): Promise<BluetoothRemoteGATTCharacteristic> | undefined {
 		if (device.gatt?.connected && !!this._characteristic) return Promise.resolve(this._characteristic);
 
-		console.log('Подключение к GATT серверу ...');
+		console.log(lang('BLESrv_GATT_Connect'));
 		return device.gatt
 			?.connect()
 			.then((server: BluetoothRemoteGATTServer) => {
-				console.log('GATT сервер подключен, читаю сервис ...');
+				console.log(lang('BLESrv_Get_Service'));
 				return server.getPrimaryService(BLUETOOTH_SERVICE_UUID);
 			})
 			.then((service: BluetoothRemoteGATTService) => {
-				console.log('Сервис получен, читаю характеристику ...');
+				console.log(lang('BLESrv_Get_Characteristic'));
 				return service.getCharacteristic(BLUETOOTH_CHARACTERISTIC_UUID);
 			})
 			.then((characteristic: BluetoothRemoteGATTCharacteristic) => {
-				console.log('Характеристика получена.');
+				console.log(lang('BLESrv_Characteristic_Done'));
 				characteristic.addEventListener('characteristicvaluechanged', (ev: any) =>
 					this.handleCharacteristicValueChanged(ev)
 				);
@@ -114,9 +120,9 @@ export class Bluetooth extends EventEmitter {
 	private startNotifications(
 		characteristic: BluetoothRemoteGATTCharacteristic | undefined
 	): Promise<void> | undefined {
-		console.log('Запуск уведомлений ...');
+		console.log(lang('BLESrv_Start_Notifications'));
 		return characteristic?.startNotifications().then(() => {
-			console.log('Уведомления запущены.');
+			console.log(lang('BLESrv_Notifications_Done'));
 			this.emit(BLUETOOTH_EVENT_CONNECTED, EConnectedStatus.CONNECT);
 		});
 	}
@@ -140,7 +146,7 @@ export class Bluetooth extends EventEmitter {
 			.then((server: BluetoothRemoteGATTServer) => success(server))
 			.catch(() => {
 				if (max === 0) return fail();
-				console.log('Повторная попытка через ' + delay + ' сек... (осталось ' + max + ' попыток)');
+				console.log(lang('BLESrv_Reconnect').replace('%', delay).replace('$', max));
 				setTimeout(() => {
 					this.exponentialBackoff(--max, delay * 2, toTry, success, fail);
 				}, delay * 1000);
@@ -160,11 +166,11 @@ export class Bluetooth extends EventEmitter {
 				if (this._device) return this.connectDeviceAndCharacteristic(this._device);
 			},
 			() => {
-				console.log('Соединение с устройством Bluetooth PJCAN восстановлено.');
+				console.log(lang('BLESrv_Reconnect_Restored'));
 				this.emit(BLUETOOTH_EVENT_CONNECTED, EConnectedStatus.CONNECT);
 			},
 			() => {
-				console.log('Связь с устройством Bluetooth PJCAN потеряна.');
+				console.log(lang('BLESrv_Connection_Lost'));
 				this.emit(BLUETOOTH_EVENT_CONNECTED, EConnectedStatus.NO_CONNECT);
 				this.clear();
 			}
@@ -173,7 +179,7 @@ export class Bluetooth extends EventEmitter {
 
 	/** Событие входящих данных */
 	private handleCharacteristicValueChanged(ev: any): void {
-		console.log('Входящие данные: ID ' + ev.target.value.getUint8(0));
+		console.log(lang('BLESrv_Receive').replace('%', ev.target.value.getUint8(0)));
 		this.emit(BLUETOOTH_EVENT_RECEIVE, ev.target.value);
 	}
 
@@ -182,7 +188,7 @@ export class Bluetooth extends EventEmitter {
 	 * @param data Отправляемые данные
 	 */
 	send(data: DataView | undefined): Promise<any> {
-		//console.log('Исходящие данные: ID ' + data.getUint8(0));
+		console.log(lang('BLESrv_Send').replace('%', data?.getUint8(0) ?? '...'));
 		return data && !!this._characteristic
 			? this._characteristic.writeValue(data).catch(() => {
 					return Promise.resolve()
