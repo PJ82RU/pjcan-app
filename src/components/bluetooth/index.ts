@@ -6,7 +6,7 @@ import {
 	BLUETOOTH_EVENT_CONNECTED,
 	BLUETOOTH_EVENT_RECEIVE,
 	EConnectedStatus
-} from './Bluetooth';
+} from './bluetooth';
 import { BluetoothStruct } from './BluetoothStruct';
 import BluetoothDialogConnection from './BluetoothDialogConnection.vue';
 import BluetoothBtn from './BluetoothBtn.vue';

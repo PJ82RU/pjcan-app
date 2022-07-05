@@ -19,7 +19,7 @@ import { inject, Ref, ref, toRefs, watch } from 'vue';
 import { lang } from '@/boot/i18n';
 import { useQuasar } from 'quasar';
 
-import { BLUETOOTH_EVENT_CONNECTED, EConnectedStatus } from './Bluetooth';
+import { BLUETOOTH_EVENT_CONNECTED, EConnectedStatus } from './bluetooth';
 
 export default {
 	name: 'BluetoothDialogConnection',
