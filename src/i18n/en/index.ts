@@ -19,6 +19,7 @@ export default {
 	BLE_Connected: 'PJCAN connected',
 	BLE_Disconnected: 'PJCAN disconnected',
 	BLE_LostConnected: 'Lost connection to PJCAN Bluetooth device. Trying to reconnect...',
+	BLE_NoData: 'No data to send',
 
 	BLESrv_Device_Selected: '% Bluetooth device is selected.',
 	BLESrv_Device_Disconnected: 'Bluetooth % device is disabled.',

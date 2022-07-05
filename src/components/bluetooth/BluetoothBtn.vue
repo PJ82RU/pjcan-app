@@ -5,13 +5,13 @@
 </template>
 
 <script lang="ts">
-import { ref, computed, inject, Ref } from 'vue';
+import { ref, computed, inject, Ref, onMounted, onUnmounted } from 'vue';
 import { useQuasar } from 'quasar';
 import { lang } from '@/i18n/i18nUtils';
 
 import BluetoothDialogConnection from './BluetoothDialogConnection.vue';
 import BluetoothDialogDisconnection from './BluetoothDialogDisconnection.vue';
-import { BLUETOOTH_EVENT_CONNECTED, EConnectedStatus } from './bluetooth';
+import { BLUETOOTH_EVENT_CONNECTED, BLUETOOTH_EVENT_SEND, EConnectedStatus } from './bluetooth';
 
 export default {
 	name: 'BluetoothBtn',
@@ -21,41 +21,38 @@ export default {
 		const store: Ref | undefined = inject('store');
 		const { bluetooth } = store?.value;
 
-		// события подключения к Bluetooth
-		bluetooth.addListener(BLUETOOTH_EVENT_CONNECTED, (status: EConnectedStatus) => {
+		const eventConnected = (status: EConnectedStatus) => {
 			switch (status) {
 				case EConnectedStatus.NO_CONNECT:
-					$q.notify({
-						message: lang('BLE_NoConnected'),
-						position: 'bottom',
-						color: 'red'
-					});
+					$q.notify({ message: lang('BLE_NoConnected'), position: 'bottom', color: 'red' });
 					break;
 
 				case EConnectedStatus.CONNECT:
-					$q.notify({
-						message: lang('BLE_Connected'),
-						position: 'bottom',
-						color: 'green'
-					});
+					$q.notify({ message: lang('BLE_Connected'), position: 'bottom', color: 'green' });
 					break;
 
 				case EConnectedStatus.WAIT_CONNECT:
-					$q.notify({
-						message: lang('BLE_LostConnected'),
-						position: 'bottom',
-						color: 'red'
-					});
+					$q.notify({ message: lang('BLE_LostConnected'), position: 'bottom', color: 'red' });
 					break;
 
 				case EConnectedStatus.DISCONNECT:
-					$q.notify({
-						message: lang('BLE_Disconnected'),
-						position: 'bottom',
-						color: 'primary'
-					});
+					$q.notify({ message: lang('BLE_Disconnected'), position: 'bottom', color: 'primary' });
 					break;
 			}
+		};
+		const eventSend = () => $q.notify({ message: lang('BLE_NoData'), position: 'bottom', color: 'red' });
+
+		onMounted(() => {
+			// события подключения к Bluetooth
+			bluetooth.addListener(BLUETOOTH_EVENT_CONNECTED, eventConnected);
+			// события отправки данных
+			bluetooth.addListener(BLUETOOTH_EVENT_SEND, eventSend);
+		});
+		onUnmounted(() => {
+			// события подключения к Bluetooth
+			bluetooth.removeListener(BLUETOOTH_EVENT_CONNECTED, eventConnected);
+			// события отправки данных
+			bluetooth.removeListener(BLUETOOTH_EVENT_SEND, eventSend);
 		});
 
 		// статус диалога подключения Bluetooth

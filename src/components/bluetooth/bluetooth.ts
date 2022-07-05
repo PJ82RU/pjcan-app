@@ -9,6 +9,7 @@ export const BLUETOOTH_SIZE_MAX = 512;
 
 export const BLUETOOTH_EVENT_CONNECTED = 'Connected'; // Событие подключения
 export const BLUETOOTH_EVENT_RECEIVE = 'Receive'; // Событие входящих данных
+export const BLUETOOTH_EVENT_SEND = 'Send'; // Событие исходящих данных
 
 export enum EConnectedStatus {
 	NO_CONNECT,
@@ -44,7 +45,7 @@ export class Bluetooth extends EventEmitter {
 	connect(): Promise<void> {
 		if (!navigator.bluetooth) {
 			this.emit(BLUETOOTH_EVENT_CONNECTED, EConnectedStatus.NO_CONNECT);
-			return Promise.resolve(undefined);
+			return Promise.resolve();
 		}
 
 		return !!this._device
@@ -188,14 +189,23 @@ export class Bluetooth extends EventEmitter {
 	 * @param data Отправляемые данные
 	 */
 	send(data: DataView | undefined): Promise<any> {
+		if (!this.connected) {
+			this.emit(BLUETOOTH_EVENT_CONNECTED, EConnectedStatus.NO_CONNECT);
+			return Promise.resolve();
+		}
+		if (!data) {
+			this.emit(BLUETOOTH_EVENT_SEND);
+			return Promise.resolve();
+		}
+
 		console.log(lang('BLESrv_Send').replace('%', data?.getUint8(0) ?? '...'));
-		return data && !!this._characteristic
-			? this._characteristic.writeValue(data).catch(() => {
-					return Promise.resolve()
-						.then(() => this.delayPromise(100))
-						.then(() => this.send(data));
-			  })
-			: Promise.resolve(undefined);
+		return (
+			this._characteristic?.writeValue(data).catch(() => {
+				return Promise.resolve()
+					.then(() => this.delayPromise(50))
+					.then(() => this.send(data));
+			}) ?? Promise.resolve()
+		);
 	}
 
 	/**

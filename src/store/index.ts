@@ -103,7 +103,8 @@ import {
 	IConfig,
 	IView,
 	IVariableView,
-	IVariableConfig
+	IVariableConfig,
+	IBaseModel
 } from '@/models/pjcan';
 
 export class Store {
@@ -218,6 +219,15 @@ export class Store {
 		this.sensorView = view.sensors;
 		this.temperatureView = view.temperature;
 		this.volumeView = view.volume;
+	}
+
+	/**
+	 * Отправить данные по Bluetooth
+	 * @param {IBaseModel} obj Объект данных
+	 */
+	send(obj: IBaseModel): void {
+		const data = obj.get();
+		this.bluetooth.send(data).then();
 	}
 
 	/**
