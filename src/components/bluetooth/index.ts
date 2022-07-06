@@ -8,7 +8,7 @@ import {
 	EConnectedStatus
 } from '@/components/bluetooth/Bluetooth';
 import { BluetoothStruct } from './BluetoothStruct';
-import BluetoothDialogConnection from './BluetoothDialogConnection.vue';
+import BluetoothDialogConnection from './BluetoothPopupConnection.vue';
 import BluetoothBtn from './BluetoothBtn.vue';
 
 export {

@@ -11,7 +11,7 @@ import {
 	API_EXEC_CONFIG,
 	API_EXEC_DEVICE_CONFIG,
 	API_EXEC_INFO,
-	API_EXEC_LCD_VALUE,
+	API_EXEC_VIEW_VALUE,
 	API_EXEC_TEYES_CONFIG,
 	API_EXEC_TEYES_VIEW,
 	API_EXEC_UPDATE_BEGIN_GZ,
@@ -85,7 +85,7 @@ export const API_EVENT_CAR_CONFIG = 'CarConfig';
 export const API_EVENT_CAR_VIEW = 'CarView';
 export const API_EVENT_DEVICE_CONFIG = 'DeviceConfig';
 export const API_EVENT_INFO = 'Info';
-export const API_EVENT_LCD_VALUE = 'LCDValue';
+export const API_EVENT_VIEW_VALUE = 'LCDValue';
 export const API_EVENT_TEYES_CONFIG = 'TeyesConfig';
 export const API_EVENT_TEYES_VIEW = 'TeyesView';
 export const API_EVENT_VARIABLE_BOSE = 'VariableBose';
@@ -236,8 +236,8 @@ export class API extends EventEmitter {
 			case API_EXEC_TEYES_VIEW:
 				this.emit(API_EVENT_TEYES_VIEW, new TeyesView(data));
 				break;
-			case API_EXEC_LCD_VALUE:
-				this.emit(API_EVENT_LCD_VALUE, new LCDValue(data));
+			case API_EXEC_VIEW_VALUE:
+				this.emit(API_EVENT_VIEW_VALUE, new LCDValue(data));
 				break;
 			case API_EXEC_CAR_CONFIG:
 				this.emit(API_EVENT_CAR_CONFIG, new CarConfig(data));

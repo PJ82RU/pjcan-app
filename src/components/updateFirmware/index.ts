@@ -1,4 +1,4 @@
 import { UpdateFirmware } from './UpdateFirmware';
-import UpdateFirmwareDialog from './UpdateFirmwareDialog.vue';
+import UpdateFirmwareDialog from './UpdateFirmwarePopup.vue';
 
 export { UpdateFirmware, UpdateFirmwareDialog };
