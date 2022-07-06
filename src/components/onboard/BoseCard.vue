@@ -99,12 +99,12 @@ export default {
 		});
 		const centerPoint = computed({
 			get: (): number => Number(boseConfig.centerPoint),
-			set: (val: number) => {
-				boseConfig.centerPoint = val as TCenterPoint;
+			set: (val: any) => {
+				boseConfig.centerPoint = (val?.value as TCenterPoint) ?? TCenterPoint.CENTERPOINT_OFF;
 				send();
 			}
 		});
-		const centerPointItems = computed((): any => [
+		const centerPointItems = computed((): any[] => [
 			{ label: 'OFF', value: 0 },
 			{ label: 'MIN', value: 1 },
 			{ label: 'LOW', value: 2 },
