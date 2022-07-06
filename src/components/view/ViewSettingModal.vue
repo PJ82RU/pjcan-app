@@ -131,6 +131,7 @@ export default {
 
 			.q-card__section
 				margin-bottom: 10px
+				align-items: center
 
 			.CardSectionSelect-input
 				width: 250px
