@@ -6,7 +6,7 @@ import { VariableConfig, IVariableConfig, StructVariableConfig } from './variabl
 import { BaseModel, IBaseModel } from './BaseModel';
 
 export const API_EXEC_CONFIG = 1;
-const STRUCT_LENGTH = 133;
+const STRUCT_LENGTH = 134;
 
 export interface IConfig extends IBaseModel {
 	buttons: IButtonsConfig;

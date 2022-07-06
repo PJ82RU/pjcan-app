@@ -196,8 +196,7 @@ export class API extends EventEmitter {
 						.replace('%2', build)
 						.replace('%3', revision)
 				);
-				//this.fetchConfig().then(() => this.fetchView());
-				this.bluetooth.send(new VariableConfig().get()).then();
+				this.fetchConfig().then(() => this.fetchView());
 				break;
 
 			case API_EXEC_CONFIG:
