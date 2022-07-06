@@ -5,7 +5,7 @@ import { TeyesView, ITeyesView, StructTeyesView } from './teyes';
 import { BaseModel, IBaseModel } from './BaseModel';
 
 export const API_EXEC_VIEW = 2;
-const STRUCT_LENGTH = 110;
+const STRUCT_LENGTH = 109;
 
 export interface IView extends IBaseModel {
 	car: ICarView;
