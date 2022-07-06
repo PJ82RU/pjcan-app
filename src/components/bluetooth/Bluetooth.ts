@@ -53,7 +53,7 @@ export class Bluetooth extends EventEmitter {
 			: this.requestBluetoothDevice()
 					.then((device: BluetoothDevice) => this.connectDeviceAndCharacteristic(device))
 					.then((characteristic: BluetoothRemoteGATTCharacteristic | undefined) =>
-						this.delayPromise(100, characteristic)
+						this.delayPromise(250, characteristic)
 					)
 					.then((characteristic: BluetoothRemoteGATTCharacteristic | undefined) =>
 						this.startNotifications(characteristic)
