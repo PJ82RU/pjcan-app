@@ -5,6 +5,7 @@
 		type="BoseCard"
 		:title="$t('BoseCard_Title')"
 		icon-name="volume"
+		:menu-card-section="menuBoseCard"
 		@click-options="onClickOptions"
 	>
 		<CardSectionToggle
@@ -68,6 +69,7 @@ import CardSection from '@/components/cardSections/CardSection.vue';
 import CardSectionToggle from '@/components/cardSections/CardSectionToggle.vue';
 import CardSectionSlider from '@/components/cardSections/CardSectionSlider.vue';
 import CardSectionSelect from '@/components/cardSections/CardSectionSelect.vue';
+import { menuBoseCard } from '@/store/menu/MenuBoseCard';
 import { BoseConfig, IBoseConfig, TCenterPoint } from '@/models/pjcan';
 import api, { API_EVENT_VARIABLE_BOSE } from '@/store/api';
 
@@ -172,6 +174,7 @@ export default {
 			treble,
 			bass,
 			wow,
+			menuBoseCard,
 			onClickOptions
 		};
 	}

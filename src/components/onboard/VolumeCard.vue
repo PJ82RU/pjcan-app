@@ -6,6 +6,7 @@ VolumeCard
 		type="VolumeCard"
 		:title="$t('VolumeCard_Title')"
 		icon-name="volume"
+		:menu-card-section="menuVolumeCard"
 		@click-options="onClickOptions"
 	>
 		<CardSectionSlider
@@ -29,6 +30,7 @@ import api, { API_EVENT_VARIABLE_VOLUME } from '@/store/api';
 import CardSection from '@/components/cardSections/CardSection.vue';
 import CardSectionToggle from '@/components/cardSections/CardSectionToggle.vue';
 import CardSectionSlider from '@/components/cardSections/CardSectionSlider.vue';
+import { menuVolumeCard } from '@/store/menu/MenuVolumeCard';
 import { IVolumeConfig, VolumeConfig } from '@/models/pjcan';
 
 export default {
@@ -82,6 +84,7 @@ export default {
 			mute,
 			volume,
 			volumeMax,
+			menuVolumeCard,
 			onClickOptions
 		};
 	}

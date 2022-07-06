@@ -4,6 +4,7 @@
 		type="FuelCard"
 		:title="$t('FuelCard_Title')"
 		icon-name="fuel"
+		:menu-card-section="menuFuelCard"
 		@click-options="onClickOptions"
 	>
 		<CardSectionInput
@@ -38,6 +39,7 @@ import { computed, onMounted, onUnmounted, ref } from 'vue';
 
 import CardSection from '@/components/cardSections/CardSection.vue';
 import CardSectionInput from '@/components/cardSections/CardSectionInput.vue';
+import { menuFuelCard } from '@/store/menu/MenuFuelCard';
 import { FuelValue, IFuelValue } from '@/models/pjcan';
 import api, { API_EVENT_VARIABLE_FUEL } from '@/store/api';
 
@@ -71,6 +73,7 @@ export default {
 			avg,
 			total,
 			consumption,
+			menuFuelCard,
 			onClickOptions
 		};
 	}

@@ -5,6 +5,7 @@
 		type="EngineCard"
 		:title="$t('EngineCard_Title')"
 		icon-name="engine"
+		:menu-card-section="menuEngineCard"
 		@click-options="onClickOptions"
 	>
 		<CardSection2Icons
@@ -60,6 +61,7 @@ import CardSectionToggle from '@/components/cardSections/CardSectionToggle.vue';
 import CardSectionInput from '@/components/cardSections/CardSectionInput.vue';
 import CardSectionProgress from '@/components/cardSections/CardSectionProgress.vue';
 import CardSection2Icons from '@/components/cardSections/CardSection2Icons.vue';
+import { menuEngineCard } from '@/store/menu/MenuEngineCard';
 import { EngineValue, IEngineValue } from '@/models/pjcan';
 import api, { API_EVENT_VARIABLE_ENGINE } from '@/store/api';
 
@@ -106,6 +108,7 @@ export default {
 			mseconds,
 			throttle,
 			coolant,
+			menuEngineCard,
 			onClickOptions
 		};
 	}

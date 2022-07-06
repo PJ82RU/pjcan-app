@@ -5,6 +5,7 @@
 		type="MovementCard"
 		:title="$t('MovementCard_Title')"
 		icon-name="speedometer"
+		:menu-card-section="menuMovementCard"
 		@click-options="onClickOptions"
 	>
 		<CardSectionInput
@@ -33,6 +34,7 @@ import { computed, onMounted, onUnmounted, ref } from 'vue';
 
 import CardSection from '@/components/cardSections/CardSection.vue';
 import CardSectionInput from '@/components/cardSections/CardSectionInput.vue';
+import { menuMovementCard } from '@/store/menu/MenuMovementCard';
 import { IMovementValue, MovementValue } from '@/models/pjcan';
 import api, { API_EVENT_VARIABLE_MOVEMENT } from '@/store/api';
 
@@ -64,6 +66,7 @@ export default {
 			speed,
 			speedAVG,
 			restWay,
+			menuMovementCard,
 			onClickOptions
 		};
 	}

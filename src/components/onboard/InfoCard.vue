@@ -5,6 +5,7 @@
 		type="InfoCard"
 		:title="$t('InfoCard_Title')"
 		icon-name="info"
+		:menu-card-section="menuInfoCard"
 		@click-options="onClickOptions"
 	>
 		<CardSectionTime
@@ -61,6 +62,7 @@ import CardSectionTime from '@/components/cardSections/CardSectionTime.vue';
 import CardSectionToggle from '@/components/cardSections/CardSectionToggle.vue';
 import CardSectionInput from '@/components/cardSections/CardSectionInput.vue';
 import CardSection2Icons from '@/components/cardSections/CardSection2Icons.vue';
+import { menuInfoCard } from '@/store/menu/MenuInfoCard';
 import { ISensorsValue, ITemperatureValue, SensorsValue, TemperatureValue, TSensorsSignal } from '@/models/pjcan';
 import api, { API_EVENT_VARIABLE_SENSORS, API_EVENT_VARIABLE_TEMPERATURE } from '@/store/api';
 
@@ -109,6 +111,7 @@ export default {
 		};
 
 		return {
+			menuInfoCard,
 			acc,
 			timeWork,
 			temperature,

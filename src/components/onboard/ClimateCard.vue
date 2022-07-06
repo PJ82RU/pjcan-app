@@ -5,6 +5,7 @@
 		type="ClimateCard"
 		:title="$t('ClimateCard_Title')"
 		icon-name="climate"
+		:menu-card-section="menuClimateCard"
 		@click-options="onClickOptions"
 	>
 		<CardSection2Icons
@@ -53,6 +54,7 @@ import CardSectionTime from '@/components/cardSections/CardSectionTime.vue';
 import CardSectionToggle from '@/components/cardSections/CardSectionToggle.vue';
 import CardSectionInput from '@/components/cardSections/CardSectionInput.vue';
 import CardSection2Icons from '@/components/cardSections/CardSection2Icons.vue';
+import { menuClimateCard } from '@/store/menu/MenuClimateCard';
 import { ClimateValue, IClimateValue, TAir } from '@/models/pjcan';
 import api, { API_EVENT_VARIABLE_CLIMATE } from '@/store/api';
 
@@ -112,6 +114,7 @@ export default {
 			blowName,
 			blowWindshield,
 			speedRotation,
+			menuClimateCard,
 			onClickOptions
 		};
 	}

@@ -6,23 +6,27 @@
 		transition-show="jump-down"
 		transition-hide="jump-up"
 	>
-		<ItemMenu :items="popupCardSection" @click="onClickItem" />
+		<ItemMenu :items="menuCardSection" @click="onClickItem" />
 	</q-menu>
 </template>
 
 <script lang="ts">
 import ItemMenu from './ItemMenu.vue';
-import { popupCardSection } from '@/store/menu/MenuCardSection';
 
 export default {
 	name: 'CardSectionMenu',
 	components: { ItemMenu },
+	props: {
+		menuCardSection: {
+			type: Array,
+			require: true
+		}
+	},
 	emits: ['click'],
 	setup(props: any, context: any) {
 		const onClickItem = (e: any) => context.emit('click', e);
 
 		return {
-			popupCardSection,
 			onClickItem
 		};
 	}

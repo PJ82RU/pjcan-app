@@ -23,7 +23,10 @@
 
 			<q-card-actions vertical class="CardSection-menu">
 				<q-btn flat round color="secondary" icon="more_vert">
-					<CardSectionMenu @click="onClickOptions" />
+					<CardSectionMenu :menu-card-section="menuCardSection" @click="onClickOptions" />
+					<q-tooltip class="CardSection-menu-tooltip" anchor="bottom middle" self="top middle">{{
+						$t('SettingLCD')
+					}}</q-tooltip>
 				</q-btn>
 				<q-btn flat round color="primary" :icon="bookmarkIcon" @click="onClickBookmark" />
 				<q-btn flat round color="primary" icon="help_outline" @click="onClickHelp" />
@@ -47,6 +50,10 @@ export default {
 		},
 		type: {
 			type: String,
+			require: true
+		},
+		menuCardSection: {
+			type: Array,
 			require: true
 		},
 		iconName: {
@@ -130,4 +137,8 @@ export default {
 			align-items: center
 			margin-bottom: 10px
 			padding: 0
+
+	&-menu
+		&-tooltip
+			font-size: 14px
 </style>

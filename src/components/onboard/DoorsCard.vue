@@ -5,6 +5,7 @@
 		type="DoorsCard"
 		:title="$t('DoorsCard_Title')"
 		icon-name="doors"
+		:menu-card-section="menuDoorsCard"
 		@click-options="onClickOptions"
 	>
 		<CardSectionToggle :title="$t('DoorsCard_FL_Title')" :comment="$t('DoorsCard_FL_Comment')" v-model="doorFL" />
@@ -24,6 +25,7 @@ import { computed, onMounted, onUnmounted, ref } from 'vue';
 
 import CardSection from '@/components/cardSections/CardSection.vue';
 import CardSectionToggle from '@/components/cardSections/CardSectionToggle.vue';
+import { menuDoorsCard } from '@/store/menu/MenuDoorsCard';
 import { DoorsValue, IDoorsValue } from '@/models/pjcan';
 import api, { API_EVENT_VARIABLE_DOORS } from '@/store/api';
 
@@ -59,6 +61,7 @@ export default {
 			doorBL,
 			doorBR,
 			trunk,
+			menuDoorsCard,
 			onClickOptions
 		};
 	}
