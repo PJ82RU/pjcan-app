@@ -52,6 +52,7 @@
 			:icon2-value="signalRight"
 		/>
 	</CardSection>
+	<ViewSettingModal v-model="viewSettingModel" :title="viewSettingTitle" :view-config="viewConfig" />
 </template>
 
 <script lang="ts">
@@ -62,30 +63,68 @@ import CardSectionTime from '@/components/cardSections/CardSectionTime.vue';
 import CardSectionToggle from '@/components/cardSections/CardSectionToggle.vue';
 import CardSectionInput from '@/components/cardSections/CardSectionInput.vue';
 import CardSection2Icons from '@/components/cardSections/CardSection2Icons.vue';
+import ViewSettingModal from '@/components/view/ViewSettingModal.vue';
 import { menuInfoCard } from '@/store/menu/MenuInfoCard';
-import { ISensorsValue, ITemperatureValue, SensorsValue, TemperatureValue, TSensorsSignal } from '@/models/pjcan';
-import api, { API_EVENT_VARIABLE_SENSORS, API_EVENT_VARIABLE_TEMPERATURE } from '@/store/api';
+import {
+	ISensorsValue,
+	ISensorsView,
+	ITemperatureValue,
+	ITemperatureView,
+	IViewConfig,
+	SensorsValue,
+	SensorsView,
+	TemperatureValue,
+	TemperatureView,
+	TSensorsSignal,
+	TViewType
+} from '@/models/pjcan';
+import api, {
+	API_EVENT_VARIABLE_SENSORS,
+	API_EVENT_VARIABLE_SENSORS_VIEW,
+	API_EVENT_VARIABLE_TEMPERATURE,
+	API_EVENT_VARIABLE_TEMPERATURE_VIEW
+} from '@/store/api';
+import { TItemMenu } from '@/models/menu';
 
 export default {
 	name: 'InfoCard',
-	components: { CardSection, CardSectionTime, CardSectionToggle, CardSectionInput, CardSection2Icons },
+	components: {
+		CardSection,
+		CardSectionTime,
+		CardSectionToggle,
+		CardSectionInput,
+		CardSection2Icons,
+		ViewSettingModal
+	},
 	setup() {
 		const sensorValue = ref(new SensorsValue());
+		const sensorView = new SensorsView();
 		const temperatureValue = ref(new TemperatureValue());
-		const onReceiveSensor = (res: ISensorsValue): void => {
+		const temperatureView = new TemperatureView();
+		const onReceiveSensorValue = (res: ISensorsValue): void => {
 			sensorValue.value.setModel(res);
 		};
-		const onReceiveTemperature = (res: ITemperatureValue): void => {
+		const onReceiveSensorView = (res: ISensorsView): void => {
+			sensorView.setModel(res);
+		};
+		const onReceiveTemperatureValue = (res: ITemperatureValue): void => {
 			temperatureValue.value.setModel(res);
+		};
+		const onReceiveTemperatureView = (res: ITemperatureView): void => {
+			temperatureView.setModel(res);
 		};
 
 		onMounted(() => {
-			api.addListener(API_EVENT_VARIABLE_SENSORS, onReceiveSensor);
-			api.addListener(API_EVENT_VARIABLE_TEMPERATURE, onReceiveTemperature);
+			api.addListener(API_EVENT_VARIABLE_SENSORS, onReceiveSensorValue);
+			api.addListener(API_EVENT_VARIABLE_SENSORS_VIEW, onReceiveSensorView);
+			api.addListener(API_EVENT_VARIABLE_TEMPERATURE, onReceiveTemperatureValue);
+			api.addListener(API_EVENT_VARIABLE_TEMPERATURE_VIEW, onReceiveTemperatureView);
 		});
 		onUnmounted(() => {
-			api.removeListener(API_EVENT_VARIABLE_SENSORS, onReceiveSensor);
-			api.removeListener(API_EVENT_VARIABLE_TEMPERATURE, onReceiveTemperature);
+			api.removeListener(API_EVENT_VARIABLE_SENSORS, onReceiveSensorValue);
+			api.removeListener(API_EVENT_VARIABLE_SENSORS_VIEW, onReceiveSensorView);
+			api.removeListener(API_EVENT_VARIABLE_TEMPERATURE, onReceiveTemperatureValue);
+			api.removeListener(API_EVENT_VARIABLE_TEMPERATURE_VIEW, onReceiveTemperatureView);
 		});
 
 		const acc = computed((): boolean => sensorValue.value.acc);
@@ -106,8 +145,40 @@ export default {
 				sensorValue.value.signal === TSensorsSignal.SIGNAL_EMERGENCY
 		);
 
+		const viewSettingModel = ref(false);
+		const viewSettingTitle = ref('');
+		const viewConfig = ref({ enabled: false, type: TViewType.VIEW_TEXT_SIMPLE, time: 0 } as IViewConfig);
 		const onClickOptions = (e: any): void => {
 			console.log('InfoCard -> onClickOptions', e);
+
+			switch (e.type) {
+				case TItemMenu.VIEW_TIME_WORK:
+					viewConfig.value = { enabled: false, type: TViewType.VIEW_TEXT_SIMPLE, time: 0 } as IViewConfig;
+					break;
+
+				case TItemMenu.VIEW_TEMPERATURE:
+					viewConfig.value = temperatureView.temperature;
+					break;
+
+				case TItemMenu.VIEW_HANDBRAKE:
+					viewConfig.value = sensorView.handbrake;
+					break;
+
+				case TItemMenu.VIEW_REVERSE:
+					viewConfig.value = sensorView.reverse;
+					break;
+
+				case TItemMenu.VIEW_SAFETY_BELT:
+					viewConfig.value = sensorView.seatbelt;
+					break;
+
+				case TItemMenu.VIEW_SIGNAL:
+					viewConfig.value = sensorView.signal;
+					break;
+			}
+
+			viewSettingTitle.value = e.lang;
+			viewSettingModel.value = true;
 		};
 
 		return {
@@ -121,6 +192,9 @@ export default {
 			seatbeltPassenger,
 			signalLeft,
 			signalRight,
+			viewSettingModel,
+			viewSettingTitle,
+			viewConfig,
 			onClickOptions
 		};
 	}
