@@ -1,6 +1,11 @@
 import EventEmitter from 'eventemitter3';
 import { lang } from '@/i18n/i18nUtils';
-import { Bluetooth, BLUETOOTH_EVENT_RECEIVE } from '@/components/bluetooth';
+import {
+	Bluetooth,
+	BLUETOOTH_EVENT_CONNECTED,
+	BLUETOOTH_EVENT_RECEIVE,
+	TConnectedStatus
+} from '@/components/bluetooth';
 import { API_EXEC_VERSION, IVersion, Version } from '@/models/version';
 import { UpdateFirmware } from '@/components/updateFirmware';
 import {
@@ -11,7 +16,6 @@ import {
 	API_EXEC_CONFIG,
 	API_EXEC_DEVICE_CONFIG,
 	API_EXEC_INFO,
-	API_EXEC_VIEW_VALUE,
 	API_EXEC_TEYES_CONFIG,
 	API_EXEC_TEYES_VIEW,
 	API_EXEC_UPDATE_BEGIN_GZ,
@@ -39,6 +43,7 @@ import {
 	API_EXEC_VARIABLE_VOLUME,
 	API_EXEC_VARIABLE_VOLUME_VIEW,
 	API_EXEC_VIEW,
+	API_EXEC_VIEW_VALUE,
 	BoseConfig,
 	BoseView,
 	ButtonsConfig,
@@ -119,7 +124,18 @@ export class API extends EventEmitter {
 
 	constructor() {
 		super();
+		this.bluetooth.addListener(BLUETOOTH_EVENT_CONNECTED, (ev: any) => this.onConnected(ev));
 		this.bluetooth.addListener(BLUETOOTH_EVENT_RECEIVE, (ev: any) => this.onReceive(ev));
+	}
+
+	/**
+	 * Событие подключения Bluetooth
+	 * @param {TConnectedStatus} status Статус подключения
+	 */
+	onConnected(status: TConnectedStatus): void {
+		if (status !== TConnectedStatus.CONNECT) return;
+
+		this.fetchConfig().then(() => this.fetchView());
 	}
 
 	/** Загрузка конфигурации */
@@ -196,7 +212,6 @@ export class API extends EventEmitter {
 						.replace('%2', build)
 						.replace('%3', revision)
 				);
-				this.fetchConfig().then(() => this.fetchView());
 				break;
 
 			case API_EXEC_CONFIG:

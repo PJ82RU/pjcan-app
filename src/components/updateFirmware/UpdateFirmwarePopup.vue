@@ -39,7 +39,7 @@ import { lang } from '@/i18n/i18nUtils';
 import { useQuasar } from 'quasar';
 import api from '@/store/api';
 
-import { BLUETOOTH_EVENT_CONNECTED, EConnectedStatus } from '@/components/bluetooth';
+import { BLUETOOTH_EVENT_CONNECTED, TConnectedStatus } from '@/components/bluetooth';
 
 import { UPDATE_UPLOAD_EVENT_RESULT } from '@/models/pjcan/update/UpdateData';
 import { UPDATE_BEGIN_EVENT_RESULT } from '@/models/pjcan/update/UpdateBegin';
@@ -112,8 +112,8 @@ export default defineComponent({
 		};
 
 		// событие подключения по Bluetooth
-		bluetooth.addListener(BLUETOOTH_EVENT_CONNECTED, (status: EConnectedStatus) => {
-			if (status === EConnectedStatus.CONNECT) {
+		bluetooth.addListener(BLUETOOTH_EVENT_CONNECTED, (status: TConnectedStatus) => {
+			if (status === TConnectedStatus.CONNECT) {
 				if (updated) {
 					$q.notify({
 						message: 'Прошивка успешно завершена',

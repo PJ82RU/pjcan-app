@@ -5,7 +5,7 @@ import {
 	BLUETOOTH_SIZE_MAX,
 	BLUETOOTH_EVENT_CONNECTED,
 	BLUETOOTH_EVENT_RECEIVE,
-	EConnectedStatus
+	TConnectedStatus
 } from '@/components/bluetooth/Bluetooth';
 import { BluetoothStruct } from './BluetoothStruct';
 import BluetoothDialogConnection from './BluetoothPopupConnection.vue';
@@ -18,7 +18,7 @@ export {
 	BLUETOOTH_SIZE_MAX,
 	BLUETOOTH_EVENT_CONNECTED,
 	BLUETOOTH_EVENT_RECEIVE,
-	EConnectedStatus,
+	TConnectedStatus,
 	BluetoothStruct,
 	BluetoothBtn,
 	BluetoothDialogConnection

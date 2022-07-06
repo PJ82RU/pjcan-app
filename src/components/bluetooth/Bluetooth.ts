@@ -11,7 +11,7 @@ export const BLUETOOTH_EVENT_CONNECTED = 'Connected'; // Событие подк
 export const BLUETOOTH_EVENT_RECEIVE = 'Receive'; // Событие входящих данных
 export const BLUETOOTH_EVENT_SEND = 'Send'; // Событие исходящих данных
 
-export enum EConnectedStatus {
+export enum TConnectedStatus {
 	NO_CONNECT,
 	CONNECT,
 	WAIT_CONNECT,
@@ -44,7 +44,7 @@ export class Bluetooth extends EventEmitter {
 	/** Запустить выбор Bluetooth устройства и подключиться к выбранному */
 	connect(): Promise<void> {
 		if (!navigator.bluetooth) {
-			this.emit(BLUETOOTH_EVENT_CONNECTED, EConnectedStatus.NO_CONNECT);
+			this.emit(BLUETOOTH_EVENT_CONNECTED, TConnectedStatus.NO_CONNECT);
 			return Promise.resolve();
 		}
 
@@ -59,7 +59,7 @@ export class Bluetooth extends EventEmitter {
 						this.startNotifications(characteristic)
 					)
 					.catch((e: any) => {
-						this.emit(BLUETOOTH_EVENT_CONNECTED, EConnectedStatus.NO_CONNECT);
+						this.emit(BLUETOOTH_EVENT_CONNECTED, TConnectedStatus.NO_CONNECT);
 						console.log(e);
 					});
 	}
@@ -72,7 +72,7 @@ export class Bluetooth extends EventEmitter {
 			device.gatt?.disconnect();
 
 			console.log(lang('BLESrv_Device_Disconnected').replace('%', device.name));
-			this.emit(BLUETOOTH_EVENT_CONNECTED, EConnectedStatus.DISCONNECT);
+			this.emit(BLUETOOTH_EVENT_CONNECTED, TConnectedStatus.DISCONNECT);
 		}
 	}
 
@@ -124,7 +124,7 @@ export class Bluetooth extends EventEmitter {
 		console.log(lang('BLESrv_Start_Notifications'));
 		return characteristic?.startNotifications().then(() => {
 			console.log(lang('BLESrv_Notifications_Done'));
-			this.emit(BLUETOOTH_EVENT_CONNECTED, EConnectedStatus.CONNECT);
+			this.emit(BLUETOOTH_EVENT_CONNECTED, TConnectedStatus.CONNECT);
 		});
 	}
 
@@ -163,16 +163,16 @@ export class Bluetooth extends EventEmitter {
 			3,
 			2,
 			() => {
-				this.emit(BLUETOOTH_EVENT_CONNECTED, EConnectedStatus.WAIT_CONNECT);
+				this.emit(BLUETOOTH_EVENT_CONNECTED, TConnectedStatus.WAIT_CONNECT);
 				if (this._device) return this.connectDeviceAndCharacteristic(this._device);
 			},
 			() => {
 				console.log(lang('BLESrv_Reconnect_Restored'));
-				this.emit(BLUETOOTH_EVENT_CONNECTED, EConnectedStatus.CONNECT);
+				this.emit(BLUETOOTH_EVENT_CONNECTED, TConnectedStatus.CONNECT);
 			},
 			() => {
 				console.log(lang('BLESrv_Connection_Lost'));
-				this.emit(BLUETOOTH_EVENT_CONNECTED, EConnectedStatus.NO_CONNECT);
+				this.emit(BLUETOOTH_EVENT_CONNECTED, TConnectedStatus.NO_CONNECT);
 				this.clear();
 			}
 		);
@@ -194,7 +194,7 @@ export class Bluetooth extends EventEmitter {
 		//console.log('send', data);
 
 		if (!this.connected) {
-			this.emit(BLUETOOTH_EVENT_CONNECTED, EConnectedStatus.NO_CONNECT);
+			this.emit(BLUETOOTH_EVENT_CONNECTED, TConnectedStatus.NO_CONNECT);
 			return Promise.resolve();
 		}
 		if (!data) {

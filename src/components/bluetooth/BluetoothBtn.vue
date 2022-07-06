@@ -12,7 +12,7 @@ import api from '@/store/api';
 
 import BluetoothDialogConnection from './BluetoothPopupConnection.vue';
 import BluetoothDialogDisconnection from './BluetoothPopupDisconnection.vue';
-import { BLUETOOTH_EVENT_CONNECTED, BLUETOOTH_EVENT_SEND, EConnectedStatus } from './Bluetooth';
+import { BLUETOOTH_EVENT_CONNECTED, BLUETOOTH_EVENT_SEND, TConnectedStatus } from './Bluetooth';
 
 export default {
 	name: 'BluetoothBtn',
@@ -21,21 +21,21 @@ export default {
 		const $q = useQuasar();
 		const { bluetooth } = api;
 
-		const eventConnected = (status: EConnectedStatus) => {
+		const eventConnected = (status: TConnectedStatus) => {
 			switch (status) {
-				case EConnectedStatus.NO_CONNECT:
+				case TConnectedStatus.NO_CONNECT:
 					$q.notify({ message: lang('BLE_NoConnected'), position: 'bottom', color: 'red' });
 					break;
 
-				case EConnectedStatus.CONNECT:
+				case TConnectedStatus.CONNECT:
 					$q.notify({ message: lang('BLE_Connected'), position: 'bottom', color: 'green' });
 					break;
 
-				case EConnectedStatus.WAIT_CONNECT:
+				case TConnectedStatus.WAIT_CONNECT:
 					$q.notify({ message: lang('BLE_LostConnected'), position: 'bottom', color: 'red' });
 					break;
 
-				case EConnectedStatus.DISCONNECT:
+				case TConnectedStatus.DISCONNECT:
 					$q.notify({ message: lang('BLE_Disconnected'), position: 'bottom', color: 'primary' });
 					break;
 			}
