@@ -26,7 +26,6 @@ const struct = new BluetoothStruct(StructDoorsValue);
 
 /** Модель значений дверей */
 export class DoorsValue extends BaseModel implements IDoorsValue {
-	enabled = false;
 	frontLeft = false;
 	frontRight = false;
 	backLeft = false;

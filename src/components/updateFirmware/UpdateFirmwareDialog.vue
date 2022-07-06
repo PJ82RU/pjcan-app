@@ -34,9 +34,10 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, inject, Ref } from 'vue';
+import { defineComponent, ref, computed } from 'vue';
 import { lang } from '@/i18n/i18nUtils';
 import { useQuasar } from 'quasar';
+import api from '@/store/api';
 
 import { BLUETOOTH_EVENT_CONNECTED, EConnectedStatus } from '@/components/bluetooth';
 
@@ -50,8 +51,7 @@ export default defineComponent({
 	name: 'UpdateFirmwareDialog',
 	setup() {
 		const $q = useQuasar();
-		const store: Ref | undefined = inject('store');
-		const { updateFirmware, bluetooth, version } = store?.value;
+		const { updateFirmware, bluetooth, version } = api;
 
 		const visibleQuestion = ref(false); // показать вопрос
 		const visibleUpdate = ref(false); // показать процесс обновления

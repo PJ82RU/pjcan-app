@@ -2,6 +2,7 @@ import EventEmitter from 'eventemitter3';
 import { lang } from '@/i18n/i18nUtils';
 import { Bluetooth, BLUETOOTH_EVENT_RECEIVE } from '@/components/bluetooth';
 import { API_EXEC_VERSION, IVersion, Version } from '@/models/version';
+import { UpdateFirmware } from '@/components/updateFirmware';
 import {
 	API_EXEC_BUTTONS_CONFIG,
 	API_EXEC_BUTTONS_VALUE,
@@ -87,8 +88,6 @@ export const API_EVENT_INFO = 'Info';
 export const API_EVENT_LCD_VALUE = 'LCDValue';
 export const API_EVENT_TEYES_CONFIG = 'TeyesConfig';
 export const API_EVENT_TEYES_VIEW = 'TeyesView';
-export const API_EVENT_UPDATE_BEGIN_GZ = 'UpdateBeginGZ';
-export const API_EVENT_UPDATE_UPLOAD_GZFILE = 'UpdateUploadGZFile';
 export const API_EVENT_VARIABLE_BOSE = 'VariableBose';
 export const API_EVENT_VARIABLE_BOSE_VIEW = 'VariableBoseView';
 export const API_EVENT_VARIABLE_CLIMATE = 'VariableClimate';
@@ -115,6 +114,8 @@ export class API extends EventEmitter {
 	bluetooth: Bluetooth = new Bluetooth();
 	/** Версия протокола */
 	version: IVersion = new Version();
+	/** Обновление прошивки устройства PJCAN */
+	updateFirmware: UpdateFirmware = new UpdateFirmware();
 
 	constructor() {
 		super();
@@ -122,13 +123,13 @@ export class API extends EventEmitter {
 	}
 
 	/** Загрузка конфигурации */
-	fetchConfig(): void {
-		this.bluetooth.send(new Config().get()).then();
+	fetchConfig(): Promise<void> {
+		return this.bluetooth.send(new Config().get());
 	}
 
 	/** Загрузка конфигурации отображения значений */
-	fetchView(): void {
-		this.bluetooth.send(new View().get()).then();
+	fetchView(): Promise<void> {
+		return this.bluetooth.send(new View().get());
 	}
 
 	/**
@@ -195,6 +196,8 @@ export class API extends EventEmitter {
 						.replace('%2', build)
 						.replace('%3', revision)
 				);
+				//this.fetchConfig().then(() => this.fetchView());
+				this.bluetooth.send(new VariableConfig().get()).then();
 				break;
 
 			case API_EXEC_CONFIG:
@@ -244,12 +247,10 @@ export class API extends EventEmitter {
 				this.emit(API_EVENT_CAR_VIEW, new CarView(data));
 				break;
 			case API_EXEC_UPDATE_UPLOAD_GZFILE:
-				this.emit(API_EVENT_UPDATE_UPLOAD_GZFILE, data);
-				// this.updateFirmware.resultUpload.set(data);
+				this.updateFirmware.resultUpload.set(data);
 				break;
 			case API_EXEC_UPDATE_BEGIN_GZ:
-				this.emit(API_EVENT_UPDATE_UPLOAD_GZFILE, data);
-				// this.updateFirmware.resultBegin.set(data);
+				this.updateFirmware.resultBegin.set(data);
 				break;
 
 			case API_EXEC_VARIABLE_CONFIG: {

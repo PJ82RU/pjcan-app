@@ -62,13 +62,14 @@
 </template>
 
 <script lang="ts">
-import { computed, inject, Ref } from 'vue';
+import { computed, onMounted, onUnmounted, ref } from 'vue';
 
 import CardSection from '@/components/cardSections/CardSection.vue';
 import CardSectionToggle from '@/components/cardSections/CardSectionToggle.vue';
 import CardSectionSlider from '@/components/cardSections/CardSectionSlider.vue';
 import CardSectionSelect from '@/components/cardSections/CardSectionSelect.vue';
-import { TCenterPoint } from '@/models/pjcan';
+import { BoseConfig, IBoseConfig, TCenterPoint } from '@/models/pjcan';
+import api, { API_EVENT_VARIABLE_BOSE } from '@/store/api';
 
 export default {
 	name: 'BoseCard',
@@ -78,30 +79,39 @@ export default {
 		CardSectionSlider,
 		CardSectionSelect
 	},
-	setup() {
-		const store: Ref | undefined = inject('store');
-		const { boseConfig } = store?.value;
-		const send = () => store?.value.send(boseConfig);
+	setup: function () {
+		const boseConfig = ref(new BoseConfig());
+		const onReceive = (res: IBoseConfig): void => {
+			boseConfig.value = res;
+		};
+		const onSend = () => api.send(boseConfig.value);
+
+		onMounted(() => {
+			api.addListener(API_EVENT_VARIABLE_BOSE, onReceive);
+		});
+		onUnmounted(() => {
+			api.removeListener(API_EVENT_VARIABLE_BOSE, onReceive);
+		});
 
 		const enabled = computed({
-			get: (): boolean => boseConfig.enabled,
+			get: (): boolean => boseConfig.value.enabled,
 			set: (val: boolean) => {
-				boseConfig.enabled = val;
-				send();
+				boseConfig.value.enabled = val;
+				onSend();
 			}
 		});
 		const audioPLT = computed({
-			get: (): boolean => boseConfig.audioPLT,
+			get: (): boolean => boseConfig.value.audioPLT,
 			set: (val: boolean) => {
-				boseConfig.audioPLT = val;
-				send();
+				boseConfig.value.audioPLT = val;
+				onSend();
 			}
 		});
 		const centerPoint = computed({
-			get: (): number => Number(boseConfig.centerPoint),
+			get: (): number => Number(boseConfig.value.centerPoint),
 			set: (val: any) => {
-				boseConfig.centerPoint = (val?.value as TCenterPoint) ?? TCenterPoint.CENTERPOINT_OFF;
-				send();
+				boseConfig.value.centerPoint = (val?.value as TCenterPoint) ?? TCenterPoint.CENTERPOINT_OFF;
+				onSend();
 			}
 		});
 		const centerPointItems = computed((): any[] => [
@@ -113,38 +123,38 @@ export default {
 			{ label: 'MAX', value: 5 }
 		]);
 		const balance = computed({
-			get: (): number => boseConfig.balance,
+			get: (): number => boseConfig.value.balance,
 			set: (val: number) => {
-				boseConfig.balance = val;
-				send();
+				boseConfig.value.balance = val;
+				onSend();
 			}
 		});
 		const fade = computed({
-			get: (): number => boseConfig.fade,
+			get: (): number => boseConfig.value.fade,
 			set: (val: number) => {
-				boseConfig.fade = val;
-				send();
+				boseConfig.value.fade = val;
+				onSend();
 			}
 		});
 		const treble = computed({
-			get: (): number => boseConfig.treble,
+			get: (): number => boseConfig.value.treble,
 			set: (val: number) => {
-				boseConfig.treble = val;
-				send();
+				boseConfig.value.treble = val;
+				onSend();
 			}
 		});
 		const bass = computed({
-			get: (): number => boseConfig.bass,
+			get: (): number => boseConfig.value.bass,
 			set: (val: number) => {
-				boseConfig.bass = val;
-				send();
+				boseConfig.value.bass = val;
+				onSend();
 			}
 		});
 		const wow = computed({
-			get: (): boolean => boseConfig.wow,
+			get: (): boolean => boseConfig.value.wow,
 			set: (val: boolean) => {
-				boseConfig.wow = val;
-				send();
+				boseConfig.value.wow = val;
+				onSend();
 			}
 		});
 

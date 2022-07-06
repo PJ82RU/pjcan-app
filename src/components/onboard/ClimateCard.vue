@@ -46,42 +46,56 @@
 </template>
 
 <script lang="ts">
-import { computed, inject, Ref } from 'vue';
+import { computed, onMounted, onUnmounted, ref } from 'vue';
 
 import CardSection from '@/components/cardSections/CardSection.vue';
 import CardSectionTime from '@/components/cardSections/CardSectionTime.vue';
 import CardSectionToggle from '@/components/cardSections/CardSectionToggle.vue';
 import CardSectionInput from '@/components/cardSections/CardSectionInput.vue';
 import CardSection2Icons from '@/components/cardSections/CardSection2Icons.vue';
-import { TAir } from '@/models/pjcan';
+import { ClimateValue, IClimateValue, TAir } from '@/models/pjcan';
+import api, { API_EVENT_VARIABLE_CLIMATE } from '@/store/api';
 
 export default {
 	name: 'ClimateCard',
 	components: { CardSection, CardSectionTime, CardSectionToggle, CardSectionInput, CardSection2Icons },
 	emits: ['click-options', 'click-bookmark', 'click-help'],
 	setup() {
-		const store: Ref | undefined = inject('store');
-		const { climateValue } = store?.value;
+		const climateValue = ref(new ClimateValue());
+		const onReceive = (res: IClimateValue): void => {
+			climateValue.value = res;
+		};
 
-		const enabled = computed((): boolean => climateValue.enabled);
-		const autoMode = computed((): boolean => climateValue.automode);
-		const ac = computed((): boolean => climateValue.ac);
-		const temperature = computed((): number => climateValue.temperature);
+		onMounted(() => {
+			api.addListener(API_EVENT_VARIABLE_CLIMATE, onReceive);
+		});
+		onUnmounted(() => {
+			api.removeListener(API_EVENT_VARIABLE_CLIMATE, onReceive);
+		});
 
-		const airEnabled = computed((): boolean => climateValue.airType !== TAir.AIR_NONE);
-		const airName = computed((): string => (climateValue.airType === TAir.AIR_STREET ? 'air-fresh' : 'air-cabin'));
-		const blowEnabled = computed((): boolean => climateValue.airDBody || climateValue.airDLegs);
+		const enabled = computed((): boolean => climateValue.value.enabled);
+		const autoMode = computed((): boolean => climateValue.value.automode);
+		const ac = computed((): boolean => climateValue.value.ac);
+		const temperature = computed((): number => climateValue.value.temperature);
+
+		const airEnabled = computed((): boolean => climateValue.value.airType !== TAir.AIR_NONE);
+		const airName = computed((): string =>
+			climateValue.value.airType === TAir.AIR_STREET ? 'air-fresh' : 'air-cabin'
+		);
+		const blowEnabled = computed((): boolean => climateValue.value.airDBody || climateValue.value.airDLegs);
 		const blowName = computed((): string =>
-			climateValue.airDLegs && climateValue.airDBody
+			climateValue.value.airDLegs && climateValue.value.airDBody
 				? 'blow-feet-body'
-				: climateValue.airDLegs
+				: climateValue.value.airDLegs
 				? 'blow-feet'
-				: climateValue.airDBody
+				: climateValue.value.airDBody
 				? 'blow-body'
 				: 'blow-none'
 		);
-		const blowWindshield = computed((): boolean => climateValue.airDWindshield);
-		const speedRotation = computed((): number => (climateValue.airRate > 0 ? climateValue.airRate + 2 : 0));
+		const blowWindshield = computed((): boolean => climateValue.value.airDWindshield);
+		const speedRotation = computed((): number =>
+			climateValue.value.airRate > 0 ? climateValue.value.airRate + 2 : 0
+		);
 
 		const onClickOptions = (e: any): void => {
 			console.log('ClimateCard -> onClickOptions', e);

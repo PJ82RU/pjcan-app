@@ -1,7 +1,7 @@
 import EventEmitter from 'eventemitter3';
 
 export const API_EXEC_UPDATE_UPLOAD_GZFILE = 92; // команда API
-export const UPDATE_UPLOAD_EVENT_RESULT = 'upload_result'; // Имя события
+export const UPDATE_UPLOAD_EVENT_RESULT = 'UploadResult'; // Имя события
 const STRUCT_LENGTH = 512; // длина данных API
 
 /** Интерфейс загрузки данных прошивки */

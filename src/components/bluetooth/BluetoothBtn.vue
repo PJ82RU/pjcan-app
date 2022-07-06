@@ -5,9 +5,10 @@
 </template>
 
 <script lang="ts">
-import { ref, computed, inject, Ref, onMounted, onUnmounted } from 'vue';
+import { ref, computed, onMounted, onUnmounted } from 'vue';
 import { useQuasar } from 'quasar';
 import { lang } from '@/i18n/i18nUtils';
+import api from '@/store/api';
 
 import BluetoothDialogConnection from './BluetoothDialogConnection.vue';
 import BluetoothDialogDisconnection from './BluetoothDialogDisconnection.vue';
@@ -18,8 +19,7 @@ export default {
 	components: { BluetoothDialogConnection, BluetoothDialogDisconnection },
 	setup() {
 		const $q = useQuasar();
-		const store: Ref | undefined = inject('store');
-		const { bluetooth } = store?.value;
+		const { bluetooth } = api;
 
 		const eventConnected = (status: EConnectedStatus) => {
 			switch (status) {

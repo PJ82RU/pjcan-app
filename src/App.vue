@@ -8,13 +8,11 @@ const { name } = require('../package.json');
 
 import '@/css/fonts.css';
 import { provide, ref } from 'vue';
-import { Store } from '@/store';
 import { Onboard } from '@/store/onboard';
 
 export default {
 	name: 'PJCAN',
 	setup() {
-		provide('store', ref(new Store()));
 		provide('onboard', ref(new Onboard()));
 	},
 	watch: {

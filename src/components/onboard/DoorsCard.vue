@@ -20,23 +20,34 @@
 </template>
 
 <script lang="ts">
-import { computed, inject, Ref } from 'vue';
+import { computed, onMounted, onUnmounted, ref } from 'vue';
 
 import CardSection from '@/components/cardSections/CardSection.vue';
 import CardSectionToggle from '@/components/cardSections/CardSectionToggle.vue';
+import { DoorsValue, IDoorsValue } from '@/models/pjcan';
+import api, { API_EVENT_VARIABLE_DOORS } from '@/store/api';
 
 export default {
 	name: 'DoorsCard',
 	components: { CardSection, CardSectionToggle },
 	setup() {
-		const store: Ref | undefined = inject('store');
-		const { doorsValue } = store?.value;
+		const doorsValue = ref(new DoorsValue());
+		const onReceive = (res: IDoorsValue): void => {
+			doorsValue.value = res;
+		};
 
-		const doorFL = computed((): boolean => doorsValue.frontLeft);
-		const doorFR = computed((): boolean => doorsValue.frontRight);
-		const doorBL = computed((): boolean => doorsValue.backLeft);
-		const doorBR = computed((): boolean => doorsValue.backRight);
-		const trunk = computed((): boolean => doorsValue.trunk);
+		onMounted(() => {
+			api.addListener(API_EVENT_VARIABLE_DOORS, onReceive);
+		});
+		onUnmounted(() => {
+			api.removeListener(API_EVENT_VARIABLE_DOORS, onReceive);
+		});
+
+		const doorFL = computed((): boolean => doorsValue.value.frontLeft);
+		const doorFR = computed((): boolean => doorsValue.value.frontRight);
+		const doorBL = computed((): boolean => doorsValue.value.backLeft);
+		const doorBR = computed((): boolean => doorsValue.value.backRight);
+		const trunk = computed((): boolean => doorsValue.value.trunk);
 
 		const onClickOptions = (e: any): void => {
 			console.log('DoorsCard -> onClickOptions', e);

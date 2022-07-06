@@ -52,7 +52,7 @@
 </template>
 
 <script lang="ts">
-import { computed, inject, Ref } from 'vue';
+import { computed, onMounted, onUnmounted, ref } from 'vue';
 
 import CardSection from '@/components/cardSections/CardSection.vue';
 import CardSectionTime from '@/components/cardSections/CardSectionTime.vue';
@@ -60,6 +60,8 @@ import CardSectionToggle from '@/components/cardSections/CardSectionToggle.vue';
 import CardSectionInput from '@/components/cardSections/CardSectionInput.vue';
 import CardSectionProgress from '@/components/cardSections/CardSectionProgress.vue';
 import CardSection2Icons from '@/components/cardSections/CardSection2Icons.vue';
+import { EngineValue, IEngineValue } from '@/models/pjcan';
+import api, { API_EVENT_VARIABLE_ENGINE } from '@/store/api';
 
 export default {
 	name: 'EngineCard',
@@ -72,16 +74,25 @@ export default {
 		CardSection2Icons
 	},
 	setup() {
-		const store: Ref | undefined = inject('store');
-		const { engineValue } = store?.value;
+		const engineValue = ref(new EngineValue());
+		const onReceive = (res: IEngineValue): void => {
+			engineValue.value = res;
+		};
 
-		const enabled = computed((): boolean => engineValue.enabled);
-		const rpm = computed((): string => engineValue.rpm.toFixed());
-		const countRPM = computed((): string => engineValue.countRPM.toFixed());
-		const load = computed((): number => engineValue.load);
-		const mseconds = computed((): string => engineValue.mseconds.toFixed());
-		const throttle = computed((): number => engineValue.throttle);
-		const coolant = computed((): number => engineValue.coolant);
+		onMounted(() => {
+			api.addListener(API_EVENT_VARIABLE_ENGINE, onReceive);
+		});
+		onUnmounted(() => {
+			api.removeListener(API_EVENT_VARIABLE_ENGINE, onReceive);
+		});
+
+		const enabled = computed((): boolean => engineValue.value.enabled);
+		const rpm = computed((): string => engineValue.value.rpm.toFixed());
+		const countRPM = computed((): string => engineValue.value.countRPM.toFixed());
+		const load = computed((): number => engineValue.value.load);
+		const mseconds = computed((): string => engineValue.value.mseconds.toFixed());
+		const throttle = computed((): number => engineValue.value.throttle);
+		const coolant = computed((): number => engineValue.value.coolant);
 
 		const onClickOptions = (e: any): void => {
 			console.log('EngineCard -> onClickOptions', e);

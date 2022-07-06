@@ -34,22 +34,33 @@
 </template>
 
 <script lang="ts">
-import { computed, inject, Ref } from 'vue';
+import { computed, onMounted, onUnmounted, ref } from 'vue';
 
 import CardSection from '@/components/cardSections/CardSection.vue';
 import CardSectionInput from '@/components/cardSections/CardSectionInput.vue';
+import { FuelValue, IFuelValue } from '@/models/pjcan';
+import api, { API_EVENT_VARIABLE_FUEL } from '@/store/api';
 
 export default {
 	name: 'FuelCard',
 	components: { CardSection, CardSectionInput },
 	setup() {
-		const store: Ref | undefined = inject('store');
-		const { fuelValue } = store?.value;
+		const fuelValue = ref(new FuelValue());
+		const onReceive = (res: IFuelValue): void => {
+			fuelValue.value = res;
+		};
 
-		const current = computed((): string => fuelValue.current.toFixed(1));
-		const avg = computed((): string => fuelValue.avg.toFixed(1));
-		const total = computed((): string => fuelValue.total.toFixed(2));
-		const consumption = computed((): string => fuelValue.consumption.toFixed(2));
+		onMounted(() => {
+			api.addListener(API_EVENT_VARIABLE_FUEL, onReceive);
+		});
+		onUnmounted(() => {
+			api.removeListener(API_EVENT_VARIABLE_FUEL, onReceive);
+		});
+
+		const current = computed((): string => fuelValue.value.current.toFixed(1));
+		const avg = computed((): string => fuelValue.value.avg.toFixed(1));
+		const total = computed((): string => fuelValue.value.total.toFixed(2));
+		const consumption = computed((): string => fuelValue.value.consumption.toFixed(2));
 
 		const onClickOptions = (e: any): void => {
 			console.log('FuelCard -> onClickOptions', e);

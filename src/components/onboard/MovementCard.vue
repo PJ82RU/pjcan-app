@@ -29,21 +29,32 @@
 </template>
 
 <script lang="ts">
-import { computed, inject, Ref } from 'vue';
+import { computed, onMounted, onUnmounted, ref } from 'vue';
 
 import CardSection from '@/components/cardSections/CardSection.vue';
 import CardSectionInput from '@/components/cardSections/CardSectionInput.vue';
+import { IMovementValue, MovementValue } from '@/models/pjcan';
+import api, { API_EVENT_VARIABLE_MOVEMENT } from '@/store/api';
 
 export default {
 	name: 'MovementCard',
 	components: { CardSection, CardSectionInput },
 	setup() {
-		const store: Ref | undefined = inject('store');
-		const { movementValue } = store?.value;
+		const movementValue = ref(new MovementValue());
+		const onReceive = (res: IMovementValue): void => {
+			movementValue.value = res;
+		};
 
-		const speed = computed((): string => movementValue.speed.toFixed(2));
-		const speedAVG = computed((): string => movementValue.speedAVG.toString());
-		const restWay = computed((): string => movementValue.restWay.toFixed(2));
+		onMounted(() => {
+			api.addListener(API_EVENT_VARIABLE_MOVEMENT, onReceive);
+		});
+		onUnmounted(() => {
+			api.removeListener(API_EVENT_VARIABLE_MOVEMENT, onReceive);
+		});
+
+		const speed = computed((): string => movementValue.value.speed.toFixed(2));
+		const speedAVG = computed((): string => movementValue.value.speedAVG.toString());
+		const restWay = computed((): string => movementValue.value.restWay.toFixed(2));
 
 		const onClickOptions = (e: any): void => {
 			console.log('MovementCard -> onClickOptions', e);

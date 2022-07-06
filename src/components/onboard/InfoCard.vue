@@ -54,38 +54,54 @@
 </template>
 
 <script lang="ts">
-import { computed, inject, Ref } from 'vue';
+import { computed, onMounted, onUnmounted, ref } from 'vue';
 
 import CardSection from '@/components/cardSections/CardSection.vue';
 import CardSectionTime from '@/components/cardSections/CardSectionTime.vue';
 import CardSectionToggle from '@/components/cardSections/CardSectionToggle.vue';
 import CardSectionInput from '@/components/cardSections/CardSectionInput.vue';
 import CardSection2Icons from '@/components/cardSections/CardSection2Icons.vue';
-import { TSensorsSignal } from '@/models/pjcan';
+import { ISensorsValue, ITemperatureValue, SensorsValue, TemperatureValue, TSensorsSignal } from '@/models/pjcan';
+import api, { API_EVENT_VARIABLE_SENSORS, API_EVENT_VARIABLE_TEMPERATURE } from '@/store/api';
 
 export default {
 	name: 'InfoCard',
 	components: { CardSection, CardSectionTime, CardSectionToggle, CardSectionInput, CardSection2Icons },
 	setup() {
-		const store: Ref | undefined = inject('store');
-		const { sensorValue, temperatureValue } = store?.value;
+		const sensorValue = ref(new SensorsValue());
+		const temperatureValue = ref(new TemperatureValue());
+		const onReceiveSensor = (res: ISensorsValue): void => {
+			sensorValue.value = res;
+		};
+		const onReceiveTemperature = (res: ITemperatureValue): void => {
+			temperatureValue.value = res;
+		};
 
-		const acc = computed((): boolean => sensorValue.acc);
+		onMounted(() => {
+			api.addListener(API_EVENT_VARIABLE_SENSORS, onReceiveSensor);
+			api.addListener(API_EVENT_VARIABLE_TEMPERATURE, onReceiveTemperature);
+		});
+		onUnmounted(() => {
+			api.removeListener(API_EVENT_VARIABLE_SENSORS, onReceiveSensor);
+			api.removeListener(API_EVENT_VARIABLE_TEMPERATURE, onReceiveTemperature);
+		});
+
+		const acc = computed((): boolean => sensorValue.value.acc);
 		const timeWork = computed((): string => '');
-		const temperature = computed((): number => temperatureValue.out);
-		const handbrake = computed((): boolean => sensorValue.handbrake);
-		const reverse = computed((): boolean => sensorValue.reverse);
-		const seatbeltDriver = computed((): boolean => sensorValue.seatbeltDriver);
-		const seatbeltPassenger = computed((): boolean => sensorValue.seatbeltPassenger);
+		const temperature = computed((): number => temperatureValue.value.out);
+		const handbrake = computed((): boolean => sensorValue.value.handbrake);
+		const reverse = computed((): boolean => sensorValue.value.reverse);
+		const seatbeltDriver = computed((): boolean => sensorValue.value.seatbeltDriver);
+		const seatbeltPassenger = computed((): boolean => sensorValue.value.seatbeltPassenger);
 		const signalLeft = computed(
 			(): boolean =>
-				sensorValue.signal === TSensorsSignal.SIGNAL_LEFT ||
-				sensorValue.signal === TSensorsSignal.SIGNAL_EMERGENCY
+				sensorValue.value.signal === TSensorsSignal.SIGNAL_LEFT ||
+				sensorValue.value.signal === TSensorsSignal.SIGNAL_EMERGENCY
 		);
 		const signalRight = computed(
 			(): boolean =>
-				sensorValue.signal === TSensorsSignal.SIGNAL_RIGHT ||
-				sensorValue.signal === TSensorsSignal.SIGNAL_EMERGENCY
+				sensorValue.value.signal === TSensorsSignal.SIGNAL_RIGHT ||
+				sensorValue.value.signal === TSensorsSignal.SIGNAL_EMERGENCY
 		);
 
 		const onClickOptions = (e: any): void => {
