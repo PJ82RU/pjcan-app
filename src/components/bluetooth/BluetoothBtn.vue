@@ -12,7 +12,7 @@ import api from '@/store/api';
 
 import BluetoothDialogConnection from './BluetoothDialogConnection.vue';
 import BluetoothDialogDisconnection from './BluetoothDialogDisconnection.vue';
-import { BLUETOOTH_EVENT_CONNECTED, BLUETOOTH_EVENT_SEND, EConnectedStatus } from './bluetooth';
+import { BLUETOOTH_EVENT_CONNECTED, BLUETOOTH_EVENT_SEND, EConnectedStatus } from './Bluetooth_';
 
 export default {
 	name: 'BluetoothBtn',
