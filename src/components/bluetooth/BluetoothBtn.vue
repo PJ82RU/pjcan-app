@@ -21,7 +21,12 @@ export default {
 		const $q = useQuasar();
 		const { bluetooth } = api;
 
-		const eventConnected = (status: TConnectedStatus) => {
+		// статус подключения
+		const connected = ref(false);
+
+		// событие подключения Bluetooth
+		const onConnected = (status: TConnectedStatus) => {
+			connected.value = status === TConnectedStatus.CONNECT;
 			switch (status) {
 				case TConnectedStatus.NO_CONNECT:
 					$q.notify({ message: lang('BLE_NoConnected'), position: 'bottom', color: 'red' });
@@ -40,19 +45,20 @@ export default {
 					break;
 			}
 		};
-		const eventSend = () => $q.notify({ message: lang('BLE_NoData'), position: 'bottom', color: 'red' });
+		// событие отправки данных
+		const onSend = () => $q.notify({ message: lang('BLE_NoData'), position: 'bottom', color: 'red' });
 
 		onMounted(() => {
-			// события подключения к Bluetooth
-			bluetooth.addListener(BLUETOOTH_EVENT_CONNECTED, eventConnected);
-			// события отправки данных
-			bluetooth.addListener(BLUETOOTH_EVENT_SEND, eventSend);
+			// событие подключения Bluetooth
+			bluetooth.addListener(BLUETOOTH_EVENT_CONNECTED, onConnected);
+			// событие отправки данных
+			bluetooth.addListener(BLUETOOTH_EVENT_SEND, onSend);
 		});
 		onUnmounted(() => {
 			// события подключения к Bluetooth
-			bluetooth.removeListener(BLUETOOTH_EVENT_CONNECTED, eventConnected);
+			bluetooth.removeListener(BLUETOOTH_EVENT_CONNECTED, onConnected);
 			// события отправки данных
-			bluetooth.removeListener(BLUETOOTH_EVENT_SEND, eventSend);
+			bluetooth.removeListener(BLUETOOTH_EVENT_SEND, onSend);
 		});
 
 		// статус диалога подключения Bluetooth
@@ -60,7 +66,7 @@ export default {
 		// статус диалога отключения Bluetooth
 		const dlgDisconnection = ref(false);
 		// иконка кнопки подключения к Bluetooth
-		const iconClass = computed(() => (bluetooth.connected ? 'bluetooth' : 'bluetooth_disabled'));
+		const iconClass = computed(() => (connected.value ? 'bluetooth' : 'bluetooth_disabled'));
 
 		/** Событие клика по кнопке Bluetooth */
 		const onBtnClick = () => {
@@ -74,6 +80,7 @@ export default {
 		/** Событие отключения Bluetooth */
 		const onDisconnect = () => {
 			bluetooth.disconnect();
+			connected.value = false;
 		};
 
 		return {
