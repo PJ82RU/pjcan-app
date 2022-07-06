@@ -71,10 +71,10 @@ export default {
 		const sensorValue = ref(new SensorsValue());
 		const temperatureValue = ref(new TemperatureValue());
 		const onReceiveSensor = (res: ISensorsValue): void => {
-			sensorValue.value = res;
+			sensorValue.value.setModel(res);
 		};
 		const onReceiveTemperature = (res: ITemperatureValue): void => {
-			temperatureValue.value = res;
+			temperatureValue.value.setModel(res);
 		};
 
 		onMounted(() => {

@@ -82,7 +82,7 @@ export default {
 	setup: function () {
 		const boseConfig = ref(new BoseConfig());
 		const onReceive = (res: IBoseConfig): void => {
-			boseConfig.value = res;
+			boseConfig.value.setModel(res);
 		};
 		const onSend = () => api.send(boseConfig.value);
 

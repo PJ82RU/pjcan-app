@@ -6,7 +6,7 @@ import { VariableConfig, IVariableConfig, StructVariableConfig } from './variabl
 import { BaseModel, IBaseModel } from './BaseModel';
 
 export const API_EXEC_CONFIG = 1;
-const STRUCT_LENGTH = 134;
+const STRUCT_LENGTH = 133; // временно!!! должно быть 134, нужно исправить в прошивке устройства!
 
 export interface IConfig extends IBaseModel {
 	buttons: IButtonsConfig;

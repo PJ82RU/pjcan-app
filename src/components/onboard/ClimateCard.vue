@@ -63,7 +63,7 @@ export default {
 	setup() {
 		const climateValue = ref(new ClimateValue());
 		const onReceive = (res: IClimateValue): void => {
-			climateValue.value = res;
+			climateValue.value.setModel(res);
 		};
 
 		onMounted(() => {

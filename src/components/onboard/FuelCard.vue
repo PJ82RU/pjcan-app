@@ -47,7 +47,7 @@ export default {
 	setup() {
 		const fuelValue = ref(new FuelValue());
 		const onReceive = (res: IFuelValue): void => {
-			fuelValue.value = res;
+			fuelValue.value.setModel(res);
 		};
 
 		onMounted(() => {

@@ -7,6 +7,7 @@ export interface IBaseModel {
 	timeout?: Timeout;
 	set: (buf: DataView) => boolean;
 	get: () => DataView | undefined;
+	setModel: <T>(res: T) => void;
 }
 
 /** Базовая модель */
@@ -48,5 +49,14 @@ export class BaseModel {
 		} catch (e) {
 			console.log(e);
 		}
+	}
+
+	/**
+	 * Копирование значений объекта на базе IBaseModel
+	 * @param res
+	 */
+	setModel<T>(res: T): void {
+		// @ts-ignore
+		for (let key in res) if (this[key] !== undefined) this[key] = res[key];
 	}
 }

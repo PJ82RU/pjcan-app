@@ -33,7 +33,7 @@ export default {
 	setup() {
 		const doorsValue = ref(new DoorsValue());
 		const onReceive = (res: IDoorsValue): void => {
-			doorsValue.value = res;
+			doorsValue.value.setModel(res);
 		};
 
 		onMounted(() => {

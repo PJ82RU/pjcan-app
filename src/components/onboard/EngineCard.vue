@@ -76,7 +76,7 @@ export default {
 	setup() {
 		const engineValue = ref(new EngineValue());
 		const onReceive = (res: IEngineValue): void => {
-			engineValue.value = res;
+			engineValue.value.setModel(res);
 		};
 
 		onMounted(() => {

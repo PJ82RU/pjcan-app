@@ -42,7 +42,7 @@ export default {
 	setup() {
 		const movementValue = ref(new MovementValue());
 		const onReceive = (res: IMovementValue): void => {
-			movementValue.value = res;
+			movementValue.value.setModel(res);
 		};
 
 		onMounted(() => {

@@ -41,7 +41,7 @@ export default {
 	setup() {
 		const volumeConfig = ref(new VolumeConfig());
 		const onReceive = (res: IVolumeConfig): void => {
-			volumeConfig.value = res;
+			volumeConfig.value.setModel(res);
 		};
 		const onSend = () => api.send(volumeConfig.value);
 
