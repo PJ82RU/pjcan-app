@@ -162,7 +162,7 @@ import {
 	IVolumeView
 } from './variables';
 
-import { ViewConfig, IViewConfig, StructViewConfig } from './view/index';
+import { TViewType, ViewConfig, IViewConfig, StructViewConfig } from './view/index';
 
 export {
 	BaseModel,
@@ -206,6 +206,7 @@ export {
 	TestValue,
 	VolumeConfig,
 	VolumeView,
+	TViewType,
 	ViewConfig
 };
 

@@ -9,6 +9,8 @@ export default {
 	DeviceInfo: 'Об устройстве',
 	About: 'О программе',
 
+	Apply: 'Применить',
+	Cancel: 'Отмена',
 	Close: 'Закрыть',
 
 	SettingLCD: 'Настройки отображения на LCD',
@@ -139,5 +141,12 @@ export default {
 	BoseCard_Bass_Title: 'Bass',
 	BoseCard_Bass_Comment: 'Усиление или ослабление низких частот',
 	BoseCard_Wow_Title: 'Wow',
-	BoseCard_Wow_Comment: 'Звуковой сигнал при изменении параметров'
+	BoseCard_Wow_Comment: 'Звуковой сигнал при изменении параметров',
+
+	ViewSetting_Enabled: 'Отображать информацию',
+	ViewSetting_Enabled_Comment: 'Статус отображения информации на информационном экране',
+	ViewSetting_Type: 'Стиль отображения информации',
+	ViewSetting_Type_Comment: 'Отображать статичный текст, мигающий или в стиле бегущий строки',
+	ViewSetting_Time: 'Время отображения, сек.',
+	ViewSetting_Time_Comment: 'Показывать на информационном экране указанное количество секунд'
 };

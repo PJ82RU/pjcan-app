@@ -9,6 +9,8 @@ export default {
 	DeviceInfo: 'Device info',
 	About: 'About',
 
+	Apply: 'Apply',
+	Cancel: 'Cancel',
 	Close: 'Close',
 
 	SettingLCD: 'LCD display settings',
@@ -139,5 +141,12 @@ export default {
 	BoseCard_Bass_Title: 'Bass',
 	BoseCard_Bass_Comment: 'Strengthening or weakening of low frequencies',
 	BoseCard_Wow_Title: 'Wow',
-	BoseCard_Wow_Comment: 'Sound signal when changing parameters'
+	BoseCard_Wow_Comment: 'Sound signal when changing parameters',
+
+	ViewSetting_Enabled: 'Display information',
+	ViewSetting_Enabled_Comment: 'Status display information on the information screen',
+	ViewSetting_Type: 'Information display style',
+	ViewSetting_Type_Comment: 'Display static text, blinking or in a ticker style',
+	ViewSetting_Time: 'Display time, sec.',
+	ViewSetting_Time_Comment: 'Show the specified number of seconds on the information screen'
 };
