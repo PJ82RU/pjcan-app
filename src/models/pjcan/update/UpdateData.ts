@@ -19,6 +19,11 @@ export class UpdateData extends EventEmitter implements IUpdateData {
 	data = new Uint8Array(0);
 	offset = 0;
 
+	constructor(data?: DataView) {
+		super();
+		if (data) this.set(data);
+	}
+
 	/** Очистить данные */
 	clear(): void {
 		this.data = new Uint8Array(0);

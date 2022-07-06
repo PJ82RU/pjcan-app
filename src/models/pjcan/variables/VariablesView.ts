@@ -57,6 +57,11 @@ export class VariableView extends BaseModel implements IVariableView {
 	temperature = new TemperatureView();
 	volume = new VolumeView();
 
+	constructor(data?: DataView) {
+		super();
+		if (data) this.set(data);
+	}
+
 	/**
 	 * Запись данных
 	 * @param {DataView} buf Буффер данных
@@ -67,6 +72,6 @@ export class VariableView extends BaseModel implements IVariableView {
 
 	/** Чтение данных */
 	get(): DataView | undefined {
-		return this._get(this, API_EXEC_VARIABLE_VIEW, STRUCT_LENGTH, struct);
+		return this._get(this, API_EXEC_VARIABLE_VIEW, 1);
 	}
 }

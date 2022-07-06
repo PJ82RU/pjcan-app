@@ -26,6 +26,11 @@ export class VolumeConfig extends BaseModel implements IVolumeConfig {
 	volume = 0;
 	max = 63;
 
+	constructor(data?: DataView) {
+		super();
+		if (data) this.set(data);
+	}
+
 	/**
 	 * Запись данных
 	 * @param {DataView} buf Буффер данных

@@ -30,6 +30,11 @@ export class Config extends BaseModel implements IConfig {
 	teyes = new TeyesConfig();
 	variable = new VariableConfig();
 
+	constructor(data?: DataView) {
+		super();
+		if (data) this.set(data);
+	}
+
 	/**
 	 * Запись данных
 	 * @param {DataView} buf Буффер данных
@@ -40,6 +45,6 @@ export class Config extends BaseModel implements IConfig {
 
 	/** Чтение данных */
 	get(): DataView | undefined {
-		return this._get(this, API_EXEC_CONFIG, STRUCT_LENGTH, struct);
+		return this._get(this, API_EXEC_CONFIG, 1);
 	}
 }

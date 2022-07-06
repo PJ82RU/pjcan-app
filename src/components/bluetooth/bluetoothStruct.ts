@@ -417,6 +417,7 @@ export class BluetoothStruct {
 							for (let i = 0; i < value[2]; i++)
 								this.offset = new BluetoothStruct(value[1]).decode(buffer, data[key][i], this.offset);
 						} else this.offset = new BluetoothStruct(value[1]).decode(buffer, data[key], this.offset);
+						break;
 				}
 			} else data[key] = this.getBit();
 		}

@@ -32,6 +32,11 @@ export class ButtonsValue extends BaseModel implements IButtonValue {
 	type = 0;
 	r = 0;
 
+	constructor(data?: DataView) {
+		super();
+		if (data) this.set(data);
+	}
+
 	/**
 	 * Запись данных
 	 * @param {DataView} buf Буффер данных

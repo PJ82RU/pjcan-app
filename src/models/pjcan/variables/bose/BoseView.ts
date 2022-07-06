@@ -21,6 +21,11 @@ const struct = new BluetoothStruct(StructBoseView);
 export class BoseView extends BaseModel implements IBoseView {
 	bose = new ViewConfig();
 
+	constructor(data?: DataView) {
+		super();
+		if (data) this.set(data);
+	}
+
 	/**
 	 * Запись данных
 	 * @param {DataView} buf Буффер данных

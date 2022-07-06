@@ -61,6 +61,11 @@ export class ClimateValue extends BaseModel implements IClimateValue {
 	tempDisplay = 0;
 	temperature = 0;
 
+	constructor(data?: DataView) {
+		super();
+		if (data) this.set(data);
+	}
+
 	/**
 	 * Запись данных
 	 * @param {DataView} buf Буффер данных

@@ -6,7 +6,7 @@ import { FuelConfig, IFuelConfig, StructFuelConfig } from './fuel';
 import { VolumeConfig, IVolumeConfig, StructVolumeConfig } from './volume';
 
 export const API_EXEC_VARIABLE_CONFIG = 100; // команда API
-const STRUCT_LENGTH = 20; // длина данных API
+const STRUCT_LENGTH = 23; // длина данных API
 
 /** Интерфейс конфигурации переменных */
 export interface IVariableConfig extends IBaseModel {
@@ -33,6 +33,11 @@ export class VariableConfig extends BaseModel implements IVariableConfig {
 	fuel = new FuelConfig();
 	volume = new VolumeConfig();
 
+	constructor(data?: DataView) {
+		super();
+		if (data) this.set(data);
+	}
+
 	/**
 	 * Запись данных
 	 * @param {DataView} buf Буффер данных
@@ -43,6 +48,6 @@ export class VariableConfig extends BaseModel implements IVariableConfig {
 
 	/** Чтение данных */
 	get(): DataView | undefined {
-		return this._get(this, API_EXEC_VARIABLE_CONFIG, STRUCT_LENGTH, struct);
+		return this._get(this, API_EXEC_VARIABLE_CONFIG, 1);
 	}
 }

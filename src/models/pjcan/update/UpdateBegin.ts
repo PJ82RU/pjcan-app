@@ -11,6 +11,11 @@ export interface IUpdateBegin extends EventEmitter {
 
 /** Модель начала обновления прошивки устройства */
 export class UpdateBegin extends EventEmitter implements IUpdateBegin {
+	constructor(data?: DataView) {
+		super();
+		if (data) this.set(data);
+	}
+
 	/**
 	 * Запись данных
 	 * @param {DataView} buf Буффер данных

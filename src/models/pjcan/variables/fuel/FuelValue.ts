@@ -29,6 +29,11 @@ export class FuelValue extends BaseModel implements IFuelValue {
 	avg = 0;
 	total = 0;
 
+	constructor(data?: DataView) {
+		super();
+		if (data) this.set(data);
+	}
+
 	/**
 	 * Запись данных
 	 * @param {DataView} buf Буффер данных

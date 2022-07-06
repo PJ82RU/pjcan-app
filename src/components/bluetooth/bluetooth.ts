@@ -180,6 +180,8 @@ export class Bluetooth extends EventEmitter {
 
 	/** Событие входящих данных */
 	private handleCharacteristicValueChanged(ev: any): void {
+		//console.log('receive', ev.target.value);
+
 		console.log(lang('BLESrv_Receive').replace('%', ev.target.value.getUint8(0)));
 		this.emit(BLUETOOTH_EVENT_RECEIVE, ev.target.value);
 	}
@@ -189,6 +191,8 @@ export class Bluetooth extends EventEmitter {
 	 * @param data Отправляемые данные
 	 */
 	send(data: DataView | undefined): Promise<any> {
+		//console.log('send', data);
+
 		if (!this.connected) {
 			this.emit(BLUETOOTH_EVENT_CONNECTED, EConnectedStatus.NO_CONNECT);
 			return Promise.resolve();

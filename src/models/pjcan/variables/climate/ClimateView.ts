@@ -21,6 +21,11 @@ const struct = new BluetoothStruct(StructClimateView);
 export class ClimateView extends BaseModel implements IClimateView {
 	climate = new ViewConfig();
 
+	constructor(data?: DataView) {
+		super();
+		if (data) this.set(data);
+	}
+
 	/**
 	 * Запись данных
 	 * @param {DataView} buf Буффер данных

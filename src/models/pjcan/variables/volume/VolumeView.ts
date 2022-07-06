@@ -21,6 +21,11 @@ const struct = new BluetoothStruct(StructVolumeView);
 export class VolumeView extends BaseModel implements IVolumeView {
 	volume = new ViewConfig();
 
+	constructor(data?: DataView) {
+		super();
+		if (data) this.set(data);
+	}
+
 	/**
 	 * Запись данных
 	 * @param {DataView} buf Буффер данных

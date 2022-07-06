@@ -23,6 +23,11 @@ export class TemperatureValue extends BaseModel implements ITemperatureValue {
 	in = 0;
 	out = 0;
 
+	constructor(data?: DataView) {
+		super();
+		if (data) this.set(data);
+	}
+
 	/**
 	 * Запись данных
 	 * @param {DataView} buf Буффер данных

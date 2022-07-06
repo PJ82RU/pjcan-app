@@ -1,7 +1,10 @@
 import { BluetoothStruct } from '@/components/bluetooth';
+import { Timeout } from '@/models/types';
 
 /** Базовый интерфейс */
 export interface IBaseModel {
+	lastSend?: number;
+	timeout?: Timeout;
 	set: (buf: DataView) => boolean;
 	get: () => DataView | undefined;
 }
@@ -23,7 +26,9 @@ export class BaseModel {
 				struct.decode(buf, th, 1);
 				return true;
 			}
-		} catch (e) {}
+		} catch (e) {
+			console.log(e);
+		}
 		return false;
 	}
 
@@ -34,12 +39,14 @@ export class BaseModel {
 	 * @param {number} len Длина данных API
 	 * @param {BluetoothStruct} struct Структура данных
 	 */
-	protected _get(th: any, exec: number, len: number, struct: BluetoothStruct): DataView | undefined {
+	protected _get(th: any, exec: number, len: number, struct?: BluetoothStruct): DataView | undefined {
 		try {
 			let buf: DataView = new DataView(new ArrayBuffer(len));
-			struct.encode(buf, th, 1);
+			struct?.encode(buf, th, 1);
 			buf.setUint8(0, exec);
 			return buf;
-		} catch (e) {}
+		} catch (e) {
+			console.log(e);
+		}
 	}
 }

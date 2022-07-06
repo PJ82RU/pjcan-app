@@ -30,6 +30,11 @@ export class SensorsView extends BaseModel implements ISensorsView {
 	seatbelt = new ViewConfig();
 	signal = new ViewConfig();
 
+	constructor(data?: DataView) {
+		super();
+		if (data) this.set(data);
+	}
+
 	/**
 	 * Запись данных
 	 * @param {DataView} buf Буффер данных

@@ -24,6 +24,11 @@ export class TestValue extends BaseModel implements ITestValue {
 	text = '';
 	view = new ViewConfig();
 
+	constructor(data?: DataView) {
+		super();
+		if (data) this.set(data);
+	}
+
 	/**
 	 * Запись данных
 	 * @param {DataView} buf Буффер данных

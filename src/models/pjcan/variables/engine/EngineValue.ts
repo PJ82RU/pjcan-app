@@ -40,6 +40,11 @@ export class EngineValue extends BaseModel implements IEngineValue {
 	load = 0;
 	throttle = 0;
 
+	constructor(data?: DataView) {
+		super();
+		if (data) this.set(data);
+	}
+
 	/**
 	 * Запись данных
 	 * @param {DataView} buf Буффер данных

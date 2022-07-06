@@ -30,6 +30,11 @@ export class FuelView extends BaseModel implements IFuelView {
 	avg = new ViewConfig();
 	total = new ViewConfig();
 
+	constructor(data?: DataView) {
+		super();
+		if (data) this.set(data);
+	}
+
 	/**
 	 * Запись данных
 	 * @param {DataView} buf Буффер данных

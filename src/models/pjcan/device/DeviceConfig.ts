@@ -23,6 +23,11 @@ export class DeviceConfig extends BaseModel implements IDeviceConfig {
 	reboot = false;
 	led = 0;
 
+	constructor(data?: DataView) {
+		super();
+		if (data) this.set(data);
+	}
+
 	/**
 	 * Запись данных
 	 * @param {DataView} buf Буффер данных

@@ -55,6 +55,11 @@ export class BoseConfig extends BaseModel implements IBoseConfig {
 	treble = 0;
 	centerPoint = TCenterPoint.CENTERPOINT_OFF;
 
+	constructor(data?: DataView) {
+		super();
+		if (data) this.set(data);
+	}
+
 	/**
 	 * Запись данных
 	 * @param {DataView} buf Буффер данных

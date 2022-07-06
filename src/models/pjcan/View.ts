@@ -26,6 +26,11 @@ export class View extends BaseModel implements IView {
 	teyes = new TeyesView();
 	variable = new VariableView();
 
+	constructor(data?: DataView) {
+		super();
+		if (data) this.set(data);
+	}
+
 	/**
 	 * Запись данных
 	 * @param {DataView} buf Буффер данных
@@ -36,6 +41,6 @@ export class View extends BaseModel implements IView {
 
 	/** Чтение данных */
 	get(): DataView | undefined {
-		return this._get(this, API_EXEC_VIEW, STRUCT_LENGTH, struct);
+		return this._get(this, API_EXEC_VIEW, 1);
 	}
 }

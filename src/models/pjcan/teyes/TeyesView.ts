@@ -21,6 +21,11 @@ const struct = new BluetoothStruct(StructTeyesView);
 export class TeyesView extends BaseModel implements ITeyesView {
 	teyes = new ViewConfig();
 
+	constructor(data?: DataView) {
+		super();
+		if (data) this.set(data);
+	}
+
 	/**
 	 * Запись данных
 	 * @param {DataView} buf Буффер данных

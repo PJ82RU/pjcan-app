@@ -88,6 +88,11 @@ export class LCDValue extends BaseModel implements ILCDValue {
 	flgClock24 = false;
 	buffer = '';
 
+	constructor(data?: DataView) {
+		super();
+		if (data) this.set(data);
+	}
+
 	/**
 	 * Запись данных
 	 * @param {DataView} buf Буффер данных

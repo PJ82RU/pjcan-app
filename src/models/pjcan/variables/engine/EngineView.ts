@@ -39,6 +39,11 @@ export class EngineView extends BaseModel implements IEngineView {
 	load = new ViewConfig();
 	throttle = new ViewConfig();
 
+	constructor(data?: DataView) {
+		super();
+		if (data) this.set(data);
+	}
+
 	/**
 	 * Запись данных
 	 * @param {DataView} buf Буффер данных

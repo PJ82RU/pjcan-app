@@ -21,6 +21,11 @@ const struct = new BluetoothStruct(StructDoorsView);
 export class DoorsView extends BaseModel implements IDoorsView {
 	doors = new ViewConfig();
 
+	constructor(data?: DataView) {
+		super();
+		if (data) this.set(data);
+	}
+
 	/**
 	 * Запись данных
 	 * @param {DataView} buf Буффер данных

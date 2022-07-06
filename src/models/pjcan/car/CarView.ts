@@ -24,6 +24,11 @@ export class CarView extends BaseModel implements ICarView {
 	logo = new ViewConfig();
 	hello = new ViewConfig();
 
+	constructor(data?: DataView) {
+		super();
+		if (data) this.set(data);
+	}
+
 	/**
 	 * Запись данных
 	 * @param {DataView} buf Буффер данных
