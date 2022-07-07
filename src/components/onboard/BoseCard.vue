@@ -60,6 +60,12 @@
 		/>
 		<CardSectionToggle :title="$t('BoseCard_Wow_Title')" :comment="$t('BoseCard_Wow_Comment')" v-model="wow" />
 	</CardSection>
+	<ViewSettingModal
+		v-model="viewSettingModel"
+		:title="viewSettingTitle"
+		:view-config="viewConfig"
+		@apply="onApplyViewConfig"
+	/>
 </template>
 
 <script lang="ts">
@@ -69,9 +75,11 @@ import CardSection from '@/components/cardSections/CardSection.vue';
 import CardSectionToggle from '@/components/cardSections/CardSectionToggle.vue';
 import CardSectionSlider from '@/components/cardSections/CardSectionSlider.vue';
 import CardSectionSelect from '@/components/cardSections/CardSectionSelect.vue';
+import ViewSettingModal from '@/components/view/ViewSettingModal.vue';
 import { menuBoseCard } from '@/store/menu/MenuBoseCard';
-import { BoseConfig, IBoseConfig, TCenterPoint } from '@/models/pjcan';
-import api, { API_EVENT_VARIABLE_BOSE } from '@/store/api';
+import { BoseConfig, BoseView, IBoseConfig, IBoseView, IViewConfig, TCenterPoint, TViewType } from '@/models/pjcan';
+import api, { API_EVENT_VARIABLE_BOSE, API_EVENT_VARIABLE_BOSE_VIEW } from '@/store/api';
+import { TItemMenu } from '@/models/menu';
 
 export default {
 	name: 'BoseCard',
@@ -79,20 +87,32 @@ export default {
 		CardSection,
 		CardSectionToggle,
 		CardSectionSlider,
-		CardSectionSelect
+		CardSectionSelect,
+		ViewSettingModal
 	},
 	setup: function () {
+		// параметры Bose
 		const boseConfig = ref(new BoseConfig());
-		const onReceive = (res: IBoseConfig): void => {
+		const boseView = new BoseView();
+		// входящие значения Bose
+		const onReceiveConfig = (res: IBoseConfig): void => {
 			boseConfig.value.setModel(res);
 		};
+		const onReceiveView = (res: IBoseView): void => {
+			boseView.setModel(res);
+		};
+		// исходящие значения Bose
 		const onSend = () => api.send(boseConfig.value);
 
+		// регистрируем события
 		onMounted(() => {
-			api.addListener(API_EVENT_VARIABLE_BOSE, onReceive);
+			api.addListener(API_EVENT_VARIABLE_BOSE, onReceiveConfig);
+			api.addListener(API_EVENT_VARIABLE_BOSE_VIEW, onReceiveView);
 		});
+		// удаляем события
 		onUnmounted(() => {
-			api.removeListener(API_EVENT_VARIABLE_BOSE, onReceive);
+			api.removeListener(API_EVENT_VARIABLE_BOSE, onReceiveConfig);
+			api.removeListener(API_EVENT_VARIABLE_BOSE_VIEW, onReceiveView);
 		});
 
 		const enabled = computed({
@@ -160,8 +180,29 @@ export default {
 			}
 		});
 
+		// настройки отображения
+		const viewSettingModel = ref(false);
+		const viewSettingTitle = ref('');
+		const viewConfig = ref({ enabled: false, type: TViewType.VIEW_TEXT_SIMPLE, time: 0 } as IViewConfig);
+
+		/** Выбор пункта меню отображения на информационном экране */
 		const onClickOptions = (e: any): void => {
-			console.log('BoseCard -> onClickOptions', e);
+			// console.log('BoseCard -> onClickOptions', e);
+
+			if (e.type !== TItemMenu.VIEW_BOSE) return;
+
+			viewConfig.value = boseView.bose;
+			viewSettingTitle.value = e.lang;
+			viewSettingModel.value = true;
+		};
+
+		/**
+		 * Применить параметры отображения на информационном экране
+		 * @param {IViewConfig} res Новые параметры отображения
+		 */
+		const onApplyViewConfig = (res: IViewConfig): void => {
+			boseView.bose = res;
+			api.send(boseView);
 		};
 
 		return {
@@ -175,7 +216,11 @@ export default {
 			bass,
 			wow,
 			menuBoseCard,
-			onClickOptions
+			viewSettingModel,
+			viewSettingTitle,
+			viewConfig,
+			onClickOptions,
+			onApplyViewConfig
 		};
 	}
 };
