@@ -4,6 +4,9 @@
 		width: $title
 		margin-right: 8px
 
+		&-title
+			line-height: 20px
+
 		&-comment
 			font-size: 11px
 			line-height: 11px
@@ -24,3 +27,28 @@
 		word-break: normal
 		width: calc(100% - 64px)
 		min-width: 200px
+
+@mixin dialog()
+	&-card
+		&-title
+			padding: 16px 16px 0 16px
+			display: flex
+			flex-direction: row
+			align-items: center
+
+			&-icon
+				margin-right: 10px
+
+			.text-h6
+				font-size: 22px
+
+		&-body
+			padding: 16px
+			font-size: 17px
+
+			.q-card__section
+				margin-bottom: 10px
+				align-items: center
+
+		&-actions
+			padding: 16px

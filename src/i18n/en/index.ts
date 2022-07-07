@@ -13,6 +13,12 @@ export default {
 	Cancel: 'Cancel',
 	Close: 'Close',
 
+	About_Version: 'Web application version',
+	About_VersionFirmware: 'PJCAN firmware version',
+	About_CarSupport: 'Car support',
+	About_Author: 'Author',
+	About_DeviceInfo: 'Device info',
+
 	SettingLCD: 'LCD display settings',
 
 	BLE_BtnConnect: 'Connect',

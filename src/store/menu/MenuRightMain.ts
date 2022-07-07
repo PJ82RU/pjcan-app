@@ -5,6 +5,6 @@ export const popupLanguage = [
 	{ type: TItemMenu.LANG_ENGLISH, lang: 'LangEnglish' }
 ];
 export const popupMain = [
-	{ type: TItemMenu.DEVICE_INFO, lang: 'DeviceInfo' },
+	// { type: TItemMenu.DEVICE_INFO, lang: 'DeviceInfo' },
 	{ type: TItemMenu.ABOUT, lang: 'About' }
 ];

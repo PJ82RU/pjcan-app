@@ -13,6 +13,12 @@ export default {
 	Cancel: 'Отмена',
 	Close: 'Закрыть',
 
+	About_Version: 'Версия web-приложения',
+	About_VersionFirmware: 'Версия прошивки PJCAN',
+	About_CarSupport: 'Поддержка автомобиля',
+	About_Author: 'Автор',
+	About_DeviceInfo: 'Техническая информация',
+
 	SettingLCD: 'Настройки отображения на LCD',
 
 	BLE_BtnConnect: 'Подключиться',

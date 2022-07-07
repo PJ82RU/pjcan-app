@@ -4,11 +4,13 @@
 		<q-separator />
 		<ItemMenu :items="popupMain" @click="onClickItem" />
 	</q-menu>
+	<AboutModal v-model="about" />
 </template>
 
 <script lang="ts">
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import ItemMenu from './ItemMenu.vue';
+import AboutModal from '@/components/about/AboutModal.vue';
 import { TItemMenu, TLangLocale } from '@/models/menu';
 
 import { popupLanguage, popupMain } from '@/store/menu/MenuRightMain';
@@ -16,7 +18,7 @@ import { getLocale, setLocale } from '@/i18n/i18nUtils';
 
 export default {
 	name: 'RightMainMenu',
-	components: { ItemMenu },
+	components: { ItemMenu, AboutModal },
 	setup() {
 		/** Отфильтрованный список меню */
 		const popupLanguageFilter = computed(() => {
@@ -32,6 +34,7 @@ export default {
 				}
 			});
 		});
+		const about = ref(false);
 
 		/** Выбор пункта меню */
 		const onClickItem = (e: any) => {
@@ -46,12 +49,16 @@ export default {
 					// выбор русского языка
 					setLocale(TLangLocale.LANG_ENGLISH);
 					break;
+				case TItemMenu.ABOUT:
+					about.value = true;
+					break;
 			}
 		};
 
 		return {
 			popupLanguageFilter,
 			popupMain,
+			about,
 			onClickItem
 		};
 	}
