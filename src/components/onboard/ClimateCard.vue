@@ -44,6 +44,12 @@
 			margin="10px"
 		/>
 	</CardSection>
+	<ViewSettingModal
+		v-model="viewSettingModel"
+		:title="viewSettingTitle"
+		:view-config="viewConfig"
+		@apply="onApplyViewConfig"
+	/>
 </template>
 
 <script lang="ts">
@@ -54,25 +60,45 @@ import CardSectionTime from '@/components/cardSections/CardSectionTime.vue';
 import CardSectionToggle from '@/components/cardSections/CardSectionToggle.vue';
 import CardSectionInput from '@/components/cardSections/CardSectionInput.vue';
 import CardSection2Icons from '@/components/cardSections/CardSection2Icons.vue';
+import ViewSettingModal from '@/components/view/ViewSettingModal.vue';
 import { menuClimateCard } from '@/store/menu/MenuClimateCard';
-import { ClimateValue, IClimateValue, TAir } from '@/models/pjcan';
-import api, { API_EVENT_VARIABLE_CLIMATE } from '@/store/api';
+import { ClimateValue, ClimateView, IClimateValue, IViewConfig, TAir, TViewType } from '@/models/pjcan';
+import api, { API_EVENT_VARIABLE_CLIMATE, API_EVENT_VARIABLE_CLIMATE_VIEW } from '@/store/api';
+import { TItemMenu } from '@/models/menu';
 
 export default {
 	name: 'ClimateCard',
-	components: { CardSection, CardSectionTime, CardSectionToggle, CardSectionInput, CardSection2Icons },
+	components: {
+		CardSection,
+		CardSectionTime,
+		CardSectionToggle,
+		CardSectionInput,
+		CardSection2Icons,
+		ViewSettingModal
+	},
 	emits: ['click-options', 'click-bookmark', 'click-help'],
 	setup() {
+		// климат-контроль
 		const climateValue = ref(new ClimateValue());
-		const onReceive = (res: IClimateValue): void => {
+		const climateView = new ClimateView();
+		// входящие значения климат-контроля
+		const onReceiveValue = (res: IClimateValue): void => {
 			climateValue.value.setModel(res);
 		};
+		// входящие значения отображения климат-контроля
+		const onReceiveView = (res: IClimateValue): void => {
+			climateView.setModel(res);
+		};
 
+		// регистрируем события
 		onMounted(() => {
-			api.addListener(API_EVENT_VARIABLE_CLIMATE, onReceive);
+			api.addListener(API_EVENT_VARIABLE_CLIMATE, onReceiveValue);
+			api.addListener(API_EVENT_VARIABLE_CLIMATE_VIEW, onReceiveView);
 		});
+		// удаляем события
 		onUnmounted(() => {
-			api.removeListener(API_EVENT_VARIABLE_CLIMATE, onReceive);
+			api.removeListener(API_EVENT_VARIABLE_CLIMATE, onReceiveValue);
+			api.removeListener(API_EVENT_VARIABLE_CLIMATE_VIEW, onReceiveView);
 		});
 
 		const enabled = computed((): boolean => climateValue.value.enabled);
@@ -99,8 +125,29 @@ export default {
 			climateValue.value.airRate > 0 ? climateValue.value.airRate + 2 : 0
 		);
 
+		// настройки отображения
+		const viewSettingModel = ref(false);
+		const viewSettingTitle = ref('');
+		const viewConfig = ref({ enabled: false, type: TViewType.VIEW_TEXT_SIMPLE, time: 0 } as IViewConfig);
+
+		/** Выбор пункта меню отображения на информационном экране */
 		const onClickOptions = (e: any): void => {
-			console.log('ClimateCard -> onClickOptions', e);
+			// console.log('ClimateCard -> onClickOptions', e);
+
+			if (e.type !== TItemMenu.VIEW_CLIMATE) return;
+
+			viewConfig.value = climateView.climate;
+			viewSettingTitle.value = e.lang;
+			viewSettingModel.value = true;
+		};
+
+		/**
+		 * Применить параметры отображения на информационном экране
+		 * @param {IViewConfig} res Новые параметры отображения
+		 */
+		const onApplyViewConfig = (res: IViewConfig): void => {
+			climateView.climate = res;
+			api.send(climateView);
 		};
 
 		return {
@@ -115,7 +162,11 @@ export default {
 			blowWindshield,
 			speedRotation,
 			menuClimateCard,
-			onClickOptions
+			viewSettingModel,
+			viewSettingTitle,
+			viewConfig,
+			onClickOptions,
+			onApplyViewConfig
 		};
 	}
 };
