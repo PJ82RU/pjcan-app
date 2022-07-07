@@ -97,6 +97,6 @@ export class DeviceInfo extends BaseModel implements IDeviceInfo {
 
 	/** Чтение данных */
 	get(): DataView | undefined {
-		return this._get(this, API_EXEC_INFO, STRUCT_LENGTH, struct);
+		return this._get(this, API_EXEC_INFO, 1);
 	}
 }

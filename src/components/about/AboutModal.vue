@@ -9,10 +9,10 @@
 					color-secondary="secondary"
 					:size="24"
 				/>
-				<div class="text-h6">О программе</div>
+				<div class="text-h6">{{ $t('About') }}</div>
 			</q-card-section>
 
-			<q-card-section class="AboutModal-card-body">
+			<q-card-section class="AboutModal-card-body scroll">
 				<CardSectionInput :title="$t('About_Version')" v-model="version" readonly />
 				<CardSectionInput :title="$t('About_VersionFirmware')" v-model="versionFirmware" readonly />
 				<CardSectionInput :title="$t('About_CarSupport')" v-model="carSupport" readonly />
@@ -20,7 +20,12 @@
 			</q-card-section>
 
 			<q-card-actions class="AboutModal-card-actions" align="right">
-				<q-btn :label="$t('About_DeviceInfo')" color="secondary" v-close-popup />
+				<q-btn
+					:label="$t('About_DeviceInfo')"
+					color="secondary"
+					v-close-popup
+					@click="$emit('clickDeviceInfo')"
+				/>
 				<q-btn label="OK" color="primary" v-close-popup />
 			</q-card-actions>
 		</q-card>
@@ -45,7 +50,7 @@ export default {
 			default: false
 		}
 	},
-	emits: ['update:modelValue'],
+	emits: ['update:modelValue', 'clickDeviceInfo'],
 	setup(props: any, context: any) {
 		const { modelValue } = toRefs(props);
 		const visible = computed({
@@ -81,11 +86,9 @@ export default {
 
 	&-author
 		.CardSectionInput
-			&-header
-				width: 67px !important
 			&-input
 				width: 100% !important
-				min-width: 240px
+				min-width: 210px
 
 	.CardSectionInput
 		&-header

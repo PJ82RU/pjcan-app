@@ -4,13 +4,15 @@
 		<q-separator />
 		<ItemMenu :items="popupMain" @click="onClickItem" />
 	</q-menu>
-	<AboutModal v-model="about" />
+	<AboutModal v-model="about" @clickDeviceInfo="deviceInfo = true" />
+	<DeviceInfoModal v-model="deviceInfo" />
 </template>
 
 <script lang="ts">
 import { computed, ref } from 'vue';
 import ItemMenu from './ItemMenu.vue';
 import AboutModal from '@/components/about/AboutModal.vue';
+import DeviceInfoModal from '@/components/about/DeviceInfoModal.vue';
 import { TItemMenu, TLangLocale } from '@/models/menu';
 
 import { popupLanguage, popupMain } from '@/store/menu/MenuRightMain';
@@ -18,7 +20,7 @@ import { getLocale, setLocale } from '@/i18n/i18nUtils';
 
 export default {
 	name: 'RightMainMenu',
-	components: { ItemMenu, AboutModal },
+	components: { ItemMenu, AboutModal, DeviceInfoModal },
 	setup() {
 		/** Отфильтрованный список меню */
 		const popupLanguageFilter = computed(() => {
@@ -35,6 +37,7 @@ export default {
 			});
 		});
 		const about = ref(false);
+		const deviceInfo = ref(false);
 
 		/** Выбор пункта меню */
 		const onClickItem = (e: any) => {
@@ -59,6 +62,7 @@ export default {
 			popupLanguageFilter,
 			popupMain,
 			about,
+			deviceInfo,
 			onClickItem
 		};
 	}

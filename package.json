@@ -3,7 +3,7 @@
 	"version": "0.0.1",
 	"description": "CanBus project for Mazda 3",
 	"productName": "PJCan App",
-	"author": "2022, PJ82 (Spiridonov Vladislav)",
+	"author": "PJ82 (Spiridonov Vladislav)",
 	"private": true,
 	"scripts": {
 		"dev": "quasar dev",
