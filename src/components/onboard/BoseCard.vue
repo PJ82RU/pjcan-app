@@ -98,6 +98,7 @@ export default {
 		const onReceiveConfig = (res: IBoseConfig): void => {
 			boseConfig.value.setModel(res);
 		};
+		// входящие значения отображения Bose
 		const onReceiveView = (res: IBoseView): void => {
 			boseView.setModel(res);
 		};

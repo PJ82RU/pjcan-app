@@ -166,7 +166,7 @@ export default {
 
 		/** Выбор пункта меню отображения на информационном экране */
 		const onClickOptions = (e: any): void => {
-			console.log('InfoCard -> onClickOptions', e);
+			// console.log('InfoCard -> onClickOptions', e);
 
 			selectItemMenu = e.type;
 			switch (selectItemMenu) {
