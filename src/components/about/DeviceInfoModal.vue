@@ -32,12 +32,12 @@
 					readonly
 					type="number"
 				/>
-				<CardSectionInput
-					:title="$t('DeviceInfo_CycleCount')"
-					v-model="deviceInfo.cycleCount"
-					readonly
-					type="number"
-				/>
+				<!--<CardSectionInput-->
+				<!--	:title="$t('DeviceInfo_CycleCount')"-->
+				<!--	v-model="deviceInfo.cycleCount"-->
+				<!--	readonly-->
+				<!--	type="number"-->
+				<!--/>-->
 				<CardSectionInput :title="$t('DeviceInfo_EfuseMac')" v-model="efuseMac" readonly />
 				<CardSectionInput
 					:title="$t('DeviceInfo_FlashChipMode')"
@@ -57,65 +57,65 @@
 					readonly
 					type="number"
 				/>
+				<!--<CardSectionInput-->
+				<!--	:title="$t('DeviceInfo_HeapSize')"-->
+				<!--	v-model="deviceInfo.heapSize"-->
+				<!--	readonly-->
+				<!--	type="number"-->
+				<!--/>-->
+				<!--<CardSectionInput-->
+				<!--	:title="$t('DeviceInfo_FreeHeap')"-->
+				<!--	v-model="deviceInfo.freeHeap"-->
+				<!--	readonly-->
+				<!--	type="number"-->
+				<!--/>-->
+				<!--<CardSectionInput-->
+				<!--	:title="$t('DeviceInfo_MaxAllocHeap')"-->
+				<!--	v-model="deviceInfo.maxAllocHeap"-->
+				<!--	readonly-->
+				<!--	type="number"-->
+				<!--/>-->
+				<!--<CardSectionInput-->
+				<!--	:title="$t('DeviceInfo_MinFreeHeap')"-->
+				<!--	v-model="deviceInfo.minFreeHeap"-->
+				<!--	readonly-->
+				<!--	type="number"-->
+				<!--/>-->
+				<!--<CardSectionInput-->
+				<!--	:title="$t('DeviceInfo_PsramSize')"-->
+				<!--	v-model="deviceInfo.psramSize"-->
+				<!--	readonly-->
+				<!--	type="number"-->
+				<!--/>-->
+				<!--<CardSectionInput-->
+				<!--	:title="$t('DeviceInfo_FreePsram')"-->
+				<!--	v-model="deviceInfo.freePsram"-->
+				<!--	readonly-->
+				<!--	type="number"-->
+				<!--/>-->
+				<!--<CardSectionInput-->
+				<!--	:title="$t('DeviceInfo_MaxAllocPsram')"-->
+				<!--	v-model="deviceInfo.maxAllocPsram"-->
+				<!--	readonly-->
+				<!--	type="number"-->
+				<!--/>-->
+				<!--<CardSectionInput-->
+				<!--	:title="$t('DeviceInfo_MinFreePsram')"-->
+				<!--	v-model="deviceInfo.minFreePsram"-->
+				<!--	readonly-->
+				<!--	type="number"-->
+				<!--/>-->
+				<CardSectionInput :title="$t('DeviceInfo_SdkVersion')" v-model="deviceInfo.sdkVersion" readonly />
+				<CardSectionInput :title="$t('DeviceInfo_SketchMD5')" v-model="deviceInfo.sketchMD5" readonly />
 				<CardSectionInput
-					:title="$t('DeviceInfo_HeapSize')"
-					v-model="deviceInfo.heapSize"
-					readonly
-					type="number"
-				/>
-				<CardSectionInput
-					:title="$t('DeviceInfo_FreeHeap')"
-					v-model="deviceInfo.freeHeap"
-					readonly
-					type="number"
-				/>
-				<CardSectionInput
-					:title="$t('DeviceInfo_MaxAllocHeap')"
-					v-model="deviceInfo.maxAllocHeap"
-					readonly
-					type="number"
-				/>
-				<CardSectionInput
-					:title="$t('DeviceInfo_MinFreeHeap')"
-					v-model="deviceInfo.minFreeHeap"
-					readonly
-					type="number"
-				/>
-				<CardSectionInput
-					:title="$t('DeviceInfo_PsramSize')"
-					v-model="deviceInfo.psramSize"
-					readonly
-					type="number"
-				/>
-				<CardSectionInput
-					:title="$t('DeviceInfo_FreePsram')"
-					v-model="deviceInfo.freePsram"
-					readonly
-					type="number"
-				/>
-				<CardSectionInput
-					:title="$t('DeviceInfo_MaxAllocPsram')"
-					v-model="deviceInfo.maxAllocPsram"
-					readonly
-					type="number"
-				/>
-				<CardSectionInput
-					:title="$t('DeviceInfo_MinFreePsram')"
-					v-model="deviceInfo.minFreePsram"
+					:title="$t('DeviceInfo_SketchSize')"
+					v-model="deviceInfo.sketchSize"
 					readonly
 					type="number"
 				/>
 				<CardSectionInput
 					:title="$t('DeviceInfo_FreeSketchSpace')"
 					v-model="deviceInfo.freeSketchSpace"
-					readonly
-					type="number"
-				/>
-				<CardSectionInput :title="$t('DeviceInfo_SdkVersion')" v-model="deviceInfo.sdkVersion" readonly />
-				<CardSectionInput :title="$t('DeviceInfo_SketchMD5')" v-model="deviceInfo.sketchMD5" readonly />
-				<CardSectionInput
-					:title="$t('DeviceInfo_SketchSize')"
-					v-model="deviceInfo.sketchSize"
 					readonly
 					type="number"
 				/>
