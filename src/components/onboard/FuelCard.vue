@@ -32,6 +32,12 @@
 			readonly
 		/>
 	</CardSection>
+	<ViewSettingModal
+		v-model="viewSettingModel"
+		:title="viewSettingTitle"
+		:view-config="viewConfig"
+		@apply="onApplyViewConfig"
+	/>
 </template>
 
 <script lang="ts">
@@ -39,24 +45,37 @@ import { computed, onMounted, onUnmounted, ref } from 'vue';
 
 import CardSection from '@/components/cardSections/CardSection.vue';
 import CardSectionInput from '@/components/cardSections/CardSectionInput.vue';
+import ViewSettingModal from '@/components/view/ViewSettingModal.vue';
 import { menuFuelCard } from '@/store/menu/MenuFuelCard';
-import { FuelValue, IFuelValue } from '@/models/pjcan';
-import api, { API_EVENT_VARIABLE_FUEL } from '@/store/api';
+import { FuelValue, FuelView, IFuelValue, IViewConfig, TViewType } from '@/models/pjcan';
+import api, { API_EVENT_VARIABLE_FUEL, API_EVENT_VARIABLE_FUEL_VIEW } from '@/store/api';
+import { TItemMenu } from '@/models/menu';
 
 export default {
 	name: 'FuelCard',
-	components: { CardSection, CardSectionInput },
+	components: { CardSection, CardSectionInput, ViewSettingModal },
 	setup() {
+		// расход топлива
 		const fuelValue = ref(new FuelValue());
-		const onReceive = (res: IFuelValue): void => {
+		const fuelView = new FuelView();
+		// входящие значения расхода топлива
+		const onReceiveValue = (res: IFuelValue): void => {
 			fuelValue.value.setModel(res);
 		};
+		// входящие значения отображения расхода топлива
+		const onReceiveView = (res: IFuelValue): void => {
+			fuelView.setModel(res);
+		};
 
+		// регистрируем события
 		onMounted(() => {
-			api.addListener(API_EVENT_VARIABLE_FUEL, onReceive);
+			api.addListener(API_EVENT_VARIABLE_FUEL, onReceiveValue);
+			api.addListener(API_EVENT_VARIABLE_FUEL_VIEW, onReceiveView);
 		});
+		// удаляем события
 		onUnmounted(() => {
-			api.removeListener(API_EVENT_VARIABLE_FUEL, onReceive);
+			api.removeListener(API_EVENT_VARIABLE_FUEL, onReceiveValue);
+			api.removeListener(API_EVENT_VARIABLE_FUEL_VIEW, onReceiveView);
 		});
 
 		const current = computed((): string => fuelValue.value.current.toFixed(1));
@@ -64,8 +83,62 @@ export default {
 		const total = computed((): string => fuelValue.value.total.toFixed(2));
 		const consumption = computed((): string => fuelValue.value.consumption.toFixed(2));
 
+		// настройки отображения
+		const viewSettingModel = ref(false);
+		const viewSettingTitle = ref('');
+		const viewConfig = ref({ enabled: false, type: TViewType.VIEW_TEXT_SIMPLE, time: 0 } as IViewConfig);
+		let selectItemMenu: TItemMenu;
+
+		/** Выбор пункта меню отображения на информационном экране */
 		const onClickOptions = (e: any): void => {
-			console.log('FuelCard -> onClickOptions', e);
+			// console.log('FuelCard -> onClickOptions', e);
+
+			selectItemMenu = e.type;
+			switch (selectItemMenu) {
+				case TItemMenu.VIEW_FUEL_CURRENT:
+					viewConfig.value = fuelView.current;
+					break;
+
+				case TItemMenu.VIEW_FUEL_AVG:
+					viewConfig.value = fuelView.avg;
+					break;
+
+				case TItemMenu.VIEW_FUEL_TOTAL:
+					viewConfig.value = fuelView.total;
+					break;
+
+				case TItemMenu.VIEW_FUEL_CONSUMPTION:
+					viewConfig.value = fuelView.consumption;
+					break;
+			}
+
+			viewSettingTitle.value = e.lang;
+			viewSettingModel.value = true;
+		};
+
+		/**
+		 * Применить параметры отображения на информационном экране
+		 * @param {IViewConfig} res Новые параметры отображения
+		 */
+		const onApplyViewConfig = (res: IViewConfig): void => {
+			switch (selectItemMenu) {
+				case TItemMenu.VIEW_FUEL_CURRENT:
+					fuelView.current = res;
+					break;
+
+				case TItemMenu.VIEW_FUEL_AVG:
+					fuelView.avg = res;
+					break;
+
+				case TItemMenu.VIEW_FUEL_TOTAL:
+					fuelView.total = res;
+					break;
+
+				case TItemMenu.VIEW_FUEL_CONSUMPTION:
+					fuelView.consumption = res;
+					break;
+			}
+			api.send(fuelView);
 		};
 
 		return {
@@ -74,7 +147,11 @@ export default {
 			total,
 			consumption,
 			menuFuelCard,
-			onClickOptions
+			viewSettingModel,
+			viewSettingTitle,
+			viewConfig,
+			onClickOptions,
+			onApplyViewConfig
 		};
 	}
 };
