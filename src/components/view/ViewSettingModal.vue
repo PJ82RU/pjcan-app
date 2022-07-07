@@ -111,31 +111,13 @@ export default {
 </script>
 
 <style lang="sass">
+@import "@/css/mixins"
+
 .ViewSettingModal
-	&-card
-		&-title
-			padding: 16px 16px 0 16px
-			display: flex
-			flex-direction: row
-			align-items: center
+	@include dialog()
 
-			&-icon
-				margin-right: 10px
-
-			.text-h6
-				font-size: 22px
-
-		&-body
-			padding: 16px
-			font-size: 17px
-
-			.q-card__section
-				margin-bottom: 10px
-				align-items: center
-
-			.CardSectionSelect-input
-				width: 250px
-
-		&-actions
-			padding: 16px
+	.CardSectionSelect,
+	.CardSectionInput
+		&-input
+			width: 250px
 </style>

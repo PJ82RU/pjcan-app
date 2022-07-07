@@ -7,7 +7,7 @@
 			</q-card-section>
 
 			<q-card-actions align="right">
-				<q-btn :label="$t('Close')" color="grey" v-close-popup />
+				<q-btn :label="$t('Close')" color="secondary" v-close-popup />
 				<q-btn :label="$t('BLE_BtnDisconnect')" color="primary" v-close-popup @click="$emit('disconnect')" />
 			</q-card-actions>
 		</q-card>

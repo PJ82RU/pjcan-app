@@ -233,7 +233,6 @@ export default {
 		};
 
 		return {
-			menuInfoCard,
 			acc,
 			timeWork,
 			temperature,
@@ -243,6 +242,7 @@ export default {
 			seatbeltPassenger,
 			signalLeft,
 			signalRight,
+			menuInfoCard,
 			viewSettingModel,
 			viewSettingTitle,
 			viewConfig,
