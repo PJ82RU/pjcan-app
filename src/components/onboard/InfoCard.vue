@@ -52,7 +52,12 @@
 			:icon2-value="signalRight"
 		/>
 	</CardSection>
-	<ViewSettingModal v-model="viewSettingModel" :title="viewSettingTitle" :view-config="viewConfig" />
+	<ViewSettingModal
+		v-model="viewSettingModel"
+		:title="viewSettingTitle"
+		:view-config="viewConfig"
+		@apply="onApplyViewConfig"
+	/>
 </template>
 
 <script lang="ts">
@@ -97,29 +102,37 @@ export default {
 		ViewSettingModal
 	},
 	setup() {
+		// датчики
 		const sensorValue = ref(new SensorsValue());
 		const sensorView = new SensorsView();
+		// температура
 		const temperatureValue = ref(new TemperatureValue());
 		const temperatureView = new TemperatureView();
+		// входящие значения датчиков
 		const onReceiveSensorValue = (res: ISensorsValue): void => {
 			sensorValue.value.setModel(res);
 		};
+		// входящие значения отображения датчиков
 		const onReceiveSensorView = (res: ISensorsView): void => {
 			sensorView.setModel(res);
 		};
+		// входящие значения температуры
 		const onReceiveTemperatureValue = (res: ITemperatureValue): void => {
 			temperatureValue.value.setModel(res);
 		};
+		// входящие значения отображения температуры
 		const onReceiveTemperatureView = (res: ITemperatureView): void => {
 			temperatureView.setModel(res);
 		};
 
+		// регистрируем события
 		onMounted(() => {
 			api.addListener(API_EVENT_VARIABLE_SENSORS, onReceiveSensorValue);
 			api.addListener(API_EVENT_VARIABLE_SENSORS_VIEW, onReceiveSensorView);
 			api.addListener(API_EVENT_VARIABLE_TEMPERATURE, onReceiveTemperatureValue);
 			api.addListener(API_EVENT_VARIABLE_TEMPERATURE_VIEW, onReceiveTemperatureView);
 		});
+		// удаляем события
 		onUnmounted(() => {
 			api.removeListener(API_EVENT_VARIABLE_SENSORS, onReceiveSensorValue);
 			api.removeListener(API_EVENT_VARIABLE_SENSORS_VIEW, onReceiveSensorView);
@@ -145,13 +158,18 @@ export default {
 				sensorValue.value.signal === TSensorsSignal.SIGNAL_EMERGENCY
 		);
 
+		// настройки отображения
 		const viewSettingModel = ref(false);
 		const viewSettingTitle = ref('');
 		const viewConfig = ref({ enabled: false, type: TViewType.VIEW_TEXT_SIMPLE, time: 0 } as IViewConfig);
+		let selectItemMenu: TItemMenu;
+
+		/** Выбор пункта меню отображения на информационном экране */
 		const onClickOptions = (e: any): void => {
 			console.log('InfoCard -> onClickOptions', e);
 
-			switch (e.type) {
+			selectItemMenu = e.type;
+			switch (selectItemMenu) {
 				case TItemMenu.VIEW_TIME_WORK:
 					viewConfig.value = { enabled: false, type: TViewType.VIEW_TEXT_SIMPLE, time: 0 } as IViewConfig;
 					break;
@@ -181,6 +199,39 @@ export default {
 			viewSettingModel.value = true;
 		};
 
+		/**
+		 * Применить параметры отображения на информационном экране
+		 * @param {IViewConfig} res Новые параметры отображения
+		 */
+		const onApplyViewConfig = (res: IViewConfig): void => {
+			switch (selectItemMenu) {
+				case TItemMenu.VIEW_TIME_WORK:
+					break;
+
+				case TItemMenu.VIEW_TEMPERATURE:
+					temperatureView.temperature = res;
+					api.send(temperatureView);
+					return;
+
+				case TItemMenu.VIEW_HANDBRAKE:
+					sensorView.handbrake = res;
+					break;
+
+				case TItemMenu.VIEW_REVERSE:
+					sensorView.reverse = res;
+					break;
+
+				case TItemMenu.VIEW_SAFETY_BELT:
+					sensorView.seatbelt = res;
+					break;
+
+				case TItemMenu.VIEW_SIGNAL:
+					sensorView.signal = res;
+					break;
+			}
+			api.send(sensorView);
+		};
+
 		return {
 			menuInfoCard,
 			acc,
@@ -195,7 +246,8 @@ export default {
 			viewSettingModel,
 			viewSettingTitle,
 			viewConfig,
-			onClickOptions
+			onClickOptions,
+			onApplyViewConfig
 		};
 	}
 };
