@@ -4,7 +4,7 @@
 			<q-card-section class="AboutModal-card-title">
 				<IconCustom
 					class="AboutModal-card-title-icon"
-					name="steering"
+					name="PJ82"
 					color="primary"
 					color-secondary="secondary"
 					:size="24"

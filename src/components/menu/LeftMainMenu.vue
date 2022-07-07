@@ -4,16 +4,19 @@
 		<ItemMenu :items="menuActions" @click="onClickItem" />
 		<q-separator />
 		<ItemMenu :items="menuFooter" @click="onClickItem" />
+		<q-separator />
+		<BGIconMenu />
 	</q-list>
 </template>
 
 <script lang="ts">
 import ItemMenu from './ItemMenu.vue';
+import BGIconMenu from './BGIconMenu.vue';
 import { menuHeader, menuActions, menuFooter } from '@/store/menu/MenuLeftMain';
 
 export default {
 	name: 'LeftMainMenu',
-	components: { ItemMenu },
+	components: { ItemMenu, BGIconMenu },
 	setup() {
 		const onClickItem = (e: any) => {
 			console.log('LeftMainMenu -> onClickItem', e);
