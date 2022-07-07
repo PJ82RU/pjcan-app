@@ -176,5 +176,9 @@ export default {
 	ViewSetting_Type: 'Стиль отображения информации',
 	ViewSetting_Type_Comment: 'Отображать статичный текст, мигающий или в стиле бегущий строки',
 	ViewSetting_Time: 'Время отображения, сек.',
-	ViewSetting_Time_Comment: 'Показывать на информационном экране указанное количество секунд'
+	ViewSetting_Time_Comment: 'Показывать на информационном экране указанное количество секунд',
+
+	ManualControlCard: 'Кнопки БК',
+	ManualControlCard_Restyling: 'Рестайлинг',
+	ManualControlCard_BeforeRestyling: 'До рестайлинг'
 };

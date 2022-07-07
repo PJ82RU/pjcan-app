@@ -36,7 +36,7 @@ import {
 	IDeviceInfo
 } from './device';
 
-import { LCDValue, API_EXEC_VIEW_VALUE, StructLCDValue, ILCDValue } from './lcd';
+import { LCDValue, API_EXEC_LCD_VALUE, StructLCDValue, ILCDValue } from './lcd';
 
 import {
 	TeyesConfig,
@@ -219,7 +219,7 @@ export {
 	API_EXEC_CAR_VIEW,
 	API_EXEC_DEVICE_CONFIG,
 	API_EXEC_INFO,
-	API_EXEC_VIEW_VALUE,
+	API_EXEC_LCD_VALUE,
 	API_EXEC_TEYES_CONFIG,
 	API_EXEC_TEYES_TEXT,
 	API_EXEC_TEYES_VIEW,

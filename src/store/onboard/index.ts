@@ -8,10 +8,12 @@ export enum TCard {
 	MOVEMENT = 'MovementCard',
 	CLIMATE = 'ClimateCard',
 	VOLUME = 'VolumeCard',
-	BOSE = 'BoseCard'
+	BOSE = 'BoseCard',
+	MANUAL_CONTROL = 'ManualControlCard'
 }
 
-const CARDS_KEY = 'cards';
+const CARDS_KEY = 'Cards';
+const CAR_STYLE_KEY = 'CarStyle';
 
 export class Onboard {
 	/** Локальное хранилище */
@@ -25,6 +27,7 @@ export class Onboard {
 			res && Array.isArray(res) && res.length > 0
 				? res
 				: [
+						TCard.MANUAL_CONTROL,
 						TCard.INFO,
 						TCard.ENGINE,
 						TCard.FUEL,
@@ -34,6 +37,14 @@ export class Onboard {
 						TCard.VOLUME,
 						TCard.BOSE
 				  ];
+	}
+
+	/** Рестайлинг/До рестайлинг */
+	get restyle(): boolean {
+		return this._storageLocal.get(CAR_STYLE_KEY);
+	}
+	set restyle(val: boolean) {
+		this._storageLocal.set(CAR_STYLE_KEY, val);
 	}
 
 	/** Наличие карточки */
