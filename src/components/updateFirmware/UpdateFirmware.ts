@@ -16,6 +16,8 @@ export class UpdateFirmware {
 	resultUpload: IUpdateData = new UpdateData();
 	/** Результат начала обновления */
 	resultBegin: IUpdateBegin = new UpdateBegin();
+	/** Статус обновления */
+	isUpdated: boolean = false;
 	/** Процент загрузки прошивки на устройство PJCAN */
 	get uploading(): number {
 		return this.resultUpload.offset > 0 ? this.resultUpload.offset / this.resultUpload.data.byteLength : 0;

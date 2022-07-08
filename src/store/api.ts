@@ -19,7 +19,7 @@ import {
 	API_EXEC_TEYES_CONFIG,
 	API_EXEC_TEYES_VIEW,
 	API_EXEC_UPDATE_BEGIN_GZ,
-	API_EXEC_UPDATE_UPLOAD_GZFILE,
+	API_EXEC_UPDATE_UPLOAD_GZ,
 	API_EXEC_VARIABLE_BOSE,
 	API_EXEC_VARIABLE_BOSE_VIEW,
 	API_EXEC_VARIABLE_CLIMATE,
@@ -260,7 +260,7 @@ export class API extends EventEmitter {
 			case API_EXEC_CAR_VIEW:
 				this.emit(API_EVENT_CAR_VIEW, new CarView(data));
 				break;
-			case API_EXEC_UPDATE_UPLOAD_GZFILE:
+			case API_EXEC_UPDATE_UPLOAD_GZ:
 				this.updateFirmware.resultUpload.set(data);
 				break;
 			case API_EXEC_UPDATE_BEGIN_GZ:

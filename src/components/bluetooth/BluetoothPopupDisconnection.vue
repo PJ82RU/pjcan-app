@@ -44,5 +44,5 @@ export default {
 @import "@/css/mixins"
 
 .BluetoothDialogDisconnection
-	@include bluetooth-dialog()
+	@include popup()
 </style>

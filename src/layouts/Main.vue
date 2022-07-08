@@ -39,7 +39,7 @@
 		</q-page-container>
 
 		<!-- Диалог обновление прошивки устройства -->
-		<UpdateFirmwareDialog />
+		<UpdateFirmwarePopup />
 	</q-layout>
 </template>
 
@@ -50,11 +50,11 @@ import { useQuasar } from 'quasar';
 import LeftMainMenu from '@/components/menu/LeftMainMenu.vue';
 import RightMainMenu from '@/components/menu/RightMainMenu.vue';
 import BluetoothBtn from '@/components/bluetooth/BluetoothBtn.vue';
-import UpdateFirmwareDialog from '@/components/updateFirmware/UpdateFirmwarePopup.vue';
+import UpdateFirmwarePopup from '@/components/updateFirmware/UpdateFirmwarePopup.vue';
 
 export default {
 	name: 'Main',
-	components: { LeftMainMenu, RightMainMenu, BluetoothBtn, UpdateFirmwareDialog },
+	components: { LeftMainMenu, RightMainMenu, BluetoothBtn, UpdateFirmwarePopup },
 	setup() {
 		const $q = useQuasar();
 		const leftMenuOpen = ref(false);

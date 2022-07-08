@@ -68,6 +68,12 @@ export default {
 
 	UpdFirmware_Later: 'Позже',
 	UpdFirmware_Update: 'Обновить',
+	UpdFirmware_New: 'Доступна новая версия прошивки устройства PJCAN. Обновить до версии % ?',
+	UpdFirmware_Preparation: 'Подготовка к загрузке ...',
+	UpdFirmware_ProcessUpload: 'Загрузка прошивки ...',
+	UpdFirmware_ProcessUpdate: 'Обновление прошивки ...',
+	UpdFirmware_ProcessCompleted: 'Прошивка успешно завершена',
+	UpdFirmware_ProcessWarning: 'Прошивка завершена не удачно. Перезагрузите устройство и попробуйте еще раз',
 	UpdFirmware_Error: 'Ошибка обновления прошивки',
 
 	InfoCard_Title: 'Информация',

@@ -1,71 +1,47 @@
 <template>
-	<q-dialog class="UpdateFirmwareDialog" v-model="visibleQuestion">
+	<q-dialog class="UpdateFirmwarePopup" v-model="visible">
 		<q-card>
 			<q-card-section class="row">
 				<q-avatar icon="update" color="primary" text-color="white" />
-				<span class="q-ml-md">{{ message }}</span>
+				<span class="q-ml-md UpdateFirmwarePopup-message">{{ message }}</span>
 			</q-card-section>
 
 			<q-card-actions align="right">
-				<q-btn flat :label="$t('UpdFirmware_Later')" color="green" v-close-popup @click="onCancel" />
-				<q-btn flat :label="$t('UpdFirmware_Update')" color="green" v-close-popup @click="onUpdateUpload" />
+				<q-btn :label="$t('UpdFirmware_Later')" color="secondary" v-close-popup @click="onCancel" />
+				<q-btn :label="$t('UpdFirmware_Update')" color="primary" v-close-popup @click="visibleProcess = true" />
 			</q-card-actions>
 		</q-card>
 	</q-dialog>
-
-	<q-dialog class="UpdateFirmwareDialog-process" v-model="visibleUpdate" persistent>
-		<q-card>
-			<q-card-section class="row">
-				<span>{{ updateMessage }}</span>
-				<span>{{ uploading }}</span>
-				<q-linear-progress
-					class="q-mt-sm"
-					dark
-					stripe
-					rounded
-					size="20px"
-					color="green"
-					:indeterminate="indeterminate"
-					:value="uploadingNumber"
-				/>
-			</q-card-section>
-		</q-card>
-	</q-dialog>
+	<UpdateFirmwarePopupProcess v-model="visibleProcess" />
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed } from 'vue';
+import { defineComponent, ref, onMounted, onUnmounted } from 'vue';
 import { lang } from '@/i18n/i18nUtils';
-import { useQuasar } from 'quasar';
 import api from '@/store/api';
 
-import { BLUETOOTH_EVENT_CONNECTED, TConnectedStatus } from '@/components/bluetooth';
+import UpdateFirmwarePopupProcess from './UpdateFirmwarePopupProcess.vue';
 
-import { UPDATE_UPLOAD_EVENT_RESULT } from '@/models/pjcan/update/UpdateData';
-import { UPDATE_BEGIN_EVENT_RESULT } from '@/models/pjcan/update/UpdateBegin';
+import { BLUETOOTH_EVENT_CONNECTED, TConnectedStatus } from '@/components/bluetooth';
 import { Timeout } from '@/models/types';
 
-const DELAY_CHECK_VERSION = 60000;
+// таймаут проверки обновления 5 мин.
+const DELAY_CHECK_VERSION = 300000;
 
 export default defineComponent({
-	name: 'UpdateFirmwareDialog',
+	name: 'UpdateFirmwarePopup',
+	components: { UpdateFirmwarePopupProcess },
 	setup() {
-		const $q = useQuasar();
-		const { updateFirmware, bluetooth, version } = api;
+		const { bluetooth, version, updateFirmware } = api;
 
-		const visibleQuestion = ref(false); // показать вопрос
-		const visibleUpdate = ref(false); // показать процесс обновления
-		const indeterminate = ref(true); // не определенное состояние загрузки
-		const updateMessage = ref(''); // сообщение в диалоговом окне
-		const uploading = ref(''); // % загрузки
-		const uploadingNumber = computed(() => updateFirmware.uploading);
-		const message = computed(
-			(): string =>
-				`Доступна новая версия прошивки устройства PJCAN. Обновить до версии ${updateFirmware.newVersion.toString} ?`
-		);
-
-		let timerCheckVersion = undefined as Timeout; // таймер проверки обновлений
-		let updated = false; // статус обновления прошивки устройства (устройство перезагружается)
+		// показать попап
+		const visible = ref(false);
+		// показать попап загрузки прошивки
+		const visibleProcess = ref(false);
+		// сообщение
+		const message = ref('');
+		// таймер проверки обновлений
+		let timerCheckVersion: Timeout = undefined;
 
 		/**
 		 * Проверка версии прошивки
@@ -73,111 +49,55 @@ export default defineComponent({
 		 */
 		const onCheckVersion = (delay: number): void => {
 			timerCheckVersion = setTimeout(() => {
-				if (bluetooth.connected && version.is)
+				if (!visibleProcess.value && bluetooth.connected && version.is) {
 					updateFirmware
 						.checkNewVersion()
-						.then(() => (visibleQuestion.value = true))
+						.then(() => {
+							message.value = lang('UpdFirmware_New').replace('%', updateFirmware.newVersion.toString);
+							visible.value = true;
+						})
 						.catch(() => onCheckVersion(DELAY_CHECK_VERSION));
-				else onCheckVersion(DELAY_CHECK_VERSION);
+				} else onCheckVersion(DELAY_CHECK_VERSION);
 			}, delay);
-		};
-
-		/** Запустить обновление прошивки */
-		const onUpdateUpload = (): void => {
-			clearTimeout(timerCheckVersion);
-
-			updateMessage.value = 'Подготовка к загрузке ...';
-			uploading.value = '0%';
-			visibleUpdate.value = true;
-			updateFirmware.upload();
 		};
 
 		/** Отменить обновление */
 		const onCancel = (): void => {
-			clearTimeout(timerCheckVersion);
-
+			if (timerCheckVersion) clearTimeout(timerCheckVersion);
 			updateFirmware.clear();
-			visibleQuestion.value = false;
-			visibleUpdate.value = false;
 		};
 
-		/** Ошибка обновления */
-		const onErrorUpdate = (): void => {
-			$q.notify({
-				message: lang('UpdFirmware_Error'),
-				position: 'bottom',
-				color: 'red'
-			});
-			onCancel();
+		/**
+		 * Событие подключения к Bluetooth
+		 * @param {TConnectedStatus} status Статус подключения Bluetooth
+		 */
+		const onConnected = (status: TConnectedStatus) => {
+			if (status === TConnectedStatus.CONNECT) onCheckVersion(5000);
+			else if (timerCheckVersion) clearTimeout(timerCheckVersion);
 		};
 
-		// событие подключения по Bluetooth
-		bluetooth.addListener(BLUETOOTH_EVENT_CONNECTED, (status: TConnectedStatus) => {
-			if (status === TConnectedStatus.CONNECT) {
-				if (updated) {
-					$q.notify({
-						message: 'Прошивка успешно завершена',
-						position: 'bottom',
-						color: 'green'
-					});
-					updated = false;
-				}
-				onCheckVersion(5000);
-			} else onCancel();
+		// регистрируем события
+		onMounted(() => {
+			bluetooth.addListener(BLUETOOTH_EVENT_CONNECTED, onConnected);
 		});
-
-		// событие загрузки прошивки на устройство PJCAN
-		updateFirmware.resultUpload.addListener(UPDATE_UPLOAD_EVENT_RESULT, (result: boolean) => {
-			if (result) {
-				if (indeterminate.value) {
-					updateMessage.value = 'Загрузка прошивки ...';
-					indeterminate.value = false;
-				}
-				uploading.value = (updateFirmware.uploading * 100).toFixed(2) + '%';
-				if (updateFirmware.resultUpload.offset === updateFirmware.resultUpload.data.byteLength)
-					updateFirmware.begin();
-			} else onErrorUpdate();
-		});
-
-		// событие успешного начала прошивки устройства
-		updateFirmware.resultBegin.addListener(UPDATE_BEGIN_EVENT_RESULT, (result: boolean) => {
-			updated = result;
-			if (result) {
-				updateMessage.value = 'Обновление прошивки ...';
-				uploading.value = '';
-				indeterminate.value = true;
-			} else onErrorUpdate();
+		// удаляем события
+		onUnmounted(() => {
+			bluetooth.removeListener(BLUETOOTH_EVENT_CONNECTED, onConnected);
 		});
 
 		return {
-			visibleQuestion,
-			visibleUpdate,
-			indeterminate,
-			updateMessage,
-			uploading,
-			uploadingNumber,
+			visible,
 			message,
-			onCancel,
-			onUpdateUpload
+			visibleProcess,
+			onCancel
 		};
 	}
 });
 </script>
 
 <style lang="sass">
-.UpdateFirmwareDialog
-    .q-ml-md
-        word-break: normal
-        width: calc(100% - 64px)
+@import "@/css/mixins"
 
-    &-process
-        width: 70%
-
-        .q-card
-            width: 500px
-
-        .row
-            display: flex
-            flex-direction: row
-            justify-content: space-between
+.UpdateFirmwarePopup
+	@include popup()
 </style>

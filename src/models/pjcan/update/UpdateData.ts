@@ -1,6 +1,6 @@
 import EventEmitter from 'eventemitter3';
 
-export const API_EXEC_UPDATE_UPLOAD_GZFILE = 92; // команда API
+export const API_EXEC_UPDATE_UPLOAD_GZ = 92; // команда API
 export const UPDATE_UPLOAD_EVENT_RESULT = 'UploadResult'; // Имя события
 const STRUCT_LENGTH = 512; // длина данных API
 
@@ -34,7 +34,7 @@ export class UpdateData extends EventEmitter implements IUpdateData {
 	 * @param {DataView} buf Буффер данных
 	 */
 	set(buf: DataView): void {
-		if (buf.getUint8(0) === API_EXEC_UPDATE_UPLOAD_GZFILE && buf.byteLength === 2)
+		if (buf.getUint8(0) === API_EXEC_UPDATE_UPLOAD_GZ && buf.byteLength === 2)
 			this.emit(UPDATE_UPLOAD_EVENT_RESULT, buf.getUint8(1) === 0);
 	}
 
@@ -45,7 +45,7 @@ export class UpdateData extends EventEmitter implements IUpdateData {
 		else if (size > STRUCT_LENGTH - 1) size = STRUCT_LENGTH - 1;
 
 		let buf: Uint8Array = new Uint8Array(size + 1);
-		buf[0] = API_EXEC_UPDATE_UPLOAD_GZFILE;
+		buf[0] = API_EXEC_UPDATE_UPLOAD_GZ;
 		for (let i = 0; i < size; i++) {
 			buf[i + 1] = this.data[this.offset];
 			this.offset++;

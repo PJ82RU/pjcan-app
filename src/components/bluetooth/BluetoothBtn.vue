@@ -19,7 +19,7 @@ export default {
 	components: { BluetoothDialogConnection, BluetoothDialogDisconnection },
 	setup() {
 		const $q = useQuasar();
-		const { bluetooth } = api;
+		const { bluetooth, updateFirmware } = api;
 
 		// статус подключения
 		const connected = ref(false);
@@ -27,6 +27,9 @@ export default {
 		// событие подключения Bluetooth
 		const onConnected = (status: TConnectedStatus) => {
 			connected.value = status === TConnectedStatus.CONNECT;
+			// не выводим сообщения об отключении/подключении Bluetooth в момент прошивки устройства
+			if (updateFirmware.isUpdated) return;
+
 			switch (status) {
 				case TConnectedStatus.NO_CONNECT:
 					$q.notify({ message: lang('BLE_NoConnected'), position: 'bottom', color: 'red' });

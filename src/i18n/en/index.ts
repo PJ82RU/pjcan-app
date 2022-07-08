@@ -68,6 +68,12 @@ export default {
 
 	UpdFirmware_Later: 'Later',
 	UpdFirmware_Update: 'Update',
+	UpdFirmware_New: 'A new firmware version of the PJCAN device is available. Upgrade to version % ?',
+	UpdFirmware_Preparation: 'Preparing to upload ...',
+	UpdFirmware_ProcessUpload: 'Firmware uploading ...',
+	UpdFirmware_ProcessUpdate: 'Firmware updating ...',
+	UpdFirmware_ProcessCompleted: 'Firmware completed successfully',
+	UpdFirmware_ProcessWarning: 'The firmware was not completed successfully. Restart your device and try again',
 	UpdFirmware_Error: 'Firmware update error',
 
 	InfoCard_Title: 'Information',

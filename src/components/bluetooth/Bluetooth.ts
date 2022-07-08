@@ -1,4 +1,4 @@
-// noinspection SpellCheckingInspection
+// noinspection SpellCheckingInspection,JSValidateJSDoc
 
 import EventEmitter from 'eventemitter3';
 import { lang } from '@/i18n/i18nUtils';
@@ -180,7 +180,7 @@ export class Bluetooth extends EventEmitter {
 
 	/** Событие входящих данных */
 	private handleCharacteristicValueChanged(ev: any): void {
-		//console.log('receive', ev.target.value);
+		// console.log('receive', ev.target.value);
 
 		console.log(lang('BLESrv_Receive').replace('%', ev.target.value.getUint8(0)));
 		this.emit(BLUETOOTH_EVENT_RECEIVE, ev.target.value);
@@ -191,7 +191,7 @@ export class Bluetooth extends EventEmitter {
 	 * @param data Отправляемые данные
 	 */
 	send(data: DataView | undefined): Promise<any> {
-		//console.log('send', data);
+		// console.log('send', data);
 
 		if (!this.connected) {
 			this.emit(BLUETOOTH_EVENT_CONNECTED, TConnectedStatus.NO_CONNECT);
