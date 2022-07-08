@@ -1,4 +1,4 @@
-<!--suppress RequiredAttributes -->
+<!--suppress RequiredAttributes, JSVoidFunctionReturnValueUsed, HtmlUnknownAttribute -->
 <template>
 	<CardSection
 		class="ManualControlCard"
@@ -17,6 +17,8 @@
 					icon="info_outline"
 					@mousedown="onClickDownInfo"
 					@mouseup="onClickUpInfo"
+					v-touch:press="onClickDownInfo"
+					v-touch:release="onClickUpInfo"
 				/>
 				<q-btn
 					color="primary"
@@ -25,16 +27,54 @@
 					icon="schedule"
 					@mousedown="onClickDownClock"
 					@mouseup="onClickUpClock"
+					v-touch:press="onClickDownClock"
+					v-touch:release="onClickUpClock"
 				/>
 			</q-btn-group>
 		</q-card-section>
 		<q-card-section class="ManualControlCard-btns" v-if="restyle">
 			<q-btn-group push class="ManualControlCard-btns-secondary">
-				<q-btn color="secondary" push label="H" />
-				<q-btn color="secondary" push label="M" />
-				<q-btn color="secondary" push label="RM" />
-				<q-btn color="secondary" push label="F12" />
-				<q-btn color="secondary" push label="F24" />
+				<q-btn
+					color="secondary"
+					push
+					label="H"
+					@mousedown="onClickDownClockH"
+					@mouseup="onClickUpClockH"
+					v-touch:press="onClickDownClockH"
+					v-touch:release="onClickUpClockH"
+				/>
+				<q-btn
+					color="secondary"
+					push
+					label="M"
+					@mousedown="onClickDownClockM"
+					@mouseup="onClickUpClockM"
+					v-touch:press="onClickDownClockM"
+					v-touch:release="onClickUpClockM"
+				/>
+				<q-btn
+					color="secondary"
+					push
+					label="RM"
+					@mousedown="onClickDownClockRM"
+					@mouseup="onClickUpClockRM"
+					v-touch:press="onClickDownClockRM"
+					v-touch:release="onClickUpClockRM"
+				/>
+				<q-btn
+					color="secondary"
+					push
+					label="F12"
+					@mousedown="onClickClockF12"
+					v-touch:press="onClickClockF12"
+				/>
+				<q-btn
+					color="secondary"
+					push
+					label="F24"
+					@mousedown="onClickClockF24"
+					v-touch:press="onClickClockF24"
+				/>
 			</q-btn-group>
 		</q-card-section>
 	</CardSection>
@@ -43,12 +83,12 @@
 <script lang="ts">
 import { computed, inject, onMounted, onUnmounted, Ref, ref } from 'vue';
 import api, { API_EVENT_LCD_VALUE } from '@/store/api';
+import { ManualControlButtons } from './ManualControlButtons';
 
 import CardSection from '@/components/cardSections/CardSection.vue';
 import { menuManualControlCard } from '@/store/menu/MenuManualControlCard';
 import { TItemMenu } from '@/models/menu';
 import { Onboard } from '@/store/onboard';
-import { Timeout } from '@/models/types';
 import { ILCDValue, LCDValue } from '@/models/pjcan';
 
 export default {
@@ -57,10 +97,11 @@ export default {
 	setup() {
 		const onboard = inject('onboard') as Ref<Onboard>;
 		// данные LCD
-		const lcdValue = ref(new LCDValue());
+		const lcdValue = new LCDValue();
+		const buttons = new ManualControlButtons(lcdValue);
 		// входящие значения об устройстве
 		const onReceiveValue = (res: ILCDValue): void => {
-			lcdValue.value.setModel(res);
+			lcdValue.setModel(res);
 		};
 		// регистрируем события
 		onMounted(() => {
@@ -73,45 +114,38 @@ export default {
 
 		const restyle = computed((): boolean => onboard.value.restyle);
 		const menuCard = ref(menuManualControlCard);
-
-		const onClickOptions = (e: any): void => {
-			//console.log('ManualControlCard -> onClickOptions', e);
-			if (e.type !== TItemMenu.MANUAL_CONTROL_RESTYLE) return;
-
-			onboard.value.restyle = !onboard.value.restyle;
+		const setLangMenuCard = (): void => {
 			menuCard.value[0].lang = onboard.value.restyle
 				? 'ManualControlCard_BeforeRestyling'
 				: 'ManualControlCard_Restyling';
 		};
+		setLangMenuCard();
 
-		let timeoutInfo: Timeout = undefined;
-		const onClickDownInfo = (): void => {
-			console.log('onClickDownInfo');
-			timeoutInfo = setTimeout(onClickUpInfo, 3000);
-		};
-		const onClickUpInfo = (): void => {
-			console.log('onClickUpInfo');
-			clearTimeout(timeoutInfo);
-		};
+		/** Изменение стиля (рестайлинг/до рестайлинг) автомобиля */
+		const onClickOptions = (e: any): void => {
+			// console.log('ManualControlCard -> onClickOptions', e);
+			if (e.type !== TItemMenu.MANUAL_CONTROL_RESTYLE) return;
 
-		let timeoutClock: Timeout = undefined;
-		const onClickDownClock = (): void => {
-			console.log('onClickDownClock');
-			timeoutClock = setTimeout(onClickUpClock, 3000);
-		};
-		const onClickUpClock = (): void => {
-			console.log('onClickUpClock');
-			clearTimeout(timeoutClock);
+			onboard.value.restyle = !onboard.value.restyle;
+			setLangMenuCard();
 		};
 
 		return {
 			restyle,
 			menuCard,
 			onClickOptions,
-			onClickDownInfo,
-			onClickUpInfo,
-			onClickDownClock,
-			onClickUpClock
+			onClickDownInfo: () => buttons.onClickDownInfo(),
+			onClickUpInfo: () => buttons.onClickUpInfo(),
+			onClickDownClock: () => buttons.onClickDownClock(),
+			onClickUpClock: () => buttons.onClickUpClock(),
+			onClickDownClockH: () => buttons.onClickDownClockH(),
+			onClickUpClockH: () => buttons.onClickUpClockH(),
+			onClickDownClockM: () => buttons.onClickDownClockM(),
+			onClickUpClockM: () => buttons.onClickUpClockM(),
+			onClickDownClockRM: () => buttons.onClickDownClockRM(),
+			onClickUpClockRM: () => buttons.onClickUpClockRM(),
+			onClickClockF12: () => buttons.onClickClockF12(),
+			onClickClockF24: () => buttons.onClickClockF24()
 		};
 	}
 };

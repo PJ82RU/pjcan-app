@@ -19,7 +19,8 @@
 		"segregate-local-storage": "^1.0.4",
 		"vue": "^3.0.0",
 		"vue-i18n": "^9.0.0",
-		"vue-router": "^4.0.0"
+		"vue-router": "^4.0.0",
+		"vue3-touch-events": "^4.1.0"
 	},
 	"devDependencies": {
 		"@quasar/app-webpack": "^3.0.0",

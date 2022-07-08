@@ -27,7 +27,7 @@ import MovementCard from '@/components/onboard/MovementCard.vue';
 import ClimateCard from '@/components/onboard/ClimateCard.vue';
 import VolumeCard from '@/components/onboard/VolumeCard.vue';
 import BoseCard from '@/components/onboard/BoseCard.vue';
-import ManualControlCard from '@/components/onboard/ManualControlCard.vue';
+import ManualControlCard from '@/components/onboard/ManualControlCard/ManualControlCard.vue';
 
 export default {
 	name: 'Onboard',

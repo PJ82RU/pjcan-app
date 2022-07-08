@@ -176,5 +176,9 @@ export default {
 	ViewSetting_Type: 'Information display style',
 	ViewSetting_Type_Comment: 'Display static text, blinking or in a ticker style',
 	ViewSetting_Time: 'Display time, sec.',
-	ViewSetting_Time_Comment: 'Show the specified number of seconds on the information screen'
+	ViewSetting_Time_Comment: 'Show the specified number of seconds on the information screen',
+
+	ManualControlCard: 'Manual control',
+	ManualControlCard_Restyling: 'Restyling',
+	ManualControlCard_BeforeRestyling: 'Before restyling'
 };
