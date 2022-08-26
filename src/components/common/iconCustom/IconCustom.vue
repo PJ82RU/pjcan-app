@@ -1,6 +1,6 @@
 <!--suppress JSCheckFunctionSignatures -->
 <template>
-	<q-icon class="IconCustom q-icon" :draggable="false" :name="src" :size="iconSize" :color="fontIconColor" />
+	<q-icon class="icon-custom q-icon" :draggable="false" :name="src" :size="iconSize" :color="iconColor" />
 </template>
 
 <script>
@@ -20,40 +20,34 @@ export default {
 			type: String,
 			required: true
 		},
-		color: {
-			type: String,
-			required: false,
-			default: 'dark'
-		},
-		colorSecondary: {
-			type: String,
-			required: false,
-			default: 'dark'
-		},
 		size: {
 			type: [Number, String],
-			required: false,
 			default: 24
+		},
+		color: String,
+		colors: {
+			type: Object,
+			default: { primary: 'primary', secondary: 'secondary' }
 		}
 	},
 	setup(props) {
 		const prefix = 'img:data:image/svg+xml;charset=utf-8,';
-		const { name, color, colorSecondary, size } = toRefs(props);
+		const { name, size, color, colors } = toRefs(props);
 
 		// размер иконки
 		const iconSize = computed(() => (typeof size.value === 'number' ? size.value + 'px' : size.value));
+		// цвет
+		const iconColor = computed(() => getColorPaletteValue(color.value ?? 'dark'));
 		// ссылка на иконку
 		const src = computed(() => {
-			let template = svgIconTemplate(name.value, color.value, colorSecondary.value);
+			let template = svgIconTemplate(name.value, color.value, colors.value);
 			return template ? prefix + encodeURIComponent(template) : name.value;
 		});
-		// цвет
-		const fontIconColor = computed(() => getColorPaletteValue(color.value));
 
 		return {
 			iconSize,
-			src,
-			fontIconColor
+			iconColor,
+			src
 		};
 	}
 };
