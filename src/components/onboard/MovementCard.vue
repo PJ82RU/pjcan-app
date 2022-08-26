@@ -1,33 +1,33 @@
 <!--suppress RequiredAttributes -->
 <template>
-	<CardSection
-		class="MovementCard"
+	<card-section
+		class="movement-card"
 		type="MovementCard"
 		:title="$t('MovementCard_Title')"
 		icon-name="speedometer"
 		:menu-card-section="menuMovementCard"
 		@click-options="onClickOptions"
 	>
-		<CardSectionInput
+		<card-section-input
 			:title="$t('MovementCard_Speed_Title')"
 			:comment="$t('MovementCard_Speed_Comment')"
 			v-model="speed"
 			readonly
 		/>
-		<CardSectionInput
+		<card-section-input
 			:title="$t('MovementCard_SpeedAVG_Title')"
 			:comment="$t('MovementCard_SpeedAVG_Comment')"
 			v-model="speedAVG"
 			readonly
 		/>
-		<CardSectionInput
+		<card-section-input
 			:title="$t('MovementCard_RestWay_Title')"
 			:comment="$t('MovementCard_RestWay_Comment')"
 			v-model="restWay"
 			readonly
 		/>
-	</CardSection>
-	<ViewSettingModal
+	</card-section>
+	<view-setting-modal
 		v-model="viewSettingModel"
 		:title="viewSettingTitle"
 		:view-config="viewConfig"

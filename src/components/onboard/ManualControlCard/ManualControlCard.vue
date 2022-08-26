@@ -1,15 +1,15 @@
 <!--suppress RequiredAttributes, JSVoidFunctionReturnValueUsed, HtmlUnknownAttribute -->
 <template>
-	<CardSection
-		class="ManualControlCard"
+	<card-section
+		class="manual-control-card"
 		type="ManualControlCard"
 		:title="$t('ManualControlCard')"
 		icon-name="steering"
 		:menu-card-section="menuCard"
 		@click-options="onClickOptions"
 	>
-		<q-card-section class="ManualControlCard-btns">
-			<q-btn-group push class="ManualControlCard-btns-primary">
+		<q-card-section class="manual-control-card__btns">
+			<q-btn-group push class="manual-control-card__btns__primary">
 				<q-btn
 					color="primary"
 					push
@@ -32,8 +32,8 @@
 				/>
 			</q-btn-group>
 		</q-card-section>
-		<q-card-section class="ManualControlCard-btns" v-if="restyle">
-			<q-btn-group push class="ManualControlCard-btns-secondary">
+		<q-card-section class="manual-control-card__btns" v-if="restyle">
+			<q-btn-group push class="manual-control-card__btns__secondary">
 				<q-btn
 					color="secondary"
 					push
@@ -77,7 +77,7 @@
 				/>
 			</q-btn-group>
 		</q-card-section>
-	</CardSection>
+	</card-section>
 </template>
 
 <script lang="ts">
@@ -152,14 +152,14 @@ export default {
 </script>
 
 <style lang="sass">
-.ManualControlCard
-	&-btns
+.manual-control-card
+	&__btns
 		text-align: center
 
 		.q-btn__content
 			flex-wrap: nowrap
 
-		&-primary
+		&__primary
 			width: 100%
 			max-width: 600px
 			button
@@ -167,7 +167,7 @@ export default {
 				max-width: 300px
 				font-size: 20px
 
-		&-secondary
+		&__secondary
 			width: 100%
 			max-width: 600px
 			button

@@ -1,8 +1,8 @@
 <template>
-	<q-item clickable v-ripple class="ItemMenu" v-for="item in langItems" @click="$emit('click', item)">
+	<q-item clickable v-ripple class="item-menu" v-for="item in langItems" @click="$emit('click', item)">
 		<q-item-section avatar v-if="item.name">
-			<div class="ItemMenu-icon">
-				<IconCustom :name="item.name" color="primary" color-secondary="secondary" :size="item.size" />
+			<div class="item-menu__icon">
+				<icon-custom :name="item.name" :size="item.size" />
 			</div>
 		</q-item-section>
 
@@ -39,8 +39,8 @@ export default {
 </script>
 
 <style lang="sass">
-.ItemMenu
-	&-icon
+.item-menu
+	&__icon
 		width: 24px
 		text-align: center
 </style>

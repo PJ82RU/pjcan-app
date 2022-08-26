@@ -1,56 +1,56 @@
 <!--suppress RequiredAttributes -->
 <template>
-	<CardSection
-		class="EngineCard"
+	<card-section
+		class="engine-card"
 		type="EngineCard"
 		:title="$t('EngineCard_Title')"
 		icon-name="engine"
 		:menu-card-section="menuEngineCard"
 		@click-options="onClickOptions"
 	>
-		<CardSection2Icons
+		<card-section2-icons
 			:title="$t('EngineCard_Enabled_Title')"
 			:comment="$t('EngineCard_Enabled_Comment')"
 			icon1-name="start-stop"
 			:icon1-value="enabled"
 		/>
-		<CardSectionInput
+		<card-section-input
 			:title="$t('EngineCard_RPM_Title')"
 			:comment="$t('EngineCard_RPM_Comment')"
 			v-model="rpm"
 			readonly
 		/>
-		<CardSectionInput
+		<card-section-input
 			:title="$t('EngineCard_CountRPM_Title')"
 			:comment="$t('EngineCard_CountRPM_Comment')"
 			v-model="countRPM"
 			readonly
 		/>
-		<CardSectionTime
+		<card-section-time
 			:title="$t('EngineCard_Motors_Title')"
 			:comment="$t('EngineCard_Motors_Comment')"
 			v-model="mseconds"
 			readonly
 		/>
-		<CardSectionProgress
+		<card-section-progress
 			:title="$t('EngineCard_Load_Title')"
 			:comment="$t('EngineCard_Load_Comment')"
 			:value="load"
 		/>
-		<CardSectionProgress
+		<card-section-progress
 			:title="$t('EngineCard_Throttle_Title')"
 			:comment="$t('EngineCard_Throttle_Comment')"
 			:value="throttle"
 		/>
-		<CardSectionInput
+		<card-section-input
 			temperature
 			:title="$t('EngineCard_Coolant_Title')"
 			:comment="$t('EngineCard_Coolant_Comment')"
 			v-model="coolant"
 			readonly
 		/>
-	</CardSection>
-	<ViewSettingModal
+	</card-section>
+	<view-setting-modal
 		v-model="viewSettingModel"
 		:title="viewSettingTitle"
 		:view-config="viewConfig"

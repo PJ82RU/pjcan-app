@@ -1,7 +1,7 @@
 <template>
-	<q-btn flat round dense :icon="iconClass" class="BluetoothBtn q-mr-sm" @click="onBtnClick" />
-	<BluetoothDialogConnection v-model="dlgConnection" @connect="onConnect" />
-	<BluetoothDialogDisconnection v-model="dlgDisconnection" @disconnect="onDisconnect" />
+	<q-btn flat round dense :icon="iconClass" class="bluetooth-btn q-mr-sm" @click="onBtnClick" />
+	<bluetooth-dialog-connection v-model="dlgConnection" @connect="onConnect" />
+	<bluetooth-dialog-disconnection v-model="dlgDisconnection" @disconnect="onDisconnect" />
 </template>
 
 <script lang="ts">

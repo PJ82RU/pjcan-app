@@ -1,23 +1,31 @@
 <template>
-	<q-card-section horizontal class="CardSection2Icons">
-		<div class="CardSection2Icons-header">
-			<div class="CardSection2Icons-header-title">{{ title }}</div>
-			<div class="CardSection2Icons-header-comment">{{ comment }}</div>
+	<q-card-section horizontal class="card-section2-icons">
+		<div class="card-section2-icons__header">
+			<div class="card-section2-icons__header__title">{{ title }}</div>
+			<div class="card-section2-icons__header__comment">{{ comment }}</div>
 		</div>
-		<IconCustom
-			class="CardSection2Icons-icon1 spin"
+		<icon-custom
+			class="card-section2-icons__icon1 spin"
 			:name="icon1Name"
-			:color="icon1Color"
-			:color-secondary="icon1ColorSecondary"
+			:colors="{
+				primary: icon1Value ? iconColorOn : iconColorOff,
+				secondary: icon1Value ? iconColorSecondaryOn : iconColorSecondaryOff
+			}"
 			:size="iconSize"
-			:style="styleIcon + styleRotation"
+			:style="{
+				'margin-right': margin ?? undefined,
+				'-webkit-animation': sec ? `spin ${sec}s infinite linear` : undefined,
+				'animation': sec ? `spin ${sec}s infinite linear` : undefined
+			}"
 		/>
-		<IconCustom
-			class="CardSection2Icons-icon2"
+		<icon-custom
+			class="card-section2-icons__icon2"
 			v-if="icon2Name?.length > 0"
 			:name="icon2Name"
-			:color="icon2Color"
-			:color-secondary="icon2ColorSecondary"
+			:colors="{
+				primary: icon2Value ? iconColorOn : iconColorOff,
+				secondary: icon2Value ? iconColorSecondaryOn : iconColorSecondaryOff
+			}"
 			:size="iconSize"
 		/>
 	</q-card-section>
@@ -75,52 +83,21 @@ export default {
 			type: String,
 			default: '30px'
 		},
-		margin: {
-			type: String,
-			default: ''
-		},
+		margin: String,
 		speedRotation: {
 			type: Number,
 			default: 0
 		}
 	},
 	setup(props: any) {
-		const {
-			icon1Value,
-			icon2Value,
-			iconColorOn,
-			iconColorOff,
-			iconColorSecondaryOn,
-			iconColorSecondaryOff,
-			margin,
-			speedRotation
-		} = toRefs(props);
+		const { speedRotation } = toRefs(props);
 
-		const icon1Color = computed((): string => (icon1Value.value ? iconColorOn.value : iconColorOff.value));
-		const icon2Color = computed((): string => (icon2Value.value ? iconColorOn.value : iconColorOff.value));
-		const icon1ColorSecondary = computed((): string =>
-			icon1Value.value ? iconColorSecondaryOn.value : iconColorSecondaryOff.value
+		const sec = computed((): number | undefined =>
+			speedRotation.value > 0 && speedRotation.value < 10 ? 10 - speedRotation.value : undefined
 		);
-		const icon2ColorSecondary = computed((): string =>
-			icon2Value.value ? iconColorSecondaryOn.value : iconColorSecondaryOff.value
-		);
-		const styleIcon = computed((): string | undefined =>
-			margin.value?.length > 0 ? `margin-right:${margin.value};` : undefined
-		);
-		const styleRotation = computed((): string | undefined => {
-			if (speedRotation.value > 0 && speedRotation.value < 10) {
-				const sec = 10 - speedRotation.value;
-				return `-webkit-animation:spin ${sec}s infinite linear;animation:spin ${sec}s infinite linear;`;
-			}
-		});
 
 		return {
-			icon1Color,
-			icon2Color,
-			icon1ColorSecondary,
-			icon2ColorSecondary,
-			styleIcon,
-			styleRotation
+			sec
 		};
 	}
 };
@@ -129,6 +106,6 @@ export default {
 <style lang="sass">
 @import "@/css/mixins"
 
-.CardSection2Icons
+.card-section2-icons
 	@include card-section()
 </style>

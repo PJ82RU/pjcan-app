@@ -7,7 +7,7 @@
 				<q-toolbar-title>PJ CAN</q-toolbar-title>
 				<q-space />
 				<!-- Кнопка подключения Bluetooth -->
-				<BluetoothBtn />
+				<bluetooth-btn />
 				<!-- Правое меню -->
 				<q-btn flat round dense icon="more_vert">
 					<RightMainMenu />
@@ -29,7 +29,7 @@
 			class="bg-grey-2"
 		>
 			<q-scroll-area class="fit">
-				<LeftMainMenu />
+				<left-main-menu />
 			</q-scroll-area>
 		</q-drawer>
 
@@ -39,7 +39,7 @@
 		</q-page-container>
 
 		<!-- Диалог обновление прошивки устройства -->
-		<UpdateFirmwarePopup />
+		<update-firmware-popup />
 	</q-layout>
 </template>
 

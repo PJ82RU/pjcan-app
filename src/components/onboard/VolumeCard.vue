@@ -1,27 +1,27 @@
 VolumeCard
 <!--suppress RequiredAttributes -->
 <template>
-	<CardSection
-		class="VolumeCard"
+	<card-section
+		class="volume-card"
 		type="VolumeCard"
 		:title="$t('VolumeCard_Title')"
 		icon-name="volume"
 		:menu-card-section="menuVolumeCard"
 		@click-options="onClickOptions"
 	>
-		<CardSectionSlider
+		<card-section-slider
 			:title="$t('VolumeCard_Volume_Title')"
 			:comment="$t('VolumeCard_Volume_Comment')"
 			v-model="volume"
 			:max="volumeMax"
 		/>
-		<CardSectionToggle
+		<card-section-toggle
 			:title="$t('VolumeCard_Mute_Title')"
 			:comment="$t('VolumeCard_Mute_Comment')"
 			v-model="mute"
 		/>
-	</CardSection>
-	<ViewSettingModal
+	</card-section>
+	<view-setting-modal
 		v-model="viewSettingModel"
 		:title="viewSettingTitle"
 		:view-config="viewConfig"

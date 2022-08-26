@@ -1,30 +1,24 @@
 <template>
-	<q-dialog class="ViewSettingModal" v-model="visible">
-		<q-card class="ViewSettingModal-card">
-			<q-card-section class="ViewSettingModal-card-title">
-				<IconCustom
-					class="ViewSettingModal-card-title-icon"
-					name="on-board"
-					color="primary"
-					color-secondary="secondary"
-					:size="30"
-				/>
+	<q-dialog class="view-setting-modal" v-model="visible">
+		<q-card class="view-setting-modal__card">
+			<q-card-section class="view-setting-modal__card__title">
+				<icon-custom class="view-setting-modal__card__title__icon" name="on-board" :size="30" />
 				<div class="text-h6">{{ title }}</div>
 			</q-card-section>
 
-			<q-card-section class="ViewSettingModal-card-body">
-				<CardSectionToggle
+			<q-card-section class="view-setting-modal__card__body">
+				<card-section-toggle
 					:title="$t('ViewSetting_Enabled')"
 					:comment="$t('ViewSetting_Enabled_Comment')"
 					v-model="viewEnabled"
 				/>
-				<CardSectionSelect
+				<card-section-select
 					:title="$t('ViewSetting_Type')"
 					:comment="$t('ViewSetting_Type_Comment')"
 					v-model="viewType"
 					:options="viewTypeItems"
 				/>
-				<CardSectionInput
+				<card-section-input
 					:title="$t('ViewSetting_Time')"
 					:comment="$t('ViewSetting_Time_Comment')"
 					v-model="viewTime"
@@ -34,7 +28,7 @@
 				/>
 			</q-card-section>
 
-			<q-card-actions class="ViewSettingModal-card-actions" align="right">
+			<q-card-actions class="view-setting-modal__card__actions" align="right">
 				<q-btn :label="$t('Cancel')" color="grey" v-close-popup />
 				<q-btn :label="$t('Apply')" color="primary" v-close-popup @click="onApply" />
 			</q-card-actions>
@@ -113,11 +107,11 @@ export default {
 <style lang="sass">
 @import "@/css/mixins"
 
-.ViewSettingModal
+.view-setting-modal
 	@include dialog()
 
-	.CardSectionSelect,
-	.CardSectionInput
-		&-input
+	.card-section-select,
+	.card-section-input
+		&__input
 			width: 250px
 </style>

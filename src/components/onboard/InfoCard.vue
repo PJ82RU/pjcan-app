@@ -1,38 +1,38 @@
 <!--suppress RequiredAttributes -->
 <template>
-	<CardSection
-		class="InfoCard"
+	<card-section
+		class="info-card"
 		type="InfoCard"
 		:title="$t('InfoCard_Title')"
 		icon-name="info"
 		:menu-card-section="menuInfoCard"
 		@click-options="onClickOptions"
 	>
-		<CardSectionTime
+		<card-section-time
 			:title="$t('InfoCard_TimeWork_Title')"
 			:comment="$t('InfoCard_TimeWork_Comment')"
 			v-model="timeWork"
 			readonly
 		/>
-		<CardSectionInput
+		<card-section-input
 			temperature
 			:title="$t('InfoCard_Temperature_Title')"
 			:comment="$t('InfoCard_Temperature_Comment')"
 			v-model="temperature"
 			readonly
 		/>
-		<CardSection2Icons title="ACC" :comment="$t('InfoCard_ACC_Comment')" icon1-name="key" :icon1-value="acc" />
-		<CardSectionToggle
+		<card-section2-icons title="ACC" :comment="$t('InfoCard_ACC_Comment')" icon1-name="key" :icon1-value="acc" />
+		<card-section-toggle
 			:title="$t('InfoCard_Handbrake_Title')"
 			:comment="$t('InfoCard_Handbrake_Comment')"
 			v-model="handbrake"
 		/>
-		<CardSectionToggle
+		<card-section-toggle
 			:title="$t('InfoCard_Reverse_Title')"
 			:comment="$t('InfoCard_Reverse_Comment')"
 			v-model="reverse"
 		/>
-		<CardSection2Icons
+		<card-section2-icons
 			:title="$t('InfoCard_SafetyBelt_Title')"
 			:comment="$t('InfoCard_SafetyBelt_Comment')"
 			icon1-name="safety-belt"
@@ -42,7 +42,7 @@
 			:icon1-value="seatbeltDriver"
 			:icon2-value="seatbeltPassenger"
 		/>
-		<CardSection2Icons
+		<card-section2-icons
 			:title="$t('InfoCard_Signal_Title')"
 			:comment="$t('InfoCard_Signal_Comment')"
 			icon1-name="arrow-left"
@@ -51,8 +51,8 @@
 			:icon1-value="signalLeft"
 			:icon2-value="signalRight"
 		/>
-	</CardSection>
-	<ViewSettingModal
+	</card-section>
+	<view-setting-modal
 		v-model="viewSettingModel"
 		:title="viewSettingTitle"
 		:view-config="viewConfig"

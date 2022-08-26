@@ -1,38 +1,38 @@
 <template>
-	<CardSection
-		class="FuelCard"
+	<card-section
+		class="fuel-card"
 		type="FuelCard"
 		:title="$t('FuelCard_Title')"
 		icon-name="fuel"
 		:menu-card-section="menuFuelCard"
 		@click-options="onClickOptions"
 	>
-		<CardSectionInput
+		<card-section-input
 			:title="$t('FuelCard_Current_Title')"
 			:comment="$t('FuelCard_Current_Comment')"
 			v-model="current"
 			readonly
 		/>
-		<CardSectionInput
+		<card-section-input
 			:title="$t('FuelCard_AVG_Title')"
 			:comment="$t('FuelCard_AVG_Comment')"
 			v-model="avg"
 			readonly
 		/>
-		<CardSectionInput
+		<card-section-input
 			:title="$t('FuelCard_Total_Title')"
 			:comment="$t('FuelCard_Total_Comment')"
 			v-model="total"
 			readonly
 		/>
-		<CardSectionInput
+		<card-section-input
 			:title="$t('FuelCard_Consumption_Title')"
 			:comment="$t('FuelCard_Consumption_Comment')"
 			v-model="consumption"
 			readonly
 		/>
-	</CardSection>
-	<ViewSettingModal
+	</card-section>
+	<view-setting-modal
 		v-model="viewSettingModel"
 		:title="viewSettingTitle"
 		:view-config="viewConfig"

@@ -1,7 +1,7 @@
 <!--suppress RequiredAttributes -->
 <template>
-	<CardSection
-		class="BoseCard"
+	<card-section
+		class="bose-card"
 		type="BoseCard"
 		:title="$t('BoseCard_Title')"
 		icon-name="volume"
@@ -24,8 +24,8 @@
 			v-model="centerPoint"
 			:options="centerPointItems"
 		/>
-		<CardSectionSlider
-			class="BoseCard-balance"
+		<card-section-slider
+			class="bose-card__balance"
 			:title="$t('BoseCard_Balance_Title')"
 			:comment="$t('BoseCard_Balance_Comment')"
 			v-model="balance"
@@ -33,8 +33,8 @@
 			:min="-8"
 			:max="8"
 		/>
-		<CardSectionSlider
-			class="BoseCard-fade"
+		<card-section-slider
+			class="bose-card__fade"
 			:title="$t('BoseCard_Fade_Title')"
 			:comment="$t('BoseCard_Fade_Comment')"
 			v-model="fade"
@@ -42,16 +42,16 @@
 			:min="-8"
 			:max="8"
 		/>
-		<CardSectionSlider
-			class="BoseCard-treble"
+		<card-section-slider
+			class="bose-card__treble"
 			:title="$t('BoseCard_Treble_Title')"
 			:comment="$t('BoseCard_Treble_Comment')"
 			v-model="treble"
 			:min="-6"
 			:max="6"
 		/>
-		<CardSectionSlider
-			class="BoseCard-bass"
+		<card-section-slider
+			class="bose-card__bass"
 			:title="$t('BoseCard_Bass_Title')"
 			:comment="$t('BoseCard_Bass_Comment')"
 			v-model="bass"
@@ -59,7 +59,7 @@
 			:max="6"
 		/>
 		<CardSectionToggle :title="$t('BoseCard_Wow_Title')" :comment="$t('BoseCard_Wow_Comment')" v-model="wow" />
-	</CardSection>
+	</card-section>
 	<ViewSettingModal
 		v-model="viewSettingModel"
 		:title="viewSettingTitle"
@@ -228,17 +228,17 @@ export default {
 </script>
 
 <style lang="sass">
-.BoseCard
-	&-balance .CardSectionSlider-icon-left
+.bose-card
+	&__balance .card-section-slider__icon__left
 		-moz-transform: rotate(180deg)
 		-webkit-transform: rotate(180deg)
 		transform: rotate(180deg)
-	&-fade .CardSectionSlider-icon
-		&-left
+	&__fade .card-section-slider__icon
+		&__left
 			-moz-transform: rotate(-90deg)
 			-webkit-transform: rotate(-90deg)
 			transform: rotate(-90deg)
-		&-right
+		&__right
 			-moz-transform: rotate(90deg)
 			-webkit-transform: rotate(90deg)
 			transform: rotate(90deg)

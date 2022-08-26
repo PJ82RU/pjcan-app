@@ -1,11 +1,11 @@
 <template>
 	<q-list padding>
-		<ItemMenu :items="menuHeader" @click="onClickItem" />
-		<ItemMenu :items="menuActions" @click="onClickItem" />
+		<item-menu :items="menuHeader" @click="onClickItem" />
+		<item-menu :items="menuActions" @click="onClickItem" />
 		<q-separator />
-		<ItemMenu :items="menuFooter" @click="onClickItem" />
+		<item-menu :items="menuFooter" @click="onClickItem" />
 		<q-separator />
-		<BGIconMenu />
+		<b-g-icon-menu />
 	</q-list>
 </template>
 

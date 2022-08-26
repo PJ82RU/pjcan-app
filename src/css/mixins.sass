@@ -1,17 +1,17 @@
 // Секция карточки
 @mixin card-section($title: 100%, $input: 120px)
-	&-header
+	&__header
 		width: $title
 		margin-right: 8px
 
-		&-title
+		&__title
 			line-height: 20px
 
-		&-comment
+		&__comment
 			font-size: 11px
 			line-height: 11px
 
-	&-input
+	&__input
 		.q-field__inner
 			width: $input
 
@@ -29,20 +29,20 @@
 		min-width: 200px
 
 @mixin dialog()
-	&-card
-		&-title
+	&__card
+		&__title
 			padding: 16px
 			display: flex
 			flex-direction: row
 			align-items: center
 
-			&-icon
+			&__icon
 				margin-right: 10px
 
 			.text-h6
 				font-size: 22px
 
-		&-body
+		&__body
 			padding: 16px
 			font-size: 17px
 			max-height: 40vh
@@ -51,5 +51,5 @@
 				margin-bottom: 10px
 				align-items: center
 
-		&-actions
+		&__actions
 			padding: 16px

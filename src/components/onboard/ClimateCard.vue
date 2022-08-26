@@ -1,40 +1,40 @@
 <!--suppress RequiredAttributes -->
 <template>
-	<CardSection
-		class="ClimateCard"
+	<card-section
+		class="climate-card"
 		type="ClimateCard"
 		:title="$t('ClimateCard_Title')"
 		icon-name="climate"
 		:menu-card-section="menuClimateCard"
 		@click-options="onClickOptions"
 	>
-		<CardSection2Icons
+		<card-section2-icons
 			:title="$t('ClimateCard_StatusWork_Title')"
 			:comment="$t('ClimateCard_StatusWork_Comment')"
 			icon1-name="climate"
 			:icon1-value="enabled"
 			:speed-rotation="speedRotation"
 		/>
-		<CardSectionToggle
+		<card-section-toggle
 			:title="$t('ClimateCard_AutoMode_Title')"
 			:comment="$t('ClimateCard_AutoMode_Comment')"
 			v-model="autoMode"
 		/>
-		<CardSectionToggle :title="$t('ClimateCard_AC_Title')" :comment="$t('ClimateCard_AC_Comment')" v-model="ac" />
-		<CardSectionInput
+		<card-section-toggle :title="$t('ClimateCard_AC_Title')" :comment="$t('ClimateCard_AC_Comment')" v-model="ac" />
+		<card-section-input
 			:title="$t('ClimateCard_Temperature_Title')"
 			:comment="$t('ClimateCard_Temperature_Comment')"
 			v-model="temperature"
 			temperature
 			readonly
 		/>
-		<CardSection2Icons
+		<card-section2-icons
 			:title="$t('ClimateCard_Air_Title')"
 			:comment="$t('ClimateCard_Air_Comment')"
 			:icon1-name="airName"
 			:icon1-value="airEnabled"
 		/>
-		<CardSection2Icons
+		<card-section2-icons
 			:title="$t('ClimateCard_Blow_Title')"
 			:comment="$t('ClimateCard_Blow_Comment')"
 			icon1-name="blow-windshield"
@@ -43,8 +43,8 @@
 			:icon2-value="blowEnabled"
 			margin="10px"
 		/>
-	</CardSection>
-	<ViewSettingModal
+	</card-section>
+	<view-setting-modal
 		v-model="viewSettingModel"
 		:title="viewSettingTitle"
 		:view-config="viewConfig"

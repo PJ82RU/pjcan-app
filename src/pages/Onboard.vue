@@ -1,16 +1,21 @@
 <!--suppress SpellCheckingInspection -->
 <template>
-	<div class="Onboard">
-		<div :class="{ 'Onboard-rows': true, 'Onboard-last': classLast(irow) }" v-for="(row, irow) in cards" :key="row">
-			<ManualControlCard v-if="row === 'ManualControlCard'" />
-			<InfoCard v-if="row === 'InfoCard'" />
-			<DoorsCard v-if="row === 'DoorsCard'" />
-			<EngineCard v-if="row === 'EngineCard'" />
-			<FuelCard v-if="row === 'FuelCard'" />
-			<MovementCard v-if="row === 'MovementCard'" />
-			<ClimateCard v-if="row === 'ClimateCard'" />
-			<VolumeCard v-if="row === 'VolumeCard'" />
-			<BoseCard v-if="row === 'BoseCard'" />
+	<div class="onboard">
+		<div
+			:class="{ 'onboard__rows': true, 'onboard__last': classLast(irow) }"
+			v-for="(row, irow) in cards"
+			:key="row"
+		>
+			<manual-control-card v-if="row === 'ManualControlCard'" />
+			<info-card v-if="row === 'InfoCard'" />
+			<doors-card v-if="row === 'DoorsCard'" />
+			<engine-card v-if="row === 'EngineCard'" />
+			<fuel-card v-if="row === 'FuelCard'" />
+			<movement-card v-if="row === 'MovementCard'" />
+			<climate-card v-if="row === 'ClimateCard'" />
+			<volume-card v-if="row === 'VolumeCard'" />
+			<bose-card v-if="row === 'BoseCard'" />
+			<buttons-setting v-if="row === 'ButtonsSetting'" />
 		</div>
 	</div>
 </template>
@@ -29,6 +34,8 @@ import VolumeCard from '@/components/onboard/VolumeCard.vue';
 import BoseCard from '@/components/onboard/BoseCard.vue';
 import ManualControlCard from '@/components/onboard/ManualControlCard/ManualControlCard.vue';
 
+import ButtonsSetting from '@/components/settings/ButtonsSetting.vue';
+
 export default {
 	name: 'Onboard',
 	components: {
@@ -40,7 +47,8 @@ export default {
 		ClimateCard,
 		VolumeCard,
 		BoseCard,
-		ManualControlCard
+		ManualControlCard,
+		ButtonsSetting
 	},
 	setup() {
 		const onboard = inject('onboard') as Ref<Onboard>;
@@ -56,9 +64,9 @@ export default {
 </script>
 
 <style lang="sass">
-.Onboard
+.onboard
 	padding: 10px
 
-	&-last .CardSection
+	&__last .card-section
 		margin-bottom: 0
 </style>

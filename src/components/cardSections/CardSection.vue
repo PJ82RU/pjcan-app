@@ -1,30 +1,29 @@
 <!--suppress TypeScriptValidateJSTypes -->
 <template>
-	<q-card class="CardSection">
+	<q-card class="card-section">
 		<q-card-section horizontal>
-			<q-card-section :horizontal="false" class="CardSection-container">
-				<q-card-section class="CardSection-title">
-					<IconCustom
-						class="CardSection-title-icon"
+			<q-card-section :horizontal="false" class="card-section__container">
+				<q-card-section class="card-section__title">
+					<icon-custom
+						class="card-section__title__icon"
 						v-if="iconName.length > 0"
 						:name="iconName"
-						:color="iconColor"
-						:color-secondary="iconColorSecondary"
+						:colors="{ primary: iconColor, secondary: iconColorSecondary }"
 						:size="iconSize"
 					/>
 					<div class="text-h6">{{ title }}</div>
 				</q-card-section>
 				<q-separator />
 
-				<q-card-section class="CardSection-body">
+				<q-card-section class="card-section__body">
 					<slot />
 				</q-card-section>
 			</q-card-section>
 
-			<q-card-actions vertical class="CardSection-menu">
+			<q-card-actions vertical class="card-section__menu">
 				<q-btn flat round color="secondary" icon="more_vert">
-					<CardSectionMenu :menu-card-section="menuCardSection" @click="onClickOptions" />
-					<!--<q-tooltip class="CardSection-menu-tooltip" anchor="bottom middle" self="top middle">{{-->
+					<card-sectionMenu :menu-card-section="menuCardSection" @click="onClickOptions" />
+					<!--<q-tooltip class="card-section__menu__tooltip" anchor="bottom middle" self="top middle">{{-->
 					<!--	$t('SettingLCD')-->
 					<!--}}</q-tooltip>-->
 				</q-btn>
@@ -102,7 +101,7 @@ export default {
 </script>
 
 <style lang="sass">
-.CardSection
+.card-section
 	width: 100%
 	margin-bottom: 10px
 	box-shadow: none
@@ -111,25 +110,25 @@ export default {
 	.q-card__actions
 		justify-content: flex-start
 
-	&-container
+	&__container
 		width: 100%
 		padding: 0
 		background-color: #f5f5f5
 
-	&-title
+	&__title
 		padding-top: 10px
 		padding-bottom: 10px
 		display: flex
 		flex-direction: row
 		align-items: center
 
-		&-icon
+		&__icon
 			margin-right: 10px
 
 		.text-h6
 			font-size: 22px
 
-	&-body
+	&__body
 		padding-bottom: 0
 		font-size: 17px
 
@@ -138,7 +137,7 @@ export default {
 			margin-bottom: 10px
 			padding: 0
 
-	&-menu
-		&-tooltip
+	&__menu
+		&__tooltip
 			font-size: 14px
 </style>

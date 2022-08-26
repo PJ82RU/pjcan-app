@@ -1,7 +1,7 @@
 <template>
 	<q-menu
 		auto-close
-		class="CardSectionMenu"
+		class="card-section-menu"
 		anchor="bottom left"
 		transition-show="jump-down"
 		transition-hide="jump-up"
@@ -34,6 +34,6 @@ export default {
 </script>
 
 <style lang="sass">
-.CardSectionMenu
+.card-section-menu
 	min-width: 200px !important
 </style>

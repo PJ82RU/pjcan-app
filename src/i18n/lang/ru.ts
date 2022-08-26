@@ -186,5 +186,7 @@ export default {
 
 	ManualControlCard: 'Кнопки БК',
 	ManualControlCard_Restyling: 'Рестайлинг',
-	ManualControlCard_BeforeRestyling: 'До рестайлинг'
+	ManualControlCard_BeforeRestyling: 'До рестайлинг',
+
+	ButtonsSetting_Title: 'Настройка кнопок'
 };

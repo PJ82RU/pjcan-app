@@ -1,5 +1,5 @@
 <template>
-	<q-dialog class="BluetoothDialogConnection" v-model="visible" persistent>
+	<q-dialog class="bluetooth-dialog-connection" v-model="visible" persistent>
 		<q-card>
 			<q-card-section class="row">
 				<q-avatar icon="bluetooth_disabled" color="primary" text-color="white" />
@@ -43,6 +43,6 @@ export default {
 <style lang="sass">
 @import "@/css/mixins"
 
-.BluetoothDialogConnection
+.bluetooth-dialog-connection
 	@include popup()
 </style>

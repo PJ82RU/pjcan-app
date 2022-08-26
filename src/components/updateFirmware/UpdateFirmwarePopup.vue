@@ -1,9 +1,9 @@
 <template>
-	<q-dialog class="UpdateFirmwarePopup" v-model="visible">
+	<q-dialog class="update-firmware-popup" v-model="visible">
 		<q-card>
 			<q-card-section class="row">
 				<q-avatar icon="update" color="primary" text-color="white" />
-				<span class="q-ml-md UpdateFirmwarePopup-message">{{ message }}</span>
+				<span class="q-ml-md update-firmware-popup__message">{{ message }}</span>
 			</q-card-section>
 
 			<q-card-actions align="right">
@@ -12,7 +12,7 @@
 			</q-card-actions>
 		</q-card>
 	</q-dialog>
-	<UpdateFirmwarePopupProcess v-model="visibleProcess" />
+	<update-firmware-popup-process v-model="visibleProcess" />
 </template>
 
 <script lang="ts">
@@ -98,6 +98,6 @@ export default defineComponent({
 <style lang="sass">
 @import "@/css/mixins"
 
-.UpdateFirmwarePopup
+.update-firmware-popup
 	@include popup()
 </style>

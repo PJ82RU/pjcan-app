@@ -1,11 +1,11 @@
 <template>
-	<q-card-section horizontal class="CardSectionTime">
-		<div class="CardSectionTime-header">
-			<div class="CardSectionTime-header-title">{{ title }}</div>
-			<div class="CardSectionTime-header-comment">{{ comment }}</div>
+	<q-card-section horizontal class="card-section-time">
+		<div class="card-section-time__header">
+			<div class="card-section-time__header__title">{{ title }}</div>
+			<div class="card-section-time__header__comment">{{ comment }}</div>
 		</div>
 		<q-input
-			class="CardSectionTime-input"
+			class="card-section-time__input"
 			outlined
 			dense
 			:readonly="readonly"
@@ -13,7 +13,7 @@
 			type="time"
 			step="2"
 		/>
-		<q-icon class="CardSectionTime-icon" :color="color" name="schedule" size="22px" />
+		<q-icon class="card-section-time__icon" :color="color" name="schedule" size="22px" />
 	</q-card-section>
 </template>
 
@@ -82,10 +82,10 @@ export default {
 <style lang="sass">
 @import "@/css/mixins"
 
-.CardSectionTime
+.card-section-time
 	@include card-section()
 
-	&-icon
+	&__icon
 		position: absolute
 		right: 12px
 		background-color: #f5f5f5

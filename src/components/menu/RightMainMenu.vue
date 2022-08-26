@@ -1,11 +1,17 @@
 <template>
-	<q-menu auto-close class="RightMainMenu" anchor="bottom left" transition-show="jump-down" transition-hide="jump-up">
-		<ItemMenu :items="popupLanguageFilter" @click="onClickItem" />
+	<q-menu
+		auto-close
+		class="right-main-menu"
+		anchor="bottom left"
+		transition-show="jump-down"
+		transition-hide="jump-up"
+	>
+		<item-menu :items="popupLanguageFilter" @click="onClickItem" />
 		<q-separator />
-		<ItemMenu :items="popupMain" @click="onClickItem" />
+		<item-menu :items="popupMain" @click="onClickItem" />
 	</q-menu>
-	<AboutModal v-model="about" @clickDeviceInfo="deviceInfo = true" />
-	<DeviceInfoModal v-model="deviceInfo" />
+	<about-modal v-model="about" @clickDeviceInfo="deviceInfo = true" />
+	<device-info-modal v-model="deviceInfo" />
 </template>
 
 <script lang="ts">
@@ -70,6 +76,6 @@ export default {
 </script>
 
 <style lang="sass">
-.RightMainMenu
+.right-main-menu
 	min-width: 200px !important
 </style>

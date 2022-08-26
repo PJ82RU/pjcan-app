@@ -9,7 +9,8 @@ export enum TCard {
 	CLIMATE = 'ClimateCard',
 	VOLUME = 'VolumeCard',
 	BOSE = 'BoseCard',
-	MANUAL_CONTROL = 'ManualControlCard'
+	MANUAL_CONTROL = 'ManualControlCard',
+	BUTTONS_SETTING = 'ButtonsSetting'
 }
 
 const CARDS_KEY = 'Cards';
@@ -27,6 +28,7 @@ export class Onboard {
 			res && Array.isArray(res) && res.length > 0
 				? res
 				: [
+						TCard.BUTTONS_SETTING,
 						TCard.MANUAL_CONTROL,
 						TCard.INFO,
 						TCard.ENGINE,

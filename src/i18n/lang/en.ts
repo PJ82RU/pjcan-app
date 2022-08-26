@@ -186,5 +186,7 @@ export default {
 
 	ManualControlCard: 'Manual control',
 	ManualControlCard_Restyling: 'Restyling',
-	ManualControlCard_BeforeRestyling: 'Before restyling'
+	ManualControlCard_BeforeRestyling: 'Before restyling',
+
+	ButtonsSetting_Title: 'Buttons setting'
 };

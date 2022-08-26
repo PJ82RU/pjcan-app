@@ -1,24 +1,24 @@
 <!--suppress RequiredAttributes -->
 <template>
-	<CardSection
-		class="DoorsCard"
+	<card-section
+		class="doors-card"
 		type="DoorsCard"
 		:title="$t('DoorsCard_Title')"
 		icon-name="doors"
 		:menu-card-section="menuDoorsCard"
 		@click-options="onClickOptions"
 	>
-		<CardSectionToggle :title="$t('DoorsCard_FL_Title')" :comment="$t('DoorsCard_FL_Comment')" v-model="doorFL" />
-		<CardSectionToggle :title="$t('DoorsCard_FR_Title')" :comment="$t('DoorsCard_FR_Comment')" v-model="doorFR" />
-		<CardSectionToggle :title="$t('DoorsCard_BL_Title')" :comment="$t('DoorsCard_BL_Comment')" v-model="doorBL" />
-		<CardSectionToggle :title="$t('DoorsCard_BR_Title')" :comment="$t('DoorsCard_BR_Comment')" v-model="doorBR" />
-		<CardSectionToggle
+		<card-section-toggle :title="$t('DoorsCard_FL_Title')" :comment="$t('DoorsCard_FL_Comment')" v-model="doorFL" />
+		<card-section-toggle :title="$t('DoorsCard_FR_Title')" :comment="$t('DoorsCard_FR_Comment')" v-model="doorFR" />
+		<card-section-toggle :title="$t('DoorsCard_BL_Title')" :comment="$t('DoorsCard_BL_Comment')" v-model="doorBL" />
+		<card-section-toggle :title="$t('DoorsCard_BR_Title')" :comment="$t('DoorsCard_BR_Comment')" v-model="doorBR" />
+		<card-section-toggle
 			:title="$t('DoorsCard_Trunk_Title')"
 			:comment="$t('DoorsCard_Trunk_Comment')"
 			v-model="trunk"
 		/>
-	</CardSection>
-	<ViewSettingModal
+	</card-section>
+	<view-setting-modal
 		v-model="viewSettingModel"
 		:title="viewSettingTitle"
 		:view-config="viewConfig"

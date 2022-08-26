@@ -1,11 +1,11 @@
 <template>
-	<q-card-section horizontal class="CardSectionSelect">
-		<div class="CardSectionSelect-header">
-			<div class="CardSectionSelect-header-title">{{ title }}</div>
-			<div class="CardSectionSelect-header-comment">{{ comment }}</div>
+	<q-card-section horizontal class="card-section-select">
+		<div class="card-section-select__header">
+			<div class="card-section-select__header__title">{{ title }}</div>
+			<div class="card-section-select__header__comment">{{ comment }}</div>
 		</div>
 		<q-select
-			class="CardSectionSelect-input"
+			class="card-section-select__input"
 			outlined
 			dense
 			v-model="valueSelect"
@@ -70,6 +70,6 @@ export default {
 <style lang="sass">
 @import "@/css/mixins"
 
-.CardSectionSelect
+.card-section-select
 	@include card-section()
 </style>

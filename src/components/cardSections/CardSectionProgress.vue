@@ -1,8 +1,8 @@
 <template>
-	<q-card-section horizontal class="CardSectionProgress">
-		<div class="CardSectionProgress-header">
-			<div class="CardSectionProgress-header-title">{{ title }}</div>
-			<div class="CardSectionProgress-header-comment">{{ comment }}</div>
+	<q-card-section horizontal class="card-section-progress">
+		<div class="card-section-progress__header">
+			<div class="card-section-progress__header__title">{{ title }}</div>
+			<div class="card-section-progress__header__comment">{{ comment }}</div>
 		</div>
 		<q-circular-progress
 			show-value
@@ -12,7 +12,7 @@
 			:thickness="thickness"
 			:color="color"
 			:track-color="trackColor"
-			class="CardSectionProgress-progress q-ma-md"
+			class="card-section-progress__progress q-ma-md"
 		>
 			{{ value }}{{ prefix }}
 		</q-circular-progress>
@@ -58,9 +58,9 @@ export default {
 <style lang="sass">
 @import "@/css/mixins"
 
-.CardSectionProgress
+.card-section-progress
 	@include card-section(100%, 80px)
 
-	&-progress
+	&__progress
 		margin: 0
 </style>

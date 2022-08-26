@@ -1,18 +1,18 @@
 <template>
-	<q-card-section class="CardSectionSlider">
-		<div class="CardSectionSlider-header">
-			<div class="CardSectionSlider-header-title">{{ title }}</div>
-			<div class="CardSectionSlider-header-comment">{{ comment }}</div>
+	<q-card-section class="card-section-slider">
+		<div class="card-section-slider__header">
+			<div class="card-section-slider__header__title">{{ title }}</div>
+			<div class="card-section-slider__header__comment">{{ comment }}</div>
 		</div>
-		<q-item class="CardSectionSlider-value">
+		<q-item class="card-section-slider__value">
 			<q-item-section side>
-				<IconCustom class="CardSectionSlider-icon-left" :name="iconLeftName" />
+				<icon-custom class="card-section-slider__icon__left" :name="iconLeftName" />
 			</q-item-section>
 			<q-item-section>
 				<q-slider v-model="valueInput" :min="min" :max="max" label />
 			</q-item-section>
 			<q-item-section side>
-				<IconCustom class="CardSectionSlider-icon-right" :name="iconRightName" />
+				<icon-custom class="card-section-slider__icon__right" :name="iconRightName" />
 			</q-item-section>
 		</q-item>
 	</q-card-section>
@@ -73,10 +73,10 @@ export default {
 <style lang="sass">
 @import "@/css/mixins"
 
-.CardSectionSlider
+.card-section-slider
 	@include card-section(100%, 80px)
 
-	&-value
+	&__value
 		padding-left: 0
 		padding-right: 0
 </style>

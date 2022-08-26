@@ -1,10 +1,10 @@
 <template>
-	<q-card-section horizontal class="CardSectionToggle">
-		<div class="CardSectionToggle-header">
-			<div class="CardSectionToggle-header-title">{{ title }}</div>
-			<div class="CardSectionToggle-header-comment">{{ comment }}</div>
+	<q-card-section horizontal class="card-section-toggle">
+		<div class="card-section-toggle__header">
+			<div class="card-section-toggle__header__title">{{ title }}</div>
+			<div class="card-section-toggle__header__comment">{{ comment }}</div>
 		</div>
-		<q-toggle class="CardSectionToggle-input" dense v-model="valueToggle" :color="color" :disable="disable" />
+		<q-toggle class="card-section-toggle__input" dense v-model="valueToggle" :color="color" :disable="disable" />
 	</q-card-section>
 </template>
 
@@ -57,10 +57,10 @@ export default {
 <style lang="sass">
 @import "@/css/mixins"
 
-.CardSectionToggle
+.card-section-toggle
 	@include card-section()
 
-	&-input
+	&__input
 		input
 			text-align: right
 </style>

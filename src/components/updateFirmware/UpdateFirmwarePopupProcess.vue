@@ -1,7 +1,7 @@
 <template>
-	<q-dialog class="UpdateFirmwarePopupProcess" v-model="visible" persistent>
+	<q-dialog class="update-firmware-popup-process" v-model="visible" persistent>
 		<q-card>
-			<q-card-section class="UpdateFirmwarePopupProcess-row row">
+			<q-card-section class="update-firmware-popup-process__row row">
 				<span>{{ message }}</span>
 				<span>{{ uploading }}</span>
 				<q-linear-progress
@@ -179,7 +179,7 @@ export default defineComponent({
 <style lang="sass">
 @import "@/css/mixins"
 
-.UpdateFirmwarePopupProcess
+.update-firmware-popup-process
 	@include popup()
 
 	width: 70%
@@ -187,7 +187,7 @@ export default defineComponent({
 	.q-card
 		width: 500px
 
-	&-row
+	&__row
 		flex-direction: row
 		justify-content: space-between
 </style>

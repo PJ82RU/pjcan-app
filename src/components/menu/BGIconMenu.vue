@@ -1,8 +1,8 @@
 <template>
-	<q-item clickable v-ripple class="BGIconMenu">
+	<q-item clickable v-ripple class="bg-icon-menu">
 		<q-item-section avatar />
 		<q-item-section>
-			<IconCustom name="PJ82" color="primary" color-secondary="secondary" size="180px" />
+			<icon-custom name="PJ82" size="180px" />
 		</q-item-section>
 	</q-item>
 </template>
@@ -17,7 +17,7 @@ export default {
 </script>
 
 <style lang="sass">
-.BGIconMenu
+.bg-icon-menu
 	position: absolute
 	bottom: 16px
 	left: -32px
