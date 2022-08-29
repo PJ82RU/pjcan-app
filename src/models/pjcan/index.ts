@@ -3,6 +3,7 @@ import { API_EXEC_CONFIG, IConfig, StructConfig, Config } from '@/models/pjcan/C
 import { API_EXEC_VIEW, IView, StructView, View } from '@/models/pjcan/View';
 
 import {
+	TButtonExec,
 	ButtonsConfig,
 	ButtonsValue,
 	API_EXEC_BUTTONS_CONFIG,
@@ -169,6 +170,7 @@ export {
 	Config,
 	View,
 	TCenterPoint,
+	TButtonExec,
 	ButtonsConfig,
 	ButtonsValue,
 	CarConfig,

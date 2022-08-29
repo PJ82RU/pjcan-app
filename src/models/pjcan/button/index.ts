@@ -1,5 +1,6 @@
 import {
 	API_EXEC_BUTTONS_CONFIG,
+	TButtonExec,
 	IButtonsConfigItem,
 	IButtonsConfig,
 	StructButtonsConfig,
@@ -8,7 +9,7 @@ import {
 
 import { API_EXEC_BUTTONS_VALUE, IButtonValue, StructButtonsValue, ButtonsValue } from './ButtonValue';
 
-export { ButtonsConfig, ButtonsValue };
+export { TButtonExec, ButtonsConfig, ButtonsValue };
 export { API_EXEC_BUTTONS_CONFIG, API_EXEC_BUTTONS_VALUE };
 export { StructButtonsConfig, StructButtonsValue };
 export type { IButtonsConfigItem, IButtonsConfig, IButtonValue };
