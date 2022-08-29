@@ -82,13 +82,15 @@
 
 <script lang="ts">
 import { computed, inject, onMounted, onUnmounted, Ref, ref } from 'vue';
-import api, { API_EVENT_LCD_VALUE } from '@/store/api';
-import { ManualControlButtons } from './ManualControlButtons';
 
 import CardSection from '@/components/cardSections/CardSection.vue';
+import { ManualControlButtons } from './ManualControlButtons';
+
+import api, { API_EVENT_LCD_VALUE } from '@/store/api';
 import { menuManualControlCard } from '@/store/menu/MenuManualControlCard';
-import { TItemMenu } from '@/models/menu';
 import { Onboard } from '@/store/onboard';
+
+import { TItemMenu } from '@/models/menu';
 import { ILCDValue, LCDValue } from '@/models/pjcan';
 
 export default {
@@ -127,7 +129,7 @@ export default {
 			if (e.type !== TItemMenu.MANUAL_CONTROL_RESTYLE) return;
 
 			onboard.value.restyle = !onboard.value.restyle;
-			setLangMenuCard();
+			setTimeout(() => setLangMenuCard(), 250);
 		};
 
 		return {
