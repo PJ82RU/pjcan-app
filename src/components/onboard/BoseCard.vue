@@ -8,17 +8,17 @@
 		:menu-card-section="menuBoseCard"
 		@click-options="onClickOptions"
 	>
-		<CardSectionToggle
+		<card-section-toggle
 			:title="$t('BoseCard_Enabled_Title')"
 			:comment="$t('BoseCard_Enabled_Comment')"
 			v-model="enabled"
 		/>
-		<CardSectionToggle
+		<card-section-toggle
 			:title="$t('BoseCard_AudioPLT_Title')"
 			:comment="$t('BoseCard_AudioPLT_Comment')"
 			v-model="audioPLT"
 		/>
-		<CardSectionSelect
+		<card-section-select
 			:title="$t('BoseCard_CenterPoint_Title')"
 			:comment="$t('BoseCard_CenterPoint_Comment')"
 			v-model="centerPoint"
@@ -58,9 +58,9 @@
 			:min="-6"
 			:max="6"
 		/>
-		<CardSectionToggle :title="$t('BoseCard_Wow_Title')" :comment="$t('BoseCard_Wow_Comment')" v-model="wow" />
+		<card-section-toggle :title="$t('BoseCard_Wow_Title')" :comment="$t('BoseCard_Wow_Comment')" v-model="wow" />
 	</card-section>
-	<ViewSettingModal
+	<view-setting-modal
 		v-model="viewSettingModel"
 		:title="viewSettingTitle"
 		:view-config="viewConfig"
