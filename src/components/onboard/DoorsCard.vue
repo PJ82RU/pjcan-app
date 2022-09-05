@@ -6,7 +6,9 @@
 		:title="$t('DoorsCard_Title')"
 		icon-name="doors"
 		:menu-card-section="menuDoorsCard"
-		@click-options="onClickOptions"
+		@click:options="onClickOptions"
+		show-options
+		show-bookmark
 	>
 		<card-section-toggle :title="$t('DoorsCard_FL_Title')" :comment="$t('DoorsCard_FL_Comment')" v-model="doorFL" />
 		<card-section-toggle :title="$t('DoorsCard_FR_Title')" :comment="$t('DoorsCard_FR_Comment')" v-model="doorFR" />

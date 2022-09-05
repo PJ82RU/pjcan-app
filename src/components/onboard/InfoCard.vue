@@ -6,7 +6,9 @@
 		:title="$t('InfoCard_Title')"
 		icon-name="info"
 		:menu-card-section="menuInfoCard"
-		@click-options="onClickOptions"
+		@click:options="onClickOptions"
+		show-options
+		show-bookmark
 	>
 		<card-section-time
 			:title="$t('InfoCard_TimeWork_Title')"

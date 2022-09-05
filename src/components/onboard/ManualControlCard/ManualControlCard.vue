@@ -6,7 +6,9 @@
 		:title="$t('ManualControlCard')"
 		icon-name="steering"
 		:menu-card-section="menuCard"
-		@click-options="onClickOptions"
+		@click:options="onClickOptions"
+		show-options
+		show-bookmark
 	>
 		<q-card-section class="manual-control-card__btns">
 			<q-btn-group push class="manual-control-card__btns__primary">

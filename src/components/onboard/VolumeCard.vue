@@ -7,7 +7,9 @@ VolumeCard
 		:title="$t('VolumeCard_Title')"
 		icon-name="volume"
 		:menu-card-section="menuVolumeCard"
-		@click-options="onClickOptions"
+		@click:options="onClickOptions"
+		show-options
+		show-bookmark
 	>
 		<card-section-slider
 			:title="$t('VolumeCard_Volume_Title')"

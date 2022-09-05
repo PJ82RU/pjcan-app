@@ -6,7 +6,7 @@
 				<q-card-section class="card-section__title">
 					<icon-custom
 						class="card-section__title__icon"
-						v-if="iconName.length > 0"
+						v-if="iconName?.length > 0"
 						:name="iconName"
 						:colors="{ primary: iconColor, secondary: iconColorSecondary }"
 						:size="iconSize"
@@ -21,14 +21,16 @@
 			</q-card-section>
 
 			<q-card-actions vertical class="card-section__menu">
-				<q-btn flat round color="secondary" icon="more_vert">
-					<card-sectionMenu :menu-card-section="menuCardSection" @click="onClickOptions" />
+				<q-btn v-if="showOptions" flat round color="secondary" icon="more_vert">
+					<card-sectionMenu :menu-card-section="menuCardSection" @click="onOptionsClick" />
 					<!--<q-tooltip class="card-section__menu__tooltip" anchor="bottom middle" self="top middle">{{-->
 					<!--	$t('SettingLCD')-->
 					<!--}}</q-tooltip>-->
 				</q-btn>
-				<q-btn flat round color="primary" :icon="bookmarkIcon" @click="onClickBookmark" />
-				<q-btn flat round color="primary" icon="help_outline" @click="onClickHelp" />
+				<q-btn v-if="showBookmark" flat round color="primary" :icon="bookmarkIcon" @click="onBookmarkClick" />
+				<q-btn v-if="showApply" flat round color="primary" icon="done" @click="onApplyClick" />
+				<q-btn v-if="showCancel" flat round color="secondary" icon="clear" @click="onCancelClick" />
+				<q-btn v-if="showHelp" flat round color="secondary" icon="help_outline" @click="onHelpClick" />
 			</q-card-actions>
 		</q-card-section>
 	</q-card>
@@ -55,10 +57,7 @@ export default {
 			type: Array,
 			require: true
 		},
-		iconName: {
-			type: String,
-			default: ''
-		},
+		iconName: String,
 		iconColor: {
 			type: String,
 			default: 'primary'
@@ -70,9 +69,14 @@ export default {
 		iconSize: {
 			type: String,
 			default: '26px'
-		}
+		},
+		showOptions: Boolean,
+		showBookmark: Boolean,
+		showApply: Boolean,
+		showCancel: Boolean,
+		showHelp: Boolean
 	},
-	emits: ['click-options', 'click-bookmark', 'click-help'],
+	emits: ['click:options', 'click:bookmark', 'click:apply', 'click:cancel', 'click:help'],
 	setup(props: any, context: any) {
 		const { type } = toRefs(props);
 		const { emit } = context;
@@ -80,21 +84,25 @@ export default {
 
 		// bookmark
 		const bookmarkIcon = computed(() => (onboard?.value.isCard(type.value) ? 'bookmark' : 'bookmark_outline'));
-		const onClickBookmark = (e: any) => {
+		const onBookmarkClick = (e: any) => {
 			if (onboard?.value.isCard(type.value)) onboard?.value.removeCard(type.value);
 			else onboard?.value.addCard(type.value);
 
-			emit('click-bookmark', e);
+			emit('click:bookmark', e);
 		};
 
-		const onClickOptions = (e: any) => emit('click-options', e);
-		const onClickHelp = (e: any) => emit('click-help', e);
+		const onOptionsClick = (e: any) => emit('click:options', e);
+		const onApplyClick = (e: any) => emit('click:apply', e);
+		const onCancelClick = (e: any) => emit('click:cancel', e);
+		const onHelpClick = (e: any) => emit('click:help', e);
 
 		return {
 			bookmarkIcon,
-			onClickOptions,
-			onClickBookmark,
-			onClickHelp
+			onOptionsClick,
+			onBookmarkClick,
+			onApplyClick,
+			onCancelClick,
+			onHelpClick
 		};
 	}
 };

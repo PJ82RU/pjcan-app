@@ -6,7 +6,9 @@
 		:title="$t('MovementCard_Title')"
 		icon-name="speedometer"
 		:menu-card-section="menuMovementCard"
-		@click-options="onClickOptions"
+		@click:options="onClickOptions"
+		show-options
+		show-bookmark
 	>
 		<card-section-input
 			:title="$t('MovementCard_Speed_Title')"

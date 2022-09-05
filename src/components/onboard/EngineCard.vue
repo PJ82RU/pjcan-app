@@ -6,7 +6,9 @@
 		:title="$t('EngineCard_Title')"
 		icon-name="engine"
 		:menu-card-section="menuEngineCard"
-		@click-options="onClickOptions"
+		@click:options="onClickOptions"
+		show-options
+		show-bookmark
 	>
 		<card-section2-icons
 			:title="$t('EngineCard_Enabled_Title')"

@@ -6,7 +6,9 @@
 		:title="$t('BoseCard_Title')"
 		icon-name="volume"
 		:menu-card-section="menuBoseCard"
-		@click-options="onClickOptions"
+		@click:options="onClickOptions"
+		show-options
+		show-bookmark
 	>
 		<card-section-toggle
 			:title="$t('BoseCard_Enabled_Title')"

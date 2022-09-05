@@ -5,7 +5,9 @@
 		:title="$t('FuelCard_Title')"
 		icon-name="fuel"
 		:menu-card-section="menuFuelCard"
-		@click-options="onClickOptions"
+		@click:options="onClickOptions"
+		show-options
+		show-bookmark
 	>
 		<card-section-input
 			:title="$t('FuelCard_Current_Title')"

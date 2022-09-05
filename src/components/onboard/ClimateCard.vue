@@ -6,7 +6,9 @@
 		:title="$t('ClimateCard_Title')"
 		icon-name="climate"
 		:menu-card-section="menuClimateCard"
-		@click-options="onClickOptions"
+		@click:options="onClickOptions"
+		show-options
+		show-bookmark
 	>
 		<card-section2-icons
 			:title="$t('ClimateCard_StatusWork_Title')"
