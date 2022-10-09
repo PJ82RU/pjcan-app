@@ -1,17 +1,23 @@
-import {
-	API_EXEC_BUTTONS_CONFIG,
+import { API_EXEC_BUTTONS_CONFIG, ButtonsConfig } from "./ButtonConfig";
+import { API_EXEC_BUTTONS_VALUE, ButtonsValue } from "./ButtonValue";
+import { TButtonItem } from "./TButtonItem";
+import { TButtonExec } from "./TButtonExec";
+import { TButtonPress } from "./TButtonPress";
+import { StructButtonsConfig } from "./StructButtonsConfig";
+import { StructButtonsValue } from "./StructButtonsValue";
+import { IButtonsConfigItem } from "./IButtonsConfigItem";
+import { IButtonsConfig } from "./IButtonsConfig";
+import { IButtonValue } from "./IButtonValue";
+
+export {
 	TButtonItem,
 	TButtonPress,
 	TButtonExec,
-	IButtonsConfigItem,
-	IButtonsConfig,
+	ButtonsConfig,
+	ButtonsValue,
+	API_EXEC_BUTTONS_CONFIG,
+	API_EXEC_BUTTONS_VALUE,
 	StructButtonsConfig,
-	ButtonsConfig
-} from './ButtonConfig';
-
-import { API_EXEC_BUTTONS_VALUE, IButtonValue, StructButtonsValue, ButtonsValue } from './ButtonValue';
-
-export { TButtonItem, TButtonPress, TButtonExec, ButtonsConfig, ButtonsValue };
-export { API_EXEC_BUTTONS_CONFIG, API_EXEC_BUTTONS_VALUE };
-export { StructButtonsConfig, StructButtonsValue };
+	StructButtonsValue
+};
 export type { IButtonsConfigItem, IButtonsConfig, IButtonValue };

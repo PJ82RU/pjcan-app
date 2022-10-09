@@ -1,15 +1,15 @@
-import { BluetoothStruct } from '@/components/bluetooth';
-import { BaseModel, IBaseModel } from '../BaseModel';
-import { ViewConfig, IViewConfig, StructViewConfig } from '../view/index';
-import { EngineView, IEngineView, StructEngineView } from './engine';
-import { MovementView, IMovementView, StructMovementView } from './movement';
-import { SensorsView, ISensorsView, StructSensorsView } from './sensors';
-import { FuelView, IFuelView, StructFuelView } from './fuel';
-import { BoseView, IBoseView, StructBoseView } from './bose';
-import { ClimateView, IClimateView, StructClimateView } from './climate';
-import { DoorsView, IDoorsView, StructDoorsView } from './doors';
-import { TemperatureView, ITemperatureView, StructTemperatureView } from './temperature';
-import { VolumeView, IVolumeView, StructVolumeView } from './volume';
+import { BluetoothStruct } from "@/components/bluetooth";
+import { BaseModel, IBaseModel } from "../base/BaseModel";
+import { ViewConfig, IViewConfig, StructViewConfig } from "../view/index";
+import { EngineView, IEngineView, StructEngineView } from "./engine";
+import { MovementView, IMovementView, StructMovementView } from "./movement";
+import { SensorsView, ISensorsView, StructSensorsView } from "./sensors";
+import { FuelView, IFuelView, StructFuelView } from "./fuel";
+import { BoseView, IBoseView, StructBoseView } from "./bose";
+import { ClimateView, IClimateView, StructClimateView } from "./climate";
+import { DoorsView, IDoorsView, StructDoorsView } from "./doors";
+import { TemperatureView, ITemperatureView, StructTemperatureView } from "./temperature";
+import { VolumeView, IVolumeView, StructVolumeView } from "./volume";
 
 export const API_EXEC_VARIABLE_VIEW = 101; // команда API
 const STRUCT_LENGTH = 97; // длина данных API
@@ -45,7 +45,8 @@ export const StructVariableView = {
 const struct = new BluetoothStruct(StructVariableView);
 
 /** Модель параметров отображения данных переменных */
-export class VariableView extends BaseModel implements IVariableView {
+export class VariableView extends BaseModel implements IVariableView
+{
 	bose = new BoseView();
 	climate = new ClimateView();
 	clock = new ViewConfig();
@@ -57,7 +58,8 @@ export class VariableView extends BaseModel implements IVariableView {
 	temperature = new TemperatureView();
 	volume = new VolumeView();
 
-	constructor(data?: DataView) {
+	constructor(data?: DataView)
+	{
 		super();
 		if (data) this.set(data);
 	}
@@ -66,12 +68,14 @@ export class VariableView extends BaseModel implements IVariableView {
 	 * Запись данных
 	 * @param {DataView} buf Буффер данных
 	 */
-	set(buf: DataView): boolean {
+	set(buf: DataView): boolean
+	{
 		return this._set(this, API_EXEC_VARIABLE_VIEW, STRUCT_LENGTH, struct, buf);
 	}
 
 	/** Чтение данных */
-	get(): DataView | undefined {
+	get(): DataView | undefined
+	{
 		return this._get(this, API_EXEC_VARIABLE_VIEW, 1);
 	}
 }

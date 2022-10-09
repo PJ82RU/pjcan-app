@@ -1,5 +1,7 @@
-import { TViewType, ViewConfig, IViewConfig, StructViewConfig } from './ViewConfig';
+import { ViewConfig } from "./ViewConfig";
+import { TViewType } from "./TViewType";
+import { StructViewConfig } from "./StructViewConfig";
+import { IViewConfig } from "./IViewConfig";
 
-export { TViewType, ViewConfig };
-export { StructViewConfig };
+export { ViewConfig, TViewType, StructViewConfig };
 export type { IViewConfig };

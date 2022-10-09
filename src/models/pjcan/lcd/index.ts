@@ -1,6 +1,6 @@
-import { API_EXEC_LCD_VALUE, ILCDValue, StructLCDValue, LCDValue } from './LCDValue';
+import { API_EXEC_LCD_VALUE, LCDValue } from "./LCDValue";
+import { StructLCDValue } from "./StructLCDValue";
+import { ILCDValue } from "./ILCDValue";
 
-export { LCDValue };
-export { API_EXEC_LCD_VALUE };
-export { StructLCDValue };
+export { LCDValue, API_EXEC_LCD_VALUE, StructLCDValue };
 export type { ILCDValue };

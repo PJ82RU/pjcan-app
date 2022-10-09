@@ -1,0 +1,13 @@
+import { IBaseModel } from "./IBaseModel";
+
+/** Интерфейс параметров Teyes */
+export interface ITeyesConfig extends IBaseModel {
+	receiveClock: boolean;
+	receiveButtons: boolean;
+	receiveText: boolean;
+	sendButton: boolean;
+	sendClimate: boolean;
+	sendDoors: boolean;
+	parseVolume: boolean;
+	lcdShow: boolean;
+}

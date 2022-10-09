@@ -1,7 +1,7 @@
 // noinspection SpellCheckingInspection
 
-import { BluetoothStruct } from '@/components/bluetooth';
-import { BaseModel, IBaseModel } from '../../BaseModel';
+import { BluetoothStruct } from "@/components/bluetooth";
+import { BaseModel, IBaseModel } from "../../base/BaseModel";
 
 export const API_EXEC_VARIABLE_CLIMATE = 120; // команда API
 const STRUCT_LENGTH = 10; // длина данных API
@@ -47,7 +47,8 @@ export const StructClimateValue = {
 const struct = new BluetoothStruct(StructClimateValue);
 
 /** Модель значений климата */
-export class ClimateValue extends BaseModel implements IClimateValue {
+export class ClimateValue extends BaseModel implements IClimateValue
+{
 	enabled = false;
 	automode = false;
 	ac = false;
@@ -61,7 +62,8 @@ export class ClimateValue extends BaseModel implements IClimateValue {
 	tempDisplay = 0;
 	temperature = 0;
 
-	constructor(data?: DataView) {
+	constructor(data?: DataView)
+	{
 		super();
 		if (data) this.set(data);
 	}
@@ -70,12 +72,14 @@ export class ClimateValue extends BaseModel implements IClimateValue {
 	 * Запись данных
 	 * @param {DataView} buf Буффер данных
 	 */
-	set(buf: DataView): boolean {
+	set(buf: DataView): boolean
+	{
 		return this._set(this, API_EXEC_VARIABLE_CLIMATE, STRUCT_LENGTH, struct, buf);
 	}
 
 	/** Чтение данных */
-	get(): DataView | undefined {
+	get(): DataView | undefined
+	{
 		return this._get(this, API_EXEC_VARIABLE_CLIMATE, STRUCT_LENGTH, struct);
 	}
 }

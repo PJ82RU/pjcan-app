@@ -1,6 +1,6 @@
-import { BluetoothStruct } from '@/components/bluetooth';
-import { ViewConfig, IViewConfig, StructViewConfig } from '../../view/index';
-import { BaseModel, IBaseModel } from '../../BaseModel';
+import { BluetoothStruct } from "@/components/bluetooth";
+import { ViewConfig, IViewConfig, StructViewConfig } from "../../view/index";
+import { BaseModel, IBaseModel } from "../../base/BaseModel";
 
 export const API_EXEC_VARIABLE_FUEL_VIEW = 152; // команда API
 const STRUCT_LENGTH = 17; // длина данных API
@@ -24,13 +24,15 @@ export const StructFuelView = {
 const struct = new BluetoothStruct(StructFuelView);
 
 /** Модель параметров отображения данных расхода топлива */
-export class FuelView extends BaseModel implements IFuelView {
+export class FuelView extends BaseModel implements IFuelView
+{
 	consumption = new ViewConfig();
 	current = new ViewConfig();
 	avg = new ViewConfig();
 	total = new ViewConfig();
 
-	constructor(data?: DataView) {
+	constructor(data?: DataView)
+	{
 		super();
 		if (data) this.set(data);
 	}
@@ -39,12 +41,14 @@ export class FuelView extends BaseModel implements IFuelView {
 	 * Запись данных
 	 * @param {DataView} buf Буффер данных
 	 */
-	set(buf: DataView): boolean {
+	set(buf: DataView): boolean
+	{
 		return this._set(this, API_EXEC_VARIABLE_FUEL_VIEW, STRUCT_LENGTH, struct, buf);
 	}
 
 	/** Чтение данных */
-	get(): DataView | undefined {
+	get(): DataView | undefined
+	{
 		return this._get(this, API_EXEC_VARIABLE_FUEL_VIEW, STRUCT_LENGTH, struct);
 	}
 }
