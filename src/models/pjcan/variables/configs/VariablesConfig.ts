@@ -1,28 +1,12 @@
 import { BluetoothStruct } from "@/components/bluetooth";
-import { BaseModel, IBaseModel } from "../base/BaseModel";
-import { BoseConfig, IBoseConfig, StructBoseConfig } from "./bose";
-import { EngineConfig, IEngineConfig, StructEngineConfig } from "./engine";
-import { FuelConfig, IFuelConfig, StructFuelConfig } from "./fuel";
-import { VolumeConfig, IVolumeConfig, StructVolumeConfig } from "./volume";
+import { BaseModel } from "@/models/pjcan/base";
+import { BoseConfig } from "@/models/pjcan/variables/bose";
+import { EngineConfig } from "@/models/pjcan/variables/engine/EngineConfig";
+import { FuelConfig } from "@/models/pjcan/variables/fuel/FuelConfig";
+import { VolumeConfig } from "@/models/pjcan/variables/volume/VolumeConfig";
 
 export const API_EXEC_VARIABLE_CONFIG = 100; // команда API
 const STRUCT_LENGTH = 23; // длина данных API
-
-/** Интерфейс конфигурации переменных */
-export interface IVariableConfig extends IBaseModel {
-	bose: IBoseConfig;
-	engine: IEngineConfig;
-	fuel: IFuelConfig;
-	volume: IVolumeConfig;
-}
-
-/** Структура данных */
-export const StructVariableConfig = {
-	bose: BluetoothStruct.struct(StructBoseConfig),
-	engine: BluetoothStruct.struct(StructEngineConfig),
-	fuel: BluetoothStruct.struct(StructFuelConfig),
-	volume: BluetoothStruct.struct(StructVolumeConfig)
-};
 
 const struct = new BluetoothStruct(StructVariableConfig);
 

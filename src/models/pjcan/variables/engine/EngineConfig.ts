@@ -1,22 +1,9 @@
 import { BluetoothStruct } from "@/components/bluetooth";
-import { BaseModel, IBaseModel } from "../../base/BaseModel";
+import { BaseModel } from "../../base";
+import { IEngineConfig, StructEngineConfig } from "./index";
 
 export const API_EXEC_VARIABLE_ENGINE_CONFIG = 141; // команда API
 const STRUCT_LENGTH = 10; // длина данных API
-
-/** Интерфейс конфигурации ДВС */
-export interface IEngineConfig extends IBaseModel {
-	showDays: boolean;
-	totalSeconds: number;
-	totalCountRPM: number;
-}
-
-/** Структура данных */
-export const StructEngineConfig = {
-	showDays: BluetoothStruct.bit(),
-	totalSeconds: BluetoothStruct.uint32(),
-	totalCountRPM: BluetoothStruct.uint32()
-};
 
 const struct = new BluetoothStruct(StructEngineConfig);
 

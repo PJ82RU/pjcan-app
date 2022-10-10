@@ -1,22 +1,9 @@
 import { BluetoothStruct } from "@/components/bluetooth";
-import { BaseModel, IBaseModel } from "../../base/BaseModel";
+import { BaseModel } from "../../base";
+import { IMovementValue, StructMovementValue } from "./index";
 
 export const API_EXEC_VARIABLE_MOVEMENT = 160; // команда API
 const STRUCT_LENGTH = 13; // длина данных API
-
-/** Интерфейс значений движения */
-export interface IMovementValue extends IBaseModel {
-	speed: number;
-	speedAVG: number;
-	restWay: number;
-}
-
-/** Структура данных */
-export const StructMovementValue = {
-	speed: BluetoothStruct.float32(),
-	speedAVG: BluetoothStruct.float32(),
-	restWay: BluetoothStruct.float32()
-};
 
 const struct = new BluetoothStruct(StructMovementValue);
 

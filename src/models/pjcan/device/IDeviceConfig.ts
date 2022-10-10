@@ -1,4 +1,4 @@
-import { IBaseModel } from "./IBaseModel";
+import { IBaseModel } from "../base";
 
 /** Интерфейс параметров устройства */
 export interface IDeviceConfig extends IBaseModel {

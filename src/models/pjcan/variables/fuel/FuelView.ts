@@ -1,25 +1,10 @@
 import { BluetoothStruct } from "@/components/bluetooth";
-import { ViewConfig, IViewConfig, StructViewConfig } from "../../view/index";
-import { BaseModel, IBaseModel } from "../../base/BaseModel";
+import { BaseModel } from "../../base";
+import { ViewConfig } from "../../view";
+import { IFuelView, StructFuelView } from "./index";
 
 export const API_EXEC_VARIABLE_FUEL_VIEW = 152; // команда API
 const STRUCT_LENGTH = 17; // длина данных API
-
-/** Интерфейс параметров отображения данных расхода топлива */
-export interface IFuelView extends IBaseModel {
-	consumption: IViewConfig;
-	current: IViewConfig;
-	avg: IViewConfig;
-	total: IViewConfig;
-}
-
-/** Структура данных */
-export const StructFuelView = {
-	consumption: BluetoothStruct.struct(StructViewConfig),
-	current: BluetoothStruct.struct(StructViewConfig),
-	avg: BluetoothStruct.struct(StructViewConfig),
-	total: BluetoothStruct.struct(StructViewConfig)
-};
 
 const struct = new BluetoothStruct(StructFuelView);
 

@@ -1,7 +1,7 @@
 import { BluetoothStruct } from "@/components/bluetooth";
 import { StructCarView } from "../car";
 import { StructTeyesView } from "../teyes";
-import { StructVariableView } from "../variables/VariablesView";
+import { StructVariableView } from "../variables/views/VariablesView";
 
 export const StructViews = {
 	car: BluetoothStruct.struct(StructCarView),

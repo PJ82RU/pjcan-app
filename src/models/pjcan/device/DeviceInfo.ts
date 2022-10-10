@@ -1,7 +1,6 @@
 import { BluetoothStruct } from "@/components/bluetooth";
-import { BaseModel } from "../base/BaseModel";
-import { StructDeviceInfo } from "./StructDeviceInfo";
-import { IDeviceInfo } from "./IDeviceInfo";
+import { BaseModel } from "../base";
+import { IDeviceInfo, StructDeviceInfo } from "./index";
 
 export const API_EXEC_INFO = 5; // команда API
 const STRUCT_LENGTH = 108; // длина данных API

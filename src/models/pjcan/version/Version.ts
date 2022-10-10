@@ -1,6 +1,5 @@
 import { BluetoothStruct } from "@/components/bluetooth";
-import { StructVersion } from "./StructVersion";
-import { IVersion } from "./IVersion";
+import { IVersion, StructVersion } from "./index";
 
 export const API_EXEC_VERSION = 0; // команда API
 const STRUCT_LENGTH = 5; // длина данных API

@@ -1,4 +1,4 @@
-import { IBaseModel } from "./IBaseModel";
+import { IBaseModel } from "../base";
 
 /** Интерфейс значений LCD */
 export interface ILCDValue extends IBaseModel {

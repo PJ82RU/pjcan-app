@@ -1,31 +1,10 @@
 import { BluetoothStruct } from "@/components/bluetooth";
-import { ViewConfig, IViewConfig, StructViewConfig } from "../../view/index";
-import { BaseModel, IBaseModel } from "../../base/BaseModel";
+import { BaseModel } from "../../base";
+import { ViewConfig } from "../../view";
+import { IEngineView, StructEngineView } from "./index";
 
 export const API_EXEC_VARIABLE_ENGINE_VIEW = 142; // команда API
 const STRUCT_LENGTH = 29; // длина данных API
-
-/** Интерфейс параметров отображения данных ДВС */
-export interface IEngineView extends IBaseModel {
-	enabled: IViewConfig;
-	totalSeconds: IViewConfig;
-	totalCountRPM: IViewConfig;
-	coolant: IViewConfig;
-	rpm: IViewConfig;
-	load: IViewConfig;
-	throttle: IViewConfig;
-}
-
-/** Структура данных */
-export const StructEngineView = {
-	enabled: BluetoothStruct.struct(StructViewConfig),
-	totalSeconds: BluetoothStruct.struct(StructViewConfig),
-	totalCountRPM: BluetoothStruct.struct(StructViewConfig),
-	coolant: BluetoothStruct.struct(StructViewConfig),
-	rpm: BluetoothStruct.struct(StructViewConfig),
-	load: BluetoothStruct.struct(StructViewConfig),
-	throttle: BluetoothStruct.struct(StructViewConfig)
-};
 
 const struct = new BluetoothStruct(StructEngineView);
 

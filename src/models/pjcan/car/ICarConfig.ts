@@ -1,4 +1,4 @@
-import { IBaseModel } from "./IBaseModel";
+import { IBaseModel } from "../base";
 
 /** Интерфейс параметров автомобиля */
 export interface ICarConfig extends IBaseModel {

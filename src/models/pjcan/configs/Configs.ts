@@ -1,9 +1,9 @@
 import { BluetoothStruct } from "@/components/bluetooth";
-import { BaseModel } from "@/models/pjcan/base";
+import { BaseModel } from "../base";
 import { ButtonsConfig } from "../button";
 import { CarConfig } from "../car";
 import { TeyesConfig } from "../teyes";
-import { VariableConfig } from "../variables/VariablesConfig";
+import { VariableConfig } from "../variables/configs/VariablesConfig";
 import { IConfigs, StructConfigs } from "./index";
 
 export const API_EXEC_CONFIG = 1;

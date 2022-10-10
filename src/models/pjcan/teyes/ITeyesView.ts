@@ -1,5 +1,5 @@
-import { IBaseModel } from "./IBaseModel";
-import { IViewConfig } from "./ViewConfig";
+import { IBaseModel } from "../base";
+import { IViewConfig } from "../view";
 
 /** Интерфейс параметров отображения данных Teyes */
 export interface ITeyesView extends IBaseModel {

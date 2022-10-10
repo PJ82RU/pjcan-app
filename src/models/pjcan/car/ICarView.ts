@@ -1,5 +1,5 @@
-import { IBaseModel } from "./IBaseModel";
-import { IViewConfig } from "../view/ViewConfig";
+import { IBaseModel } from "../base";
+import { IViewConfig } from "../view";
 
 /** Интерфейс параметров отображения данных автомобиля */
 export interface ICarView extends IBaseModel {

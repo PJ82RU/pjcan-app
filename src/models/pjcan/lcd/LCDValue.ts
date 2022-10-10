@@ -1,7 +1,6 @@
 import { BluetoothStruct } from "@/components/bluetooth";
-import { BaseModel } from "../base/BaseModel";
-import { StructLCDValue } from "./StructLCDValue";
-import { ILCDValue } from "./ILCDValue";
+import { BaseModel } from "../base";
+import { ILCDValue, StructLCDValue } from "./index";
 
 export const API_EXEC_LCD_VALUE = 40; // команда API
 const STRUCT_LENGTH = 16; // длина данных API

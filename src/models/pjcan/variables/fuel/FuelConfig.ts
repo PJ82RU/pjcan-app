@@ -1,17 +1,9 @@
 import { BluetoothStruct } from "@/components/bluetooth";
-import { BaseModel, IBaseModel } from "../../base/BaseModel";
+import { BaseModel } from "../../base";
+import { IFuelConfig, StructFuelConfig } from "./index";
 
 export const API_EXEC_VARIABLE_FUEL_CONFIG = 151; // команда API
 const STRUCT_LENGTH = 5; // длина данных API
-
-/** Интерфейс конфигурации расхода топлива */
-export interface IFuelConfig extends IBaseModel {
-	ratio: number;
-}
-
-export const StructFuelConfig = {
-	ratio: BluetoothStruct.float32()
-};
 
 const struct = new BluetoothStruct(StructFuelConfig);
 

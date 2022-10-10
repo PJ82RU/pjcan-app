@@ -1,19 +1,10 @@
 import { BluetoothStruct } from "@/components/bluetooth";
-import { ViewConfig, IViewConfig, StructViewConfig } from "../../view/index";
-import { BaseModel, IBaseModel } from "../../base/BaseModel";
+import { BaseModel } from "../../base";
+import { ViewConfig } from "../../view";
+import { IDoorsView, StructDoorsView } from "./index";
 
 export const API_EXEC_VARIABLE_DOORS_VIEW = 131; // команда API
 const STRUCT_LENGTH = 5; // длина данных API
-
-/** Интерфейс параметров отображения данных дверей */
-export interface IDoorsView extends IBaseModel {
-	doors: IViewConfig;
-}
-
-/** Структура данных */
-export const StructDoorsView = {
-	doors: BluetoothStruct.struct(StructViewConfig)
-};
 
 const struct = new BluetoothStruct(StructDoorsView);
 

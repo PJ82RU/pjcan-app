@@ -1,15 +1,15 @@
 import { BluetoothStruct } from "@/components/bluetooth";
-import { BaseModel, IBaseModel } from "../base/BaseModel";
-import { ViewConfig, IViewConfig, StructViewConfig } from "../view/index";
-import { EngineView, IEngineView, StructEngineView } from "./engine";
-import { MovementView, IMovementView, StructMovementView } from "./movement";
-import { SensorsView, ISensorsView, StructSensorsView } from "./sensors";
-import { FuelView, IFuelView, StructFuelView } from "./fuel";
-import { BoseView, IBoseView, StructBoseView } from "./bose";
-import { ClimateView, IClimateView, StructClimateView } from "./climate";
-import { DoorsView, IDoorsView, StructDoorsView } from "./doors";
-import { TemperatureView, ITemperatureView, StructTemperatureView } from "./temperature";
-import { VolumeView, IVolumeView, StructVolumeView } from "./volume";
+import { BaseModel, IBaseModel } from "../../base/BaseModel";
+import { ViewConfig, IViewConfig, StructViewConfig } from "../../view";
+import { EngineView, IEngineView, StructEngineView } from "../engine";
+import { MovementView, IMovementView, StructMovementView } from "../movement";
+import { SensorsView, ISensorsView, StructSensorsView } from "../sensors";
+import { FuelView, IFuelView, StructFuelView } from "../fuel";
+import { BoseView, IBoseView, StructBoseView } from "../bose";
+import { ClimateView, IClimateView, StructClimateView } from "../climate";
+import { DoorsView, IDoorsView, StructDoorsView } from "../doors";
+import { TemperatureView, ITemperatureView, StructTemperatureView } from "../temperature";
+import { VolumeView, IVolumeView, StructVolumeView } from "../volume";
 
 export const API_EXEC_VARIABLE_VIEW = 101; // команда API
 const STRUCT_LENGTH = 97; // длина данных API

@@ -1,7 +1,7 @@
 import { BluetoothStruct } from "@/components/bluetooth";
-import { BaseModel } from "@/models/pjcan/base";
+import { BaseModel } from "../base";
 import { CarView } from "../car";
-import { VariableView } from "../variables/VariablesView";
+import { VariableView } from "../variables/views/VariablesView";
 import { TeyesView } from "../teyes";
 import { IViews, StructViews } from "./index";
 

@@ -1,48 +1,9 @@
-// noinspection SpellCheckingInspection
-
 import { BluetoothStruct } from "@/components/bluetooth";
-import { BaseModel, IBaseModel } from "../../base/BaseModel";
+import { BaseModel } from "../../base";
+import { IClimateValue, StructClimateValue } from "./index";
 
 export const API_EXEC_VARIABLE_CLIMATE = 120; // команда API
 const STRUCT_LENGTH = 10; // длина данных API
-
-export enum TAir {
-	AIR_NONE,
-	AIR_CABIN,
-	AIR_STREET
-}
-
-/** Интерфейс значений климата */
-export interface IClimateValue extends IBaseModel {
-	enabled: boolean;
-	automode: boolean;
-	ac: boolean;
-	airDLegs: boolean;
-	airDBody: boolean;
-	airDWindshield: boolean;
-	visible: boolean;
-	airRate: number;
-	airType: TAir;
-	tempType: number;
-	tempDisplay: number;
-	temperature: number;
-}
-
-/** Структура данных */
-export const StructClimateValue = {
-	enabled: BluetoothStruct.bit(),
-	automode: BluetoothStruct.bit(),
-	ac: BluetoothStruct.bit(),
-	airDLegs: BluetoothStruct.bit(),
-	airDBody: BluetoothStruct.bit(),
-	airDWindshield: BluetoothStruct.bit(),
-	visible: BluetoothStruct.bit(),
-	airRate: BluetoothStruct.uint8(),
-	airType: BluetoothStruct.uint8(),
-	tempType: BluetoothStruct.uint8(),
-	tempDisplay: BluetoothStruct.uint8(),
-	temperature: BluetoothStruct.float32()
-};
 
 const struct = new BluetoothStruct(StructClimateValue);
 

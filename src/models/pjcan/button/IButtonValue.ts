@@ -1,4 +1,4 @@
-import { IBaseModel } from "./IBaseModel";
+import { IBaseModel } from "../base";
 
 /** Интерфейс значений кнопки */
 export interface IButtonValue extends IBaseModel {

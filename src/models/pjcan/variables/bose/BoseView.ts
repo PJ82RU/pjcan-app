@@ -1,19 +1,10 @@
 import { BluetoothStruct } from "@/components/bluetooth";
-import { ViewConfig, IViewConfig, StructViewConfig } from "../../view/index";
-import { BaseModel, IBaseModel } from "../../base/BaseModel";
+import { BaseModel } from "../../base";
+import { ViewConfig } from "../../view";
+import { IBoseView, StructBoseView } from "./index";
 
 export const API_EXEC_VARIABLE_BOSE_VIEW = 111; // команда API
 const STRUCT_LENGTH = 5; // длина данных API
-
-/** Интерфейс параметров отображения данных Bose */
-export interface IBoseView extends IBaseModel {
-	bose: IViewConfig;
-}
-
-/** Структура данных */
-export const StructBoseView = {
-	bose: BluetoothStruct.struct(StructViewConfig)
-};
 
 const struct = new BluetoothStruct(StructBoseView);
 

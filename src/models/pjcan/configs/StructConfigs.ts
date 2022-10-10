@@ -2,7 +2,7 @@ import { BluetoothStruct } from "@/components/bluetooth";
 import { StructButtonsConfig } from "../button";
 import { StructCarConfig } from "../car";
 import { StructTeyesConfig } from "../teyes";
-import { StructVariableConfig } from "../variables/VariablesConfig";
+import { StructVariableConfig } from "../variables/configs/VariablesConfig";
 
 export const StructConfigs = {
 	buttons: BluetoothStruct.struct(StructButtonsConfig),
