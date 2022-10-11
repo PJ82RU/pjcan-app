@@ -1,21 +1,10 @@
 import { BluetoothStruct } from "@/components/bluetooth";
-import { ViewConfig, IViewConfig, StructViewConfig } from "../../view/index";
-import { BaseModel, IBaseModel } from "../../base/BaseModel";
+import { BaseModel } from "../../base";
+import { ViewConfig } from "../../view";
+import { ITestValue, StructTestValue } from "./index";
 
 export const API_EXEC_VARIABLE_TEST = 190; // команда API
 const STRUCT_LENGTH = 37; // длина данных API
-
-/** Интерфейс значений тестирования */
-export interface ITestValue extends IBaseModel {
-	text: string;
-	view: IViewConfig;
-}
-
-/** Структура данных */
-export const StructTestValue = {
-	text: BluetoothStruct.char(32),
-	view: BluetoothStruct.struct(StructViewConfig)
-};
 
 const struct = new BluetoothStruct(StructTestValue);
 

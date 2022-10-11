@@ -1,5 +1,8 @@
 import { BluetoothStruct } from "@/components/bluetooth";
-import { StructBoseConfig } from "@/models/pjcan/variables/bose";
+import { StructBoseConfig } from "../bose";
+import { StructEngineConfig } from "../engine";
+import { StructFuelConfig } from "../fuel";
+import { StructVolumeConfig } from "../volume";
 
 /** Структура данных */
 export const StructVariableConfig = {

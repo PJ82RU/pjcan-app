@@ -1,19 +1,10 @@
 import { BluetoothStruct } from "@/components/bluetooth";
-import { ViewConfig, IViewConfig, StructViewConfig } from "../../view/index";
-import { BaseModel, IBaseModel } from "../../base/BaseModel";
+import { BaseModel } from "../../base";
+import { ViewConfig } from "../../view";
+import { ITemperatureView, StructTemperatureView } from "./index";
 
 export const API_EXEC_VARIABLE_TEMPERATURE_VIEW = 181; // команда API
 const STRUCT_LENGTH = 5; // длина данных API
-
-/** Интерфейс параметров отображения данных температуры */
-export interface ITemperatureView extends IBaseModel {
-	temperature: IViewConfig;
-}
-
-/** Структура данных */
-export const StructTemperatureView = {
-	temperature: BluetoothStruct.struct(StructViewConfig)
-};
 
 const struct = new BluetoothStruct(StructTemperatureView);
 

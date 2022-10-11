@@ -1,19 +1,10 @@
 import { BluetoothStruct } from "@/components/bluetooth";
-import { ViewConfig, IViewConfig, StructViewConfig } from "../../view/index";
-import { BaseModel, IBaseModel } from "../../base/BaseModel";
+import { BaseModel } from "../../base";
+import { ViewConfig } from "../../view";
+import { IVolumeView, StructVolumeView } from "./index";
 
 export const API_EXEC_VARIABLE_VOLUME_VIEW = 201; // команда API
 const STRUCT_LENGTH = 5; // длина данных API
-
-/** Интерфейс параметров отображения данных уровня звука */
-export interface IVolumeView extends IBaseModel {
-	volume: IViewConfig;
-}
-
-/** Структура данных */
-export const StructVolumeView = {
-	volume: BluetoothStruct.struct(StructViewConfig)
-};
 
 const struct = new BluetoothStruct(StructVolumeView);
 

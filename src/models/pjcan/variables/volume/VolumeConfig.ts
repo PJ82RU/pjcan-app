@@ -1,22 +1,9 @@
 import { BluetoothStruct } from "@/components/bluetooth";
-import { BaseModel, IBaseModel } from "../../base/BaseModel";
+import { BaseModel } from "../../base";
+import { IVolumeConfig, StructVolumeConfig } from "./index";
 
 export const API_EXEC_VARIABLE_VOLUME = 200; // команда API
 const STRUCT_LENGTH = 4; // длина данных API
-
-/** Интерфейс конфигурации уровня звука */
-export interface IVolumeConfig extends IBaseModel {
-	mute: boolean; // Выкл. звук
-	volume: number; // Уровень звука
-	max: number; // Максимальный уровень звука
-}
-
-/** Структура данных */
-export const StructVolumeConfig = {
-	mute: BluetoothStruct.bit(),
-	volume: BluetoothStruct.uint8(),
-	max: BluetoothStruct.uint8()
-};
 
 const struct = new BluetoothStruct(StructVolumeConfig);
 

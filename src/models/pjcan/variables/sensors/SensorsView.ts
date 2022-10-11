@@ -1,25 +1,10 @@
 import { BluetoothStruct } from "@/components/bluetooth";
-import { ViewConfig, IViewConfig, StructViewConfig } from "../../view/index";
-import { BaseModel, IBaseModel } from "../../base/BaseModel";
+import { BaseModel } from "../../base";
+import { ViewConfig } from "../../view";
+import { ISensorsView, StructSensorsView } from "./index";
 
 export const API_EXEC_VARIABLE_SENSORS_VIEW = 171; // команда API
 const STRUCT_LENGTH = 17; // длина данных API
-
-/** Интерфейс параметров отображения данных датчиков */
-export interface ISensorsView extends IBaseModel {
-	handbrake: IViewConfig;
-	reverse: IViewConfig;
-	seatbelt: IViewConfig;
-	signal: IViewConfig;
-}
-
-/** Структура данных */
-export const StructSensorsView = {
-	handbrake: BluetoothStruct.struct(StructViewConfig),
-	reverse: BluetoothStruct.struct(StructViewConfig),
-	seatbelt: BluetoothStruct.struct(StructViewConfig),
-	signal: BluetoothStruct.struct(StructViewConfig)
-};
 
 const struct = new BluetoothStruct(StructSensorsView);
 

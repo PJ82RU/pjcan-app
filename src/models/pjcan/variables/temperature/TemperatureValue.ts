@@ -1,20 +1,9 @@
 import { BluetoothStruct } from "@/components/bluetooth";
-import { BaseModel, IBaseModel } from "../../base/BaseModel";
+import { BaseModel } from "../../base";
+import { ITemperatureValue, StructTemperatureValue } from "./index";
 
 export const API_EXEC_VARIABLE_TEMPERATURE = 180; // команда API
 const STRUCT_LENGTH = 9; // длина данных API
-
-/** Интерфейс значений температуры */
-export interface ITemperatureValue extends IBaseModel {
-	in: number;
-	out: number;
-}
-
-/** Структура данных */
-export const StructTemperatureValue = {
-	in: BluetoothStruct.float32(),
-	out: BluetoothStruct.float32()
-};
 
 const struct = new BluetoothStruct(StructTemperatureValue);
 

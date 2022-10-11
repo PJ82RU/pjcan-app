@@ -1,9 +1,10 @@
 import { BluetoothStruct } from "@/components/bluetooth";
-import { BaseModel } from "@/models/pjcan/base";
-import { BoseConfig } from "@/models/pjcan/variables/bose";
-import { EngineConfig } from "@/models/pjcan/variables/engine/EngineConfig";
-import { FuelConfig } from "@/models/pjcan/variables/fuel/FuelConfig";
-import { VolumeConfig } from "@/models/pjcan/variables/volume/VolumeConfig";
+import { BaseModel } from "../../base";
+import { BoseConfig } from "../bose";
+import { EngineConfig } from "../engine";
+import { FuelConfig } from "../fuel";
+import { VolumeConfig } from "../volume";
+import { IVariableConfig, StructVariableConfig } from "./index";
 
 export const API_EXEC_VARIABLE_CONFIG = 100; // команда API
 const STRUCT_LENGTH = 23; // длина данных API
