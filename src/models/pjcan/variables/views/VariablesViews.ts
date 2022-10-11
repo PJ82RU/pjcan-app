@@ -10,15 +10,15 @@ import { MovementView } from "../movement";
 import { SensorsView } from "../sensors";
 import { TemperatureView } from "../temperature";
 import { VolumeView } from "../volume";
-import { IVariableView, StructVariableView } from "./index";
+import { IVariableViews, StructVariableViews } from "./index";
 
 export const API_EXEC_VARIABLE_VIEW = 101; // команда API
 const STRUCT_LENGTH = 97; // длина данных API
 
-const struct = new BluetoothStruct(StructVariableView);
+const struct = new BluetoothStruct(StructVariableViews);
 
 /** Модель параметров отображения данных переменных */
-export class VariableView extends BaseModel implements IVariableView
+export class VariableView extends BaseModel implements IVariableViews
 {
 	bose = new BoseView();
 	climate = new ClimateView();

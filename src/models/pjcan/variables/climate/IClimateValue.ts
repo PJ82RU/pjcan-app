@@ -1,4 +1,5 @@
 import { IBaseModel } from "../../base";
+import { TAir } from "./TAir";
 
 /** Интерфейс значений климата */
 export interface IClimateValue extends IBaseModel {

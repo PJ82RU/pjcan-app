@@ -4,15 +4,15 @@ import { BoseConfig } from "../bose";
 import { EngineConfig } from "../engine";
 import { FuelConfig } from "../fuel";
 import { VolumeConfig } from "../volume";
-import { IVariableConfig, StructVariableConfig } from "./index";
+import { IVariableConfigs, StructVariableConfigs } from "./index";
 
 export const API_EXEC_VARIABLE_CONFIG = 100; // команда API
 const STRUCT_LENGTH = 23; // длина данных API
 
-const struct = new BluetoothStruct(StructVariableConfig);
+const struct = new BluetoothStruct(StructVariableConfigs);
 
 /** Модель конфигурации переменных */
-export class VariableConfig extends BaseModel implements IVariableConfig
+export class VariableConfig extends BaseModel implements IVariableConfigs
 {
 	bose = new BoseConfig();
 	engine = new EngineConfig();

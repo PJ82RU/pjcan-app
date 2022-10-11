@@ -11,7 +11,7 @@ import { ITemperatureView } from "../temperature";
 import { IVolumeView } from "../volume";
 
 /** Интерфейс параметров отображения данных переменных */
-export interface IVariableView extends IBaseModel {
+export interface IVariableViews extends IBaseModel {
 	bose: IBoseView;
 	climate: IClimateView;
 	clock: IViewConfig;

@@ -1,6 +1,6 @@
-import { VariableConfig, API_EXEC_VARIABLE_CONFIG } from "./VariablesConfig";
-import { IVariableConfig } from "./IVariableConfig";
-import { StructVariableConfig } from "./StructVariableConfig";
+import { VariableConfig, API_EXEC_VARIABLE_CONFIG } from "./VariablesConfigs";
+import { IVariableConfigs } from "./IVariableConfigs";
+import { StructVariableConfigs } from "./StructVariableConfigs";
 
-export { VariableConfig, StructVariableConfig, API_EXEC_VARIABLE_CONFIG };
-export type { IVariableConfig };
+export { VariableConfig, StructVariableConfigs, API_EXEC_VARIABLE_CONFIG };
+export type { IVariableConfigs };

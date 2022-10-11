@@ -1,6 +1,6 @@
-import { VariableView, API_EXEC_VARIABLE_VIEW } from "./VariablesView";
-import { IVariableView } from "./IVariableView";
-import { StructVariableView } from "./StructVariableView";
+import { VariableView, API_EXEC_VARIABLE_VIEW } from "./VariablesViews";
+import { IVariableViews } from "./IVariableViews";
+import { StructVariableViews } from "./StructVariableViews";
 
-export { VariableView, StructVariableView, API_EXEC_VARIABLE_VIEW };
-export type { IVariableView };
+export { VariableView, StructVariableViews, API_EXEC_VARIABLE_VIEW };
+export type { IVariableViews };

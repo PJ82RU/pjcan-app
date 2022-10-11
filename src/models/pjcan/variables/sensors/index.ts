@@ -1,9 +1,10 @@
-import { SensorsValue, API_EXEC_VARIABLE_SENSORS } from "@/models/pjcan/variables/sensors/SensorsValue";
-import { SensorsView, API_EXEC_VARIABLE_SENSORS_VIEW } from "@/models/pjcan/variables/sensors/SensorsView";
-import { ISensorsValue } from "@/models/pjcan/variables/sensors/ISensorsValue";
-import { ISensorsView } from "@/models/pjcan/variables/sensors/ISensorsView";
-import { StructSensorsValue } from "@/models/pjcan/variables/sensors/StructSensorsValue";
-import { StructSensorsView } from "@/models/pjcan/variables/sensors/StructSensorsView";
+import { SensorsValue, API_EXEC_VARIABLE_SENSORS } from "./SensorsValue";
+import { SensorsView, API_EXEC_VARIABLE_SENSORS_VIEW } from "./SensorsView";
+import { ISensorsValue } from "./ISensorsValue";
+import { ISensorsView } from "./ISensorsView";
+import { StructSensorsValue } from "./StructSensorsValue";
+import { StructSensorsView } from "./StructSensorsView";
+import { TSensorsSignal } from "./TSensorsSignal";
 
 export {
 	SensorsValue,
@@ -11,6 +12,7 @@ export {
 	StructSensorsValue,
 	StructSensorsView,
 	API_EXEC_VARIABLE_SENSORS,
-	API_EXEC_VARIABLE_SENSORS_VIEW
+	API_EXEC_VARIABLE_SENSORS_VIEW,
+	TSensorsSignal
 };
 export type { ISensorsValue, ISensorsView };

@@ -5,7 +5,7 @@ import { StructFuelConfig } from "../fuel";
 import { StructVolumeConfig } from "../volume";
 
 /** Структура данных */
-export const StructVariableConfig = {
+export const StructVariableConfigs = {
 	bose: BluetoothStruct.struct(StructBoseConfig),
 	engine: BluetoothStruct.struct(StructEngineConfig),
 	fuel: BluetoothStruct.struct(StructFuelConfig),

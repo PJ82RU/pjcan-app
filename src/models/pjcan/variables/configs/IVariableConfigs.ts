@@ -5,7 +5,7 @@ import { IFuelConfig } from "../fuel";
 import { IVolumeConfig } from "../volume";
 
 /** Интерфейс конфигурации переменных */
-export interface IVariableConfig extends IBaseModel {
+export interface IVariableConfigs extends IBaseModel {
 	bose: IBoseConfig;
 	engine: IEngineConfig;
 	fuel: IFuelConfig;

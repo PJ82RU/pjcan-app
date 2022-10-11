@@ -11,7 +11,7 @@ import { StructTemperatureView } from "../temperature";
 import { StructVolumeView } from "../volume";
 
 /** Структура данных */
-export const StructVariableView = {
+export const StructVariableViews = {
 	bose: BluetoothStruct.struct(StructBoseView),
 	climate: BluetoothStruct.struct(StructClimateView),
 	clock: BluetoothStruct.struct(StructViewConfig),
