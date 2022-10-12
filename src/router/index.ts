@@ -4,7 +4,11 @@ const routes: Array<RouteRecordRaw> = [
 	{
 		path: "/",
 		name: "Onboard",
-		component: () => import("@/views/onboard/index.vue")
+		component: () => import("@/views/onboard/index.vue"),
+		meta: {
+			title: "PJ CAN"
+		}
+
 	}
 ];
 
