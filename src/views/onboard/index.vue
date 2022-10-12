@@ -1,5 +1,5 @@
 <template>
-	<v-row class="onboard"></v-row>
+	<v-row class="m-0 onboard"></v-row>
 </template>
 
 <script>
