@@ -8,9 +8,22 @@ import i18n from "@/lang";
 // шрифты
 import "./styles/fonts/jura.scss";
 
+// уведомления Vue3Toasity
+import Vue3Toasity, { toast } from "vue3-toastify";
+import "vue3-toastify/dist/index.css";
+const Vue3ToasityOptions = {
+	autoClose: 3000,
+	theme: toast.THEME.COLORED,
+	hideProgressBar: true,
+	position: toast.POSITION.BOTTOM_RIGHT,
+	pauseOnHover: true,
+	newestOnTop: true
+};
+
 createApp(App)
 	.use(router)
 	.use(store)
 	.use(vuetify)
 	.use(i18n)
+	.use(Vue3Toasity, Vue3ToasityOptions)
 	.mount("#app");
