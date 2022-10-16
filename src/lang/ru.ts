@@ -1,8 +1,10 @@
 export default {
 	BLE: {
+		title: "Bluetooth",
 		btnConnect: "Подключиться",
 		btnDisconnect: "Отключиться",
-		noConnected: "Вы не подключены ни к одному устройству Bluetooth.",
+		dlgNoConnected: "Вы не подключены ни к одному устройству Bluetooth.",
+		dlgConnected: "Вы подключены устройству Bluetooth PJCAN.",
 		connected: "PJCAN подключен",
 		disconnected: "PJCAN отключен",
 		lostConnected: "Потеряно подключение с устройством Bluetooth PJCAN. Пытаюсь восстановить связь...",
@@ -40,6 +42,11 @@ export default {
 		error: "Ошибка обновления прошивки"
 	},
 
-	onboard: {
+	onboard: {},
+
+	btn: {
+		apply: "Применить",
+		cancel: "Отмена",
+		close: "Закрыть"
 	}
 };
