@@ -77,7 +77,7 @@ export class Bluetooth extends EventEmitter
 			this.clear();
 			device.gatt?.disconnect();
 
-			if (dev) console.log(i18n.global.tc("BLE.server.deviceDisconnected", { n: device.name }));
+			if (dev) console.log(i18n.global.t("BLE.server.deviceDisconnected", { n: device.name }));
 			this.emit(BLUETOOTH_EVENT_CONNECTED, TConnectedStatus.DISCONNECT);
 		}
 	}
@@ -89,7 +89,7 @@ export class Bluetooth extends EventEmitter
 			.requestDevice({ filters: [{ services: [BLUETOOTH_SERVICE_UUID] }] })
 			.then((device: BluetoothDevice) =>
 			{
-				if (dev) console.log(i18n.global.tc("BLE.server.deviceSelected", { n: device.name }));
+				if (dev) console.log(i18n.global.t("BLE.server.deviceSelected", { n: device.name }));
 				device.addEventListener("gattserverdisconnected", () => this.handleDisconnection());
 				this._device = device;
 				return device;
@@ -163,7 +163,7 @@ export class Bluetooth extends EventEmitter
 			.catch(() =>
 			{
 				if (max === 0) return fail();
-				if (dev) console.log(i18n.global.tc("BLE.server.reconnect", { n: delay, c: max }));
+				if (dev) console.log(i18n.global.t("BLE.server.reconnect", { n: delay, c: max }));
 				setTimeout(() =>
 				{
 					this.exponentialBackoff(--max, delay * 2, toTry, success, fail);
@@ -204,7 +204,7 @@ export class Bluetooth extends EventEmitter
 	{
 		console.log("receive", ev.target.value);
 
-		if (dev) console.log(i18n.global.tc("BLE.server.receive", { n: ev.target.value.getUint8(0) }));
+		if (dev) console.log(i18n.global.t("BLE.server.receive", { n: ev.target.value.getUint8(0) }));
 		this.emit(BLUETOOTH_EVENT_RECEIVE, ev.target.value);
 	}
 
@@ -227,7 +227,7 @@ export class Bluetooth extends EventEmitter
 			return Promise.resolve();
 		}
 
-		if (dev) console.log(i18n.global.tc("BLE.server.send", { n: data?.getUint8(0) ?? "..." }));
+		if (dev) console.log(i18n.global.t("BLE.server.send", { n: data?.getUint8(0) ?? "..." }));
 		return (
 			this._characteristic?.writeValue(data).catch(() =>
 			{

@@ -219,7 +219,7 @@ export class Canbus extends EventEmitter
 				{
 					const { major, minor, build, revision } = this.version;
 					console.log(
-						i18n.global.tc("BLE.server.versionProtocol", { mj: major, mn: minor, bl: build, rv: revision })
+						i18n.global.t("BLE.server.versionProtocol", { mj: major, mn: minor, bl: build, rv: revision })
 					);
 				}
 				break;

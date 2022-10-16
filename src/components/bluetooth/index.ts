@@ -4,6 +4,7 @@ import {
 	BLUETOOTH_SIZE_MAX,
 	BLUETOOTH_EVENT_CONNECTED,
 	BLUETOOTH_EVENT_RECEIVE,
+	BLUETOOTH_EVENT_SEND,
 	Bluetooth
 } from "./Bluetooth";
 import { BluetoothStruct } from "./BluetoothStruct";
@@ -16,6 +17,7 @@ export {
 	BLUETOOTH_SIZE_MAX,
 	BLUETOOTH_EVENT_CONNECTED,
 	BLUETOOTH_EVENT_RECEIVE,
+	BLUETOOTH_EVENT_SEND,
 	Bluetooth,
 	BluetoothStruct,
 	TConnectedStatus,
