@@ -1,6 +1,7 @@
 import { BluetoothStruct } from "@/components/bluetooth";
 import { BaseModel } from "../base";
-import { ICarConfig, StructCarConfig } from "./index";
+import { StructCarConfig } from "./StructCarConfig";
+import { ICarConfig } from "./ICarConfig";
 
 export const API_EXEC_CAR_CONFIG = 50; // команда API
 const STRUCT_LENGTH = 49; // длина данных API

@@ -6,11 +6,11 @@ import { StructTemperatureValue } from "./StructTemperatureValue";
 import { StructTemperatureView } from "./StructTemperatureView";
 
 export {
-	TemperatureValue,
-	TemperatureView,
+	API_EXEC_VARIABLE_TEMPERATURE,
+	API_EXEC_VARIABLE_TEMPERATURE_VIEW,
 	StructTemperatureValue,
 	StructTemperatureView,
-	API_EXEC_VARIABLE_TEMPERATURE,
-	API_EXEC_VARIABLE_TEMPERATURE_VIEW
+	TemperatureValue,
+	TemperatureView
 };
 export type { ITemperatureValue, ITemperatureView };

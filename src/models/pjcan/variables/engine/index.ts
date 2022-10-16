@@ -9,14 +9,14 @@ import { StructEngineValue } from "./StructEngineValue";
 import { StructEngineView } from "./StructEngineView";
 
 export {
-	EngineConfig,
-	EngineValue,
-	EngineView,
+	API_EXEC_VARIABLE_ENGINE_CONFIG,
+	API_EXEC_VARIABLE_ENGINE,
+	API_EXEC_VARIABLE_ENGINE_VIEW,
 	StructEngineConfig,
 	StructEngineValue,
 	StructEngineView,
-	API_EXEC_VARIABLE_ENGINE_CONFIG,
-	API_EXEC_VARIABLE_ENGINE,
-	API_EXEC_VARIABLE_ENGINE_VIEW
+	EngineConfig,
+	EngineValue,
+	EngineView
 };
 export type { IEngineConfig, IEngineValue, IEngineView };

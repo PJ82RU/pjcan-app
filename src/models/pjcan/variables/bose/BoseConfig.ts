@@ -1,6 +1,8 @@
 import { BluetoothStruct } from "@/components/bluetooth";
 import { BaseModel } from "../../base";
-import { IBoseConfig, StructBoseConfig, TCenterPoint } from "./index";
+import { StructBoseConfig } from "./StructBoseConfig";
+import { IBoseConfig } from "./IBoseConfig";
+import { TCenterPoint } from "./TCenterPoint";
 
 export const API_EXEC_VARIABLE_BOSE = 110; // команда API
 const STRUCT_LENGTH = 7; // длина данных API

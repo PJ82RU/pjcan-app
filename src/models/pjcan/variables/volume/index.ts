@@ -6,11 +6,11 @@ import { StructVolumeConfig } from "./StructVolumeConfig";
 import { StructVolumeView } from "./StructVolumeView";
 
 export {
-	VolumeConfig,
-	VolumeView,
+	API_EXEC_VARIABLE_VOLUME,
+	API_EXEC_VARIABLE_VOLUME_VIEW,
 	StructVolumeConfig,
 	StructVolumeView,
-	API_EXEC_VARIABLE_VOLUME,
-	API_EXEC_VARIABLE_VOLUME_VIEW
+	VolumeConfig,
+	VolumeView
 };
 export type { IVolumeConfig, IVolumeView };

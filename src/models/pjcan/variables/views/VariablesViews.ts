@@ -10,7 +10,8 @@ import { MovementView } from "../movement";
 import { SensorsView } from "../sensors";
 import { TemperatureView } from "../temperature";
 import { VolumeView } from "../volume";
-import { IVariableViews, StructVariableViews } from "./index";
+import { StructVariableViews } from "./StructVariableViews";
+import { IVariableViews } from "./IVariableViews";
 
 export const API_EXEC_VARIABLE_VIEW = 101; // команда API
 const STRUCT_LENGTH = 97; // длина данных API

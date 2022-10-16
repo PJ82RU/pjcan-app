@@ -9,14 +9,14 @@ import { ITeyesText } from "./ITeyesText";
 import { ITeyesView } from "./ITeyesView";
 
 export {
-	TeyesConfig,
-	TeyesText,
-	TeyesView,
 	API_EXEC_TEYES_CONFIG,
 	API_EXEC_TEYES_TEXT,
 	API_EXEC_TEYES_VIEW,
 	StructTeyesConfig,
 	StructTeyesText,
-	StructTeyesView
+	StructTeyesView,
+	TeyesConfig,
+	TeyesText,
+	TeyesView
 };
 export type { ITeyesConfig, ITeyesText, ITeyesView };

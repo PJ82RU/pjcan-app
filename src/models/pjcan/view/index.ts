@@ -3,5 +3,5 @@ import { TViewType } from "./TViewType";
 import { StructViewConfig } from "./StructViewConfig";
 import { IViewConfig } from "./IViewConfig";
 
-export { ViewConfig, TViewType, StructViewConfig };
+export { TViewType, StructViewConfig, ViewConfig };
 export type { IViewConfig };

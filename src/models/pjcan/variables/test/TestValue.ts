@@ -1,7 +1,8 @@
 import { BluetoothStruct } from "@/components/bluetooth";
 import { BaseModel } from "../../base";
 import { ViewConfig } from "../../view";
-import { ITestValue, StructTestValue } from "./index";
+import { StructTestValue } from "./StructTestValue";
+import { ITestValue } from "./ITestValue";
 
 export const API_EXEC_VARIABLE_TEST = 190; // команда API
 const STRUCT_LENGTH = 37; // длина данных API

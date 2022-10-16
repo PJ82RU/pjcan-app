@@ -3,7 +3,8 @@ import { BaseModel } from "../base";
 import { CarView } from "../car";
 import { VariableView } from "../variables/views";
 import { TeyesView } from "../teyes";
-import { IViews, StructViews } from "./index";
+import { StructViews } from "./StructViews";
+import { IViews } from "./IViews";
 
 export const API_EXEC_VIEW = 2;
 const STRUCT_LENGTH = 109;

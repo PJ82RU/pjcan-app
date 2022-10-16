@@ -1,7 +1,8 @@
 import { BluetoothStruct } from "@/components/bluetooth";
 import { BaseModel } from "../../base";
 import { ViewConfig } from "../../view";
-import { IVolumeView, StructVolumeView } from "./index";
+import { StructVolumeView } from "./StructVolumeView";
+import { IVolumeView } from "./IVolumeView";
 
 export const API_EXEC_VARIABLE_VOLUME_VIEW = 201; // команда API
 const STRUCT_LENGTH = 5; // длина данных API

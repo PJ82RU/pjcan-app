@@ -1,7 +1,8 @@
 import { BluetoothStruct } from "@/components/bluetooth";
 import { BaseModel } from "../../base";
 import { ViewConfig } from "../../view";
-import { ISensorsView, StructSensorsView } from "./index";
+import { StructSensorsView } from "./StructSensorsView";
+import { ISensorsView } from "./ISensorsView";
 
 export const API_EXEC_VARIABLE_SENSORS_VIEW = 171; // команда API
 const STRUCT_LENGTH = 17; // длина данных API

@@ -7,12 +7,12 @@ import { StructSensorsView } from "./StructSensorsView";
 import { TSensorsSignal } from "./TSensorsSignal";
 
 export {
-	SensorsValue,
-	SensorsView,
-	StructSensorsValue,
-	StructSensorsView,
 	API_EXEC_VARIABLE_SENSORS,
 	API_EXEC_VARIABLE_SENSORS_VIEW,
-	TSensorsSignal
+	StructSensorsValue,
+	StructSensorsView,
+	TSensorsSignal,
+	SensorsValue,
+	SensorsView
 };
 export type { ISensorsValue, ISensorsView };

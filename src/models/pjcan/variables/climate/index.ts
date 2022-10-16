@@ -7,12 +7,12 @@ import { StructClimateView } from "./StructClimateView";
 import { TAir } from "./TAir";
 
 export {
-	ClimateValue,
-	ClimateView,
+	API_EXEC_VARIABLE_CLIMATE,
+	API_EXEC_VARIABLE_CLIMATE_VIEW,
 	StructClimateValue,
 	StructClimateView,
 	TAir,
-	API_EXEC_VARIABLE_CLIMATE,
-	API_EXEC_VARIABLE_CLIMATE_VIEW
+	ClimateValue,
+	ClimateView
 };
 export type { IClimateValue, IClimateView };

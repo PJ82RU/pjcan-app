@@ -4,7 +4,8 @@ import { BoseConfig } from "../bose";
 import { EngineConfig } from "../engine";
 import { FuelConfig } from "../fuel";
 import { VolumeConfig } from "../volume";
-import { IVariableConfigs, StructVariableConfigs } from "./index";
+import { StructVariableConfigs } from "./StructVariableConfigs";
+import { IVariableConfigs } from "./IVariableConfigs";
 
 export const API_EXEC_VARIABLE_CONFIG = 100; // команда API
 const STRUCT_LENGTH = 23; // длина данных API

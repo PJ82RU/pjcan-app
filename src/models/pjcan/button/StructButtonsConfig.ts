@@ -1,5 +1,7 @@
 import { BluetoothStruct } from "@/components/bluetooth";
-import { BUTTON_NUMBER, BUTTON_PRESS_TYPE_NUMBER } from "./ButtonConfig";
+
+export const BUTTON_NUMBER = 6; // количество кнопок
+export const BUTTON_PRESS_TYPE_NUMBER = 5; // количество типов кнопок
 
 /** Структура данных */
 export const StructButtonsConfig = {

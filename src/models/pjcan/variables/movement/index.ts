@@ -5,5 +5,12 @@ import { IMovementView } from "./IMovementView";
 import { StructMovementValue } from "./StructMovementValue";
 import { StructMovementView } from "./StructMovementView";
 
-export { MovementValue, MovementView, StructMovementValue, StructMovementView, API_EXEC_VARIABLE_MOVEMENT, API_EXEC_VARIABLE_MOVEMENT_VIEW };
+export {
+	API_EXEC_VARIABLE_MOVEMENT,
+	API_EXEC_VARIABLE_MOVEMENT_VIEW,
+	StructMovementValue,
+	StructMovementView,
+	MovementValue,
+	MovementView
+};
 export type { IMovementValue, IMovementView };

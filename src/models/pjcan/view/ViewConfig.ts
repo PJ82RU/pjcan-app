@@ -1,4 +1,5 @@
-import { TViewType, IViewConfig } from "./index";
+import { IViewConfig } from "./IViewConfig";
+import { TViewType } from "./TViewType";
 
 /** Модель параметров отображения */
 export class ViewConfig implements IViewConfig

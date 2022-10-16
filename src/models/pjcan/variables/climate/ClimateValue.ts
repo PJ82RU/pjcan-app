@@ -1,6 +1,7 @@
 import { BluetoothStruct } from "@/components/bluetooth";
 import { BaseModel } from "../../base";
-import { IClimateValue, StructClimateValue } from "./index";
+import { StructClimateValue } from "./StructClimateValue";
+import { IClimateValue } from "./IClimateValue";
 
 export const API_EXEC_VARIABLE_CLIMATE = 120; // команда API
 const STRUCT_LENGTH = 10; // длина данных API

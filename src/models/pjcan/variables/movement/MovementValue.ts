@@ -1,6 +1,7 @@
 import { BluetoothStruct } from "@/components/bluetooth";
 import { BaseModel } from "../../base";
-import { IMovementValue, StructMovementValue } from "./index";
+import { StructMovementValue } from "./StructMovementValue";
+import { IMovementValue } from "./IMovementValue";
 
 export const API_EXEC_VARIABLE_MOVEMENT = 160; // команда API
 const STRUCT_LENGTH = 13; // длина данных API

@@ -1,6 +1,7 @@
 import { BluetoothStruct } from "@/components/bluetooth";
 import { BaseModel } from "../../base";
-import { IEngineValue, StructEngineValue } from "./index";
+import { StructEngineValue } from "./StructEngineValue";
+import { IEngineValue } from "./IEngineValue";
 
 export const API_EXEC_VARIABLE_ENGINE = 140; // команда API
 const STRUCT_LENGTH = 21; // длина данных API

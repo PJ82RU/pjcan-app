@@ -1,6 +1,8 @@
 import { BluetoothStruct } from "@/components/bluetooth";
 import { BaseModel } from "../../base";
-import { ISensorsValue, StructSensorsValue, TSensorsSignal } from "./index";
+import { StructSensorsValue } from "./StructSensorsValue";
+import { ISensorsValue } from "./ISensorsValue";
+import { TSensorsSignal } from "./TSensorsSignal";
 
 export const API_EXEC_VARIABLE_SENSORS = 170; // команда API
 const STRUCT_LENGTH = 3; // длина данных API

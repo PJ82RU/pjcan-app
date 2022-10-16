@@ -1,12 +1,11 @@
 import { BluetoothStruct } from "@/components/bluetooth";
 import { BaseModel } from "../base";
-import { IButtonsConfig, IButtonsConfigItem, StructButtonsConfig } from "./index";
+import { StructButtonsConfig, BUTTON_NUMBER, BUTTON_PRESS_TYPE_NUMBER } from "./StructButtonsConfig";
+import { IButtonsConfig } from "./IButtonsConfig";
+import { IButtonsConfigItem } from "./IButtonsConfigItem";
 
 export const API_EXEC_BUTTONS_CONFIG = 20; // команда API
 const STRUCT_LENGTH = 63; // длина данных API
-
-export const BUTTON_NUMBER = 6; // количество кнопок
-export const BUTTON_PRESS_TYPE_NUMBER = 5; // количество типов кнопок
 
 const struct = new BluetoothStruct(StructButtonsConfig);
 

@@ -6,11 +6,11 @@ import { StructDoorsValue } from "./StructDoorsValue";
 import { StructDoorsView } from "./StructDoorsView";
 
 export {
-	DoorsValue,
-	DoorsView,
+	API_EXEC_VARIABLE_DOORS,
+	API_EXEC_VARIABLE_DOORS_VIEW,
 	StructDoorsValue,
 	StructDoorsView,
-	API_EXEC_VARIABLE_DOORS,
-	API_EXEC_VARIABLE_DOORS_VIEW
+	DoorsValue,
+	DoorsView
 };
 export type { IDoorsValue, IDoorsView };

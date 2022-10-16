@@ -7,12 +7,12 @@ import { StructBoseView } from "./StructBoseView";
 import { TCenterPoint } from "./TCenterPoint";
 
 export {
-	BoseConfig,
-	BoseView,
+	API_EXEC_VARIABLE_BOSE,
+	API_EXEC_VARIABLE_BOSE_VIEW,
+	TCenterPoint,
 	StructBoseConfig,
 	StructBoseView,
-	TCenterPoint,
-	API_EXEC_VARIABLE_BOSE,
-	API_EXEC_VARIABLE_BOSE_VIEW
+	BoseConfig,
+	BoseView
 };
 export type { IBoseConfig, IBoseView };

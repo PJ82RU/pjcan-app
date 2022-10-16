@@ -1,7 +1,8 @@
 import { BluetoothStruct } from "@/components/bluetooth";
 import { BaseModel } from "../../base";
 import { ViewConfig } from "../../view";
-import { IDoorsView, StructDoorsView } from "./index";
+import { StructDoorsView } from "./StructDoorsView";
+import { IDoorsView } from "./IDoorsView";
 
 export const API_EXEC_VARIABLE_DOORS_VIEW = 131; // команда API
 const STRUCT_LENGTH = 5; // длина данных API

@@ -1,7 +1,8 @@
 import { BluetoothStruct } from "@/components/bluetooth";
 import { BaseModel } from "../../base";
 import { ViewConfig } from "../../view";
-import { ITemperatureView, StructTemperatureView } from "./index";
+import { StructTemperatureView } from "./StructTemperatureView";
+import { ITemperatureView } from "./ITemperatureView";
 
 export const API_EXEC_VARIABLE_TEMPERATURE_VIEW = 181; // команда API
 const STRUCT_LENGTH = 5; // длина данных API

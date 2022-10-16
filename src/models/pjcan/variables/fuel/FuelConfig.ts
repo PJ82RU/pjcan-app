@@ -1,6 +1,7 @@
 import { BluetoothStruct } from "@/components/bluetooth";
 import { BaseModel } from "../../base";
-import { IFuelConfig, StructFuelConfig } from "./index";
+import { StructFuelConfig } from "./StructFuelConfig";
+import { IFuelConfig } from "./IFuelConfig";
 
 export const API_EXEC_VARIABLE_FUEL_CONFIG = 151; // команда API
 const STRUCT_LENGTH = 5; // длина данных API

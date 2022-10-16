@@ -4,7 +4,8 @@ import { ButtonsConfig } from "../button";
 import { CarConfig } from "../car";
 import { TeyesConfig } from "../teyes";
 import { VariableConfig } from "../variables/configs";
-import { IConfigs, StructConfigs } from "./index";
+import { StructConfigs } from "./StructConfigs";
+import { IConfigs } from "./IConfigs";
 
 export const API_EXEC_CONFIG = 1;
 const STRUCT_LENGTH = 133; // временно!!! должно быть 134, нужно исправить в прошивке устройства!

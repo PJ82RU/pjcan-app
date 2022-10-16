@@ -1,7 +1,8 @@
 import { BluetoothStruct } from "@/components/bluetooth";
 import { ViewConfig } from "../view";
 import { BaseModel } from "../base";
-import { ITeyesView, StructTeyesView } from "./index";
+import { StructTeyesView } from "./StructTeyesView";
+import { ITeyesView } from "./ITeyesView";
 
 export const API_EXEC_TEYES_VIEW = 32; // команда API
 const STRUCT_LENGTH = 5; // длина данных API

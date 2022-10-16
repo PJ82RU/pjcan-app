@@ -1,7 +1,8 @@
 import { BluetoothStruct } from "@/components/bluetooth";
 import { BaseModel } from "../../base";
 import { ViewConfig } from "../../view";
-import { IBoseView, StructBoseView } from "./index";
+import { StructBoseView } from "./StructBoseView";
+import { IBoseView } from "./IBoseView";
 
 export const API_EXEC_VARIABLE_BOSE_VIEW = 111; // команда API
 const STRUCT_LENGTH = 5; // длина данных API

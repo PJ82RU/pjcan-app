@@ -1,6 +1,7 @@
 import { BluetoothStruct } from "@/components/bluetooth";
 import { BaseModel } from "../base";
-import { IButtonValue, StructButtonsValue } from "./index";
+import { StructButtonsValue } from "./StructButtonsValue";
+import { IButtonValue } from "./IButtonValue";
 
 export const API_EXEC_BUTTONS_VALUE = 21; // команда API
 const STRUCT_LENGTH = 7; // длина данных API

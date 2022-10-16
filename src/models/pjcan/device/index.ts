@@ -5,5 +5,5 @@ import { StructDeviceInfo } from "./StructDeviceInfo";
 import { IDeviceConfig } from "./IDeviceConfig";
 import { IDeviceInfo } from "./IDeviceInfo";
 
-export { DeviceConfig, DeviceInfo, API_EXEC_DEVICE_CONFIG, API_EXEC_INFO, StructDeviceConfig, StructDeviceInfo };
+export { API_EXEC_DEVICE_CONFIG, API_EXEC_INFO, StructDeviceConfig, StructDeviceInfo, DeviceConfig, DeviceInfo };
 export type { IDeviceConfig, IDeviceInfo };

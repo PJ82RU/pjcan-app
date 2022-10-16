@@ -9,14 +9,14 @@ import { StructFuelValue } from "./StructFuelValue";
 import { StructFuelView } from "./StructFuelView";
 
 export {
-	FuelConfig,
-	FuelValue,
-	FuelView,
+	API_EXEC_VARIABLE_FUEL_CONFIG,
+	API_EXEC_VARIABLE_FUEL,
+	API_EXEC_VARIABLE_FUEL_VIEW,
 	StructFuelConfig,
 	StructFuelValue,
 	StructFuelView,
-	API_EXEC_VARIABLE_FUEL_CONFIG,
-	API_EXEC_VARIABLE_FUEL,
-	API_EXEC_VARIABLE_FUEL_VIEW
+	FuelConfig,
+	FuelValue,
+	FuelView
 };
 export type { IFuelConfig, IFuelValue, IFuelView };

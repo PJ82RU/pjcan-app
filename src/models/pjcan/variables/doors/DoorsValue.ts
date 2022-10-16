@@ -1,6 +1,7 @@
 import { BluetoothStruct } from "@/components/bluetooth";
 import { BaseModel } from "../../base";
-import { IDoorsValue, StructDoorsValue } from "./index";
+import { StructDoorsValue } from "./StructDoorsValue";
+import { IDoorsValue } from "./IDoorsValue";
 
 export const API_EXEC_VARIABLE_DOORS = 130; // команда API
 const STRUCT_LENGTH = 2; // длина данных API
