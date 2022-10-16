@@ -9,7 +9,7 @@ const URL_FIRMWARE_PATH = location.href + "firmware/";
 const URL_FIRMWARE_VERSION = URL_FIRMWARE_PATH + "version.json";
 const URL_FIRMWARE_GZIP = URL_FIRMWARE_PATH + "firmware.bin.gz";
 
-/** Обновление прошивки устройства PJCAN */
+/** Обновление прошивки устройства PJ CAN */
 export class UpdateFirmware
 {
 	/** Новая версия прошивки */
@@ -20,7 +20,7 @@ export class UpdateFirmware
 	resultBegin: IUpdateBegin = new UpdateBegin();
 	/** Статус обновления */
 	isUpdated: boolean = false;
-	/** Процент загрузки прошивки на устройство PJCAN */
+	/** Процент загрузки прошивки на устройство PJ CAN */
 	get uploading(): number
 	{
 		return this.resultUpload.offset > 0 ? this.resultUpload.offset / this.resultUpload.data.byteLength : 0;
@@ -70,7 +70,7 @@ export class UpdateFirmware
 		});
 	}
 
-	/** Пишем данные файла прошивки в устройство PJCAN */
+	/** Пишем данные файла прошивки в устройство PJ CAN */
 	private onUpload(result: boolean): void
 	{
 		if (result && this.resultUpload.offset < this.resultUpload.data.byteLength)
@@ -107,3 +107,6 @@ export class UpdateFirmware
 		canbus.bluetooth.send(this.resultBegin.get()).then();
 	}
 }
+
+const update = new UpdateFirmware();
+export default update;

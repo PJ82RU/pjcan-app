@@ -13,6 +13,7 @@
 			<v-spacer />
 
 			<bluetooth-btn />
+			<update-firmware />
 
 			<v-btn icon>
 				<v-icon>mdi-dots-vertical</v-icon>
@@ -25,11 +26,12 @@
 </template>
 
 <script lang="ts">
-import BluetoothBtn from "./components/bluetooth/BluetoothBtn.vue";
+import BluetoothBtn from "./components/BluetoothBtn.vue";
+import UpdateFirmware from "./components/UpdateFirmware.vue";
 
 export default {
 	name: "BaseLayout",
-	components: { BluetoothBtn }
+	components: { BluetoothBtn, UpdateFirmware }
 };
 </script>
 
