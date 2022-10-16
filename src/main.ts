@@ -7,6 +7,7 @@ import i18n from "@/lang";
 
 // шрифты
 import "./styles/fonts/jura.scss";
+import "./styles/fonts/roboto.scss";
 
 // уведомления Vue3Toasity
 import Vue3Toasity, { toast } from "vue3-toastify";
