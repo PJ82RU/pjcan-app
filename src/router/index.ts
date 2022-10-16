@@ -6,7 +6,8 @@ const routes: Array<RouteRecordRaw> = [
 		name: "Onboard",
 		component: () => import("@/views/onboard/index.vue"),
 		meta: {
-			title: "PJ CAN"
+			title: "PJ CAN",
+			subtitle: "Onboard"
 		}
 
 	}
@@ -15,6 +16,12 @@ const routes: Array<RouteRecordRaw> = [
 const router = createRouter({
 	history: createWebHistory(process.env.BASE_URL),
 	routes
+});
+
+router.beforeEach(async (to, from, next) =>
+{
+	document.title = "PJCAN: %s".replace("%s", (to.meta?.subtitle ?? "") as string);
+	next();
 });
 
 export default router;

@@ -14,14 +14,14 @@
 
 			<v-card-text>
 				<span>
-					{{ $t(!connected ? "BLE.dlgNoConnected" : "BLE.dlgConnected") }}
+					{{ $t(!connected ? "BLE.dialog.noConnected" : "BLE.dialog.connected") }}
 				</span>
 			</v-card-text>
 
 			<v-card-actions class="justify-end align-end">
 				<v-btn-group class="border-dialog-btns">
 					<v-btn color="#25323e" @click="$emit('click:apply')">
-						{{ $t(!connected ? "BLE.btnConnect" : "BLE.btnDisconnect") }}
+						{{ $t(!connected ? "BLE.btn.connect" : "BLE.btn.disconnect") }}
 					</v-btn>
 					<v-btn color="#25323e" @click="visible = false">
 						{{ $t("btn.close") }}
@@ -60,8 +60,3 @@ export default {
 	}
 };
 </script>
-
-<style lang="scss" scoped>
-.bluetooth-dialog {
-}
-</style>

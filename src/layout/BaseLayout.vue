@@ -5,14 +5,14 @@
 			<v-app-bar-nav-icon />
 
 			<v-toolbar-title>
-				{{ $route?.meta?.title ?? "" }}
+				<span class="text-h5">
+					{{ $route?.meta?.title ?? "" }}
+				</span>
 			</v-toolbar-title>
 
 			<v-spacer />
 
-			<v-btn icon>
-				<v-icon>mdi-bluetooth</v-icon>
-			</v-btn>
+			<bluetooth-btn />
 
 			<v-btn icon>
 				<v-icon>mdi-dots-vertical</v-icon>
@@ -24,9 +24,12 @@
 	</v-app>
 </template>
 
-<script>
+<script lang="ts">
+import BluetoothBtn from "./components/bluetooth/BluetoothBtn.vue";
+
 export default {
-	name: "BaseLayout"
+	name: "BaseLayout",
+	components: { BluetoothBtn }
 };
 </script>
 

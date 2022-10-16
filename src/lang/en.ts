@@ -1,28 +1,36 @@
 export default {
 	BLE: {
-		btnConnect: "Подключиться",
-		btnDisconnect: "Отключиться",
-		noConnected: "Вы не подключены ни к одному устройству Bluetooth.",
-		connected: "PJCAN подключен",
-		disconnected: "PJCAN отключен",
-		lostConnected: "Потеряно подключение с устройством Bluetooth PJCAN. Пытаюсь восстановить связь...",
-		noData: "Нет данных для отправки",
-
+		title: "Bluetooth",
+		btn: {
+			connect: "Подключиться",
+			disconnect: "Отключиться"
+		},
+		dialog: {
+			noConnected: "Вы не подключены ни к одному устройству Bluetooth.",
+			connected: "Вы подключены к устройству Bluetooth PJCAN."
+		},
+		notify: {
+			noConnected: "Нет подключения устройству Bluetooth.",
+			connected: "PJCAN подключен",
+			disconnected: "PJCAN отключен",
+			lostConnected: "Потеряно подключение с устройством Bluetooth PJCAN. Пытаюсь восстановить связь...",
+			noData: "Нет данных для отправки"
+		},
 		server: {
-			deviceSelected: "Выбрано % Bluetooth устройство.",
-			deviceDisconnected: "Устройство Bluetooth % отключено.",
+			deviceSelected: "Выбрано {n} Bluetooth устройство.",
+			deviceDisconnected: "Устройство Bluetooth {n} отключено.",
 			GATTConnect: "Подключение к GATT серверу ...",
 			getService: "GATT сервер подключен, читаю сервис ...",
 			getCharacteristic: "Сервис получен, читаю характеристику ...",
 			characteristicDone: "Характеристика получена.",
 			startNotifications: "Запуск уведомлений ...",
 			notificationsDone: "Уведомления запущены.",
-			reconnect: "Повторная попытка через % сек... (осталось $ попыток)",
+			reconnect: "Повторная попытка через {n} сек... (осталось {c} попыток)",
 			reconnectRestored: "Соединение с устройством Bluetooth PJCAN восстановлено.",
 			connectionLost: "Связь с устройством Bluetooth PJCAN потеряна.",
-			receive: "Входящие данные: ID %",
-			send: "Исходящие данные: ID %",
-			versionProtocol: "Версия протокола: %n0.%n1.%n2.%n3"
+			receive: "Входящие данные: ID {n}",
+			send: "Исходящие данные: ID {n}",
+			versionProtocol: "Версия протокола: {mj}.{mn}.{bl}.{rv}"
 		}
 	},
 
@@ -40,6 +48,11 @@ export default {
 		error: "Ошибка обновления прошивки"
 	},
 
-	onboard: {
+	onboard: {},
+
+	btn: {
+		apply: "Применить",
+		cancel: "Отмена",
+		close: "Закрыть"
 	}
 };
