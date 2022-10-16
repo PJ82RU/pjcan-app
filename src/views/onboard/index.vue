@@ -1,8 +1,8 @@
 <template>
-	<v-row class="m-0 onboard"></v-row>
+	<v-row class="ma-0 onboard"></v-row>
 </template>
 
-<script>
+<script lang="ts">
 export default {
 	name: "onboard"
 };
