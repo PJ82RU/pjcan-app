@@ -3,27 +3,39 @@
 		<v-icon v-if="connected">mdi-bluetooth</v-icon>
 		<v-icon v-else>mdi-bluetooth-off</v-icon>
 	</v-btn>
-	<bluetooth-dialog v-model="visibleDialog" :connected="connected" @click:apply="onDialogClick" />
+
+	<dialog-template v-model="visibleDialog" icon="mdi-bluetooth" :title="$t('BLE.title')" text actions>
+		<template #body>
+			{{ $t(!connected ? "BLE.dialog.noConnected" : "BLE.dialog.connected") }}
+		</template>
+		<template #btns>
+			<v-btn color="#25323e" @click="onDialogClick">
+				{{ $t(!connected ? "BLE.btn.connect" : "BLE.btn.disconnect") }}
+			</v-btn>
+			<v-btn color="#25323e" @click="visibleDialog = false">
+				{{ $t("btn.close") }}
+			</v-btn>
+		</template>
+	</dialog-template>
 </template>
 
 <script lang="ts">
+import DialogTemplate from "@/components/DialogTemplate.vue";
+
 import { onMounted, onUnmounted, ref } from "vue";
 import { toast } from "vue3-toastify";
-import BluetoothDialog from "./BluetoothDialog.vue";
-
+import i18n from "@/lang";
 import canbus from "@/api/canbus";
 import { BLUETOOTH_EVENT_CONNECTED, BLUETOOTH_EVENT_SEND, TConnectedStatus } from "@/components/bluetooth";
-import { UpdateFirmware } from "@/components/firmware";
-import i18n from "@/lang";
+import update from "@/components/firmware";
 
 export default {
 	name: "BluetoothBtn",
-	components: { BluetoothDialog },
+	components: { DialogTemplate },
 	setup()
 	{
 		const visibleDialog = ref(true);
 		const connected = ref(false);
-		const updateFirmware = new UpdateFirmware();
 
 		/** Событие кнопки подключения/отключения Bluetooth */
 		const onDialogClick = () =>
@@ -39,7 +51,7 @@ export default {
 		{
 			connected.value = status === TConnectedStatus.CONNECT;
 			// не выводим сообщения об отключении/подключении Bluetooth в момент прошивки устройства
-			if (updateFirmware.isUpdated) return;
+			if (update.isUpdated) return;
 
 			switch (status)
 			{
@@ -71,6 +83,7 @@ export default {
 			// событие отправки данных
 			canbus.bluetooth.addListener(BLUETOOTH_EVENT_SEND, onSend);
 		});
+
 		onUnmounted(() =>
 		{
 			// события подключения к Bluetooth

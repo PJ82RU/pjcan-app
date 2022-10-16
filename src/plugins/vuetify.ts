@@ -6,6 +6,18 @@ import "../styles/vuetify.scss";
 // Vuetify
 import { createVuetify } from "vuetify";
 
-export default createVuetify(
-	// https://vuetifyjs.com/en/introduction/why-vuetify/#feature-guides
-);
+export default createVuetify({
+	theme: {
+		themes: {
+			light: {
+				colors: {
+					primary: "#0b677b",
+					secondary: "#25323e",
+					accent: "#9c27b0",
+					info: "#31ccec",
+					warning: "#f2c037"
+				}
+			}
+		}
+	}
+});

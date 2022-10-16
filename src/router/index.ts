@@ -20,7 +20,7 @@ const router = createRouter({
 
 router.beforeEach(async (to, from, next) =>
 {
-	document.title = "PJCAN: %s".replace("%s", (to.meta?.subtitle ?? "") as string);
+	document.title = "PJ CAN: %s".replace("%s", (to.meta?.subtitle ?? "") as string);
 	next();
 });
 

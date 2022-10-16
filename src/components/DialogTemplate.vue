@@ -1,31 +1,22 @@
 <template>
 	<v-dialog
-		class="bluetooth-dialog"
 		v-model="visible"
 		transition="dialog-bottom-transition"
 		:width="`${mobile ? 90 : 50}%`"
+		:persistent="!actions"
 	>
-		<v-card prepend-icon="mdi-bluetooth">
-			<template v-slot:title>
-				<span class="text-h5">
-					{{ $t("BLE.title") }}
-				</span>
+		<v-card :prepend-icon="icon">
+			<template v-if="title?.length > 0" v-slot:title>
+				<span class="text-h5">{{ title }}</span>
 			</template>
 
-			<v-card-text>
-				<span>
-					{{ $t(!connected ? "BLE.dialog.noConnected" : "BLE.dialog.connected") }}
-				</span>
+			<v-card-text v-if="text" :class="{ 'mb-2': !actions }">
+				<slot name="body" />
 			</v-card-text>
 
-			<v-card-actions class="justify-end align-end">
+			<v-card-actions v-if="actions" class="justify-end align-end">
 				<v-btn-group class="border-dialog-btns">
-					<v-btn color="#25323e" @click="$emit('click:apply')">
-						{{ $t(!connected ? "BLE.btn.connect" : "BLE.btn.disconnect") }}
-					</v-btn>
-					<v-btn color="#25323e" @click="visible = false">
-						{{ $t("btn.close") }}
-					</v-btn>
+					<slot name="btns" />
 				</v-btn-group>
 			</v-card-actions>
 		</v-card>
@@ -37,12 +28,15 @@ import { computed, toRefs } from "vue";
 import { useDisplay } from "vuetify";
 
 export default {
-	name: "BluetoothDialog",
+	name: "DialogTemplate",
 	props: {
 		modelValue: Boolean,
-		connected: Boolean
+		icon: String,
+		title: String,
+		text: Boolean,
+		actions: Boolean
 	},
-	emits: ["update:modelValue", "click:apply"],
+	emits: ["update:modelValue"],
 	setup(props: any, { emit }: { emit: any })
 	{
 		const { modelValue } = toRefs(props);
