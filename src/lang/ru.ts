@@ -55,7 +55,9 @@ export default {
 		}
 	},
 
-	onboard: {},
+	onboard: {
+		title: "Бортовой компьютер"
+	},
 
 	btn: {
 		apply: "Применить",

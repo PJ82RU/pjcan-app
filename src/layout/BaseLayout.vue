@@ -2,11 +2,11 @@
 <template>
 	<v-app class="base-layout">
 		<v-app-bar flat class="base-layout__toolbar" color="#0b677b" :height="50">
-			<v-app-bar-nav-icon />
+			<!--<v-app-bar-nav-icon />-->
 
 			<v-toolbar-title>
 				<span class="text-h5">
-					{{ $route?.meta?.title ?? "" }}
+					{{ title }}
 				</span>
 			</v-toolbar-title>
 
@@ -26,12 +26,23 @@
 </template>
 
 <script lang="ts">
+import { computed } from "vue";
+import store from "@/store";
+
 import BluetoothBtn from "./components/BluetoothBtn.vue";
 import UpdateFirmware from "./components/UpdateFirmware.vue";
 
 export default {
 	name: "BaseLayout",
-	components: { BluetoothBtn, UpdateFirmware }
+	components: { BluetoothBtn, UpdateFirmware },
+	setup()
+	{
+		const title = computed(() => store.getters["app/title"]);
+
+		return {
+			title
+		};
+	}
 };
 </script>
 
