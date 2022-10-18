@@ -5,10 +5,11 @@
 		:width="`${mobile ? 90 : 50}%`"
 		:persistent="!actions"
 	>
-		<v-card :prepend-icon="icon">
-			<template v-if="title?.length > 0" v-slot:title>
-				<span class="text-h5">{{ title }}</span>
-			</template>
+		<v-card>
+			<v-card-title v-if="title?.length > 0" class="d-flex align-center">
+				<icon-custom :name="icon" />
+				<span class="ml-2 text-h5">{{ title }}</span>
+			</v-card-title>
 
 			<v-card-text v-if="text" :class="{ 'mb-2': !actions }">
 				<slot name="body" />
@@ -27,8 +28,11 @@
 import { computed, toRefs } from "vue";
 import { useDisplay } from "vuetify";
 
+import IconCustom from "@/components/icon-custom/IconCustom.vue";
+
 export default {
 	name: "DialogTemplate",
+	components: { IconCustom },
 	props: {
 		modelValue: Boolean,
 		icon: String,
