@@ -55,13 +55,55 @@ export default {
 		}
 	},
 
-	onboard: {
-		title: "Бортовой компьютер"
+	menu: {
+		language: {
+			russian: "Russian language",
+			english: "English language"
+		},
+		about: "О программе"
+	},
+
+	about: {
+		title: "О программе",
+		version: "Версия web-приложения",
+		versionFirmware: "Версия прошивки PJCAN",
+		carSupport: "Поддержка автомобиля",
+		author: "Автор"
+	},
+
+	deviceInfo: {
+		title: "Техническая информация",
+		chipCores: "Количество ядер",
+		// chipModel: "Модель чипа",
+		chipRevision: "Номер ревизии чипа",
+		cpuFreqMHz: "Частота ЦП, МГц",
+		// cycleCount: "Количество циклов",
+		efuseMac: "MAC-адрес",
+		flashChipMode: "Режим флеш-памяти",
+		flashChipSize: "Размер флеш-памяти, байт",
+		flashChipSpeed: "Частота флеш-памяти",
+		// heapSize: "Размер кучи в памяти",
+		// freeHeap: "Свободной кучи в памяти",
+		// maxAllocHeap: "Размер самого большого блока кучи",
+		// minFreeHeap: "Наименьший уровень свободной кучи",
+		// psramSize: "Размер SPI RAM",
+		// freePsram: "Свободной SPI RAM",
+		// maxAllocPsram: "Размер самого большого блока SPI RAM",
+		// minFreePsram: "Наименьший уровень свободной SPI RAM",
+		freeSketchSpace: "Свободное место для прошивки",
+		sdkVersion: "Версия SDK",
+		sketchMD5: "MD5 прошивки",
+		sketchSize: "Размер прошивки"
 	},
 
 	btn: {
 		apply: "Применить",
 		cancel: "Отмена",
-		close: "Закрыть"
+		close: "Закрыть",
+		deviceInfo: "Об устройстве"
+	},
+
+	onboard: {
+		title: "Бортовой компьютер"
 	}
 };

@@ -1,14 +1,15 @@
 <template>
 	<v-dialog
 		v-model="visible"
+		:content-class="contentClass"
 		transition="dialog-bottom-transition"
-		:width="`${mobile ? 90 : 50}%`"
+		:width="widthModel"
 		:persistent="!actions"
 	>
 		<v-card>
 			<v-card-title v-if="title?.length > 0" class="d-flex align-center">
 				<icon-custom :name="icon" />
-				<span class="ml-2 text-h5">{{ title }}</span>
+				<span class="ml-2 text-h5 dialog-title">{{ title }}</span>
 			</v-card-title>
 
 			<v-card-text v-if="text" :class="{ 'mb-2': !actions }">
@@ -35,26 +36,44 @@ export default {
 	components: { IconCustom },
 	props: {
 		modelValue: Boolean,
+		contentClass: String,
 		icon: String,
 		title: String,
 		text: Boolean,
-		actions: Boolean
+		actions: Boolean,
+		width: [String, Number]
 	},
 	emits: ["update:modelValue"],
 	setup(props: any, { emit }: { emit: any })
 	{
-		const { modelValue } = toRefs(props);
+		const { modelValue, width } = toRefs(props);
 		const { mobile } = useDisplay();
 
 		const visible = computed({
 			get: () => modelValue.value,
 			set: (val) => emit("update:modelValue", val)
 		});
+		const widthModel = computed(() =>
+			typeof width.value === "number" && width.value > 0
+				? `${width.value}px`
+				: typeof width.value === "string" && width.value.length > 0
+					? width.value
+					: `${mobile.value ? 90 : 50}%`
+		);
 
 		return {
 			visible,
-			mobile
+			widthModel
 		};
 	}
 };
 </script>
+
+<style lang="scss" scoped>
+.dialog-title
+{
+	width: calc(100% - 32px);
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+</style>

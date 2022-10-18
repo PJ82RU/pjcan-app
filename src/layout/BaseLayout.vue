@@ -15,9 +15,7 @@
 			<bluetooth-btn />
 			<update-firmware />
 
-			<v-btn icon>
-				<v-icon>mdi-dots-vertical</v-icon>
-			</v-btn>
+			<menu-dots />
 		</v-app-bar>
 		<v-main>
 			<router-view class="base-layout__view" />
@@ -31,13 +29,14 @@ import store from "@/store";
 
 import BluetoothBtn from "./components/BluetoothBtn.vue";
 import UpdateFirmware from "./components/UpdateFirmware.vue";
+import MenuDots from "./components/MenuDots.vue";
 
 export default {
 	name: "BaseLayout",
-	components: { BluetoothBtn, UpdateFirmware },
+	components: { BluetoothBtn, UpdateFirmware, MenuDots },
 	setup()
 	{
-		const title = computed(() => store.getters["app/title"]);
+		const title = computed((): string => store.getters["app/title"]);
 
 		return {
 			title

@@ -78,6 +78,7 @@ import {
 	VolumeView
 } from "@/models/pjcan/variables/volume";
 
+export const API_EVENT_VERSION = "Version";
 export const API_EVENT_BUTTONS_CONFIG = "ButtonsConfig";
 export const API_EVENT_BUTTONS_VALUE = "ButtonsValue";
 export const API_EVENT_CAR_CONFIG = "CarConfig";
@@ -222,6 +223,7 @@ export class Canbus extends EventEmitter
 						i18n.global.t("BLE.server.versionProtocol", { mj: major, mn: minor, bl: build, rv: revision })
 					);
 				}
+				this.emit(API_EVENT_VERSION, this.version);
 				break;
 
 			case API_EXEC_CONFIG:
