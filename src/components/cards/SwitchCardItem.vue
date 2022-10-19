@@ -36,7 +36,7 @@ export default {
 	{
 		const { modelValue } = toRefs(props);
 		const modelSwitch = computed({
-			get: () => modelValue.value ?? true,
+			get: () => modelValue.value,
 			set: (val) => emit("update:modelValue", val)
 		});
 
