@@ -7,7 +7,7 @@
 
 <script lang="ts">
 import { computed, toRefs } from "vue";
-const svgIconTemplate: any = require("./svg-icon-template");
+import svgIconTemplate from "./svg-icon-template";
 
 export default {
 	name: "IconCustom",
@@ -34,7 +34,7 @@ export default {
 		const svg = computed((): boolean => /^<svg.*\/svg>$/i.test(name.value));
 		const html = computed((): string =>
 		{
-			let src = svg.value ? name.value : svgIconTemplate[name.value] ?? undefined;
+			let src = svg.value ? name.value : (svgIconTemplate as any)[name.value] ?? undefined;
 			if (src)
 			{
 				src = src.replaceAll("{size}", size.value);

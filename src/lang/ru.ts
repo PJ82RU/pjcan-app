@@ -104,6 +104,38 @@ export default {
 	},
 
 	onboard: {
-		title: "Бортовой компьютер"
+		title: "Бортовой компьютер",
+
+		info: {
+			title: "Информация",
+			acc: {
+				title: "ACC",
+				description: "Питание автомобиля"
+			},
+			timeWork: {
+				title: "Время работы",
+				description: "Время работы устройства с момента включения"
+			},
+			temperature: {
+				title: "Температура воздуха",
+				description: "Показания внешней температуры автомобиля"
+			},
+			handbrake: {
+				title: "Ручной тормоз",
+				description: "Положение ручного тормоза"
+			},
+			reverse: {
+				title: "Задний ход",
+				description: "Ручка КПП в положении R"
+			},
+			safetyBelt: {
+				title: "Ремень безопасности",
+				description: "Ремень безопасности водителя и пассажира"
+			},
+			signal: {
+				title: "Сигнал поворота",
+				description: "Сигнал поворота и аварийной остановки"
+			}
+		}
 	}
 };

@@ -66,3 +66,11 @@ html{
 	padding-bottom: 0;
 	overflow: hidden;
 }
+
+.fixed-message {
+	.v-messages__message {
+		overflow: hidden;
+		white-space: nowrap;
+		text-overflow: ellipsis;
+	}
+}
