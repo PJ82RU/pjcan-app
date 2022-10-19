@@ -1,5 +1,5 @@
 <template>
-	<div class="time-card-item d-flex">
+	<div class="input-card-item d-flex">
 		<v-text-field
 			class="fixed-message"
 			:model-value="title"
@@ -11,7 +11,7 @@
 			dense
 		/>
 		<v-text-field
-			class="time-card-item__time"
+			class="input-card-item__value"
 			:model-value="value"
 			variant="underlined"
 			density="compact"
@@ -25,7 +25,7 @@
 
 <script lang="ts">
 export default {
-	name: "TimeCardItem",
+	name: "InputCardItem",
 	props: {
 		value: String,
 		title: String,
@@ -35,8 +35,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.time-card-item {
-	&__time {
+.input-card-item {
+	&__value {
 		width: 70px;
 		font-family: "Jura", "Roboto", sans-serif;
 
