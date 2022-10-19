@@ -3,7 +3,6 @@
 		<v-text-field
 			:model-value="title"
 			:hint="description"
-			:loading="loading"
 			variant="underlined"
 			density="compact"
 			persistent-hint
@@ -28,8 +27,7 @@ export default {
 	props: {
 		modelValue: Boolean,
 		title: String,
-		description: String,
-		loading: Boolean
+		description: String
 	},
 	emits: ["update:modelValue"],
 	setup(props: any, { emit }: { emit: any })
