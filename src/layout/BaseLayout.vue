@@ -53,6 +53,7 @@ export default {
 
 	&__view {
 		height: 100%;
+		background: center url("~@/assets/images/tire-track.svg");
 	}
 }
 </style>
