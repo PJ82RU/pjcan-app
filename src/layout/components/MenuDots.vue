@@ -33,15 +33,15 @@ export default {
 	{
 		const visibleAbout = ref(false);
 
-		const menu = computed((): IMenuItem[] => [
+		const menu = computed((): (IMenuItem | null)[] => [
 			{
 				label: i18n.global.t("menu.language." + (i18n.global.locale === "ru" ? "english" : "russian")),
-				on: (): void => null
+				on: (): void => {}
 			},
 			null,
 			{
 				label: i18n.global.t("menu.about"),
-				on: (): void => (visibleAbout.value = true)
+				on: (): void => { visibleAbout.value = true; }
 			}
 		]);
 

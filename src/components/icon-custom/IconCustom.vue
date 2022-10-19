@@ -7,7 +7,7 @@
 
 <script lang="ts">
 import { computed, toRefs } from "vue";
-import svgIconTemplate from "./svg-icon-template";
+const svgIconTemplate: any = require("./svg-icon-template");
 
 export default {
 	name: "IconCustom",
@@ -26,12 +26,12 @@ export default {
 			default: () => ({ primary: "#0b677b", secondary: "#25323e" })
 		}
 	},
-	setup(props)
+	setup(props: any)
 	{
 		const { name, size, color, colors } = toRefs(props);
 
-		const mdi = computed((): string => /^mdi-.*$/i.test(name.value));
-		const svg = computed((): string => /^<svg.*\/svg>$/i.test(name.value));
+		const mdi = computed((): boolean => /^mdi-.*$/i.test(name.value));
+		const svg = computed((): boolean => /^<svg.*\/svg>$/i.test(name.value));
 		const html = computed((): string =>
 		{
 			let src = svg.value ? name.value : svgIconTemplate[name.value] ?? undefined;
