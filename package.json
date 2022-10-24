@@ -10,6 +10,7 @@
 		"lint": "vue-cli-service lint"
 	},
 	"dependencies": {
+		"@egjs/vue3-flicking": "^4.10.0",
 		"@mdi/font": "5.9.55",
 		"axios": "^1.1.2",
 		"bitset": "^5.1.1",

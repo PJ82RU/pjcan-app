@@ -1,5 +1,5 @@
 <template>
-	<v-card class="card" height="100%">
+	<v-card class="card">
 		<v-card-text>
 			<slot name="body" />
 		</v-card-text>
