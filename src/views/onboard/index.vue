@@ -1,6 +1,6 @@
 <template>
 	<flicking class="onboard" :options="{ bound: true }">
-			<info-card v-for="i in 6" :key="i" :class="classFlicking" />
+<!--			<info-card v-for="i in 6" :key="i" :class="classFlicking" />-->
 	</flicking>
 </template>
 
@@ -67,9 +67,5 @@ export default {
 	//		width: 100%;
 	//	}
 	//}
-
-	::v-deep(.v-sheet) {
-		background: rgba(255, 255, 255, 0.5);
-	}
 }
 </style>

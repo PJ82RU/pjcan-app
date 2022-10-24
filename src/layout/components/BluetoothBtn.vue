@@ -9,10 +9,10 @@
 			{{ $t(!connected ? "BLE.dialog.noConnected" : "BLE.dialog.connected") }}
 		</template>
 		<template #btns>
-			<v-btn color="#25323e" @click="onDialogClick">
+			<v-btn color="primary" @click="onDialogClick">
 				{{ $t(!connected ? "BLE.btn.connect" : "BLE.btn.disconnect") }}
 			</v-btn>
-			<v-btn color="#25323e" @click="visibleDialog = false">
+			<v-btn color="primary" @click="visibleDialog = false">
 				{{ $t("btn.close") }}
 			</v-btn>
 		</template>

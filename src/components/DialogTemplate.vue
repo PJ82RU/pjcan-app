@@ -5,6 +5,7 @@
 		transition="dialog-bottom-transition"
 		:width="widthModel"
 		:persistent="!actions"
+		:scrim="false"
 	>
 		<v-card>
 			<v-card-title v-if="title?.length > 0" class="d-flex align-center">

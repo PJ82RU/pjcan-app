@@ -41,7 +41,7 @@ export default {
 		font-family: "Jura", "Roboto", sans-serif;
 
 		::v-deep(input) {
-			color: $primary-color;
+			color: var(--v-theme-primary);
 		}
 	}
 }

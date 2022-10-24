@@ -4,10 +4,10 @@
 			<span>{{ $t("update.dialog.new", { n: version }) }}</span>
 		</template>
 		<template #btns>
-			<v-btn color="#25323e" @click="onUpdateUpload">
+			<v-btn color="primary" @click="onUpdateUpload">
 				{{ $t("update.btn.update") }}
 			</v-btn>
-			<v-btn color="#25323e" @click="onCancel">
+			<v-btn color="primary" @click="onCancel">
 				{{ $t("update.btn.later") }}
 			</v-btn>
 		</template>

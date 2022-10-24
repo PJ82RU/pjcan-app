@@ -1,7 +1,7 @@
 <!--suppress JSUnresolvedVariable -->
 <template>
 	<v-app class="base-layout">
-		<v-app-bar flat class="base-layout__toolbar" color="#0b677b" :height="50">
+		<v-app-bar flat class="base-layout__toolbar" color="primary" :height="50">
 			<!--<v-app-bar-nav-icon />-->
 
 			<v-toolbar-title>
@@ -18,7 +18,9 @@
 			<menu-dots />
 		</v-app-bar>
 		<v-main>
-			<router-view class="base-layout__view" />
+			<div class="base-layout__main">
+				<router-view />
+			</div>
 		</v-main>
 	</v-app>
 </template>
@@ -47,13 +49,11 @@ export default {
 
 <style lang="scss" scoped>
 .base-layout {
-	&__toolbar {
-		color: white;
-	}
-
-	&__view {
+	&__main {
+		width: 100%;
 		height: 100%;
 		background: center url("~@/assets/images/tire-track.svg");
+		opacity: 10%
 	}
 }
 </style>

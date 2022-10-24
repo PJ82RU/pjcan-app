@@ -24,7 +24,7 @@
 		</template>
 
 		<template #btns>
-			<v-btn color="#25323e" @click="visible = false">
+			<v-btn color="primary" @click="visible = false">
 				{{ $t("btn.close") }}
 			</v-btn>
 		</template>
