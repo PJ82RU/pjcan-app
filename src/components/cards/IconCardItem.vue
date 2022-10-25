@@ -10,11 +10,14 @@
 			dense
 		/>
 		<icon-custom
+			v-for="(item, index) in iconList"
+			:key="`icon-card-item_${index}`"
 			class="icon-card-item__icon"
-			:name="iconName"
-			:colors="colors"
+			:style="{ right: `${parseInt(size) * index}px` }"
+			:name="item.name"
+			:colors="item.colors"
 			:size="size"
-			@click="modelSwitch = !modelSwitch"
+			@click="modelSwitch[index] = !modelSwitch[index]"
 		/>
 	</div>
 </template>
@@ -28,10 +31,10 @@ export default {
 	name: "IconCardItem",
 	components: { IconCustom },
 	props: {
-		modelValue: Boolean,
+		modelValue: Array as () => boolean[],
 		title: String,
 		description: String,
-		iconName: String,
+		iconName: Array as () => string[],
 		colorsTrue: {
 			type: Object,
 			default: () => ({ primary: "#66bb6a", secondary: "#e2e2e2" })
@@ -48,16 +51,29 @@ export default {
 	emits: ["update:modelValue"],
 	setup(props: any, { emit }: { emit: any })
 	{
-		const { modelValue, colorsTrue, colorsFalse } = toRefs(props);
+		const { modelValue, iconName, colorsTrue, colorsFalse } = toRefs(props);
 		const modelSwitch = computed({
 			get: () => modelValue.value,
 			set: (val) => emit("update:modelValue", val)
 		});
-		const colors = computed(() => (modelSwitch.value ? colorsTrue.value : colorsFalse.value));
+
+		/** Список параметров иконок */
+		const iconList = computed((): any[] =>
+		{
+			const result: any[] = [];
+			modelSwitch.value?.forEach((x: boolean, i: number) =>
+			{
+				result.push({
+					name: iconName.value[i],
+					colors: x ? colorsTrue.value : colorsFalse.value
+				});
+			});
+			return result;
+		});
 
 		return {
 			modelSwitch,
-			colors
+			iconList
 		};
 	}
 };
