@@ -13,7 +13,7 @@
 			v-model="modelSwitch"
 			class="switch-card-item__switch"
 			density="compact"
-			color="primary"
+			:color="color"
 			hide-details
 		/>
 	</div>
@@ -27,7 +27,11 @@ export default {
 	props: {
 		modelValue: Boolean,
 		title: String,
-		description: String
+		description: String,
+		color: {
+			type: String,
+			default: "success"
+		}
 	},
 	emits: ["update:modelValue"],
 	setup(props: any, { emit }: { emit: any })
