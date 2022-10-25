@@ -11,7 +11,7 @@ import "./styles/fonts/roboto.scss";
 
 // уведомления Vue3Toasity
 import Vue3Toasity, { toast } from "vue3-toastify";
-import "./styles/vue3-toasity.css";
+import "./styles/vue3-toasity.scss";
 const Vue3ToasityOptions = {
 	autoClose: 3000,
 	theme: toast.THEME.COLORED,

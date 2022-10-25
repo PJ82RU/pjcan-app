@@ -1,10 +1,10 @@
 :root {
     --toastify-color-light: #fff;
     --toastify-color-dark: #121212;
-    --toastify-color-info: #3498db;
-    --toastify-color-success: #07bc0c;
-    --toastify-color-warning: #f1c40f;
-    --toastify-color-error: #e74c3c;
+    --toastify-color-info: #78909c;
+    --toastify-color-success: #66bb6a;
+    --toastify-color-warning: #ffee58;
+    --toastify-color-error: #ef5350;
     --toastify-color-transparent: hsla(0, 0%, 100%, 0.7);
     --toastify-icon-color-info: var(--toastify-color-info);
     --toastify-icon-color-success: var(--toastify-color-success);
@@ -14,7 +14,7 @@
     --toastify-toast-background: #fff;
     --toastify-toast-min-height: 64px;
     --toastify-toast-max-height: 800px;
-    --toastify-font-family: sans-serif;
+    --toastify-font-family: "Roboto", sans-serif;
     --toastify-z-index: 9999;
     --toastify-text-color-light: #757575;
     --toastify-text-color-dark: #fff;
@@ -32,6 +32,8 @@
     --toastify-color-progress-error: var(--toastify-color-error);
     --toastify-color-progress-colored: #ddd;
 }
+
+//noinspection CssInvalidFunction
 .Toastify__toast-container {
     box-sizing: border-box;
     color: #fff;

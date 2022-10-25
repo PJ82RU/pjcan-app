@@ -23,16 +23,16 @@ module.exports = defineConfig({
 		vuetify: {
 			// https://github.com/vuetifyjs/vuetify-loader/tree/next/packages/vuetify-loader
 		}
-	}
+	},
 
-	// css: {
-	// 	loaderOptions: {
-	// 		sass: {
-	// 			additionalData: `@import "@/styles/variables.sass";`
-	// 		},
-	// 		scss: {
-	// 			additionalData: `@import "@/styles/variables.scss";`
-	// 		}
-	// 	}
-	// }
+	css: {
+		loaderOptions: {
+			// sass: {
+			// 	additionalData: `@import "@/styles/variables.sass";`
+			// },
+			scss: {
+				additionalData: `@import "@/styles/variables.scss";`
+			}
+		}
+	}
 });

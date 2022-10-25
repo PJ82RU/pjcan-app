@@ -29,7 +29,7 @@ export default {
 {
 	width: 100%;
 	height: 100%;
-	background: #FFFFFF;
+	background: white;
 	box-shadow: 0 4px 16px rgba(27, 44, 61, 0.18);
 	border-radius: 6px;
 

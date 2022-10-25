@@ -14,10 +14,10 @@ const customDarkTheme: ThemeDefinition = {
 		primary: "#0b677b",
 		secondary: "#25323e",
 		accent: "#9c27b0",
-		error: "#B00020",
-		info: "#31ccec",
-		success: "#4caf50",
-		warning: "#f2c037",
+		error: "#ef5350",
+		info: "#78909c",
+		success: "#66bb6a",
+		warning: "#ffee58",
 		menu: "#3f6e90"
 	}
 };

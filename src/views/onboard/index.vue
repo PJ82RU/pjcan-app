@@ -1,6 +1,6 @@
 <template>
 	<flicking class="onboard" :options="{ bound: true }">
-<!--			<info-card v-for="i in 6" :key="i" :class="classFlicking" />-->
+		<info-card v-for="i in 4" :key="i" :class="classFlicking" />
 	</flicking>
 </template>
 
@@ -47,10 +47,16 @@ export default {
 
 <style lang="scss" scoped>
 .onboard {
+	height: 100%;
+
+	::v-deep(.flicking-camera) {
+		height: 100%;
+	}
+
 	&__flicking {
-		width: 100%;
-		height: calc(100% - 16px);
-		margin: 8px;
+		width: calc(100% / 3 - 8px);
+		height: 100%;
+		margin-right: 8px;
 	}
 	//.flicking {
 	//	&-xl {

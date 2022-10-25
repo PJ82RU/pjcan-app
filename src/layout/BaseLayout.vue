@@ -18,7 +18,8 @@
 			<menu-dots />
 		</v-app-bar>
 		<v-main>
-			<div class="base-layout__main">
+			<div class="base-layout__bg" />
+			<div class="base-layout__main" :style="{ width: `${pageWidth}px`, height: `${pageHeight - 50}px`}">
 				<router-view />
 			</div>
 		</v-main>
@@ -26,7 +27,7 @@
 </template>
 
 <script lang="ts">
-import { computed } from "vue";
+import { computed, onMounted, onUnmounted, ref } from "vue";
 import store from "@/store";
 
 import BluetoothBtn from "./components/BluetoothBtn.vue";
@@ -39,9 +40,29 @@ export default {
 	setup()
 	{
 		const title = computed((): string => store.getters["app/title"]);
+		const pageWidth = ref(0);
+		const pageHeight = ref(0);
+
+		const windowSize = () =>
+		{
+			pageWidth.value = document.documentElement.clientWidth;
+			pageHeight.value = document.documentElement.clientHeight;
+		};
+
+		onMounted(() =>
+		{
+			window.addEventListener("resize", windowSize);
+			windowSize();
+		});
+		onUnmounted(() =>
+		{
+			window.removeEventListener("resize", windowSize);
+		});
 
 		return {
-			title
+			title,
+			pageWidth,
+			pageHeight
 		};
 	}
 };
@@ -49,11 +70,22 @@ export default {
 
 <style lang="scss" scoped>
 .base-layout {
-	&__main {
+	&__bg {
+		position: fixed;
+		top: 0;
+		left: 0;
 		width: 100%;
 		height: 100%;
 		background: center url("~@/assets/images/tire-track.svg");
-		opacity: 10%
+		opacity: 10%;
+		z-index: 0;
+	}
+
+	&__main {
+		position: fixed;
+		top: 50px;
+		left: 0;
+		padding: 16px;
 	}
 }
 </style>

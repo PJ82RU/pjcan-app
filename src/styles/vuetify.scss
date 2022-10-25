@@ -20,7 +20,7 @@ html{
 .text-h1,
 .text-h2,
 .text-h3 {
-	font-weight: 500 !important;
+	font-weight: map-get($font-weights, "medium") !important;
 }
 
 .text-h1,
@@ -30,13 +30,17 @@ html{
 .text-h5,
 .text-h6,
 .v-btn {
-	font-family: "Jura", "Roboto", sans-serif !important;
+	font-family: $font-family !important;
+}
+
+.v-toolbar-title {
+	min-width: 65%;
 }
 
 .v-card {
 	.v-card-title,
 	.v-icon {
-		color: var(--v-theme-primary);
+		color: $primary;
 	}
 	.v-card-item__prepend {
 		padding: 0 !important;

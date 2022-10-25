@@ -38,7 +38,7 @@ export default {
 .input-card-item {
 	&__value {
 		width: 70px;
-		font-family: "Jura", "Roboto", sans-serif;
+		font-family: $font-family;
 
 		::v-deep(input) {
 			color: var(--v-theme-primary);

@@ -1,0 +1,20 @@
+$font-family: "Jura", "Roboto", sans-serif;
+$font-weights: (
+        "thin": 100,
+        "light": 300,
+        "regular": 400,
+        "medium": 500,
+        "bold": 600,
+        "black": 900
+);
+
+$background: var(--v-theme-background);
+$surface: var(--v-theme-surface);
+$primary: var(--v-theme-primary);
+$secondary: var(--v-theme-secondary);
+$accent: var(--v-theme-accent);
+$error: var(--v-theme-error);
+$info: var(--v-theme-info);
+$success: var(--v-theme-success);
+$warning: var(--v-theme-warning);
+$menu: var(--v-theme-menu);
