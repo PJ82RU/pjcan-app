@@ -21,6 +21,9 @@ const Vue3ToasityOptions = {
 	newestOnTop: true
 };
 
+// vue3-flicking
+import "@egjs/vue3-flicking/dist/flicking.css";
+
 createApp(App)
 	.use(router)
 	.use(store)

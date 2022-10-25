@@ -8,7 +8,7 @@
 				{{ title }}
 			</div>
 			<v-btn-group class="border-dialog-btns">
-				<v-btn icon="mdi-close" color="#25323e" @click="$emit('click:close')" />
+				<v-btn icon="mdi-close" color="primary" @click="$emit('click:close')" />
 			</v-btn-group>
 		</v-card-actions>
 	</v-card>
@@ -29,7 +29,7 @@ export default {
 {
 	width: 100%;
 	height: 100%;
-	background: white;
+	background: rgba(120, 144, 156, 0.1);
 	box-shadow: 0 4px 16px rgba(27, 44, 61, 0.18);
 	border-radius: 6px;
 

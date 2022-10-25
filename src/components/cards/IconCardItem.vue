@@ -34,11 +34,11 @@ export default {
 		iconName: String,
 		colorsTrue: {
 			type: Object,
-			default: () => ({ primary: "#0b677b", secondary: "#25323e" })
+			default: () => ({ primary: "#66bb6a", secondary: "#e2e2e2" })
 		},
 		colorsFalse: {
 			type: Object,
-			default: () => ({ primary: "#ccc", secondary: "#aaa" })
+			default: () => ({ primary: "#676b6d", secondary: "#676b6d" })
 		},
 		size: {
 			type: String,
