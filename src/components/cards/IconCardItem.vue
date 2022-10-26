@@ -37,7 +37,7 @@ export default {
 		iconName: Array as () => string[],
 		colorsTrue: {
 			type: Object,
-			default: () => ({ primary: "#66bb6a", secondary: "#e2e2e2" })
+			default: () => ({ primary: "success", secondary: "#e2e2e2" })
 		},
 		colorsFalse: {
 			type: Object,
