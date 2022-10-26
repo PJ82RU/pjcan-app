@@ -46,8 +46,17 @@
 						:title="$t('onboard.info.safetyBelt.title')"
 						:description="$t('onboard.info.safetyBelt.description')"
 						:icon-name="['passenger', 'passenger']"
-						:colorsTrue="{ primary: '#66bb6a' }"
-						:colorsFalse="{ primary: '#ef5350' }"
+						:colorsTrue="acc ? { primary: 'success' } : undefined"
+						:colorsFalse="acc ? { primary: 'error' } : undefined"
+					/>
+				</v-col>
+				<v-col cols="12" class="pt-0 pb-0">
+					<icon-card-item
+						:model-value="[signalRight, signalLeft]"
+						:title="$t('onboard.info.signal.title')"
+						:description="$t('onboard.info.signal.description')"
+						:icon-name="['arrow-right', 'arrow-left']"
+						:colorsTrue="{ primary: 'success' }"
 					/>
 				</v-col>
 			</v-row>
@@ -56,15 +65,31 @@
 </template>
 
 <script lang="ts">
-import { computed, ref } from "vue";
+import { computed, onMounted, onUnmounted, ref } from "vue";
 
 import Card from "@/components/cards/Card.vue";
 import InputCardItem from "@/components/cards/InputCardItem.vue";
 import SwitchCardItem from "@/components/cards/SwitchCardItem.vue";
 import IconCardItem from "@/components/cards/IconCardItem.vue";
 
-import { SensorsValue } from "@/models/pjcan/variables/sensors";
-import { TemperatureValue } from "@/models/pjcan/variables/temperature";
+import {
+	ISensorsValue,
+	ISensorsView,
+	SensorsValue,
+	SensorsView,
+	TSensorsSignal
+} from "@/models/pjcan/variables/sensors";
+import {
+	ITemperatureValue,
+	ITemperatureView,
+	TemperatureValue,
+	TemperatureView
+} from "@/models/pjcan/variables/temperature";
+import canbus, {
+	API_EVENT_VARIABLE_SENSORS,
+	API_EVENT_VARIABLE_SENSORS_VIEW,
+	API_EVENT_VARIABLE_TEMPERATURE, API_EVENT_VARIABLE_TEMPERATURE_VIEW
+} from "@/api/canbus";
 
 export default {
 	name: "InfoCard",
@@ -73,16 +98,65 @@ export default {
 	{
 		// датчики
 		const sensorValue = ref(new SensorsValue());
+		const sensorView = new SensorsView();
 		// температура
 		const temperatureValue = ref(new TemperatureValue());
+		const temperatureView = new TemperatureView();
+		// входящие значения датчиков
+		const onReceiveSensorValue = (res: ISensorsValue): void =>
+		{
+			sensorValue.value.setModel(res);
+		};
+		// входящие значения отображения датчиков
+		const onReceiveSensorView = (res: ISensorsView): void =>
+		{
+			sensorView.setModel(res);
+		};
+		// входящие значения температуры
+		const onReceiveTemperatureValue = (res: ITemperatureValue): void =>
+		{
+			temperatureValue.value.setModel(res);
+		};
+		// входящие значения отображения температуры
+		const onReceiveTemperatureView = (res: ITemperatureView): void =>
+		{
+			temperatureView.setModel(res);
+		};
 
-		const acc = computed((): boolean => true ?? sensorValue.value.acc);
-		const timeWork = computed((): string => "01:05:30");
-		const temperature = computed((): string => `${temperatureValue.value.out.toFixed(1)}°C`);
-		const handbrake = computed((): boolean => true ?? sensorValue.value.handbrake);
-		const reverse = computed((): boolean => true ?? sensorValue.value.reverse);
-		const seatbeltDriver = computed((): boolean => true ?? sensorValue.value.seatbeltDriver);
+		// регистрируем события
+		onMounted(() =>
+		{
+			canbus.addListener(API_EVENT_VARIABLE_SENSORS, onReceiveSensorValue);
+			canbus.addListener(API_EVENT_VARIABLE_SENSORS_VIEW, onReceiveSensorView);
+			canbus.addListener(API_EVENT_VARIABLE_TEMPERATURE, onReceiveTemperatureValue);
+			canbus.addListener(API_EVENT_VARIABLE_TEMPERATURE_VIEW, onReceiveTemperatureView);
+		});
+		// удаляем события
+		onUnmounted(() =>
+		{
+			canbus.removeListener(API_EVENT_VARIABLE_SENSORS, onReceiveSensorValue);
+			canbus.removeListener(API_EVENT_VARIABLE_SENSORS_VIEW, onReceiveSensorView);
+			canbus.removeListener(API_EVENT_VARIABLE_TEMPERATURE, onReceiveTemperatureValue);
+			canbus.removeListener(API_EVENT_VARIABLE_TEMPERATURE_VIEW, onReceiveTemperatureView);
+		});
+
+		const acc = computed((): boolean => sensorValue.value.acc);
+		const timeWork = computed((): string => "--:--:--");
+		const temperature = computed((): string => (acc.value ? temperatureValue.value.out.toFixed(1) : "-.-") + "°C");
+		const handbrake = computed((): boolean => sensorValue.value.handbrake);
+		const reverse = computed((): boolean => sensorValue.value.reverse);
+		const seatbeltDriver = computed((): boolean => sensorValue.value.seatbeltDriver);
 		const seatbeltPassenger = computed((): boolean => sensorValue.value.seatbeltPassenger);
+		const signalLeft = computed(
+			(): boolean =>
+				sensorValue.value.signal === TSensorsSignal.SIGNAL_LEFT ||
+				sensorValue.value.signal === TSensorsSignal.SIGNAL_EMERGENCY
+		);
+		const signalRight = computed(
+			(): boolean =>
+				sensorValue.value.signal === TSensorsSignal.SIGNAL_RIGHT ||
+				sensorValue.value.signal === TSensorsSignal.SIGNAL_EMERGENCY
+		);
 
 		return {
 			acc,
@@ -91,7 +165,9 @@ export default {
 			handbrake,
 			reverse,
 			seatbeltDriver,
-			seatbeltPassenger
+			seatbeltPassenger,
+			signalLeft,
+			signalRight
 		};
 	}
 };
