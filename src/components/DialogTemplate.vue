@@ -10,10 +10,10 @@
 		<v-card>
 			<v-card-title v-if="title?.length > 0" class="d-flex align-center">
 				<icon-custom :name="icon" />
-				<span class="ml-2 text-h5 dialog-title">{{ title }}</span>
+				<span class="ml-2 text-h5 dialog__title">{{ title }}</span>
 			</v-card-title>
 
-			<v-card-text v-if="text" :class="{ 'mb-2': !actions }">
+			<v-card-text v-if="text" class="dialog__text" :class="{ 'mb-2': !actions }">
 				<slot name="body" />
 			</v-card-text>
 
@@ -71,10 +71,16 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.dialog-title
+.dialog
 {
-	width: calc(100% - 32px);
-	overflow: hidden;
-	text-overflow: ellipsis;
+	&__title {
+		width: calc(100% - 32px);
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
+	&__text {
+		overflow-y: auto;
+	}
 }
 </style>

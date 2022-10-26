@@ -1,6 +1,6 @@
 <template>
 	<v-card class="card">
-		<v-card-text>
+		<v-card-text class="card__text">
 			<slot name="body" />
 		</v-card-text>
 		<v-card-actions class="justify-space-between">
@@ -32,6 +32,10 @@ export default {
 	background: rgba(120, 144, 156, 0.1);
 	box-shadow: 0 4px 16px rgba(27, 44, 61, 0.18);
 	border-radius: 6px;
+
+	&__text {
+		overflow-y: auto;
+	}
 
 	::v-deep(.v-card-text) {
 		height: calc(100% - 48px);
