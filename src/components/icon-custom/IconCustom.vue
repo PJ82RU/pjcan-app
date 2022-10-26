@@ -7,6 +7,8 @@
 
 <script lang="ts">
 import { computed, toRefs } from "vue";
+import { useTheme } from "vuetify";
+
 import svgIconTemplate from "./svg-icon-template";
 
 export default {
@@ -30,6 +32,9 @@ export default {
 	{
 		const { name, size, color, colors } = toRefs(props);
 
+		const { current } = useTheme();
+		const getColor = (name: string): string => current.value.colors?.[name] ?? name;
+
 		const mdi = computed((): boolean => /^mdi-.*$/i.test(name.value));
 		const svg = computed((): boolean => /^<svg.*\/svg>$/i.test(name.value));
 		const html = computed((): string =>
@@ -38,12 +43,12 @@ export default {
 			if (src)
 			{
 				src = src.replaceAll("{size}", size.value);
-				if (color.value) src = src.replaceAll("{primary}", color.value);
+				if (color.value) src = src.replaceAll("{primary}", getColor(color.value));
 				if (colors.value)
 				{
 					for (const key in colors.value)
 					{
-						src = src.replaceAll("{" + key + "}", colors.value[key]);
+						src = src.replaceAll("{" + key + "}", getColor(colors.value[key]));
 					}
 				}
 				// заменяем значения на дефолтные, если они небыли заменены
