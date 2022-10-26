@@ -15,7 +15,8 @@
 			<bluetooth-btn />
 			<update-firmware />
 
-			<menu-dots />
+			<menu-dots :menu="menu" @click:item="onMenuClick" />
+			<about-modal v-model="visibleAbout" />
 		</v-app-bar>
 		<v-main>
 			<div class="base-layout__bg" />
@@ -29,20 +30,34 @@
 <script lang="ts">
 import { computed, onMounted, onUnmounted, ref } from "vue";
 import store from "@/store";
+import i18n from "@/lang";
 
 import BluetoothBtn from "./components/BluetoothBtn.vue";
 import UpdateFirmware from "./components/UpdateFirmware.vue";
-import MenuDots from "./components/MenuDots.vue";
+import MenuDots from "@/components/MenuDots.vue";
+import AboutModal from "./components/AboutModal.vue";
 
 export default {
 	name: "BaseLayout",
-	components: { BluetoothBtn, UpdateFirmware, MenuDots },
+	components: { BluetoothBtn, UpdateFirmware, MenuDots, AboutModal },
 	setup()
 	{
 		const title = computed((): string => store.getters["app/title"]);
+		const menu = computed((): string[] => [
+			i18n.global.t("menu.language." + (i18n.global.locale === "ru" ? "english" : "russian")),
+			"",
+			i18n.global.t("menu.about")
+		]);
+		const visibleAbout = ref(false);
+
+		/** Событие выбора пункта меню */
+		const onMenuClick = (data: any) =>
+		{
+			if (data.index === 2) visibleAbout.value = true;
+		};
+
 		const pageWidth = ref(0);
 		const pageHeight = ref(0);
-
 		const windowSize = () =>
 		{
 			pageWidth.value = document.documentElement.clientWidth;
@@ -61,8 +76,11 @@ export default {
 
 		return {
 			title,
+			menu,
+			visibleAbout,
 			pageWidth,
-			pageHeight
+			pageHeight,
+			onMenuClick
 		};
 	}
 };
