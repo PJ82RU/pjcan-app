@@ -25,7 +25,7 @@
 <script lang="ts">
 import { computed, toRefs } from "vue";
 
-import IconCustom from "@/components/icon-custom/IconCustom.vue";
+import IconCustom from "@/components/common/icon-custom/IconCustom.vue";
 
 export default {
 	name: "IconCardItem",
@@ -41,7 +41,7 @@ export default {
 		},
 		colorsFalse: {
 			type: Object,
-			default: () => ({ primary: "#676b6d", secondary: "#676b6d" })
+			default: () => ({ primary: "disable", secondary: "disable" })
 		},
 		size: {
 			type: String,

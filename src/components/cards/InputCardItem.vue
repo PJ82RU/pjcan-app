@@ -12,6 +12,7 @@
 		/>
 		<v-text-field
 			class="input-card-item__value"
+			:class="{ nodata }"
 			:model-value="value"
 			variant="underlined"
 			density="compact"
@@ -29,7 +30,8 @@ export default {
 	props: {
 		value: String,
 		title: String,
-		description: String
+		description: String,
+		nodata: Boolean
 	}
 };
 </script>
@@ -39,6 +41,10 @@ export default {
 	&__value {
 		width: 70px;
 		font-family: $font-family;
+
+		&.nodata {
+			color: $disable;
+		}
 
 		::v-deep(input) {
 			color: var(--v-theme-primary);

@@ -1,5 +1,5 @@
 <template>
-	<card class="info-card" :title="$t('onboard.info.title')">
+	<card class="info-card" :title="$t('onboard.info.title')" :menu="menu" @click:menu="onMenuClick">
 		<template #body>
 			<v-row>
 				<v-col cols="12" class="pb-0">
@@ -15,6 +15,7 @@
 						:value="timeWork"
 						:title="$t('onboard.info.timeWork.title')"
 						:description="$t('onboard.info.timeWork.description')"
+						:nodata="!acc"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0 pb-0">
@@ -22,6 +23,7 @@
 						:value="temperature"
 						:title="$t('onboard.info.temperature.title')"
 						:description="$t('onboard.info.temperature.description')"
+						:nodata="!acc"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0 pb-0">
@@ -62,15 +64,19 @@
 			</v-row>
 		</template>
 	</card>
+
+	<view-setting-dialog v-model="menuVisible" :title="menuTitle" />
 </template>
 
 <script lang="ts">
 import { computed, onMounted, onUnmounted, ref } from "vue";
+import i18n from "@/lang";
 
 import Card from "@/components/cards/Card.vue";
 import InputCardItem from "@/components/cards/InputCardItem.vue";
 import SwitchCardItem from "@/components/cards/SwitchCardItem.vue";
 import IconCardItem from "@/components/cards/IconCardItem.vue";
+import ViewSettingDialog from "./ViewSettingDialog.vue";
 
 import {
 	ISensorsValue,
@@ -85,15 +91,17 @@ import {
 	TemperatureValue,
 	TemperatureView
 } from "@/models/pjcan/variables/temperature";
+
 import canbus, {
 	API_EVENT_VARIABLE_SENSORS,
 	API_EVENT_VARIABLE_SENSORS_VIEW,
 	API_EVENT_VARIABLE_TEMPERATURE, API_EVENT_VARIABLE_TEMPERATURE_VIEW
 } from "@/api/canbus";
+import { IMenuItem } from "@/models/IMenuItem";
 
 export default {
 	name: "InfoCard",
-	components: { Card, InputCardItem, SwitchCardItem, IconCardItem },
+	components: { Card, InputCardItem, SwitchCardItem, IconCardItem, ViewSettingDialog },
 	setup()
 	{
 		// датчики
@@ -158,6 +166,24 @@ export default {
 				sensorValue.value.signal === TSensorsSignal.SIGNAL_EMERGENCY
 		);
 
+		// меню отображения
+		const menu = computed((): string[] => [
+			i18n.global.t("onboard.info.acc.menu"),
+			i18n.global.t("onboard.info.timeWork.menu"),
+			i18n.global.t("onboard.info.temperature.menu"),
+			i18n.global.t("onboard.info.handbrake.menu"),
+			i18n.global.t("onboard.info.reverse.menu"),
+			i18n.global.t("onboard.info.safetyBelt.menu"),
+			i18n.global.t("onboard.info.signal.menu")
+		]);
+		const menuVisible = ref(false);
+		const menuTitle = ref("");
+		const onMenuClick = (data: IMenuItem): void =>
+		{
+			menuVisible.value = true;
+			menuTitle.value = data.item;
+		};
+
 		return {
 			acc,
 			timeWork,
@@ -167,7 +193,11 @@ export default {
 			seatbeltDriver,
 			seatbeltPassenger,
 			signalLeft,
-			signalRight
+			signalRight,
+			menu,
+			menuVisible,
+			menuTitle,
+			onMenuClick
 		};
 	}
 };

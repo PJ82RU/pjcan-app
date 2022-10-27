@@ -1,6 +1,8 @@
 <template>
 	<flicking class="onboard" :options="{ bound: true, align: 'prev' }">
-		<info-card v-for="i in 4" :key="i" class="onboard__flicking" :class="nameDisplay" />
+		<div v-for="i in 4" :key="i" class="onboard__flicking" :class="nameDisplay">
+			<info-card />
+		</div>
 	</flicking>
 </template>
 

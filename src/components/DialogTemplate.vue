@@ -5,12 +5,15 @@
 		transition="dialog-bottom-transition"
 		:width="widthModel"
 		:persistent="!actions"
-		:scrim="false"
 	>
 		<v-card>
 			<v-card-title v-if="title?.length > 0" class="d-flex align-center">
 				<icon-custom :name="icon" />
 				<span class="ml-2 text-h5 dialog__title">{{ title }}</span>
+				<template v-if="close">
+					<v-spacer />
+					<icon-custom name="mdi-close" />
+				</template>
 			</v-card-title>
 
 			<v-card-text v-if="text" class="dialog__text" :class="{ 'mb-2': !actions }">
@@ -30,7 +33,7 @@
 import { computed, toRefs } from "vue";
 import { useDisplay } from "vuetify";
 
-import IconCustom from "@/components/icon-custom/IconCustom.vue";
+import IconCustom from "@/components/common/icon-custom/IconCustom.vue";
 
 export default {
 	name: "DialogTemplate",
@@ -42,6 +45,7 @@ export default {
 		title: String,
 		text: Boolean,
 		actions: Boolean,
+		close: Boolean,
 		width: [String, Number]
 	},
 	emits: ["update:modelValue"],

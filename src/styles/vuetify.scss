@@ -40,7 +40,9 @@ html{
 .v-card {
 	.v-card-title,
 	.v-icon {
-		color: $primary;
+		.icon-custom {
+			color: $primary;
+		}
 	}
 	.v-card-item__prepend {
 		padding: 0 !important;
@@ -76,5 +78,18 @@ html{
 		overflow: hidden;
 		white-space: nowrap;
 		text-overflow: ellipsis;
+	}
+}
+
+.v-overlay {
+	&__scrim {
+		background: black;
+		opacity: 50%;
+	}
+}
+
+.v-switch {
+	&__thumb {
+		color: $disable !important;
 	}
 }

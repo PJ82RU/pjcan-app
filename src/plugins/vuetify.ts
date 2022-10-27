@@ -18,7 +18,8 @@ const customDarkTheme: ThemeDefinition = {
 		info: "#78909c",
 		success: "#66bb6a",
 		warning: "#ffee58",
-		menu: "#3f6e90"
+		menu: "#3f6e90",
+		disable: "#676b6d"
 	}
 };
 export default createVuetify({

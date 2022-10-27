@@ -1,4 +1,4 @@
 export interface IMenuItem {
-	label: string,
-	on: () => void
+	item: string,
+	index: number
 }
