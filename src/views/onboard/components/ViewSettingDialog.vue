@@ -27,6 +27,7 @@
 						item-title="label"
 						item-value="value"
 						persistent-hint
+						:disabled="disabled"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0">
@@ -77,7 +78,9 @@ export default {
 		/** Тип вывода текста на LCD */
 		type: Number,
 		/** Время отображения текста на LCD, сек */
-		time: Number
+		time: Number,
+		/** Выкл. */
+		disabled: Boolean
 	},
 	emits: ["update:modelValue", "click:apply"],
 	setup(props: any, { emit }: { emit: any })

@@ -71,6 +71,7 @@
 		:enabled="menuItem.enabled"
 		:type="menuItem.type"
 		:time="menuItem.time"
+		:disabled="!isLoaded"
 		@click:apply="onViewSettingApply"
 	/>
 </template>
@@ -114,6 +115,8 @@ export default {
 	components: { Card, InputCardItem, SwitchCardItem, IconCardItem, ViewSettingDialog },
 	setup()
 	{
+		const isLoaded = ref(false);
+
 		// датчики
 		const sensorValue = ref(new SensorsValue());
 		const sensorView = new SensorsView();
@@ -123,21 +126,25 @@ export default {
 		// входящие значения датчиков
 		const onReceiveSensorValue = (res: ISensorsValue): void =>
 		{
+			isLoaded.value = true;
 			sensorValue.value.setModel(res);
 		};
 		// входящие значения отображения датчиков
 		const onReceiveSensorView = (res: ISensorsView): void =>
 		{
+			isLoaded.value = true;
 			sensorView.setModel(res);
 		};
 		// входящие значения температуры
 		const onReceiveTemperatureValue = (res: ITemperatureValue): void =>
 		{
+			isLoaded.value = true;
 			temperatureValue.value.setModel(res);
 		};
 		// входящие значения отображения температуры
 		const onReceiveTemperatureView = (res: ITemperatureView): void =>
 		{
+			isLoaded.value = true;
 			temperatureView.setModel(res);
 		};
 
@@ -261,6 +268,7 @@ export default {
 		};
 
 		return {
+			isLoaded,
 			acc,
 			timeWork,
 			temperature,
