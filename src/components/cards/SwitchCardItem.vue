@@ -8,6 +8,7 @@
 			persistent-hint
 			readonly
 			dense
+			:disabled="disabled"
 		/>
 		<v-switch
 			v-model="modelSwitch"
@@ -15,6 +16,7 @@
 			density="compact"
 			:color="color"
 			hide-details
+			:disabled="disabled"
 		/>
 	</div>
 </template>
@@ -25,13 +27,19 @@ import { computed, toRefs } from "vue";
 export default {
 	name: "SwitchCardItem",
 	props: {
+		/** Значение switch */
 		modelValue: Boolean,
+		/** Заголовок */
 		title: String,
+		/** Описание */
 		description: String,
+		/** Цвет switch */
 		color: {
 			type: String,
 			default: "success"
-		}
+		},
+		/** Выкл. */
+		disabled: Boolean
 	},
 	emits: ["update:modelValue"],
 	setup(props: any, { emit }: { emit: any })

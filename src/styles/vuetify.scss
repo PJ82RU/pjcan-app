@@ -63,6 +63,10 @@ html{
 	.v-btn {
 		margin: 0 !important;
 		padding: 0 16px;
+
+		&--disabled {
+			color: black !important;
+		}
 	}
 }
 

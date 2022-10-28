@@ -9,6 +9,7 @@
 			persistent-hint
 			readonly
 			dense
+			:disabled="disabled"
 		/>
 		<v-text-field
 			class="input-card-item__value"
@@ -20,6 +21,7 @@
 			persistent-hint
 			readonly
 			dense
+			:disabled="disabled"
 		/>
 	</div>
 </template>
@@ -28,10 +30,16 @@
 export default {
 	name: "InputCardItem",
 	props: {
+		/** Значение */
 		value: String,
+		/** Заголовок */
 		title: String,
+		/** Описание */
 		description: String,
-		nodata: Boolean
+		/** Нет данных */
+		nodata: Boolean,
+		/** Выкл. */
+		disabled: Boolean
 	}
 };
 </script>

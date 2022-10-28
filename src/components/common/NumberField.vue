@@ -14,6 +14,7 @@
 		persistent-hint
 		dense
 		@blur="onBlur"
+		:disabled="disabled"
 	/>
 </template>
 
@@ -43,7 +44,9 @@ export default {
 		defaultValue: {
 			type: Number,
 			default: 3
-		}
+		},
+		/** Выкл. */
+		disabled: Boolean
 	},
 	emits: ["update:modelValue"],
 	setup(props: any, { emit }: { emit: any })

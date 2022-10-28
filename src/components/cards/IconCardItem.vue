@@ -8,6 +8,7 @@
 			persistent-hint
 			readonly
 			dense
+			:disabled="disabled"
 		/>
 		<icon-custom
 			v-for="(item, index) in iconList"
@@ -31,27 +32,36 @@ export default {
 	name: "IconCardItem",
 	components: { IconCustom },
 	props: {
+		/** Список значений иконок */
 		modelValue: Array as () => boolean[],
+		/** Заголовок */
 		title: String,
+		/** Описание */
 		description: String,
+		/** Список имен иконок */
 		iconName: Array as () => string[],
+		/** Цвета вкл. иконки */
 		colorsTrue: {
 			type: Object,
 			default: () => ({ primary: "success", secondary: "#e2e2e2" })
 		},
+		/** Цвета выкл. иконки */
 		colorsFalse: {
 			type: Object,
 			default: () => ({ primary: "disable", secondary: "disable" })
 		},
+		/** Размер иконок */
 		size: {
 			type: String,
 			default: "44px"
-		}
+		},
+		/** Выкл. */
+		disabled: Boolean
 	},
 	emits: ["update:modelValue"],
 	setup(props: any, { emit }: { emit: any })
 	{
-		const { modelValue, iconName, colorsTrue, colorsFalse } = toRefs(props);
+		const { modelValue, iconName, colorsTrue, colorsFalse, disabled } = toRefs(props);
 		const modelSwitch = computed({
 			get: () => modelValue.value,
 			set: (val) => emit("update:modelValue", val)
@@ -65,7 +75,7 @@ export default {
 			{
 				result.push({
 					name: iconName.value[i],
-					colors: x ? colorsTrue.value : colorsFalse.value
+					colors: x && !disabled.value ? colorsTrue.value : colorsFalse.value
 				});
 			});
 			return result;

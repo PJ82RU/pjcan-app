@@ -15,6 +15,7 @@
 						v-model="modelEnabled"
 						:title="$t('onboard.viewSetting.enabled.title')"
 						:description="$t('onboard.viewSetting.enabled.description')"
+						:disabled="disabled"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0">
@@ -35,12 +36,13 @@
 						v-model="modelTime"
 						:label="$t('onboard.viewSetting.time.title')"
 						:hint="$t('onboard.viewSetting.time.description')"
+						:disabled="disabled"
 					/>
 				</v-col>
 			</v-row>
 		</template>
 		<template #btns>
-			<v-btn color="primary" @click="onApplyClick">
+			<v-btn color="primary" @click="onApplyClick" :disabled="disabled">
 				{{ $t("btn.apply") }}
 			</v-btn>
 			<v-btn color="primary" @click="visible = false">

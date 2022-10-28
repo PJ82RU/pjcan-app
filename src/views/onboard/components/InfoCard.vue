@@ -115,36 +115,39 @@ export default {
 	components: { Card, InputCardItem, SwitchCardItem, IconCardItem, ViewSettingDialog },
 	setup()
 	{
-		const isLoaded = ref(false);
+		// ДАТЧИКИ
 
-		// датчики
+		let loadedSensor = false;
 		const sensorValue = ref(new SensorsValue());
 		const sensorView = new SensorsView();
-		// температура
-		const temperatureValue = ref(new TemperatureValue());
-		const temperatureView = new TemperatureView();
+
 		// входящие значения датчиков
 		const onReceiveSensorValue = (res: ISensorsValue): void =>
 		{
-			isLoaded.value = true;
 			sensorValue.value.setModel(res);
 		};
 		// входящие значения отображения датчиков
 		const onReceiveSensorView = (res: ISensorsView): void =>
 		{
-			isLoaded.value = true;
+			loadedSensor = true;
 			sensorView.setModel(res);
 		};
+
+		// ТЕМПЕРАТУРА
+
+		let loadedTemperature = false;
+		const temperatureValue = ref(new TemperatureValue());
+		const temperatureView = new TemperatureView();
+
 		// входящие значения температуры
 		const onReceiveTemperatureValue = (res: ITemperatureValue): void =>
 		{
-			isLoaded.value = true;
 			temperatureValue.value.setModel(res);
 		};
 		// входящие значения отображения температуры
 		const onReceiveTemperatureView = (res: ITemperatureView): void =>
 		{
-			isLoaded.value = true;
+			loadedTemperature = true;
 			temperatureView.setModel(res);
 		};
 
@@ -196,6 +199,8 @@ export default {
 		const menuVisible = ref(false);
 		const menuTitle = ref("");
 		const menuItem = ref({} as IViewConfig);
+		const isLoaded = ref(false);
+
 		let menuSelected = {} as IMenuItem;
 
 		/**
@@ -211,11 +216,13 @@ export default {
 			{
 				case 0:
 					menuItem.value = { enabled: false, type: 0, time: 3 };
-					break;
+					isLoaded.value = false;
+					return;
 
 				case 1:
 					menuItem.value = temperatureView.temperature;
-					break;
+					isLoaded.value = loadedTemperature;
+					return;
 
 				case 2:
 					menuItem.value = sensorView.handbrake;
@@ -233,6 +240,7 @@ export default {
 					menuItem.value = sensorView.signal;
 					break;
 			}
+			isLoaded.value = loadedSensor;
 		};
 
 		/**
@@ -288,8 +296,3 @@ export default {
 	}
 };
 </script>
-
-<style lang="scss" scoped>
-.info-card {
-}
-</style>
