@@ -65,7 +65,7 @@
 		</template>
 	</card>
 
-	<view-setting-dialog v-model="menuVisible" :title="menuTitle" />
+	<view-setting-dialog v-model="menuVisible" :title="menuTitle" @click:apply="onViewSettingApply" />
 </template>
 
 <script lang="ts">
@@ -97,7 +97,9 @@ import canbus, {
 	API_EVENT_VARIABLE_SENSORS_VIEW,
 	API_EVENT_VARIABLE_TEMPERATURE, API_EVENT_VARIABLE_TEMPERATURE_VIEW
 } from "@/api/canbus";
+
 import { IMenuItem } from "@/models/IMenuItem";
+import { IViewSetting } from "@/models/interfaces/IViewSetting";
 
 export default {
 	name: "InfoCard",
@@ -183,6 +185,10 @@ export default {
 			menuVisible.value = true;
 			menuTitle.value = data.item;
 		};
+		const onViewSettingApply = (data: IViewSetting): void =>
+		{
+			console.log(data);
+		};
 
 		return {
 			acc,
@@ -197,7 +203,8 @@ export default {
 			menu,
 			menuVisible,
 			menuTitle,
-			onMenuClick
+			onMenuClick,
+			onViewSettingApply
 		};
 	}
 };

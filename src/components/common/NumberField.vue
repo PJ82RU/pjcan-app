@@ -24,10 +24,7 @@ export default {
 	name: "NumberField",
 	props: {
 		/** Вводимое значение */
-		modelValue: {
-			type: Number,
-			required: true
-		},
+		modelValue: Number,
 		/** Заголовок */
 		label: String,
 		/** Подсказка */
@@ -48,12 +45,13 @@ export default {
 			default: 3
 		}
 	},
+	emits: ["update:modelValue"],
 	setup(props: any, { emit }: { emit: any })
 	{
 		const { modelValue, min, max, defaultValue } = toRefs(props);
 
 		const value = computed({
-			get: (): string => modelValue.value.toString(),
+			get: (): string => modelValue.value?.toString() ?? "",
 			set: (val: string | number): void => emit("update:modelValue", Number(val))
 		});
 

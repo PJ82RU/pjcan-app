@@ -12,14 +12,14 @@
 			<v-row>
 				<v-col cols="12" class="pt-0">
 					<switch-card-item
-						v-model="enabled"
+						v-model="modelEnabled"
 						:title="$t('onboard.viewSetting.enabled.title')"
 						:description="$t('onboard.viewSetting.enabled.description')"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0">
 					<v-select
-						v-model="type"
+						v-model="modelType"
 						:label="$t('onboard.viewSetting.type.title')"
 						:items="typeItems"
 						:hint="$t('onboard.viewSetting.type.description')"
@@ -31,7 +31,7 @@
 				</v-col>
 				<v-col cols="12" class="pt-0">
 					<number-field
-						v-model="number"
+						v-model="modelTime"
 						:label="$t('onboard.viewSetting.time.title')"
 						:hint="$t('onboard.viewSetting.time.description')"
 					/>
@@ -39,7 +39,7 @@
 			</v-row>
 		</template>
 		<template #btns>
-			<v-btn color="primary" @click="visible = false">
+			<v-btn color="primary" @click="onApplyClick">
 				{{ $t("btn.apply") }}
 			</v-btn>
 			<v-btn color="primary" @click="visible = false">
@@ -50,50 +50,82 @@
 </template>
 
 <script lang="ts">
-import { computed, ref, toRefs } from "vue";
+import { computed, ref, toRefs, watch } from "vue";
 import i18n from "@/lang";
 
 import DialogTemplate from "@/components/DialogTemplate.vue";
 import SwitchCardItem from "@/components/cards/SwitchCardItem.vue";
 import NumberField from "@/components/common/NumberField.vue";
+import { IViewSetting } from "@/models/interfaces/IViewSetting";
 
 export default {
 	name: "ViewSettingDialog",
 	components: { DialogTemplate, SwitchCardItem, NumberField },
 	props: {
+		/** Отображение диалога */
 		modelValue: {
 			type: Boolean,
 			default: false
 		},
+		/** Заголовок */
 		title: {
 			type: String,
 			require: true
-		}
+		},
+		/** Вкл/выкл. отображения на LCD */
+		enabled: Boolean,
+		/** Тип вывода текста на LCD */
+		type: Number,
+		/** Время отображения текста на LCD, сек */
+		time: Number
 	},
+	emits: ["update:modelValue", "click:apply"],
 	setup(props: any, { emit }: { emit: any })
 	{
-		const { modelValue } = toRefs(props);
+		const { modelValue, enabled, type, time } = toRefs(props);
 
 		const visible = computed({
 			get: (): boolean => modelValue.value,
 			set: (val: boolean): void => emit("update:modelValue", val)
 		});
-		const enabled = ref(false);
-		const type = ref(0);
+		const modelEnabled = ref(false);
+		const modelType = ref(0);
 		const typeItems = computed(() =>
 			(i18n.global.tm("onboard.viewSetting.type.items") as string[])?.map((x, i) => ({
 				label: x,
 				value: i
 			}))
 		);
-		const number = ref(3);
+		const modelTime = ref(3);
+
+		watch(visible, val =>
+		{
+			if (val)
+			{
+				modelEnabled.value = enabled.value ?? false;
+				modelType.value = type.value ?? 0;
+				modelTime.value = time.value ?? 3;
+			}
+		});
+
+		/** Применить изменения и закрыть диалог */
+		const onApplyClick = (): void =>
+		{
+			visible.value = false;
+			emit("click:apply", {
+				enabled: modelEnabled.value,
+				type: modelType.value,
+				time: modelTime.value
+			} as IViewSetting);
+		};
 
 		return {
 			visible,
-			enabled,
-			type,
+			modelEnabled,
+			modelType,
 			typeItems,
-			number
+			modelTime,
+			onApplyClick
 		};
 	}
 };
