@@ -1,7 +1,10 @@
 <template>
 	<flicking class="onboard" :options="{ bound: true, align: 'prev' }">
-		<div v-for="i in 4" :key="i" class="onboard__flicking" :class="nameDisplay">
+		<div key="info-card" class="onboard__flicking" :class="nameDisplay">
 			<info-card />
+		</div>
+		<div key="engine-card" class="onboard__flicking" :class="nameDisplay">
+			<engine-card />
 		</div>
 	</flicking>
 </template>
@@ -12,12 +15,12 @@ import store from "@/store";
 import { useDisplay } from "vuetify";
 
 import Flicking from "@egjs/vue3-flicking";
-import Card from "@/components/cards/Card.vue";
 import InfoCard from "./components/InfoCard.vue";
+import EngineCard from "./components/EngineCard.vue";
 
 export default {
 	name: "onboard",
-	components: { Flicking, Card, InfoCard },
+	components: { Flicking, InfoCard, EngineCard },
 	setup()
 	{
 		const { name } = useDisplay();

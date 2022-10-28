@@ -47,7 +47,8 @@ export default {
 <style lang="scss" scoped>
 .input-card-item {
 	&__value {
-		width: 70px;
+		max-width: 80px;
+		min-width: 80px;
 		font-family: $font-family;
 
 		&.nodata {

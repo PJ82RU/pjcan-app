@@ -80,6 +80,13 @@
 import { computed, onMounted, onUnmounted, ref } from "vue";
 import i18n from "@/lang";
 
+import canbus, {
+	API_EVENT_VARIABLE_SENSORS,
+	API_EVENT_VARIABLE_SENSORS_VIEW,
+	API_EVENT_VARIABLE_TEMPERATURE,
+	API_EVENT_VARIABLE_TEMPERATURE_VIEW
+} from "@/api/canbus";
+
 import Card from "@/components/cards/Card.vue";
 import InputCardItem from "@/components/cards/InputCardItem.vue";
 import SwitchCardItem from "@/components/cards/SwitchCardItem.vue";
@@ -99,14 +106,6 @@ import {
 	TemperatureValue,
 	TemperatureView
 } from "@/models/pjcan/variables/temperature";
-
-import canbus, {
-	API_EVENT_VARIABLE_SENSORS,
-	API_EVENT_VARIABLE_SENSORS_VIEW,
-	API_EVENT_VARIABLE_TEMPERATURE,
-	API_EVENT_VARIABLE_TEMPERATURE_VIEW
-} from "@/api/canbus";
-
 import { IMenuItem } from "@/models/IMenuItem";
 import { IViewConfig } from "@/models/pjcan/view";
 
