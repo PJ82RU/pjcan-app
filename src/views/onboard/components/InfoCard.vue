@@ -65,7 +65,14 @@
 		</template>
 	</card>
 
-	<view-setting-dialog v-model="menuVisible" :title="menuTitle" @click:apply="onViewSettingApply" />
+	<view-setting-dialog
+		v-model="menuVisible"
+		:title="menuTitle"
+		:enabled="menuItem.enabled"
+		:type="menuItem.type"
+		:time="menuItem.time"
+		@click:apply="onViewSettingApply"
+	/>
 </template>
 
 <script lang="ts">
@@ -95,11 +102,12 @@ import {
 import canbus, {
 	API_EVENT_VARIABLE_SENSORS,
 	API_EVENT_VARIABLE_SENSORS_VIEW,
-	API_EVENT_VARIABLE_TEMPERATURE, API_EVENT_VARIABLE_TEMPERATURE_VIEW
+	API_EVENT_VARIABLE_TEMPERATURE,
+	API_EVENT_VARIABLE_TEMPERATURE_VIEW
 } from "@/api/canbus";
 
 import { IMenuItem } from "@/models/IMenuItem";
-import { IViewSetting } from "@/models/interfaces/IViewSetting";
+import { IViewConfig } from "@/models/pjcan/view";
 
 export default {
 	name: "InfoCard",
@@ -168,9 +176,9 @@ export default {
 				sensorValue.value.signal === TSensorsSignal.SIGNAL_EMERGENCY
 		);
 
-		// меню отображения
+		// МЕНЮ ОТОБРАЖЕНИЯ
+
 		const menu = computed((): string[] => [
-			i18n.global.t("onboard.info.acc.menu"),
 			i18n.global.t("onboard.info.timeWork.menu"),
 			i18n.global.t("onboard.info.temperature.menu"),
 			i18n.global.t("onboard.info.handbrake.menu"),
@@ -180,14 +188,76 @@ export default {
 		]);
 		const menuVisible = ref(false);
 		const menuTitle = ref("");
+		const menuItem = ref({} as IViewConfig);
+		let menuSelected = {} as IMenuItem;
+
+		/**
+		 * Выбор пункта меню отображения на информационном экране
+		 * @param {IMenuItem} data Выбранный пункт меню
+		 */
 		const onMenuClick = (data: IMenuItem): void =>
 		{
 			menuVisible.value = true;
 			menuTitle.value = data.item;
+			menuSelected = data;
+			switch (data.index)
+			{
+				case 0:
+					menuItem.value = { enabled: false, type: 0, time: 3 };
+					break;
+
+				case 1:
+					menuItem.value = temperatureView.temperature;
+					break;
+
+				case 2:
+					menuItem.value = sensorView.handbrake;
+					break;
+
+				case 3:
+					menuItem.value = sensorView.reverse;
+					break;
+
+				case 4:
+					menuItem.value = sensorView.seatbelt;
+					break;
+
+				case 5:
+					menuItem.value = sensorView.signal;
+					break;
+			}
 		};
-		const onViewSettingApply = (data: IViewSetting): void =>
+
+		/**
+		 * Применить параметры отображения на информационном экране
+		 * @param {IViewConfig} data Новые параметры отображения
+		 */
+		const onViewSettingApply = (data: IViewConfig): void =>
 		{
-			console.log(data);
+			switch (menuSelected.index)
+			{
+				case 1:
+					temperatureView.temperature = data;
+					canbus.send(temperatureView);
+					return;
+
+				case 2:
+					sensorView.handbrake = data;
+					break;
+
+				case 3:
+					sensorView.reverse = data;
+					break;
+
+				case 4:
+					sensorView.seatbelt = data;
+					break;
+
+				case 5:
+					sensorView.signal = data;
+					break;
+			}
+			canbus.send(sensorView);
 		};
 
 		return {
@@ -203,6 +273,7 @@ export default {
 			menu,
 			menuVisible,
 			menuTitle,
+			menuItem,
 			onMenuClick,
 			onViewSettingApply
 		};

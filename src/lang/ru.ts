@@ -130,8 +130,7 @@ export default {
 			title: "Информация",
 			acc: {
 				title: "ACC",
-				description: "Питание автомобиля",
-				menu: "LCD: ACC"
+				description: "Питание автомобиля"
 			},
 			timeWork: {
 				title: "Время работы",

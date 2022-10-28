@@ -56,7 +56,7 @@ import i18n from "@/lang";
 import DialogTemplate from "@/components/DialogTemplate.vue";
 import SwitchCardItem from "@/components/cards/SwitchCardItem.vue";
 import NumberField from "@/components/common/NumberField.vue";
-import { IViewSetting } from "@/models/interfaces/IViewSetting";
+import { IViewConfig } from "@/models/pjcan/view";
 
 export default {
 	name: "ViewSettingDialog",
@@ -116,7 +116,7 @@ export default {
 				enabled: modelEnabled.value,
 				type: modelType.value,
 				time: modelTime.value
-			} as IViewSetting);
+			} as IViewConfig);
 		};
 
 		return {
