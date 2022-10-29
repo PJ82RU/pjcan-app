@@ -55,13 +55,15 @@ export default {
 			type: String,
 			default: "44px"
 		},
+		/** Нет данных */
+		nodata: Boolean,
 		/** Выкл. */
 		disabled: Boolean
 	},
 	emits: ["update:modelValue"],
 	setup(props: any, { emit }: { emit: any })
 	{
-		const { modelValue, iconName, colorsTrue, colorsFalse, disabled } = toRefs(props);
+		const { modelValue, iconName, colorsTrue, colorsFalse, nodata, disabled } = toRefs(props);
 		const modelSwitch = computed({
 			get: () => modelValue.value,
 			set: (val) => emit("update:modelValue", val)
@@ -75,7 +77,7 @@ export default {
 			{
 				result.push({
 					name: iconName.value[i],
-					colors: x && !disabled.value ? colorsTrue.value : colorsFalse.value
+					colors: x && !nodata.value && !disabled.value ? colorsTrue.value : colorsFalse.value
 				});
 			});
 			return result;

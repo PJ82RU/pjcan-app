@@ -16,7 +16,7 @@
 			density="compact"
 			:color="color"
 			hide-details
-			:disabled="disabled"
+			:disabled="nodata || disabled"
 		/>
 	</div>
 </template>
@@ -38,6 +38,8 @@ export default {
 			type: String,
 			default: "success"
 		},
+		/** Нет данных */
+		nodata: Boolean,
 		/** Выкл. */
 		disabled: Boolean
 	},

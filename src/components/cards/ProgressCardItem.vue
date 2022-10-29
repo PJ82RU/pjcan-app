@@ -38,7 +38,7 @@ export default {
 		description: String,
 		/** Цвет прогресса */
 		color: {
-			type: Object,
+			type: String,
 			default: "success"
 		},
 		/** Размер иконок */

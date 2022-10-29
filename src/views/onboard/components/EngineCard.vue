@@ -8,6 +8,7 @@
 						:title="$t('onboard.engine.enabled.title')"
 						:description="$t('onboard.engine.enabled.description')"
 						:icon-name="['start-stop']"
+						:disabled="!isLoaded"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0 pb-0">
@@ -16,6 +17,7 @@
 						:title="$t('onboard.engine.RPM.title')"
 						:description="$t('onboard.engine.RPM.description')"
 						:nodata="!enabled"
+						:disabled="!isLoaded"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0 pb-0">
@@ -24,6 +26,7 @@
 						:title="$t('onboard.engine.countRPM.title')"
 						:description="$t('onboard.engine.countRPM.description')"
 						:nodata="!enabled"
+						:disabled="!isLoaded"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0 pb-0">
@@ -32,6 +35,7 @@
 						:title="$t('onboard.engine.motors.title')"
 						:description="$t('onboard.engine.motors.description')"
 						:nodata="!enabled"
+						:disabled="!isLoaded"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0 pb-0">

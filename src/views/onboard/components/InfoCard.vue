@@ -8,6 +8,7 @@
 						:title="$t('onboard.info.acc.title')"
 						:description="$t('onboard.info.acc.description')"
 						:icon-name="['key']"
+						:disabled="!loadedSensor"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0 pb-0">
@@ -16,6 +17,7 @@
 						:title="$t('onboard.info.timeWork.title')"
 						:description="$t('onboard.info.timeWork.description')"
 						:nodata="!acc"
+						:disabled="!loadedSensor"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0 pb-0">
@@ -24,6 +26,7 @@
 						:title="$t('onboard.info.temperature.title')"
 						:description="$t('onboard.info.temperature.description')"
 						:nodata="!acc"
+						:disabled="!loadedTemperature"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0 pb-0">
@@ -32,6 +35,8 @@
 						:title="$t('onboard.info.handbrake.title')"
 						:description="$t('onboard.info.handbrake.description')"
 						color="error"
+						:nodata="!acc"
+						:disabled="!loadedSensor"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0 pb-0">
@@ -40,6 +45,8 @@
 						:title="$t('onboard.info.reverse.title')"
 						:description="$t('onboard.info.reverse.description')"
 						color="warning"
+						:nodata="!acc"
+						:disabled="!loadedSensor"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0 pb-0">
@@ -50,6 +57,8 @@
 						:icon-name="['passenger', 'passenger']"
 						:colorsTrue="acc ? { primary: 'success' } : undefined"
 						:colorsFalse="acc ? { primary: 'error' } : undefined"
+						:nodata="!acc"
+						:disabled="!loadedSensor"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0 pb-0">
@@ -59,6 +68,8 @@
 						:description="$t('onboard.info.signal.description')"
 						:icon-name="['arrow-right', 'arrow-left']"
 						:colorsTrue="{ primary: 'success' }"
+						:nodata="!acc"
+						:disabled="!loadedSensor"
 					/>
 				</v-col>
 			</v-row>
@@ -106,6 +117,7 @@ import {
 	TemperatureValue,
 	TemperatureView
 } from "@/models/pjcan/variables/temperature";
+
 import { IMenuItem } from "@/models/IMenuItem";
 import { IViewConfig } from "@/models/pjcan/view";
 
@@ -116,7 +128,7 @@ export default {
 	{
 		// ДАТЧИКИ
 
-		let loadedSensor = false;
+		const loadedSensor = ref(false);
 		const sensorValue = ref(new SensorsValue());
 		const sensorView = new SensorsView();
 
@@ -128,13 +140,13 @@ export default {
 		// входящие значения отображения датчиков
 		const onReceiveSensorView = (res: ISensorsView): void =>
 		{
-			loadedSensor = true;
+			loadedSensor.value = true;
 			sensorView.setModel(res);
 		};
 
 		// ТЕМПЕРАТУРА
 
-		let loadedTemperature = false;
+		const loadedTemperature = ref(false);
 		const temperatureValue = ref(new TemperatureValue());
 		const temperatureView = new TemperatureView();
 
@@ -146,7 +158,7 @@ export default {
 		// входящие значения отображения температуры
 		const onReceiveTemperatureView = (res: ITemperatureView): void =>
 		{
-			loadedTemperature = true;
+			loadedTemperature.value = true;
 			temperatureView.setModel(res);
 		};
 
@@ -220,7 +232,7 @@ export default {
 
 				case 1:
 					menuItem.value = temperatureView.temperature;
-					isLoaded.value = loadedTemperature;
+					isLoaded.value = loadedTemperature.value;
 					return;
 
 				case 2:
@@ -239,7 +251,7 @@ export default {
 					menuItem.value = sensorView.signal;
 					break;
 			}
-			isLoaded.value = loadedSensor;
+			isLoaded.value = loadedSensor.value;
 		};
 
 		/**
@@ -275,6 +287,8 @@ export default {
 		};
 
 		return {
+			loadedSensor,
+			loadedTemperature,
 			isLoaded,
 			acc,
 			timeWork,
