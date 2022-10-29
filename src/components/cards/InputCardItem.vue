@@ -1,28 +1,19 @@
 <template>
 	<div class="input-card-item d-flex">
 		<v-text-field
-			class="fixed-message"
+			class="input-card-item__message"
+			:class="{ nodata }"
 			:model-value="title"
 			:hint="description"
+			:suffix="value"
 			variant="underlined"
 			density="compact"
 			persistent-hint
 			readonly
 			dense
 			:disabled="disabled"
-		/>
-		<v-text-field
-			class="input-card-item__value"
-			:class="{ nodata }"
-			:model-value="value"
-			variant="underlined"
-			density="compact"
-			reverse
-			persistent-hint
-			readonly
-			dense
-			:disabled="disabled"
-		/>
+		>
+		</v-text-field>
 	</div>
 </template>
 
@@ -46,6 +37,18 @@ export default {
 
 <style lang="scss" scoped>
 .input-card-item {
+	&__message {
+		&.nodata {
+			::v-deep(.v-text-field__suffix) {
+				color: $disable;
+			}
+		}
+
+		::v-deep(.v-text-field__suffix) {
+			font-family: $font-family !important;
+		}
+	}
+
 	&__value {
 		max-width: 80px;
 		min-width: 80px;

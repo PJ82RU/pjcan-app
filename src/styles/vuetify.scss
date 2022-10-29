@@ -85,6 +85,12 @@ html{
 	}
 }
 
+.v-input {
+	.v-messages__message {
+		font-weight: 300;
+	}
+}
+
 .v-overlay {
 	&__scrim {
 		background: black;
