@@ -95,7 +95,7 @@ export default {
 
 	&__icon {
 		position: absolute;
-		top: 12px;
+		top: 8px;
 		right: 0;
 	}
 }

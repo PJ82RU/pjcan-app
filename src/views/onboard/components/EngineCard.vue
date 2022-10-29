@@ -34,7 +34,15 @@
 						:nodata="!enabled"
 					/>
 				</v-col>
-				<v-col cols="12" class="pt-0 pb-0"> </v-col>
+				<v-col cols="12" class="pt-0 pb-0">
+					<progress-card-item
+						:value="load"
+						:title="$t('onboard.engine.load.title')"
+						:description="$t('onboard.engine.load.description')"
+						:nodata="!enabled"
+						:disabled="!isLoaded"
+					/>
+				</v-col>
 				<v-col cols="12" class="pt-0 pb-0"> </v-col>
 				<v-col cols="12" class="pt-0 pb-0"> </v-col>
 			</v-row>
@@ -62,6 +70,7 @@ import Card from "@/components/cards/Card.vue";
 import InputCardItem from "@/components/cards/InputCardItem.vue";
 import SwitchCardItem from "@/components/cards/SwitchCardItem.vue";
 import IconCardItem from "@/components/cards/IconCardItem.vue";
+import ProgressCardItem from "@/components/cards/ProgressCardItem.vue";
 import ViewSettingDialog from "./ViewSettingDialog.vue";
 
 import { IMenuItem } from "@/models/IMenuItem";
@@ -72,12 +81,12 @@ import { getFormatTime } from "@/utils/time";
 
 export default {
 	name: "EngineCard",
-	components: { Card, InputCardItem, SwitchCardItem, IconCardItem, ViewSettingDialog },
+	components: { Card, InputCardItem, SwitchCardItem, IconCardItem, ProgressCardItem, ViewSettingDialog },
 	setup()
 	{
 		// ПАРАМЕТРЫ ДВС
 
-		let loadedEngine = false;
+		const isLoaded = ref(false);
 		const engineValue = ref(new EngineValue());
 		const engineView = new EngineView();
 
@@ -89,7 +98,7 @@ export default {
 		// входящие значения отображения ДВС
 		const onReceiveView = (res: IEngineValue): void =>
 		{
-			loadedEngine = true;
+			isLoaded.value = true;
 			engineView.setModel(res);
 		};
 
@@ -128,7 +137,6 @@ export default {
 		const menuVisible = ref(false);
 		const menuTitle = ref("");
 		const menuItem = ref({} as IViewConfig);
-		const isLoaded = ref(false);
 
 		let menuSelected = {} as IMenuItem;
 
@@ -171,7 +179,6 @@ export default {
 					menuItem.value = engineView.coolant;
 					break;
 			}
-			isLoaded.value = loadedEngine;
 		};
 
 		/**
