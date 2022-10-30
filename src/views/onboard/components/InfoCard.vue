@@ -8,7 +8,7 @@
 						:title="$t('onboard.info.acc.title')"
 						:description="$t('onboard.info.acc.description')"
 						:icon-name="['key']"
-						:disabled="!loadedSensor"
+						:disabled="!isLoadedView"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0 pb-0">
@@ -18,7 +18,7 @@
 						:description="$t('onboard.info.timeWork.description')"
 						type="time"
 						:nodata="!acc"
-						:disabled="!loadedSensor"
+						:disabled="!isLoadedView"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0 pb-0">
@@ -38,7 +38,7 @@
 						:description="$t('onboard.info.handbrake.description')"
 						color="error"
 						:nodata="!acc"
-						:disabled="!loadedSensor"
+						:disabled="!isLoadedView"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0 pb-0">
@@ -48,7 +48,7 @@
 						:description="$t('onboard.info.reverse.description')"
 						color="warning"
 						:nodata="!acc"
-						:disabled="!loadedSensor"
+						:disabled="!isLoadedView"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0 pb-0">
@@ -60,7 +60,7 @@
 						:colorsTrue="acc ? { primary: 'success' } : undefined"
 						:colorsFalse="acc ? { primary: 'error' } : undefined"
 						:nodata="!acc"
-						:disabled="!loadedSensor"
+						:disabled="!isLoadedView"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0 pb-0">
@@ -71,7 +71,7 @@
 						:icon-name="['arrow-right', 'arrow-left']"
 						:colorsTrue="{ primary: 'success' }"
 						:nodata="!acc"
-						:disabled="!loadedSensor"
+						:disabled="!isLoadedView"
 					/>
 				</v-col>
 			</v-row>
@@ -130,7 +130,8 @@ export default {
 	{
 		// ДАТЧИКИ
 
-		const loadedSensor = ref(false);
+		const isLoadedView = ref(false);
+
 		const sensorValue = ref(new SensorsValue());
 		const sensorView = new SensorsView();
 
@@ -142,7 +143,7 @@ export default {
 		// входящие значения отображения датчиков
 		const onReceiveSensorView = (res: ISensorsView): void =>
 		{
-			loadedSensor.value = true;
+			isLoadedView.value = true;
 			sensorView.setModel(res);
 		};
 
@@ -253,7 +254,7 @@ export default {
 					menuItem.value = sensorView.signal;
 					break;
 			}
-			isLoaded.value = loadedSensor.value;
+			isLoaded.value = isLoadedView.value;
 		};
 
 		/**
@@ -289,7 +290,7 @@ export default {
 		};
 
 		return {
-			loadedSensor,
+			isLoadedView,
 			loadedTemperature,
 			isLoaded,
 			acc,

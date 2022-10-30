@@ -7,8 +7,8 @@
 						:value="current"
 						:title="$t('onboard.fuel.current.title')"
 						:description="$t('onboard.fuel.current.description')"
-						:nodata="!isData"
-						:disabled="!isLoaded"
+						:nodata="!isLoadedValue"
+						:disabled="!isLoadedView"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0 pb-0">
@@ -16,8 +16,8 @@
 						:value="avg"
 						:title="$t('onboard.fuel.avg.title')"
 						:description="$t('onboard.fuel.avg.description')"
-						:nodata="!isData"
-						:disabled="!isLoaded"
+						:nodata="!isLoadedValue"
+						:disabled="!isLoadedView"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0 pb-0">
@@ -25,8 +25,8 @@
 						:value="total"
 						:title="$t('onboard.fuel.total.title')"
 						:description="$t('onboard.fuel.total.description')"
-						:nodata="!isData"
-						:disabled="!isLoaded"
+						:nodata="!isLoadedValue"
+						:disabled="!isLoadedView"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0 pb-0">
@@ -34,8 +34,8 @@
 						:value="consumption"
 						:title="$t('onboard.fuel.consumption.title')"
 						:description="$t('onboard.fuel.consumption.description')"
-						:nodata="!isData"
-						:disabled="!isLoaded"
+						:nodata="!isLoadedValue"
+						:disabled="!isLoadedView"
 					/>
 				</v-col>
 			</v-row>
@@ -48,7 +48,7 @@
 		:enabled="menuItem.enabled"
 		:type="menuItem.type"
 		:time="menuItem.time"
-		:disabled="!isLoaded"
+		:disabled="!isLoadedView"
 		@click:apply="onViewSettingApply"
 	/>
 </template>
@@ -61,37 +61,35 @@ import canbus, { API_EVENT_VARIABLE_FUEL, API_EVENT_VARIABLE_FUEL_VIEW } from "@
 
 import Card from "@/components/cards/Card.vue";
 import InputCardItem from "@/components/cards/InputCardItem.vue";
-import SwitchCardItem from "@/components/cards/SwitchCardItem.vue";
-import IconCardItem from "@/components/cards/IconCardItem.vue";
-import ProgressCardItem from "@/components/cards/ProgressCardItem.vue";
 import ViewSettingDialog from "./ViewSettingDialog.vue";
 
 import { IMenuItem } from "@/models/IMenuItem";
 import { IViewConfig } from "@/models/pjcan/view";
-import { FuelValue, FuelView, IFuelValue } from "@/models/pjcan/variables/fuel";
+import { FuelValue, FuelView, IFuelValue, IFuelView } from "@/models/pjcan/variables/fuel";
 
 export default {
 	name: "FuelCard",
-	components: { Card, InputCardItem, SwitchCardItem, IconCardItem, ProgressCardItem, ViewSettingDialog },
+	components: { Card, InputCardItem, ViewSettingDialog },
 	setup()
 	{
 		// РАСХОД ТОПЛИВА
 
-		const isLoaded = ref(false);
-		const isData = ref(false);
+		const isLoadedValue = ref(false);
+		const isLoadedView = ref(false);
+
 		const fuelValue = ref(new FuelValue());
 		const fuelView = new FuelView();
 
 		// входящие значения расхода топлива
 		const onReceiveValue = (res: IFuelValue): void =>
 		{
-			isData.value = true;
+			isLoadedValue.value = true;
 			fuelValue.value.setModel(res);
 		};
 		// входящие значения отображения расхода топлива
-		const onReceiveView = (res: IFuelValue): void =>
+		const onReceiveView = (res: IFuelView): void =>
 		{
-			isLoaded.value = true;
+			isLoadedView.value = true;
 			fuelView.setModel(res);
 		};
 
@@ -184,8 +182,8 @@ export default {
 		};
 
 		return {
-			isLoaded,
-			isData,
+			isLoadedView,
+			isLoadedValue,
 			current,
 			avg,
 			total,

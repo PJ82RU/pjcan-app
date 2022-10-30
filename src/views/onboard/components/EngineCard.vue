@@ -8,7 +8,7 @@
 						:title="$t('onboard.engine.enabled.title')"
 						:description="$t('onboard.engine.enabled.description')"
 						:icon-name="['start-stop']"
-						:disabled="!isLoaded"
+						:disabled="!isLoadedView"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0 pb-0">
@@ -17,7 +17,7 @@
 						:title="$t('onboard.engine.RPM.title')"
 						:description="$t('onboard.engine.RPM.description')"
 						:nodata="!enabled"
-						:disabled="!isLoaded"
+						:disabled="!isLoadedView"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0 pb-0">
@@ -26,7 +26,7 @@
 						:title="$t('onboard.engine.countRPM.title')"
 						:description="$t('onboard.engine.countRPM.description')"
 						:nodata="!enabled"
-						:disabled="!isLoaded"
+						:disabled="!isLoadedView"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0 pb-0">
@@ -36,7 +36,7 @@
 						:description="$t('onboard.engine.motors.description')"
 						type="time"
 						:nodata="!enabled"
-						:disabled="!isLoaded"
+						:disabled="!isLoadedView"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0 pb-0">
@@ -45,7 +45,7 @@
 						:title="$t('onboard.engine.load.title')"
 						:description="$t('onboard.engine.load.description')"
 						:nodata="!enabled"
-						:disabled="!isLoaded"
+						:disabled="!isLoadedView"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0 pb-0">
@@ -54,7 +54,7 @@
 						:title="$t('onboard.engine.throttle.title')"
 						:description="$t('onboard.engine.throttle.description')"
 						:nodata="!enabled"
-						:disabled="!isLoaded"
+						:disabled="!isLoadedView"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0 pb-0">
@@ -64,7 +64,7 @@
 						:description="$t('onboard.engine.coolant.description')"
 						type="temperature"
 						:nodata="!enabled"
-						:disabled="!isLoaded"
+						:disabled="!isLoadedView"
 					/>
 				</v-col>
 			</v-row>
@@ -77,7 +77,7 @@
 		:enabled="menuItem.enabled"
 		:type="menuItem.type"
 		:time="menuItem.time"
-		:disabled="!isLoaded"
+		:disabled="!isLoadedView"
 		@click:apply="onViewSettingApply"
 	/>
 </template>
@@ -90,23 +90,23 @@ import canbus, { API_EVENT_VARIABLE_ENGINE, API_EVENT_VARIABLE_ENGINE_VIEW } fro
 
 import Card from "@/components/cards/Card.vue";
 import InputCardItem from "@/components/cards/InputCardItem.vue";
-import SwitchCardItem from "@/components/cards/SwitchCardItem.vue";
 import IconCardItem from "@/components/cards/IconCardItem.vue";
 import ProgressCardItem from "@/components/cards/ProgressCardItem.vue";
 import ViewSettingDialog from "./ViewSettingDialog.vue";
 
 import { IMenuItem } from "@/models/IMenuItem";
 import { IViewConfig } from "@/models/pjcan/view";
-import { EngineValue, EngineView, IEngineValue } from "@/models/pjcan/variables/engine";
+import { EngineValue, EngineView, IEngineValue, IEngineView } from "@/models/pjcan/variables/engine";
 
 export default {
 	name: "EngineCard",
-	components: { Card, InputCardItem, SwitchCardItem, IconCardItem, ProgressCardItem, ViewSettingDialog },
+	components: { Card, InputCardItem, IconCardItem, ProgressCardItem, ViewSettingDialog },
 	setup()
 	{
 		// ПАРАМЕТРЫ ДВС
 
-		const isLoaded = ref(false);
+		const isLoadedView = ref(false);
+
 		const engineValue = ref(new EngineValue());
 		const engineView = new EngineView();
 
@@ -116,9 +116,9 @@ export default {
 			engineValue.value.setModel(res);
 		};
 		// входящие значения отображения ДВС
-		const onReceiveView = (res: IEngineValue): void =>
+		const onReceiveView = (res: IEngineView): void =>
 		{
-			isLoaded.value = true;
+			isLoadedView.value = true;
 			engineView.setModel(res);
 		};
 
@@ -241,7 +241,7 @@ export default {
 		};
 
 		return {
-			isLoaded,
+			isLoadedView,
 			enabled,
 			rpm,
 			countRPM,

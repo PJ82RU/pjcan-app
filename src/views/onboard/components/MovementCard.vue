@@ -7,8 +7,8 @@
 						:value="speed"
 						:title="$t('onboard.movement.speed.title')"
 						:description="$t('onboard.movement.speed.description')"
-						:nodata="!isData"
-						:disabled="!isLoaded"
+						:nodata="!isLoadedValue"
+						:disabled="!isLoadedView"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0 pb-0">
@@ -16,8 +16,8 @@
 						:value="speedAVG"
 						:title="$t('onboard.movement.speedAVG.title')"
 						:description="$t('onboard.movement.speedAVG.description')"
-						:nodata="!isData"
-						:disabled="!isLoaded"
+						:nodata="!isLoadedValue"
+						:disabled="!isLoadedView"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0 pb-0">
@@ -25,8 +25,8 @@
 						:value="restWay"
 						:title="$t('onboard.movement.restWay.title')"
 						:description="$t('onboard.movement.restWay.description')"
-						:nodata="!isData"
-						:disabled="!isLoaded"
+						:nodata="!isLoadedValue"
+						:disabled="!isLoadedView"
 					/>
 				</v-col>
 			</v-row>
@@ -39,7 +39,7 @@
 		:enabled="menuItem.enabled"
 		:type="menuItem.type"
 		:time="menuItem.time"
-		:disabled="!isLoaded"
+		:disabled="!isLoadedView"
 		@click:apply="onViewSettingApply"
 	/>
 </template>
@@ -52,37 +52,35 @@ import canbus, { API_EVENT_VARIABLE_MOVEMENT, API_EVENT_VARIABLE_MOVEMENT_VIEW }
 
 import Card from "@/components/cards/Card.vue";
 import InputCardItem from "@/components/cards/InputCardItem.vue";
-import SwitchCardItem from "@/components/cards/SwitchCardItem.vue";
-import IconCardItem from "@/components/cards/IconCardItem.vue";
-import ProgressCardItem from "@/components/cards/ProgressCardItem.vue";
 import ViewSettingDialog from "./ViewSettingDialog.vue";
 
 import { IMenuItem } from "@/models/IMenuItem";
 import { IViewConfig } from "@/models/pjcan/view";
-import { IMovementValue, MovementValue, MovementView } from "@/models/pjcan/variables/movement";
+import { IMovementValue, IMovementView, MovementValue, MovementView } from "@/models/pjcan/variables/movement";
 
 export default {
 	name: "MovementCard",
-	components: { Card, InputCardItem, SwitchCardItem, IconCardItem, ProgressCardItem, ViewSettingDialog },
+	components: { Card, InputCardItem, ViewSettingDialog },
 	setup()
 	{
 		// ЗНАЧЕНИЯ ДВИЖЕНИЯ
 
-		const isLoaded = ref(false);
-		const isData = ref(false);
+		const isLoadedView = ref(false);
+		const isLoadedValue = ref(false);
+
 		const movementValue = ref(new MovementValue());
 		const movementView = new MovementView();
 
 		// входящие значения движения
 		const onReceiveValue = (res: IMovementValue): void =>
 		{
-			isData.value = true;
+			isLoadedValue.value = true;
 			movementValue.value.setModel(res);
 		};
 		// входящие значения отображения движения
-		const onReceiveView = (res: IMovementValue): void =>
+		const onReceiveView = (res: IMovementView): void =>
 		{
-			isLoaded.value = true;
+			isLoadedView.value = true;
 			movementView.setModel(res);
 		};
 
@@ -165,8 +163,8 @@ export default {
 		};
 
 		return {
-			isLoaded,
-			isData,
+			isLoadedView,
+			isLoadedValue,
 			speed,
 			speedAVG,
 			restWay,
