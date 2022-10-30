@@ -6,6 +6,9 @@
 		<div key="engine-card" class="onboard__flicking" :class="nameDisplay">
 			<engine-card />
 		</div>
+		<div key="fuel-card" class="onboard__flicking" :class="nameDisplay">
+			<fuel-card />
+		</div>
 	</flicking>
 </template>
 
@@ -17,10 +20,11 @@ import { useDisplay } from "vuetify";
 import Flicking from "@egjs/vue3-flicking";
 import InfoCard from "./components/InfoCard.vue";
 import EngineCard from "./components/EngineCard.vue";
+import FuelCard from "./components/FuelCard.vue";
 
 export default {
 	name: "onboard",
-	components: { Flicking, InfoCard, EngineCard },
+	components: { Flicking, InfoCard, EngineCard, FuelCard },
 	setup()
 	{
 		const { name } = useDisplay();
