@@ -5,7 +5,7 @@
 			:class="{ nodata }"
 			:model-value="title"
 			:hint="description"
-			:suffix="value"
+			:suffix="textValue"
 			variant="underlined"
 			density="compact"
 			persistent-hint
@@ -18,19 +18,70 @@
 </template>
 
 <script lang="ts">
+import { computed, toRefs } from "vue";
+import { getFormatTime } from "@/utils/time";
+
 export default {
 	name: "InputCardItem",
 	props: {
 		/** Значение */
-		value: String,
+		value: [String, Number],
 		/** Заголовок */
 		title: String,
 		/** Описание */
 		description: String,
+		/** Тип: text, time, temperature */
+		type: {
+			type: String,
+			default: "text"
+		},
 		/** Нет данных */
 		nodata: Boolean,
 		/** Выкл. */
 		disabled: Boolean
+	},
+	setup(props: any)
+	{
+		const { value, type, nodata } = toRefs(props);
+		const textValue = computed(() =>
+		{
+			switch (type.value)
+			{
+				case "time":
+					if (!nodata)
+					{
+						switch (typeof value.value)
+						{
+							case "number": return getFormatTime(value.value);
+							case "string": return value.value;
+						}
+					}
+					return "--:--:--";
+
+				case "temperature":
+					if (!nodata)
+					{
+						switch (typeof value.value)
+						{
+							case "number": return value.value.toFixed(1) + "°C";
+							case "string": return value.value + "°C";
+						}
+					}
+					return "-.-°C";
+
+				default:
+					switch (typeof value.value)
+					{
+						case "number": return value.value.toFixed();
+						case "string": return value.value;
+					}
+					return "";
+			}
+		});
+
+		return {
+			textValue
+		};
 	}
 };
 </script>
