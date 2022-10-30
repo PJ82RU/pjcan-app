@@ -1,5 +1,5 @@
 <template>
-	<flicking class="onboard" :options="{ bound: true, align: 'prev' }">
+	<flicking ref="flicking" class="onboard" :options="{ bound: true, align: 'prev' }">
 		<div key="info-card" class="onboard__flicking" :class="nameDisplay">
 			<info-card />
 		</div>
@@ -15,11 +15,14 @@
 		<div key="doors-card" class="onboard__flicking" :class="nameDisplay">
 			<doors-card />
 		</div>
+		<div key="volume-card" class="onboard__flicking" :class="nameDisplay">
+			<volume-card />
+		</div>
 	</flicking>
 </template>
 
 <script lang="ts">
-import { computed } from "vue";
+import { computed, provide, ref } from "vue";
 import store from "@/store";
 import { useDisplay } from "vuetify";
 
@@ -29,13 +32,17 @@ import EngineCard from "./components/EngineCard.vue";
 import FuelCard from "./components/FuelCard.vue";
 import MovementCard from "./components/MovementCard.vue";
 import DoorsCard from "./components/DoorsCard.vue";
+import VolumeCard from "./components/VolumeCard.vue";
 
 export default {
 	name: "onboard",
-	components: { Flicking, InfoCard, EngineCard, FuelCard, MovementCard, DoorsCard },
+	components: { Flicking, InfoCard, EngineCard, FuelCard, MovementCard, DoorsCard, VolumeCard },
 	setup()
 	{
 		const { name } = useDisplay();
+
+		const flicking = ref(null);
+		provide("flicking", flicking);
 
 		const onboardCardList = computed(() => store.getters["app/onboardCardList"]);
 		const nameDisplay = computed(() => ({
@@ -47,6 +54,7 @@ export default {
 		}));
 
 		return {
+			flicking,
 			onboardCardList,
 			nameDisplay
 		};
