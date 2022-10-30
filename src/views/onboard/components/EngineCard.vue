@@ -34,6 +34,7 @@
 						:value="motors"
 						:title="$t('onboard.engine.motors.title')"
 						:description="$t('onboard.engine.motors.description')"
+						type="time"
 						:nodata="!enabled"
 						:disabled="!isLoaded"
 					/>
@@ -47,8 +48,25 @@
 						:disabled="!isLoaded"
 					/>
 				</v-col>
-				<v-col cols="12" class="pt-0 pb-0"> </v-col>
-				<v-col cols="12" class="pt-0 pb-0"> </v-col>
+				<v-col cols="12" class="pt-0 pb-0">
+					<progress-card-item
+						:value="throttle"
+						:title="$t('onboard.engine.throttle.title')"
+						:description="$t('onboard.engine.throttle.description')"
+						:nodata="!enabled"
+						:disabled="!isLoaded"
+					/>
+				</v-col>
+				<v-col cols="12" class="pt-0 pb-0">
+					<input-card-item
+						:value="coolant"
+						:title="$t('onboard.engine.coolant.title')"
+						:description="$t('onboard.engine.coolant.description')"
+						type="temperature"
+						:nodata="!enabled"
+						:disabled="!isLoaded"
+					/>
+				</v-col>
 			</v-row>
 		</template>
 	</card>
@@ -80,8 +98,6 @@ import ViewSettingDialog from "./ViewSettingDialog.vue";
 import { IMenuItem } from "@/models/IMenuItem";
 import { IViewConfig } from "@/models/pjcan/view";
 import { EngineValue, EngineView, IEngineValue } from "@/models/pjcan/variables/engine";
-
-import { getFormatTime } from "@/utils/time";
 
 export default {
 	name: "EngineCard",
@@ -123,7 +139,7 @@ export default {
 		const rpm = computed((): string => engineValue.value.rpm.toFixed());
 		const countRPM = computed((): string => engineValue.value.countRPM.toFixed());
 		const load = computed((): number => engineValue.value.load);
-		const motors = computed((): string => getFormatTime(engineValue.value.mseconds));
+		const motors = computed((): number => engineValue.value.mseconds);
 		const throttle = computed((): number => engineValue.value.throttle);
 		const coolant = computed((): number => engineValue.value.coolant);
 

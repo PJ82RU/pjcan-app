@@ -16,6 +16,7 @@
 						:value="timeWork"
 						:title="$t('onboard.info.timeWork.title')"
 						:description="$t('onboard.info.timeWork.description')"
+						type="time"
 						:nodata="!acc"
 						:disabled="!loadedSensor"
 					/>
@@ -25,6 +26,7 @@
 						:value="temperature"
 						:title="$t('onboard.info.temperature.title')"
 						:description="$t('onboard.info.temperature.description')"
+						type="temperature"
 						:nodata="!acc"
 						:disabled="!loadedTemperature"
 					/>
@@ -180,8 +182,8 @@ export default {
 		});
 
 		const acc = computed((): boolean => sensorValue.value.acc);
-		const timeWork = computed((): string => "--:--:--");
-		const temperature = computed((): string => (acc.value ? temperatureValue.value.out.toFixed(1) : "-.-") + "°C");
+		const timeWork = computed((): number => 0);
+		const temperature = computed((): number => temperatureValue.value.out);
 		const handbrake = computed((): boolean => sensorValue.value.handbrake);
 		const reverse = computed((): boolean => sensorValue.value.reverse);
 		const seatbeltDriver = computed((): boolean => sensorValue.value.seatbeltDriver);
