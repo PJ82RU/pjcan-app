@@ -17,18 +17,26 @@ html{
 	line-height: 2.5rem !important;
 }
 
+.text-h6 {
+	font-size: 1rem !important;
+	line-height: 1.5rem !important;
+}
+
 .text-h1,
 .text-h2,
 .text-h3 {
 	font-weight: map-get($font-weights, "medium") !important;
 }
 
+.text-h4,
+.text-h5,
+.text-h6 {
+	font-weight: map-get($font-weights, "regular") !important;
+}
+
 .text-h1,
 .text-h2,
 .text-h3,
-.text-h4,
-.text-h5,
-.text-h6,
 .v-btn {
 	font-family: $font-family !important;
 }
