@@ -48,7 +48,7 @@ export default {
 			switch (type.value)
 			{
 				case "time":
-					if (!nodata)
+					if (!nodata.value)
 					{
 						switch (typeof value.value)
 						{
@@ -59,7 +59,7 @@ export default {
 					return "--:--:--";
 
 				case "temperature":
-					if (!nodata)
+					if (!nodata.value)
 					{
 						switch (typeof value.value)
 						{
