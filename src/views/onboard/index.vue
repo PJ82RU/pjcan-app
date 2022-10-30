@@ -18,6 +18,9 @@
 		<div key="volume-card" class="onboard__flicking" :class="nameDisplay">
 			<volume-card />
 		</div>
+		<div key="climate-card" class="onboard__flicking" :class="nameDisplay">
+			<climate-card />
+		</div>
 	</flicking>
 </template>
 
@@ -33,10 +36,11 @@ import FuelCard from "./components/FuelCard.vue";
 import MovementCard from "./components/MovementCard.vue";
 import DoorsCard from "./components/DoorsCard.vue";
 import VolumeCard from "./components/VolumeCard.vue";
+import ClimateCard from "./components/ClimateCard.vue";
 
 export default {
 	name: "onboard",
-	components: { Flicking, InfoCard, EngineCard, FuelCard, MovementCard, DoorsCard, VolumeCard },
+	components: { Flicking, InfoCard, EngineCard, FuelCard, MovementCard, DoorsCard, VolumeCard, ClimateCard },
 	setup()
 	{
 		const { name } = useDisplay();
