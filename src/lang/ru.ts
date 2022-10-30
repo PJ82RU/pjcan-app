@@ -227,6 +227,26 @@ export default {
 				description: "Экспериментальное значение (расчетное), л/ч",
 				menu: "LCD: Расход топлива"
 			}
+		},
+
+		movement: {
+			title: "Спидометр",
+
+			speed: {
+				title: "Скорость автомобиля",
+				description: "Значение БК, км/ч",
+				menu: "LCD: Скорость автомобиля"
+			},
+			speedAVG: {
+				title: "Средняя скорость",
+				description: "Значение БК, км/ч",
+				menu: "LCD: Средняя скорость"
+			},
+			restWay: {
+				title: "Остаток пути, км",
+				description: "Значение БК в км",
+				menu: "LCD: Остаток пути"
+			}
 		}
 	}
 };

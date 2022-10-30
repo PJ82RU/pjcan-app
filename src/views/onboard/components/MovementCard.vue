@@ -1,39 +1,30 @@
 <template>
-	<card class="fuel-card" :title="$t('onboard.fuel.title')" :menu="menu" @click:menu="onMenuClick">
+	<card class="movement-card" :title="$t('onboard.movement.title')" :menu="menu" @click:menu="onMenuClick">
 		<template #body>
 			<v-row>
 				<v-col cols="12" class="pb-0">
 					<input-card-item
-						:value="current"
-						:title="$t('onboard.fuel.current.title')"
-						:description="$t('onboard.fuel.current.description')"
+						:value="speed"
+						:title="$t('onboard.movement.speed.title')"
+						:description="$t('onboard.movement.speed.description')"
 						:nodata="!isData"
 						:disabled="!isLoaded"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0 pb-0">
 					<input-card-item
-						:value="avg"
-						:title="$t('onboard.fuel.avg.title')"
-						:description="$t('onboard.fuel.avg.description')"
+						:value="speedAVG"
+						:title="$t('onboard.movement.speedAVG.title')"
+						:description="$t('onboard.movement.speedAVG.description')"
 						:nodata="!isData"
 						:disabled="!isLoaded"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0 pb-0">
 					<input-card-item
-						:value="total"
-						:title="$t('onboard.fuel.total.title')"
-						:description="$t('onboard.fuel.total.description')"
-						:nodata="!isData"
-						:disabled="!isLoaded"
-					/>
-				</v-col>
-				<v-col cols="12" class="pt-0 pb-0">
-					<input-card-item
-						:value="consumption"
-						:title="$t('onboard.fuel.consumption.title')"
-						:description="$t('onboard.fuel.consumption.description')"
+						:value="restWay"
+						:title="$t('onboard.movement.restWay.title')"
+						:description="$t('onboard.movement.restWay.description')"
 						:nodata="!isData"
 						:disabled="!isLoaded"
 					/>
@@ -57,7 +48,7 @@
 import { computed, onMounted, onUnmounted, ref } from "vue";
 import i18n from "@/lang";
 
-import canbus, { API_EVENT_VARIABLE_FUEL, API_EVENT_VARIABLE_FUEL_VIEW } from "@/api/canbus";
+import canbus, { API_EVENT_VARIABLE_MOVEMENT, API_EVENT_VARIABLE_MOVEMENT_VIEW } from "@/api/canbus";
 
 import Card from "@/components/cards/Card.vue";
 import InputCardItem from "@/components/cards/InputCardItem.vue";
@@ -68,58 +59,56 @@ import ViewSettingDialog from "./ViewSettingDialog.vue";
 
 import { IMenuItem } from "@/models/IMenuItem";
 import { IViewConfig } from "@/models/pjcan/view";
-import { FuelValue, FuelView, IFuelValue } from "@/models/pjcan/variables/fuel";
+import { IMovementValue, MovementValue, MovementView } from "@/models/pjcan/variables/movement";
 
 export default {
-	name: "FuelCard",
+	name: "MovementCard",
 	components: { Card, InputCardItem, SwitchCardItem, IconCardItem, ProgressCardItem, ViewSettingDialog },
 	setup()
 	{
-		// РАСХОД ТОПЛИВА
+		// ЗНАЧЕНИЯ ДВИЖЕНИЯ
 
 		const isLoaded = ref(false);
 		const isData = ref(false);
-		const fuelValue = ref(new FuelValue());
-		const fuelView = new FuelView();
+		const movementValue = ref(new MovementValue());
+		const movementView = new MovementView();
 
-		// входящие значения расхода топлива
-		const onReceiveValue = (res: IFuelValue): void =>
+		// входящие значения движения
+		const onReceiveValue = (res: IMovementValue): void =>
 		{
 			isData.value = true;
-			fuelValue.value.setModel(res);
+			movementValue.value.setModel(res);
 		};
-		// входящие значения отображения расхода топлива
-		const onReceiveView = (res: IFuelValue): void =>
+		// входящие значения отображения движения
+		const onReceiveView = (res: IMovementValue): void =>
 		{
 			isLoaded.value = true;
-			fuelView.setModel(res);
+			movementView.setModel(res);
 		};
 
 		// регистрируем события
 		onMounted(() =>
 		{
-			canbus.addListener(API_EVENT_VARIABLE_FUEL, onReceiveValue);
-			canbus.addListener(API_EVENT_VARIABLE_FUEL_VIEW, onReceiveView);
+			canbus.addListener(API_EVENT_VARIABLE_MOVEMENT, onReceiveValue);
+			canbus.addListener(API_EVENT_VARIABLE_MOVEMENT_VIEW, onReceiveView);
 		});
 		// удаляем события
 		onUnmounted(() =>
 		{
-			canbus.removeListener(API_EVENT_VARIABLE_FUEL, onReceiveValue);
-			canbus.removeListener(API_EVENT_VARIABLE_FUEL_VIEW, onReceiveView);
+			canbus.removeListener(API_EVENT_VARIABLE_MOVEMENT, onReceiveValue);
+			canbus.removeListener(API_EVENT_VARIABLE_MOVEMENT_VIEW, onReceiveView);
 		});
 
-		const current = computed((): string => fuelValue.value.current.toFixed(1));
-		const avg = computed((): string => fuelValue.value.avg.toFixed(1));
-		const total = computed((): string => fuelValue.value.total.toFixed(2));
-		const consumption = computed((): string => fuelValue.value.consumption.toFixed(2));
+		const speed = computed((): string => movementValue.value.speed.toFixed(2));
+		const speedAVG = computed((): string => movementValue.value.speedAVG.toString());
+		const restWay = computed((): string => movementValue.value.restWay.toFixed(2));
 
 		// МЕНЮ ОТОБРАЖЕНИЯ
 
 		const menu = computed((): string[] => [
-			i18n.global.t("onboard.fuel.current.menu"),
-			i18n.global.t("onboard.fuel.avg.menu"),
-			i18n.global.t("onboard.fuel.total.menu"),
-			i18n.global.t("onboard.fuel.consumption.menu")
+			i18n.global.t("onboard.movement.speed.menu"),
+			i18n.global.t("onboard.movement.speedAVG.menu"),
+			i18n.global.t("onboard.movement.restWay.menu")
 		]);
 		const menuVisible = ref(false);
 		const menuTitle = ref("");
@@ -139,19 +128,15 @@ export default {
 			switch (data.index)
 			{
 				case 0:
-					menuItem.value = fuelView.current;
+					menuItem.value = movementView.speed;
 					return;
 
 				case 1:
-					menuItem.value = fuelView.avg;
+					menuItem.value = movementView.speedAVG;
 					break;
 
 				case 2:
-					menuItem.value = fuelView.total;
-					break;
-
-				case 3:
-					menuItem.value = fuelView.consumption;
+					menuItem.value = movementView.restWay;
 					break;
 			}
 		};
@@ -165,31 +150,26 @@ export default {
 			switch (menuSelected.index)
 			{
 				case 0:
-					fuelView.current = data;
+					movementView.speed = data;
 					break;
 
 				case 1:
-					fuelView.avg = data;
+					movementView.speedAVG = data;
 					break;
 
 				case 2:
-					fuelView.total = data;
-					break;
-
-				case 3:
-					fuelView.consumption = data;
+					movementView.restWay = data;
 					break;
 			}
-			canbus.send(fuelView);
+			canbus.send(movementView);
 		};
 
 		return {
 			isLoaded,
 			isData,
-			current,
-			avg,
-			total,
-			consumption,
+			speed,
+			speedAVG,
+			restWay,
 			menu,
 			menuVisible,
 			menuTitle,
