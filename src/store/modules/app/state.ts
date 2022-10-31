@@ -2,7 +2,7 @@ const state = {
 	title: "",
 	messages: [],
 
-	onboardCardList: ["INFO", "DOORS", "ENGINE", "FUEL", "MOVEMENT", "CLIMATE", "VOLUME", "BOSE"]
+	onboardCardList: ["info", "engine", "fuel", "movement", "doors", "volume", "climate"]
 };
 
 export default state;
