@@ -10,6 +10,14 @@ const routes: Array<RouteRecordRaw> = [
 		meta: {
 			title: i18n.global.t("onboard.title")
 		}
+	},
+	{
+		path: "/buttons",
+		name: "Buttons",
+		component: () => import("@/views/buttons/index.vue"),
+		meta: {
+			title: i18n.global.t("buttons.title")
+		}
 	}
 ];
 

@@ -20,7 +20,7 @@
 		</v-app-bar>
 		<v-main>
 			<div class="base-layout__bg" />
-			<div class="base-layout__main" :style="{ width: `${pageWidth}px`, height: `${pageHeight - 50}px`}">
+			<div class="base-layout__main" :style="{ width: `${pageWidth}px`, height: `${pageHeight - 50}px` }">
 				<router-view />
 			</div>
 		</v-main>
@@ -36,6 +36,7 @@ import BluetoothBtn from "./components/BluetoothBtn.vue";
 import UpdateFirmware from "./components/UpdateFirmware.vue";
 import MenuDots from "@/components/MenuDots.vue";
 import AboutModal from "./components/AboutModal.vue";
+import router from "@/router";
 
 export default {
 	name: "BaseLayout",
@@ -43,18 +44,32 @@ export default {
 	setup()
 	{
 		const title = computed((): string => store.getters["app/title"]);
-		const menu = computed((): string[] => [
-			i18n.global.t("menu.settings.buttons"),
-			"",
-			i18n.global.t("menu.language." + (i18n.global.locale !== "ru" ? "english" : "russian")),
-			i18n.global.t("menu.about")
-		]);
+		const menu = computed((): string[] =>
+		{
+			const lang = i18n.global;
+			const list = [
+				"settings.buttons",
+				"language." + (lang.locale !== "ru" ? "english" : "russian"),
+				"",
+				"about"
+			];
+			return list.map((x) => (x.length > 0 ? lang.t("menu." + x) : ""));
+		});
 		const visibleAbout = ref(false);
 
 		/** Событие выбора пункта меню */
 		const onMenuClick = (data: any) =>
 		{
-			if (data.index === 3) visibleAbout.value = true;
+			switch (data.index)
+			{
+				case 0:
+					router.push({ name: "Buttons" });
+					break;
+
+				case 3:
+					visibleAbout.value = true;
+					break;
+			}
 		};
 
 		const pageWidth = ref(0);

@@ -112,6 +112,10 @@ html{
 	}
 }
 
+.v-label {
+	color: $success;
+}
+
 .flicking {
 	&-xl {
 		width: calc(100% / 4 - 16px + 16px / 4);
