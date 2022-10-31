@@ -67,7 +67,7 @@ export default {
 	setup(props: any, { emit }: { emit: any })
 	{
 		const { modelValue, points, pointColors } = toRefs(props);
-		const flicking = inject("flicking");
+		const flicking = inject("flicking") as any;
 
 		const modelSlider = computed({
 			get: (): number => modelValue.value,
@@ -87,7 +87,7 @@ export default {
 		/** Цвет */
 		const color = (): string =>
 		{
-			const index = points.value?.findIndex(x => modelSlider.value <= x);
+			const index = points.value?.findIndex((x: number): boolean => modelSlider.value <= x);
 			return pointColors.value?.[index] ?? undefined;
 		};
 
