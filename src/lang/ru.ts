@@ -60,6 +60,9 @@ export default {
 			russian: "Russian language",
 			english: "English language"
 		},
+		settings: {
+			buttons: "Настройка кнопок руля"
+		},
 		about: "О программе"
 	},
 

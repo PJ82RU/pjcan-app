@@ -44,8 +44,9 @@ export default {
 	{
 		const title = computed((): string => store.getters["app/title"]);
 		const menu = computed((): string[] => [
-			i18n.global.t("menu.language." + (i18n.global.locale === "ru" ? "english" : "russian")),
+			i18n.global.t("menu.settings.buttons"),
 			"",
+			i18n.global.t("menu.language." + (i18n.global.locale !== "ru" ? "english" : "russian")),
 			i18n.global.t("menu.about")
 		]);
 		const visibleAbout = ref(false);
@@ -53,7 +54,7 @@ export default {
 		/** Событие выбора пункта меню */
 		const onMenuClick = (data: any) =>
 		{
-			if (data.index === 2) visibleAbout.value = true;
+			if (data.index === 3) visibleAbout.value = true;
 		};
 
 		const pageWidth = ref(0);
