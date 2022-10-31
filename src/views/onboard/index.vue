@@ -1,7 +1,7 @@
 <template>
 	<flicking ref="flicking" class="onboard" :options="{ bound: true, align: 'prev' }">
 		<div v-for="name in componentsList" :key="name" class="onboard__flicking" :class="nameDisplay">
-			<component :is="name" />
+			<component :is="`${name}-card`" />
 		</div>
 	</flicking>
 </template>
@@ -38,15 +38,7 @@ export default {
 			"flicking-sm": name.value === "sm",
 			"flicking-xs": name.value === "xs"
 		}));
-		const componentsList = computed(() => [
-			"info-card",
-			"engine-card",
-			"fuel-card",
-			"movement-card",
-			"doors-card",
-			"volume-card",
-			"climate-card"
-		]);
+		const componentsList = computed(() => ["info", "engine", "fuel", "movement", "doors", "volume", "climate"]);
 
 		return {
 			flicking,
