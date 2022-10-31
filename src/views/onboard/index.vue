@@ -1,25 +1,7 @@
 <template>
 	<flicking ref="flicking" class="onboard" :options="{ bound: true, align: 'prev' }">
-		<div key="info-card" class="onboard__flicking" :class="nameDisplay">
-			<info-card />
-		</div>
-		<div key="engine-card" class="onboard__flicking" :class="nameDisplay">
-			<engine-card />
-		</div>
-		<div key="fuel-card" class="onboard__flicking" :class="nameDisplay">
-			<fuel-card />
-		</div>
-		<div key="movement-card" class="onboard__flicking" :class="nameDisplay">
-			<movement-card />
-		</div>
-		<div key="doors-card" class="onboard__flicking" :class="nameDisplay">
-			<doors-card />
-		</div>
-		<div key="volume-card" class="onboard__flicking" :class="nameDisplay">
-			<volume-card />
-		</div>
-		<div key="climate-card" class="onboard__flicking" :class="nameDisplay">
-			<climate-card />
+		<div v-for="name in componentsList" :key="name" class="onboard__flicking" :class="nameDisplay">
+			<component :is="name" />
 		</div>
 	</flicking>
 </template>
@@ -56,11 +38,21 @@ export default {
 			"flicking-sm": name.value === "sm",
 			"flicking-xs": name.value === "xs"
 		}));
+		const componentsList = computed(() => [
+			"info-card",
+			"engine-card",
+			"fuel-card",
+			"movement-card",
+			"doors-card",
+			"volume-card",
+			"climate-card"
+		]);
 
 		return {
 			flicking,
 			onboardCardList,
-			nameDisplay
+			nameDisplay,
+			componentsList
 		};
 	}
 };
