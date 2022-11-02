@@ -9,7 +9,7 @@ const STRUCT_LENGTH = 7; // длина данных API
 const struct = new BluetoothStruct(StructButtonsValue);
 
 /** Модель значений кнопок */
-export class ButtonsValue extends BaseModel implements IButtonValue
+export class ButtonValue extends BaseModel implements IButtonValue
 {
 	index = -1;
 	exec = 0;

@@ -8,7 +8,8 @@
 				{{ title }}
 			</div>
 			<v-btn-group class="border-dialog-btns">
-				<v-btn icon="mdi-heart" color="primary" @click="$emit('click:like')" />
+				<v-btn v-if="custom !== undefined" :icon="custom" color="primary" @click="$emit('click:custom')" />
+				<v-btn v-if="like !== undefined" icon="mdi-heart" color="primary" @click="$emit('click:like')" />
 				<menu-dots
 					v-if="menu && menu.length > 0"
 					:menu="menu"
@@ -28,7 +29,15 @@ export default {
 	components: { MenuDots },
 	props: {
 		title: String,
-		menu: Array as () => string[]
+		menu: Array as () => string[],
+		like: {
+			type: Boolean,
+			default: undefined
+		},
+		custom: {
+			type: String,
+			default: undefined
+		}
 	},
 	emits: ["click:like", "click:menu"]
 };

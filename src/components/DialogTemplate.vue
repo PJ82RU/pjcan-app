@@ -8,7 +8,7 @@
 	>
 		<v-card>
 			<v-card-title v-if="title?.length > 0" class="d-flex align-center">
-				<icon-custom :name="icon" />
+				<icon-custom class="dialog__icon" :name="icon" />
 				<span class="ml-2 text-h5 dialog__title">{{ title }}</span>
 				<template v-if="close">
 					<v-spacer />
@@ -85,6 +85,12 @@ export default {
 
 	&__text {
 		overflow-y: auto;
+	}
+
+	&__icon {
+		::v-deep(.v-icon) {
+			margin-bottom: 4px;
+		}
 	}
 }
 </style>

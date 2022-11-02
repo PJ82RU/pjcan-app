@@ -5,7 +5,7 @@ import canbus, { API_EVENT_UPDATE_BEGIN_GZ, API_EVENT_UPDATE_UPLOAD_GZ } from "@
 import { IVersion, Version } from "@/models/pjcan/version";
 import { IUpdateBegin, IUpdateData, UPDATE_UPLOAD_EVENT_RESULT, UpdateBegin, UpdateData } from "@/models/pjcan/update";
 
-const URL_FIRMWARE_PATH = location.href + "firmware/";
+const URL_FIRMWARE_PATH = "/firmware/";
 const URL_FIRMWARE_VERSION = URL_FIRMWARE_PATH + "version.json";
 const URL_FIRMWARE_GZIP = URL_FIRMWARE_PATH + "firmware.bin.gz";
 

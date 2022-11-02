@@ -1,5 +1,5 @@
 <template>
-	<card class="settings-card" :title="$t(title)">
+	<card class="settings-card" :title="$t(title)" :custom="iconName">
 		<template #body>
 			<v-row>
 				<v-col cols="12">
@@ -7,8 +7,8 @@
 						v-model="resistance"
 						:label="$t('buttons.resistance.title')"
 						:hint="$t('buttons.resistance.description')"
-						:max="1024"
-						:disabled="!isLoaded"
+						:max="3999"
+						:disabled="!isLoadedConfig"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0">
@@ -21,7 +21,7 @@
 						item-title="label"
 						item-value="value"
 						persistent-hint
-						:disabled="!isLoaded"
+						:disabled="!isLoadedConfig"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0">
@@ -34,7 +34,7 @@
 						item-title="label"
 						item-value="value"
 						persistent-hint
-						:disabled="!isLoaded"
+						:disabled="!isLoadedConfig"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0">
@@ -47,7 +47,7 @@
 						item-title="label"
 						item-value="value"
 						persistent-hint
-						:disabled="!isLoaded"
+						:disabled="!isLoadedConfig"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0">
@@ -60,7 +60,7 @@
 						item-title="label"
 						item-value="value"
 						persistent-hint
-						:disabled="!isLoaded"
+						:disabled="!isLoadedConfig"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0">
@@ -73,7 +73,7 @@
 						item-title="label"
 						item-value="value"
 						persistent-hint
-						:disabled="!isLoaded"
+						:disabled="!isLoadedConfig"
 					/>
 				</v-col>
 			</v-row>
@@ -82,17 +82,12 @@
 </template>
 
 <script lang="ts">
-import { computed, onMounted, onUnmounted, ref, toRefs } from "vue";
-
-import canbus, {
-	API_EVENT_BUTTONS_CONFIG
-} from "@/api/canbus";
+import { computed, toRefs } from "vue";
 
 import Card from "@/components/cards/Card.vue";
 import NumberField from "@/components/common/NumberField.vue";
 
 import {
-	ButtonsConfig,
 	IButtonsConfig,
 	IButtonsConfigItem,
 	TButtonExec,
@@ -106,48 +101,37 @@ export default {
 	components: { Card, NumberField },
 	props: {
 		type: {
-			type: Number as TButtonItem,
+			type: Number as () => TButtonItem,
 			required: true
-		}
+		},
+		config: {
+			type: Object as () => IButtonsConfig,
+			required: true
+		},
+		isLoadedConfig: Boolean,
+		iconName: String
 	},
 	setup(props: any)
 	{
-		const { type } = toRefs(props);
-
-		// КОНФИГУРАЦИЯ КНОПОК
-
-		const isLoaded = ref(true);
-		const config = ref(new ButtonsConfig());
-
-		// входящие значения конфигурации кнопок
-		const onReceiveValue = (res: IButtonsConfig): void =>
-		{
-			isLoaded.value = true;
-			config.value.setModel(res);
-		};
-
-		// регистрируем события
-		onMounted(() =>
-		{
-			canbus.addListener(API_EVENT_BUTTONS_CONFIG, onReceiveValue);
-		});
-		// удаляем события
-		onUnmounted(() =>
-		{
-			canbus.removeListener(API_EVENT_BUTTONS_CONFIG, onReceiveValue);
-		});
+		const { type, config } = toRefs(props);
 
 		const title = computed((): string =>
 		{
 			const r = "buttons.";
 			switch (type.value)
 			{
-				case TButtonItem.BUTTON_MODE: return r + "mode";
-				case TButtonItem.BUTTON_SEEK_UP: return r + "seekUp";
-				case TButtonItem.BUTTON_SEEK_DOWN: return r + "seekDown";
-				case TButtonItem.BUTTON_VOL_UP: return r + "volUp";
-				case TButtonItem.BUTTON_VOL_DOWN: return r + "volDown";
-				case TButtonItem.BUTTON_VOL_MUTE: return r + "volMute";
+				case TButtonItem.BUTTON_MODE:
+					return r + "mode";
+				case TButtonItem.BUTTON_SEEK_UP:
+					return r + "seekUp";
+				case TButtonItem.BUTTON_SEEK_DOWN:
+					return r + "seekDown";
+				case TButtonItem.BUTTON_VOL_UP:
+					return r + "volUp";
+				case TButtonItem.BUTTON_VOL_DOWN:
+					return r + "volDown";
+				case TButtonItem.BUTTON_VOL_MUTE:
+					return r + "volMute";
 			}
 			return r + "title";
 		});
@@ -165,37 +149,54 @@ export default {
 		const items = computed((): IButtonsConfigItem => config.value.items?.[type.value]);
 
 		const resistance = computed({
-			get: (): number => (items.value?.inR ?? 0),
-			set: (val: number): void => { if (items.value) items.value.inR = val; }
+			get: (): number => items.value?.inR ?? 0,
+			set: (val: number): void =>
+			{
+				if (items.value) items.value.inR = val;
+			}
 		});
 
 		const pressSingle = computed({
-			get: (): number => (items.value?.exec[TButtonPress.PRESS_SINGLE] ?? TButtonExec.TEYES_NONE),
-			set: (val: number): void => { if (items.value) items.value.exec[TButtonPress.PRESS_SINGLE] = val; }
+			get: (): number => items.value?.exec[TButtonPress.PRESS_SINGLE] ?? TButtonExec.TEYES_NONE,
+			set: (val: number): void =>
+			{
+				if (items.value) items.value.exec[TButtonPress.PRESS_SINGLE] = val;
+			}
 		});
 
 		const pressDual = computed({
-			get: (): number => (items.value?.exec[TButtonPress.PRESS_DUAL] ?? TButtonExec.TEYES_NONE),
-			set: (val: number): void => { if (items.value) items.value.exec[TButtonPress.PRESS_DUAL] = val; }
+			get: (): number => items.value?.exec[TButtonPress.PRESS_DUAL] ?? TButtonExec.TEYES_NONE,
+			set: (val: number): void =>
+			{
+				if (items.value) items.value.exec[TButtonPress.PRESS_DUAL] = val;
+			}
 		});
 
 		const pressTriple = computed({
-			get: (): number => (items.value?.exec[TButtonPress.PRESS_TRIPLE] ?? TButtonExec.TEYES_NONE),
-			set: (val: number): void => { if (items.value) items.value.exec[TButtonPress.PRESS_TRIPLE] = val; }
+			get: (): number => items.value?.exec[TButtonPress.PRESS_TRIPLE] ?? TButtonExec.TEYES_NONE,
+			set: (val: number): void =>
+			{
+				if (items.value) items.value.exec[TButtonPress.PRESS_TRIPLE] = val;
+			}
 		});
 
 		const pressHold = computed({
-			get: (): number => (items.value?.exec[TButtonPress.PRESS_HOLD] ?? TButtonExec.TEYES_NONE),
-			set: (val: number): void => { if (items.value) items.value.exec[TButtonPress.PRESS_HOLD] = val; }
+			get: (): number => items.value?.exec[TButtonPress.PRESS_HOLD] ?? TButtonExec.TEYES_NONE,
+			set: (val: number): void =>
+			{
+				if (items.value) items.value.exec[TButtonPress.PRESS_HOLD] = val;
+			}
 		});
 
 		const release = computed({
-			get: (): number => (items.value?.exec[TButtonPress.RELEASE] ?? TButtonExec.TEYES_NONE),
-			set: (val: number): void => { if (items.value) items.value.exec[TButtonPress.RELEASE] = val; }
+			get: (): number => items.value?.exec[TButtonPress.RELEASE] ?? TButtonExec.TEYES_NONE,
+			set: (val: number): void =>
+			{
+				if (items.value) items.value.exec[TButtonPress.RELEASE] = val;
+			}
 		});
 
 		return {
-			isLoaded,
 			title,
 			functionsList,
 			resistance,

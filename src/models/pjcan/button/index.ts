@@ -1,5 +1,5 @@
 import { API_EXEC_BUTTONS_CONFIG, ButtonsConfig } from "./ButtonConfig";
-import { API_EXEC_BUTTONS_VALUE, ButtonsValue } from "./ButtonValue";
+import { API_EXEC_BUTTONS_VALUE, ButtonValue } from "./ButtonValue";
 import { TButtonItem } from "./TButtonItem";
 import { TButtonExec } from "./TButtonExec";
 import { TButtonPress } from "./TButtonPress";
@@ -20,6 +20,6 @@ export {
 	TButtonPress,
 	TButtonExec,
 	ButtonsConfig,
-	ButtonsValue
+	ButtonValue
 };
 export type { IButtonsConfigItem, IButtonsConfig, IButtonValue };
