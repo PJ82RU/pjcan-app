@@ -17,6 +17,11 @@ html{
 	line-height: 2.5rem !important;
 }
 
+.text-h5 {
+	font-size: 1.25rem !important;
+	line-height: 1.75rem !important;
+}
+
 .text-h6 {
 	font-size: 1rem !important;
 	line-height: 1.5rem !important;
@@ -42,7 +47,11 @@ html{
 }
 
 .v-toolbar-title {
-	min-width: 65%;
+	min-width: 55%;
+}
+
+.v-field {
+	font-size: 1.25rem !important;
 }
 
 .v-card {

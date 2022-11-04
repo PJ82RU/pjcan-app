@@ -60,7 +60,7 @@ export default {
 
 	&__progress {
 		position: absolute;
-		top: 8px;
+		top: 18px;
 		right: 0;
 
 		::v-deep(.v-progress-circular__content) {

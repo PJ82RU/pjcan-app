@@ -93,6 +93,7 @@ export default {
 			window.removeEventListener("resize", windowSize);
 		});
 
+		/** Переключение полноэкранного режима */
 		const toggleFullscreen = () =>
 		{
 			if (ScreenFull.isEnabled) ScreenFull.toggle();

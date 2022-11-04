@@ -1,6 +1,6 @@
 <template>
 	<div class="slider-card-item">
-		<div class="text-h6">
+		<div class="text-h5">
 			{{ title }}
 		</div>
 		<v-slider
