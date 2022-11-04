@@ -49,13 +49,16 @@ export class Version implements IVersion
 	 * Сравнение версий
 	 * @param {IVersion} ver Объект версии
 	 */
-	compare(ver: IVersion): boolean
+	compare(ver: IVersion): number
 	{
-		return (
-			ver.revision === this.revision &&
-			ver.build === this.build &&
-			ver.minor === this.minor &&
-			ver.major === this.major
-		);
+		const verA = [this.major, this.minor, this.build, this.revision];
+		const verB = [ver.major, ver.minor, ver.build, ver.revision];
+
+		for (let i = 0; i < 4; i++)
+		{
+			if (verB[i] > verA[i]) return 1;
+			else if (verB[i] < verA[i]) return -1;
+		}
+		return 0;
 	}
 }

@@ -9,5 +9,5 @@ export interface IVersion {
 
 	clear: () => void;
 	set: (buf: DataView) => void;
-	compare: (ver: IVersion) => boolean;
+	compare: (ver: IVersion) => number;
 }

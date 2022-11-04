@@ -61,7 +61,7 @@ export class UpdateFirmware
 						this.newVersion.build = ver[2];
 						this.newVersion.revision = ver[3];
 
-						if (!canbus.version.compare(this.newVersion)) resolve();
+						if (canbus.version.compare(this.newVersion) > 0) resolve();
 						else reject("Current version");
 					}
 					else reject("No data");
