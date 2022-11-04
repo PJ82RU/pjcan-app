@@ -12,6 +12,8 @@
 
 			<v-spacer />
 
+			<v-btn icon="mdi-fit-to-screen-outline" @click="toggleFullscreen" />
+
 			<bluetooth-btn />
 			<update-firmware />
 
@@ -19,10 +21,10 @@
 			<about-modal v-model="visibleAbout" />
 		</v-app-bar>
 		<v-main>
-			<div class="base-layout__bg" />
-			<div class="base-layout__main" :style="{ width: `${pageWidth}px`, height: `${pageHeight - 50}px` }">
-				<router-view />
-			</div>
+				<div class="base-layout__bg" />
+				<div class="base-layout__main" :style="{ width: `${pageWidth}px`, height: `${pageHeight - 50}px` }">
+					<router-view />
+				</div>
 		</v-main>
 	</v-app>
 </template>
@@ -30,13 +32,14 @@
 <script lang="ts">
 import { computed, onMounted, onUnmounted, ref } from "vue";
 import store from "@/store";
+import router from "@/router";
 import i18n from "@/lang";
 
 import BluetoothBtn from "./components/BluetoothBtn.vue";
 import UpdateFirmware from "./components/UpdateFirmware.vue";
 import MenuDots from "@/components/MenuDots.vue";
 import AboutModal from "./components/AboutModal.vue";
-import router from "@/router";
+import ScreenFull from "screenfull";
 
 export default {
 	name: "BaseLayout",
@@ -90,13 +93,19 @@ export default {
 			window.removeEventListener("resize", windowSize);
 		});
 
+		const toggleFullscreen = () =>
+		{
+			if (ScreenFull.isEnabled) ScreenFull.toggle();
+		};
+
 		return {
 			title,
 			menu,
 			visibleAbout,
 			pageWidth,
 			pageHeight,
-			onMenuClick
+			onMenuClick,
+			toggleFullscreen
 		};
 	}
 };
