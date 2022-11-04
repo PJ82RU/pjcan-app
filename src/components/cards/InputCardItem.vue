@@ -25,7 +25,7 @@ export default {
 	name: "InputCardItem",
 	props: {
 		/** Значение */
-		value: [String, Number],
+		value: [String, Number, BigInt],
 		/** Заголовок */
 		title: String,
 		/** Описание */
@@ -52,7 +52,8 @@ export default {
 					{
 						switch (typeof value.value)
 						{
-							case "number": return getFormatTime(value.value);
+							case "number":
+							case "bigint": return getFormatTime(value.value);
 							case "string": return value.value;
 						}
 					}

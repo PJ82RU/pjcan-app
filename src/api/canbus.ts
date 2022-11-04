@@ -13,7 +13,14 @@ import { API_EXEC_VIEW, Views, IViews } from "@/models/pjcan/views";
 import { API_EXEC_VERSION, Version, IVersion } from "@/models/pjcan/version";
 import { API_EXEC_VARIABLE_CONFIG, VariableConfig, IVariableConfigs } from "@/models/pjcan/variables/configs";
 import { API_EXEC_VARIABLE_VIEW, VariableView, IVariableViews } from "@/models/pjcan/variables/views";
-import { API_EXEC_DEVICE_CONFIG, API_EXEC_INFO, DeviceConfig, DeviceInfo } from "@/models/pjcan/device";
+import {
+	API_EXEC_DEVICE_CONFIG,
+	API_EXEC_DEVICE_VALUE,
+	API_EXEC_INFO,
+	DeviceConfig,
+	DeviceInfo,
+	DeviceValue
+} from "@/models/pjcan/device";
 import { API_EXEC_BUTTONS_CONFIG, API_EXEC_BUTTONS_VALUE, ButtonsConfig, ButtonValue } from "@/models/pjcan/button";
 import { API_EXEC_TEYES_CONFIG, API_EXEC_TEYES_VIEW, TeyesConfig, TeyesView } from "@/models/pjcan/teyes";
 import { API_EXEC_LCD_VALUE, LCDValue } from "@/models/pjcan/lcd";
@@ -84,6 +91,7 @@ export const API_EVENT_BUTTON_VALUE = "ButtonsValue";
 export const API_EVENT_CAR_CONFIG = "CarConfig";
 export const API_EVENT_CAR_VIEW = "CarView";
 export const API_EVENT_DEVICE_CONFIG = "DeviceConfig";
+export const API_EVENT_DEVICE_VALUE = "DeviceValue";
 export const API_EVENT_INFO = "Info";
 export const API_EVENT_LCD_VALUE = "LCDValue";
 export const API_EVENT_TEYES_CONFIG = "TeyesConfig";
@@ -250,6 +258,9 @@ export class Canbus extends EventEmitter
 				break;
 			case API_EXEC_DEVICE_CONFIG:
 				this.emit(API_EVENT_DEVICE_CONFIG, new DeviceConfig(data));
+				break;
+			case API_EXEC_DEVICE_VALUE:
+				this.emit(API_EVENT_DEVICE_VALUE, new DeviceValue(data));
 				break;
 			case API_EXEC_BUTTONS_CONFIG:
 				this.emit(API_EVENT_BUTTONS_CONFIG, new ButtonsConfig(data));

@@ -17,7 +17,6 @@
 						:title="$t('onboard.info.timeWork.title')"
 						:description="$t('onboard.info.timeWork.description')"
 						type="time"
-						:nodata="!acc"
 						:disabled="!isLoadedView"
 					/>
 				</v-col>
@@ -94,6 +93,7 @@ import { computed, onMounted, onUnmounted, ref } from "vue";
 import i18n from "@/lang";
 
 import canbus, {
+	API_EVENT_DEVICE_VALUE,
 	API_EVENT_VARIABLE_SENSORS,
 	API_EVENT_VARIABLE_SENSORS_VIEW,
 	API_EVENT_VARIABLE_TEMPERATURE,
@@ -122,12 +122,23 @@ import {
 
 import { IMenuItem } from "@/models/IMenuItem";
 import { IViewConfig } from "@/models/pjcan/view";
+import { DeviceValue, IDeviceValue } from "@/models/pjcan/device";
 
 export default {
 	name: "InfoCard",
 	components: { Card, InputCardItem, SwitchCardItem, IconCardItem, ViewSettingDialog },
 	setup()
 	{
+		// УСТРОЙСТВО
+
+		const deviceValue = ref(new DeviceValue());
+
+		// входящие значения устройства
+		const onReceiveDeviceValue = (res: IDeviceValue): void =>
+		{
+			deviceValue.value.setModel(res);
+		};
+
 		// ДАТЧИКИ
 
 		const isLoadedView = ref(false);
@@ -168,6 +179,7 @@ export default {
 		// регистрируем события
 		onMounted(() =>
 		{
+			canbus.addListener(API_EVENT_DEVICE_VALUE, onReceiveDeviceValue);
 			canbus.addListener(API_EVENT_VARIABLE_SENSORS, onReceiveSensorValue);
 			canbus.addListener(API_EVENT_VARIABLE_SENSORS_VIEW, onReceiveSensorView);
 			canbus.addListener(API_EVENT_VARIABLE_TEMPERATURE, onReceiveTemperatureValue);
@@ -176,6 +188,7 @@ export default {
 		// удаляем события
 		onUnmounted(() =>
 		{
+			canbus.removeListener(API_EVENT_DEVICE_VALUE, onReceiveDeviceValue);
 			canbus.removeListener(API_EVENT_VARIABLE_SENSORS, onReceiveSensorValue);
 			canbus.removeListener(API_EVENT_VARIABLE_SENSORS_VIEW, onReceiveSensorView);
 			canbus.removeListener(API_EVENT_VARIABLE_TEMPERATURE, onReceiveTemperatureValue);
@@ -183,7 +196,7 @@ export default {
 		});
 
 		const acc = computed((): boolean => sensorValue.value.acc);
-		const timeWork = computed((): number => 0);
+		const timeWork = computed((): bigint => deviceValue.value.worktime);
 		const temperature = computed((): number => temperatureValue.value.out);
 		const handbrake = computed((): boolean => sensorValue.value.handbrake);
 		const reverse = computed((): boolean => sensorValue.value.reverse);
