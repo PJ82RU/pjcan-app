@@ -56,6 +56,7 @@ export default {
 	},
 
 	menu: {
+		onboard: "Бортовой компьютер",
 		language: {
 			russian: "Russian language",
 			english: "English language"

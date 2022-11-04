@@ -51,6 +51,7 @@ export default {
 		{
 			const lang = i18n.global;
 			const list = [
+				"onboard",
 				"settings.buttons",
 				"language." + (lang.locale !== "ru" ? "english" : "russian"),
 				"",
@@ -66,6 +67,10 @@ export default {
 			switch (data.index)
 			{
 				case 0:
+					router.push({ name: "Onboard" });
+					break;
+
+				case 1:
 					router.push({ name: "Buttons" });
 					break;
 
