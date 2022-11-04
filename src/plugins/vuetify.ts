@@ -5,8 +5,12 @@ import "../styles/vuetify.scss";
 
 // Vuetify
 import { createVuetify, ThemeDefinition } from "vuetify";
+import * as components from "vuetify/components";
+import * as directives from "vuetify/directives";
 
 const customDarkTheme: ThemeDefinition = {
+	...components,
+	...directives,
 	dark: true,
 	colors: {
 		background: "#121517",

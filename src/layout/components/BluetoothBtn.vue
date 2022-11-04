@@ -12,7 +12,7 @@
 			<v-btn color="primary" @click="onDialogClick">
 				{{ $t(!connected ? "BLE.btn.connect" : "BLE.btn.disconnect") }}
 			</v-btn>
-			<v-btn color="primary" @click="visibleDialog = false">
+			<v-btn color="primary" @click="onCloseClick">
 				{{ $t("btn.close") }}
 			</v-btn>
 		</template>
@@ -20,22 +20,31 @@
 </template>
 
 <script lang="ts">
-import DialogTemplate from "@/components/DialogTemplate.vue";
-
 import { onMounted, onUnmounted, ref } from "vue";
 import { toast } from "vue3-toastify";
 import i18n from "@/lang";
+
+import DialogTemplate from "@/components/DialogTemplate.vue";
+
 import canbus from "@/api/canbus";
-import { BLUETOOTH_EVENT_CONNECTED, BLUETOOTH_EVENT_SEND, TConnectedStatus } from "@/components/bluetooth";
 import update from "@/components/firmware";
+import { BLUETOOTH_EVENT_CONNECTED, BLUETOOTH_EVENT_SEND, TConnectedStatus } from "@/components/bluetooth";
 
 export default {
 	name: "BluetoothBtn",
 	components: { DialogTemplate },
-	setup()
+	emits: ["click"],
+	setup(props: any, { emit }: { emit: any })
 	{
 		const visibleDialog = ref(true);
 		const connected = ref(false);
+
+		/** Событие закрытия диалога */
+		const onCloseClick = () =>
+		{
+			visibleDialog.value = false;
+			emit("click");
+		};
 
 		/** Событие кнопки подключения/отключения Bluetooth */
 		const onDialogClick = () =>
@@ -43,7 +52,7 @@ export default {
 			if (canbus.bluetooth.connected) canbus.bluetooth.disconnect();
 			else canbus.bluetooth.connect();
 
-			visibleDialog.value = false;
+			onCloseClick();
 		};
 
 		/** Событие подключения Bluetooth */
@@ -95,6 +104,7 @@ export default {
 		return {
 			visibleDialog,
 			connected,
+			onCloseClick,
 			onDialogClick
 		};
 	}
