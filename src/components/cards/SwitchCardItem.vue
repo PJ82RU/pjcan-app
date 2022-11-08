@@ -65,7 +65,7 @@ export default {
 
 	&__switch {
 		position: absolute;
-		top: 8px;
+		top: 4px;
 		right: 0;
 	}
 }
