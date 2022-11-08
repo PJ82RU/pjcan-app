@@ -202,9 +202,11 @@ export class Bluetooth extends EventEmitter
 	/** Событие входящих данных */
 	private handleCharacteristicValueChanged(ev: any): void
 	{
-		console.log("receive", ev.target.value);
-
-		if (dev) console.log(i18n.global.t("BLE.server.receive", { n: ev.target.value.getUint8(0) }));
+		if (dev)
+		{
+			console.log("receive", ev.target.value);
+			console.log(i18n.global.t("BLE.server.receive", { n: ev.target.value.getUint8(0) }));
+		}
 		this.emit(BLUETOOTH_EVENT_RECEIVE, ev.target.value);
 	}
 
@@ -214,7 +216,7 @@ export class Bluetooth extends EventEmitter
 	 */
 	send(data: DataView | undefined): Promise<any>
 	{
-		console.log("send", data);
+		if (dev) console.log("send", data);
 
 		if (!this.connected)
 		{

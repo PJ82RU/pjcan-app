@@ -58,14 +58,14 @@ export default {
 		{
 			isLoadedConfig.value = true;
 			config.value.setModel(res);
-			console.log("ButtonValue", config.value);
+			// console.log("ButtonValue", config.value);
 		};
 		// входящие значения кнопки
 		const onReceiveValue = (res: IButtonValue): void =>
 		{
 			isLoadedValue.value = true;
 			value.value.setModel(res);
-			console.log("ButtonValue", value.value);
+			// console.log("ButtonValue", value.value);
 		};
 
 		// регистрируем события
