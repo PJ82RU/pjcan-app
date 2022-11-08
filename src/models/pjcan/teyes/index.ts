@@ -7,6 +7,7 @@ import { StructTeyesView } from "./StructTeyesView";
 import { ITeyesConfig } from "./ITeyesConfig";
 import { ITeyesText } from "./ITeyesText";
 import { ITeyesView } from "./ITeyesView";
+import { ITeyes } from "./ITeyes";
 
 export {
 	API_EXEC_TEYES_CONFIG,
@@ -19,4 +20,4 @@ export {
 	TeyesText,
 	TeyesView
 };
-export type { ITeyesConfig, ITeyesText, ITeyesView };
+export type { ITeyesConfig, ITeyesText, ITeyesView, ITeyes };

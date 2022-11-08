@@ -22,8 +22,21 @@ import {
 	DeviceValue,
 	IDevice
 } from "@/models/pjcan/device";
-import { API_EXEC_BUTTONS_CONFIG, API_EXEC_BUTTONS_VALUE, ButtonsConfig, ButtonValue } from "@/models/pjcan/button";
-import { API_EXEC_TEYES_CONFIG, API_EXEC_TEYES_VIEW, TeyesConfig, TeyesView } from "@/models/pjcan/teyes";
+import {
+	API_EXEC_BUTTONS_CONFIG,
+	API_EXEC_BUTTONS_VALUE,
+	ButtonsConfig,
+	ButtonValue,
+	IButtons
+} from "@/models/pjcan/button";
+import {
+	API_EXEC_TEYES_CONFIG,
+	API_EXEC_TEYES_VIEW,
+	ITeyes,
+	TeyesConfig,
+	TeyesText,
+	TeyesView
+} from "@/models/pjcan/teyes";
 import { API_EXEC_LCD_VALUE, LCDValue } from "@/models/pjcan/lcd";
 import { API_EXEC_CAR_CONFIG, API_EXEC_CAR_VIEW, CarConfig, CarView } from "@/models/pjcan/car";
 import { API_EXEC_UPDATE_BEGIN_GZ, API_EXEC_UPDATE_UPLOAD_GZ } from "@/models/pjcan/update";
@@ -138,6 +151,19 @@ export class Canbus extends EventEmitter
 		info: new DeviceInfo(),
 		config: new DeviceConfig(),
 		value: new DeviceValue()
+	};
+
+	/** Кнопки */
+	buttons: IButtons = {
+		config: new ButtonsConfig(),
+		value: new ButtonValue()
+	};
+
+	/** Teyes */
+	teyes: ITeyes = {
+		config: new TeyesConfig(),
+		text: new TeyesText(),
+		view: new TeyesView()
 	};
 
 	constructor()
@@ -274,16 +300,20 @@ export class Canbus extends EventEmitter
 				this.emit(API_EVENT_DEVICE_VALUE, this.device.value);
 				break;
 			case API_EXEC_BUTTONS_CONFIG:
-				this.emit(API_EVENT_BUTTONS_CONFIG, new ButtonsConfig(data));
+				this.buttons.config.set(data);
+				this.emit(API_EVENT_BUTTONS_CONFIG, this.buttons.config);
 				break;
 			case API_EXEC_BUTTONS_VALUE:
-				this.emit(API_EVENT_BUTTON_VALUE, new ButtonValue(data));
+				this.buttons.value.set(data);
+				this.emit(API_EVENT_BUTTON_VALUE, this.buttons.value);
 				break;
 			case API_EXEC_TEYES_CONFIG:
-				this.emit(API_EVENT_TEYES_CONFIG, new TeyesConfig(data));
+				this.teyes.config.set(data);
+				this.emit(API_EVENT_TEYES_CONFIG, this.teyes.config);
 				break;
 			case API_EXEC_TEYES_VIEW:
-				this.emit(API_EVENT_TEYES_VIEW, new TeyesView(data));
+				this.teyes.view.set(data);
+				this.emit(API_EVENT_TEYES_VIEW, this.teyes.view);
 				break;
 			case API_EXEC_LCD_VALUE:
 				this.emit(API_EVENT_LCD_VALUE, new LCDValue(data));
