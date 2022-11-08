@@ -19,7 +19,8 @@ import {
 	API_EXEC_INFO,
 	DeviceConfig,
 	DeviceInfo,
-	DeviceValue
+	DeviceValue,
+	IDevice
 } from "@/models/pjcan/device";
 import { API_EXEC_BUTTONS_CONFIG, API_EXEC_BUTTONS_VALUE, ButtonsConfig, ButtonValue } from "@/models/pjcan/button";
 import { API_EXEC_TEYES_CONFIG, API_EXEC_TEYES_VIEW, TeyesConfig, TeyesView } from "@/models/pjcan/teyes";
@@ -127,6 +128,17 @@ export class Canbus extends EventEmitter
 	bluetooth: Bluetooth = new Bluetooth();
 	/** Версия протокола */
 	version: IVersion = new Version();
+	/** Конфигурация устройства */
+	configs: IConfigs = new Configs();
+	/** Конфигурация отображения значений */
+	views: IViews = new Views();
+
+	/** Устройство */
+	device: IDevice = {
+		info: new DeviceInfo(),
+		config: new DeviceConfig(),
+		value: new DeviceValue()
+	};
 
 	constructor()
 	{
@@ -149,13 +161,13 @@ export class Canbus extends EventEmitter
 	/** Загрузка конфигурации */
 	fetchConfig(): Promise<void>
 	{
-		return this.bluetooth.send(new Configs().get());
+		return this.bluetooth.send(this.configs.get());
 	}
 
 	/** Загрузка конфигурации отображения значений */
 	fetchView(): Promise<void>
 	{
-		return this.bluetooth.send(new Views().get());
+		return this.bluetooth.send(this.views.get());
 	}
 
 	/**
@@ -235,32 +247,31 @@ export class Canbus extends EventEmitter
 				break;
 
 			case API_EXEC_CONFIG:
-				{
-					const configs: IConfigs = new Configs(data);
-					this.emit(API_EVENT_BUTTONS_CONFIG, configs.buttons);
-					this.emit(API_EVENT_CAR_CONFIG, configs.car);
-					this.emit(API_EVENT_TEYES_CONFIG, configs.teyes);
-					this.emitVariableConfig(configs.variable);
-				}
+				this.configs.set(data);
+				this.emit(API_EVENT_BUTTONS_CONFIG, this.configs.buttons);
+				this.emit(API_EVENT_CAR_CONFIG, this.configs.car);
+				this.emit(API_EVENT_TEYES_CONFIG, this.configs.teyes);
+				this.emitVariableConfig(this.configs.variable);
 				break;
 
 			case API_EXEC_VIEW:
-				{
-					const views: IViews = new Views(data);
-					this.emit(API_EVENT_CAR_VIEW, views.car);
-					this.emit(API_EVENT_TEYES_VIEW, views.teyes);
-					this.emitVariableView(views.variable);
-				}
+				this.views.set(data);
+				this.emit(API_EVENT_CAR_VIEW, this.views.car);
+				this.emit(API_EVENT_TEYES_VIEW, this.views.teyes);
+				this.emitVariableView(this.views.variable);
 				break;
 
 			case API_EXEC_INFO:
-				this.emit(API_EVENT_INFO, new DeviceInfo(data));
+				this.device.info.set(data);
+				this.emit(API_EVENT_INFO, this.device.info);
 				break;
 			case API_EXEC_DEVICE_CONFIG:
-				this.emit(API_EVENT_DEVICE_CONFIG, new DeviceConfig(data));
+				this.device.config.set(data);
+				this.emit(API_EVENT_DEVICE_CONFIG, this.device.config);
 				break;
 			case API_EXEC_DEVICE_VALUE:
-				this.emit(API_EVENT_DEVICE_VALUE, new DeviceValue(data));
+				this.device.value.set(data);
+				this.emit(API_EVENT_DEVICE_VALUE, this.device.value);
 				break;
 			case API_EXEC_BUTTONS_CONFIG:
 				this.emit(API_EVENT_BUTTONS_CONFIG, new ButtonsConfig(data));
