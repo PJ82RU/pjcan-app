@@ -3,6 +3,8 @@ import { BluetoothStruct } from "@/components/bluetooth";
 /** Базовая модель */
 export class BaseModel
 {
+	isData: boolean = false;
+
 	/**
 	 * Запись данных
 	 * @param {any} th Объект модели
@@ -19,6 +21,7 @@ export class BaseModel
 			if (buf.getUint8(0) === exec && buf.byteLength === len)
 			{
 				struct.decode(buf, th, 1);
+				this.isData = true;
 				return true;
 			}
 		}

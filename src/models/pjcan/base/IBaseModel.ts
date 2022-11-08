@@ -7,4 +7,5 @@ export interface IBaseModel {
 	set: (buf: DataView) => boolean;
 	get: () => DataView | undefined;
 	setModel: <T>(res: T) => void;
+	isData: Boolean;
 }
