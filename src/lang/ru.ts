@@ -55,6 +55,10 @@ export default {
 		}
 	},
 
+	error: {
+		title: "Что смотришь,\nпиши PJ82"
+	},
+
 	menu: {
 		onboard: "Бортовой компьютер",
 		language: {

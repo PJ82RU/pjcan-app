@@ -6,7 +6,7 @@ const routes: Array<RouteRecordRaw> = [
 	{
 		path: "/",
 		name: "Onboard",
-		component: () => import("@/views/onboard/index.vue"),
+		component: () => import("@/views/onboard/Loader.vue"),
 		meta: {
 			title: i18n.global.t("onboard.title")
 		}
@@ -14,7 +14,7 @@ const routes: Array<RouteRecordRaw> = [
 	{
 		path: "/buttons",
 		name: "Buttons",
-		component: () => import("@/views/buttons/index.vue"),
+		component: () => import("@/views/buttons/Loader.vue"),
 		meta: {
 			title: i18n.global.t("buttons.title")
 		}
