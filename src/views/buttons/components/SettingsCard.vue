@@ -1,5 +1,5 @@
 <template>
-	<card class="settings-card" :title="$t(title)" :custom="iconName">
+	<card class="settings-card" :title="title" :custom="icon">
 		<template #body>
 			<v-row>
 				<v-col cols="12">
@@ -88,53 +88,35 @@ import { $tm } from "@/lang";
 import Card from "@/components/cards/Card.vue";
 import NumberField from "@/components/common/NumberField.vue";
 
-import {
-	IButtonsConfig,
-	IButtonsConfigItem,
-	TButtonExec,
-	TButtonItem,
-	TButtonPress
-} from "@/models/pjcan/button";
+import { IButtonsConfigItem, TButtonExec, TButtonItem, TButtonPress } from "@/models/pjcan/button";
+
+export interface IConfigReturn {
+	type: TButtonItem;
+	item: IButtonsConfigItem;
+}
 
 export default {
 	name: "SettingsCard",
 	components: { Card, NumberField },
 	props: {
+		title: {
+			type: String,
+			required: true
+		},
 		type: {
 			type: Number as () => TButtonItem,
 			required: true
 		},
-		config: {
-			type: Object as () => IButtonsConfig,
-			required: true
-		},
+		config: Object as () => IButtonsConfigItem,
 		isLoadedConfig: Boolean,
-		iconName: String
+		icon: String
 	},
-	setup(props: any)
+	emits: ["update"],
+	setup(props: any, { emit }: { emit: any })
 	{
 		const { type, config } = toRefs(props);
 
-		const title = computed((): string =>
-		{
-			const r = "buttons.";
-			switch (type.value)
-			{
-				case TButtonItem.BUTTON_MODE:
-					return r + "mode";
-				case TButtonItem.BUTTON_SEEK_UP:
-					return r + "seekUp";
-				case TButtonItem.BUTTON_SEEK_DOWN:
-					return r + "seekDown";
-				case TButtonItem.BUTTON_VOL_UP:
-					return r + "volUp";
-				case TButtonItem.BUTTON_VOL_DOWN:
-					return r + "volDown";
-				case TButtonItem.BUTTON_VOL_MUTE:
-					return r + "volMute";
-			}
-			return r + "title";
-		});
+		/** Список функций */
 		const functionsList = computed((): object[] =>
 		{
 			const result = [];
@@ -146,58 +128,88 @@ export default {
 			return result;
 		});
 
-		const items = computed((): IButtonsConfigItem => config.value.items?.[type.value]);
+		/** Обновить конфигурацию */
+		const onUpdate = (): void => emit("update", { type: type.value, item: config.value } as IConfigReturn);
 
+		/** Сопротивление кнопки */
 		const resistance = computed({
-			get: (): number => items.value?.inR ?? 0,
+			get: (): number => config.value?.inR ?? 0,
 			set: (val: number): void =>
 			{
-				if (items.value) items.value.inR = val;
+				if (config.value)
+				{
+					config.value.inR = val;
+					onUpdate();
+				}
 			}
 		});
 
+		/** Кнопка нажата один раз */
 		const pressSingle = computed({
-			get: (): number => items.value?.exec[TButtonPress.PRESS_SINGLE] ?? TButtonExec.TEYES_NONE,
+			get: (): number => config.value?.exec[TButtonPress.PRESS_SINGLE] ?? TButtonExec.TEYES_NONE,
 			set: (val: number): void =>
 			{
-				if (items.value) items.value.exec[TButtonPress.PRESS_SINGLE] = val;
+				if (config.value)
+				{
+					config.value.exec[TButtonPress.PRESS_SINGLE] = val;
+					onUpdate();
+				}
 			}
 		});
 
+		/** Кнопка нажата два раза */
 		const pressDual = computed({
-			get: (): number => items.value?.exec[TButtonPress.PRESS_DUAL] ?? TButtonExec.TEYES_NONE,
+			get: (): number => config.value?.exec[TButtonPress.PRESS_DUAL] ?? TButtonExec.TEYES_NONE,
 			set: (val: number): void =>
 			{
-				if (items.value) items.value.exec[TButtonPress.PRESS_DUAL] = val;
+				if (config.value)
+				{
+					config.value.exec[TButtonPress.PRESS_DUAL] = val;
+					onUpdate();
+				}
 			}
 		});
 
+		/** Кнопка нажата три раза */
 		const pressTriple = computed({
-			get: (): number => items.value?.exec[TButtonPress.PRESS_TRIPLE] ?? TButtonExec.TEYES_NONE,
+			get: (): number => config.value?.exec[TButtonPress.PRESS_TRIPLE] ?? TButtonExec.TEYES_NONE,
 			set: (val: number): void =>
 			{
-				if (items.value) items.value.exec[TButtonPress.PRESS_TRIPLE] = val;
+				if (config.value)
+				{
+					config.value.exec[TButtonPress.PRESS_TRIPLE] = val;
+					onUpdate();
+				}
 			}
 		});
 
+		/** Удержание кнопки */
 		const pressHold = computed({
-			get: (): number => items.value?.exec[TButtonPress.PRESS_HOLD] ?? TButtonExec.TEYES_NONE,
+			get: (): number => config.value?.exec[TButtonPress.PRESS_HOLD] ?? TButtonExec.TEYES_NONE,
 			set: (val: number): void =>
 			{
-				if (items.value) items.value.exec[TButtonPress.PRESS_HOLD] = val;
+				if (config.value)
+				{
+					config.value.exec[TButtonPress.PRESS_HOLD] = val;
+					onUpdate();
+				}
 			}
 		});
 
+		/** Кнопка отпущена */
 		const release = computed({
-			get: (): number => items.value?.exec[TButtonPress.RELEASE] ?? TButtonExec.TEYES_NONE,
+			get: (): number => config.value?.exec[TButtonPress.RELEASE] ?? TButtonExec.TEYES_NONE,
 			set: (val: number): void =>
 			{
-				if (items.value) items.value.exec[TButtonPress.RELEASE] = val;
+				if (config.value)
+				{
+					config.value.exec[TButtonPress.RELEASE] = val;
+					onUpdate();
+				}
 			}
 		});
 
 		return {
-			title,
 			functionsList,
 			resistance,
 			pressSingle,

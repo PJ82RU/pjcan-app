@@ -1,31 +1,37 @@
 <template>
 	<flicking ref="flicking" class="buttons" :options="{ bound: true, align: 'prev' }">
-		<div
-			v-for="(iconName, index) in iconsNameList"
-			:key="`buttons-${index}`"
-			class="mr-4"
-			:class="`flicking-${display}`"
-		>
+		<div v-for="(item, index) in list" :key="`buttons-${index}`" class="mr-4" :class="`flicking-${display}`">
 			<settings-card
 				:class="`settings-card-${index}`"
-				:type="index"
-				:config="config"
+				:title="item.title"
+				:type="item.type"
+				:config="item.item"
 				:is-loaded-config="isLoadedConfig"
-				:icon-name="iconName"
+				:icon="item.icon"
+				@update="onUpdateConfig"
 			/>
 		</div>
 	</flicking>
 </template>
 
 <script lang="ts">
-import { computed, onMounted, onUnmounted, provide, ref } from "vue";
+import { onMounted, onUnmounted, provide, ref } from "vue";
 import { useDisplay } from "vuetify";
 
 import Flicking from "@egjs/vue3-flicking";
 import SettingsCard from "./components/SettingsCard.vue";
-import { ButtonsConfig, ButtonValue, IButtonsConfig, IButtonValue } from "@/models/pjcan/button";
+import { IButtonsConfig, IButtonsConfigItem, IButtonValue, TButtonItem } from "@/models/pjcan/button";
 
 import canbus, { API_EVENT_BUTTON_VALUE, API_EVENT_BUTTONS_CONFIG } from "@/api/canbus";
+import { $t } from "@/lang";
+import { IConfigReturn } from "@/views/buttons/components/SettingsCard.vue";
+
+interface IConfigItem {
+	title: string;
+	type: TButtonItem;
+	item: IButtonsConfigItem | undefined;
+	icon: string;
+}
 
 export default {
 	name: "buttons",
@@ -36,36 +42,32 @@ export default {
 		const flicking = ref(null);
 		provide("flicking", flicking);
 
-		const iconsNameList = computed(() => [
-			"mdi-menu",
-			"mdi-play",
-			"mdi-play",
-			"mdi-volume-plus",
-			"mdi-volume-minus",
-			"mdi-volume-mute"
-		]);
-
-		// КОНФИГУРАЦИЯ КНОПОК
-
 		const isLoadedConfig = ref(false);
 		const isLoadedValue = ref(false);
 
-		const config = ref(new ButtonsConfig());
-		const value = ref(new ButtonValue());
+		const list = ref([
+			{ title: $t("buttons.mode"), type: TButtonItem.BUTTON_MODE, icon: "mdi-menu" },
+			{ title: $t("buttons.seekUp"), type: TButtonItem.BUTTON_SEEK_UP, icon: "mdi-play" },
+			{ title: $t("buttons.seekDown"), type: TButtonItem.BUTTON_SEEK_DOWN, icon: "mdi-play" },
+			{ title: $t("buttons.volUp"), type: TButtonItem.BUTTON_VOL_UP, icon: "mdi-volume-plus" },
+			{ title: $t("buttons.volDown"), type: TButtonItem.BUTTON_VOL_DOWN, icon: "mdi-volume-minus" },
+			{ title: $t("buttons.volMute"), type: TButtonItem.BUTTON_VOL_MUTE, icon: "mdi-volume-mute" }
+		] as IConfigItem[]);
 
-		// входящие значения конфигурации кнопок
+		/** Входящие значения конфигурации кнопок */
 		const onReceiveConfig = (res: IButtonsConfig): void =>
 		{
-			isLoadedConfig.value = true;
-			config.value.setModel(res);
-			// console.log("ButtonValue", config.value);
+			isLoadedConfig.value = res.isData;
+			if (isLoadedConfig.value)
+			{
+				res.items?.forEach((x, i) => (list.value[i].item = x));
+			}
 		};
-		// входящие значения кнопки
+
+		/** Входящие значения кнопки */
 		const onReceiveValue = (res: IButtonValue): void =>
 		{
-			isLoadedValue.value = true;
-			value.value.setModel(res);
-			// console.log("ButtonValue", value.value);
+			isLoadedValue.value = res.isData;
 		};
 
 		// регистрируем события
@@ -73,6 +75,8 @@ export default {
 		{
 			canbus.addListener(API_EVENT_BUTTONS_CONFIG, onReceiveConfig);
 			canbus.addListener(API_EVENT_BUTTON_VALUE, onReceiveValue);
+			onReceiveConfig(canbus.configs.buttons);
+			onReceiveValue(canbus.buttonValue);
 		});
 		// удаляем события
 		onUnmounted(() =>
@@ -81,14 +85,23 @@ export default {
 			canbus.removeListener(API_EVENT_BUTTON_VALUE, onReceiveValue);
 		});
 
+		/**
+		 * Обновление конфигурации кнопок
+		 * @param {IConfigReturn} data
+		 */
+		const onUpdateConfig = (data: IConfigReturn) =>
+		{
+			canbus.configs.buttons.items[data.type] = data.item;
+			canbus.send(canbus.configs.buttons);
+		};
+
 		return {
 			flicking,
 			display,
-			iconsNameList,
 			isLoadedConfig,
 			isLoadedValue,
-			config,
-			value
+			list,
+			onUpdateConfig
 		};
 	}
 };
