@@ -12,7 +12,7 @@ const struct = new BluetoothStruct(StructDoorsView);
 /** Модель параметров отображения данных дверей */
 export class DoorsView extends BaseModel implements IDoorsView
 {
-	doors = new ViewConfig();
+	view = new ViewConfig();
 
 	constructor(data?: DataView)
 	{

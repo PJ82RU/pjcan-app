@@ -79,32 +79,36 @@ import ViewSettingDialog from "./ViewSettingDialog.vue";
 
 import { IMenuItem } from "@/models/IMenuItem";
 import { IViewConfig } from "@/models/pjcan/view";
-import { DoorsValue, DoorsView, IDoorsValue, IDoorsView } from "@/models/pjcan/variables/doors";
+import { IDoorsValue, IDoorsView } from "@/models/pjcan/variables/doors";
 
 export default {
 	name: "DoorsCard",
 	components: { Card, SwitchCardItem, ViewSettingDialog },
 	setup()
 	{
-		// ПАРАМЕТРЫ ОТКРЫТЫХ ДВЕРЕЙ
-
 		const isLoadedView = ref(false);
 		const isLoadedValue = ref(false);
 
-		const doorsValue = ref(new DoorsValue());
-		const doorsView = new DoorsView();
+		const doorFL = ref(false);
+		const doorFR = ref(false);
+		const doorBL = ref(false);
+		const doorBR = ref(false);
+		const trunk = ref(false);
 
-		// входящие значения открытых дверей
+		/** Входящие значения открытых дверей */
 		const onReceiveValue = (res: IDoorsValue): void =>
 		{
-			isLoadedValue.value = true;
-			doorsValue.value.setModel(res);
+			isLoadedValue.value = res.isData;
+			doorFL.value = res.frontLeft;
+			doorFR.value = res.frontRight;
+			doorBL.value = res.backLeft;
+			doorBR.value = res.backRight;
+			trunk.value = res.trunk;
 		};
-		// входящие значения отображения открытых дверей
+		/** Входящие значения отображения открытых дверей */
 		const onReceiveView = (res: IDoorsView): void =>
 		{
-			isLoadedView.value = true;
-			doorsView.setModel(res);
+			isLoadedView.value = res.isData;
 		};
 
 		// регистрируем события
@@ -119,12 +123,6 @@ export default {
 			canbus.removeListener(API_EVENT_VARIABLE_DOORS, onReceiveValue);
 			canbus.removeListener(API_EVENT_VARIABLE_DOORS_VIEW, onReceiveView);
 		});
-
-		const doorFL = computed((): boolean => doorsValue.value.frontLeft);
-		const doorFR = computed((): boolean => doorsValue.value.frontRight);
-		const doorBL = computed((): boolean => doorsValue.value.backLeft);
-		const doorBR = computed((): boolean => doorsValue.value.backRight);
-		const trunk = computed((): boolean => doorsValue.value.trunk);
 
 		// МЕНЮ ОТОБРАЖЕНИЯ
 
@@ -141,7 +139,7 @@ export default {
 		{
 			menuVisible.value = true;
 			menuTitle.value = data.item;
-			menuItem.value = doorsView.doors;
+			menuItem.value = canbus.views.variable.doors.view;
 		};
 
 		/**
@@ -150,8 +148,8 @@ export default {
 		 */
 		const onViewSettingApply = (data: IViewConfig): void =>
 		{
-			doorsView.doors = data;
-			canbus.send(doorsView);
+			canbus.views.variable.doors.view = data;
+			canbus.send(canbus.views.variable.doors);
 		};
 
 		return {
