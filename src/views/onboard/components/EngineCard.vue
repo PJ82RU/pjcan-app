@@ -8,6 +8,7 @@
 						:title="$t('onboard.engine.enabled.title')"
 						:description="$t('onboard.engine.enabled.description')"
 						:icon-name="['start-stop']"
+						:nodata="!isLoadedValue"
 						:disabled="!isLoadedView"
 					/>
 				</v-col>
@@ -96,30 +97,41 @@ import ViewSettingDialog from "./ViewSettingDialog.vue";
 
 import { IMenuItem } from "@/models/IMenuItem";
 import { IViewConfig } from "@/models/pjcan/view";
-import { EngineValue, EngineView, IEngineValue, IEngineView } from "@/models/pjcan/variables/engine";
+import { IEngineValue, IEngineView } from "@/models/pjcan/variables/engine";
 
 export default {
 	name: "EngineCard",
 	components: { Card, InputCardItem, IconCardItem, ProgressCardItem, ViewSettingDialog },
 	setup()
 	{
-		// ПАРАМЕТРЫ ДВС
-
+		const isLoadedValue = ref(false);
 		const isLoadedView = ref(false);
 
-		const engineValue = ref(new EngineValue());
-		const engineView = new EngineView();
+		const enabled = ref(false);
+		const rpm = ref("");
+		const countRPM = ref("");
+		const load = ref(0);
+		const motors = ref(0);
+		const throttle = ref(0);
+		const coolant = ref(0);
 
-		// входящие значения ДВС
+		/** Входящие значения ДВС */
 		const onReceiveValue = (res: IEngineValue): void =>
 		{
-			engineValue.value.setModel(res);
+			isLoadedValue.value = res.isData;
+			enabled.value = res.enabled;
+			rpm.value = res.rpm.toFixed();
+			countRPM.value = res.countRPM.toFixed();
+			load.value = res.load;
+			motors.value = res.mseconds;
+			throttle.value = res.throttle;
+			coolant.value = res.coolant;
 		};
-		// входящие значения отображения ДВС
+
+		/** Входящие значения отображения ДВС */
 		const onReceiveView = (res: IEngineView): void =>
 		{
-			isLoadedView.value = true;
-			engineView.setModel(res);
+			isLoadedView.value = res.isData;
 		};
 
 		// регистрируем события
@@ -134,14 +146,6 @@ export default {
 			canbus.removeListener(API_EVENT_VARIABLE_ENGINE, onReceiveValue);
 			canbus.removeListener(API_EVENT_VARIABLE_ENGINE_VIEW, onReceiveView);
 		});
-
-		const enabled = computed((): boolean => engineValue.value.enabled);
-		const rpm = computed((): string => engineValue.value.rpm.toFixed());
-		const countRPM = computed((): string => engineValue.value.countRPM.toFixed());
-		const load = computed((): number => engineValue.value.load);
-		const motors = computed((): number => engineValue.value.mseconds);
-		const throttle = computed((): number => engineValue.value.throttle);
-		const coolant = computed((): number => engineValue.value.coolant);
 
 		// МЕНЮ ОТОБРАЖЕНИЯ
 
@@ -169,34 +173,36 @@ export default {
 			menuVisible.value = true;
 			menuTitle.value = data.item;
 			menuSelected = data;
+
+			const { engine } = canbus.views.variable;
 			switch (data.index)
 			{
 				case 0:
-					menuItem.value = engineView.enabled;
+					menuItem.value = engine.enabled;
 					return;
 
 				case 1:
-					menuItem.value = engineView.rpm;
+					menuItem.value = engine.rpm;
 					break;
 
 				case 2:
-					menuItem.value = engineView.totalCountRPM;
+					menuItem.value = engine.totalCountRPM;
 					break;
 
 				case 3:
-					menuItem.value = engineView.load;
+					menuItem.value = engine.load;
 					break;
 
 				case 4:
-					menuItem.value = engineView.totalSeconds;
+					menuItem.value = engine.totalSeconds;
 					break;
 
 				case 5:
-					menuItem.value = engineView.throttle;
+					menuItem.value = engine.throttle;
 					break;
 
 				case 6:
-					menuItem.value = engineView.coolant;
+					menuItem.value = engine.coolant;
 					break;
 			}
 		};
@@ -207,40 +213,42 @@ export default {
 		 */
 		const onViewSettingApply = (data: IViewConfig): void =>
 		{
+			const { engine } = canbus.views.variable;
 			switch (menuSelected.index)
 			{
 				case 0:
-					engineView.enabled = data;
+					engine.enabled = data;
 					break;
 
 				case 1:
-					engineView.rpm = data;
+					engine.rpm = data;
 					break;
 
 				case 2:
-					engineView.totalCountRPM = data;
+					engine.totalCountRPM = data;
 					break;
 
 				case 3:
-					engineView.load = data;
+					engine.load = data;
 					break;
 
 				case 4:
-					engineView.totalSeconds = data;
+					engine.totalSeconds = data;
 					break;
 
 				case 5:
-					engineView.throttle = data;
+					engine.throttle = data;
 					break;
 
 				case 6:
-					engineView.coolant = data;
+					engine.coolant = data;
 					break;
 			}
-			canbus.send(engineView);
+			canbus.send(engine);
 		};
 
 		return {
+			isLoadedValue,
 			isLoadedView,
 			enabled,
 			rpm,
