@@ -12,7 +12,7 @@ const struct = new BluetoothStruct(StructVolumeView);
 /** Модель параметров отображения данных уровня звука */
 export class VolumeView extends BaseModel implements IVolumeView
 {
-	volume = new ViewConfig();
+	view = new ViewConfig();
 
 	constructor(data?: DataView)
 	{

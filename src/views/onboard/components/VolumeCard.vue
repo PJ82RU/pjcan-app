@@ -7,6 +7,9 @@
 						v-model="volume"
 						:title="$t('onboard.volume.level.title')"
 						:description="$t('onboard.volume.level.description')"
+						:max="max"
+						:nodata="!isLoadedValue"
+						:disabled="!isLoadedView"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0 pb-0">
@@ -15,6 +18,7 @@
 						:title="$t('onboard.volume.mute.title')"
 						:description="$t('onboard.volume.mute.description')"
 						color="warning"
+						:nodata="!isLoadedValue"
 						:disabled="!isLoadedView"
 					/>
 				</v-col>
@@ -34,7 +38,7 @@
 </template>
 
 <script lang="ts">
-import { computed, onMounted, onUnmounted, ref } from "vue";
+import { computed, onMounted, onUnmounted, ref, watch } from "vue";
 import { $t } from "@/lang";
 
 import canbus, { API_EVENT_VARIABLE_VOLUME, API_EVENT_VARIABLE_VOLUME_VIEW } from "@/api/canbus";
@@ -46,30 +50,61 @@ import ViewSettingDialog from "./ViewSettingDialog.vue";
 
 import { IMenuItem } from "@/models/IMenuItem";
 import { IViewConfig } from "@/models/pjcan/view";
-import { IVolumeConfig, IVolumeView, VolumeConfig, VolumeView } from "@/models/pjcan/variables/volume";
+import { IVolumeConfig, IVolumeView } from "@/models/pjcan/variables/volume";
 
 export default {
 	name: "VolumeCard",
 	components: { Card, SwitchCardItem, SliderCardItem, ViewSettingDialog },
 	setup()
 	{
-		// ПАРАМЕТРЫ ЗВУКА
+		const isLoadedValue = ref(false);
+		const isLoadedView = ref(false);
 
-		const isLoadedView = ref(true);
+		const mute = ref(false);
+		const volume = ref(0);
+		const max = ref(1);
 
-		const volumeConfig = ref(new VolumeConfig());
-		const volumeView = new VolumeView();
+		/** Исходящие значения звука */
+		const onSend = () => canbus.send(canbus.configs.variable.volume);
 
-		// входящие значения звука
+		watch(mute, (val: boolean) =>
+		{
+			if (isLoadedValue.value && canbus.configs.variable.volume.mute !== val)
+			{
+				canbus.configs.variable.volume.mute = val;
+				onSend();
+			}
+		});
+		watch(volume, (val: number) =>
+		{
+			if (isLoadedValue.value && canbus.configs.variable.volume.volume !== val)
+			{
+				canbus.configs.variable.volume.volume = val;
+				onSend();
+			}
+		});
+		watch(max, (val: number) =>
+		{
+			if (isLoadedValue.value && canbus.configs.variable.volume.max !== val)
+			{
+				canbus.configs.variable.volume.max = val;
+				onSend();
+			}
+		});
+
+		/** Входящие значения звука */
 		const onReceiveConfig = (res: IVolumeConfig): void =>
 		{
-			volumeConfig.value.setModel(res);
+			isLoadedValue.value = res.isData;
+			mute.value = res.mute;
+			volume.value = res.volume;
+			max.value = res.max;
 		};
-		// входящие значения отображения звука
+
+		/** Входящие значения отображения звука */
 		const onReceiveView = (res: IVolumeView): void =>
 		{
-			isLoadedView.value = true;
-			volumeView.setModel(res);
+			isLoadedView.value = res.isData;
 		};
 
 		// регистрируем события
@@ -77,39 +112,14 @@ export default {
 		{
 			canbus.addListener(API_EVENT_VARIABLE_VOLUME, onReceiveConfig);
 			canbus.addListener(API_EVENT_VARIABLE_VOLUME_VIEW, onReceiveView);
+			onReceiveConfig(canbus.configs.variable.volume);
+			onReceiveView(canbus.views.variable.volume);
 		});
 		// удаляем события
 		onUnmounted(() =>
 		{
 			canbus.removeListener(API_EVENT_VARIABLE_VOLUME, onReceiveConfig);
 			canbus.removeListener(API_EVENT_VARIABLE_VOLUME_VIEW, onReceiveView);
-		});
-
-		// исходящие значения звука
-		const onSend = () => canbus.send(volumeConfig.value);
-		const mute = computed({
-			get: (): boolean => volumeConfig.value.mute,
-			set: (val: boolean) =>
-			{
-				volumeConfig.value.mute = val;
-				onSend();
-			}
-		});
-		const volume = computed({
-			get: (): number => volumeConfig.value.volume,
-			set: (val: number) =>
-			{
-				volumeConfig.value.volume = val;
-				onSend();
-			}
-		});
-		const volumeMax = computed({
-			get: (): number => volumeConfig.value.max,
-			set: (val: number) =>
-			{
-				volumeConfig.value.max = val;
-				onSend();
-			}
 		});
 
 		// МЕНЮ ОТОБРАЖЕНИЯ
@@ -127,7 +137,7 @@ export default {
 		{
 			menuVisible.value = true;
 			menuTitle.value = data.item;
-			menuItem.value = volumeView.volume;
+			menuItem.value = canbus.views.variable.volume.view;
 		};
 
 		/**
@@ -136,15 +146,16 @@ export default {
 		 */
 		const onViewSettingApply = (data: IViewConfig): void =>
 		{
-			volumeView.volume = data;
-			canbus.send(volumeView);
+			canbus.views.variable.volume.view = data;
+			canbus.send(canbus.views.variable.volume);
 		};
 
 		return {
+			isLoadedValue,
 			isLoadedView,
 			mute,
 			volume,
-			volumeMax,
+			max,
 			menu,
 			menuVisible,
 			menuTitle,
