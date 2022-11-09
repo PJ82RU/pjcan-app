@@ -56,32 +56,33 @@ import ViewSettingDialog from "./ViewSettingDialog.vue";
 
 import { IMenuItem } from "@/models/IMenuItem";
 import { IViewConfig } from "@/models/pjcan/view";
-import { IMovementValue, IMovementView, MovementValue, MovementView } from "@/models/pjcan/variables/movement";
+import { IMovementValue, IMovementView } from "@/models/pjcan/variables/movement";
 
 export default {
 	name: "MovementCard",
 	components: { Card, InputCardItem, ViewSettingDialog },
 	setup()
 	{
-		// ЗНАЧЕНИЯ ДВИЖЕНИЯ
-
 		const isLoadedView = ref(false);
 		const isLoadedValue = ref(false);
 
-		const movementValue = ref(new MovementValue());
-		const movementView = new MovementView();
+		const speed = ref("");
+		const speedAVG = ref("");
+		const restWay = ref("");
 
-		// входящие значения движения
+		/** Входящие значения движения */
 		const onReceiveValue = (res: IMovementValue): void =>
 		{
-			isLoadedValue.value = true;
-			movementValue.value.setModel(res);
+			isLoadedValue.value = res.isData;
+			speed.value = res.speed.toFixed(2);
+			speedAVG.value = res.speedAVG.toString();
+			restWay.value = res.restWay.toFixed(2);
 		};
-		// входящие значения отображения движения
+
+		/** Входящие значения отображения движения */
 		const onReceiveView = (res: IMovementView): void =>
 		{
-			isLoadedView.value = true;
-			movementView.setModel(res);
+			isLoadedView.value = res.isData;
 		};
 
 		// регистрируем события
@@ -89,6 +90,8 @@ export default {
 		{
 			canbus.addListener(API_EVENT_VARIABLE_MOVEMENT, onReceiveValue);
 			canbus.addListener(API_EVENT_VARIABLE_MOVEMENT_VIEW, onReceiveView);
+			onReceiveValue(canbus.variables.movement);
+			onReceiveView(canbus.views.variable.movement);
 		});
 		// удаляем события
 		onUnmounted(() =>
@@ -96,10 +99,6 @@ export default {
 			canbus.removeListener(API_EVENT_VARIABLE_MOVEMENT, onReceiveValue);
 			canbus.removeListener(API_EVENT_VARIABLE_MOVEMENT_VIEW, onReceiveView);
 		});
-
-		const speed = computed((): string => movementValue.value.speed.toFixed(2));
-		const speedAVG = computed((): string => movementValue.value.speedAVG.toString());
-		const restWay = computed((): string => movementValue.value.restWay.toFixed(2));
 
 		// МЕНЮ ОТОБРАЖЕНИЯ
 
@@ -123,18 +122,20 @@ export default {
 			menuVisible.value = true;
 			menuTitle.value = data.item;
 			menuSelected = data;
+
+			const { movement } = canbus.views.variable;
 			switch (data.index)
 			{
 				case 0:
-					menuItem.value = movementView.speed;
+					menuItem.value = movement.speed;
 					return;
 
 				case 1:
-					menuItem.value = movementView.speedAVG;
+					menuItem.value = movement.speedAVG;
 					break;
 
 				case 2:
-					menuItem.value = movementView.restWay;
+					menuItem.value = movement.restWay;
 					break;
 			}
 		};
@@ -145,21 +146,22 @@ export default {
 		 */
 		const onViewSettingApply = (data: IViewConfig): void =>
 		{
+			const { movement } = canbus.views.variable;
 			switch (menuSelected.index)
 			{
 				case 0:
-					movementView.speed = data;
+					movement.speed = data;
 					break;
 
 				case 1:
-					movementView.speedAVG = data;
+					movement.speedAVG = data;
 					break;
 
 				case 2:
-					movementView.restWay = data;
+					movement.restWay = data;
 					break;
 			}
-			canbus.send(movementView);
+			canbus.send(movement);
 		};
 
 		return {
