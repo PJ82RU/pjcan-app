@@ -44,7 +44,20 @@ export class VariableView extends BaseModel implements IVariableViews
 	 */
 	set(buf: DataView): boolean
 	{
-		return this._set(this, API_EXEC_VARIABLE_VIEW, STRUCT_LENGTH, struct, buf);
+		const result = this._set(this, API_EXEC_VARIABLE_VIEW, STRUCT_LENGTH, struct, buf);
+		if (result)
+		{
+			this.bose.isData = true;
+			this.climate.isData = true;
+			this.doors.isData = true;
+			this.engine.isData = true;
+			this.fuel.isData = true;
+			this.movement.isData = true;
+			this.sensors.isData = true;
+			this.temperature.isData = true;
+			this.volume.isData = true;
+		}
+		return result;
 	}
 
 	/** Чтение данных */

@@ -12,7 +12,7 @@ const struct = new BluetoothStruct(StructTemperatureView);
 /** Модель параметров отображения данных температуры */
 export class TemperatureView extends BaseModel implements ITemperatureView
 {
-	temperature = new ViewConfig();
+	view = new ViewConfig();
 
 	constructor(data?: DataView)
 	{

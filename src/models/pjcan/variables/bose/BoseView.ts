@@ -12,7 +12,7 @@ const struct = new BluetoothStruct(StructBoseView);
 /** Модель параметров отображения данных Bose */
 export class BoseView extends BaseModel implements IBoseView
 {
-	bose = new ViewConfig();
+	view = new ViewConfig();
 
 	constructor(data?: DataView)
 	{

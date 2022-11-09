@@ -32,7 +32,15 @@ export class VariableConfig extends BaseModel implements IVariableConfigs
 	 */
 	set(buf: DataView): boolean
 	{
-		return this._set(this, API_EXEC_VARIABLE_CONFIG, STRUCT_LENGTH, struct, buf);
+		const result = this._set(this, API_EXEC_VARIABLE_CONFIG, STRUCT_LENGTH, struct, buf);
+		if (result)
+		{
+			this.bose.isData = true;
+			this.engine.isData = true;
+			this.fuel.isData = true;
+			this.volume.isData = true;
+		}
+		return result;
 	}
 
 	/** Чтение данных */

@@ -247,7 +247,7 @@ export default {
 					return;
 
 				case 1:
-					menuItem.value = temperatureView.temperature;
+					menuItem.value = temperatureView.view;
 					isLoaded.value = loadedTemperature.value;
 					return;
 
@@ -279,7 +279,7 @@ export default {
 			switch (menuSelected.index)
 			{
 				case 1:
-					temperatureView.temperature = data;
+					temperatureView.view = data;
 					canbus.send(temperatureView);
 					return;
 

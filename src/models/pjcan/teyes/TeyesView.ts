@@ -12,7 +12,7 @@ const struct = new BluetoothStruct(StructTeyesView);
 /** Модель параметров отображения данных Teyes */
 export class TeyesView extends BaseModel implements ITeyesView
 {
-	teyes = new ViewConfig();
+	view = new ViewConfig();
 
 	constructor(data?: DataView)
 	{

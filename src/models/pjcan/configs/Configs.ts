@@ -8,7 +8,7 @@ import { StructConfigs } from "./StructConfigs";
 import { IConfigs } from "./IConfigs";
 
 export const API_EXEC_CONFIG = 1;
-const STRUCT_LENGTH = 133; // временно!!! должно быть 134, нужно исправить в прошивке устройства!
+const STRUCT_LENGTH = 134;
 
 const struct = new BluetoothStruct(StructConfigs);
 
@@ -31,7 +31,18 @@ export class Configs extends BaseModel implements IConfigs
 	 */
 	set(buf: DataView): boolean
 	{
-		return this._set(this, API_EXEC_CONFIG, STRUCT_LENGTH, struct, buf);
+		const result = this._set(this, API_EXEC_CONFIG, STRUCT_LENGTH, struct, buf);
+		if (result)
+		{
+			this.buttons.isData = true;
+			this.car.isData = true;
+			this.teyes.isData = true;
+			this.variable.bose.isData = true;
+			this.variable.engine.isData = true;
+			this.variable.fuel.isData = true;
+			this.variable.volume.isData = true;
+		}
+		return result;
 	}
 
 	/** Чтение данных */

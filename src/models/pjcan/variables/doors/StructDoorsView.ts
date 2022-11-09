@@ -3,5 +3,5 @@ import { StructViewConfig } from "../../view";
 
 /** Структура данных */
 export const StructDoorsView = {
-	doors: BluetoothStruct.struct(StructViewConfig)
+	view: BluetoothStruct.struct(StructViewConfig)
 };

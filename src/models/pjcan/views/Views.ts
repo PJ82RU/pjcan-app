@@ -1,3 +1,5 @@
+// noinspection DuplicatedCode
+
 import { BluetoothStruct } from "@/components/bluetooth";
 import { BaseModel } from "../base";
 import { CarView } from "../car";
@@ -29,7 +31,22 @@ export class Views extends BaseModel implements IViews
 	 */
 	set(buf: DataView): boolean
 	{
-		return this._set(this, API_EXEC_VIEW, STRUCT_LENGTH, struct, buf);
+		const result = this._set(this, API_EXEC_VIEW, STRUCT_LENGTH, struct, buf);
+		if (result)
+		{
+			this.car.isData = true;
+			this.teyes.isData = true;
+			this.variable.bose.isData = true;
+			this.variable.climate.isData = true;
+			this.variable.doors.isData = true;
+			this.variable.engine.isData = true;
+			this.variable.fuel.isData = true;
+			this.variable.movement.isData = true;
+			this.variable.sensors.isData = true;
+			this.variable.temperature.isData = true;
+			this.variable.volume.isData = true;
+		}
+		return result;
 	}
 
 	/** Чтение данных */
