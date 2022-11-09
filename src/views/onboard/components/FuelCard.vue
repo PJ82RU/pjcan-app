@@ -65,32 +65,35 @@ import ViewSettingDialog from "./ViewSettingDialog.vue";
 
 import { IMenuItem } from "@/models/IMenuItem";
 import { IViewConfig } from "@/models/pjcan/view";
-import { FuelValue, FuelView, IFuelValue, IFuelView } from "@/models/pjcan/variables/fuel";
+import { IFuelValue, IFuelView } from "@/models/pjcan/variables/fuel";
 
 export default {
 	name: "FuelCard",
 	components: { Card, InputCardItem, ViewSettingDialog },
 	setup()
 	{
-		// РАСХОД ТОПЛИВА
-
 		const isLoadedValue = ref(false);
 		const isLoadedView = ref(false);
 
-		const fuelValue = ref(new FuelValue());
-		const fuelView = new FuelView();
+		const current = ref("");
+		const avg = ref("");
+		const total = ref("");
+		const consumption = ref("");
 
-		// входящие значения расхода топлива
+		/** Входящие значения расхода топлива */
 		const onReceiveValue = (res: IFuelValue): void =>
 		{
-			isLoadedValue.value = true;
-			fuelValue.value.setModel(res);
+			isLoadedValue.value = res.isData;
+			current.value = res.current.toFixed(1);
+			avg.value = res.avg.toFixed(1);
+			total.value = res.total.toFixed(2);
+			consumption.value = res.consumption.toFixed(2);
 		};
-		// входящие значения отображения расхода топлива
+
+		/** Входящие значения отображения расхода топлива */
 		const onReceiveView = (res: IFuelView): void =>
 		{
-			isLoadedView.value = true;
-			fuelView.setModel(res);
+			isLoadedView.value = res.isData;
 		};
 
 		// регистрируем события
@@ -98,6 +101,8 @@ export default {
 		{
 			canbus.addListener(API_EVENT_VARIABLE_FUEL, onReceiveValue);
 			canbus.addListener(API_EVENT_VARIABLE_FUEL_VIEW, onReceiveView);
+			onReceiveValue(canbus.variables.fuel);
+			onReceiveView(canbus.views.variable.fuel);
 		});
 		// удаляем события
 		onUnmounted(() =>
@@ -105,11 +110,6 @@ export default {
 			canbus.removeListener(API_EVENT_VARIABLE_FUEL, onReceiveValue);
 			canbus.removeListener(API_EVENT_VARIABLE_FUEL_VIEW, onReceiveView);
 		});
-
-		const current = computed((): string => fuelValue.value.current.toFixed(1));
-		const avg = computed((): string => fuelValue.value.avg.toFixed(1));
-		const total = computed((): string => fuelValue.value.total.toFixed(2));
-		const consumption = computed((): string => fuelValue.value.consumption.toFixed(2));
 
 		// МЕНЮ ОТОБРАЖЕНИЯ
 
@@ -134,22 +134,24 @@ export default {
 			menuVisible.value = true;
 			menuTitle.value = data.item;
 			menuSelected = data;
+
+			const { fuel } = canbus.views.variable;
 			switch (data.index)
 			{
 				case 0:
-					menuItem.value = fuelView.current;
+					menuItem.value = fuel.current;
 					return;
 
 				case 1:
-					menuItem.value = fuelView.avg;
+					menuItem.value = fuel.avg;
 					break;
 
 				case 2:
-					menuItem.value = fuelView.total;
+					menuItem.value = fuel.total;
 					break;
 
 				case 3:
-					menuItem.value = fuelView.consumption;
+					menuItem.value = fuel.consumption;
 					break;
 			}
 		};
@@ -160,25 +162,26 @@ export default {
 		 */
 		const onViewSettingApply = (data: IViewConfig): void =>
 		{
+			const { fuel } = canbus.views.variable;
 			switch (menuSelected.index)
 			{
 				case 0:
-					fuelView.current = data;
+					fuel.current = data;
 					break;
 
 				case 1:
-					fuelView.avg = data;
+					fuel.avg = data;
 					break;
 
 				case 2:
-					fuelView.total = data;
+					fuel.total = data;
 					break;
 
 				case 3:
-					fuelView.consumption = data;
+					fuel.consumption = data;
 					break;
 			}
-			canbus.send(fuelView);
+			canbus.send(fuel);
 		};
 
 		return {
