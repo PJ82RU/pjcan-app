@@ -62,7 +62,7 @@ export default {
 
 		const mute = ref(false);
 		const volume = ref(0);
-		const max = ref(1);
+		const max = ref(0);
 
 		/** Исходящие значения звука */
 		const onSend = () => canbus.send(canbus.configs.variable.volume);

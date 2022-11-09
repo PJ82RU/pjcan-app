@@ -88,7 +88,7 @@ export default {
 		const color = (): string =>
 		{
 			const index = points.value?.findIndex((x: number): boolean => modelSlider.value <= x);
-			return pointColors.value?.[index] ?? undefined;
+			return pointColors.value?.[index] ?? "error";
 		};
 
 		return {

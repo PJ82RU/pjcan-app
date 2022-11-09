@@ -13,7 +13,7 @@ export class VolumeConfig extends BaseModel implements IVolumeConfig
 {
 	mute = false;
 	volume = 0;
-	max = 63;
+	max = 0;
 
 	constructor(data?: DataView)
 	{
