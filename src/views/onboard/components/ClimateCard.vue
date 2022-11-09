@@ -147,6 +147,8 @@ export default {
 		{
 			canbus.addListener(API_EVENT_VARIABLE_CLIMATE, onReceiveValue);
 			canbus.addListener(API_EVENT_VARIABLE_CLIMATE_VIEW, onReceiveView);
+			onReceiveValue(canbus.variables.climate);
+			onReceiveView(canbus.views.variable.climate);
 		});
 		// удаляем события
 		onUnmounted(() =>

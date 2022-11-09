@@ -116,6 +116,8 @@ export default {
 		{
 			canbus.addListener(API_EVENT_VARIABLE_DOORS, onReceiveValue);
 			canbus.addListener(API_EVENT_VARIABLE_DOORS_VIEW, onReceiveView);
+			onReceiveValue(canbus.variables.doors);
+			onReceiveView(canbus.views.variable.doors);
 		});
 		// удаляем события
 		onUnmounted(() =>

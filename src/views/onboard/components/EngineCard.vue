@@ -139,6 +139,8 @@ export default {
 		{
 			canbus.addListener(API_EVENT_VARIABLE_ENGINE, onReceiveValue);
 			canbus.addListener(API_EVENT_VARIABLE_ENGINE_VIEW, onReceiveView);
+			onReceiveValue(canbus.variables.engine);
+			onReceiveView(canbus.views.variable.engine);
 		});
 		// удаляем события
 		onUnmounted(() =>
