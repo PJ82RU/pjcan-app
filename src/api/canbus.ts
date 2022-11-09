@@ -1,5 +1,5 @@
 import EventEmitter from "eventemitter3";
-import i18n from "@/lang";
+import { $t } from "@/lang";
 import {
 	BLUETOOTH_EVENT_CONNECTED,
 	BLUETOOTH_EVENT_RECEIVE,
@@ -233,7 +233,7 @@ export class Canbus extends EventEmitter
 				{
 					const { major, minor, build, revision } = this.version;
 					console.log(
-						i18n.global.t("BLE.server.versionProtocol", { mj: major, mn: minor, bl: build, rv: revision })
+						$t("BLE.server.versionProtocol", { mj: major, mn: minor, bl: build, rv: revision })
 					);
 				}
 				this.emit(API_EVENT_VERSION, this.version);

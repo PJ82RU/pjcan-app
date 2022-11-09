@@ -35,7 +35,7 @@
 
 <script lang="ts">
 import { computed, onMounted, onUnmounted, ref } from "vue";
-import i18n from "@/lang";
+import { $t } from "@/lang";
 
 import canbus, { API_EVENT_VARIABLE_VOLUME, API_EVENT_VARIABLE_VOLUME_VIEW } from "@/api/canbus";
 
@@ -114,7 +114,7 @@ export default {
 
 		// МЕНЮ ОТОБРАЖЕНИЯ
 
-		const menu = computed((): string[] => [i18n.global.t("onboard.volume.menu")]);
+		const menu = computed((): string[] => [$t("onboard.volume.menu")]);
 		const menuVisible = ref(false);
 		const menuTitle = ref("");
 		const menuItem = ref({} as IViewConfig);

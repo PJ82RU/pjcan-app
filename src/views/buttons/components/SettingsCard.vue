@@ -83,6 +83,7 @@
 
 <script lang="ts">
 import { computed, toRefs } from "vue";
+import { $tm } from "@/lang";
 
 import Card from "@/components/cards/Card.vue";
 import NumberField from "@/components/common/NumberField.vue";
@@ -94,7 +95,6 @@ import {
 	TButtonItem,
 	TButtonPress
 } from "@/models/pjcan/button";
-import i18n from "@/lang";
 
 export default {
 	name: "SettingsCard",
@@ -138,7 +138,7 @@ export default {
 		const functionsList = computed((): object[] =>
 		{
 			const result = [];
-			const list = i18n.global.tm("buttons.functions");
+			const list = $tm("buttons.functions");
 			for (const key in list)
 			{
 				result.push({ label: list[key], value: Number(key) });

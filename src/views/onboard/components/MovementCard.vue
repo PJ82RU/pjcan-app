@@ -46,7 +46,7 @@
 
 <script lang="ts">
 import { computed, onMounted, onUnmounted, ref } from "vue";
-import i18n from "@/lang";
+import { $t } from "@/lang";
 
 import canbus, { API_EVENT_VARIABLE_MOVEMENT, API_EVENT_VARIABLE_MOVEMENT_VIEW } from "@/api/canbus";
 
@@ -104,9 +104,9 @@ export default {
 		// МЕНЮ ОТОБРАЖЕНИЯ
 
 		const menu = computed((): string[] => [
-			i18n.global.t("onboard.movement.speed.menu"),
-			i18n.global.t("onboard.movement.speedAVG.menu"),
-			i18n.global.t("onboard.movement.restWay.menu")
+			$t("onboard.movement.speed.menu"),
+			$t("onboard.movement.speedAVG.menu"),
+			$t("onboard.movement.restWay.menu")
 		]);
 		const menuVisible = ref(false);
 		const menuTitle = ref("");

@@ -54,7 +54,7 @@
 
 <script lang="ts">
 import { computed, ref, toRefs, watch } from "vue";
-import i18n from "@/lang";
+import { $tm } from "@/lang";
 
 import DialogTemplate from "@/components/DialogTemplate.vue";
 import SwitchCardItem from "@/components/cards/SwitchCardItem.vue";
@@ -96,7 +96,7 @@ export default {
 		const modelEnabled = ref(false);
 		const modelType = ref(0);
 		const typeItems = computed(() =>
-			(i18n.global.tm("onboard.viewSetting.type.items") as string[])?.map((x, i) => ({
+			($tm("onboard.viewSetting.type.items") as string[])?.map((x, i) => ({
 				label: x,
 				value: i
 			}))

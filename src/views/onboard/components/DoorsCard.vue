@@ -69,7 +69,7 @@
 
 <script lang="ts">
 import { computed, onMounted, onUnmounted, ref } from "vue";
-import i18n from "@/lang";
+import { $t } from "@/lang";
 
 import canbus, { API_EVENT_VARIABLE_DOORS, API_EVENT_VARIABLE_DOORS_VIEW } from "@/api/canbus";
 
@@ -128,7 +128,7 @@ export default {
 
 		// МЕНЮ ОТОБРАЖЕНИЯ
 
-		const menu = computed((): string[] => [i18n.global.t("onboard.doors.menu")]);
+		const menu = computed((): string[] => [$t("onboard.doors.menu")]);
 		const menuVisible = ref(false);
 		const menuTitle = ref("");
 		const menuItem = ref({} as IViewConfig);

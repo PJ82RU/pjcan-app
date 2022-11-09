@@ -90,7 +90,7 @@
 
 <script lang="ts">
 import { computed, onMounted, onUnmounted, ref } from "vue";
-import i18n from "@/lang";
+import { $t } from "@/lang";
 
 import canbus, {
 	API_EVENT_DEVICE_VALUE,
@@ -216,12 +216,12 @@ export default {
 		// МЕНЮ ОТОБРАЖЕНИЯ
 
 		const menu = computed((): string[] => [
-			i18n.global.t("onboard.info.timeWork.menu"),
-			i18n.global.t("onboard.info.temperature.menu"),
-			i18n.global.t("onboard.info.handbrake.menu"),
-			i18n.global.t("onboard.info.reverse.menu"),
-			i18n.global.t("onboard.info.safetyBelt.menu"),
-			i18n.global.t("onboard.info.signal.menu")
+			$t("onboard.info.timeWork.menu"),
+			$t("onboard.info.temperature.menu"),
+			$t("onboard.info.handbrake.menu"),
+			$t("onboard.info.reverse.menu"),
+			$t("onboard.info.safetyBelt.menu"),
+			$t("onboard.info.signal.menu")
 		]);
 		const menuVisible = ref(false);
 		const menuTitle = ref("");

@@ -50,5 +50,8 @@ const i18n = createI18n({
 	}
 });
 
+const $t = i18n.global.t;
+const $tm = i18n.global.tm;
+
 export default i18n;
-export { getLanguageList, getLanguage };
+export { getLanguageList, getLanguage, $t, $tm };

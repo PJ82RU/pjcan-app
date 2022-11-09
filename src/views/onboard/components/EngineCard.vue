@@ -84,7 +84,7 @@
 
 <script lang="ts">
 import { computed, onMounted, onUnmounted, ref } from "vue";
-import i18n from "@/lang";
+import { $t } from "@/lang";
 
 import canbus, { API_EVENT_VARIABLE_ENGINE, API_EVENT_VARIABLE_ENGINE_VIEW } from "@/api/canbus";
 
@@ -146,13 +146,13 @@ export default {
 		// МЕНЮ ОТОБРАЖЕНИЯ
 
 		const menu = computed((): string[] => [
-			i18n.global.t("onboard.engine.enabled.menu"),
-			i18n.global.t("onboard.engine.RPM.menu"),
-			i18n.global.t("onboard.engine.countRPM.menu"),
-			i18n.global.t("onboard.engine.load.menu"),
-			i18n.global.t("onboard.engine.motors.menu"),
-			i18n.global.t("onboard.engine.throttle.menu"),
-			i18n.global.t("onboard.engine.coolant.menu")
+			$t("onboard.engine.enabled.menu"),
+			$t("onboard.engine.RPM.menu"),
+			$t("onboard.engine.countRPM.menu"),
+			$t("onboard.engine.load.menu"),
+			$t("onboard.engine.motors.menu"),
+			$t("onboard.engine.throttle.menu"),
+			$t("onboard.engine.coolant.menu")
 		]);
 		const menuVisible = ref(false);
 		const menuTitle = ref("");

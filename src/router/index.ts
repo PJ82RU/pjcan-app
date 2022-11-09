@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
-import i18n from "@/lang";
+import { $t } from "@/lang";
 import store from "@/store";
 
 const routes: Array<RouteRecordRaw> = [
@@ -8,7 +8,7 @@ const routes: Array<RouteRecordRaw> = [
 		name: "Onboard",
 		component: () => import("@/views/onboard/Loader.vue"),
 		meta: {
-			title: i18n.global.t("onboard.title")
+			title: $t("onboard.title")
 		}
 	},
 	{
@@ -16,7 +16,7 @@ const routes: Array<RouteRecordRaw> = [
 		name: "Buttons",
 		component: () => import("@/views/buttons/Loader.vue"),
 		meta: {
-			title: i18n.global.t("buttons.title")
+			title: $t("buttons.title")
 		}
 	}
 ];

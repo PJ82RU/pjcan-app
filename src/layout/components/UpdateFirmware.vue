@@ -37,7 +37,7 @@ import DialogTemplate from "@/components/DialogTemplate.vue";
 
 import { onMounted, onUnmounted, ref } from "vue";
 import { toast } from "vue3-toastify";
-import i18n from "@/lang";
+import { $t } from "@/lang";
 
 import { Timeout } from "@/models/types/Timeout";
 import { UPDATE_BEGIN_EVENT_RESULT, UPDATE_UPLOAD_EVENT_RESULT } from "@/models/pjcan/update";
@@ -96,7 +96,7 @@ export default {
 		/** Ошибка обновления */
 		const onErrorUpdate = (): void =>
 		{
-			toast.error(i18n.global.t("update.notify.error"));
+			toast.error($t("update.notify.error"));
 			onCancel();
 		};
 
@@ -113,8 +113,8 @@ export default {
 				// завершение прошивки
 				update
 					.checkNewVersion()
-					.then(() => toast.error(i18n.global.t("update.notify.warning")))
-					.catch(() => toast.error(i18n.global.t("update.notify.completed")));
+					.then(() => toast.error($t("update.notify.warning")))
+					.catch(() => toast.error($t("update.notify.completed")));
 
 				update.isUpdated = false;
 				onCancel();
@@ -129,7 +129,7 @@ export default {
 		/** Событие запуска прошивки */
 		const onUpdateUpload = (): void =>
 		{
-			message.value = i18n.global.t("update.process.preparation");
+			message.value = $t("update.process.preparation");
 			uploading.value = "";
 			progress.value = 0;
 			visibleUpdate.value = false;
@@ -145,7 +145,7 @@ export default {
 		{
 			if (result)
 			{
-				message.value = i18n.global.t("update.process.upload");
+				message.value = $t("update.process.upload");
 				progress.value = update.uploading * 100;
 				uploading.value = progress.value.toFixed(2) + "%";
 
@@ -166,7 +166,7 @@ export default {
 			update.isUpdated = result;
 			if (result)
 			{
-				message.value = i18n.global.t("update.process.update");
+				message.value = $t("update.process.update");
 				progress.value = 0;
 				uploading.value = "";
 			}
