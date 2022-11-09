@@ -8,7 +8,6 @@ import { StructButtonsValue } from "./StructButtonsValue";
 import { IButtonsConfigItem } from "./IButtonsConfigItem";
 import { IButtonsConfig } from "./IButtonsConfig";
 import { IButtonValue } from "./IButtonValue";
-import { IButtons } from "./IButtons";
 
 export {
 	API_EXEC_BUTTONS_CONFIG,
@@ -23,4 +22,4 @@ export {
 	ButtonsConfig,
 	ButtonValue
 };
-export type { IButtonsConfigItem, IButtonsConfig, IButtonValue, IButtons };
+export type { IButtonsConfigItem, IButtonsConfig, IButtonValue };
