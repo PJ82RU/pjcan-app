@@ -12,7 +12,7 @@ const struct = new BluetoothStruct(StructClimateView);
 /** Модель параметров отображения данных климата */
 export class ClimateView extends BaseModel implements IClimateView
 {
-	climate = new ViewConfig();
+	view = new ViewConfig();
 
 	constructor(data?: DataView)
 	{
