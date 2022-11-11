@@ -144,11 +144,19 @@ export class Canbus extends EventEmitter
 	 * Событие подключения Bluetooth
 	 * @param {TConnectedStatus} status Статус подключения
 	 */
-	onConnected(status: TConnectedStatus): void
+	async onConnected(status: TConnectedStatus)
 	{
 		if (status !== TConnectedStatus.CONNECT) return;
 
-		this.fetchConfig().then(() => this.fetchView());
+		await this.fetchVersion();
+		await this.fetchConfig();
+		await this.fetchView();
+	}
+
+	/** Загрузка версии */
+	fetchVersion(): Promise<void>
+	{
+		return !this.version.is ? this.bluetooth.send(this.version.get()) : Promise.resolve();
 	}
 
 	/** Загрузка конфигурации */

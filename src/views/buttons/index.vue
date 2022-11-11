@@ -43,7 +43,6 @@ export default {
 		provide("flicking", flicking);
 
 		const isLoadedConfig = ref(false);
-		const isLoadedValue = ref(false);
 
 		const list = ref([
 			{ title: $t("buttons.mode"), type: TButtonItem.BUTTON_MODE, icon: "mdi-menu" },
@@ -67,7 +66,7 @@ export default {
 		/** Входящие значения кнопки */
 		const onReceiveValue = (res: IButtonValue): void =>
 		{
-			isLoadedValue.value = res.isData;
+			console.log(res);
 		};
 
 		// регистрируем события
@@ -99,7 +98,6 @@ export default {
 			flicking,
 			display,
 			isLoadedConfig,
-			isLoadedValue,
 			list,
 			onUpdateConfig
 		};

@@ -45,6 +45,12 @@ export class Version implements IVersion
 		if (buf.getUint8(0) === API_EXEC_VERSION && buf.byteLength === STRUCT_LENGTH) struct.decode(buf, this, 1);
 	}
 
+	/** Чтение данных */
+	get(): DataView
+	{
+		return new DataView(new Uint8Array([API_EXEC_VERSION]).buffer);
+	}
+
 	/**
 	 * Сравнение версий
 	 * @param {IVersion} ver Объект версии

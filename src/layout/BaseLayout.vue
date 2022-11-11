@@ -74,7 +74,7 @@ export default {
 					router.push({ name: "Buttons" });
 					break;
 
-				case 3:
+				case 4:
 					visibleAbout.value = true;
 					break;
 			}
