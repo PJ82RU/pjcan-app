@@ -84,10 +84,13 @@ export default {
 		const onReceiveValue = (res: IFuelValue): void =>
 		{
 			isLoadedValue.value = res.isData;
-			current.value = res.current.toFixed(1);
-			avg.value = res.avg.toFixed(1);
-			total.value = res.total.toFixed(2);
-			consumption.value = res.consumption.toFixed(2);
+			if (res.isData)
+			{
+				current.value = res.current.toFixed(1);
+				avg.value = res.avg.toFixed(1);
+				total.value = res.total.toFixed(2);
+				consumption.value = res.consumption.toFixed(2);
+			}
 		};
 
 		/** Входящие значения отображения расхода топлива */

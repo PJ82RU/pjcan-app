@@ -119,13 +119,16 @@ export default {
 		const onReceiveValue = (res: IEngineValue): void =>
 		{
 			isLoadedValue.value = res.isData;
-			enabled.value = res.enabled;
-			rpm.value = res.rpm.toFixed();
-			countRPM.value = res.countRPM.toFixed();
-			load.value = res.load;
-			motors.value = res.mseconds;
-			throttle.value = res.throttle;
-			coolant.value = res.coolant;
+			if (res.isData)
+			{
+				enabled.value = res.enabled;
+				rpm.value = res.rpm.toFixed();
+				countRPM.value = res.countRPM.toFixed();
+				load.value = res.load;
+				motors.value = res.mseconds;
+				throttle.value = res.throttle;
+				coolant.value = res.coolant;
+			}
 		};
 
 		/** Входящие значения отображения ДВС */

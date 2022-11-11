@@ -120,7 +120,7 @@ export default {
 		const functionsList = computed((): object[] =>
 		{
 			const result = [];
-			const list = $tm("buttons.functions");
+			const list: any = $tm("buttons.functions");
 			for (const key in list)
 			{
 				result.push({ label: list[key], value: Number(key) });

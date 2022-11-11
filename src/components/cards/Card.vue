@@ -39,7 +39,7 @@ export default {
 			default: undefined
 		}
 	},
-	emits: ["click:like", "click:menu"]
+	emits: ["click:custom", "click:like", "click:menu"]
 };
 </script>
 

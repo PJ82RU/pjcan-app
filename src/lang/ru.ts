@@ -140,7 +140,7 @@ export default {
 				title: "ACC",
 				description: "Питание автомобиля"
 			},
-			timeWork: {
+			worktime: {
 				title: "Время работы",
 				description: "Время работы устройства с момента включения",
 				menu: "LCD: Время работы"

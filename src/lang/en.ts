@@ -55,10 +55,18 @@ export default {
 		}
 	},
 
+	error: {
+		title: "Что смотришь,\nпиши PJ82"
+	},
+
 	menu: {
+		onboard: "Бортовой компьютер",
 		language: {
 			russian: "Russian language",
 			english: "English language"
+		},
+		settings: {
+			buttons: "Настройка кнопок руля"
 		},
 		about: "О программе"
 	},
@@ -132,7 +140,7 @@ export default {
 				title: "ACC",
 				description: "Питание автомобиля"
 			},
-			timeWork: {
+			worktime: {
 				title: "Время работы",
 				description: "Время работы устройства с момента включения",
 				menu: "LCD: Время работы"
@@ -193,7 +201,7 @@ export default {
 				menu: "LCD: Моточасы"
 			},
 			throttle: {
-				title: "Положение дроссельной заслонки",
+				title: "Положение дрос. заслонки",
 				description: "Вот как ее положили, так и лежит",
 				menu: "LCD: Положение дроссельной заслонки"
 			},
@@ -317,6 +325,64 @@ export default {
 				title: "Воздушный поток",
 				description: "Направление воздушного потока"
 			}
+		}
+	},
+
+	buttons: {
+		title: "Настройки кнопок",
+
+		mode: "Кнопка MODE",
+		seekUp: "Кнопка SEEK UP",
+		seekDown: "Кнопка SEEK DOWN",
+		volUp: "Кнопка VOL UP",
+		volDown: "Кнопка VOL DOWN",
+		volMute: "Кнопка VOL MUTE",
+
+		resistance: {
+			title: "Сопротивление кнопки",
+			description: "Сопротивление кнопки в условных единицах"
+		},
+		pressSingle: {
+			title: "Кнопка нажата 1 раз",
+			description: "Функция, которая выполняется при нажатии кнопки"
+		},
+		pressDual: {
+			title: "Кнопка нажата 2 раза",
+			description: "Функция, которая выполняется при нажатии кнопки 2 раза"
+		},
+		pressTriple: {
+			title: "Кнопка нажата 3 раза",
+			description: "Функция, которая выполняется при нажатии кнопки 3 раза"
+		},
+		pressHold: {
+			title: "Удержание кнопки",
+			description: "Функция, которая выполняется при нажатии и удержании кнопки 3 более секунд."
+		},
+		release: {
+			title: "Кнопка отпущена",
+			description: "Функция, которая выполняется если кнопка отпущена"
+		},
+
+		functions: {
+			0: "Кнопка Teyes отпущена",
+			1: "Кнопка Teyes MODE",
+			2: "Кнопка Teyes SEEK UP",
+			3: "Кнопка Teyes SEEK DOWN",
+			4: "Кнопка Teyes VOL UP",
+			5: "Кнопка Teyes VOL DOWN",
+			6: "Кнопка Teyes VOL MUTE",
+			7: "Кнопка Clock на LCD нажата",
+			8: "Кнопка Clock на LCD отпущена",
+			9: "Кнопка Clock H на LCD нажата",
+			10: "Кнопка Clock H на LCD отпущена",
+			11: "Кнопка Clock M на LCD нажата",
+			12: "Кнопка Clock M на LCD отпущена",
+			13: "Кнопка Info на LCD нажата",
+			14: "Кнопка Info на LCD отпущена",
+			15: "Кнопка показать значения ДВС",
+			16: "Кнопка показать значения расхода",
+			17: "Кнопка показать значения движения",
+			18: "Кнопка показать значения температуры"
 		}
 	}
 };

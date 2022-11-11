@@ -99,11 +99,14 @@ export default {
 		const onReceiveValue = (res: IDoorsValue): void =>
 		{
 			isLoadedValue.value = res.isData;
-			doorFL.value = res.frontLeft;
-			doorFR.value = res.frontRight;
-			doorBL.value = res.backLeft;
-			doorBR.value = res.backRight;
-			trunk.value = res.trunk;
+			if (res.isData)
+			{
+				doorFL.value = res.frontLeft;
+				doorFR.value = res.frontRight;
+				doorBL.value = res.backLeft;
+				doorBR.value = res.backRight;
+				trunk.value = res.trunk;
+			}
 		};
 		/** Входящие значения отображения открытых дверей */
 		const onReceiveView = (res: IDoorsView): void =>

@@ -96,9 +96,12 @@ export default {
 		const onReceiveConfig = (res: IVolumeConfig): void =>
 		{
 			isLoadedValue.value = res.isData;
-			mute.value = res.mute;
-			volume.value = res.volume;
-			max.value = res.max;
+			if (res.isData)
+			{
+				mute.value = res.mute;
+				volume.value = res.volume;
+				max.value = res.max;
+			}
 		};
 
 		/** Входящие значения отображения звука */

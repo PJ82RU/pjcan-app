@@ -117,23 +117,26 @@ export default {
 		const onReceiveValue = (res: IClimateValue): void =>
 		{
 			isLoadedValue.value = res.isData;
-			enabled.value = res.enabled;
-			autoMode.value = res.automode;
-			ac.value = res.ac;
-			temperature.value = res.temperature;
-			airEnabled.value = res.airType !== TAir.AIR_NONE;
-			airName.value = res.airType === TAir.AIR_STREET ? "air-fresh" : "air-cabin";
-			blowEnabled.value = res.airDBody || res.airDLegs;
-			blowName.value =
-				res.airDLegs && res.airDBody
-					? "blow-feet-body"
-					: res.airDLegs
-						? "blow-feet"
-						: res.airDBody
-							? "blow-body"
-							: "blow-none";
-			blowWindshield.value = res.airDWindshield;
-			speedRotation.value = res.airRate > 0 ? res.airRate + 2 : 0;
+			if (res.isData)
+			{
+				enabled.value = res.enabled;
+				autoMode.value = res.automode;
+				ac.value = res.ac;
+				temperature.value = res.temperature;
+				airEnabled.value = res.airType !== TAir.AIR_NONE;
+				airName.value = res.airType === TAir.AIR_STREET ? "air-fresh" : "air-cabin";
+				blowEnabled.value = res.airDBody || res.airDLegs;
+				blowName.value =
+					res.airDLegs && res.airDBody
+						? "blow-feet-body"
+						: res.airDLegs
+							? "blow-feet"
+							: res.airDBody
+								? "blow-body"
+								: "blow-none";
+				blowWindshield.value = res.airDWindshield;
+				speedRotation.value = res.airRate > 0 ? res.airRate + 2 : 0;
+			}
 		};
 
 		/** Входящие значения отображения климат-контроля */

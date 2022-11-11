@@ -58,7 +58,7 @@ export default {
 		const onReceiveConfig = (res: IButtonsConfig): void =>
 		{
 			isLoadedConfig.value = res.isData;
-			if (isLoadedConfig.value)
+			if (res.isData)
 			{
 				res.items?.forEach((x, i) => (list.value[i].item = x));
 			}

@@ -74,9 +74,12 @@ export default {
 		const onReceiveValue = (res: IMovementValue): void =>
 		{
 			isLoadedValue.value = res.isData;
-			speed.value = res.speed.toFixed(2);
-			speedAVG.value = res.speedAVG.toString();
-			restWay.value = res.restWay.toFixed(2);
+			if (res.isData)
+			{
+				speed.value = res.speed.toFixed(2);
+				speedAVG.value = res.speedAVG.toString();
+				restWay.value = res.restWay.toFixed(2);
+			}
 		};
 
 		/** Входящие значения отображения движения */
