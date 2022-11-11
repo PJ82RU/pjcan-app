@@ -8,16 +8,18 @@
 						:title="$t('onboard.info.acc.title')"
 						:description="$t('onboard.info.acc.description')"
 						:icon-name="['key']"
-						:disabled="!isLoadedView"
+						:nodata="!isLoadedSensorValue"
+						:disabled="!isLoadedSensorView"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0 pb-0">
 					<input-card-item
-						:value="timeWork"
-						:title="$t('onboard.info.timeWork.title')"
-						:description="$t('onboard.info.timeWork.description')"
+						:value="worktime"
+						:title="$t('onboard.info.worktime.title')"
+						:description="$t('onboard.info.worktime.description')"
 						type="time"
-						:disabled="!isLoadedView"
+						:nodata="!isLoadedDeviceValue"
+						:disabled="!isLoadedSensorView"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0 pb-0">
@@ -26,8 +28,8 @@
 						:title="$t('onboard.info.temperature.title')"
 						:description="$t('onboard.info.temperature.description')"
 						type="temperature"
-						:nodata="!acc"
-						:disabled="!loadedTemperature"
+						:nodata="!isLoadedTemperatureValue"
+						:disabled="!isLoadedTemperatureView"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0 pb-0">
@@ -36,8 +38,8 @@
 						:title="$t('onboard.info.handbrake.title')"
 						:description="$t('onboard.info.handbrake.description')"
 						color="error"
-						:nodata="!acc"
-						:disabled="!isLoadedView"
+						:nodata="!isLoadedSensorValue"
+						:disabled="!isLoadedSensorView"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0 pb-0">
@@ -46,8 +48,8 @@
 						:title="$t('onboard.info.reverse.title')"
 						:description="$t('onboard.info.reverse.description')"
 						color="warning"
-						:nodata="!acc"
-						:disabled="!isLoadedView"
+						:nodata="!isLoadedSensorValue"
+						:disabled="!isLoadedSensorView"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0 pb-0">
@@ -58,8 +60,8 @@
 						:icon-name="['passenger', 'passenger']"
 						:colorsTrue="acc ? { primary: 'success' } : undefined"
 						:colorsFalse="acc ? { primary: 'error' } : undefined"
-						:nodata="!acc"
-						:disabled="!isLoadedView"
+						:nodata="!isLoadedSensorValue"
+						:disabled="!isLoadedSensorView"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0 pb-0">
@@ -69,8 +71,8 @@
 						:description="$t('onboard.info.signal.description')"
 						:icon-name="['arrow-right', 'arrow-left']"
 						:colorsTrue="{ primary: 'success' }"
-						:nodata="!acc"
-						:disabled="!isLoadedView"
+						:nodata="!isLoadedSensorValue"
+						:disabled="!isLoadedSensorView"
 					/>
 				</v-col>
 			</v-row>
@@ -83,7 +85,7 @@
 		:enabled="menuItem.enabled"
 		:type="menuItem.type"
 		:time="menuItem.time"
-		:disabled="!isLoaded"
+		:disabled="!isLoadedSensorView"
 		@click:apply="onViewSettingApply"
 	/>
 </template>
@@ -106,74 +108,96 @@ import SwitchCardItem from "@/components/cards/SwitchCardItem.vue";
 import IconCardItem from "@/components/cards/IconCardItem.vue";
 import ViewSettingDialog from "./ViewSettingDialog.vue";
 
-import {
-	ISensorsValue,
-	ISensorsView,
-	SensorsValue,
-	SensorsView,
-	TSensorsSignal
-} from "@/models/pjcan/variables/sensors";
-import {
-	ITemperatureValue,
-	ITemperatureView,
-	TemperatureValue,
-	TemperatureView
-} from "@/models/pjcan/variables/temperature";
+import { ISensorsValue, ISensorsView, TSensorsSignal } from "@/models/pjcan/variables/sensors";
+import { ITemperatureValue, ITemperatureView } from "@/models/pjcan/variables/temperature";
 
 import { IMenuItem } from "@/models/IMenuItem";
 import { IViewConfig } from "@/models/pjcan/view";
-import { DeviceValue, IDeviceValue } from "@/models/pjcan/device";
+import { IDeviceValue } from "@/models/pjcan/device";
 
 export default {
 	name: "InfoCard",
 	components: { Card, InputCardItem, SwitchCardItem, IconCardItem, ViewSettingDialog },
 	setup()
 	{
-		// УСТРОЙСТВО
+		const isLoadedDeviceValue = ref(false);
+		const isLoadedSensorValue = ref(false);
+		const isLoadedSensorView = ref(false);
+		const isLoadedTemperatureValue = ref(false);
+		const isLoadedTemperatureView = ref(false);
 
-		const deviceValue = ref(new DeviceValue());
+		const acc = ref(false);
+		const worktime = ref(BigInt(0));
+		const temperature = ref(0);
+		const handbrake = ref(false);
+		const reverse = ref(false);
+		const seatbeltDriver = ref(false);
+		const seatbeltPassenger = ref(false);
+		const signalLeft = ref(false);
+		const signalRight = ref(false);
 
-		// входящие значения устройства
+		/**
+		 * Входящие значения устройства
+		 * @param {IDeviceValue} res
+		 */
 		const onReceiveDeviceValue = (res: IDeviceValue): void =>
 		{
-			deviceValue.value.setModel(res);
+			isLoadedDeviceValue.value = res.isData;
+			if (res.isData)
+			{
+				// @ts-ignore
+				worktime.value = res.worktime;
+			}
 		};
 
-		// ДАТЧИКИ
-
-		const isLoadedView = ref(false);
-
-		const sensorValue = ref(new SensorsValue());
-		const sensorView = new SensorsView();
-
-		// входящие значения датчиков
+		/**
+		 * Входящие значения датчиков
+		 * @param {ISensorsValue} res
+		 */
 		const onReceiveSensorValue = (res: ISensorsValue): void =>
 		{
-			sensorValue.value.setModel(res);
+			isLoadedSensorValue.value = res.isData;
+			if (res.isData)
+			{
+				acc.value = res.acc;
+				handbrake.value = res.handbrake;
+				reverse.value = res.reverse;
+				seatbeltDriver.value = res.seatbeltDriver;
+				seatbeltPassenger.value = res.seatbeltPassenger;
+				signalLeft.value =
+					res.signal === TSensorsSignal.SIGNAL_LEFT || res.signal === TSensorsSignal.SIGNAL_EMERGENCY;
+				signalRight.value =
+					res.signal === TSensorsSignal.SIGNAL_RIGHT || res.signal === TSensorsSignal.SIGNAL_EMERGENCY;
+			}
 		};
-		// входящие значения отображения датчиков
+		/**
+		 * Входящие значения отображения датчиков
+		 * @param {ISensorsView} res
+		 */
 		const onReceiveSensorView = (res: ISensorsView): void =>
 		{
-			isLoadedView.value = true;
-			sensorView.setModel(res);
+			isLoadedSensorView.value = res.isData;
 		};
 
-		// ТЕМПЕРАТУРА
-
-		const loadedTemperature = ref(false);
-		const temperatureValue = ref(new TemperatureValue());
-		const temperatureView = new TemperatureView();
-
-		// входящие значения температуры
+		/**
+		 * Входящие значения температуры
+		 * @param {ITemperatureValue} res
+		 */
 		const onReceiveTemperatureValue = (res: ITemperatureValue): void =>
 		{
-			temperatureValue.value.setModel(res);
+			isLoadedTemperatureValue.value = res.isData;
+			if (res.isData)
+			{
+				temperature.value = res.out;
+			}
 		};
-		// входящие значения отображения температуры
+		/**
+		 * Входящие значения отображения температуры
+		 * @param {ITemperatureView} res
+		 */
 		const onReceiveTemperatureView = (res: ITemperatureView): void =>
 		{
-			loadedTemperature.value = true;
-			temperatureView.setModel(res);
+			isLoadedTemperatureView.value = res.isData;
 		};
 
 		// регистрируем события
@@ -184,6 +208,11 @@ export default {
 			canbus.addListener(API_EVENT_VARIABLE_SENSORS_VIEW, onReceiveSensorView);
 			canbus.addListener(API_EVENT_VARIABLE_TEMPERATURE, onReceiveTemperatureValue);
 			canbus.addListener(API_EVENT_VARIABLE_TEMPERATURE_VIEW, onReceiveTemperatureView);
+			onReceiveDeviceValue(canbus.device.value);
+			onReceiveSensorValue(canbus.variables.sensors);
+			onReceiveSensorView(canbus.views.variable.sensors);
+			onReceiveTemperatureValue(canbus.variables.temperature);
+			onReceiveTemperatureView(canbus.views.variable.temperature);
 		});
 		// удаляем события
 		onUnmounted(() =>
@@ -195,28 +224,9 @@ export default {
 			canbus.removeListener(API_EVENT_VARIABLE_TEMPERATURE_VIEW, onReceiveTemperatureView);
 		});
 
-		const acc = computed((): boolean => sensorValue.value.acc);
-		const timeWork = computed((): bigint => deviceValue.value.worktime);
-		const temperature = computed((): number => temperatureValue.value.out);
-		const handbrake = computed((): boolean => sensorValue.value.handbrake);
-		const reverse = computed((): boolean => sensorValue.value.reverse);
-		const seatbeltDriver = computed((): boolean => sensorValue.value.seatbeltDriver);
-		const seatbeltPassenger = computed((): boolean => sensorValue.value.seatbeltPassenger);
-		const signalLeft = computed(
-			(): boolean =>
-				sensorValue.value.signal === TSensorsSignal.SIGNAL_LEFT ||
-				sensorValue.value.signal === TSensorsSignal.SIGNAL_EMERGENCY
-		);
-		const signalRight = computed(
-			(): boolean =>
-				sensorValue.value.signal === TSensorsSignal.SIGNAL_RIGHT ||
-				sensorValue.value.signal === TSensorsSignal.SIGNAL_EMERGENCY
-		);
-
 		// МЕНЮ ОТОБРАЖЕНИЯ
 
 		const menu = computed((): string[] => [
-			$t("onboard.info.timeWork.menu"),
 			$t("onboard.info.temperature.menu"),
 			$t("onboard.info.handbrake.menu"),
 			$t("onboard.info.reverse.menu"),
@@ -239,35 +249,32 @@ export default {
 			menuVisible.value = true;
 			menuTitle.value = data.item;
 			menuSelected = data;
+
+			const { temperature, sensors } = canbus.views.variable;
 			switch (data.index)
 			{
 				case 0:
-					menuItem.value = { enabled: false, type: 0, time: 3 };
-					isLoaded.value = false;
+					menuItem.value = temperature.view;
+					isLoaded.value = isLoadedTemperatureView.value;
 					return;
 
 				case 1:
-					menuItem.value = temperatureView.view;
-					isLoaded.value = loadedTemperature.value;
-					return;
+					menuItem.value = sensors.handbrake;
+					break;
 
 				case 2:
-					menuItem.value = sensorView.handbrake;
+					menuItem.value = sensors.reverse;
 					break;
 
 				case 3:
-					menuItem.value = sensorView.reverse;
+					menuItem.value = sensors.seatbelt;
 					break;
 
 				case 4:
-					menuItem.value = sensorView.seatbelt;
-					break;
-
-				case 5:
-					menuItem.value = sensorView.signal;
+					menuItem.value = sensors.signal;
 					break;
 			}
-			isLoaded.value = isLoadedView.value;
+			isLoaded.value = isLoadedSensorView.value;
 		};
 
 		/**
@@ -276,38 +283,41 @@ export default {
 		 */
 		const onViewSettingApply = (data: IViewConfig): void =>
 		{
+			const { temperature, sensors } = canbus.views.variable;
 			switch (menuSelected.index)
 			{
-				case 1:
-					temperatureView.view = data;
-					canbus.send(temperatureView);
+				case 0:
+					temperature.view = data;
+					canbus.send(temperature);
 					return;
 
+				case 1:
+					sensors.handbrake = data;
+					break;
+
 				case 2:
-					sensorView.handbrake = data;
+					sensors.reverse = data;
 					break;
 
 				case 3:
-					sensorView.reverse = data;
+					sensors.seatbelt = data;
 					break;
 
 				case 4:
-					sensorView.seatbelt = data;
-					break;
-
-				case 5:
-					sensorView.signal = data;
+					sensors.signal = data;
 					break;
 			}
-			canbus.send(sensorView);
+			canbus.send(sensors);
 		};
 
 		return {
-			isLoadedView,
-			loadedTemperature,
-			isLoaded,
+			isLoadedDeviceValue,
+			isLoadedSensorValue,
+			isLoadedSensorView,
+			isLoadedTemperatureValue,
+			isLoadedTemperatureView,
 			acc,
-			timeWork,
+			worktime,
 			temperature,
 			handbrake,
 			reverse,
