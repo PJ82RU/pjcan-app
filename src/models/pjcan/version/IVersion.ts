@@ -7,8 +7,5 @@ export interface IVersion {
 	is: boolean;
 	toString: string;
 
-	clear: () => void;
-	set: (buf: DataView) => void;
-	get: () => DataView;
 	compare: (ver: IVersion) => number;
 }
