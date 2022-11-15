@@ -1,3 +1,5 @@
+// noinspection DuplicatedCode
+
 import { BluetoothStruct } from "@/components/bluetooth";
 import { BaseModel } from "../../base";
 import { StructVariablesValue } from "./StructVariablesValue";
@@ -40,7 +42,18 @@ export class VariablesValue extends BaseModel implements IVariablesValue
 	 */
 	set(buf: DataView): boolean
 	{
-		return this._set(this, API_EXEC_VARIABLE_VALUE, STRUCT_LENGTH, struct, buf);
+		const result = this._set(this, API_EXEC_VARIABLE_VALUE, STRUCT_LENGTH, struct, buf);
+		if (result)
+		{
+			this.climate.isData = true;
+			this.doors.isData = true;
+			this.engine.isData = true;
+			this.fuel.isData = true;
+			this.movement.isData = true;
+			this.sensors.isData = true;
+			this.temperature.isData = true;
+		}
+		return result;
 	}
 
 	/** Чтение данных */
