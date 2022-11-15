@@ -1,14 +1,17 @@
-import { IClimateValue } from "./climate";
-import { IDoorsValue } from "./doors";
-import { IEngineValue } from "./engine";
-import { IFuelValue } from "./fuel";
-import { IMovementValue } from "./movement";
-import { ISensorsValue } from "./sensors";
-import { ITemperatureValue } from "./temperature";
+import { IClimateValue } from "../climate";
+import { IClockValue } from "../clock";
+import { IDoorsValue } from "../doors";
+import { IEngineValue } from "../engine";
+import { IFuelValue } from "../fuel";
+import { IMovementValue } from "../movement";
+import { ISensorsValue } from "../sensors";
+import { ITemperatureValue } from "../temperature";
 
-export interface IVariables {
+export interface IVariablesValue {
 	/** Значения климат-контроля */
 	climate: IClimateValue;
+	/** Значения часов */
+	clock: IClockValue;
 	/** Значения дверей */
 	doors: IDoorsValue;
 	/** Значения двигателя */
