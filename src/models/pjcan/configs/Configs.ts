@@ -1,19 +1,21 @@
 import { BluetoothStruct } from "@/components/bluetooth";
 import { BaseModel } from "../base";
+import { Version } from "../version";
 import { ButtonsConfig } from "../button";
 import { CarConfig } from "../car";
 import { TeyesConfig } from "../teyes";
 import { VariableConfig } from "../variables/configs";
-import { StructConfigs } from "./StructConfigs";
 import { IConfigs } from "./IConfigs";
+import { StructConfigs } from "./StructConfigs";
 
 export const API_EXEC_CONFIG = 1;
-const STRUCT_LENGTH = 134;
+const STRUCT_LENGTH = 138;
 
 const struct = new BluetoothStruct(StructConfigs);
 
 export class Configs extends BaseModel implements IConfigs
 {
+	version = new Version();
 	buttons = new ButtonsConfig();
 	car = new CarConfig();
 	teyes = new TeyesConfig();

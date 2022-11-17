@@ -1,3 +1,4 @@
+import { IBaseModel } from "../../base";
 import { IClimateValue } from "../climate";
 import { IClockValue } from "../clock";
 import { IDoorsValue } from "../doors";
@@ -7,7 +8,7 @@ import { IMovementValue } from "../movement";
 import { ISensorsValue } from "../sensors";
 import { ITemperatureValue } from "../temperature";
 
-export interface IVariablesValue {
+export interface IVariablesValue extends IBaseModel {
 	/** Значения климат-контроля */
 	climate: IClimateValue;
 	/** Значения часов */

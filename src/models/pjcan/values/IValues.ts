@@ -1,8 +1,9 @@
-import { IDeviceValue } from "@/models/pjcan/device";
-import { ILCDValue } from "@/models/pjcan/lcd";
-import { IVariablesValue } from "@/models/pjcan/variables/values";
+import { IBaseModel } from "../base";
+import { IDeviceValue } from "../device";
+import { ILCDValue } from "../lcd";
+import { IVariablesValue } from "../variables/values";
 
-export interface IValues {
+export interface IValues extends IBaseModel {
 	device: IDeviceValue;
 	lcd: ILCDValue;
 	variable: IVariablesValue;

@@ -2,6 +2,7 @@ import { API_EXEC_DEVICE_CONFIG, DeviceConfig } from "./DeviceConfig";
 import { API_EXEC_DEVICE_VALUE, DeviceValue } from "./DeviceValue";
 import { API_EXEC_INFO, DeviceInfo } from "./DeviceInfo";
 import { StructDeviceConfig } from "./StructDeviceConfig";
+import { StructDeviceValue } from "./StructDeviceValue";
 import { StructDeviceInfo } from "./StructDeviceInfo";
 import { IDeviceConfig } from "./IDeviceConfig";
 import { IDeviceValue } from "./IDeviceValue";
@@ -13,6 +14,7 @@ export {
 	API_EXEC_DEVICE_VALUE,
 	API_EXEC_INFO,
 	StructDeviceConfig,
+	StructDeviceValue,
 	StructDeviceInfo,
 	DeviceConfig,
 	DeviceValue,
