@@ -12,30 +12,32 @@
 			/>
 		</div>
 	</flicking>
+
+	<button-definition-dialog
+		v-model="visibleButtonDefinitionDialog"
+		:list="list"
+		:type="typeButtonDefinition"
+		@click:apply="onButtonDefinitionApply"
+	/>
 </template>
 
 <script lang="ts">
 import { onMounted, onUnmounted, provide, ref } from "vue";
 import { useDisplay } from "vuetify";
+import { $t } from "@/lang";
+import canbus, { API_EVENT_BUTTON, API_EVENT_BUTTONS_CONFIG } from "@/api/canbus";
 
 import Flicking from "@egjs/vue3-flicking";
 import SettingsCard from "./components/SettingsCard.vue";
-import { IButtonsConfig, IButtonsConfigItem, IButtonValue, TButtonItem } from "@/models/pjcan/button";
+import ButtonDefinitionDialog from "./components/ButtonDefinitionDialog.vue";
 
-import canbus, { API_EVENT_BUTTON_VALUE, API_EVENT_BUTTONS_CONFIG } from "@/api/canbus";
-import { $t } from "@/lang";
+import { IButtonsConfig, IButtonValue, TButtonItem } from "@/models/pjcan/button";
 import { IConfigReturn } from "@/views/buttons/components/SettingsCard.vue";
-
-interface IConfigItem {
-	title: string;
-	type: TButtonItem;
-	item: IButtonsConfigItem | undefined;
-	icon: string;
-}
+import { IConfigItem } from "@/models/interfaces/IConfigItem";
 
 export default {
 	name: "buttons",
-	components: { Flicking, SettingsCard },
+	components: { Flicking, SettingsCard, ButtonDefinitionDialog },
 	setup()
 	{
 		const { name: display } = useDisplay();
@@ -43,6 +45,9 @@ export default {
 		provide("flicking", flicking);
 
 		const isLoadedConfig = ref(false);
+		const visibleButtonDefinitionDialog = ref(false);
+		const typeButtonDefinition = ref(-1);
+		let resistanceButtonDefinition = 0;
 
 		const list = ref([
 			{ title: $t("buttons.mode"), type: TButtonItem.BUTTON_MODE, icon: "mdi-menu" },
@@ -53,7 +58,10 @@ export default {
 			{ title: $t("buttons.volMute"), type: TButtonItem.BUTTON_VOL_MUTE, icon: "mdi-volume-mute" }
 		] as IConfigItem[]);
 
-		/** Входящие значения конфигурации кнопок */
+		/**
+		 * Входящие значения конфигурации кнопок
+		 * @param {IButtonsConfig} res
+		 */
 		const onReceiveConfig = (res: IButtonsConfig): void =>
 		{
 			isLoadedConfig.value = res.isData;
@@ -63,17 +71,25 @@ export default {
 			}
 		};
 
-		/** Входящие значения кнопки */
+		/**
+		 * Входящие значения кнопки
+		 * @param {IButtonValue} res
+		 */
 		const onReceiveValue = (res: IButtonValue): void =>
 		{
-			console.log(res);
+			if (res.isData && !visibleButtonDefinitionDialog.value)
+			{
+				typeButtonDefinition.value = res.index;
+				resistanceButtonDefinition = res.r;
+				visibleButtonDefinitionDialog.value = true;
+			}
 		};
 
 		// регистрируем события
 		onMounted(() =>
 		{
 			canbus.addListener(API_EVENT_BUTTONS_CONFIG, onReceiveConfig);
-			canbus.addListener(API_EVENT_BUTTON_VALUE, onReceiveValue);
+			canbus.addListener(API_EVENT_BUTTON, onReceiveValue);
 			onReceiveConfig(canbus.configs.buttons);
 			onReceiveValue(canbus.buttonValue);
 		});
@@ -81,7 +97,7 @@ export default {
 		onUnmounted(() =>
 		{
 			canbus.removeListener(API_EVENT_BUTTONS_CONFIG, onReceiveConfig);
-			canbus.removeListener(API_EVENT_BUTTON_VALUE, onReceiveValue);
+			canbus.removeListener(API_EVENT_BUTTON, onReceiveValue);
 		});
 
 		/**
@@ -91,7 +107,18 @@ export default {
 		const onUpdateConfig = (data: IConfigReturn) =>
 		{
 			canbus.configs.buttons.items[data.type] = data.item;
-			canbus.send(canbus.configs.buttons);
+			canbus.queryConfigsButtons();
+		};
+
+		/**
+		 * Применить новый тип не определенной кнопки
+		 * @param {number} type Тип кнопки
+		 */
+		const onButtonDefinitionApply = (type: TButtonItem) =>
+		{
+			canbus.configs.buttons.items[type].inR = resistanceButtonDefinition;
+			canbus.queryConfigsButtons();
+			onReceiveConfig(canbus.configs.buttons);
 		};
 
 		return {
@@ -99,7 +126,10 @@ export default {
 			display,
 			isLoadedConfig,
 			list,
-			onUpdateConfig
+			visibleButtonDefinitionDialog,
+			typeButtonDefinition,
+			onUpdateConfig,
+			onButtonDefinitionApply
 		};
 	}
 };

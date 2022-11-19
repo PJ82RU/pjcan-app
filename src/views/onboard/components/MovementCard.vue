@@ -93,7 +93,7 @@ export default {
 		{
 			canbus.addListener(API_EVENT_VARIABLE_MOVEMENT, onReceiveValue);
 			canbus.addListener(API_EVENT_VARIABLE_MOVEMENT_VIEW, onReceiveView);
-			onReceiveValue(canbus.variables.movement);
+			onReceiveValue(canbus.values.variable.movement);
 			onReceiveView(canbus.views.variable.movement);
 		});
 		// удаляем события
@@ -164,7 +164,7 @@ export default {
 					movement.restWay = data;
 					break;
 			}
-			canbus.send(movement);
+			canbus.queryViewsMovement();
 		};
 
 		return {

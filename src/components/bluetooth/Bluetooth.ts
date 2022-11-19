@@ -39,7 +39,7 @@ export class Bluetooth extends EventEmitter
 	/** Статус подключения */
 	get connected(): boolean
 	{
-		return !!this._device && !!this._characteristic;
+		return !!this._device?.gatt?.connected;
 	}
 
 	/** Запустить выбор Bluetooth устройства и подключиться к выбранному */
@@ -54,18 +54,27 @@ export class Bluetooth extends EventEmitter
 		return this._device
 			? Promise.resolve()
 			: this.requestBluetoothDevice()
-				.then((device: BluetoothDevice) => this.connectDeviceAndCharacteristic(device))
-				.then((characteristic: BluetoothRemoteGATTCharacteristic | undefined) =>
-					this.delayPromise(250, characteristic)
-				)
-				.then((characteristic: BluetoothRemoteGATTCharacteristic | undefined) =>
-					this.startNotifications(characteristic)
-				)
+				.then((device: BluetoothDevice) => this.reconnect(device))
 				.catch((e: any) =>
 				{
 					this.emit(BLUETOOTH_EVENT_CONNECTED, TConnectedStatus.NO_CONNECT);
 					console.log(e);
 				});
+	}
+
+	/**
+	 * Переподключение к устройству
+	 * @param {BluetoothDevice} device Объект устройства
+	 */
+	reconnect(device: BluetoothDevice): Promise<void> | undefined
+	{
+		return this.connectDeviceAndCharacteristic(device)
+			?.then((characteristic: BluetoothRemoteGATTCharacteristic | undefined) =>
+				this.delayPromise(250, characteristic)
+			)
+			.then((characteristic: BluetoothRemoteGATTCharacteristic | undefined) =>
+				this.startNotifications(characteristic)
+			);
 	}
 
 	/** Отключение от Bluetooth устройства */
@@ -90,6 +99,7 @@ export class Bluetooth extends EventEmitter
 			.then((device: BluetoothDevice) =>
 			{
 				if (dev) console.log($t("BLE.server.deviceSelected", { n: device.name }));
+				// device.removeEventListener("gattserverdisconnected", null);
 				device.addEventListener("gattserverdisconnected", () => this.handleDisconnection());
 				this._device = device;
 				return device;
@@ -119,10 +129,11 @@ export class Bluetooth extends EventEmitter
 			.then((characteristic: BluetoothRemoteGATTCharacteristic) =>
 			{
 				if (dev) console.log($t("BLE.server.characteristicDone"));
+				// characteristic.removeEventListener("characteristicvaluechanged", null);
 				characteristic.addEventListener("characteristicvaluechanged", (ev: any) =>
 					this.handleCharacteristicValueChanged(ev)
 				);
-				// читаем версию протокола устройства (сообщение отправляется устройством сразу после подключения)
+				// запускает процесс чтения данных
 				characteristic?.readValue();
 				this._characteristic = characteristic;
 				return characteristic;
@@ -183,12 +194,12 @@ export class Bluetooth extends EventEmitter
 			() =>
 			{
 				this.emit(BLUETOOTH_EVENT_CONNECTED, TConnectedStatus.WAIT_CONNECT);
-				if (this._device) return this.connectDeviceAndCharacteristic(this._device);
+				if (this._device) return this.reconnect(this._device);
 			},
 			() =>
 			{
 				if (dev) console.log($t("BLE.server.reconnectRestored"));
-				this.emit(BLUETOOTH_EVENT_CONNECTED, TConnectedStatus.CONNECT);
+				// this.emit(BLUETOOTH_EVENT_CONNECTED, TConnectedStatus.CONNECT);
 			},
 			() =>
 			{
@@ -202,12 +213,12 @@ export class Bluetooth extends EventEmitter
 	/** Событие входящих данных */
 	private handleCharacteristicValueChanged(ev: any): void
 	{
-		if (dev)
+		const { value } = ev.target;
+		if (value?.byteLength > 0)
 		{
-			console.log("receive", ev.target.value);
-			console.log($t("BLE.server.receive", { n: ev.target.value.getUint8(0) }));
+			if (dev) console.log($t("BLE.server.receive", { n: value.getUint8(0) }), value);
+			this.emit(BLUETOOTH_EVENT_RECEIVE, value);
 		}
-		this.emit(BLUETOOTH_EVENT_RECEIVE, ev.target.value);
 	}
 
 	/**
@@ -216,11 +227,9 @@ export class Bluetooth extends EventEmitter
 	 */
 	send(data: DataView | undefined): Promise<any>
 	{
-		if (dev) console.log("send", data);
-
 		if (!this.connected)
 		{
-			this.emit(BLUETOOTH_EVENT_CONNECTED, TConnectedStatus.NO_CONNECT);
+			// this.emit(BLUETOOTH_EVENT_CONNECTED, TConnectedStatus.NO_CONNECT);
 			return Promise.resolve();
 		}
 		if (!data)
@@ -229,7 +238,8 @@ export class Bluetooth extends EventEmitter
 			return Promise.resolve();
 		}
 
-		if (dev) console.log($t("BLE.server.send", { n: data?.getUint8(0) ?? "..." }));
+		if (dev) console.log($t("BLE.server.send", { n: data?.getUint8(0) ?? "..." }), data);
+
 		return (
 			this._characteristic?.writeValue(data).catch(() =>
 			{

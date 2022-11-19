@@ -36,4 +36,13 @@ export class Version implements IVersion
 		}
 		return 0;
 	}
+
+	/** Очистить значения версии */
+	clear(): void
+	{
+		this.major = 0;
+		this.minor = 0;
+		this.build = 0;
+		this.revision = 0;
+	}
 }

@@ -1,5 +1,7 @@
+import axios from "axios";
 import EventEmitter from "eventemitter3";
 import { $t } from "@/lang";
+
 import {
 	BLUETOOTH_EVENT_CONNECTED,
 	BLUETOOTH_EVENT_RECEIVE,
@@ -29,7 +31,12 @@ import {
 } from "@/models/pjcan/teyes";
 import { API_EXEC_LCD_VALUE } from "@/models/pjcan/lcd";
 import { API_EXEC_CAR_CONFIG, API_EXEC_CAR_VIEW } from "@/models/pjcan/car";
-import { API_EXEC_UPDATE_BEGIN_GZ, API_EXEC_UPDATE_UPLOAD_GZ } from "@/models/pjcan/update";
+import {
+	API_EXEC_UPDATE_BEGIN_GZ,
+	API_EXEC_UPDATE_UPLOAD_GZ,
+	UpdateBegin,
+	UpdateData
+} from "@/models/pjcan/update";
 import { API_EXEC_VARIABLE_BOSE, API_EXEC_VARIABLE_BOSE_VIEW } from "@/models/pjcan/variables/bose";
 import { API_EXEC_VARIABLE_CLIMATE, API_EXEC_VARIABLE_CLIMATE_VIEW } from "@/models/pjcan/variables/climate";
 import { API_EXEC_VARIABLE_DOORS, API_EXEC_VARIABLE_DOORS_VIEW } from "@/models/pjcan/variables/doors";
@@ -54,6 +61,9 @@ import { IValues, Values } from "@/models/pjcan/values";
 import { IVariablesValue } from "@/models/pjcan/variables/values";
 import { API_EXEC_VALUE } from "@/models/pjcan/values/Values";
 import { API_EXEC_VARIABLE_VALUE } from "@/models/pjcan/variables/values/VariablesValue";
+import { Timeout } from "@/models/types/Timeout";
+import { IUpdateResult } from "@/models/pjcan/update/IUpdateResult";
+import { IVersion, Version } from "@/models/pjcan/version";
 
 export const API_EVENT_CONFIGS = "Configs";
 export const API_EVENT_VIEWS = "Views";
@@ -110,7 +120,9 @@ export const API_EVENT_VARIABLE_VOLUME_VIEW = "VariableVolumeView";
 export const API_EVENT_UPDATE_UPLOAD_GZ = "UpdateUploadGZ";
 export const API_EVENT_UPDATE_BEGIN_GZ = "UpdateBeginGZ";
 
-const dev = process.env.NODE_ENV === "development";
+const URL_FIRMWARE_PATH = process.env.BASE_URL + "firmware/";
+const URL_FIRMWARE_VERSION = URL_FIRMWARE_PATH + "version.json";
+const URL_FIRMWARE_GZIP = URL_FIRMWARE_PATH + "firmware.bin.gz";
 
 export class Canbus extends EventEmitter
 {
@@ -128,10 +140,25 @@ export class Canbus extends EventEmitter
 		info: new DeviceInfo(),
 		config: new DeviceConfig()
 	};
+
+	/** Обновление прошивки */
+	update: IUpdateResult = {
+		upload: new UpdateData(),
+		begin: new UpdateBegin()
+	};
+
 	/** Значения кнопки */
 	buttonValue: IButtonValue = new ButtonValue();
 	/** Текст Teyes */
 	teyesText: ITeyesText = new TeyesText();
+
+	/** Запрет на отправку данных */
+	private queryDisabled: boolean = true;
+
+	/** Последний promise */
+	private lastPromise: Promise<void> | undefined = undefined;
+	/** Таймер */
+	private debounce: Timeout | undefined = undefined;
 
 	constructor()
 	{
@@ -141,54 +168,148 @@ export class Canbus extends EventEmitter
 	}
 
 	/**
+	 * Запрос/отправка данных
+	 * @param {IBaseModel} obj Объект данных
+	 * @private
+	 */
+	private async query(obj: IBaseModel)
+	{
+		await this.lastPromise;
+		if (this.bluetooth.connected)
+		{
+			await (this.lastPromise = this.bluetooth.send(obj.get()));
+		}
+	}
+
+	/**
 	 * Событие подключения Bluetooth
 	 * @param {TConnectedStatus} status Статус подключения
 	 */
 	async onConnected(status: TConnectedStatus)
 	{
-		if (status !== TConnectedStatus.CONNECT) return;
+		if (status !== TConnectedStatus.CONNECT)
+		{
+			this.queryDisabled = true;
+			return;
+		}
 
 		await this.fetchConfig();
 		await this.fetchView();
+		await this.fetchDevice();
+		this.queryDisabled = false;
 	}
 
-	/** Загрузка конфигурации */
-	fetchConfig(): Promise<void>
+	/** Получить конфигурацию */
+	async fetchConfig()
 	{
-		return this.bluetooth.send(this.configs.get());
+		await this.query(this.configs);
 	}
 
-	/** Загрузка конфигурации отображения значений */
-	fetchView(): Promise<void>
+	/** Получить конфигурацию отображения значений */
+	async fetchView()
 	{
-		return this.bluetooth.send(this.views.get());
+		await this.query(this.views);
+	}
+
+	/** Получить значения */
+	async fetchValue()
+	{
+		if (!this.queryDisabled) await this.query(this.values);
+	}
+
+	/** Отправка конфигурации отображения уровня звука */
+	async fetchDevice()
+	{
+		await this.query(this.device.info);
+		await this.query(this.device.config);
 	}
 
 	/**
-	 * Отправить данные по Bluetooth.
-	 * Отправка осуществляется не чаще одного раза в 250 мс для одного объекта данных.
-	 * @param {IBaseModel} obj Объект данных
+	 * Запустить циклический запрос значений
+	 * @param {number} timeout Пауза между ответом и запросом
 	 */
-	send(obj: IBaseModel): void
+	startFetchValue(timeout: number = 500)
 	{
-		if (!obj.lastSend || obj.lastSend === 0)
+		this.stopFetchValue();
+		this.debounce = setTimeout(async () =>
 		{
-			const data = obj.get();
-			this.bluetooth.send(data).then();
-
-			obj.lastSend = 1;
-			obj.timeout = setTimeout(() =>
+			await this.fetchValue();
+			if (this.debounce !== undefined)
 			{
-				if (obj.lastSend && obj.lastSend > 1)
-				{
-					obj.lastSend = 0;
-					this.send(obj);
-				}
-				else obj.lastSend = 0;
-				obj.timeout = undefined;
-			}, 250);
+				this.debounce = undefined;
+				this.startFetchValue(timeout);
+			}
+		}, timeout);
+	}
+
+	/** Остановить циклический запрос значений */
+	stopFetchValue()
+	{
+		if (this.debounce !== undefined)
+		{
+			clearTimeout(this.debounce);
+			this.debounce = undefined;
 		}
-		else obj.lastSend++;
+	}
+
+	/** Отправка конфигурации уровня звука */
+	async queryConfigsVolume()
+	{
+		if (!this.queryDisabled) await this.query(this.configs.variable.volume);
+	}
+
+	/** Отправка конфигурации кнопок */
+	async queryConfigsButtons()
+	{
+		if (!this.queryDisabled) await this.query(this.configs.buttons);
+	}
+
+	/** Отправка конфигурации отображения климата */
+	async queryViewsClimate()
+	{
+		if (!this.queryDisabled) await this.query(this.views.variable.climate);
+	}
+
+	/** Отправка конфигурации отображения дверей */
+	async queryViewsDoors()
+	{
+		if (!this.queryDisabled) await this.query(this.views.variable.doors);
+	}
+
+	/** Отправка конфигурации отображения ДВС */
+	async queryViewsEngine()
+	{
+		if (!this.queryDisabled) await this.query(this.views.variable.engine);
+	}
+
+	/** Отправка конфигурации отображения расхода */
+	async queryViewsFuel()
+	{
+		if (!this.queryDisabled) await this.query(this.views.variable.fuel);
+	}
+
+	/** Отправка конфигурации отображения температуры */
+	async queryViewsTemperature()
+	{
+		if (!this.queryDisabled) await this.query(this.views.variable.temperature);
+	}
+
+	/** Отправка конфигурации отображения датчиков */
+	async queryViewsSensors()
+	{
+		if (!this.queryDisabled) await this.query(this.views.variable.sensors);
+	}
+
+	/** Отправка конфигурации отображения движения */
+	async queryViewsMovement()
+	{
+		if (!this.queryDisabled) await this.query(this.views.variable.movement);
+	}
+
+	/** Отправка конфигурации отображения уровня звука */
+	async queryViewsVolume()
+	{
+		if (!this.queryDisabled) await this.query(this.views.variable.volume);
 	}
 
 	/**
@@ -236,16 +357,6 @@ export class Canbus extends EventEmitter
 		this.emit(API_EVENT_VARIABLE_MOVEMENT, value.movement);
 		this.emit(API_EVENT_VARIABLE_SENSORS, value.sensors);
 		this.emit(API_EVENT_VARIABLE_TEMPERATURE, value.temperature);
-	}
-
-	/** Лог версии прошивки */
-	private logVersion()
-	{
-		if (dev)
-		{
-			const { major, minor, build, revision } = this.configs.version;
-			console.log($t("BLE.server.versionProtocol", { mj: major, mn: minor, bl: build, rv: revision }));
-		}
 	}
 
 	/**
@@ -335,10 +446,13 @@ export class Canbus extends EventEmitter
 				break;
 
 			case API_EXEC_UPDATE_UPLOAD_GZ: // Загрузка файла прошивки
-				this.emit(API_EVENT_UPDATE_UPLOAD_GZ, data);
+				this.update.upload.set(data);
+				this.emit(API_EVENT_UPDATE_UPLOAD_GZ, this.update.upload);
+				this.nextUpload().then();
 				break;
 			case API_EXEC_UPDATE_BEGIN_GZ: // Запуск обновления прошивки
-				this.emit(API_EVENT_UPDATE_BEGIN_GZ, data);
+				this.update.begin.set(data);
+				this.emit(API_EVENT_UPDATE_BEGIN_GZ, this.update.begin);
 				break;
 
 			case API_EXEC_VARIABLE_CONFIG: // Вся конфигурация переменных
@@ -445,6 +559,93 @@ export class Canbus extends EventEmitter
 				this.emit(API_EVENT_VARIABLE_VOLUME_VIEW, this.views.variable.volume);
 				break;
 		}
+	}
+
+	/** Запустить процесс загрузки прошивки на устройство */
+	beginUpload(): void
+	{
+		axios({
+			url: URL_FIRMWARE_GZIP,
+			method: "GET",
+			responseType: "arraybuffer",
+			headers: { "Content-Type": "application/gzip" }
+		}).then((res: any) =>
+		{
+			if (res.data.byteLength > 0)
+			{
+				setTimeout(() =>
+				{
+					this.update.upload.data = new Uint8Array(res.data);
+					this.update.upload.offset = 0;
+					this.update.upload.last = true;
+					this.nextUpload().then();
+				}, 1000);
+			}
+		});
+	}
+
+	/** Пишем данные файла прошивки в устройство PJ CAN */
+	async nextUpload()
+	{
+		if (
+			this.bluetooth.connected &&
+			this.update.upload.last &&
+			this.update.upload.offset < this.update.upload.data.byteLength
+		)
+		{
+			this.queryDisabled = true;
+			await this.bluetooth.send(this.update.upload.get());
+		}
+		else if (!this.update.upload.last)
+		{
+			this.queryDisabled = false;
+		}
+	}
+
+	/** Запустить процесс обновления устройства */
+	async beginUpdate()
+	{
+		if (this.bluetooth.connected)
+		{
+			await this.bluetooth.send(this.update.begin.get());
+		}
+	}
+
+	/** Лог версии прошивки */
+	private logVersion()
+	{
+		const { major, minor, build, revision } = this.configs.version;
+		console.log($t("BLE.server.versionProtocol", { mj: major, mn: minor, bl: build, rv: revision }));
+	}
+
+	/** Проверить версию прошивки */
+	checkVersion(): Promise<IVersion>
+	{
+		return new Promise((resolve, reject) =>
+		{
+			axios({
+				url: URL_FIRMWARE_VERSION,
+				method: "GET"
+			})
+				.then((res: any) =>
+				{
+					// проверяем версию прошивки
+					if (res.data?.current?.length === 4)
+					{
+						const ver = res.data.current;
+						const newVersion: IVersion = new Version();
+						newVersion.major = ver[0];
+						newVersion.minor = ver[1];
+						newVersion.build = ver[2];
+						newVersion.revision = ver[3];
+
+						if (this.configs.version.compare(newVersion) > 0) resolve(newVersion);
+						else reject("Current version");
+					}
+					else reject("No data");
+				})
+				.catch((e) => reject(e));
+		});
 	}
 }
 

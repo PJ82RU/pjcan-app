@@ -7,7 +7,7 @@
 </template>
 
 <script lang="ts">
-import { computed, provide, ref } from "vue";
+import { computed, onMounted, onUnmounted, provide, ref } from "vue";
 import store from "@/store";
 import { useDisplay } from "vuetify";
 
@@ -19,6 +19,7 @@ import MovementCard from "./components/MovementCard.vue";
 import DoorsCard from "./components/DoorsCard.vue";
 import VolumeCard from "./components/VolumeCard.vue";
 import ClimateCard from "./components/ClimateCard.vue";
+import canbus from "@/api/canbus";
 
 export default {
 	name: "onboard",
@@ -30,6 +31,9 @@ export default {
 		provide("flicking", flicking);
 
 		const onboardCardList = computed(() => store.getters["app/onboardCardList"]);
+
+		onMounted(() => canbus.startFetchValue());
+		onUnmounted(() => canbus.stopFetchValue());
 
 		return {
 			flicking,

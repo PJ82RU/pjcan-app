@@ -39,11 +39,11 @@ import { onMounted, onUnmounted, ref } from "vue";
 import { toast } from "vue3-toastify";
 import { $t } from "@/lang";
 
+import canbus from "@/api/canbus";
+import { BLUETOOTH_EVENT_CONNECTED, TConnectedStatus } from "@/components/bluetooth";
+
 import { Timeout } from "@/models/types/Timeout";
 import { UPDATE_BEGIN_EVENT_RESULT, UPDATE_UPLOAD_EVENT_RESULT } from "@/models/pjcan/update";
-import canbus from "@/api/canbus";
-import update from "@/components/firmware";
-import { BLUETOOTH_EVENT_CONNECTED, TConnectedStatus } from "@/components/bluetooth";
 
 // таймаут проверки обновления 5 мин.
 const DELAY_CHECK_VERSION = 300000;
@@ -69,13 +69,13 @@ export default {
 		{
 			timerCheckVersion = setTimeout(() =>
 			{
-				if (canbus.bluetooth.connected && canbus.version.is)
+				if (canbus.bluetooth.connected && canbus.configs.version.is)
 				{
-					update
-						.checkNewVersion()
-						.then(() =>
+					canbus
+						.checkVersion()
+						.then((newVersion) =>
 						{
-							version.value = update.newVersion.toString;
+							version.value = newVersion.toString;
 							visibleUpdate.value = true;
 						})
 						.catch(() => onCheckVersion(DELAY_CHECK_VERSION));
@@ -90,7 +90,7 @@ export default {
 			visibleUpdate.value = false;
 			visibleProcess.value = false;
 			if (timerCheckVersion) clearTimeout(timerCheckVersion);
-			update.clear();
+			canbus.update.upload.clear();
 		};
 
 		/** Ошибка обновления */
@@ -106,18 +106,24 @@ export default {
 		 */
 		const onConnected = (status: TConnectedStatus) =>
 		{
-			if (update.isUpdated)
+			if (canbus.update.upload.last)
 			{
 				if (status !== TConnectedStatus.CONNECT) return;
 
 				// завершение прошивки
-				update
-					.checkNewVersion()
-					.then(() => toast.error($t("update.notify.warning")))
-					.catch(() => toast.error($t("update.notify.completed")));
+				setTimeout(() =>
+				{
+					if (canbus.configs.version.is)
+					{
+						canbus
+							.checkVersion()
+							.then(() => toast.error($t("update.notify.warning")))
+							.catch(() => toast.success($t("update.notify.completed")));
 
-				update.isUpdated = false;
-				onCancel();
+						onCancel();
+					}
+					else canbus.bluetooth.disconnect();
+				}, 1000);
 			}
 			else
 			{
@@ -134,7 +140,7 @@ export default {
 			progress.value = 0;
 			visibleUpdate.value = false;
 			visibleProcess.value = true;
-			update.upload();
+			canbus.beginUpload();
 		};
 
 		/**
@@ -146,10 +152,13 @@ export default {
 			if (result)
 			{
 				message.value = $t("update.process.upload");
-				progress.value = update.uploading * 100;
+				progress.value = canbus.update.upload.uploading * 100;
 				uploading.value = progress.value.toFixed(2) + "%";
 
-				if (update.resultUpload.offset === update.resultUpload.data.byteLength) update.begin();
+				if (canbus.update.upload.offset === canbus.update.upload.data.byteLength)
+				{
+					canbus.beginUpdate();
+				}
 			}
 			else
 			{
@@ -163,12 +172,12 @@ export default {
 		 */
 		const onUpdate = (result: boolean) =>
 		{
-			update.isUpdated = result;
 			if (result)
 			{
 				message.value = $t("update.process.update");
 				progress.value = 0;
 				uploading.value = "";
+				canbus.configs.version.clear();
 			}
 			else
 			{
@@ -179,15 +188,15 @@ export default {
 		onMounted(() =>
 		{
 			canbus.bluetooth.addListener(BLUETOOTH_EVENT_CONNECTED, onConnected);
-			update.resultUpload.addListener(UPDATE_UPLOAD_EVENT_RESULT, onUpload);
-			update.resultBegin.addListener(UPDATE_BEGIN_EVENT_RESULT, onUpdate);
+			canbus.update.upload.addListener(UPDATE_UPLOAD_EVENT_RESULT, onUpload);
+			canbus.update.begin.addListener(UPDATE_BEGIN_EVENT_RESULT, onUpdate);
 		});
 
 		onUnmounted(() =>
 		{
 			canbus.bluetooth.removeListener(BLUETOOTH_EVENT_CONNECTED, onConnected);
-			update.resultUpload.removeListener(UPDATE_UPLOAD_EVENT_RESULT, onUpload);
-			update.resultBegin.removeListener(UPDATE_BEGIN_EVENT_RESULT, onUpdate);
+			canbus.update.upload.removeListener(UPDATE_UPLOAD_EVENT_RESULT, onUpload);
+			canbus.update.begin.removeListener(UPDATE_BEGIN_EVENT_RESULT, onUpdate);
 		});
 
 		return {

@@ -27,7 +27,6 @@ import { $t } from "@/lang";
 import DialogTemplate from "@/components/DialogTemplate.vue";
 
 import canbus from "@/api/canbus";
-import update from "@/components/firmware";
 import { BLUETOOTH_EVENT_CONNECTED, BLUETOOTH_EVENT_SEND, TConnectedStatus } from "@/components/bluetooth";
 
 export default {
@@ -59,8 +58,14 @@ export default {
 		const onConnected = (status: TConnectedStatus) =>
 		{
 			connected.value = status === TConnectedStatus.CONNECT;
-			// не выводим сообщения об отключении/подключении Bluetooth в момент прошивки устройства
-			if (update.isUpdated) return;
+			// Не выводим сообщения об отключении/подключении Bluetooth в момент прошивки устройства
+			if (canbus.update.upload.last)
+			{
+				// Если устройство отключилось, значит возникли проблемы с восстановлением соединения.
+				// Просим подключить устройство
+				if (status === TConnectedStatus.DISCONNECT) visibleDialog.value = true;
+				return;
+			}
 
 			switch (status)
 			{

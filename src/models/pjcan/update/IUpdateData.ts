@@ -4,6 +4,8 @@ import EventEmitter from "eventemitter3";
 export interface IUpdateData extends EventEmitter {
 	data: Uint8Array;
 	offset: number;
+	last: boolean;
+	uploading: number;
 
 	clear: () => void;
 	set: (buf: DataView) => void;

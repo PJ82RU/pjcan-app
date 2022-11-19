@@ -8,4 +8,5 @@ export interface IVersion {
 	toString: string;
 
 	compare: (ver: IVersion) => number;
+	clear: () => void;
 }

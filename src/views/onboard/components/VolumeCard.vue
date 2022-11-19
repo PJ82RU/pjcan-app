@@ -64,15 +64,12 @@ export default {
 		const volume = ref(0);
 		const max = ref(0);
 
-		/** Исходящие значения звука */
-		const onSend = () => canbus.send(canbus.configs.variable.volume);
-
 		watch(mute, (val: boolean) =>
 		{
 			if (isLoadedValue.value && canbus.configs.variable.volume.mute !== val)
 			{
 				canbus.configs.variable.volume.mute = val;
-				onSend();
+				canbus.queryConfigsVolume();
 			}
 		});
 		watch(volume, (val: number) =>
@@ -80,7 +77,7 @@ export default {
 			if (isLoadedValue.value && canbus.configs.variable.volume.volume !== val)
 			{
 				canbus.configs.variable.volume.volume = val;
-				onSend();
+				canbus.queryConfigsVolume();
 			}
 		});
 		watch(max, (val: number) =>
@@ -88,7 +85,7 @@ export default {
 			if (isLoadedValue.value && canbus.configs.variable.volume.max !== val)
 			{
 				canbus.configs.variable.volume.max = val;
-				onSend();
+				canbus.queryConfigsVolume();
 			}
 		});
 
@@ -150,7 +147,7 @@ export default {
 		const onViewSettingApply = (data: IViewConfig): void =>
 		{
 			canbus.views.variable.volume.view = data;
-			canbus.send(canbus.views.variable.volume);
+			canbus.queryViewsVolume();
 		};
 
 		return {

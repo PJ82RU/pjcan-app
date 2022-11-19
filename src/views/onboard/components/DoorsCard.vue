@@ -119,7 +119,7 @@ export default {
 		{
 			canbus.addListener(API_EVENT_VARIABLE_DOORS, onReceiveValue);
 			canbus.addListener(API_EVENT_VARIABLE_DOORS_VIEW, onReceiveView);
-			onReceiveValue(canbus.variables.doors);
+			onReceiveValue(canbus.values.variable.doors);
 			onReceiveView(canbus.views.variable.doors);
 		});
 		// удаляем события
@@ -154,7 +154,7 @@ export default {
 		const onViewSettingApply = (data: IViewConfig): void =>
 		{
 			canbus.views.variable.doors.view = data;
-			canbus.send(canbus.views.variable.doors);
+			canbus.queryViewsDoors();
 		};
 
 		return {

@@ -38,12 +38,12 @@
 
 <script lang="ts">
 import { computed, onMounted, onUnmounted, ref, toRefs } from "vue";
-import canbus, { API_EVENT_VERSION } from "@/api/canbus";
+import canbus, { API_EVENT_CONFIGS } from "@/api/canbus";
 const pkg = require("/package.json");
 
 import DialogTemplate from "@/components/DialogTemplate.vue";
 import DeviceInfoModal from "@/layout/components/DeviceInfoModal.vue";
-import { IVersion } from "@/models/pjcan/version";
+import { IConfigs } from "@/models/pjcan/configs";
 
 export default {
 	name: "AboutModal",
@@ -68,9 +68,9 @@ export default {
 		}));
 
 		/** Обновление версии */
-		const updateInfo = (ver: IVersion): void =>
+		const updateInfo = (configs: IConfigs): void =>
 		{
-			versionFirmware.value = ver.toString;
+			versionFirmware.value = configs.version.toString;
 		};
 
 		/** Открыть попап технической информации */
@@ -82,11 +82,11 @@ export default {
 
 		onMounted(() =>
 		{
-			canbus.addListener(API_EVENT_VERSION, updateInfo);
+			canbus.addListener(API_EVENT_CONFIGS, updateInfo);
 		});
 		onUnmounted(() =>
 		{
-			canbus.removeListener(API_EVENT_VERSION, updateInfo);
+			canbus.removeListener(API_EVENT_CONFIGS, updateInfo);
 		});
 
 		return {

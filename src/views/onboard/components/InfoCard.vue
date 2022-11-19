@@ -95,7 +95,7 @@ import { computed, onMounted, onUnmounted, ref } from "vue";
 import { $t } from "@/lang";
 
 import canbus, {
-	API_EVENT_DEVICE_VALUE,
+	API_EVENT_DEVICE,
 	API_EVENT_VARIABLE_SENSORS,
 	API_EVENT_VARIABLE_SENSORS_VIEW,
 	API_EVENT_VARIABLE_TEMPERATURE,
@@ -203,21 +203,21 @@ export default {
 		// регистрируем события
 		onMounted(() =>
 		{
-			canbus.addListener(API_EVENT_DEVICE_VALUE, onReceiveDeviceValue);
+			canbus.addListener(API_EVENT_DEVICE, onReceiveDeviceValue);
 			canbus.addListener(API_EVENT_VARIABLE_SENSORS, onReceiveSensorValue);
 			canbus.addListener(API_EVENT_VARIABLE_SENSORS_VIEW, onReceiveSensorView);
 			canbus.addListener(API_EVENT_VARIABLE_TEMPERATURE, onReceiveTemperatureValue);
 			canbus.addListener(API_EVENT_VARIABLE_TEMPERATURE_VIEW, onReceiveTemperatureView);
-			onReceiveDeviceValue(canbus.device.value);
-			onReceiveSensorValue(canbus.variables.sensors);
+			onReceiveDeviceValue(canbus.values.device);
+			onReceiveSensorValue(canbus.values.variable.sensors);
 			onReceiveSensorView(canbus.views.variable.sensors);
-			onReceiveTemperatureValue(canbus.variables.temperature);
+			onReceiveTemperatureValue(canbus.values.variable.temperature);
 			onReceiveTemperatureView(canbus.views.variable.temperature);
 		});
 		// удаляем события
 		onUnmounted(() =>
 		{
-			canbus.removeListener(API_EVENT_DEVICE_VALUE, onReceiveDeviceValue);
+			canbus.removeListener(API_EVENT_DEVICE, onReceiveDeviceValue);
 			canbus.removeListener(API_EVENT_VARIABLE_SENSORS, onReceiveSensorValue);
 			canbus.removeListener(API_EVENT_VARIABLE_SENSORS_VIEW, onReceiveSensorView);
 			canbus.removeListener(API_EVENT_VARIABLE_TEMPERATURE, onReceiveTemperatureValue);
@@ -288,7 +288,7 @@ export default {
 			{
 				case 0:
 					temperature.view = data;
-					canbus.send(temperature);
+					canbus.queryViewsTemperature();
 					return;
 
 				case 1:
@@ -307,7 +307,7 @@ export default {
 					sensors.signal = data;
 					break;
 			}
-			canbus.send(sensors);
+			canbus.queryViewsSensors();
 		};
 
 		return {

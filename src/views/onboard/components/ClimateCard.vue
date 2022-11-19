@@ -150,7 +150,7 @@ export default {
 		{
 			canbus.addListener(API_EVENT_VARIABLE_CLIMATE, onReceiveValue);
 			canbus.addListener(API_EVENT_VARIABLE_CLIMATE_VIEW, onReceiveView);
-			onReceiveValue(canbus.variables.climate);
+			onReceiveValue(canbus.values.variable.climate);
 			onReceiveView(canbus.views.variable.climate);
 		});
 		// удаляем события
@@ -185,7 +185,7 @@ export default {
 		const onViewSettingApply = (data: IViewConfig): void =>
 		{
 			canbus.views.variable.climate.view = data;
-			canbus.send(canbus.views.variable.climate);
+			canbus.queryViewsClimate();
 		};
 
 		return {

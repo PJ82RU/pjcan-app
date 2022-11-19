@@ -142,7 +142,7 @@ export default {
 		{
 			canbus.addListener(API_EVENT_VARIABLE_ENGINE, onReceiveValue);
 			canbus.addListener(API_EVENT_VARIABLE_ENGINE_VIEW, onReceiveView);
-			onReceiveValue(canbus.variables.engine);
+			onReceiveValue(canbus.values.variable.engine);
 			onReceiveView(canbus.views.variable.engine);
 		});
 		// удаляем события
@@ -249,7 +249,7 @@ export default {
 					engine.coolant = data;
 					break;
 			}
-			canbus.send(engine);
+			canbus.queryViewsEngine();
 		};
 
 		return {

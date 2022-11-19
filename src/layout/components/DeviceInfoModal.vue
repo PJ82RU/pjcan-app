@@ -96,7 +96,7 @@ export default {
 
 		watch(modelValue, (val: boolean): void =>
 		{
-			if (val) canbus.send(deviceInfo.value);
+			if (val && !canbus.device.info.isData) canbus.fetchDevice();
 		});
 
 		return {

@@ -104,7 +104,7 @@ export default {
 		{
 			canbus.addListener(API_EVENT_VARIABLE_FUEL, onReceiveValue);
 			canbus.addListener(API_EVENT_VARIABLE_FUEL_VIEW, onReceiveView);
-			onReceiveValue(canbus.variables.fuel);
+			onReceiveValue(canbus.values.variable.fuel);
 			onReceiveView(canbus.views.variable.fuel);
 		});
 		// удаляем события
@@ -184,7 +184,7 @@ export default {
 					fuel.consumption = data;
 					break;
 			}
-			canbus.send(fuel);
+			canbus.queryViewsFuel();
 		};
 
 		return {

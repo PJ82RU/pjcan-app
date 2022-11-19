@@ -10,6 +10,11 @@ export class UpdateData extends EventEmitter implements IUpdateData
 {
 	data = new Uint8Array(0);
 	offset = 0;
+	last = false;
+	get uploading(): number
+	{
+		return this.offset > 0 ? this.offset / this.data.byteLength : 0;
+	}
 
 	constructor(data?: DataView)
 	{
@@ -22,6 +27,7 @@ export class UpdateData extends EventEmitter implements IUpdateData
 	{
 		this.data = new Uint8Array(0);
 		this.offset = 0;
+		this.last = false;
 	}
 	/**
 	 * Запись данных
@@ -30,7 +36,10 @@ export class UpdateData extends EventEmitter implements IUpdateData
 	set(buf: DataView): void
 	{
 		if (buf.getUint8(0) === API_EXEC_UPDATE_UPLOAD_GZ && buf.byteLength === 2)
-		{ this.emit(UPDATE_UPLOAD_EVENT_RESULT, buf.getUint8(1) === 0); }
+		{
+			this.last = buf.getUint8(1) === 0;
+			this.emit(UPDATE_UPLOAD_EVENT_RESULT, this.last);
+		}
 	}
 
 	/** Чтение данных */
