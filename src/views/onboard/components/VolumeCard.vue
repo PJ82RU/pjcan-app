@@ -41,7 +41,11 @@
 import { computed, onMounted, onUnmounted, ref, watch } from "vue";
 import { $t } from "@/lang";
 
-import canbus, { API_EVENT_VARIABLE_VOLUME, API_EVENT_VARIABLE_VOLUME_VIEW } from "@/api/canbus";
+import canbus, {
+	API_EVENT_VARIABLE_VOLUME,
+	API_EVENT_VARIABLE_VOLUME_CONFIG,
+	API_EVENT_VARIABLE_VOLUME_VIEW
+} from "@/api/canbus";
 
 import Card from "@/components/cards/Card.vue";
 import SwitchCardItem from "@/components/cards/SwitchCardItem.vue";
@@ -50,7 +54,7 @@ import ViewSettingDialog from "./ViewSettingDialog.vue";
 
 import { IMenuItem } from "@/models/IMenuItem";
 import { IViewConfig } from "@/models/pjcan/view";
-import { IVolumeConfig, IVolumeView } from "@/models/pjcan/variables/volume";
+import { IVolumeConfig, IVolumeValue, IVolumeView } from "@/models/pjcan/variables/volume";
 
 export default {
 	name: "VolumeCard",
@@ -64,39 +68,57 @@ export default {
 		const volume = ref(0);
 		const max = ref(0);
 
+		let queryValueVolumeDisabled: boolean = false;
+
 		watch(mute, (val: boolean) =>
 		{
-			if (isLoadedValue.value && canbus.configs.variable.volume.mute !== val)
+			if (isLoadedValue.value && canbus.values.variable.volume.mute !== val)
 			{
-				canbus.configs.variable.volume.mute = val;
-				canbus.queryConfigsVolume();
+				canbus.values.variable.volume.mute = val;
+				canbus.queryValueVolume();
 			}
 		});
 		watch(volume, (val: number) =>
 		{
-			if (isLoadedValue.value && canbus.configs.variable.volume.volume !== val)
+			if (isLoadedValue.value && canbus.values.variable.volume.volume !== val)
 			{
-				canbus.configs.variable.volume.volume = val;
-				canbus.queryConfigsVolume();
+				canbus.values.variable.volume.volume = val;
+				if (!queryValueVolumeDisabled)
+				{
+					queryValueVolumeDisabled = true;
+					setTimeout(() =>
+					{
+						queryValueVolumeDisabled = false;
+						canbus.queryValueVolume();
+					}, 250);
+					canbus.queryValueVolume();
+				}
 			}
 		});
-		watch(max, (val: number) =>
-		{
-			if (isLoadedValue.value && canbus.configs.variable.volume.max !== val)
-			{
-				canbus.configs.variable.volume.max = val;
-				canbus.queryConfigsVolume();
-			}
-		});
+		// watch(max, (val: number) =>
+		// {
+		// 	if (isLoadedValue.value && canbus.configs.variable.volume.max !== val)
+		// 	{
+		// 		canbus.configs.variable.volume.max = val;
+		// 	}
+		// });
 
 		/** Входящие значения звука */
-		const onReceiveConfig = (res: IVolumeConfig): void =>
+		const onReceiveValue = (res: IVolumeValue): void =>
 		{
 			isLoadedValue.value = res.isData;
 			if (res.isData)
 			{
 				mute.value = res.mute;
 				volume.value = res.volume;
+			}
+		};
+
+		/** Входящие конфигурация звука */
+		const onReceiveConfig = (res: IVolumeConfig): void =>
+		{
+			if (res.isData)
+			{
 				max.value = res.max;
 			}
 		};
@@ -110,15 +132,18 @@ export default {
 		// регистрируем события
 		onMounted(() =>
 		{
-			canbus.addListener(API_EVENT_VARIABLE_VOLUME, onReceiveConfig);
+			canbus.addListener(API_EVENT_VARIABLE_VOLUME, onReceiveValue);
+			canbus.addListener(API_EVENT_VARIABLE_VOLUME_CONFIG, onReceiveConfig);
 			canbus.addListener(API_EVENT_VARIABLE_VOLUME_VIEW, onReceiveView);
+			onReceiveValue(canbus.values.variable.volume);
 			onReceiveConfig(canbus.configs.variable.volume);
 			onReceiveView(canbus.views.variable.volume);
 		});
 		// удаляем события
 		onUnmounted(() =>
 		{
-			canbus.removeListener(API_EVENT_VARIABLE_VOLUME, onReceiveConfig);
+			canbus.removeListener(API_EVENT_VARIABLE_VOLUME, onReceiveValue);
+			canbus.removeListener(API_EVENT_VARIABLE_VOLUME_CONFIG, onReceiveConfig);
 			canbus.removeListener(API_EVENT_VARIABLE_VOLUME_VIEW, onReceiveView);
 		});
 

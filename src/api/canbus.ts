@@ -56,7 +56,11 @@ import {
 	API_EXEC_VARIABLE_TEMPERATURE,
 	API_EXEC_VARIABLE_TEMPERATURE_VIEW
 } from "@/models/pjcan/variables/temperature";
-import { API_EXEC_VARIABLE_VOLUME, API_EXEC_VARIABLE_VOLUME_VIEW } from "@/models/pjcan/variables/volume";
+import {
+	API_EXEC_VARIABLE_VOLUME,
+	API_EXEC_VARIABLE_VOLUME_CONFIG,
+	API_EXEC_VARIABLE_VOLUME_VIEW
+} from "@/models/pjcan/variables/volume";
 import { IValues, Values } from "@/models/pjcan/values";
 import { IVariablesValue } from "@/models/pjcan/variables/values";
 import { API_EXEC_VALUE } from "@/models/pjcan/values/Values";
@@ -114,7 +118,8 @@ export const API_EVENT_VARIABLE_SENSORS = "VariableSensorsValue";
 export const API_EVENT_VARIABLE_TEMPERATURE_VIEW = "VariableTemperatureView";
 export const API_EVENT_VARIABLE_TEMPERATURE = "VariableTemperatureValue";
 
-export const API_EVENT_VARIABLE_VOLUME = "VariableVolumeConfig";
+export const API_EVENT_VARIABLE_VOLUME = "VariableVolumeValue";
+export const API_EVENT_VARIABLE_VOLUME_CONFIG = "VariableVolumeConfig";
 export const API_EVENT_VARIABLE_VOLUME_VIEW = "VariableVolumeView";
 
 export const API_EVENT_UPDATE_UPLOAD_GZ = "UpdateUploadGZ";
@@ -221,7 +226,7 @@ export class Canbus extends EventEmitter
 	async fetchDevice()
 	{
 		await this.query(this.device.info);
-		await this.query(this.device.config);
+		// await this.query(this.device.config);
 	}
 
 	/**
@@ -253,9 +258,9 @@ export class Canbus extends EventEmitter
 	}
 
 	/** Отправка конфигурации уровня звука */
-	async queryConfigsVolume()
+	async queryValueVolume()
 	{
-		if (!this.queryDisabled) await this.query(this.configs.variable.volume);
+		if (!this.queryDisabled) await this.query(this.values.variable.volume);
 	}
 
 	/** Отправка конфигурации кнопок */
@@ -322,7 +327,7 @@ export class Canbus extends EventEmitter
 		this.emit(API_EVENT_VARIABLE_BOSE, config.bose);
 		this.emit(API_EVENT_VARIABLE_ENGINE_CONFIG, config.engine);
 		this.emit(API_EVENT_VARIABLE_FUEL_CONFIG, config.fuel);
-		this.emit(API_EVENT_VARIABLE_VOLUME, config.volume);
+		this.emit(API_EVENT_VARIABLE_VOLUME_CONFIG, config.volume);
 	}
 
 	/**
@@ -357,6 +362,7 @@ export class Canbus extends EventEmitter
 		this.emit(API_EVENT_VARIABLE_MOVEMENT, value.movement);
 		this.emit(API_EVENT_VARIABLE_SENSORS, value.sensors);
 		this.emit(API_EVENT_VARIABLE_TEMPERATURE, value.temperature);
+		this.emit(API_EVENT_VARIABLE_VOLUME, value.volume);
 	}
 
 	/**
@@ -550,9 +556,13 @@ export class Canbus extends EventEmitter
 				this.emit(API_EVENT_VARIABLE_TEMPERATURE_VIEW, this.views.variable.temperature);
 				break;
 
-			case API_EXEC_VARIABLE_VOLUME: // Конфигурация уровня звука
+			case API_EXEC_VARIABLE_VOLUME: // Значения уровня звука
+				this.values.variable.volume.set(data);
+				this.emit(API_EVENT_VARIABLE_VOLUME, this.values.variable.volume);
+				break;
+			case API_EXEC_VARIABLE_VOLUME_CONFIG: // Конфигурация уровня звука
 				this.configs.variable.volume.set(data);
-				this.emit(API_EVENT_VARIABLE_VOLUME, this.configs.variable.volume);
+				this.emit(API_EVENT_VARIABLE_VOLUME_CONFIG, this.configs.variable.volume);
 				break;
 			case API_EXEC_VARIABLE_VOLUME_VIEW: // Параметры отображения уровня звука
 				this.views.variable.volume.set(data);
