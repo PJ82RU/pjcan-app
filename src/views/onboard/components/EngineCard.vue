@@ -35,7 +35,7 @@
 						:value="motors"
 						:title="$t('onboard.engine.motors.title')"
 						:description="$t('onboard.engine.motors.description')"
-						type="mtime"
+						type="time"
 						:nodata="!enabled"
 						:disabled="!isLoadedView"
 					/>
@@ -123,9 +123,9 @@ export default {
 			{
 				enabled.value = res.enabled;
 				rpm.value = res.rpm.toFixed();
-				countRPM.value = res.countRPM.toFixed();
+				countRPM.value = res.totalCountRPM.toFixed();
 				load.value = res.load;
-				motors.value = res.mseconds;
+				motors.value = res.totalSeconds;
 				throttle.value = res.throttle;
 				coolant.value = res.coolant;
 			}
