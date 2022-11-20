@@ -69,7 +69,7 @@ export default {
 		{
 			timerCheckVersion = setTimeout(() =>
 			{
-				if (canbus.bluetooth.connected && canbus.configs.version.is)
+				if (canbus.bluetooth.connected)
 				{
 					canbus
 						.checkVersion()
