@@ -59,6 +59,19 @@ export default {
 		] as IConfigItem[]);
 
 		/**
+		 * Отправлять значение нажатой кнопки
+		 * @param {boolean} enabled Вкл/выкл
+		 */
+		const enabledSendValue = (enabled: boolean): void =>
+		{
+			if (enabled !== canbus.configs.buttons.sendValue)
+			{
+				canbus.configs.buttons.sendValue = enabled;
+				canbus.queryConfigsButtons();
+			}
+		};
+
+		/**
 		 * Входящие значения конфигурации кнопок
 		 * @param {IButtonsConfig} res
 		 */
@@ -68,6 +81,10 @@ export default {
 			if (res.isData)
 			{
 				res.items?.forEach((x, i) => (list.value[i].item = x));
+
+				// Включаем определение нажатой кнопки.
+				// Выключится автоматически, при запросе значений или ручками в onUnmounted
+				enabledSendValue(true);
 			}
 		};
 
@@ -91,13 +108,15 @@ export default {
 			canbus.addListener(API_EVENT_BUTTONS_CONFIG, onReceiveConfig);
 			canbus.addListener(API_EVENT_BUTTON, onReceiveValue);
 			onReceiveConfig(canbus.configs.buttons);
-			onReceiveValue(canbus.buttonValue);
+			// onReceiveValue(canbus.buttonValue);
 		});
 		// удаляем события
 		onUnmounted(() =>
 		{
 			canbus.removeListener(API_EVENT_BUTTONS_CONFIG, onReceiveConfig);
 			canbus.removeListener(API_EVENT_BUTTON, onReceiveValue);
+
+			enabledSendValue(false);
 		});
 
 		/**
