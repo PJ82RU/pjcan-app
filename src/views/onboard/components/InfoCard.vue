@@ -17,7 +17,7 @@
 						:value="worktime"
 						:title="$t('onboard.info.worktime.title')"
 						:description="$t('onboard.info.worktime.description')"
-						type="time"
+						type="mtime"
 						:nodata="!isLoadedDeviceValue"
 						:disabled="!isLoadedSensorView"
 					/>

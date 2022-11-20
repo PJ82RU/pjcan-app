@@ -47,13 +47,25 @@ export default {
 		{
 			switch (type.value)
 			{
-				case "time":
+				case "mtime":
 					if (!nodata.value)
 					{
 						switch (typeof value.value)
 						{
 							case "number":
 							case "bigint": return getFormatTime(value.value);
+							case "string": return value.value;
+						}
+					}
+					return "--:--:--";
+
+				case "time":
+					if (!nodata.value)
+					{
+						switch (typeof value.value)
+						{
+							case "number":
+							case "bigint": return getFormatTime(value.value, false);
 							case "string": return value.value;
 						}
 					}

@@ -35,7 +35,7 @@
 						:value="motors"
 						:title="$t('onboard.engine.motors.title')"
 						:description="$t('onboard.engine.motors.description')"
-						type="time"
+						type="mtime"
 						:nodata="!enabled"
 						:disabled="!isLoadedView"
 					/>
