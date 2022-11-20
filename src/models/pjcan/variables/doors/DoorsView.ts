@@ -1,11 +1,11 @@
 import { BluetoothStruct } from "@/components/bluetooth";
 import { BaseModel } from "../../base";
-import { ViewConfig } from "../../view";
+import { API_SIZE_VIEW, ViewConfig } from "../../view";
 import { StructDoorsView } from "./StructDoorsView";
 import { IDoorsView } from "./IDoorsView";
 
-export const API_EXEC_VARIABLE_DOORS_VIEW = 131; // команда API
-const STRUCT_LENGTH = 5; // длина данных API
+export const API_EXEC_VARIABLE_DOORS_VIEW = 131;
+export const API_SIZE_VARIABLE_DOORS_VIEW = API_SIZE_VIEW;
 
 const struct = new BluetoothStruct(StructDoorsView);
 
@@ -26,12 +26,12 @@ export class DoorsView extends BaseModel implements IDoorsView
 	 */
 	set(buf: DataView): boolean
 	{
-		return this._set(this, API_EXEC_VARIABLE_DOORS_VIEW, STRUCT_LENGTH, struct, buf);
+		return this._set(this, API_EXEC_VARIABLE_DOORS_VIEW, API_SIZE_VARIABLE_DOORS_VIEW + 1, struct, buf);
 	}
 
 	/** Чтение данных */
 	get(): DataView | undefined
 	{
-		return this._get(this, API_EXEC_VARIABLE_DOORS_VIEW, STRUCT_LENGTH, struct);
+		return this._get(this, API_EXEC_VARIABLE_DOORS_VIEW, API_SIZE_VARIABLE_DOORS_VIEW + 1, struct);
 	}
 }

@@ -4,17 +4,27 @@ import { BluetoothStruct } from "@/components/bluetooth";
 import { BaseModel } from "../../base";
 import { StructVariablesValue } from "./StructVariablesValue";
 import { IVariablesValue } from "./IVariablesValue";
-import { ClimateValue } from "../climate";
-import { ClockValue } from "../clock";
-import { DoorsValue } from "../doors";
-import { EngineValue } from "../engine";
-import { FuelValue } from "../fuel";
-import { MovementValue } from "../movement";
-import { SensorsValue } from "../sensors";
-import { TemperatureValue } from "../temperature";
+import { API_SIZE_VARIABLE_CLIMATE, ClimateValue } from "../climate";
+import { API_SIZE_VARIABLE_CLOCK, ClockValue } from "../clock";
+import { API_SIZE_VARIABLE_DOORS, DoorsValue } from "../doors";
+import { API_SIZE_VARIABLE_ENGINE, EngineValue } from "../engine";
+import { API_SIZE_VARIABLE_FUEL, FuelValue } from "../fuel";
+import { API_SIZE_VARIABLE_MOVEMENT, MovementValue } from "../movement";
+import { API_SIZE_VARIABLE_SENSORS, SensorsValue } from "../sensors";
+import { API_SIZE_VARIABLE_TEMPERATURE, TemperatureValue } from "../temperature";
+import { API_SIZE_VARIABLE_VOLUME, VolumeValue } from "../volume";
 
-export const API_EXEC_VARIABLE_VALUE = 102; // команда API
-const STRUCT_LENGTH = 72; // длина данных API
+export const API_EXEC_VARIABLE_VALUE = 102;
+export const API_SIZE_VARIABLE_VALUE =
+	API_SIZE_VARIABLE_CLIMATE +
+	API_SIZE_VARIABLE_CLOCK +
+	API_SIZE_VARIABLE_DOORS +
+	API_SIZE_VARIABLE_ENGINE +
+	API_SIZE_VARIABLE_FUEL +
+	API_SIZE_VARIABLE_MOVEMENT +
+	API_SIZE_VARIABLE_SENSORS +
+	API_SIZE_VARIABLE_TEMPERATURE +
+	API_SIZE_VARIABLE_VOLUME;
 
 const struct = new BluetoothStruct(StructVariablesValue);
 
@@ -29,6 +39,7 @@ export class VariablesValue extends BaseModel implements IVariablesValue
 	movement = new MovementValue();
 	sensors = new SensorsValue();
 	temperature = new TemperatureValue();
+	volume = new VolumeValue();
 
 	constructor(data?: DataView)
 	{
@@ -42,7 +53,7 @@ export class VariablesValue extends BaseModel implements IVariablesValue
 	 */
 	set(buf: DataView): boolean
 	{
-		const result = this._set(this, API_EXEC_VARIABLE_VALUE, STRUCT_LENGTH, struct, buf);
+		const result = this._set(this, API_EXEC_VARIABLE_VALUE, API_SIZE_VARIABLE_VALUE + 1, struct, buf);
 		if (result)
 		{
 			this.climate.isData = true;
@@ -52,6 +63,7 @@ export class VariablesValue extends BaseModel implements IVariablesValue
 			this.movement.isData = true;
 			this.sensors.isData = true;
 			this.temperature.isData = true;
+			this.volume.isData = true;
 		}
 		return result;
 	}
@@ -59,6 +71,6 @@ export class VariablesValue extends BaseModel implements IVariablesValue
 	/** Чтение данных */
 	get(): DataView | undefined
 	{
-		return this._get(this, API_EXEC_VARIABLE_VALUE, STRUCT_LENGTH, struct);
+		return this._get(this, API_EXEC_VARIABLE_VALUE, API_SIZE_VARIABLE_VALUE + 1, struct);
 	}
 }

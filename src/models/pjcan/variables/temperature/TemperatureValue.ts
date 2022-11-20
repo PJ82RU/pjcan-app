@@ -3,8 +3,8 @@ import { BaseModel } from "../../base";
 import { StructTemperatureValue } from "./StructTemperatureValue";
 import { ITemperatureValue } from "./ITemperatureValue";
 
-export const API_EXEC_VARIABLE_TEMPERATURE = 180; // команда API
-const STRUCT_LENGTH = 9; // длина данных API
+export const API_EXEC_VARIABLE_TEMPERATURE = 180;
+export const API_SIZE_VARIABLE_TEMPERATURE = 8;
 
 const struct = new BluetoothStruct(StructTemperatureValue);
 
@@ -26,12 +26,12 @@ export class TemperatureValue extends BaseModel implements ITemperatureValue
 	 */
 	set(buf: DataView): boolean
 	{
-		return this._set(this, API_EXEC_VARIABLE_TEMPERATURE, STRUCT_LENGTH, struct, buf);
+		return this._set(this, API_EXEC_VARIABLE_TEMPERATURE, API_SIZE_VARIABLE_TEMPERATURE + 1, struct, buf);
 	}
 
 	/** Чтение данных */
 	get(): DataView | undefined
 	{
-		return this._get(this, API_EXEC_VARIABLE_TEMPERATURE, STRUCT_LENGTH, struct);
+		return this._get(this, API_EXEC_VARIABLE_TEMPERATURE, API_SIZE_VARIABLE_TEMPERATURE + 1, struct);
 	}
 }

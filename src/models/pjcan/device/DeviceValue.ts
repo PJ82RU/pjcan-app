@@ -3,8 +3,8 @@ import { BaseModel } from "../base";
 import { StructDeviceValue } from "./StructDeviceValue";
 import { IDeviceValue } from "./IDeviceValue";
 
-export const API_EXEC_DEVICE_VALUE = 11; // команда API
-const STRUCT_LENGTH = 9; // длина данных API
+export const API_EXEC_DEVICE_VALUE = 11;
+export const API_SIZE_DEVICE_VALUE = 8;
 
 const struct = new BluetoothStruct(StructDeviceValue);
 
@@ -25,12 +25,12 @@ export class DeviceValue extends BaseModel implements IDeviceValue
 	 */
 	set(buf: DataView): boolean
 	{
-		return this._set(this, API_EXEC_DEVICE_VALUE, STRUCT_LENGTH, struct, buf);
+		return this._set(this, API_EXEC_DEVICE_VALUE, API_SIZE_DEVICE_VALUE + 1, struct, buf);
 	}
 
 	/** Чтение данных */
 	get(): DataView | undefined
 	{
-		return this._get(this, API_EXEC_DEVICE_VALUE, STRUCT_LENGTH, struct);
+		return this._get(this, API_EXEC_DEVICE_VALUE, API_SIZE_DEVICE_VALUE + 1, struct);
 	}
 }

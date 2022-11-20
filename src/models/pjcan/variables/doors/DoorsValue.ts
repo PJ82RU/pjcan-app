@@ -3,8 +3,8 @@ import { BaseModel } from "../../base";
 import { StructDoorsValue } from "./StructDoorsValue";
 import { IDoorsValue } from "./IDoorsValue";
 
-export const API_EXEC_VARIABLE_DOORS = 130; // команда API
-const STRUCT_LENGTH = 2; // длина данных API
+export const API_EXEC_VARIABLE_DOORS = 130;
+export const API_SIZE_VARIABLE_DOORS = 1;
 
 const struct = new BluetoothStruct(StructDoorsValue);
 
@@ -29,12 +29,12 @@ export class DoorsValue extends BaseModel implements IDoorsValue
 	 */
 	set(buf: DataView): boolean
 	{
-		return this._set(this, API_EXEC_VARIABLE_DOORS, STRUCT_LENGTH, struct, buf);
+		return this._set(this, API_EXEC_VARIABLE_DOORS, API_SIZE_VARIABLE_DOORS + 1, struct, buf);
 	}
 
 	/** Чтение данных */
 	get(): DataView | undefined
 	{
-		return this._get(this, API_EXEC_VARIABLE_DOORS, STRUCT_LENGTH, struct);
+		return this._get(this, API_EXEC_VARIABLE_DOORS, API_SIZE_VARIABLE_DOORS + 1, struct);
 	}
 }

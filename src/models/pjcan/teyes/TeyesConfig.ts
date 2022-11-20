@@ -3,8 +3,8 @@ import { BaseModel } from "../base";
 import { StructTeyesConfig } from "./StructTeyesConfig";
 import { ITeyesConfig } from "./ITeyesConfig";
 
-export const API_EXEC_TEYES_CONFIG = 30; // команда API
-const STRUCT_LENGTH = 2; // длина данных API
+export const API_EXEC_TEYES_CONFIG = 30;
+export const API_SIZE_TEYES_CONFIG = 1;
 
 const struct = new BluetoothStruct(StructTeyesConfig);
 
@@ -32,12 +32,12 @@ export class TeyesConfig extends BaseModel implements ITeyesConfig
 	 */
 	set(buf: DataView): boolean
 	{
-		return this._set(this, API_EXEC_TEYES_CONFIG, STRUCT_LENGTH, struct, buf);
+		return this._set(this, API_EXEC_TEYES_CONFIG, API_SIZE_TEYES_CONFIG + 1, struct, buf);
 	}
 
 	/** Чтение данных */
 	get(): DataView | undefined
 	{
-		return this._get(this, API_EXEC_TEYES_CONFIG, STRUCT_LENGTH, struct);
+		return this._get(this, API_EXEC_TEYES_CONFIG, API_SIZE_TEYES_CONFIG + 1, struct);
 	}
 }

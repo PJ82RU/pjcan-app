@@ -4,8 +4,8 @@ import { StructButtonsConfig, BUTTON_NUMBER, BUTTON_PRESS_TYPE_NUMBER } from "./
 import { IButtonsConfig } from "./IButtonsConfig";
 import { IButtonsConfigItem } from "./IButtonsConfigItem";
 
-export const API_EXEC_BUTTONS_CONFIG = 20; // команда API
-const STRUCT_LENGTH = 63; // длина данных API
+export const API_EXEC_BUTTONS_CONFIG = 20;
+export const API_SIZE_BUTTONS_CONFIG = 62;
 
 const struct = new BluetoothStruct(StructButtonsConfig);
 
@@ -16,6 +16,7 @@ export class ButtonsConfig extends BaseModel implements IButtonsConfig
 	out = false;
 	reset = false;
 	range = 0;
+	sendValue = false;
 	items = [] as IButtonsConfigItem[];
 
 	constructor(data?: DataView)
@@ -36,12 +37,12 @@ export class ButtonsConfig extends BaseModel implements IButtonsConfig
 	 */
 	set(buf: DataView): boolean
 	{
-		return this._set(this, API_EXEC_BUTTONS_CONFIG, STRUCT_LENGTH, struct, buf);
+		return this._set(this, API_EXEC_BUTTONS_CONFIG, API_SIZE_BUTTONS_CONFIG + 1, struct, buf);
 	}
 
 	/** Чтение данных */
 	get(): DataView | undefined
 	{
-		return this._get(this, API_EXEC_BUTTONS_CONFIG, STRUCT_LENGTH, struct);
+		return this._get(this, API_EXEC_BUTTONS_CONFIG, API_SIZE_BUTTONS_CONFIG + 1, struct);
 	}
 }

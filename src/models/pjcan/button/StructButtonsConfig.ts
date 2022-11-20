@@ -8,6 +8,7 @@ export const StructButtonsConfig = {
 	enabled: BluetoothStruct.bit(),
 	out: BluetoothStruct.bit(),
 	reset: BluetoothStruct.bit(),
+	sendValue: BluetoothStruct.bit(),
 	range: BluetoothStruct.uint8(),
 	items: BluetoothStruct.struct(
 		{

@@ -4,8 +4,8 @@ import { ViewConfig } from "../../view";
 import { StructVolumeView } from "./StructVolumeView";
 import { IVolumeView } from "./IVolumeView";
 
-export const API_EXEC_VARIABLE_VOLUME_VIEW = 201; // команда API
-const STRUCT_LENGTH = 5; // длина данных API
+export const API_EXEC_VARIABLE_VOLUME_VIEW = 202;
+export const API_SIZE_VARIABLE_VOLUME_VIEW = 4;
 
 const struct = new BluetoothStruct(StructVolumeView);
 
@@ -26,12 +26,12 @@ export class VolumeView extends BaseModel implements IVolumeView
 	 */
 	set(buf: DataView): boolean
 	{
-		return this._set(this, API_EXEC_VARIABLE_VOLUME_VIEW, STRUCT_LENGTH, struct, buf);
+		return this._set(this, API_EXEC_VARIABLE_VOLUME_VIEW, API_SIZE_VARIABLE_VOLUME_VIEW + 1, struct, buf);
 	}
 
 	/** Чтение данных */
 	get(): DataView | undefined
 	{
-		return this._get(this, API_EXEC_VARIABLE_VOLUME_VIEW, STRUCT_LENGTH, struct);
+		return this._get(this, API_EXEC_VARIABLE_VOLUME_VIEW, API_SIZE_VARIABLE_VOLUME_VIEW + 1, struct);
 	}
 }

@@ -6,6 +6,8 @@ export interface IEngineValue extends IBaseModel {
 	coolant: number;
 	rpm: number;
 	mseconds: number;
+	totalSeconds: number;
+	totalCountRPM: number;
 	countRPM: number;
 	load: number;
 	throttle: number;

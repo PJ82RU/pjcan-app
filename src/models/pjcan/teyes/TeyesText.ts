@@ -3,8 +3,8 @@ import { BaseModel } from "../base";
 import { StructTeyesText } from "./StructTeyesText";
 import { ITeyesText } from "./ITeyesText";
 
-export const API_EXEC_TEYES_TEXT = 31; // команда API
-const STRUCT_LENGTH = 13; // длина данных API
+export const API_EXEC_TEYES_TEXT = 31;
+export const API_SIZE_TEYES_TEXT = 12;
 
 const struct = new BluetoothStruct(StructTeyesText);
 
@@ -25,12 +25,12 @@ export class TeyesText extends BaseModel implements ITeyesText
 	 */
 	set(buf: DataView): boolean
 	{
-		return this._set(this, API_EXEC_TEYES_TEXT, STRUCT_LENGTH, struct, buf);
+		return this._set(this, API_EXEC_TEYES_TEXT, API_SIZE_TEYES_TEXT + 1, struct, buf);
 	}
 
 	/** Чтение данных */
 	get(): DataView | undefined
 	{
-		return this._get(this, API_EXEC_TEYES_TEXT, STRUCT_LENGTH, struct);
+		return this._get(this, API_EXEC_TEYES_TEXT, API_SIZE_TEYES_TEXT + 1, struct);
 	}
 }

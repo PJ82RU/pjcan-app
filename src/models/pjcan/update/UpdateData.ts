@@ -1,9 +1,9 @@
 import EventEmitter from "eventemitter3";
 import { IUpdateData } from "./IUpdateData";
 
-export const API_EXEC_UPDATE_UPLOAD_GZ = 92; // команда API
-export const UPDATE_UPLOAD_EVENT_RESULT = "UploadResult"; // Имя события
-const STRUCT_LENGTH = 512; // длина данных API
+export const API_EXEC_UPDATE_UPLOAD_GZ = 92;
+export const API_SIZE_UPDATE_UPLOAD_GZ = 511;
+export const UPDATE_UPLOAD_EVENT_RESULT = "UploadResult";
 
 /** Модель загрузки данных прошивки */
 export class UpdateData extends EventEmitter implements IUpdateData
@@ -47,7 +47,7 @@ export class UpdateData extends EventEmitter implements IUpdateData
 	{
 		let size = this.data.byteLength - this.offset;
 		if (size < 0) size = 0;
-		else if (size > STRUCT_LENGTH - 1) size = STRUCT_LENGTH - 1;
+		else if (size > API_SIZE_UPDATE_UPLOAD_GZ) size = API_SIZE_UPDATE_UPLOAD_GZ;
 
 		const buf: Uint8Array = new Uint8Array(size + 1);
 		buf[0] = API_EXEC_UPDATE_UPLOAD_GZ;

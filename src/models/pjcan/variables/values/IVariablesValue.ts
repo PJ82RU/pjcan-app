@@ -7,6 +7,7 @@ import { IFuelValue } from "../fuel";
 import { IMovementValue } from "../movement";
 import { ISensorsValue } from "../sensors";
 import { ITemperatureValue } from "../temperature";
+import { IVolumeValue } from "../volume";
 
 export interface IVariablesValue extends IBaseModel {
 	/** Значения климат-контроля */
@@ -25,4 +26,6 @@ export interface IVariablesValue extends IBaseModel {
 	sensors: ISensorsValue;
 	/** Значения температуры */
 	temperature: ITemperatureValue;
+	/** Значения уровня звука */
+	volume: IVolumeValue;
 }

@@ -3,8 +3,8 @@ import { BaseModel } from "../../base";
 import { StructMovementValue } from "./StructMovementValue";
 import { IMovementValue } from "./IMovementValue";
 
-export const API_EXEC_VARIABLE_MOVEMENT = 160; // команда API
-const STRUCT_LENGTH = 13; // длина данных API
+export const API_EXEC_VARIABLE_MOVEMENT = 160;
+export const API_SIZE_VARIABLE_MOVEMENT = 12;
 
 const struct = new BluetoothStruct(StructMovementValue);
 
@@ -27,12 +27,12 @@ export class MovementValue extends BaseModel implements IMovementValue
 	 */
 	set(buf: DataView): boolean
 	{
-		return this._set(this, API_EXEC_VARIABLE_MOVEMENT, STRUCT_LENGTH, struct, buf);
+		return this._set(this, API_EXEC_VARIABLE_MOVEMENT, API_SIZE_VARIABLE_MOVEMENT + 1, struct, buf);
 	}
 
 	/** Чтение данных */
 	get(): DataView | undefined
 	{
-		return this._get(this, API_EXEC_VARIABLE_MOVEMENT, STRUCT_LENGTH, struct);
+		return this._get(this, API_EXEC_VARIABLE_MOVEMENT, API_SIZE_VARIABLE_MOVEMENT + 1, struct);
 	}
 }

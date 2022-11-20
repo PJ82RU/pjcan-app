@@ -1,5 +1,5 @@
-import { API_EXEC_BUTTONS_CONFIG, ButtonsConfig } from "./ButtonConfig";
-import { API_EXEC_BUTTONS_VALUE, ButtonValue } from "./ButtonValue";
+import { API_EXEC_BUTTONS_CONFIG, ButtonsConfig, API_SIZE_BUTTONS_CONFIG } from "./ButtonConfig";
+import { API_EXEC_BUTTONS_VALUE, ButtonValue, API_SIZE_BUTTONS_VALUE } from "./ButtonValue";
 import { TButtonItem } from "./TButtonItem";
 import { TButtonExec } from "./TButtonExec";
 import { TButtonPress } from "./TButtonPress";
@@ -12,6 +12,8 @@ import { IButtonValue } from "./IButtonValue";
 export {
 	API_EXEC_BUTTONS_CONFIG,
 	API_EXEC_BUTTONS_VALUE,
+	API_SIZE_BUTTONS_CONFIG,
+	API_SIZE_BUTTONS_VALUE,
 	BUTTON_NUMBER,
 	BUTTON_PRESS_TYPE_NUMBER,
 	StructButtonsConfig,

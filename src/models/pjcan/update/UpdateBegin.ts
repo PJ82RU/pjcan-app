@@ -1,8 +1,8 @@
 import EventEmitter from "eventemitter3";
 import { IUpdateBegin } from "./IUpdateBegin";
 
-export const API_EXEC_UPDATE_BEGIN_GZ = 93; // команда API
-export const UPDATE_BEGIN_EVENT_RESULT = "begin_result"; // Имя события
+export const API_EXEC_UPDATE_BEGIN_GZ = 93;
+export const UPDATE_BEGIN_EVENT_RESULT = "begin_result";
 
 /** Модель начала обновления прошивки устройства */
 export class UpdateBegin extends EventEmitter implements IUpdateBegin

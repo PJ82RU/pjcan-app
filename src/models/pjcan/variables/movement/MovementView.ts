@@ -1,11 +1,11 @@
 import { BluetoothStruct } from "@/components/bluetooth";
 import { BaseModel } from "../../base";
-import { ViewConfig } from "../../view";
+import { API_SIZE_VIEW, ViewConfig } from "../../view";
 import { StructMovementView } from "./StructMovementView";
 import { IMovementView } from "./IMovementView";
 
-export const API_EXEC_VARIABLE_MOVEMENT_VIEW = 161; // команда API
-const STRUCT_LENGTH = 13; // длина данных API
+export const API_EXEC_VARIABLE_MOVEMENT_VIEW = 161;
+export const API_SIZE_VARIABLE_MOVEMENT_VIEW = API_SIZE_VIEW * 3;
 
 const struct = new BluetoothStruct(StructMovementView);
 
@@ -28,12 +28,12 @@ export class MovementView extends BaseModel implements IMovementView
 	 */
 	set(buf: DataView): boolean
 	{
-		return this._set(this, API_EXEC_VARIABLE_MOVEMENT_VIEW, STRUCT_LENGTH, struct, buf);
+		return this._set(this, API_EXEC_VARIABLE_MOVEMENT_VIEW, API_SIZE_VARIABLE_MOVEMENT_VIEW + 1, struct, buf);
 	}
 
 	/** Чтение данных */
 	get(): DataView | undefined
 	{
-		return this._get(this, API_EXEC_VARIABLE_MOVEMENT_VIEW, STRUCT_LENGTH, struct);
+		return this._get(this, API_EXEC_VARIABLE_MOVEMENT_VIEW, API_SIZE_VARIABLE_MOVEMENT_VIEW + 1, struct);
 	}
 }

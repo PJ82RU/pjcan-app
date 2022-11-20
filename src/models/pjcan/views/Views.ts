@@ -2,14 +2,14 @@
 
 import { BluetoothStruct } from "@/components/bluetooth";
 import { BaseModel } from "../base";
-import { CarView } from "../car";
-import { VariableView } from "../variables/views";
-import { TeyesView } from "../teyes";
+import { API_SIZE_CAR_VIEW, CarView } from "../car";
+import { API_SIZE_VARIABLE_VIEW, VariableView } from "../variables/views";
+import { API_SIZE_TEYES_VIEW, TeyesView } from "../teyes";
 import { StructViews } from "./StructViews";
 import { IViews } from "./IViews";
 
 export const API_EXEC_VIEW = 2;
-const STRUCT_LENGTH = 109;
+export const API_SIZE_VIEW = API_SIZE_CAR_VIEW + API_SIZE_TEYES_VIEW + API_SIZE_VARIABLE_VIEW;
 
 const struct = new BluetoothStruct(StructViews);
 
@@ -31,7 +31,7 @@ export class Views extends BaseModel implements IViews
 	 */
 	set(buf: DataView): boolean
 	{
-		const result = this._set(this, API_EXEC_VIEW, STRUCT_LENGTH, struct, buf);
+		const result = this._set(this, API_EXEC_VIEW, API_SIZE_VIEW + 1, struct, buf);
 		if (result)
 		{
 			this.car.isData = true;

@@ -7,6 +7,7 @@ import { StructFuelValue } from "../fuel";
 import { StructMovementValue } from "../movement";
 import { StructSensorsValue } from "../sensors";
 import { StructTemperatureValue } from "../temperature";
+import { StructVolumeValue } from "../volume";
 
 export const StructVariablesValue = {
 	climate: BluetoothStruct.struct(StructClimateValue),
@@ -16,5 +17,6 @@ export const StructVariablesValue = {
 	fuel: BluetoothStruct.struct(StructFuelValue),
 	movement: BluetoothStruct.struct(StructMovementValue),
 	sensors: BluetoothStruct.struct(StructSensorsValue),
-	temperature: BluetoothStruct.struct(StructTemperatureValue)
+	temperature: BluetoothStruct.struct(StructTemperatureValue),
+	volume: BluetoothStruct.struct(StructVolumeValue)
 };

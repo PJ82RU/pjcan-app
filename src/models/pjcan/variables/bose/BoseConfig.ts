@@ -4,8 +4,8 @@ import { StructBoseConfig } from "./StructBoseConfig";
 import { IBoseConfig } from "./IBoseConfig";
 import { TCenterPoint } from "./TCenterPoint";
 
-export const API_EXEC_VARIABLE_BOSE = 110; // команда API
-const STRUCT_LENGTH = 7; // длина данных API
+export const API_EXEC_VARIABLE_BOSE = 110;
+export const API_SIZE_VARIABLE_BOSE = 6;
 
 const struct = new BluetoothStruct(StructBoseConfig);
 
@@ -34,12 +34,12 @@ export class BoseConfig extends BaseModel implements IBoseConfig
 	 */
 	set(buf: DataView): boolean
 	{
-		return this._set(this, API_EXEC_VARIABLE_BOSE, STRUCT_LENGTH, struct, buf);
+		return this._set(this, API_EXEC_VARIABLE_BOSE, API_SIZE_VARIABLE_BOSE + 1, struct, buf);
 	}
 
 	/** Чтение данных */
 	get(): DataView | undefined
 	{
-		return this._get(this, API_EXEC_VARIABLE_BOSE, STRUCT_LENGTH, struct);
+		return this._get(this, API_EXEC_VARIABLE_BOSE, API_SIZE_VARIABLE_BOSE + 1, struct);
 	}
 }

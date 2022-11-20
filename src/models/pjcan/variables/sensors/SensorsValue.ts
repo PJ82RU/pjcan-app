@@ -4,8 +4,8 @@ import { StructSensorsValue } from "./StructSensorsValue";
 import { ISensorsValue } from "./ISensorsValue";
 import { TSensorsSignal } from "./TSensorsSignal";
 
-export const API_EXEC_VARIABLE_SENSORS = 170; // команда API
-const STRUCT_LENGTH = 3; // длина данных API
+export const API_EXEC_VARIABLE_SENSORS = 170;
+export const API_SIZE_VARIABLE_SENSORS = 2;
 
 const struct = new BluetoothStruct(StructSensorsValue);
 
@@ -31,12 +31,12 @@ export class SensorsValue extends BaseModel implements ISensorsValue
 	 */
 	set(buf: DataView): boolean
 	{
-		return this._set(this, API_EXEC_VARIABLE_SENSORS, STRUCT_LENGTH, struct, buf);
+		return this._set(this, API_EXEC_VARIABLE_SENSORS, API_SIZE_VARIABLE_SENSORS + 1, struct, buf);
 	}
 
 	/** Чтение данных */
 	get(): DataView | undefined
 	{
-		return this._get(this, API_EXEC_VARIABLE_SENSORS, STRUCT_LENGTH, struct);
+		return this._get(this, API_EXEC_VARIABLE_SENSORS, API_SIZE_VARIABLE_SENSORS + 1, struct);
 	}
 }

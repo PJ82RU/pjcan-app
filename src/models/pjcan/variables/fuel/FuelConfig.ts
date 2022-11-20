@@ -3,8 +3,8 @@ import { BaseModel } from "../../base";
 import { StructFuelConfig } from "./StructFuelConfig";
 import { IFuelConfig } from "./IFuelConfig";
 
-export const API_EXEC_VARIABLE_FUEL_CONFIG = 151; // команда API
-const STRUCT_LENGTH = 5; // длина данных API
+export const API_EXEC_VARIABLE_FUEL_CONFIG = 151;
+export const API_SIZE_VARIABLE_FUEL_CONFIG = 4;
 
 const struct = new BluetoothStruct(StructFuelConfig);
 
@@ -25,12 +25,12 @@ export class FuelConfig extends BaseModel implements IFuelConfig
 	 */
 	set(buf: DataView): boolean
 	{
-		return this._set(this, API_EXEC_VARIABLE_FUEL_CONFIG, STRUCT_LENGTH, struct, buf);
+		return this._set(this, API_EXEC_VARIABLE_FUEL_CONFIG, API_SIZE_VARIABLE_FUEL_CONFIG + 1, struct, buf);
 	}
 
 	/** Чтение данных */
 	get(): DataView | undefined
 	{
-		return this._get(this, API_EXEC_VARIABLE_FUEL_CONFIG, STRUCT_LENGTH, struct);
+		return this._get(this, API_EXEC_VARIABLE_FUEL_CONFIG, API_SIZE_VARIABLE_FUEL_CONFIG + 1, struct);
 	}
 }

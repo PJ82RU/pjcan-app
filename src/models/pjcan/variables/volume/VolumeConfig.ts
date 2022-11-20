@@ -3,8 +3,8 @@ import { BaseModel } from "../../base";
 import { StructVolumeConfig } from "./StructVolumeConfig";
 import { IVolumeConfig } from "./IVolumeConfig";
 
-export const API_EXEC_VARIABLE_VOLUME = 200; // команда API
-const STRUCT_LENGTH = 4; // длина данных API
+export const API_EXEC_VARIABLE_VOLUME_CONFIG = 201;
+export const API_SIZE_VARIABLE_VOLUME_CONFIG = 3;
 
 const struct = new BluetoothStruct(StructVolumeConfig);
 
@@ -27,12 +27,12 @@ export class VolumeConfig extends BaseModel implements IVolumeConfig
 	 */
 	set(buf: DataView): boolean
 	{
-		return this._set(this, API_EXEC_VARIABLE_VOLUME, STRUCT_LENGTH, struct, buf);
+		return this._set(this, API_EXEC_VARIABLE_VOLUME_CONFIG, API_SIZE_VARIABLE_VOLUME_CONFIG + 1, struct, buf);
 	}
 
 	/** Чтение данных */
 	get(): DataView | undefined
 	{
-		return this._get(this, API_EXEC_VARIABLE_VOLUME, STRUCT_LENGTH, struct);
+		return this._get(this, API_EXEC_VARIABLE_VOLUME_CONFIG, API_SIZE_VARIABLE_VOLUME_CONFIG + 1, struct);
 	}
 }

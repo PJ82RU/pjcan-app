@@ -1,15 +1,16 @@
 import { BluetoothStruct } from "@/components/bluetooth";
 import { BaseModel } from "../base";
-import { Version } from "../version";
-import { ButtonsConfig } from "../button";
-import { CarConfig } from "../car";
-import { TeyesConfig } from "../teyes";
-import { VariableConfig } from "../variables/configs";
+import { API_SIZE_VERSION, Version } from "../version";
+import { API_SIZE_BUTTONS_CONFIG, ButtonsConfig } from "../button";
+import { API_SIZE_CAR_CONFIG, CarConfig } from "../car";
+import { API_SIZE_TEYES_CONFIG, TeyesConfig } from "../teyes";
+import { API_SIZE_VARIABLE_CONFIG, VariableConfig } from "../variables/configs";
 import { IConfigs } from "./IConfigs";
 import { StructConfigs } from "./StructConfigs";
 
 export const API_EXEC_CONFIG = 1;
-const STRUCT_LENGTH = 138;
+export const API_SIZE_CONFIG =
+	API_SIZE_VERSION + API_SIZE_BUTTONS_CONFIG + API_SIZE_CAR_CONFIG + API_SIZE_TEYES_CONFIG + API_SIZE_VARIABLE_CONFIG;
 
 const struct = new BluetoothStruct(StructConfigs);
 
@@ -33,7 +34,7 @@ export class Configs extends BaseModel implements IConfigs
 	 */
 	set(buf: DataView): boolean
 	{
-		const result = this._set(this, API_EXEC_CONFIG, STRUCT_LENGTH, struct, buf);
+		const result = this._set(this, API_EXEC_CONFIG, API_SIZE_CONFIG + 1, struct, buf);
 		if (result)
 		{
 			this.buttons.isData = true;

@@ -1,6 +1,6 @@
-import { FuelConfig, API_EXEC_VARIABLE_FUEL_CONFIG } from "./FuelConfig";
-import { FuelValue, API_EXEC_VARIABLE_FUEL } from "./FuelValue";
-import { FuelView, API_EXEC_VARIABLE_FUEL_VIEW } from "./FuelView";
+import { FuelConfig, API_EXEC_VARIABLE_FUEL_CONFIG, API_SIZE_VARIABLE_FUEL_CONFIG } from "./FuelConfig";
+import { FuelValue, API_EXEC_VARIABLE_FUEL, API_SIZE_VARIABLE_FUEL } from "./FuelValue";
+import { FuelView, API_EXEC_VARIABLE_FUEL_VIEW, API_SIZE_VARIABLE_FUEL_VIEW } from "./FuelView";
 import { IFuelConfig } from "./IFuelConfig";
 import { IFuelValue } from "./IFuelValue";
 import { IFuelView } from "./IFuelView";
@@ -12,6 +12,9 @@ export {
 	API_EXEC_VARIABLE_FUEL_CONFIG,
 	API_EXEC_VARIABLE_FUEL,
 	API_EXEC_VARIABLE_FUEL_VIEW,
+	API_SIZE_VARIABLE_FUEL_CONFIG,
+	API_SIZE_VARIABLE_FUEL,
+	API_SIZE_VARIABLE_FUEL_VIEW,
 	StructFuelConfig,
 	StructFuelValue,
 	StructFuelView,

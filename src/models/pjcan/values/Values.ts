@@ -4,12 +4,12 @@ import { BluetoothStruct } from "@/components/bluetooth";
 import { BaseModel } from "../base";
 import { StructValues } from "./StructValues";
 import { IValues } from "./IValues";
-import { DeviceValue } from "../device";
-import { LCDValue } from "../lcd";
-import { VariablesValue } from "../variables/values";
+import { API_SIZE_DEVICE_VALUE, DeviceValue } from "../device";
+import { API_SIZE_LCD_VALUE, LCDValue } from "../lcd";
+import { API_SIZE_VARIABLE_VALUE, VariablesValue } from "../variables/values";
 
 export const API_EXEC_VALUE = 3;
-const STRUCT_LENGTH = 95;
+export const API_SIZE_VALUE = API_SIZE_DEVICE_VALUE + API_SIZE_LCD_VALUE + API_SIZE_VARIABLE_VALUE;
 
 const struct = new BluetoothStruct(StructValues);
 
@@ -31,7 +31,7 @@ export class Values extends BaseModel implements IValues
 	 */
 	set(buf: DataView): boolean
 	{
-		const result = this._set(this, API_EXEC_VALUE, STRUCT_LENGTH, struct, buf);
+		const result = this._set(this, API_EXEC_VALUE, API_SIZE_VALUE + 1, struct, buf);
 		if (result)
 		{
 			this.device.isData = true;
@@ -43,6 +43,7 @@ export class Values extends BaseModel implements IValues
 			this.variable.movement.isData = true;
 			this.variable.sensors.isData = true;
 			this.variable.temperature.isData = true;
+			this.variable.volume.isData = true;
 		}
 		return result;
 	}

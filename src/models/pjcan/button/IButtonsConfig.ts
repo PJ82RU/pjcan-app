@@ -3,9 +3,16 @@ import { IButtonsConfigItem } from "./IButtonsConfigItem";
 
 /** Интерфейс кнопки */
 export interface IButtonsConfig extends IBaseModel {
-	enabled: boolean; // вкл/выкл. кнопок
-	out: boolean; // вкл/выкл. эмуляции кнопок
-	reset: boolean; // сбросить значения
-	range: number; // диапазон сигнала (по умолчанию 10)
-	items: IButtonsConfigItem[]; // настройки кнопок
+	/** Вкл/выкл кнопок */
+	enabled: boolean;
+	/** Вкл/выкл эмуляции кнопок */
+	out: boolean;
+	/** Сбросить значения */
+	reset: boolean;
+	/** Отправлять значение нажатой кнопки */
+	sendValue: boolean;
+	/** Диапазон сигнала (по умолчанию 10) */
+	range: number;
+	/** Настройки кнопок */
+	items: IButtonsConfigItem[];
 }
