@@ -465,14 +465,24 @@ export class BluetoothStruct
 						if (value[2] > 0)
 						{
 							for (let i = 0; i < value[2]; i++)
-							{ this.offset = new BluetoothStruct(value[1]).decode(buffer, data[key][i], this.offset); }
+							{
+								this.offset = new BluetoothStruct(value[1]).decode(buffer, data[key][i], this.offset);
+							}
 						}
-						else this.offset = new BluetoothStruct(value[1]).decode(buffer, data[key], this.offset);
+						else
+						{
+							this.offset = new BluetoothStruct(value[1]).decode(buffer, data[key], this.offset);
+						}
 						break;
 				}
 			}
-			else data[key] = this.getBit();
+			else
+			{
+				data[key] = this.getBit();
+			}
 		}
+
+		if (this.bit_offset > 0) this.freeBitBuffer();
 		return this.offset;
 	}
 
@@ -569,6 +579,7 @@ export class BluetoothStruct
 				else this.setBit(data[key]);
 			}
 		}
+		if (this.bit_offset > 0) this.freeBitBuffer();
 		return this.offset;
 	}
 }
