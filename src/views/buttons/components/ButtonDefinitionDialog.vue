@@ -10,6 +10,14 @@
 	>
 		<template #body>
 			<v-row>
+				<v-col cols="12">
+					<number-field
+						v-model="resistance"
+						:label="$t('buttons.resistance.title')"
+						:hint="$t('buttons.resistance.description')"
+						:max="3999"
+					/>
+				</v-col>
 				<v-col cols="12" class="pt-0">
 					<v-select
 						v-model="modelType"
@@ -39,13 +47,14 @@
 import { computed, ref, toRefs, watch } from "vue";
 
 import DialogTemplate from "@/components/DialogTemplate.vue";
+import NumberField from "@/components/common/NumberField.vue";
 
 import { IConfigItem } from "@/models/interfaces/IConfigItem";
 import { TButtonItem } from "@/models/pjcan/button";
 
 export default {
 	name: "ButtonDefinitionDialog",
-	components: { DialogTemplate },
+	components: { DialogTemplate, NumberField },
 	props: {
 		/** Отображение диалога */
 		modelValue: {
@@ -57,6 +66,8 @@ export default {
 			type: Array as () => IConfigItem[],
 			required: true
 		},
+		/** Сопротивление кнопки */
+		resistance: Number,
 		type: Number as () => TButtonItem
 	},
 	emits: ["update:modelValue", "click:apply"],

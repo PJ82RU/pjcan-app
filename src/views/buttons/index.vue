@@ -16,6 +16,7 @@
 	<button-definition-dialog
 		v-model="visibleButtonDefinitionDialog"
 		:list="list"
+		:resistance="resistanceButtonDefinition"
 		:type="typeButtonDefinition"
 		@click:apply="onButtonDefinitionApply"
 	/>
@@ -47,7 +48,7 @@ export default {
 		const isLoadedConfig = ref(false);
 		const visibleButtonDefinitionDialog = ref(false);
 		const typeButtonDefinition = ref(-1);
-		let resistanceButtonDefinition = 0;
+		const resistanceButtonDefinition = ref(0);
 
 		const list = ref([
 			{ title: $t("buttons.mode"), type: TButtonItem.BUTTON_MODE, icon: "mdi-menu" },
@@ -81,6 +82,7 @@ export default {
 			if (res.isData)
 			{
 				res.items?.forEach((x, i) => (list.value[i].item = x));
+				console.log(list.value);
 
 				// Включаем определение нажатой кнопки.
 				// Выключится автоматически, при запросе значений или ручками в onUnmounted
@@ -97,7 +99,7 @@ export default {
 			if (res.isData && !visibleButtonDefinitionDialog.value)
 			{
 				typeButtonDefinition.value = res.index;
-				resistanceButtonDefinition = res.r;
+				resistanceButtonDefinition.value = res.r;
 				visibleButtonDefinitionDialog.value = true;
 			}
 		};
@@ -135,7 +137,7 @@ export default {
 		 */
 		const onButtonDefinitionApply = (type: TButtonItem) =>
 		{
-			canbus.configs.buttons.items[type].inR = resistanceButtonDefinition;
+			canbus.configs.buttons.items[type].inR = resistanceButtonDefinition.value;
 			canbus.queryConfigsButtons();
 			onReceiveConfig(canbus.configs.buttons);
 		};
@@ -146,6 +148,7 @@ export default {
 			isLoadedConfig,
 			list,
 			visibleButtonDefinitionDialog,
+			resistanceButtonDefinition,
 			typeButtonDefinition,
 			onUpdateConfig,
 			onButtonDefinitionApply
