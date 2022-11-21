@@ -4,16 +4,17 @@
 			<v-row>
 				<v-col cols="12">
 					<number-field
-						v-model="resistance"
+						v-model="modelResistance"
 						:label="$t('buttons.resistance.title')"
 						:hint="$t('buttons.resistance.description')"
 						:max="3999"
 						:disabled="!isLoadedConfig"
+						@change="$emit('change')"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0">
 					<v-select
-						v-model="pressSingle"
+						v-model="modelPressSingle"
 						:label="$t('buttons.pressSingle.title')"
 						:items="functionsList"
 						:hint="$t('buttons.pressSingle.description')"
@@ -22,11 +23,12 @@
 						item-value="value"
 						persistent-hint
 						:disabled="!isLoadedConfig"
+						@change="$emit('change')"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0">
 					<v-select
-						v-model="pressDual"
+						v-model="modelPressDual"
 						:label="$t('buttons.pressDual.title')"
 						:items="functionsList"
 						:hint="$t('buttons.pressDual.description')"
@@ -35,11 +37,12 @@
 						item-value="value"
 						persistent-hint
 						:disabled="!isLoadedConfig"
+						@change="$emit('change')"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0">
 					<v-select
-						v-model="pressTriple"
+						v-model="modelPressTriple"
 						:label="$t('buttons.pressTriple.title')"
 						:items="functionsList"
 						:hint="$t('buttons.pressTriple.description')"
@@ -48,11 +51,12 @@
 						item-value="value"
 						persistent-hint
 						:disabled="!isLoadedConfig"
+						@change="$emit('change')"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0">
 					<v-select
-						v-model="pressHold"
+						v-model="modelPressHold"
 						:label="$t('buttons.pressHold.title')"
 						:items="functionsList"
 						:hint="$t('buttons.pressHold.description')"
@@ -61,11 +65,12 @@
 						item-value="value"
 						persistent-hint
 						:disabled="!isLoadedConfig"
+						@change="$emit('change')"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0">
 					<v-select
-						v-model="release"
+						v-model="modelRelease"
 						:label="$t('buttons.release.title')"
 						:items="functionsList"
 						:hint="$t('buttons.release.description')"
@@ -74,6 +79,7 @@
 						item-value="value"
 						persistent-hint
 						:disabled="!isLoadedConfig"
+						@change="$emit('change')"
 					/>
 				</v-col>
 			</v-row>
@@ -88,13 +94,6 @@ import { $tm } from "@/lang";
 import Card from "@/components/cards/Card.vue";
 import NumberField from "@/components/common/NumberField.vue";
 
-import { IButtonsConfigItem, TButtonExec, TButtonItem, TButtonPress } from "@/models/pjcan/button";
-
-export interface IConfigReturn {
-	type: TButtonItem;
-	item: IButtonsConfigItem;
-}
-
 export default {
 	name: "SettingsCard",
 	components: { Card, NumberField },
@@ -103,18 +102,45 @@ export default {
 			type: String,
 			required: true
 		},
-		type: {
-			type: Number as () => TButtonItem,
+		inR: {
+			type: Number,
 			required: true
 		},
-		config: Object as () => IButtonsConfigItem,
+		pressSingle: {
+			type: Number,
+			required: true
+		},
+		pressDual: {
+			type: Number,
+			required: true
+		},
+		pressTriple: {
+			type: Number,
+			required: true
+		},
+		pressHold: {
+			type: Number,
+			required: true
+		},
+		release: {
+			type: Number,
+			required: true
+		},
 		isLoadedConfig: Boolean,
 		icon: String
 	},
-	emits: ["update"],
+	emits: [
+		"change",
+		"update:inR",
+		"update:pressSingle",
+		"update:pressDual",
+		"update:pressTriple",
+		"update:pressHold",
+		"update:release"
+	],
 	setup(props: any, { emit }: { emit: any })
 	{
-		const { type, config } = toRefs(props);
+		const { inR, pressSingle, pressDual, pressTriple, pressHold, release } = toRefs(props);
 
 		/** Список функций */
 		const functionsList = computed((): object[] =>
@@ -128,95 +154,50 @@ export default {
 			return result;
 		});
 
-		/** Обновить конфигурацию */
-		const onUpdate = (): void => emit("update", { type: type.value, item: config.value } as IConfigReturn);
-
 		/** Сопротивление кнопки */
-		const resistance = computed({
-			get: (): number => config.value?.inR ?? 0,
-			set: (val: number): void =>
-			{
-				if (config.value)
-				{
-					config.value.inR = val;
-					onUpdate();
-				}
-			}
+		const modelResistance = computed({
+			get: (): number => inR.value,
+			set: (val: number): void => emit("update:inR", val)
 		});
 
 		/** Кнопка нажата один раз */
-		const pressSingle = computed({
-			get: (): number => config.value?.exec[TButtonPress.PRESS_SINGLE] ?? TButtonExec.TEYES_NONE,
-			set: (val: number): void =>
-			{
-				if (config.value)
-				{
-					config.value.exec[TButtonPress.PRESS_SINGLE] = val;
-					onUpdate();
-				}
-			}
+		const modelPressSingle = computed({
+			get: (): number => pressSingle.value,
+			set: (val: number): void => emit("update:pressSingle", val)
 		});
 
 		/** Кнопка нажата два раза */
-		const pressDual = computed({
-			get: (): number => config.value?.exec[TButtonPress.PRESS_DUAL] ?? TButtonExec.TEYES_NONE,
-			set: (val: number): void =>
-			{
-				if (config.value)
-				{
-					config.value.exec[TButtonPress.PRESS_DUAL] = val;
-					onUpdate();
-				}
-			}
+		const modelPressDual = computed({
+			get: (): number => pressDual.value,
+			set: (val: number): void => emit("update:pressDual", val)
 		});
 
 		/** Кнопка нажата три раза */
-		const pressTriple = computed({
-			get: (): number => config.value?.exec[TButtonPress.PRESS_TRIPLE] ?? TButtonExec.TEYES_NONE,
-			set: (val: number): void =>
-			{
-				if (config.value)
-				{
-					config.value.exec[TButtonPress.PRESS_TRIPLE] = val;
-					onUpdate();
-				}
-			}
+		const modelPressTriple = computed({
+			get: (): number => pressTriple.value,
+			set: (val: number): void => emit("update:pressTriple", val)
 		});
 
 		/** Удержание кнопки */
-		const pressHold = computed({
-			get: (): number => config.value?.exec[TButtonPress.PRESS_HOLD] ?? TButtonExec.TEYES_NONE,
-			set: (val: number): void =>
-			{
-				if (config.value)
-				{
-					config.value.exec[TButtonPress.PRESS_HOLD] = val;
-					onUpdate();
-				}
-			}
+		const modelPressHold = computed({
+			get: (): number => pressHold.value,
+			set: (val: number): void => emit("update:pressHold", val)
 		});
 
 		/** Кнопка отпущена */
-		const release = computed({
-			get: (): number => config.value?.exec[TButtonPress.RELEASE] ?? TButtonExec.TEYES_NONE,
-			set: (val: number): void =>
-			{
-				if (config.value)
-				{
-					config.value.exec[TButtonPress.RELEASE] = val;
-					onUpdate();
-				}
-			}
+		const modelRelease = computed({
+			get: (): number => release.value,
+			set: (val: number): void => emit("update:release", val)
 		});
 
 		return {
 			functionsList,
-			resistance,
-			pressSingle,
-			pressDual,
-			pressTriple,
-			pressHold,
-			release
+			modelResistance,
+			modelPressSingle,
+			modelPressDual,
+			modelPressTriple,
+			modelPressHold,
+			modelRelease
 		};
 	}
 };

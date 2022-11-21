@@ -1,8 +1,13 @@
-import { IButtonsConfigItem, TButtonItem } from "../pjcan/button";
+import { TButtonItem } from "../pjcan/button";
 
 export interface IConfigItem {
 	title: string;
 	type: TButtonItem;
-	item: IButtonsConfigItem | undefined;
 	icon: string;
+	inR: number;
+	pressSingle: number;
+	pressDual: number;
+	pressTriple: number;
+	pressHold: number;
+	release: number;
 }

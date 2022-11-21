@@ -4,11 +4,15 @@
 			<settings-card
 				:class="`settings-card-${index}`"
 				:title="item.title"
-				:type="item.type"
-				:config="item.item"
+				v-model:in-r="item.inR"
+				v-model:press-single="item.pressSingle"
+				v-model:press-dual="item.pressDual"
+				v-model:press-triple="item.pressTriple"
+				v-model:press-hold="item.pressHold"
+				v-model:release="item.release"
 				:is-loaded-config="isLoadedConfig"
 				:icon="item.icon"
-				@update="onUpdateConfig"
+				@change="onButtonConfigChange"
 			/>
 		</div>
 	</flicking>
@@ -32,8 +36,7 @@ import Flicking from "@egjs/vue3-flicking";
 import SettingsCard from "./components/SettingsCard.vue";
 import ButtonDefinitionDialog from "./components/ButtonDefinitionDialog.vue";
 
-import { IButtonsConfig, IButtonValue, TButtonItem } from "@/models/pjcan/button";
-import { IConfigReturn } from "@/views/buttons/components/SettingsCard.vue";
+import { IButtonsConfig, IButtonValue, TButtonItem, TButtonPress } from "@/models/pjcan/button";
 import { IConfigItem } from "@/models/interfaces/IConfigItem";
 
 export default {
@@ -51,12 +54,72 @@ export default {
 		const resistanceButtonDefinition = ref(0);
 
 		const list = ref([
-			{ title: $t("buttons.mode"), type: TButtonItem.BUTTON_MODE, icon: "mdi-menu" },
-			{ title: $t("buttons.seekUp"), type: TButtonItem.BUTTON_SEEK_UP, icon: "mdi-play" },
-			{ title: $t("buttons.seekDown"), type: TButtonItem.BUTTON_SEEK_DOWN, icon: "mdi-play" },
-			{ title: $t("buttons.volUp"), type: TButtonItem.BUTTON_VOL_UP, icon: "mdi-volume-plus" },
-			{ title: $t("buttons.volDown"), type: TButtonItem.BUTTON_VOL_DOWN, icon: "mdi-volume-minus" },
-			{ title: $t("buttons.volMute"), type: TButtonItem.BUTTON_VOL_MUTE, icon: "mdi-volume-mute" }
+			{
+				title: $t("buttons.mode"),
+				type: TButtonItem.BUTTON_MODE,
+				icon: "mdi-menu",
+				inR: 0,
+				pressSingle: 0,
+				pressDual: 0,
+				pressTriple: 0,
+				pressHold: 0,
+				release: 0
+			},
+			{
+				title: $t("buttons.seekUp"),
+				type: TButtonItem.BUTTON_SEEK_UP,
+				icon: "mdi-play",
+				inR: 0,
+				pressSingle: 0,
+				pressDual: 0,
+				pressTriple: 0,
+				pressHold: 0,
+				release: 0
+			},
+			{
+				title: $t("buttons.seekDown"),
+				type: TButtonItem.BUTTON_SEEK_DOWN,
+				icon: "mdi-play",
+				inR: 0,
+				pressSingle: 0,
+				pressDual: 0,
+				pressTriple: 0,
+				pressHold: 0,
+				release: 0
+			},
+			{
+				title: $t("buttons.volUp"),
+				type: TButtonItem.BUTTON_VOL_UP,
+				icon: "mdi-volume-plus",
+				inR: 0,
+				pressSingle: 0,
+				pressDual: 0,
+				pressTriple: 0,
+				pressHold: 0,
+				release: 0
+			},
+			{
+				title: $t("buttons.volDown"),
+				type: TButtonItem.BUTTON_VOL_DOWN,
+				icon: "mdi-volume-minus",
+				inR: 0,
+				pressSingle: 0,
+				pressDual: 0,
+				pressTriple: 0,
+				pressHold: 0,
+				release: 0
+			},
+			{
+				title: $t("buttons.volMute"),
+				type: TButtonItem.BUTTON_VOL_MUTE,
+				icon: "mdi-volume-mute",
+				inR: 0,
+				pressSingle: 0,
+				pressDual: 0,
+				pressTriple: 0,
+				pressHold: 0,
+				release: 0
+			}
 		] as IConfigItem[]);
 
 		/**
@@ -81,8 +144,16 @@ export default {
 			isLoadedConfig.value = res.isData;
 			if (res.isData)
 			{
-				res.items?.forEach((x, i) => (list.value[i].item = x));
-				console.log(list.value);
+				res.items?.forEach((x, i) =>
+				{
+					const vals = list.value[i];
+					vals.inR = x.inR;
+					vals.pressSingle = x.exec[TButtonPress.PRESS_SINGLE];
+					vals.pressDual = x.exec[TButtonPress.PRESS_DUAL];
+					vals.pressTriple = x.exec[TButtonPress.PRESS_TRIPLE];
+					vals.pressHold = x.exec[TButtonPress.PRESS_HOLD];
+					vals.release = x.exec[TButtonPress.RELEASE];
+				});
 
 				// Включаем определение нажатой кнопки.
 				// Выключится автоматически, при запросе значений или ручками в onUnmounted
@@ -121,13 +192,20 @@ export default {
 			enabledSendValue(false);
 		});
 
-		/**
-		 * Обновление конфигурации кнопок
-		 * @param {IConfigReturn} data
-		 */
-		const onUpdateConfig = (data: IConfigReturn) =>
+		/** Изменение значений конфигурации кнопок */
+		const onButtonConfigChange = (): void =>
 		{
-			canbus.configs.buttons.items[data.type] = data.item;
+			const { items } = canbus.configs.buttons;
+			list.value.forEach((x, i) =>
+			{
+				const vals = items[i];
+				vals.inR = x.inR;
+				vals.exec[TButtonPress.PRESS_SINGLE] = x.pressSingle;
+				vals.exec[TButtonPress.PRESS_DUAL] = x.pressDual;
+				vals.exec[TButtonPress.PRESS_TRIPLE] = x.pressTriple;
+				vals.exec[TButtonPress.PRESS_HOLD] = x.pressHold;
+				vals.exec[TButtonPress.RELEASE] = x.release;
+			});
 			canbus.queryConfigsButtons();
 		};
 
@@ -135,7 +213,7 @@ export default {
 		 * Применить новый тип не определенной кнопки
 		 * @param {number} type Тип кнопки
 		 */
-		const onButtonDefinitionApply = (type: TButtonItem) =>
+		const onButtonDefinitionApply = (type: TButtonItem): void =>
 		{
 			canbus.configs.buttons.items[type].inR = resistanceButtonDefinition.value;
 			canbus.queryConfigsButtons();
@@ -150,7 +228,7 @@ export default {
 			visibleButtonDefinitionDialog,
 			resistanceButtonDefinition,
 			typeButtonDefinition,
-			onUpdateConfig,
+			onButtonConfigChange,
 			onButtonDefinitionApply
 		};
 	}
