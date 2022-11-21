@@ -102,30 +102,12 @@ export default {
 			type: String,
 			required: true
 		},
-		inR: {
-			type: Number,
-			required: true
-		},
-		pressSingle: {
-			type: Number,
-			required: true
-		},
-		pressDual: {
-			type: Number,
-			required: true
-		},
-		pressTriple: {
-			type: Number,
-			required: true
-		},
-		pressHold: {
-			type: Number,
-			required: true
-		},
-		release: {
-			type: Number,
-			required: true
-		},
+		inR: Number,
+		pressSingle: Number,
+		pressDual: Number,
+		pressTriple: Number,
+		pressHold: Number,
+		release: Number,
 		isLoadedConfig: Boolean,
 		icon: String
 	},
@@ -156,37 +138,37 @@ export default {
 
 		/** Сопротивление кнопки */
 		const modelResistance = computed({
-			get: (): number => inR.value,
+			get: (): number => inR.value ?? 0,
 			set: (val: number): void => emit("update:inR", val)
 		});
 
 		/** Кнопка нажата один раз */
 		const modelPressSingle = computed({
-			get: (): number => pressSingle.value,
+			get: (): number => pressSingle.value ?? 0,
 			set: (val: number): void => emit("update:pressSingle", val)
 		});
 
 		/** Кнопка нажата два раза */
 		const modelPressDual = computed({
-			get: (): number => pressDual.value,
+			get: (): number => pressDual.value ?? 0,
 			set: (val: number): void => emit("update:pressDual", val)
 		});
 
 		/** Кнопка нажата три раза */
 		const modelPressTriple = computed({
-			get: (): number => pressTriple.value,
+			get: (): number => pressTriple.value ?? 0,
 			set: (val: number): void => emit("update:pressTriple", val)
 		});
 
 		/** Удержание кнопки */
 		const modelPressHold = computed({
-			get: (): number => pressHold.value,
+			get: (): number => pressHold.value ?? 0,
 			set: (val: number): void => emit("update:pressHold", val)
 		});
 
 		/** Кнопка отпущена */
 		const modelRelease = computed({
-			get: (): number => release.value,
+			get: (): number => release.value ?? 0,
 			set: (val: number): void => emit("update:release", val)
 		});
 
