@@ -7,11 +7,11 @@
 		<v-list>
 			<template v-for="(item, index) in menu">
 				<v-list-item
-					v-if="item?.length > 0"
+					v-if="item.title?.length > 0"
 					:key="`menu-item_${index}`"
-					@click="$emit('click:item', { item, index })"
+					@click="$emit('click:item', item)"
 				>
-					<v-list-item-title>{{ item }}</v-list-item-title>
+					<v-list-item-title>{{ item.title }}</v-list-item-title>
 				</v-list-item>
 				<v-divider v-else :key="`menu-divider_${index}`" />
 			</template>
@@ -22,12 +22,17 @@
 <script lang="ts">
 import { ref } from "vue";
 
+export interface IMenuItem {
+	id: number;
+	title: string;
+}
+
 export default {
 	name: "MenuDots",
 	emits: ["click:item"],
 	props: {
 		menu: {
-			type: Array as () => string[],
+			type: Array as () => IMenuItem[],
 			required: true
 		},
 		color: String

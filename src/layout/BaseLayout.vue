@@ -21,10 +21,10 @@
 			<about-modal v-model="visibleAbout" />
 		</v-app-bar>
 		<v-main>
-				<div class="base-layout__bg" />
-				<div class="base-layout__main" :style="{ width: `${pageWidth}px`, height: `${pageHeight - 50}px` }">
-					<router-view />
-				</div>
+			<div class="base-layout__bg" />
+			<div class="base-layout__main" :style="{ width: `${pageWidth}px`, height: `${pageHeight - 50}px` }">
+				<router-view />
+			</div>
 		</v-main>
 	</v-app>
 </template>
@@ -37,7 +37,7 @@ import i18n from "@/lang";
 
 import BluetoothBtn from "./components/BluetoothBtn.vue";
 import UpdateFirmware from "./components/UpdateFirmware.vue";
-import MenuDots from "@/components/MenuDots.vue";
+import MenuDots, { IMenuItem } from "@/components/MenuDots.vue";
 import AboutModal from "./components/AboutModal.vue";
 import ScreenFull from "screenfull";
 
@@ -47,24 +47,28 @@ export default {
 	setup()
 	{
 		const title = computed((): string => store.getters["app/title"]);
-		const menu = computed((): string[] =>
+		const menu = computed((): IMenuItem[] =>
 		{
 			const lang = i18n.global;
-			const list = [
-				"onboard",
-				"settings.buttons",
-				"language." + (lang.locale !== "ru" ? "english" : "russian"),
-				"",
-				"about"
-			];
-			return list.map((x) => (x.length > 0 ? lang.t("menu." + x) : ""));
+			const result = [] as IMenuItem[];
+			const { name } = router.currentRoute.value;
+
+			if (name !== "Onboard") result.push({ id: 0, title: lang.t("menu.onboard") });
+			if (name !== "Buttons") result.push({ id: 1, title: lang.t("menu.settings.buttons") });
+			result.push(
+				{ id: 2, title: lang.t("menu.language." + (lang.locale !== "ru" ? "english" : "russian")) },
+				{} as IMenuItem,
+				{ id: 3, title: lang.t("menu.about") }
+			);
+
+			return result;
 		});
 		const visibleAbout = ref(false);
 
 		/** Событие выбора пункта меню */
 		const onMenuClick = (data: any) =>
 		{
-			switch (data.index)
+			switch (data.id)
 			{
 				case 0:
 					router.push({ name: "Onboard" });
@@ -74,7 +78,7 @@ export default {
 					router.push({ name: "Buttons" });
 					break;
 
-				case 4:
+				case 3:
 					visibleAbout.value = true;
 					break;
 			}
