@@ -175,9 +175,11 @@ export default {
 <style lang="scss" scoped>
 .onboard-buttons {
 	&__btns-main {
+		width: 100%;
 		height: 64px;
+
 		::v-deep(.v-btn) {
-			width: 200px;
+			width: calc(100% / 2);
 		}
 		::v-deep(.v-btn__content) {
 			font-size: 2rem;
@@ -186,8 +188,9 @@ export default {
 	}
 
 	&__btns-added {
+		width: 100%;
 		::v-deep(.v-btn) {
-			width: 100px;
+			width: calc(100% / 4);
 		}
 	}
 
