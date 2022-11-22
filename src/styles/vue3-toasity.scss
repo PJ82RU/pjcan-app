@@ -20,7 +20,7 @@
     --toastify-text-color-dark: #fff;
     --toastify-text-color-info: #fff;
     --toastify-text-color-success: #fff;
-    --toastify-text-color-warning: #fff;
+    --toastify-text-color-warning: #21262a;
     --toastify-text-color-error: #fff;
     --toastify-spinner-color: #616161;
     --toastify-spinner-color-empty-area: #e0e0e0;
@@ -205,6 +205,9 @@
     outline: none;
     padding: 0;
     transition: 0.3s ease;
+}
+.Toastify__toast--warning .Toastify__close-button {
+    color: #21262a !important;
 }
 .Toastify__close-button--light {
     color: #000;
