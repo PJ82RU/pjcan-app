@@ -22,14 +22,14 @@
 </template>
 
 <script lang="ts">
-import MenuDots from "@/components/MenuDots.vue";
+import MenuDots, { IMenuItem } from "@/components/MenuDots.vue";
 
 export default {
 	name: "Card",
 	components: { MenuDots },
 	props: {
 		title: String,
-		menu: Array as () => string[],
+		menu: Array as () => IMenuItem[],
 		like: {
 			type: Boolean,
 			default: undefined

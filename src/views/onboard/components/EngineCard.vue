@@ -74,10 +74,10 @@
 
 	<view-setting-dialog
 		v-model="menuVisible"
-		:title="menuTitle"
-		:enabled="menuItem.enabled"
-		:type="menuItem.type"
-		:time="menuItem.time"
+		:title="menuSelected.title"
+		:enabled="menuViewConfig.enabled"
+		:type="menuViewConfig.type"
+		:time="menuViewConfig.time"
 		:disabled="!isLoadedView"
 		@click:apply="onViewSettingApply"
 	/>
@@ -95,9 +95,9 @@ import IconCardItem from "@/components/cards/IconCardItem.vue";
 import ProgressCardItem from "@/components/cards/ProgressCardItem.vue";
 import ViewSettingDialog from "./ViewSettingDialog.vue";
 
-import { IMenuItem } from "@/models/IMenuItem";
 import { IViewConfig } from "@/models/pjcan/view";
 import { IEngineValue, IEngineView } from "@/models/pjcan/variables/engine";
+import { IMenuItem } from "@/components/MenuDots.vue";
 
 export default {
 	name: "EngineCard",
@@ -154,60 +154,57 @@ export default {
 
 		// МЕНЮ ОТОБРАЖЕНИЯ
 
-		const menu = computed((): string[] => [
-			$t("onboard.engine.enabled.menu"),
-			$t("onboard.engine.RPM.menu"),
-			$t("onboard.engine.countRPM.menu"),
-			$t("onboard.engine.load.menu"),
-			$t("onboard.engine.motors.menu"),
-			$t("onboard.engine.throttle.menu"),
-			$t("onboard.engine.coolant.menu")
+		const menu = computed((): IMenuItem[] => [
+			{ id: 0, title: $t("onboard.engine.enabled.menu") },
+			{ id: 1, title: $t("onboard.engine.RPM.menu") },
+			{ id: 2, title: $t("onboard.engine.countRPM.menu") },
+			{ id: 3, title: $t("onboard.engine.load.menu") },
+			{ id: 4, title: $t("onboard.engine.motors.menu") },
+			{ id: 5, title: $t("onboard.engine.throttle.menu") },
+			{ id: 6, title: $t("onboard.engine.coolant.menu") }
 		]);
 		const menuVisible = ref(false);
-		const menuTitle = ref("");
-		const menuItem = ref({} as IViewConfig);
-
-		let menuSelected = {} as IMenuItem;
+		const menuSelected = ref({} as IMenuItem);
+		const menuViewConfig = ref({} as IViewConfig);
 
 		/**
 		 * Выбор пункта меню отображения на информационном экране
-		 * @param {IMenuItem} data Выбранный пункт меню
+		 * @param {IMenuItem} item Элемент меню
 		 */
-		const onMenuClick = (data: IMenuItem): void =>
+		const onMenuClick = (item: IMenuItem): void =>
 		{
 			menuVisible.value = true;
-			menuTitle.value = data.item;
-			menuSelected = data;
+			menuSelected.value = item;
 
 			const { engine } = canbus.views.variable;
-			switch (data.index)
+			switch (item.id)
 			{
 				case 0:
-					menuItem.value = engine.enabled;
+					menuViewConfig.value = engine.enabled;
 					return;
 
 				case 1:
-					menuItem.value = engine.rpm;
+					menuViewConfig.value = engine.rpm;
 					break;
 
 				case 2:
-					menuItem.value = engine.totalCountRPM;
+					menuViewConfig.value = engine.totalCountRPM;
 					break;
 
 				case 3:
-					menuItem.value = engine.load;
+					menuViewConfig.value = engine.load;
 					break;
 
 				case 4:
-					menuItem.value = engine.totalSeconds;
+					menuViewConfig.value = engine.totalSeconds;
 					break;
 
 				case 5:
-					menuItem.value = engine.throttle;
+					menuViewConfig.value = engine.throttle;
 					break;
 
 				case 6:
-					menuItem.value = engine.coolant;
+					menuViewConfig.value = engine.coolant;
 					break;
 			}
 		};
@@ -219,7 +216,7 @@ export default {
 		const onViewSettingApply = (data: IViewConfig): void =>
 		{
 			const { engine } = canbus.views.variable;
-			switch (menuSelected.index)
+			switch (menuSelected.value.id)
 			{
 				case 0:
 					engine.enabled = data;
@@ -264,8 +261,8 @@ export default {
 			coolant,
 			menu,
 			menuVisible,
-			menuTitle,
-			menuItem,
+			menuSelected,
+			menuViewConfig,
 			onMenuClick,
 			onViewSettingApply
 		};

@@ -69,10 +69,10 @@
 
 	<view-setting-dialog
 		v-model="menuVisible"
-		:title="menuTitle"
-		:enabled="menuItem.enabled"
-		:type="menuItem.type"
-		:time="menuItem.time"
+		:title="menuSelected.title"
+		:enabled="menuViewConfig.enabled"
+		:type="menuViewConfig.type"
+		:time="menuViewConfig.time"
 		:disabled="!isLoadedView"
 		@click:apply="onViewSettingApply"
 	/>
@@ -90,9 +90,9 @@ import IconCardItem from "@/components/cards/IconCardItem.vue";
 import SwitchCardItem from "@/components/cards/SwitchCardItem.vue";
 import ViewSettingDialog from "./ViewSettingDialog.vue";
 
-import { IMenuItem } from "@/models/IMenuItem";
 import { IViewConfig } from "@/models/pjcan/view";
 import { IClimateValue, IClimateView, TAir } from "@/models/pjcan/variables/climate";
+import { IMenuItem } from "@/components/MenuDots.vue";
 
 export default {
 	name: "ClimateCard",
@@ -162,20 +162,20 @@ export default {
 
 		// МЕНЮ ОТОБРАЖЕНИЯ
 
-		const menu = computed((): string[] => [$t("onboard.climate.menu")]);
+		const menu = computed((): IMenuItem[] => [{ id: 0, title: $t("onboard.climate.menu") }]);
 		const menuVisible = ref(false);
-		const menuTitle = ref("");
-		const menuItem = ref({} as IViewConfig);
+		const menuSelected = ref({} as IMenuItem);
+		const menuViewConfig = ref({} as IViewConfig);
 
 		/**
 		 * Выбор пункта меню отображения на информационном экране
-		 * @param {IMenuItem} data Выбранный пункт меню
+		 * @param {IMenuItem} item Элемент меню
 		 */
-		const onMenuClick = (data: IMenuItem): void =>
+		const onMenuClick = (item: IMenuItem): void =>
 		{
 			menuVisible.value = true;
-			menuTitle.value = data.item;
-			menuItem.value = canbus.views.variable.climate.view;
+			menuSelected.value = item;
+			menuViewConfig.value = canbus.views.variable.climate.view;
 		};
 
 		/**
@@ -203,8 +203,8 @@ export default {
 			speedRotation,
 			menu,
 			menuVisible,
-			menuTitle,
-			menuItem,
+			menuSelected,
+			menuViewConfig,
 			onMenuClick,
 			onViewSettingApply
 		};

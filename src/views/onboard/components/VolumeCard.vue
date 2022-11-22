@@ -12,26 +12,26 @@
 						:disabled="!isLoadedView"
 					/>
 				</v-col>
-				<v-col cols="12" class="pt-0 pb-0">
-					<switch-card-item
-						v-model="mute"
-						:title="$t('onboard.volume.mute.title')"
-						:description="$t('onboard.volume.mute.description')"
-						color="warning"
-						:nodata="!isLoadedValue"
-						:disabled="!isLoadedView"
-					/>
-				</v-col>
+				<!--<v-col cols="12" class="pt-0 pb-0">-->
+				<!--	<switch-card-item-->
+				<!--		v-model="mute"-->
+				<!--		:title="$t('onboard.volume.mute.title')"-->
+				<!--		:description="$t('onboard.volume.mute.description')"-->
+				<!--		color="warning"-->
+				<!--		:nodata="!isLoadedValue"-->
+				<!--		:disabled="!isLoadedView"-->
+				<!--	/>-->
+				<!--</v-col>-->
 			</v-row>
 		</template>
 	</card>
 
 	<view-setting-dialog
 		v-model="menuVisible"
-		:title="menuTitle"
-		:enabled="menuItem.enabled"
-		:type="menuItem.type"
-		:time="menuItem.time"
+		:title="menuSelected.title"
+		:enabled="menuViewConfig.enabled"
+		:type="menuViewConfig.type"
+		:time="menuViewConfig.time"
 		:disabled="!isLoadedView"
 		@click:apply="onViewSettingApply"
 	/>
@@ -52,9 +52,9 @@ import SwitchCardItem from "@/components/cards/SwitchCardItem.vue";
 import SliderCardItem from "@/components/cards/SliderCardItem.vue";
 import ViewSettingDialog from "./ViewSettingDialog.vue";
 
-import { IMenuItem } from "@/models/IMenuItem";
 import { IViewConfig } from "@/models/pjcan/view";
 import { IVolumeConfig, IVolumeValue, IVolumeView } from "@/models/pjcan/variables/volume";
+import { IMenuItem } from "@/components/MenuDots.vue";
 
 export default {
 	name: "VolumeCard",
@@ -149,20 +149,20 @@ export default {
 
 		// МЕНЮ ОТОБРАЖЕНИЯ
 
-		const menu = computed((): string[] => [$t("onboard.volume.menu")]);
+		const menu = computed((): IMenuItem[] => [{ id: 0, title: $t("onboard.volume.menu") }]);
 		const menuVisible = ref(false);
-		const menuTitle = ref("");
-		const menuItem = ref({} as IViewConfig);
+		const menuSelected = ref({} as IMenuItem);
+		const menuViewConfig = ref({} as IViewConfig);
 
 		/**
 		 * Выбор пункта меню отображения на информационном экране
-		 * @param {IMenuItem} data Выбранный пункт меню
+		 * @param {IMenuItem} item Элемент меню
 		 */
-		const onMenuClick = (data: IMenuItem): void =>
+		const onMenuClick = (item: IMenuItem): void =>
 		{
 			menuVisible.value = true;
-			menuTitle.value = data.item;
-			menuItem.value = canbus.views.variable.volume.view;
+			menuSelected.value = item;
+			menuViewConfig.value = canbus.views.variable.volume.view;
 		};
 
 		/**
@@ -183,8 +183,8 @@ export default {
 			max,
 			menu,
 			menuVisible,
-			menuTitle,
-			menuItem,
+			menuSelected,
+			menuViewConfig,
 			onMenuClick,
 			onViewSettingApply
 		};

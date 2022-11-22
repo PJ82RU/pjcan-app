@@ -81,10 +81,10 @@
 
 	<view-setting-dialog
 		v-model="menuVisible"
-		:title="menuTitle"
-		:enabled="menuItem.enabled"
-		:type="menuItem.type"
-		:time="menuItem.time"
+		:title="menuSelected.title"
+		:enabled="menuViewConfig.enabled"
+		:type="menuViewConfig.type"
+		:time="menuViewConfig.time"
 		:disabled="!isLoadedSensorView"
 		@click:apply="onViewSettingApply"
 	/>
@@ -111,9 +111,9 @@ import ViewSettingDialog from "./ViewSettingDialog.vue";
 import { ISensorsValue, ISensorsView, TSensorsSignal } from "@/models/pjcan/variables/sensors";
 import { ITemperatureValue, ITemperatureView } from "@/models/pjcan/variables/temperature";
 
-import { IMenuItem } from "@/models/IMenuItem";
 import { IViewConfig } from "@/models/pjcan/view";
 import { IDeviceValue } from "@/models/pjcan/device";
+import { IMenuItem } from "@/components/MenuDots.vue";
 
 export default {
 	name: "InfoCard",
@@ -226,52 +226,49 @@ export default {
 
 		// МЕНЮ ОТОБРАЖЕНИЯ
 
-		const menu = computed((): string[] => [
-			$t("onboard.info.temperature.menu"),
-			$t("onboard.info.handbrake.menu"),
-			$t("onboard.info.reverse.menu"),
-			$t("onboard.info.safetyBelt.menu"),
-			$t("onboard.info.signal.menu")
+		const menu = computed((): IMenuItem[] => [
+			{ id: 0, title: $t("onboard.info.temperature.menu") },
+			{ id: 1, title: $t("onboard.info.handbrake.menu") },
+			{ id: 2, title: $t("onboard.info.reverse.menu") },
+			{ id: 3, title: $t("onboard.info.safetyBelt.menu") },
+			{ id: 4, title: $t("onboard.info.signal.menu") }
 		]);
 		const menuVisible = ref(false);
-		const menuTitle = ref("");
-		const menuItem = ref({} as IViewConfig);
+		const menuSelected = ref({} as IMenuItem);
+		const menuViewConfig = ref({} as IViewConfig);
 		const isLoaded = ref(false);
-
-		let menuSelected = {} as IMenuItem;
 
 		/**
 		 * Выбор пункта меню отображения на информационном экране
-		 * @param {IMenuItem} data Выбранный пункт меню
+		 * @param {IMenuItem} item Элемент меню
 		 */
-		const onMenuClick = (data: IMenuItem): void =>
+		const onMenuClick = (item: IMenuItem): void =>
 		{
 			menuVisible.value = true;
-			menuTitle.value = data.item;
-			menuSelected = data;
+			menuSelected.value = item;
 
 			const { temperature, sensors } = canbus.views.variable;
-			switch (data.index)
+			switch (item.id)
 			{
 				case 0:
-					menuItem.value = temperature.view;
+					menuViewConfig.value = temperature.view;
 					isLoaded.value = isLoadedTemperatureView.value;
 					return;
 
 				case 1:
-					menuItem.value = sensors.handbrake;
+					menuViewConfig.value = sensors.handbrake;
 					break;
 
 				case 2:
-					menuItem.value = sensors.reverse;
+					menuViewConfig.value = sensors.reverse;
 					break;
 
 				case 3:
-					menuItem.value = sensors.seatbelt;
+					menuViewConfig.value = sensors.seatbelt;
 					break;
 
 				case 4:
-					menuItem.value = sensors.signal;
+					menuViewConfig.value = sensors.signal;
 					break;
 			}
 			isLoaded.value = isLoadedSensorView.value;
@@ -284,7 +281,7 @@ export default {
 		const onViewSettingApply = (data: IViewConfig): void =>
 		{
 			const { temperature, sensors } = canbus.views.variable;
-			switch (menuSelected.index)
+			switch (menuSelected.value.id)
 			{
 				case 0:
 					temperature.view = data;
@@ -327,8 +324,8 @@ export default {
 			signalRight,
 			menu,
 			menuVisible,
-			menuTitle,
-			menuItem,
+			menuSelected,
+			menuViewConfig,
 			onMenuClick,
 			onViewSettingApply
 		};

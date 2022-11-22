@@ -11,7 +11,7 @@
 					:key="`menu-item_${index}`"
 					@click="$emit('click:item', item)"
 				>
-					<v-list-item-title>{{ item.title }}</v-list-item-title>
+					<v-list-item-title> {{ item.title }} </v-list-item-title>
 				</v-list-item>
 				<v-divider v-else :key="`menu-divider_${index}`" />
 			</template>

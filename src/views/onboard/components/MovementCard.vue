@@ -35,10 +35,10 @@
 
 	<view-setting-dialog
 		v-model="menuVisible"
-		:title="menuTitle"
-		:enabled="menuItem.enabled"
-		:type="menuItem.type"
-		:time="menuItem.time"
+		:title="menuSelected.title"
+		:enabled="menuViewConfig.enabled"
+		:type="menuViewConfig.type"
+		:time="menuViewConfig.time"
 		:disabled="!isLoadedView"
 		@click:apply="onViewSettingApply"
 	/>
@@ -54,9 +54,9 @@ import Card from "@/components/cards/Card.vue";
 import InputCardItem from "@/components/cards/InputCardItem.vue";
 import ViewSettingDialog from "./ViewSettingDialog.vue";
 
-import { IMenuItem } from "@/models/IMenuItem";
 import { IViewConfig } from "@/models/pjcan/view";
 import { IMovementValue, IMovementView } from "@/models/pjcan/variables/movement";
+import { IMenuItem } from "@/components/MenuDots.vue";
 
 export default {
 	name: "MovementCard",
@@ -105,40 +105,37 @@ export default {
 
 		// МЕНЮ ОТОБРАЖЕНИЯ
 
-		const menu = computed((): string[] => [
-			$t("onboard.movement.speed.menu"),
-			$t("onboard.movement.speedAVG.menu"),
-			$t("onboard.movement.restWay.menu")
+		const menu = computed((): IMenuItem[] => [
+			{ id: 0, title: $t("onboard.movement.speed.menu") },
+			{ id: 1, title: $t("onboard.movement.speedAVG.menu") },
+			{ id: 2, title: $t("onboard.movement.restWay.menu") }
 		]);
 		const menuVisible = ref(false);
-		const menuTitle = ref("");
-		const menuItem = ref({} as IViewConfig);
-
-		let menuSelected = {} as IMenuItem;
+		const menuSelected = ref({} as IMenuItem);
+		const menuViewConfig = ref({} as IViewConfig);
 
 		/**
 		 * Выбор пункта меню отображения на информационном экране
-		 * @param {IMenuItem} data Выбранный пункт меню
+		 * @param {IMenuItem} item Элемент меню
 		 */
-		const onMenuClick = (data: IMenuItem): void =>
+		const onMenuClick = (item: IMenuItem): void =>
 		{
 			menuVisible.value = true;
-			menuTitle.value = data.item;
-			menuSelected = data;
+			menuSelected.value = item;
 
 			const { movement } = canbus.views.variable;
-			switch (data.index)
+			switch (item.id)
 			{
 				case 0:
-					menuItem.value = movement.speed;
+					menuViewConfig.value = movement.speed;
 					return;
 
 				case 1:
-					menuItem.value = movement.speedAVG;
+					menuViewConfig.value = movement.speedAVG;
 					break;
 
 				case 2:
-					menuItem.value = movement.restWay;
+					menuViewConfig.value = movement.restWay;
 					break;
 			}
 		};
@@ -150,7 +147,7 @@ export default {
 		const onViewSettingApply = (data: IViewConfig): void =>
 		{
 			const { movement } = canbus.views.variable;
-			switch (menuSelected.index)
+			switch (menuSelected.value.id)
 			{
 				case 0:
 					movement.speed = data;
@@ -175,8 +172,8 @@ export default {
 			restWay,
 			menu,
 			menuVisible,
-			menuTitle,
-			menuItem,
+			menuSelected,
+			menuViewConfig,
 			onMenuClick,
 			onViewSettingApply
 		};

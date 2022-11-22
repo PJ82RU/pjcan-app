@@ -44,10 +44,10 @@
 
 	<view-setting-dialog
 		v-model="menuVisible"
-		:title="menuTitle"
-		:enabled="menuItem.enabled"
-		:type="menuItem.type"
-		:time="menuItem.time"
+		:title="menuSelected.title"
+		:enabled="menuViewConfig.enabled"
+		:type="menuViewConfig.type"
+		:time="menuViewConfig.time"
 		:disabled="!isLoadedView"
 		@click:apply="onViewSettingApply"
 	/>
@@ -63,9 +63,9 @@ import Card from "@/components/cards/Card.vue";
 import InputCardItem from "@/components/cards/InputCardItem.vue";
 import ViewSettingDialog from "./ViewSettingDialog.vue";
 
-import { IMenuItem } from "@/models/IMenuItem";
 import { IViewConfig } from "@/models/pjcan/view";
 import { IFuelValue, IFuelView } from "@/models/pjcan/variables/fuel";
+import { IMenuItem } from "@/components/MenuDots.vue";
 
 export default {
 	name: "FuelCard",
@@ -116,45 +116,42 @@ export default {
 
 		// МЕНЮ ОТОБРАЖЕНИЯ
 
-		const menu = computed((): string[] => [
-			$t("onboard.fuel.current.menu"),
-			$t("onboard.fuel.avg.menu"),
-			$t("onboard.fuel.total.menu"),
-			$t("onboard.fuel.consumption.menu")
+		const menu = computed((): IMenuItem[] => [
+			{ id: 0, title: $t("onboard.fuel.current.menu") },
+			{ id: 1, title: $t("onboard.fuel.avg.menu") },
+			{ id: 2, title: $t("onboard.fuel.total.menu") },
+			{ id: 3, title: $t("onboard.fuel.consumption.menu") }
 		]);
 		const menuVisible = ref(false);
-		const menuTitle = ref("");
-		const menuItem = ref({} as IViewConfig);
-
-		let menuSelected = {} as IMenuItem;
+		const menuSelected = ref({} as IMenuItem);
+		const menuViewConfig = ref({} as IViewConfig);
 
 		/**
 		 * Выбор пункта меню отображения на информационном экране
-		 * @param {IMenuItem} data Выбранный пункт меню
+		 * @param {IMenuItem} item Элемент меню
 		 */
-		const onMenuClick = (data: IMenuItem): void =>
+		const onMenuClick = (item: IMenuItem): void =>
 		{
 			menuVisible.value = true;
-			menuTitle.value = data.item;
-			menuSelected = data;
+			menuSelected.value = item;
 
 			const { fuel } = canbus.views.variable;
-			switch (data.index)
+			switch (item.id)
 			{
 				case 0:
-					menuItem.value = fuel.current;
+					menuViewConfig.value = fuel.current;
 					return;
 
 				case 1:
-					menuItem.value = fuel.avg;
+					menuViewConfig.value = fuel.avg;
 					break;
 
 				case 2:
-					menuItem.value = fuel.total;
+					menuViewConfig.value = fuel.total;
 					break;
 
 				case 3:
-					menuItem.value = fuel.consumption;
+					menuViewConfig.value = fuel.consumption;
 					break;
 			}
 		};
@@ -166,7 +163,7 @@ export default {
 		const onViewSettingApply = (data: IViewConfig): void =>
 		{
 			const { fuel } = canbus.views.variable;
-			switch (menuSelected.index)
+			switch (menuSelected.value.id)
 			{
 				case 0:
 					fuel.current = data;
@@ -196,8 +193,8 @@ export default {
 			consumption,
 			menu,
 			menuVisible,
-			menuTitle,
-			menuItem,
+			menuSelected,
+			menuViewConfig,
 			onMenuClick,
 			onViewSettingApply
 		};
