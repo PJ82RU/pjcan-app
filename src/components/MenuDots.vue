@@ -1,10 +1,10 @@
 <template>
-	<v-menu location="center end" transition="slide-x-reverse-transition">
+	<v-menu content-class="menu-dots" location="center end" transition="slide-x-reverse-transition">
 		<template v-slot:activator="{ props }">
 			<v-btn v-bind="props" icon="mdi-dots-vertical" :color="color" />
 		</template>
 
-		<v-list>
+		<v-list class="pa-0">
 			<template v-for="(item, index) in menu">
 				<v-list-item
 					v-if="item.title?.length > 0"

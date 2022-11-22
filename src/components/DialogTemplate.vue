@@ -16,7 +16,7 @@
 				</template>
 			</v-card-title>
 
-			<v-card-text v-if="text" class="dialog__text" :class="{ 'mb-2': !actions }">
+			<v-card-text v-if="text" class="dialog__text">
 				<slot name="body" />
 			</v-card-text>
 
