@@ -14,16 +14,78 @@
 			<v-row class="pb-2">
 				<v-col cols="12" class="pb-0 d-flex justify-center">
 					<v-btn-group class="onboard-buttons__btns-main">
-						<v-btn color="primary" size="x-large"> CLOCK </v-btn>
-						<v-btn color="primary" size="x-large"> INFO </v-btn>
+						<v-btn
+							color="primary"
+							size="x-large"
+							@mousedown="onTouchPress('btnClock')"
+							@mouseup="onTouchRelease('btnClock')"
+							@mouseleave="onTouchRelease('btnClock')"
+							@touchstart="onTouchPress('btnClock')"
+							@touchend="onTouchRelease('btnClock')"
+							@touchcancel="onTouchRelease('btnClock')"
+						>
+							CLOCK
+						</v-btn>
+						<v-btn
+							color="primary"
+							size="x-large"
+							@mousedown="onTouchPress('btnInfo')"
+							@mouseup="onTouchRelease('btnInfo')"
+							@mouseleave="onTouchRelease('btnInfo')"
+							@touchstart="onTouchPress('btnInfo')"
+							@touchend="onTouchRelease('btnInfo')"
+							@touchcancel="onTouchRelease('btnInfo')"
+						>
+							INFO
+						</v-btn>
 					</v-btn-group>
 				</v-col>
 				<v-col cols="12" class="d-flex justify-center">
 					<v-btn-group class="onboard-buttons__btns-added">
-						<v-btn color="secondary" size="x-large"> H </v-btn>
-						<v-btn color="secondary" size="x-large"> M </v-btn>
-						<v-btn color="secondary" size="x-large"> RM </v-btn>
-						<v-btn color="secondary" size="x-large"> 24/12 </v-btn>
+						<v-btn
+							color="secondary"
+							size="x-large"
+							@mousedown="onTouchPress('btnClockM')"
+							@mouseup="onTouchRelease('btnClockM')"
+							@mouseleave="onTouchRelease('btnClockM')"
+							@touchstart="onTouchPress('btnClockM')"
+							@touchend="onTouchRelease('btnClockM')"
+							@touchcancel="onTouchRelease('btnClockM')"
+						>
+							H
+						</v-btn>
+						<v-btn
+							color="secondary"
+							size="x-large"
+							@mousedown="onTouchPress('btnClockM')"
+							@mouseup="onTouchRelease('btnClockM')"
+							@mouseleave="onTouchRelease('btnClockM')"
+							@touchstart="onTouchPress('btnClockM')"
+							@touchend="onTouchRelease('btnClockM')"
+							@touchcancel="onTouchRelease('btnClockM')"
+						>
+							M
+						</v-btn>
+						<v-btn
+							color="secondary"
+							size="x-large"
+							@mousedown="onTouchPress('btnClockRM')"
+							@mouseup="onTouchRelease('btnClockRM')"
+							@mouseleave="onTouchRelease('btnClockRM')"
+							@touchstart="onTouchPress('btnClockRM')"
+							@touchend="onTouchRelease('btnClockRM')"
+							@touchcancel="onTouchRelease('btnClockRM')"
+						>
+							RM
+						</v-btn>
+						<v-btn
+							color="secondary"
+							size="x-large"
+							@mousedown="onTouchPress('flgClock24', true)"
+							@touchstart="onTouchPress('flgClock24', true)"
+						>
+							24/12
+						</v-btn>
 					</v-btn-group>
 				</v-col>
 			</v-row>
@@ -61,19 +123,20 @@ export default {
 			btnInfo: 0,
 			btnClock: 0,
 			btnClockM: 0,
-			btnClockH: 0
+			btnClockH: 0,
+			btnClockRM: 0
 		} as any;
 
 		/**
 		 * Событие нажатия на кнопку
 		 * @param {string} name Имя кнопки
-		 * @param {boolean} value Значение нажатия
+		 * @param {boolean} toggle Переключатель
 		 */
-		const onTouchPress = (name: string, value: boolean = true): void =>
+		const onTouchPress = (name: string, toggle: boolean = false): void =>
 		{
-			console.log("onTouchPress");
-			canbus.values.lcd[name] = value;
-			// canbus.queryValueLCD();
+			// console.log("onTouchPress");
+			canbus.values.lcd[name] = !toggle ? true : !canbus.values.lcd[name];
+			canbus.queryValueLCD();
 			navigator.vibrate(30);
 
 			if (timeouts?.[name])
@@ -89,9 +152,13 @@ export default {
 		 */
 		const onTouchRelease = (name: string): void =>
 		{
-			console.log("onTouchRelease");
-			// canbus.values.lcd[name] = false;
-			navigator.vibrate(20);
+			if (canbus.values.lcd[name])
+			{
+				// console.log("onTouchRelease");
+				canbus.values.lcd[name] = false;
+				canbus.queryValueLCD();
+				navigator.vibrate(20);
+			}
 
 			if (timeouts?.[name]) clearTimeout(timeouts[name]);
 		};

@@ -27,6 +27,7 @@ const i18n = createI18n({
 	locale: getLanguage(),
 	fallbackLocale: "ru",
 	messages,
+	warnHtmlMessage: false,
 	pluralizationRules: {
 		ru: (choice: number, choicesLength: number): number =>
 		{
