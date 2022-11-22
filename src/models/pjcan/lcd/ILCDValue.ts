@@ -2,6 +2,7 @@ import { IBaseModel } from "../base";
 
 /** Интерфейс значений LCD */
 export interface ILCDValue extends IBaseModel {
+	[key: string]: any;
 	icoCDIN: boolean; // CD IN (CD диск)
 	icoMDIN: boolean; // MD IN (Мини диск)
 	icoST: boolean; // ST (Стерео)

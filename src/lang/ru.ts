@@ -64,6 +64,7 @@ export default {
 
 	menu: {
 		onboard: "Бортовой компьютер",
+		onboardButtons: "Кнопки БК",
 		language: {
 			russian: "Russian language",
 			english: "English language"
@@ -395,5 +396,10 @@ export default {
 				description: "Выберите тип кнопки для дальнейшего ее использования"
 			}
 		}
+	},
+
+	onboardButtons: {
+		title: "Кнопки БК",
+		description: "Кнопки <b>H</b>, <b>M</b>, <b>RM</b> и <b>24/12</b> работают только на рестайлинговой версии  автомобиля"
 	}
 };

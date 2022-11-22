@@ -51,6 +51,7 @@ export default {
 	props: {
 		modelValue: Boolean
 	},
+	emits: ["update:modelValue"],
 	setup(props: any, { emit }: { emit: any })
 	{
 		const { modelValue } = toRefs(props);

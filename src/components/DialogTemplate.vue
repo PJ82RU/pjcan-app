@@ -9,7 +9,7 @@
 		<v-card>
 			<v-card-title v-if="title?.length > 0" class="d-flex align-center">
 				<icon-custom class="dialog__icon" :name="icon" />
-				<span class="ml-2 text-h5 dialog__title">{{ title }}</span>
+				<span class="ml-4 text-h5 dialog__title">{{ title }}</span>
 				<template v-if="close">
 					<v-spacer />
 					<icon-custom name="mdi-close" />
@@ -18,6 +18,18 @@
 
 			<v-card-text v-if="text" class="dialog__text">
 				<slot name="body" />
+			</v-card-text>
+
+			<v-card-text v-if="info?.length > 0" class="dialog__info">
+				<v-row>
+					<v-col cols="12" class="pt-0 pb-0">
+						<v-divider />
+					</v-col>
+					<v-col cols="12">
+						<v-icon icon="mdi-information-outline" class="mr-1" />
+						<span v-html="info" />
+					</v-col>
+				</v-row>
 			</v-card-text>
 
 			<v-card-actions v-if="actions" class="justify-end align-end">
@@ -43,6 +55,7 @@ export default {
 		contentClass: String,
 		icon: String,
 		title: String,
+		info: String,
 		text: Boolean,
 		actions: Boolean,
 		close: Boolean,
@@ -85,6 +98,18 @@ export default {
 
 	&__text {
 		overflow-y: auto;
+	}
+
+	&__info {
+		font-weight: 300;
+		font-size: 1rem;
+		line-height: 1.25rem;
+		color: $info;
+
+		::v-deep(b) {
+			color: $primary;
+			font-weight: 600;
+		}
 	}
 
 	&__icon {

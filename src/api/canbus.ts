@@ -252,6 +252,12 @@ export class Canbus extends EventEmitter
 		if (!this.queryDisabled) await this.query(this.values.variable.volume);
 	}
 
+	/** Отправка значения LCD */
+	async queryValueLCD()
+	{
+		if (!this.queryDisabled) await this.query(this.values.lcd);
+	}
+
 	/** Отправка конфигурации кнопок */
 	async queryConfigsButtons()
 	{

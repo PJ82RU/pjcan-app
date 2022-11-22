@@ -19,6 +19,7 @@
 
 			<menu-dots :menu="menu" @click:item="onMenuClick" />
 			<about-dialog v-model="visibleAbout" />
+			<onboard-buttons-dialog v-model="visibleOnboardButtons" />
 		</v-app-bar>
 		<v-main>
 			<div class="base-layout__bg" />
@@ -39,11 +40,12 @@ import BluetoothBtn from "./components/BluetoothBtn.vue";
 import UpdateFirmwareDialog from "./components/UpdateFirmwareDialog.vue";
 import MenuDots, { IMenuItem } from "@/components/MenuDots.vue";
 import AboutDialog from "./components/AboutDialog.vue";
+import OnboardButtonsDialog from "./components/OnboardButtonsDialog.vue";
 import ScreenFull from "screenfull";
 
 export default {
 	name: "BaseLayout",
-	components: { BluetoothBtn, UpdateFirmwareDialog, MenuDots, AboutDialog },
+	components: { BluetoothBtn, UpdateFirmwareDialog, MenuDots, AboutDialog, OnboardButtonsDialog },
 	setup()
 	{
 		const title = computed((): string => store.getters["app/title"]);
@@ -56,14 +58,16 @@ export default {
 			if (name !== "Onboard") result.push({ id: 0, title: lang.t("menu.onboard") });
 			if (name !== "Buttons") result.push({ id: 1, title: lang.t("menu.settings.buttons") });
 			result.push(
-				{ id: 2, title: lang.t("menu.language." + (lang.locale !== "ru" ? "english" : "russian")) },
+				{ id: 4, title: lang.t("menu.onboardButtons") },
 				{} as IMenuItem,
+				{ id: 2, title: lang.t("menu.language." + (lang.locale !== "ru" ? "english" : "russian")) },
 				{ id: 3, title: lang.t("menu.about") }
 			);
 
 			return result;
 		});
 		const visibleAbout = ref(false);
+		const visibleOnboardButtons = ref(false);
 
 		/** Событие выбора пункта меню */
 		const onMenuClick = (data: any) =>
@@ -73,13 +77,14 @@ export default {
 				case 0:
 					router.push({ name: "Onboard" });
 					break;
-
 				case 1:
 					router.push({ name: "Buttons" });
 					break;
-
 				case 3:
 					visibleAbout.value = true;
+					break;
+				case 4:
+					visibleOnboardButtons.value = true;
 					break;
 			}
 		};
@@ -112,6 +117,7 @@ export default {
 			title,
 			menu,
 			visibleAbout,
+			visibleOnboardButtons,
 			pageWidth,
 			pageHeight,
 			onMenuClick,
