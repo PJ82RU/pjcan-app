@@ -15,10 +15,10 @@
 			<v-btn icon="mdi-fit-to-screen-outline" @click="toggleFullscreen" />
 
 			<bluetooth-btn />
-			<update-firmware />
+			<update-firmware-dialog />
 
 			<menu-dots :menu="menu" @click:item="onMenuClick" />
-			<about-modal v-model="visibleAbout" />
+			<about-dialog v-model="visibleAbout" />
 		</v-app-bar>
 		<v-main>
 			<div class="base-layout__bg" />
@@ -36,14 +36,14 @@ import router from "@/router";
 import i18n from "@/lang";
 
 import BluetoothBtn from "./components/BluetoothBtn.vue";
-import UpdateFirmware from "./components/UpdateFirmware.vue";
+import UpdateFirmwareDialog from "./components/UpdateFirmwareDialog.vue";
 import MenuDots, { IMenuItem } from "@/components/MenuDots.vue";
-import AboutModal from "./components/AboutModal.vue";
+import AboutDialog from "./components/AboutDialog.vue";
 import ScreenFull from "screenfull";
 
 export default {
 	name: "BaseLayout",
-	components: { BluetoothBtn, UpdateFirmware, MenuDots, AboutModal },
+	components: { BluetoothBtn, UpdateFirmwareDialog, MenuDots, AboutDialog },
 	setup()
 	{
 		const title = computed((): string => store.getters["app/title"]);

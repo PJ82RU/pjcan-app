@@ -1,6 +1,6 @@
 <template>
 	<dialog-template
-		content-class="about"
+		content-class="device-info"
 		v-model="visible"
 		:title="$t('deviceInfo.title')"
 		icon="on-board"
@@ -39,7 +39,7 @@ import DialogTemplate from "@/components/DialogTemplate.vue";
 import { DeviceInfo, IDeviceInfo } from "@/models/pjcan/device";
 
 export default {
-	name: "DeviceInfoModal",
+	name: "DeviceInfoDialog",
 	components: { DialogTemplate },
 	props: {
 		modelValue: Boolean

@@ -49,7 +49,7 @@ import { UPDATE_BEGIN_EVENT_RESULT, UPDATE_UPLOAD_EVENT_RESULT } from "@/models/
 const DELAY_CHECK_VERSION = 300000;
 
 export default {
-	name: "UpdateFirmware",
+	name: "UpdateFirmwareDialog",
 	components: { DialogTemplate },
 	setup()
 	{

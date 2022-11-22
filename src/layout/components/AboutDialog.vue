@@ -33,7 +33,7 @@
 		</template>
 	</dialog-template>
 
-	<device-info-modal v-model="visibleDeviceInfo" />
+	<device-info-dialog v-model="visibleDeviceInfo" />
 </template>
 
 <script lang="ts">
@@ -42,12 +42,12 @@ import canbus, { API_EVENT_CONFIGS } from "@/api/canbus";
 const pkg = require("/package.json");
 
 import DialogTemplate from "@/components/DialogTemplate.vue";
-import DeviceInfoModal from "@/layout/components/DeviceInfoModal.vue";
+import DeviceInfoDialog from "@/layout/components/DeviceInfoDialog.vue";
 import { IConfigs } from "@/models/pjcan/configs";
 
 export default {
-	name: "AboutModal",
-	components: { DialogTemplate, DeviceInfoModal },
+	name: "AboutDialog",
+	components: { DialogTemplate, DeviceInfoDialog },
 	props: {
 		modelValue: Boolean
 	},
