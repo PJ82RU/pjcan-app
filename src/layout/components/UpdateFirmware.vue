@@ -39,7 +39,7 @@ import { onMounted, onUnmounted, ref } from "vue";
 import { toast } from "vue3-toastify";
 import { $t } from "@/lang";
 
-import canbus from "@/api/canbus";
+import canbus, { API_EVENT_UPDATE_ERROR } from "@/api/canbus";
 import { BLUETOOTH_EVENT_CONNECTED, TConnectedStatus } from "@/components/bluetooth";
 
 import { Timeout } from "@/models/types/Timeout";
@@ -90,14 +90,9 @@ export default {
 			visibleUpdate.value = false;
 			visibleProcess.value = false;
 			if (timerCheckVersion) clearTimeout(timerCheckVersion);
-			canbus.update.upload.clear();
-		};
 
-		/** Ошибка обновления */
-		const onErrorUpdate = (): void =>
-		{
-			toast.error($t("update.notify.error"));
-			onCancel();
+			canbus.removeListener(API_EVENT_UPDATE_ERROR, onErrorUpdate);
+			canbus.update.upload.clear();
 		};
 
 		/**
@@ -140,6 +135,8 @@ export default {
 			progress.value = 0;
 			visibleUpdate.value = false;
 			visibleProcess.value = true;
+
+			canbus.addListener(API_EVENT_UPDATE_ERROR, onErrorUpdate);
 			canbus.beginUpload();
 		};
 
@@ -162,7 +159,7 @@ export default {
 			}
 			else
 			{
-				onErrorUpdate();
+				onErrorUpdate($t("update.notify.error"));
 			}
 		};
 
@@ -181,8 +178,15 @@ export default {
 			}
 			else
 			{
-				onErrorUpdate();
+				onErrorUpdate($t("update.notify.error"));
 			}
+		};
+
+		/** Ошибка обновления */
+		const onErrorUpdate = (msg: string): void =>
+		{
+			toast.error(msg);
+			onCancel();
 		};
 
 		onMounted(() =>
@@ -197,6 +201,7 @@ export default {
 			canbus.bluetooth.removeListener(BLUETOOTH_EVENT_CONNECTED, onConnected);
 			canbus.update.upload.removeListener(UPDATE_UPLOAD_EVENT_RESULT, onUpload);
 			canbus.update.begin.removeListener(UPDATE_BEGIN_EVENT_RESULT, onUpdate);
+			canbus.removeListener(API_EVENT_UPDATE_ERROR, onErrorUpdate);
 		});
 
 		return {

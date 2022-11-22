@@ -1,6 +1,7 @@
 import axios from "axios";
 import EventEmitter from "eventemitter3";
 import { $t } from "@/lang";
+import { clearDebounce, debounce } from "@/utils/debounce";
 
 import {
 	BLUETOOTH_EVENT_CONNECTED,
@@ -31,12 +32,7 @@ import {
 } from "@/models/pjcan/teyes";
 import { API_EXEC_LCD_VALUE } from "@/models/pjcan/lcd";
 import { API_EXEC_CAR_CONFIG, API_EXEC_CAR_VIEW } from "@/models/pjcan/car";
-import {
-	API_EXEC_UPDATE_BEGIN_GZ,
-	API_EXEC_UPDATE_UPLOAD_GZ,
-	UpdateBegin,
-	UpdateData
-} from "@/models/pjcan/update";
+import { API_EXEC_UPDATE_BEGIN_GZ, API_EXEC_UPDATE_UPLOAD_GZ, UpdateBegin, UpdateData } from "@/models/pjcan/update";
 import { API_EXEC_VARIABLE_BOSE, API_EXEC_VARIABLE_BOSE_VIEW } from "@/models/pjcan/variables/bose";
 import { API_EXEC_VARIABLE_CLIMATE, API_EXEC_VARIABLE_CLIMATE_VIEW } from "@/models/pjcan/variables/climate";
 import { API_EXEC_VARIABLE_DOORS, API_EXEC_VARIABLE_DOORS_VIEW } from "@/models/pjcan/variables/doors";
@@ -65,7 +61,6 @@ import { IValues, Values } from "@/models/pjcan/values";
 import { IVariablesValue } from "@/models/pjcan/variables/values";
 import { API_EXEC_VALUE } from "@/models/pjcan/values/Values";
 import { API_EXEC_VARIABLE_VALUE } from "@/models/pjcan/variables/values/VariablesValue";
-import { Timeout } from "@/models/types/Timeout";
 import { IUpdateResult } from "@/models/pjcan/update/IUpdateResult";
 import { IVersion, Version } from "@/models/pjcan/version";
 
@@ -124,6 +119,7 @@ export const API_EVENT_VARIABLE_VOLUME_VIEW = "VariableVolumeView";
 
 export const API_EVENT_UPDATE_UPLOAD_GZ = "UpdateUploadGZ";
 export const API_EVENT_UPDATE_BEGIN_GZ = "UpdateBeginGZ";
+export const API_EVENT_UPDATE_ERROR = "ErrorUpdate";
 
 const URL_FIRMWARE_PATH = process.env.BASE_URL + "firmware/";
 const URL_FIRMWARE_VERSION = URL_FIRMWARE_PATH + "version.json";
@@ -163,7 +159,7 @@ export class Canbus extends EventEmitter
 	/** Последний promise */
 	private lastPromise: Promise<void> | undefined = undefined;
 	/** Таймер */
-	private debounce: Timeout | undefined = undefined;
+	private debounceFetchValue: boolean = false;
 
 	constructor()
 	{
@@ -235,26 +231,19 @@ export class Canbus extends EventEmitter
 	 */
 	startFetchValue(timeout: number = 500)
 	{
-		this.stopFetchValue();
-		this.debounce = setTimeout(async () =>
+		this.debounceFetchValue = true;
+		debounce(async () =>
 		{
 			await this.fetchValue();
-			if (this.debounce !== undefined)
-			{
-				this.debounce = undefined;
-				this.startFetchValue(timeout);
-			}
+			if (this.debounceFetchValue) this.startFetchValue(timeout);
 		}, timeout);
 	}
 
 	/** Остановить циклический запрос значений */
 	stopFetchValue()
 	{
-		if (this.debounce !== undefined)
-		{
-			clearTimeout(this.debounce);
-			this.debounce = undefined;
-		}
+		this.debounceFetchValue = false;
+		clearDebounce();
 	}
 
 	/** Отправка конфигурации уровня звука */
@@ -579,19 +568,21 @@ export class Canbus extends EventEmitter
 			method: "GET",
 			responseType: "arraybuffer",
 			headers: { "Content-Type": "application/gzip" }
-		}).then((res: any) =>
-		{
-			if (res.data.byteLength > 0)
+		})
+			.then((res: any) =>
 			{
-				setTimeout(() =>
+				if (res.data.byteLength > 0)
 				{
-					this.update.upload.data = new Uint8Array(res.data);
-					this.update.upload.offset = 0;
-					this.update.upload.last = true;
-					this.nextUpload().then();
-				}, 1000);
-			}
-		});
+					setTimeout(() =>
+					{
+						this.update.upload.data = new Uint8Array(res.data);
+						this.update.upload.offset = 0;
+						this.update.upload.last = true;
+						this.nextUpload().then();
+					}, 1000);
+				}
+			})
+			.catch(() => this.emit(API_EVENT_UPDATE_ERROR, $t("update.notify.errorDownload")));
 	}
 
 	/** Пишем данные файла прошивки в устройство PJ CAN */
@@ -610,6 +601,8 @@ export class Canbus extends EventEmitter
 		{
 			this.queryDisabled = false;
 		}
+
+		debounce(() => this.emit(API_EVENT_UPDATE_ERROR, $t("update.notify.errorUpload")), 5000);
 	}
 
 	/** Запустить процесс обновления устройства */
@@ -619,6 +612,7 @@ export class Canbus extends EventEmitter
 		{
 			await this.bluetooth.send(this.update.begin.get());
 		}
+		debounce(() => this.emit(API_EVENT_UPDATE_ERROR, $t("update.notify.errorWaitUpdate")), 60000);
 	}
 
 	/** Лог версии прошивки */
