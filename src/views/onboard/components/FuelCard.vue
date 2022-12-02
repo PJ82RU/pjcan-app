@@ -7,7 +7,7 @@
 						:value="current"
 						:title="$t('onboard.fuel.current.title')"
 						:description="$t('onboard.fuel.current.description')"
-						:nodata="!isLoadedValue"
+						:nodata="!isCurrent"
 						:disabled="!isLoadedView"
 					/>
 				</v-col>
@@ -16,25 +16,25 @@
 						:value="avg"
 						:title="$t('onboard.fuel.avg.title')"
 						:description="$t('onboard.fuel.avg.description')"
-						:nodata="!isLoadedValue"
+						:nodata="!isAvg"
 						:disabled="!isLoadedView"
 					/>
 				</v-col>
-				<v-col cols="12" class="pt-0 pb-0">
-					<input-card-item
-						:value="total"
-						:title="$t('onboard.fuel.total.title')"
-						:description="$t('onboard.fuel.total.description')"
-						:nodata="!isLoadedValue"
-						:disabled="!isLoadedView"
-					/>
-				</v-col>
+				<!--<v-col cols="12" class="pt-0 pb-0">-->
+				<!--	<input-card-item-->
+				<!--		:value="total"-->
+				<!--		:title="$t('onboard.fuel.total.title')"-->
+				<!--		:description="$t('onboard.fuel.total.description')"-->
+				<!--		:nodata="!isLoadedValue"-->
+				<!--		:disabled="!isLoadedView"-->
+				<!--	/>-->
+				<!--</v-col>-->
 				<v-col cols="12" class="pt-0 pb-0">
 					<input-card-item
 						:value="consumption"
 						:title="$t('onboard.fuel.consumption.title')"
 						:description="$t('onboard.fuel.consumption.description')"
-						:nodata="!isLoadedValue"
+						:nodata="!isConsumption"
 						:disabled="!isLoadedView"
 					/>
 				</v-col>
@@ -77,8 +77,12 @@ export default {
 
 		const current = ref("");
 		const avg = ref("");
-		const total = ref("");
+		// const total = ref("");
 		const consumption = ref("");
+
+		const isCurrent = computed(() => isLoadedValue.value && canbus.values.variable.fuel.current > 0);
+		const isAvg = computed(() => isLoadedValue.value && canbus.values.variable.fuel.avg > 0);
+		const isConsumption = computed(() => isLoadedValue.value && canbus.values.variable.fuel.consumption > 0);
 
 		/** Входящие значения расхода топлива */
 		const onReceiveValue = (res: IFuelValue): void =>
@@ -88,7 +92,7 @@ export default {
 			{
 				current.value = res.current.toFixed(1);
 				avg.value = res.avg.toFixed(1);
-				total.value = res.total.toFixed(2);
+				// total.value = res.total.toFixed(2);
 				consumption.value = res.consumption.toFixed(2);
 			}
 		};
@@ -119,7 +123,7 @@ export default {
 		const menu = computed((): IMenuItem[] => [
 			{ id: 0, title: $t("onboard.fuel.current.menu") },
 			{ id: 1, title: $t("onboard.fuel.avg.menu") },
-			{ id: 2, title: $t("onboard.fuel.total.menu") },
+			// { id: 2, title: $t("onboard.fuel.total.menu") },
 			{ id: 3, title: $t("onboard.fuel.consumption.menu") }
 		]);
 		const menuVisible = ref(false);
@@ -146,9 +150,9 @@ export default {
 					menuViewConfig.value = fuel.avg;
 					break;
 
-				case 2:
-					menuViewConfig.value = fuel.total;
-					break;
+					// case 2:
+					// 	menuViewConfig.value = fuel.total;
+					// 	break;
 
 				case 3:
 					menuViewConfig.value = fuel.consumption;
@@ -173,9 +177,9 @@ export default {
 					fuel.avg = data;
 					break;
 
-				case 2:
-					fuel.total = data;
-					break;
+					// case 2:
+					// 	fuel.total = data;
+					// 	break;
 
 				case 3:
 					fuel.consumption = data;
@@ -187,9 +191,12 @@ export default {
 		return {
 			isLoadedView,
 			isLoadedValue,
+			isCurrent,
+			isAvg,
+			isConsumption,
 			current,
 			avg,
-			total,
+			// total,
 			consumption,
 			menu,
 			menuVisible,

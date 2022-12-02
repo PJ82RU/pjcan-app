@@ -16,7 +16,7 @@
 						:value="speedAVG"
 						:title="$t('onboard.movement.speedAVG.title')"
 						:description="$t('onboard.movement.speedAVG.description')"
-						:nodata="!isLoadedValue"
+						:nodata="!isSpeedAVG"
 						:disabled="!isLoadedView"
 					/>
 				</v-col>
@@ -25,7 +25,7 @@
 						:value="restWay"
 						:title="$t('onboard.movement.restWay.title')"
 						:description="$t('onboard.movement.restWay.description')"
-						:nodata="!isLoadedValue"
+						:nodata="!isRestWay"
 						:disabled="!isLoadedView"
 					/>
 				</v-col>
@@ -69,6 +69,9 @@ export default {
 		const speed = ref("");
 		const speedAVG = ref("");
 		const restWay = ref("");
+
+		const isSpeedAVG = computed(() => isLoadedValue.value && canbus.values.variable.movement.speedAVG > 0);
+		const isRestWay = computed(() => isLoadedValue.value && canbus.values.variable.movement.restWay > 0);
 
 		/** Входящие значения движения */
 		const onReceiveValue = (res: IMovementValue): void =>
@@ -167,6 +170,8 @@ export default {
 		return {
 			isLoadedView,
 			isLoadedValue,
+			isSpeedAVG,
+			isRestWay,
 			speed,
 			speedAVG,
 			restWay,

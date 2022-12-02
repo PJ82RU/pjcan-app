@@ -83,12 +83,15 @@ export default {
 					return "-.-°C";
 
 				default:
-					switch (typeof value.value)
+					if (!nodata.value)
 					{
-						case "number": return value.value.toFixed();
-						case "string": return value.value;
+						switch (typeof value.value)
+						{
+							case "number": return value.value.toFixed();
+							case "string": return value.value;
+						}
 					}
-					return "";
+					return "--";
 			}
 		});
 
