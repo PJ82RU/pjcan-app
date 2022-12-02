@@ -4,7 +4,7 @@ import { StructDeviceInfo } from "./StructDeviceInfo";
 import { IDeviceInfo } from "./IDeviceInfo";
 
 export const API_EXEC_INFO = 5;
-export const API_SIZE_INFO = 107;
+export const API_SIZE_INFO = 108;
 
 const struct = new BluetoothStruct(StructDeviceInfo);
 
@@ -32,6 +32,7 @@ export class DeviceInfo extends BaseModel implements IDeviceInfo
 	sdkVersion = "";
 	sketchMD5 = "";
 	sketchSize = 0;
+	temperatureChip = 0;
 
 	constructor(data?: DataView)
 	{

@@ -23,4 +23,5 @@ export interface IDeviceInfo extends IBaseModel {
 	sdkVersion: string;
 	sketchMD5: string;
 	sketchSize: number;
+	temperatureChip: number;
 }

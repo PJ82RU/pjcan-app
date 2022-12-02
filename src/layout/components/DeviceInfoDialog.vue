@@ -10,12 +10,17 @@
 	>
 		<template #body>
 			<v-row class="pb-2">
-				<v-col v-for="(item, key) in modelDeviceInfo" :key="'deviceInfo-' + key" cols="12" class="height-48 mb-2">
+				<v-col
+					v-for="(item, key) in modelDeviceInfo"
+					:key="'deviceInfo-' + key"
+					cols="12"
+					class="height-48 mb-2"
+				>
 					<v-text-field
 						:model-value="item"
 						:label="$t('deviceInfo.' + key)"
 						variant="underlined"
-						:disabled="!isData"
+						:disabled="!isLoadedValue"
 						readonly
 						dense
 					/>
@@ -36,7 +41,7 @@ import { computed, onMounted, onUnmounted, ref, toRefs, watch } from "vue";
 import canbus, { API_EVENT_INFO } from "@/api/canbus";
 
 import DialogTemplate from "@/components/DialogTemplate.vue";
-import { DeviceInfo, IDeviceInfo } from "@/models/pjcan/device";
+import { IDeviceInfo } from "@/models/pjcan/device";
 
 export default {
 	name: "DeviceInfoDialog",
@@ -53,41 +58,49 @@ export default {
 			set: (val: boolean): void => context.emit("update:modelValue", val)
 		});
 
-		/** Данные об устройстве */
-		const deviceInfo = ref(new DeviceInfo());
-		const isData = ref(false);
-
-		/** MAC */
-		const efuseMac = (): string =>
-		{
-			const result: string = deviceInfo.value.efuseMac.toString(16).toUpperCase();
-			return result.length % 2 > 0 ? "0" + result : result;
-		};
-
-		const modelDeviceInfo = computed(() => ({
-			chipCores: isData.value ? deviceInfo.value.chipCores : "",
-			chipRevision: isData.value ? deviceInfo.value.chipRevision : "",
-			cpuFreqMHz: isData.value ? deviceInfo.value.cpuFreqMHz : "",
-			efuseMac: isData.value ? efuseMac() : "",
-			flashChipMode: isData.value ? deviceInfo.value.flashChipMode : "",
-			flashChipSize: isData.value ? deviceInfo.value.flashChipSize : "",
-			flashChipSpeed: isData.value ? deviceInfo.value.flashChipSpeed : "",
-			freeSketchSpace: isData.value ? deviceInfo.value.freeSketchSpace : "",
-			sdkVersion: deviceInfo.value.sdkVersion,
-			sketchMD5: deviceInfo.value.sketchMD5,
-			sketchSize: isData.value ? deviceInfo.value.sketchSize : ""
-		}));
+		const isLoadedValue = ref(false);
+		const modelDeviceInfo = ref({
+			chipCores: "",
+			chipRevision: "",
+			cpuFreqMHz: "",
+			efuseMac: "",
+			flashChipMode: "",
+			flashChipSize: "",
+			flashChipSpeed: "",
+			freeSketchSpace: "",
+			sdkVersion: "",
+			sketchMD5: "",
+			sketchSize: "",
+			temperatureChip: ""
+		});
 
 		/** Входящие значения об устройстве */
 		const onReceiveInfo = (res: IDeviceInfo): void =>
 		{
-			deviceInfo.value.setModel(res);
-			isData.value = true;
+			isLoadedValue.value = res.isData;
+			if (res.isData)
+			{
+				const { value } = modelDeviceInfo;
+				value.chipCores = canbus.device.info.chipCores.toString();
+				value.chipRevision = canbus.device.info.chipRevision.toString();
+				value.cpuFreqMHz = canbus.device.info.cpuFreqMHz.toString();
+				const mac: string = canbus.device.info.efuseMac.toString(16).toUpperCase();
+				value.efuseMac = mac.length % 2 > 0 ? "0" + mac : mac;
+				value.flashChipMode = canbus.device.info.flashChipMode.toString();
+				value.flashChipSize = canbus.device.info.flashChipSize.toString();
+				value.flashChipSpeed = canbus.device.info.flashChipSpeed.toString();
+				value.freeSketchSpace = canbus.device.info.freeSketchSpace.toString();
+				value.sdkVersion = canbus.device.info.sdkVersion;
+				value.sketchMD5 = canbus.device.info.sketchMD5;
+				value.sketchSize = canbus.device.info.sketchSize.toString();
+				value.temperatureChip = ((canbus.device.info.temperatureChip - 32) / 1.8).toFixed(2) + "°C";
+			}
 		};
 
 		onMounted(() =>
 		{
 			canbus.addListener(API_EVENT_INFO, onReceiveInfo);
+			onReceiveInfo(canbus.device.info);
 		});
 		onUnmounted(() =>
 		{
@@ -96,13 +109,13 @@ export default {
 
 		watch(modelValue, (val: boolean): void =>
 		{
-			if (val && !canbus.device.info.isData) canbus.fetchDevice();
+			if (val) canbus.fetchDevice();
 		});
 
 		return {
 			visible,
-			modelDeviceInfo,
-			isData
+			isLoadedValue,
+			modelDeviceInfo
 		};
 	}
 };

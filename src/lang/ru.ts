@@ -105,7 +105,8 @@ export default {
 		freeSketchSpace: "Свободное место для прошивки",
 		sdkVersion: "Версия SDK",
 		sketchMD5: "MD5 прошивки",
-		sketchSize: "Размер прошивки"
+		sketchSize: "Размер прошивки",
+		temperatureChip: "Температура чипа"
 	},
 
 	btn: {
