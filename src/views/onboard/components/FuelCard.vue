@@ -7,7 +7,7 @@
 						:value="current"
 						:title="$t('onboard.fuel.current.title')"
 						:description="$t('onboard.fuel.current.description')"
-						:nodata="!isCurrent"
+						:nodata="!isLoadedValue || Number(current) <= 0"
 						:disabled="!isLoadedView"
 					/>
 				</v-col>
@@ -16,7 +16,7 @@
 						:value="avg"
 						:title="$t('onboard.fuel.avg.title')"
 						:description="$t('onboard.fuel.avg.description')"
-						:nodata="!isAvg"
+						:nodata="!isLoadedValue || Number(avg) <= 0"
 						:disabled="!isLoadedView"
 					/>
 				</v-col>
@@ -34,7 +34,7 @@
 						:value="consumption"
 						:title="$t('onboard.fuel.consumption.title')"
 						:description="$t('onboard.fuel.consumption.description')"
-						:nodata="!isConsumption"
+						:nodata="!isLoadedValue || Number(consumption) <= 0"
 						:disabled="!isLoadedView"
 					/>
 				</v-col>
@@ -79,10 +79,6 @@ export default {
 		const avg = ref("");
 		// const total = ref("");
 		const consumption = ref("");
-
-		const isCurrent = computed(() => isLoadedValue.value && canbus.values.variable.fuel.current > 0);
-		const isAvg = computed(() => isLoadedValue.value && canbus.values.variable.fuel.avg > 0);
-		const isConsumption = computed(() => isLoadedValue.value && canbus.values.variable.fuel.consumption > 0);
 
 		/** Входящие значения расхода топлива */
 		const onReceiveValue = (res: IFuelValue): void =>
@@ -191,9 +187,6 @@ export default {
 		return {
 			isLoadedView,
 			isLoadedValue,
-			isCurrent,
-			isAvg,
-			isConsumption,
 			current,
 			avg,
 			// total,
