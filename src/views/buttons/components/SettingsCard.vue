@@ -9,7 +9,6 @@
 						:hint="$t('buttons.resistance.description')"
 						:max="3999"
 						:disabled="!isLoadedConfig"
-						@change="$emit('change')"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0">
@@ -23,7 +22,6 @@
 						item-value="value"
 						persistent-hint
 						:disabled="!isLoadedConfig"
-						@change="$emit('change')"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0">
@@ -37,7 +35,6 @@
 						item-value="value"
 						persistent-hint
 						:disabled="!isLoadedConfig"
-						@change="$emit('change')"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0">
@@ -51,7 +48,6 @@
 						item-value="value"
 						persistent-hint
 						:disabled="!isLoadedConfig"
-						@change="$emit('change')"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0">
@@ -65,7 +61,6 @@
 						item-value="value"
 						persistent-hint
 						:disabled="!isLoadedConfig"
-						@change="$emit('change')"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0">
@@ -79,7 +74,6 @@
 						item-value="value"
 						persistent-hint
 						:disabled="!isLoadedConfig"
-						@change="$emit('change')"
 					/>
 				</v-col>
 			</v-row>
@@ -139,37 +133,61 @@ export default {
 		/** Сопротивление кнопки */
 		const modelResistance = computed({
 			get: (): number => inR.value ?? 0,
-			set: (val: number): void => emit("update:inR", val)
+			set: (val: number): void =>
+			{
+				emit("update:inR", val);
+				emit("change");
+			}
 		});
 
 		/** Кнопка нажата один раз */
 		const modelPressSingle = computed({
 			get: (): number => pressSingle.value ?? 0,
-			set: (val: number): void => emit("update:pressSingle", val)
+			set: (val: number): void =>
+			{
+				emit("update:pressSingle", val);
+				emit("change");
+			}
 		});
 
 		/** Кнопка нажата два раза */
 		const modelPressDual = computed({
 			get: (): number => pressDual.value ?? 0,
-			set: (val: number): void => emit("update:pressDual", val)
+			set: (val: number): void =>
+			{
+				emit("update:pressDual", val);
+				emit("change");
+			}
 		});
 
 		/** Кнопка нажата три раза */
 		const modelPressTriple = computed({
 			get: (): number => pressTriple.value ?? 0,
-			set: (val: number): void => emit("update:pressTriple", val)
+			set: (val: number): void =>
+			{
+				emit("update:pressTriple", val);
+				emit("change");
+			}
 		});
 
 		/** Удержание кнопки */
 		const modelPressHold = computed({
 			get: (): number => pressHold.value ?? 0,
-			set: (val: number): void => emit("update:pressHold", val)
+			set: (val: number): void =>
+			{
+				emit("update:pressHold", val);
+				emit("change");
+			}
 		});
 
 		/** Кнопка отпущена */
 		const modelRelease = computed({
 			get: (): number => release.value ?? 0,
-			set: (val: number): void => emit("update:release", val)
+			set: (val: number): void =>
+			{
+				emit("update:release", val);
+				emit("change");
+			}
 		});
 
 		return {

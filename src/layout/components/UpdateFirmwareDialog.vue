@@ -37,6 +37,7 @@ import DialogTemplate from "@/components/DialogTemplate.vue";
 
 import { onMounted, onUnmounted, ref } from "vue";
 import { toast } from "vue3-toastify";
+import router from "@/router";
 import { $t } from "@/lang";
 
 import canbus, { API_EVENT_UPDATE_ERROR } from "@/api/canbus";
@@ -115,6 +116,7 @@ export default {
 							.then(() => toast.error($t("update.notify.warning")))
 							.catch(() => toast.success($t("update.notify.completed")));
 
+						setTimeout(() => router.go(0), 5000);
 						onCancel();
 					}
 					else canbus.bluetooth.disconnect();
