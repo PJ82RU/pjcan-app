@@ -196,7 +196,7 @@ export class Canbus extends EventEmitter
 
 		await this.fetchConfig();
 		await this.fetchView();
-		await this.fetchDevice();
+		await this.queryDevice();
 		this.queryDisabled = false;
 	}
 
@@ -218,11 +218,14 @@ export class Canbus extends EventEmitter
 		if (!this.queryDisabled) await this.query(this.values);
 	}
 
-	/** Отправка конфигурации отображения уровня звука */
-	async fetchDevice()
+	/**
+	 * Отправка конфигурации или получение информации устройства
+	 * @param {boolean} config Отправить конфигурацию
+	 */
+	async queryDevice(config = false)
 	{
-		await this.query(this.device.info);
-		// await this.query(this.device.config);
+		if (config) await this.query(this.device.config);
+		else await this.query(this.device.info);
 	}
 
 	/**

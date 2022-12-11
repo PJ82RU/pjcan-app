@@ -148,3 +148,12 @@ html{
 		height: 100%;
 	}
 }
+
+.v-checkbox {
+	.v-selection-control {
+		height: 36px !important;
+	}
+	.v-label {
+		color: white;
+	}
+}

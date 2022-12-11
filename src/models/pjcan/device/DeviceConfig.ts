@@ -12,6 +12,8 @@ const struct = new BluetoothStruct(StructDeviceConfig);
 export class DeviceConfig extends BaseModel implements IDeviceConfig
 {
 	reboot = false;
+	resetConfig = false;
+	resetView = false;
 	led = 0;
 
 	constructor(data?: DataView)

@@ -64,6 +64,7 @@ export default {
 
 	menu: {
 		onboard: "Бортовой компьютер",
+		onboardButtons: "Кнопки БК",
 		language: {
 			russian: "Russian language",
 			english: "English language"
@@ -104,14 +105,22 @@ export default {
 		freeSketchSpace: "Свободное место для прошивки",
 		sdkVersion: "Версия SDK",
 		sketchMD5: "MD5 прошивки",
-		sketchSize: "Размер прошивки"
+		sketchSize: "Размер прошивки",
+		temperatureChip: "Температура чипа"
+	},
+
+	deviceReset: {
+		title: "Сброс конфигурации устройства",
+		config: "Сбросить значения конфигурации по умолчанию",
+		view: "Сбросить значения конфигурации отображения по умолчанию"
 	},
 
 	btn: {
 		apply: "Применить",
 		cancel: "Отмена",
 		close: "Закрыть",
-		deviceInfo: "Об устройстве"
+		deviceInfo: "Об устройстве",
+		deviceReset: "Сбросить конфигурацию"
 	},
 
 	onboard: {
@@ -367,20 +376,20 @@ export default {
 		},
 
 		functions: {
-			0: "Кнопка Teyes отпущена",
+			0: "Нет действия",
 			1: "Кнопка Teyes MODE",
 			2: "Кнопка Teyes SEEK UP",
 			3: "Кнопка Teyes SEEK DOWN",
 			4: "Кнопка Teyes VOL UP",
 			5: "Кнопка Teyes VOL DOWN",
 			6: "Кнопка Teyes VOL MUTE",
-			7: "Кнопка Clock на LCD нажата",
+			7: "Кнопка Clock на LCD",
 			8: "Кнопка Clock на LCD отпущена",
-			9: "Кнопка Clock H на LCD нажата",
+			9: "Кнопка Clock H на LCD",
 			10: "Кнопка Clock H на LCD отпущена",
-			11: "Кнопка Clock M на LCD нажата",
+			11: "Кнопка Clock M на LCD",
 			12: "Кнопка Clock M на LCD отпущена",
-			13: "Кнопка Info на LCD нажата",
+			13: "Кнопка Info на LCD",
 			14: "Кнопка Info на LCD отпущена",
 			15: "Кнопка показать значения ДВС",
 			16: "Кнопка показать значения расхода",
@@ -398,6 +407,7 @@ export default {
 	},
 
 	onboardButtons: {
-		title: "Кнопки БК"
+		title: "Кнопки БК",
+		description: "Кнопки <b>H</b>, <b>M</b>, <b>RM</b> и <b>24/12</b> работают только на рестайлинговой версии  автомобиля"
 	}
 };

@@ -29,11 +29,16 @@
 		</template>
 
 		<template #btns>
+			<v-btn color="primary" @click="onResetClick">
+				{{ $t("btn.deviceReset") }}
+			</v-btn>
 			<v-btn color="primary" @click="visible = false">
 				{{ $t("btn.close") }}
 			</v-btn>
 		</template>
 	</dialog-template>
+
+	<device-reset-dialog v-model="visibleReset" />
 </template>
 
 <script lang="ts">
@@ -41,11 +46,12 @@ import { computed, onMounted, onUnmounted, ref, toRefs, watch } from "vue";
 import canbus, { API_EVENT_INFO } from "@/api/canbus";
 
 import DialogTemplate from "@/components/DialogTemplate.vue";
+import DeviceResetDialog from "./DeviceResetDialog.vue";
 import { IDeviceInfo } from "@/models/pjcan/device";
 
 export default {
 	name: "DeviceInfoDialog",
-	components: { DialogTemplate },
+	components: { DialogTemplate, DeviceResetDialog },
 	props: {
 		modelValue: Boolean
 	},
@@ -109,13 +115,23 @@ export default {
 
 		watch(modelValue, (val: boolean): void =>
 		{
-			if (val) canbus.fetchDevice();
+			if (val) canbus.queryDevice();
 		});
+
+		const visibleReset = ref(false);
+		/** Показать диалог сброса настроек */
+		const onResetClick = (): void =>
+		{
+			visible.value = false;
+			visibleReset.value = true;
+		};
 
 		return {
 			visible,
 			isLoadedValue,
-			modelDeviceInfo
+			modelDeviceInfo,
+			visibleReset,
+			onResetClick
 		};
 	}
 };
