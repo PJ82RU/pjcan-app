@@ -99,7 +99,7 @@ export default {
 				value.sdkVersion = canbus.device.info.sdkVersion;
 				value.sketchMD5 = canbus.device.info.sketchMD5;
 				value.sketchSize = canbus.device.info.sketchSize.toString();
-				value.temperatureChip = ((canbus.device.info.temperatureChip - 32) / 1.8).toFixed(2) + "°C";
+				value.temperatureChip = canbus.device.info.temperatureChip.toFixed(2) + "°C";
 			}
 		};
 
