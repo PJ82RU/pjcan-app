@@ -23,5 +23,5 @@ export const StructDeviceInfo = {
 	sdkVersion: BluetoothStruct.char(8),
 	sketchMD5: BluetoothStruct.char(16),
 	sketchSize: BluetoothStruct.uint32(),
-	temperatureChip: BluetoothStruct.uint8()
+	temperatureChip: BluetoothStruct.float32()
 };
