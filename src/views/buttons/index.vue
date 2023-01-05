@@ -27,9 +27,10 @@
 </template>
 
 <script lang="ts">
-import { onMounted, onUnmounted, provide, ref } from "vue";
+import { computed, onMounted, onUnmounted, provide, ref } from "vue";
 import { useDisplay } from "vuetify";
-import { $t } from "@/lang";
+import { useI18n } from "vue-i18n";
+
 import canbus, { API_EVENT_BUTTON, API_EVENT_BUTTONS_CONFIG } from "@/api/canbus";
 
 import Flicking from "@egjs/vue3-flicking";
@@ -45,6 +46,7 @@ export default {
 	setup()
 	{
 		const { name: display } = useDisplay();
+		const { t } = useI18n();
 		const flicking = ref(null);
 		provide("flicking", flicking);
 
@@ -53,9 +55,9 @@ export default {
 		const typeButtonDefinition = ref(-1);
 		const resistanceButtonDefinition = ref(0);
 
-		const list = ref([
+		const list = computed(() => [
 			{
-				title: $t("buttons.mode"),
+				title: t("buttons.mode"),
 				type: TButtonItem.BUTTON_MODE,
 				icon: "mdi-menu",
 				inR: 0,
@@ -66,7 +68,7 @@ export default {
 				release: 0
 			},
 			{
-				title: $t("buttons.seekUp"),
+				title: t("buttons.seekUp"),
 				type: TButtonItem.BUTTON_SEEK_UP,
 				icon: "mdi-play",
 				inR: 0,
@@ -77,7 +79,7 @@ export default {
 				release: 0
 			},
 			{
-				title: $t("buttons.seekDown"),
+				title: t("buttons.seekDown"),
 				type: TButtonItem.BUTTON_SEEK_DOWN,
 				icon: "mdi-play",
 				inR: 0,
@@ -88,7 +90,7 @@ export default {
 				release: 0
 			},
 			{
-				title: $t("buttons.volUp"),
+				title: t("buttons.volUp"),
 				type: TButtonItem.BUTTON_VOL_UP,
 				icon: "mdi-volume-plus",
 				inR: 0,
@@ -99,7 +101,7 @@ export default {
 				release: 0
 			},
 			{
-				title: $t("buttons.volDown"),
+				title: t("buttons.volDown"),
 				type: TButtonItem.BUTTON_VOL_DOWN,
 				icon: "mdi-volume-minus",
 				inR: 0,
@@ -110,7 +112,7 @@ export default {
 				release: 0
 			},
 			{
-				title: $t("buttons.volMute"),
+				title: t("buttons.volMute"),
 				type: TButtonItem.BUTTON_VOL_MUTE,
 				icon: "mdi-volume-mute",
 				inR: 0,

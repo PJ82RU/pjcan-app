@@ -1,6 +1,6 @@
 import axios from "axios";
 import EventEmitter from "eventemitter3";
-import { $t } from "@/lang";
+import { t } from "@/lang";
 import { clearDebounce, debounce } from "@/utils/debounce";
 
 import {
@@ -591,7 +591,7 @@ export class Canbus extends EventEmitter
 					}, 1000);
 				}
 			})
-			.catch(() => this.emit(API_EVENT_UPDATE_ERROR, $t("update.notify.errorDownload")));
+			.catch(() => this.emit(API_EVENT_UPDATE_ERROR, t("update.notify.errorDownload")));
 	}
 
 	/** Пишем данные файла прошивки в устройство PJ CAN */
@@ -611,7 +611,7 @@ export class Canbus extends EventEmitter
 			this.queryDisabled = false;
 		}
 
-		debounce(() => this.emit(API_EVENT_UPDATE_ERROR, $t("update.notify.errorUpload")), 5000);
+		debounce(() => this.emit(API_EVENT_UPDATE_ERROR, t("update.notify.errorUpload")), 5000);
 	}
 
 	/** Запустить процесс обновления устройства */
@@ -621,14 +621,14 @@ export class Canbus extends EventEmitter
 		{
 			await this.bluetooth.send(this.update.begin.get());
 		}
-		debounce(() => this.emit(API_EVENT_UPDATE_ERROR, $t("update.notify.errorWaitUpdate")), 60000);
+		debounce(() => this.emit(API_EVENT_UPDATE_ERROR, t("update.notify.errorWaitUpdate")), 60000);
 	}
 
 	/** Лог версии прошивки */
 	private logVersion()
 	{
 		const { major, minor, build, revision } = this.configs.version;
-		console.log($t("BLE.server.versionProtocol", { mj: major, mn: minor, bl: build, rv: revision }));
+		console.log(t("BLE.server.versionProtocol", { mj: major, mn: minor, bl: build, rv: revision }));
 	}
 
 	/** Проверить версию прошивки */

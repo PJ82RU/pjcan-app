@@ -39,7 +39,7 @@
 
 <script lang="ts">
 import { computed, onMounted, onUnmounted, ref, watch } from "vue";
-import { $t } from "@/lang";
+import { useI18n } from "vue-i18n";
 
 import canbus, {
 	API_EVENT_VARIABLE_VOLUME,
@@ -61,6 +61,8 @@ export default {
 	components: { Card, SwitchCardItem, SliderCardItem, ViewSettingDialog },
 	setup()
 	{
+		const { t } = useI18n();
+
 		const isLoadedValue = ref(false);
 		const isLoadedView = ref(false);
 
@@ -149,7 +151,7 @@ export default {
 
 		// МЕНЮ ОТОБРАЖЕНИЯ
 
-		const menu = computed((): IMenuItem[] => [{ id: 0, title: $t("onboard.volume.menu") }]);
+		const menu = computed((): IMenuItem[] => [{ id: 0, title: t("onboard.volume.menu") }]);
 		const menuVisible = ref(false);
 		const menuSelected = ref({} as IMenuItem);
 		const menuViewConfig = ref({} as IViewConfig);

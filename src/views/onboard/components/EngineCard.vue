@@ -85,7 +85,7 @@
 
 <script lang="ts">
 import { computed, onMounted, onUnmounted, ref } from "vue";
-import { $t } from "@/lang";
+import { useI18n } from "vue-i18n";
 
 import canbus, { API_EVENT_VARIABLE_ENGINE, API_EVENT_VARIABLE_ENGINE_VIEW } from "@/api/canbus";
 
@@ -104,6 +104,8 @@ export default {
 	components: { Card, InputCardItem, IconCardItem, ProgressCardItem, ViewSettingDialog },
 	setup()
 	{
+		const { t } = useI18n();
+
 		const isLoadedValue = ref(false);
 		const isLoadedView = ref(false);
 
@@ -155,13 +157,13 @@ export default {
 		// МЕНЮ ОТОБРАЖЕНИЯ
 
 		const menu = computed((): IMenuItem[] => [
-			{ id: 0, title: $t("onboard.engine.enabled.menu") },
-			{ id: 1, title: $t("onboard.engine.RPM.menu") },
-			{ id: 2, title: $t("onboard.engine.countRPM.menu") },
-			{ id: 3, title: $t("onboard.engine.load.menu") },
-			{ id: 4, title: $t("onboard.engine.motors.menu") },
-			{ id: 5, title: $t("onboard.engine.throttle.menu") },
-			{ id: 6, title: $t("onboard.engine.coolant.menu") }
+			{ id: 0, title: t("onboard.engine.enabled.menu") },
+			{ id: 1, title: t("onboard.engine.RPM.menu") },
+			{ id: 2, title: t("onboard.engine.countRPM.menu") },
+			{ id: 3, title: t("onboard.engine.load.menu") },
+			{ id: 4, title: t("onboard.engine.motors.menu") },
+			{ id: 5, title: t("onboard.engine.throttle.menu") },
+			{ id: 6, title: t("onboard.engine.coolant.menu") }
 		]);
 		const menuVisible = ref(false);
 		const menuSelected = ref({} as IMenuItem);

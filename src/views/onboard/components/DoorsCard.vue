@@ -69,7 +69,7 @@
 
 <script lang="ts">
 import { computed, onMounted, onUnmounted, ref } from "vue";
-import { $t } from "@/lang";
+import { useI18n } from "vue-i18n";
 
 import canbus, { API_EVENT_VARIABLE_DOORS, API_EVENT_VARIABLE_DOORS_VIEW } from "@/api/canbus";
 
@@ -86,6 +86,8 @@ export default {
 	components: { Card, SwitchCardItem, ViewSettingDialog },
 	setup()
 	{
+		const { t } = useI18n();
+
 		const isLoadedView = ref(false);
 		const isLoadedValue = ref(false);
 
@@ -131,7 +133,7 @@ export default {
 
 		// МЕНЮ ОТОБРАЖЕНИЯ
 
-		const menu = computed((): IMenuItem[] => [{ id: 0, title: $t("onboard.doors.menu") }]);
+		const menu = computed((): IMenuItem[] => [{ id: 0, title: t("onboard.doors.menu") }]);
 		const menuVisible = ref(false);
 		const menuSelected = ref({} as IMenuItem);
 		const menuViewConfig = ref({} as IViewConfig);

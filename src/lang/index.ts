@@ -1,4 +1,4 @@
-// noinspection JSUnresolvedVariable,JSValidateTypes,JSUnresolvedFunction
+// noinspection JSUnresolvedVariable,JSValidateTypes,JSUnresolvedFunction,DuplicatedCode
 
 import { createI18n } from "vue-i18n";
 import locale_ru from "./ru";
@@ -25,7 +25,7 @@ const getLanguage = () =>
 
 const i18n = createI18n({
 	locale: getLanguage(),
-	fallbackLocale: "ru",
+	fallbackLocale: "en",
 	messages,
 	warnHtmlMessage: false,
 	pluralizationRules: {
@@ -47,12 +47,30 @@ const i18n = createI18n({
 						: choicesLength < 4
 							? 2
 							: 3;
+		},
+		en: (choice: number, choicesLength: number): number =>
+		{
+			if (choice === 0) return 0;
+
+			const teen = choice > 10 && choice < 20;
+			const endsWithOne = choice % 10 === 1;
+
+			return choicesLength < 4
+				? !teen && endsWithOne
+					? 1
+					: 2
+				: !teen && endsWithOne
+					? 1
+					: !teen && choice % 10 >= 2 && choice % 10 <= 4
+						? 2
+						: choicesLength < 4
+							? 2
+							: 3;
 		}
 	}
 });
 
-const $t = i18n.global.t;
-const $tm = i18n.global.tm;
+const t = i18n.global.t;
 
 export default i18n;
-export { getLanguageList, getLanguage, $t, $tm };
+export { getLanguageList, getLanguage, t };

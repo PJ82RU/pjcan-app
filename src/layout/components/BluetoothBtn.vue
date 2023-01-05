@@ -22,7 +22,7 @@
 <script lang="ts">
 import { onMounted, onUnmounted, ref } from "vue";
 import { toast } from "vue3-toastify";
-import { $t } from "@/lang";
+import { useI18n } from "vue-i18n";
 
 import DialogTemplate from "@/components/DialogTemplate.vue";
 
@@ -35,6 +35,8 @@ export default {
 	emits: ["click"],
 	setup(props: any, { emit }: { emit: any })
 	{
+		const { t } = useI18n();
+
 		const visibleDialog = ref(true);
 		const connected = ref(false);
 
@@ -70,25 +72,25 @@ export default {
 			switch (status)
 			{
 				case TConnectedStatus.NO_CONNECT:
-					toast.error($t("BLE.notify.noConnected"));
+					toast.error(t("BLE.notify.noConnected"));
 					break;
 
 				case TConnectedStatus.CONNECT:
-					toast.success($t("BLE.notify.connected"));
+					toast.success(t("BLE.notify.connected"));
 					break;
 
 				case TConnectedStatus.WAIT_CONNECT:
-					toast.error($t("BLE.notify.lostConnected"));
+					toast.error(t("BLE.notify.lostConnected"));
 					break;
 
 				case TConnectedStatus.DISCONNECT:
-					toast.warning($t("BLE.notify.disconnected"));
+					toast.warning(t("BLE.notify.disconnected"));
 					break;
 			}
 		};
 
 		/** Событие отправки данных */
-		const onSend = () => toast.error($t("BLE.notify.noData"));
+		const onSend = () => toast.error(t("BLE.notify.noData"));
 
 		onMounted(() =>
 		{

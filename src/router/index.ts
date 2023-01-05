@@ -1,6 +1,5 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
-import { $t } from "@/lang";
-import store from "@/store";
+import { t } from "@/lang";
 
 const routes: Array<RouteRecordRaw> = [
 	{
@@ -8,7 +7,7 @@ const routes: Array<RouteRecordRaw> = [
 		name: "Onboard",
 		component: () => import("@/views/onboard/Loader.vue"),
 		meta: {
-			title: $t("onboard.title")
+			title: "onboard.title"
 		}
 	},
 	{
@@ -16,7 +15,7 @@ const routes: Array<RouteRecordRaw> = [
 		name: "Buttons",
 		component: () => import("@/views/buttons/Loader.vue"),
 		meta: {
-			title: $t("buttons.title")
+			title: "buttons.title"
 		}
 	}
 ];
@@ -28,10 +27,8 @@ const router = createRouter({
 
 router.beforeEach(async (to, from, next) =>
 {
-	const title = "PJ CAN: %s".replace("%s", (to.meta?.title ?? "") as string);
-	store.commit("app/setTitle", title);
-	document.title = title;
-
+	const title = to.meta?.title as string;
+	document.title = "PJ CAN: " + (title?.length > 0 ? t(title) : "");
 	next();
 });
 

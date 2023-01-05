@@ -54,7 +54,7 @@
 
 <script lang="ts">
 import { computed, ref, toRefs, watch } from "vue";
-import { $tm } from "@/lang";
+import { useI18n } from "vue-i18n";
 
 import DialogTemplate from "@/components/DialogTemplate.vue";
 import SwitchCardItem from "@/components/cards/SwitchCardItem.vue";
@@ -88,6 +88,7 @@ export default {
 	setup(props: any, { emit }: { emit: any })
 	{
 		const { modelValue, enabled, type, time } = toRefs(props);
+		const { tm } = useI18n();
 
 		const visible = computed({
 			get: (): boolean => modelValue.value,
@@ -96,7 +97,7 @@ export default {
 		const modelEnabled = ref(false);
 		const modelType = ref(0);
 		const typeItems = computed(() =>
-			($tm("onboard.viewSetting.type.items") as string[])?.map((x, i) => ({
+			(tm("onboard.viewSetting.type.items") as string[])?.map((x, i) => ({
 				label: x,
 				value: i
 			}))

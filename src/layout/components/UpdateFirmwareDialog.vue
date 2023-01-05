@@ -38,7 +38,7 @@ import DialogTemplate from "@/components/DialogTemplate.vue";
 import { onMounted, onUnmounted, ref } from "vue";
 import { toast } from "vue3-toastify";
 import router from "@/router";
-import { $t } from "@/lang";
+import { useI18n } from "vue-i18n";
 
 import canbus, { API_EVENT_UPDATE_ERROR } from "@/api/canbus";
 import { BLUETOOTH_EVENT_CONNECTED, TConnectedStatus } from "@/components/bluetooth";
@@ -54,6 +54,8 @@ export default {
 	components: { DialogTemplate },
 	setup()
 	{
+		const { t } = useI18n();
+
 		const visibleUpdate = ref(false);
 		const visibleProcess = ref(false);
 		const version = ref("");
@@ -113,8 +115,8 @@ export default {
 					{
 						canbus
 							.checkVersion()
-							.then(() => toast.error($t("update.notify.warning")))
-							.catch(() => toast.success($t("update.notify.completed")));
+							.then(() => toast.error(t("update.notify.warning")))
+							.catch(() => toast.success(t("update.notify.completed")));
 
 						setTimeout(() => router.go(0), 5000);
 						onCancel();
@@ -132,7 +134,7 @@ export default {
 		/** Событие запуска прошивки */
 		const onUpdateUpload = (): void =>
 		{
-			message.value = $t("update.process.preparation");
+			message.value = t("update.process.preparation");
 			uploading.value = "";
 			progress.value = 0;
 			visibleUpdate.value = false;
@@ -150,7 +152,7 @@ export default {
 		{
 			if (result)
 			{
-				message.value = $t("update.process.upload");
+				message.value = t("update.process.upload");
 				progress.value = canbus.update.upload.uploading * 100;
 				uploading.value = progress.value.toFixed(2) + "%";
 
@@ -161,7 +163,7 @@ export default {
 			}
 			else
 			{
-				onErrorUpdate($t("update.notify.error"));
+				onErrorUpdate(t("update.notify.error"));
 			}
 		};
 
@@ -173,14 +175,14 @@ export default {
 		{
 			if (result)
 			{
-				message.value = $t("update.process.update");
+				message.value = t("update.process.update");
 				progress.value = 0;
 				uploading.value = "";
 				canbus.configs.version.clear();
 			}
 			else
 			{
-				onErrorUpdate($t("update.notify.error"));
+				onErrorUpdate(t("update.notify.error"));
 			}
 		};
 

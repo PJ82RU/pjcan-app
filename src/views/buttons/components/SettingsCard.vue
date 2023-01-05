@@ -83,7 +83,7 @@
 
 <script lang="ts">
 import { computed, toRefs } from "vue";
-import { $tm } from "@/lang";
+import { useI18n } from "vue-i18n";
 
 import Card from "@/components/cards/Card.vue";
 import NumberField from "@/components/common/NumberField.vue";
@@ -117,12 +117,13 @@ export default {
 	setup(props: any, { emit }: { emit: any })
 	{
 		const { inR, pressSingle, pressDual, pressTriple, pressHold } = toRefs(props);
+		const { tm } = useI18n();
 
 		/** Список функций */
 		const functionsList = computed((): object[] =>
 		{
 			const result: object[] = [];
-			const list: any = $tm("buttons.functions");
+			const list: any = tm("buttons.functions");
 			[0, 1, 2, 3, 4, 5, 6, 7, 9, 11, 13, 15, 16, 17, 18].forEach((x) =>
 				result.push({ label: list[x], value: x })
 			);

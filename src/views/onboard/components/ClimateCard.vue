@@ -80,7 +80,7 @@
 
 <script lang="ts">
 import { computed, onMounted, onUnmounted, ref } from "vue";
-import { $t } from "@/lang";
+import { useI18n } from "vue-i18n";
 
 import canbus, { API_EVENT_VARIABLE_CLIMATE, API_EVENT_VARIABLE_CLIMATE_VIEW } from "@/api/canbus";
 
@@ -99,6 +99,8 @@ export default {
 	components: { Card, InputCardItem, IconCardItem, SwitchCardItem, ViewSettingDialog },
 	setup()
 	{
+		const { t } = useI18n();
+
 		const isLoadedValue = ref(false);
 		const isLoadedView = ref(false);
 
@@ -162,7 +164,7 @@ export default {
 
 		// МЕНЮ ОТОБРАЖЕНИЯ
 
-		const menu = computed((): IMenuItem[] => [{ id: 0, title: $t("onboard.climate.menu") }]);
+		const menu = computed((): IMenuItem[] => [{ id: 0, title: t("onboard.climate.menu") }]);
 		const menuVisible = ref(false);
 		const menuSelected = ref({} as IMenuItem);
 		const menuViewConfig = ref({} as IViewConfig);

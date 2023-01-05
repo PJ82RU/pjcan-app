@@ -46,7 +46,7 @@
 
 <script lang="ts">
 import { computed, onMounted, onUnmounted, ref } from "vue";
-import { $t } from "@/lang";
+import { useI18n } from "vue-i18n";
 
 import canbus, { API_EVENT_VARIABLE_MOVEMENT, API_EVENT_VARIABLE_MOVEMENT_VIEW } from "@/api/canbus";
 
@@ -63,6 +63,8 @@ export default {
 	components: { Card, InputCardItem, ViewSettingDialog },
 	setup()
 	{
+		const { t } = useI18n();
+
 		const isLoadedView = ref(false);
 		const isLoadedValue = ref(false);
 
@@ -109,9 +111,9 @@ export default {
 		// МЕНЮ ОТОБРАЖЕНИЯ
 
 		const menu = computed((): IMenuItem[] => [
-			{ id: 0, title: $t("onboard.movement.speed.menu") },
-			{ id: 1, title: $t("onboard.movement.speedAVG.menu") },
-			{ id: 2, title: $t("onboard.movement.restWay.menu") }
+			{ id: 0, title: t("onboard.movement.speed.menu") },
+			{ id: 1, title: t("onboard.movement.speedAVG.menu") },
+			{ id: 2, title: t("onboard.movement.restWay.menu") }
 		]);
 		const menuVisible = ref(false);
 		const menuSelected = ref({} as IMenuItem);

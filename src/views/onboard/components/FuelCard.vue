@@ -55,7 +55,7 @@
 
 <script lang="ts">
 import { computed, onMounted, onUnmounted, ref } from "vue";
-import { $t } from "@/lang";
+import { useI18n } from "vue-i18n";
 
 import canbus, { API_EVENT_VARIABLE_FUEL, API_EVENT_VARIABLE_FUEL_VIEW } from "@/api/canbus";
 
@@ -72,6 +72,8 @@ export default {
 	components: { Card, InputCardItem, ViewSettingDialog },
 	setup()
 	{
+		const { t } = useI18n();
+
 		const isLoadedValue = ref(false);
 		const isLoadedView = ref(false);
 
@@ -117,10 +119,10 @@ export default {
 		// МЕНЮ ОТОБРАЖЕНИЯ
 
 		const menu = computed((): IMenuItem[] => [
-			{ id: 0, title: $t("onboard.fuel.current.menu") },
-			{ id: 1, title: $t("onboard.fuel.avg.menu") },
-			// { id: 2, title: $t("onboard.fuel.total.menu") },
-			{ id: 3, title: $t("onboard.fuel.consumption.menu") }
+			{ id: 0, title: t("onboard.fuel.current.menu") },
+			{ id: 1, title: t("onboard.fuel.avg.menu") },
+			// { id: 2, title: t("onboard.fuel.total.menu") },
+			{ id: 3, title: t("onboard.fuel.consumption.menu") }
 		]);
 		const menuVisible = ref(false);
 		const menuSelected = ref({} as IMenuItem);

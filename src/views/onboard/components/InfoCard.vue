@@ -92,7 +92,7 @@
 
 <script lang="ts">
 import { computed, onMounted, onUnmounted, ref } from "vue";
-import { $t } from "@/lang";
+import { useI18n } from "vue-i18n";
 
 import canbus, {
 	API_EVENT_DEVICE,
@@ -120,6 +120,8 @@ export default {
 	components: { Card, InputCardItem, SwitchCardItem, IconCardItem, ViewSettingDialog },
 	setup()
 	{
+		const { t } = useI18n();
+
 		const isLoadedDeviceValue = ref(false);
 		const isLoadedSensorValue = ref(false);
 		const isLoadedSensorView = ref(false);
@@ -227,11 +229,11 @@ export default {
 		// МЕНЮ ОТОБРАЖЕНИЯ
 
 		const menu = computed((): IMenuItem[] => [
-			{ id: 0, title: $t("onboard.info.temperature.menu") },
-			{ id: 1, title: $t("onboard.info.handbrake.menu") },
-			{ id: 2, title: $t("onboard.info.reverse.menu") },
-			{ id: 3, title: $t("onboard.info.safetyBelt.menu") },
-			{ id: 4, title: $t("onboard.info.signal.menu") }
+			{ id: 0, title: t("onboard.info.temperature.menu") },
+			{ id: 1, title: t("onboard.info.handbrake.menu") },
+			{ id: 2, title: t("onboard.info.reverse.menu") },
+			{ id: 3, title: t("onboard.info.safetyBelt.menu") },
+			{ id: 4, title: t("onboard.info.signal.menu") }
 		]);
 		const menuVisible = ref(false);
 		const menuSelected = ref({} as IMenuItem);

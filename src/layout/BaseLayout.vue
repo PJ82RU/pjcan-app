@@ -32,9 +32,9 @@
 
 <script lang="ts">
 import { computed, onMounted, onUnmounted, ref } from "vue";
-import store from "@/store";
 import router from "@/router";
-import i18n from "@/lang";
+import { useI18n } from "vue-i18n";
+import moment from "moment/moment";
 
 import BluetoothBtn from "./components/BluetoothBtn.vue";
 import UpdateFirmwareDialog from "./components/UpdateFirmwareDialog.vue";
@@ -48,20 +48,25 @@ export default {
 	components: { BluetoothBtn, UpdateFirmwareDialog, MenuDots, AboutDialog, OnboardButtonsDialog },
 	setup()
 	{
-		const title = computed((): string => store.getters["app/title"]);
+		const { t, locale } = useI18n();
+
+		const title = computed((): string =>
+		{
+			const result = router.currentRoute.value.meta?.title as string;
+			return "PJ CAN: " + (result?.length > 0 ? t(result) : "");
+		});
 		const menu = computed((): IMenuItem[] =>
 		{
-			const lang = i18n.global;
 			const result = [] as IMenuItem[];
 			const { name } = router.currentRoute.value;
 
 			result.push(
-				{ id: 0, title: lang.t("menu.onboard"), disabled: name === "Onboard" },
-				{ id: 1, title: lang.t("menu.settings.buttons"), disabled: name === "Buttons" },
-				{ id: 4, title: lang.t("menu.onboardButtons") },
+				{ id: 0, title: t("menu.onboard"), disabled: name === "Onboard" },
+				{ id: 1, title: t("menu.settings.buttons"), disabled: name === "Buttons" },
+				{ id: 4, title: t("menu.onboardButtons") },
 				{} as IMenuItem,
-				{ id: 2, title: lang.t("menu.language." + (lang.locale !== "ru" ? "english" : "russian")) },
-				{ id: 3, title: lang.t("menu.about") }
+				{ id: 2, title: t("menu.language." + (locale.value !== "ru" ? "russian" : "english")) },
+				{ id: 3, title: t("menu.about") }
 			);
 
 			return result;
@@ -79,6 +84,10 @@ export default {
 					break;
 				case 1:
 					router.push({ name: "Buttons" });
+					break;
+				case 2:
+					locale.value = locale.value !== "ru" ? "ru" : "en";
+					moment.locale(locale.value);
 					break;
 				case 3:
 					visibleAbout.value = true;
