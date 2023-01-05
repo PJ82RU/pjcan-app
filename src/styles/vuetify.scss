@@ -17,6 +17,11 @@ html{
 	line-height: 2.5rem !important;
 }
 
+.text-h4 {
+	font-size: 1.5rem !important;
+	line-height: 2rem !important;
+}
+
 .text-h5 {
 	font-size: 1.25rem !important;
 	line-height: 1.75rem !important;
@@ -51,7 +56,11 @@ html{
 }
 
 .v-field {
-	font-size: 1rem !important;
+	font-size: 1.25rem !important;
+}
+
+.v-list-item-title {
+	font-size: 1.25rem !important;
 }
 
 .v-card {
@@ -61,14 +70,18 @@ html{
 			color: $primary;
 		}
 	}
+	.v-card-title {
+		padding: 16px 24px;
+	}
 	.v-card-item__prepend {
 		padding: 0 !important;
 	}
 	.v-card-text {
 		padding: 16px 24px !important;
+		font-size: 1.25rem !important;
 	}
 	.v-card-actions {
-		padding: 0 !important;
+		padding: 16px 0 0 0 !important;
 		min-height: 48px;
 	}
 }
@@ -104,6 +117,8 @@ html{
 
 .v-input {
 	.v-messages__message {
+		font-size: 0.875rem;
+		line-height: 0.875rem;
 		font-weight: 300;
 	}
 }
@@ -155,5 +170,11 @@ html{
 	}
 	.v-label {
 		color: white;
+	}
+}
+
+.v-btn {
+	&--size-default {
+		font-size: 1rem;
 	}
 }

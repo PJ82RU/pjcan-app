@@ -9,6 +9,7 @@
 				<v-list-item
 					v-if="item.title?.length > 0"
 					:key="`menu-item_${index}`"
+					:disabled="item?.disabled"
 					@click="$emit('click:item', item)"
 				>
 					<v-list-item-title> {{ item.title }} </v-list-item-title>
@@ -25,6 +26,7 @@ import { ref } from "vue";
 export interface IMenuItem {
 	id: number;
 	title: string;
+	disabled?: boolean;
 }
 
 export default {

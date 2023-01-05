@@ -5,7 +5,7 @@
 			<!--<v-app-bar-nav-icon />-->
 
 			<v-toolbar-title>
-				<span class="text-h5">
+				<span class="text-h4">
 					{{ title }}
 				</span>
 			</v-toolbar-title>
@@ -55,9 +55,9 @@ export default {
 			const result = [] as IMenuItem[];
 			const { name } = router.currentRoute.value;
 
-			if (name !== "Onboard") result.push({ id: 0, title: lang.t("menu.onboard") });
-			if (name !== "Buttons") result.push({ id: 1, title: lang.t("menu.settings.buttons") });
 			result.push(
+				{ id: 0, title: lang.t("menu.onboard"), disabled: name === "Onboard" },
+				{ id: 1, title: lang.t("menu.settings.buttons"), disabled: name === "Buttons" },
 				{ id: 4, title: lang.t("menu.onboardButtons") },
 				{} as IMenuItem,
 				{ id: 2, title: lang.t("menu.language." + (lang.locale !== "ru" ? "english" : "russian")) },

@@ -4,7 +4,7 @@
 			<slot name="body" />
 		</v-card-text>
 		<v-card-actions class="justify-space-between">
-			<div class="pl-4 pr-4 text-h5 text-uppercase">
+			<div class="pl-4 pr-4 text-h4 text-uppercase">
 				{{ title }}
 			</div>
 			<v-btn-group class="border-dialog-btns">
@@ -56,7 +56,7 @@ export default {
 	}
 
 	::v-deep(.v-card-text) {
-		height: calc(100% - 48px);
+		height: calc(100% - 64px);
 		padding: 16px !important;
 	}
 	::v-deep(.v-btn .v-icon) {
