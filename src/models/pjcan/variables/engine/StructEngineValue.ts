@@ -3,7 +3,7 @@ import { BluetoothStruct } from "@/components/bluetooth";
 /** Структура данных */
 export const StructEngineValue = {
 	enabled: BluetoothStruct.bit(),
-	coolant: BluetoothStruct.uint8(),
+	coolant: BluetoothStruct.int8(),
 	rpm: BluetoothStruct.uint16(),
 	mseconds: BluetoothStruct.uint32(),
 	totalSeconds: BluetoothStruct.uint32(),
