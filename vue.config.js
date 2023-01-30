@@ -65,8 +65,6 @@ module.exports = defineConfig({
 				config.optimization.runtimeChunk("single");
 			}
 		);
-
-		config.plugin("workbox");
 	},
 
 	pluginOptions: {
@@ -101,7 +99,6 @@ module.exports = defineConfig({
 
 		// настройки манифеста
 		manifestOptions: {
-			display: "landscape",
 			background_color: "#121517"
 		}
 	}
