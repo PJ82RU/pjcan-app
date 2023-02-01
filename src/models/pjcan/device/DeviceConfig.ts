@@ -1,10 +1,10 @@
 import { BluetoothStruct } from "@/components/bluetooth";
 import { BaseModel } from "../base";
-import { StructDeviceConfig } from "./StructDeviceConfig";
+import { API_SIZE_DEVICE_SHA, StructDeviceConfig } from "./StructDeviceConfig";
 import { IDeviceConfig } from "./IDeviceConfig";
 
 export const API_EXEC_DEVICE_CONFIG = 10;
-export const API_SIZE_DEVICE_CONFIG = 2;
+export const API_SIZE_DEVICE_CONFIG = 2 + API_SIZE_DEVICE_SHA;
 
 const struct = new BluetoothStruct(StructDeviceConfig);
 
@@ -15,6 +15,10 @@ export class DeviceConfig extends BaseModel implements IDeviceConfig
 	resetConfig = false;
 	resetView = false;
 	led = 0;
+	sha = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+	activation = false;
+	save = false;
+	serial = "";
 
 	constructor(data?: DataView)
 	{

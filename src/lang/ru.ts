@@ -80,7 +80,8 @@ export default {
 		version: "Версия web-приложения",
 		versionFirmware: "Версия прошивки PJCAN",
 		carSupport: "Поддержка автомобиля",
-		author: "Автор"
+		author: "Автор",
+		sha: "Хеш устройства"
 	},
 
 	deviceInfo: {

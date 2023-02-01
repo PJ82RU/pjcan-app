@@ -38,12 +38,14 @@
 
 <script lang="ts">
 import { computed, onMounted, onUnmounted, ref, toRefs } from "vue";
-import canbus, { API_EVENT_CONFIGS } from "@/api/canbus";
+import canbus, { API_EVENT_CONFIGS, API_EVENT_DEVICE_CONFIG } from "@/api/canbus";
 const pkg = require("/package.json");
 
 import DialogTemplate from "@/components/DialogTemplate.vue";
 import DeviceInfoDialog from "@/layout/components/DeviceInfoDialog.vue";
+
 import { IConfigs } from "@/models/pjcan/configs";
+import { IDeviceConfig } from "@/models/pjcan/device";
 
 export default {
 	name: "AboutDialog",
@@ -61,17 +63,30 @@ export default {
 		});
 		const visibleDeviceInfo = ref(false);
 		const versionFirmware = ref("");
+		const shaDevice = ref("");
 		const modelInfo = computed(() => ({
 			version: pkg.version,
 			versionFirmware: versionFirmware.value,
 			carSupport: "Mazda 3 BK",
-			author: pkg.author
+			author: pkg.author,
+			sha: shaDevice.value
 		}));
 
 		/** Обновление версии */
 		const updateInfo = (configs: IConfigs): void =>
 		{
 			versionFirmware.value = configs.version.toString;
+			if (!shaDevice.value.length) canbus.queryDevice(true);
+		};
+		/** Обновление конфигурации устройства */
+		const onDeviceConfig = (res: IDeviceConfig): void =>
+		{
+			if (res.isData)
+			{
+				let sha = "";
+				res.sha.forEach(x => (sha += x.toString(16)));
+				shaDevice.value = sha;
+			}
 		};
 
 		/** Открыть попап технической информации */
@@ -84,10 +99,13 @@ export default {
 		onMounted(() =>
 		{
 			canbus.addListener(API_EVENT_CONFIGS, updateInfo);
+			canbus.addListener(API_EVENT_DEVICE_CONFIG, onDeviceConfig);
+			onDeviceConfig(canbus.device.config);
 		});
 		onUnmounted(() =>
 		{
 			canbus.removeListener(API_EVENT_CONFIGS, updateInfo);
+			canbus.removeListener(API_EVENT_DEVICE_CONFIG, onDeviceConfig);
 		});
 
 		return {

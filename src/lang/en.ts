@@ -80,7 +80,8 @@ export default {
 		version: "Web application version",
 		versionFirmware: "PJCAN firmware version",
 		carSupport: "Car support",
-		author: "Author"
+		author: "Author",
+		sha: "Device hash"
 	},
 
 	deviceInfo: {
