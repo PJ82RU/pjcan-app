@@ -75,6 +75,11 @@ export default {
 		about: "About"
 	},
 
+	activation: {
+		success: "Device successfully activated! The device is rebooting...",
+		error: "The device is not activated. Contact the developer."
+	},
+
 	about: {
 		title: "About",
 		version: "Web application version",

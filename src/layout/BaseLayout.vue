@@ -40,7 +40,7 @@
 </template>
 
 <script lang="ts">
-import { computed, onMounted, onUnmounted, ref } from "vue";
+import { computed, onMounted, onUnmounted, ref, watch } from "vue";
 import router from "@/router";
 import store from "@/store";
 import { useI18n } from "vue-i18n";
@@ -55,6 +55,7 @@ import OnboardButtonsDialog from "./components/OnboardButtonsDialog.vue";
 import MessageDialog from "@/layout/components/MessageDialog.vue";
 
 import { IMessage } from "@/models/interfaces/message/IMessage";
+import { Timeout } from "@/models/types/Timeout";
 
 export default {
 	name: "BaseLayout",
@@ -138,10 +139,24 @@ export default {
 		// Вывод сообщений //
 
 		const visibleMessage = computed({
-			get: (): boolean => (store.getters["app/visibleMessage"]),
-			set: (val: boolean): void => (store.commit("app/setVisibleMessage", val))
+			get: (): boolean => store.getters["app/visibleMessage"],
+			set: (val: boolean): void => store.commit("app/setVisibleMessage", val)
 		});
 		const message = computed((): IMessage => store.getters["app/message"]);
+
+		let timer: Timeout;
+		watch(message, (msg: IMessage): void =>
+		{
+			if (timer) clearTimeout(timer);
+			if (msg?.timeout)
+			{
+				timer = setTimeout(() =>
+				{
+					store.commit("app/freeMessage");
+					timer = undefined;
+				}, msg.timeout);
+			}
+		});
 
 		return {
 			title,

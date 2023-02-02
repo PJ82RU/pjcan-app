@@ -40,6 +40,8 @@
 import { computed, onMounted, onUnmounted, ref, toRefs } from "vue";
 import canbus, { API_EVENT_DEVICE, API_EVENT_VALUES } from "@/api/canbus";
 const pkg = require("/package.json");
+import { toast } from "vue3-toastify";
+import { useI18n } from "vue-i18n";
 
 import DialogTemplate from "@/components/DialogTemplate.vue";
 import DeviceInfoDialog from "@/layout/components/DeviceInfoDialog.vue";
@@ -60,6 +62,8 @@ export default {
 	setup(props: any, { emit }: { emit: any })
 	{
 		const { modelValue } = toRefs(props);
+		const { t } = useI18n();
+
 		const visible = computed({
 			get: (): boolean => modelValue.value,
 			set: (val: boolean): void => emit("update:modelValue", val)
@@ -84,6 +88,7 @@ export default {
 		{
 			versionFirmware.value = values.version.toString;
 		};
+		let attempt: boolean = false;
 		/** Обновление конфигурации устройства */
 		const onDevice = (res: IDeviceValue): void =>
 		{
@@ -100,8 +105,9 @@ export default {
 					shaDevice.value = sha;
 				}
 
-				if (!res.activation && !canbus.configs.device.serial.length)
+				if (!attempt && !res.activation)
 				{
+					attempt = true;
 					getSerial(shaDevice.value)
 						.then((res: any) =>
 						{
@@ -110,6 +116,11 @@ export default {
 							canbus.values.device.save = true;
 							canbus.values.device.reboot = true;
 							canbus.queryValue(API_EXEC_DEVICE_VALUE);
+							toast.success(t("activation.success"));
+						})
+						.catch(() =>
+						{
+							toast.error(t("activation.error"));
 						});
 				}
 			}

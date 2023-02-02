@@ -1,9 +1,9 @@
 <template>
-	<dialog-template v-model="visible" :icon="icon" :title="title" text actions>
-		<template v-if="text" #body>
+	<dialog-template v-model="visible" :icon="icon" :title="title" :text="!!text" :actions="!!btns">
+		<template #body>
 			{{ text }}
 		</template>
-		<template v-if="btns" #btns>
+		<template #btns>
 			<v-btn
 				v-for="(btn, i) in btns"
 				:key="`message-btn_${i}`"
