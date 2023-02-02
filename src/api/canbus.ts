@@ -1,7 +1,7 @@
-import axios from "axios";
 import EventEmitter from "eventemitter3";
 import { t } from "@/lang";
 import { clearDebounce, debounce } from "@/utils/debounce";
+import { getFirmware, getFirmwareVersion } from "@/api/firmware";
 
 import {
 	BLUETOOTH_EVENT_CONNECTED,
@@ -119,10 +119,6 @@ export const API_EVENT_VARIABLE_VOLUME_VIEW = "VariableVolumeView";
 export const API_EVENT_UPDATE_UPLOAD_GZ = "UpdateUploadGZ";
 export const API_EVENT_UPDATE_BEGIN_GZ = "UpdateBeginGZ";
 export const API_EVENT_UPDATE_ERROR = "ErrorUpdate";
-
-const URL_FIRMWARE_PATH = process.env.BASE_URL + "firmware/";
-const URL_FIRMWARE_VERSION = URL_FIRMWARE_PATH + "version.json";
-const URL_FIRMWARE_GZIP = URL_FIRMWARE_PATH + "firmware.bin.gz";
 
 export class Canbus extends EventEmitter
 {
@@ -658,12 +654,7 @@ export class Canbus extends EventEmitter
 	/** Запустить процесс загрузки прошивки на устройство */
 	beginUpload(): void
 	{
-		axios({
-			url: URL_FIRMWARE_GZIP,
-			method: "GET",
-			responseType: "arraybuffer",
-			headers: { "Content-Type": "application/gzip" }
-		})
+		getFirmware()
 			.then((res: any) =>
 			{
 				if (res.data.byteLength > 0)
@@ -722,10 +713,7 @@ export class Canbus extends EventEmitter
 	{
 		return new Promise((resolve, reject) =>
 		{
-			axios({
-				url: URL_FIRMWARE_VERSION,
-				method: "GET"
-			})
+			getFirmwareVersion()
 				.then((res: any) =>
 				{
 					// проверяем версию прошивки
