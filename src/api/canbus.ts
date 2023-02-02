@@ -713,7 +713,7 @@ export class Canbus extends EventEmitter
 	/** Лог версии прошивки */
 	private logVersion()
 	{
-		const { major, minor, build, revision } = this.values.version;
+		const { major, minor, build, revision } = this.configs.version;
 		console.log(t("BLE.server.versionProtocol", { mj: major, mn: minor, bl: build, rv: revision }));
 	}
 
@@ -738,7 +738,7 @@ export class Canbus extends EventEmitter
 						newVersion.build = ver[2];
 						newVersion.revision = ver[3];
 
-						if (this.values.version.compare(newVersion) > 0) resolve(newVersion);
+						if (this.configs.version.compare(newVersion) > 0) resolve(newVersion);
 						else reject("Current version");
 					}
 					else reject("No data");

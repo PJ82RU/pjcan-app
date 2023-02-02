@@ -38,7 +38,7 @@
 
 <script lang="ts">
 import { computed, onMounted, onUnmounted, ref, toRefs } from "vue";
-import canbus, { API_EVENT_DEVICE, API_EVENT_VALUES } from "@/api/canbus";
+import canbus, { API_EVENT_CONFIGS, API_EVENT_DEVICE } from "@/api/canbus";
 const pkg = require("/package.json");
 import { toast } from "vue3-toastify";
 import { useI18n } from "vue-i18n";
@@ -49,8 +49,8 @@ import DeviceInfoDialog from "@/layout/components/DeviceInfoDialog.vue";
 import { getSerial } from "@/api/hash";
 
 import { API_EXEC_DEVICE_CONFIG, API_EXEC_DEVICE_VALUE, IDeviceValue } from "@/models/pjcan/device";
-import { IValues } from "@/models/pjcan/values";
 import { ILooseObject } from "@/models/interfaces/ILooseObject";
+import { IConfigs } from "@/models/pjcan/configs";
 
 export default {
 	name: "AboutDialog",
@@ -84,9 +84,9 @@ export default {
 		});
 
 		/** Обновление версии */
-		const updateInfo = (values: IValues): void =>
+		const updateInfo = (configs: IConfigs): void =>
 		{
-			versionFirmware.value = values.version.toString;
+			versionFirmware.value = configs.version.toString;
 		};
 		let attempt: boolean = false;
 		/** Обновление конфигурации устройства */
@@ -135,13 +135,13 @@ export default {
 
 		onMounted(() =>
 		{
-			canbus.addListener(API_EVENT_VALUES, updateInfo);
+			canbus.addListener(API_EVENT_CONFIGS, updateInfo);
 			canbus.addListener(API_EVENT_DEVICE, onDevice);
 			onDevice(canbus.values.device);
 		});
 		onUnmounted(() =>
 		{
-			canbus.removeListener(API_EVENT_VALUES, updateInfo);
+			canbus.removeListener(API_EVENT_CONFIGS, updateInfo);
 			canbus.removeListener(API_EVENT_DEVICE, onDevice);
 		});
 

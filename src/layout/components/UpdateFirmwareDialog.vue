@@ -111,7 +111,7 @@ export default {
 				// завершение прошивки
 				setTimeout(() =>
 				{
-					if (canbus.values.version.is)
+					if (canbus.configs.version.is)
 					{
 						canbus
 							.checkVersion()
@@ -178,7 +178,7 @@ export default {
 				message.value = t("update.process.update");
 				progress.value = 0;
 				uploading.value = "";
-				canbus.values.version.clear();
+				canbus.configs.version.clear();
 			}
 			else
 			{
