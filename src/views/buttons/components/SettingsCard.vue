@@ -9,6 +9,7 @@
 						:hint="$t('buttons.resistance.description')"
 						:max="3999"
 						:disabled="!isLoadedConfig"
+						@change="$emit('change')"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0">
@@ -136,7 +137,6 @@ export default {
 			set: (val: number): void =>
 			{
 				emit("update:inR", val);
-				emit("change");
 			}
 		});
 

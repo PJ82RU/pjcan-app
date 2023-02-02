@@ -49,8 +49,8 @@ import { computed, ref, toRefs, watch } from "vue";
 import DialogTemplate from "@/components/DialogTemplate.vue";
 import NumberField from "@/components/common/NumberField.vue";
 
-import { IConfigItem } from "@/models/interfaces/IConfigItem";
 import { TButtonItem } from "@/models/pjcan/button";
+import { IButtonCard } from "@/models/interfaces/IButtonCard";
 
 export default {
 	name: "ButtonDefinitionDialog",
@@ -63,7 +63,7 @@ export default {
 		},
 		/** Список типов кнопок */
 		list: {
-			type: Array as () => IConfigItem[],
+			type: Array as () => IButtonCard[],
 			required: true
 		},
 		/** Сопротивление кнопки */

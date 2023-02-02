@@ -372,7 +372,10 @@ export class Canbus extends EventEmitter
 	/** Получить информацию устройства */
 	async queryDeviceInfo()
 	{
-		await this.query(this.deviceInfo);
+		if (!this.queryDisabled)
+		{
+			await this.query(this.deviceInfo);
+		}
 	}
 
 	/**

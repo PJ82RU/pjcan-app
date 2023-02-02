@@ -1,9 +1,9 @@
 <template>
 	<flicking ref="flicking" class="buttons" :options="{ bound: true, align: 'prev' }">
-		<div v-for="(item, index) in list" :key="`buttons-${index}`" class="mr-4" :class="`flicking-${display}`">
+		<div v-for="(item, i) in buttons" :key="`buttons-${i}`" class="mr-4" :class="`flicking-${display}`">
 			<settings-card
-				:class="`settings-card-${index}`"
-				:title="item.title"
+				:class="`settings-card-${i}`"
+				:title="list[i].title"
 				v-model:in-r="item.inR"
 				v-model:press-single="item.pressSingle"
 				v-model:press-dual="item.pressDual"
@@ -11,7 +11,7 @@
 				v-model:press-hold="item.pressHold"
 				v-model:release="item.release"
 				:is-loaded-config="isLoadedConfig"
-				:icon="item.icon"
+				:icon="list[i].icon"
 				@change="onButtonConfigChange"
 			/>
 		</div>
@@ -27,7 +27,7 @@
 </template>
 
 <script lang="ts">
-import { computed, onMounted, onUnmounted, provide, ref } from "vue";
+import { computed, onMounted, onUnmounted, provide, ref, watch } from "vue";
 import { useDisplay } from "vuetify";
 import { useI18n } from "vue-i18n";
 
@@ -44,7 +44,8 @@ import {
 	TButtonItem,
 	TButtonPress
 } from "@/models/pjcan/button";
-import { IConfigItem } from "@/models/interfaces/IConfigItem";
+import { IButtonItem } from "@/models/interfaces/IButtonItem";
+import { IButtonCard } from "@/models/interfaces/IButtonCard";
 
 export default {
 	name: "buttons",
@@ -60,75 +61,66 @@ export default {
 		const visibleButtonDefinitionDialog = ref(false);
 		const typeButtonDefinition = ref(-1);
 		const resistanceButtonDefinition = ref(0);
+		const buttons = ref([] as IButtonItem[]);
 
-		const list = computed(() => [
+		/** Обновление списка конфигураций кнопок */
+		const buttonItemsUpdate = (): void =>
+		{
+			canbus.configs.buttons.items?.forEach((x, i) =>
+			{
+				if (!buttons.value?.[i]) buttons.value.push({} as IButtonItem);
+				const res = buttons.value[i];
+				res.inR = x.inR;
+				res.pressSingle = x.exec[TButtonPress.PRESS_SINGLE];
+				res.pressDual = x.exec[TButtonPress.PRESS_DUAL];
+				res.pressTriple = x.exec[TButtonPress.PRESS_TRIPLE];
+				res.pressHold = x.exec[TButtonPress.PRESS_HOLD];
+				res.release = x.exec[TButtonPress.RELEASE];
+			});
+		};
+		buttonItemsUpdate();
+
+		/** Список конфигураций кнопок */
+		const list = computed((): IButtonCard[] => [
 			{
 				title: t("buttons.mode"),
 				type: TButtonItem.BUTTON_MODE,
-				icon: "mdi-menu",
-				inR: 0,
-				pressSingle: 0,
-				pressDual: 0,
-				pressTriple: 0,
-				pressHold: 0,
-				release: 0
+				icon: "mdi-menu"
 			},
 			{
 				title: t("buttons.seekUp"),
 				type: TButtonItem.BUTTON_SEEK_UP,
-				icon: "mdi-play",
-				inR: 0,
-				pressSingle: 0,
-				pressDual: 0,
-				pressTriple: 0,
-				pressHold: 0,
-				release: 0
+				icon: "mdi-play"
 			},
 			{
 				title: t("buttons.seekDown"),
 				type: TButtonItem.BUTTON_SEEK_DOWN,
-				icon: "mdi-play",
-				inR: 0,
-				pressSingle: 0,
-				pressDual: 0,
-				pressTriple: 0,
-				pressHold: 0,
-				release: 0
+				icon: "mdi-play"
 			},
 			{
 				title: t("buttons.volUp"),
 				type: TButtonItem.BUTTON_VOL_UP,
-				icon: "mdi-volume-plus",
-				inR: 0,
-				pressSingle: 0,
-				pressDual: 0,
-				pressTriple: 0,
-				pressHold: 0,
-				release: 0
+				icon: "mdi-volume-plus"
 			},
 			{
 				title: t("buttons.volDown"),
 				type: TButtonItem.BUTTON_VOL_DOWN,
-				icon: "mdi-volume-minus",
-				inR: 0,
-				pressSingle: 0,
-				pressDual: 0,
-				pressTriple: 0,
-				pressHold: 0,
-				release: 0
+				icon: "mdi-volume-minus"
 			},
 			{
 				title: t("buttons.volMute"),
 				type: TButtonItem.BUTTON_VOL_MUTE,
-				icon: "mdi-volume-mute",
-				inR: 0,
-				pressSingle: 0,
-				pressDual: 0,
-				pressTriple: 0,
-				pressHold: 0,
-				release: 0
+				icon: "mdi-volume-mute"
 			}
-		] as IConfigItem[]);
+		] as IButtonCard[]);
+
+		// блокируем отправку значений на время обновления list
+		let receiveConfig = false;
+		watch(list, () =>
+		{
+			receiveConfig = true;
+			setTimeout(() => (receiveConfig = false), 500);
+		});
 
 		/**
 		 * Отправлять значение нажатой кнопки
@@ -152,16 +144,7 @@ export default {
 			isLoadedConfig.value = res.isData;
 			if (res.isData)
 			{
-				res.items?.forEach((x, i) =>
-				{
-					const vals = list.value[i];
-					vals.inR = x.inR;
-					vals.pressSingle = x.exec[TButtonPress.PRESS_SINGLE];
-					vals.pressDual = x.exec[TButtonPress.PRESS_DUAL];
-					vals.pressTriple = x.exec[TButtonPress.PRESS_TRIPLE];
-					vals.pressHold = x.exec[TButtonPress.PRESS_HOLD];
-					vals.release = x.exec[TButtonPress.RELEASE];
-				});
+				buttonItemsUpdate();
 
 				// Включаем определение нажатой кнопки.
 				// Выключится автоматически, при запросе значений или ручками в onUnmounted
@@ -203,16 +186,18 @@ export default {
 		/** Изменение значений конфигурации кнопок */
 		const onButtonConfigChange = (): void =>
 		{
+			if (receiveConfig) return;
+
 			const { items } = canbus.configs.buttons;
-			list.value.forEach((x, i) =>
+			buttons.value.forEach((x, i) =>
 			{
-				const vals = items[i];
-				vals.inR = x.inR;
-				vals.exec[TButtonPress.PRESS_SINGLE] = x.pressSingle;
-				vals.exec[TButtonPress.PRESS_DUAL] = x.pressDual;
-				vals.exec[TButtonPress.PRESS_TRIPLE] = x.pressTriple;
-				vals.exec[TButtonPress.PRESS_HOLD] = x.pressHold;
-				vals.exec[TButtonPress.RELEASE] = x.release;
+				const res = items[i];
+				res.inR = x.inR;
+				res.exec[TButtonPress.PRESS_SINGLE] = x.pressSingle;
+				res.exec[TButtonPress.PRESS_DUAL] = x.pressDual;
+				res.exec[TButtonPress.PRESS_TRIPLE] = x.pressTriple;
+				res.exec[TButtonPress.PRESS_HOLD] = x.pressHold;
+				res.exec[TButtonPress.RELEASE] = x.release;
 			});
 			canbus.queryConfig(API_EXEC_BUTTONS_CONFIG);
 		};
@@ -232,6 +217,7 @@ export default {
 			flicking,
 			display,
 			isLoadedConfig,
+			buttons,
 			list,
 			visibleButtonDefinitionDialog,
 			resistanceButtonDefinition,

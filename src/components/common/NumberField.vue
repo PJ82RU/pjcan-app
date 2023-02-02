@@ -11,10 +11,11 @@
 			if(Number(this.value) > Number(this.max)) { this.value = this.max; }
 			else if (Number(this.value) < Number(this.min)) { this.value = ''; }
 		"
+		:disabled="disabled"
 		persistent-hint
 		dense
 		@blur="onBlur"
-		:disabled="disabled"
+		@change="$emit('change', $event)"
 	/>
 </template>
 
@@ -48,7 +49,7 @@ export default {
 		/** Выкл. */
 		disabled: Boolean
 	},
-	emits: ["update:modelValue"],
+	emits: ["update:modelValue", "change"],
 	setup(props: any, { emit }: { emit: any })
 	{
 		const { modelValue, min, max, defaultValue } = toRefs(props);
