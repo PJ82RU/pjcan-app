@@ -84,19 +84,20 @@ export default {
 		{
 			if (res.isData)
 			{
-				let sha = "";
-				res.sha.forEach((x) =>
+				if (!shaDevice.value.length)
 				{
-					const hex = x.toString(16);
-					sha += (hex.length === 1 ? "0" : "") + hex;
-				});
-				shaDevice.value = sha;
+					let sha = "";
+					res.sha.forEach((x) =>
+					{
+						const hex = x.toString(16);
+						sha += (hex.length === 1 ? "0" : "") + hex;
+					});
+					shaDevice.value = sha;
+				}
 
-				console.log("activation", res.activation);
-				console.log("serial", canbus.configs.device.serial);
 				if (!res.activation && !canbus.configs.device.serial.length)
 				{
-					getSerial(sha)
+					getSerial(shaDevice.value)
 						.then((res: any) =>
 						{
 							canbus.configs.device.serial = res?.sha ?? "";

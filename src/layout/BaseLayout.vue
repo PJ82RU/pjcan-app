@@ -26,26 +26,39 @@
 			<div class="base-layout__main" :style="{ width: `${pageWidth}px`, height: `${pageHeight - 50}px` }">
 				<router-view />
 			</div>
+
+			<message-dialog
+				v-if="message"
+				v-model="visibleMessage"
+				:title="message.title"
+				:icon="message?.icon"
+				:text="message.text"
+				:btns="message?.btns"
+			/>
 		</v-main>
 	</v-app>
 </template>
 
 <script lang="ts">
-import { computed, onMounted, onUnmounted, ref } from "vue";
+import { computed, onMounted, onUnmounted, ref, watch } from "vue";
 import router from "@/router";
+import store from "@/store";
 import { useI18n } from "vue-i18n";
 import moment from "moment/moment";
+import ScreenFull from "screenfull";
 
 import BluetoothBtn from "./components/BluetoothBtn.vue";
 import UpdateFirmwareDialog from "./components/UpdateFirmwareDialog.vue";
 import MenuDots, { IMenuItem } from "@/components/MenuDots.vue";
 import AboutDialog from "./components/AboutDialog.vue";
 import OnboardButtonsDialog from "./components/OnboardButtonsDialog.vue";
-import ScreenFull from "screenfull";
+import MessageDialog from "@/layout/components/MessageDialog.vue";
+
+import { IMessage } from "@/models/interfaces/message/IMessage";
 
 export default {
 	name: "BaseLayout",
-	components: { BluetoothBtn, UpdateFirmwareDialog, MenuDots, AboutDialog, OnboardButtonsDialog },
+	components: { BluetoothBtn, UpdateFirmwareDialog, MenuDots, AboutDialog, OnboardButtonsDialog, MessageDialog },
 	setup()
 	{
 		const { t, locale } = useI18n();
@@ -122,6 +135,23 @@ export default {
 			if (ScreenFull.isEnabled) ScreenFull.toggle();
 		};
 
+		// Вывод сообщений //
+
+		const visibleMessage = ref(false);
+		const message = computed((): IMessage => store.getters["app/message"]);
+
+		watch(message, (msg: IMessage | undefined) =>
+		{
+			visibleMessage.value = !!msg;
+		});
+		watch(visibleMessage, (val: boolean) =>
+		{
+			if (!val)
+			{
+				setTimeout(() => store.commit("app/freeMessage"), 400);
+			}
+		});
+
 		return {
 			title,
 			menu,
@@ -129,6 +159,8 @@ export default {
 			visibleOnboardButtons,
 			pageWidth,
 			pageHeight,
+			visibleMessage,
+			message,
 			onMenuClick,
 			toggleFullscreen
 		};
