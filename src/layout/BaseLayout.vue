@@ -40,7 +40,7 @@
 </template>
 
 <script lang="ts">
-import { computed, onMounted, onUnmounted, ref, watch } from "vue";
+import { computed, onMounted, onUnmounted, ref } from "vue";
 import router from "@/router";
 import store from "@/store";
 import { useI18n } from "vue-i18n";
@@ -137,20 +137,11 @@ export default {
 
 		// Вывод сообщений //
 
-		const visibleMessage = ref(false);
+		const visibleMessage = computed({
+			get: (): boolean => (store.getters["app/visibleMessage"]),
+			set: (val: boolean): void => (store.commit("app/setVisibleMessage", val))
+		});
 		const message = computed((): IMessage => store.getters["app/message"]);
-
-		watch(message, (msg: IMessage | undefined) =>
-		{
-			visibleMessage.value = !!msg;
-		});
-		watch(visibleMessage, (val: boolean) =>
-		{
-			if (!val)
-			{
-				setTimeout(() => store.commit("app/freeMessage"), 400);
-			}
-		});
 
 		return {
 			title,

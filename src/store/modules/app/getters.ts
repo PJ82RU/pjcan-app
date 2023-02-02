@@ -5,6 +5,12 @@
 export const message = (state: any) => state.messages?.[0];
 
 /**
+ * Отображение диалога сообщения
+ * @param state
+ */
+export const visibleMessage = (state: any) => state.visibleMessage;
+
+/**
  * Список карточек бортового компьютера
  * @param state
  */

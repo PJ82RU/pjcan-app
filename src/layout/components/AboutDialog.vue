@@ -48,6 +48,7 @@ import { getSerial } from "@/api/hash";
 
 import { API_EXEC_DEVICE_CONFIG, API_EXEC_DEVICE_VALUE, IDeviceValue } from "@/models/pjcan/device";
 import { IValues } from "@/models/pjcan/values";
+import { ILooseObject } from "@/models/interfaces/ILooseObject";
 
 export default {
 	name: "AboutDialog",
@@ -66,13 +67,17 @@ export default {
 		const visibleDeviceInfo = ref(false);
 		const versionFirmware = ref("");
 		const shaDevice = ref("");
-		const modelInfo = computed(() => ({
-			version: pkg.version,
-			versionFirmware: versionFirmware.value,
-			carSupport: "Mazda 3 BK",
-			author: pkg.author,
-			sha: shaDevice.value
-		}));
+		const modelInfo = computed(() =>
+		{
+			const result: ILooseObject = {
+				version: pkg.version,
+				versionFirmware: versionFirmware.value,
+				carSupport: "Mazda 3 BK",
+				author: pkg.author
+			};
+			if (!canbus.values.device.activation) result.sha = shaDevice.value;
+			return result;
+		});
 
 		/** Обновление версии */
 		const updateInfo = (values: IValues): void =>
