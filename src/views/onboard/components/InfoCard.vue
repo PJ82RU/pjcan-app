@@ -94,6 +94,13 @@
 import { computed, onMounted, onUnmounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
+import Card from "@/components/cards/Card.vue";
+import InputCardItem from "@/components/cards/InputCardItem.vue";
+import SwitchCardItem from "@/components/cards/SwitchCardItem.vue";
+import IconCardItem from "@/components/cards/IconCardItem.vue";
+import ViewSettingDialog from "./ViewSettingDialog.vue";
+import { IMenuItem } from "@/components/MenuDots.vue";
+
 import canbus, {
 	API_EVENT_DEVICE,
 	API_EVENT_VARIABLE_SENSORS,
@@ -102,18 +109,19 @@ import canbus, {
 	API_EVENT_VARIABLE_TEMPERATURE_VIEW
 } from "@/api/canbus";
 
-import Card from "@/components/cards/Card.vue";
-import InputCardItem from "@/components/cards/InputCardItem.vue";
-import SwitchCardItem from "@/components/cards/SwitchCardItem.vue";
-import IconCardItem from "@/components/cards/IconCardItem.vue";
-import ViewSettingDialog from "./ViewSettingDialog.vue";
-
-import { ISensorsValue, ISensorsView, TSensorsSignal } from "@/models/pjcan/variables/sensors";
-import { ITemperatureValue, ITemperatureView } from "@/models/pjcan/variables/temperature";
-
+import {
+	API_EXEC_VARIABLE_SENSORS_VIEW,
+	ISensorsValue,
+	ISensorsView,
+	TSensorsSignal
+} from "@/models/pjcan/variables/sensors";
+import {
+	API_EXEC_VARIABLE_TEMPERATURE_VIEW,
+	ITemperatureValue,
+	ITemperatureView
+} from "@/models/pjcan/variables/temperature";
 import { IViewConfig } from "@/models/pjcan/view";
 import { IDeviceValue } from "@/models/pjcan/device";
-import { IMenuItem } from "@/components/MenuDots.vue";
 
 export default {
 	name: "InfoCard",
@@ -287,7 +295,7 @@ export default {
 			{
 				case 0:
 					temperature.view = data;
-					canbus.queryViewsTemperature();
+					canbus.queryView(API_EXEC_VARIABLE_TEMPERATURE_VIEW);
 					return;
 
 				case 1:
@@ -306,7 +314,7 @@ export default {
 					sensors.signal = data;
 					break;
 			}
-			canbus.queryViewsSensors();
+			canbus.queryView(API_EXEC_VARIABLE_SENSORS_VIEW);
 		};
 
 		return {

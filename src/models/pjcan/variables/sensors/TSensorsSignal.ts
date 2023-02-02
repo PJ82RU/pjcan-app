@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 export enum TSensorsSignal {
 	SIGNAL_NONE = 0,
 	SIGNAL_LEFT = 1,

@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 /** Список ID функций кнопки */
 export enum TButtonExec {
 	TEYES_NONE = 0, // кнопка отпущена

@@ -48,15 +48,15 @@
 import { computed, onMounted, onUnmounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
-import canbus, { API_EVENT_VARIABLE_MOVEMENT, API_EVENT_VARIABLE_MOVEMENT_VIEW } from "@/api/canbus";
-
 import Card from "@/components/cards/Card.vue";
 import InputCardItem from "@/components/cards/InputCardItem.vue";
 import ViewSettingDialog from "./ViewSettingDialog.vue";
+import { IMenuItem } from "@/components/MenuDots.vue";
+
+import canbus, { API_EVENT_VARIABLE_MOVEMENT, API_EVENT_VARIABLE_MOVEMENT_VIEW } from "@/api/canbus";
 
 import { IViewConfig } from "@/models/pjcan/view";
-import { IMovementValue, IMovementView } from "@/models/pjcan/variables/movement";
-import { IMenuItem } from "@/components/MenuDots.vue";
+import { API_EXEC_VARIABLE_MOVEMENT_VIEW, IMovementValue, IMovementView } from "@/models/pjcan/variables/movement";
 
 export default {
 	name: "MovementCard",
@@ -166,7 +166,7 @@ export default {
 					movement.restWay = data;
 					break;
 			}
-			canbus.queryViewsMovement();
+			canbus.queryView(API_EXEC_VARIABLE_MOVEMENT_VIEW);
 		};
 
 		return {

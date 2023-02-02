@@ -87,17 +87,17 @@
 import { computed, onMounted, onUnmounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
-import canbus, { API_EVENT_VARIABLE_ENGINE, API_EVENT_VARIABLE_ENGINE_VIEW } from "@/api/canbus";
-
 import Card from "@/components/cards/Card.vue";
 import InputCardItem from "@/components/cards/InputCardItem.vue";
 import IconCardItem from "@/components/cards/IconCardItem.vue";
 import ProgressCardItem from "@/components/cards/ProgressCardItem.vue";
 import ViewSettingDialog from "./ViewSettingDialog.vue";
+import { IMenuItem } from "@/components/MenuDots.vue";
+
+import canbus, { API_EVENT_VARIABLE_ENGINE, API_EVENT_VARIABLE_ENGINE_VIEW } from "@/api/canbus";
 
 import { IViewConfig } from "@/models/pjcan/view";
-import { IEngineValue, IEngineView } from "@/models/pjcan/variables/engine";
-import { IMenuItem } from "@/components/MenuDots.vue";
+import { API_EXEC_VARIABLE_ENGINE_VIEW, IEngineValue, IEngineView } from "@/models/pjcan/variables/engine";
 
 export default {
 	name: "EngineCard",
@@ -248,7 +248,7 @@ export default {
 					engine.coolant = data;
 					break;
 			}
-			canbus.queryViewsEngine();
+			canbus.queryView(API_EXEC_VARIABLE_ENGINE_VIEW);
 		};
 
 		return {

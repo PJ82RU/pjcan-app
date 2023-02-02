@@ -32,10 +32,13 @@
 
 <script lang="ts">
 import { computed, ref, toRefs } from "vue";
+import router from "@/router";
 
 import DialogTemplate from "@/components/DialogTemplate.vue";
+
 import canbus from "@/api/canbus";
-import router from "@/router";
+
+import { API_EXEC_DEVICE_VALUE } from "@/models/pjcan/device";
 
 export default {
 	name: "DeviceResetDialog",
@@ -58,10 +61,10 @@ export default {
 		/** Применить */
 		const onApply = (): void =>
 		{
-			canbus.device.config.reboot = true;
-			canbus.device.config.resetConfig = resetConfig.value;
-			canbus.device.config.resetView = resetView.value;
-			canbus.queryDevice(true);
+			canbus.values.device.reboot = true;
+			canbus.values.device.resetConfig = resetConfig.value;
+			canbus.values.device.resetView = resetView.value;
+			canbus.queryValue(API_EXEC_DEVICE_VALUE);
 			visible.value = false;
 			setTimeout(() => router.go(0), 5000);
 		};

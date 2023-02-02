@@ -33,15 +33,15 @@
 </template>
 
 <script lang="ts">
-import DialogTemplate from "@/components/DialogTemplate.vue";
-
 import { onMounted, onUnmounted, ref } from "vue";
 import { toast } from "vue3-toastify";
 import router from "@/router";
 import { useI18n } from "vue-i18n";
 
-import canbus, { API_EVENT_UPDATE_ERROR } from "@/api/canbus";
+import DialogTemplate from "@/components/DialogTemplate.vue";
 import { BLUETOOTH_EVENT_CONNECTED, TConnectedStatus } from "@/components/bluetooth";
+
+import canbus, { API_EVENT_UPDATE_ERROR } from "@/api/canbus";
 
 import { Timeout } from "@/models/types/Timeout";
 import { UPDATE_BEGIN_EVENT_RESULT, UPDATE_UPLOAD_EVENT_RESULT } from "@/models/pjcan/update";
@@ -111,7 +111,7 @@ export default {
 				// завершение прошивки
 				setTimeout(() =>
 				{
-					if (canbus.configs.version.is)
+					if (canbus.values.version.is)
 					{
 						canbus
 							.checkVersion()
@@ -178,7 +178,7 @@ export default {
 				message.value = t("update.process.update");
 				progress.value = 0;
 				uploading.value = "";
-				canbus.configs.version.clear();
+				canbus.values.version.clear();
 			}
 			else
 			{

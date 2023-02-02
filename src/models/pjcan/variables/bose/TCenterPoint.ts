@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 export enum TCenterPoint {
 	CENTERPOINT_OFF = 0,
 	CENTERPOINT_MIN = 1,

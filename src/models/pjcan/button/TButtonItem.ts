@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 /** Список ID кнопки */
 export enum TButtonItem {
 	BUTTON_MODE = 0, // кнопка mode

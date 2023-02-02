@@ -57,15 +57,15 @@
 import { computed, onMounted, onUnmounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
-import canbus, { API_EVENT_VARIABLE_FUEL, API_EVENT_VARIABLE_FUEL_VIEW } from "@/api/canbus";
-
 import Card from "@/components/cards/Card.vue";
 import InputCardItem from "@/components/cards/InputCardItem.vue";
 import ViewSettingDialog from "./ViewSettingDialog.vue";
+import { IMenuItem } from "@/components/MenuDots.vue";
+
+import canbus, { API_EVENT_VARIABLE_FUEL, API_EVENT_VARIABLE_FUEL_VIEW } from "@/api/canbus";
 
 import { IViewConfig } from "@/models/pjcan/view";
-import { IFuelValue, IFuelView } from "@/models/pjcan/variables/fuel";
-import { IMenuItem } from "@/components/MenuDots.vue";
+import { API_EXEC_VARIABLE_FUEL_VIEW, IFuelValue, IFuelView } from "@/models/pjcan/variables/fuel";
 
 export default {
 	name: "FuelCard",
@@ -183,7 +183,7 @@ export default {
 					fuel.consumption = data;
 					break;
 			}
-			canbus.queryViewsFuel();
+			canbus.queryView(API_EXEC_VARIABLE_FUEL_VIEW);
 		};
 
 		return {

@@ -43,10 +43,12 @@
 
 <script lang="ts">
 import { computed, onMounted, onUnmounted, ref, toRefs, watch } from "vue";
-import canbus, { API_EVENT_INFO } from "@/api/canbus";
 
 import DialogTemplate from "@/components/DialogTemplate.vue";
 import DeviceResetDialog from "./DeviceResetDialog.vue";
+
+import canbus, { API_EVENT_INFO } from "@/api/canbus";
+
 import { IDeviceInfo } from "@/models/pjcan/device";
 
 export default {
@@ -87,26 +89,26 @@ export default {
 			if (res.isData)
 			{
 				const { value } = modelDeviceInfo;
-				value.chipCores = canbus.device.info.chipCores.toString();
-				value.chipRevision = canbus.device.info.chipRevision.toString();
-				value.cpuFreqMHz = canbus.device.info.cpuFreqMHz.toString();
-				const mac: string = canbus.device.info.efuseMac.toString(16).toUpperCase();
+				value.chipCores = canbus.deviceInfo.chipCores.toString();
+				value.chipRevision = canbus.deviceInfo.chipRevision.toString();
+				value.cpuFreqMHz = canbus.deviceInfo.cpuFreqMHz.toString();
+				const mac: string = canbus.deviceInfo.efuseMac.toString(16).toUpperCase();
 				value.efuseMac = mac.length % 2 > 0 ? "0" + mac : mac;
-				value.flashChipMode = canbus.device.info.flashChipMode.toString();
-				value.flashChipSize = canbus.device.info.flashChipSize.toString();
-				value.flashChipSpeed = canbus.device.info.flashChipSpeed.toString();
-				value.freeSketchSpace = canbus.device.info.freeSketchSpace.toString();
-				value.sdkVersion = canbus.device.info.sdkVersion;
-				value.sketchMD5 = canbus.device.info.sketchMD5;
-				value.sketchSize = canbus.device.info.sketchSize.toString();
-				value.temperatureChip = canbus.device.info.temperatureChip.toFixed(2) + "°C";
+				value.flashChipMode = canbus.deviceInfo.flashChipMode.toString();
+				value.flashChipSize = canbus.deviceInfo.flashChipSize.toString();
+				value.flashChipSpeed = canbus.deviceInfo.flashChipSpeed.toString();
+				value.freeSketchSpace = canbus.deviceInfo.freeSketchSpace.toString();
+				value.sdkVersion = canbus.deviceInfo.sdkVersion;
+				value.sketchMD5 = canbus.deviceInfo.sketchMD5;
+				value.sketchSize = canbus.deviceInfo.sketchSize.toString();
+				value.temperatureChip = canbus.deviceInfo.temperatureChip.toFixed(2) + "°C";
 			}
 		};
 
 		onMounted(() =>
 		{
 			canbus.addListener(API_EVENT_INFO, onReceiveInfo);
-			onReceiveInfo(canbus.device.info);
+			onReceiveInfo(canbus.deviceInfo);
 		});
 		onUnmounted(() =>
 		{
@@ -115,7 +117,7 @@ export default {
 
 		watch(modelValue, (val: boolean): void =>
 		{
-			if (val) canbus.queryDevice();
+			if (val) canbus.queryDeviceInfo();
 		});
 
 		const visibleReset = ref(false);

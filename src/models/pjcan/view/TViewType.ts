@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 /** Тип отображения текста */
 export enum TViewType {
 	VIEW_TEXT_SIMPLE = 0, // простое отображение текста

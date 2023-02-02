@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 export enum TConnectedStatus {
 	NO_CONNECT,
 	CONNECT,

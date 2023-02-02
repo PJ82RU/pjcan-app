@@ -71,15 +71,15 @@
 import { computed, onMounted, onUnmounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
-import canbus, { API_EVENT_VARIABLE_DOORS, API_EVENT_VARIABLE_DOORS_VIEW } from "@/api/canbus";
-
 import Card from "@/components/cards/Card.vue";
 import SwitchCardItem from "@/components/cards/SwitchCardItem.vue";
 import ViewSettingDialog from "./ViewSettingDialog.vue";
+import { IMenuItem } from "@/components/MenuDots.vue";
+
+import canbus, { API_EVENT_VARIABLE_DOORS, API_EVENT_VARIABLE_DOORS_VIEW } from "@/api/canbus";
 
 import { IViewConfig } from "@/models/pjcan/view";
-import { IDoorsValue, IDoorsView } from "@/models/pjcan/variables/doors";
-import { IMenuItem } from "@/components/MenuDots.vue";
+import { API_EXEC_VARIABLE_DOORS_VIEW, IDoorsValue, IDoorsView } from "@/models/pjcan/variables/doors";
 
 export default {
 	name: "DoorsCard",
@@ -156,7 +156,7 @@ export default {
 		const onViewSettingApply = (data: IViewConfig): void =>
 		{
 			canbus.views.variable.doors.view = data;
-			canbus.queryViewsDoors();
+			canbus.queryView(API_EXEC_VARIABLE_DOORS_VIEW);
 		};
 
 		return {

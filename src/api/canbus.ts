@@ -18,9 +18,8 @@ import {
 	API_EXEC_DEVICE_CONFIG,
 	API_EXEC_DEVICE_VALUE,
 	API_EXEC_INFO,
-	DeviceConfig,
 	DeviceInfo,
-	IDevice
+	IDeviceInfo
 } from "@/models/pjcan/device";
 import { API_EXEC_BUTTONS_CONFIG, API_EXEC_BUTTONS_VALUE, ButtonValue, IButtonValue } from "@/models/pjcan/button";
 import {
@@ -137,10 +136,7 @@ export class Canbus extends EventEmitter
 	values: IValues = new Values();
 
 	/** Устройство */
-	device: IDevice = {
-		info: new DeviceInfo(),
-		config: new DeviceConfig()
-	};
+	deviceInfo: IDeviceInfo = new DeviceInfo();
 
 	/** Обновление прошивки */
 	update: IUpdateResult = {
@@ -157,7 +153,8 @@ export class Canbus extends EventEmitter
 	private queryDisabled: boolean = true;
 
 	/** Последний promise */
-	private lastPromise: Promise<void> | undefined = undefined;
+	private promises: Promise<void>[] | null = null;
+	private queue: Promise<void>[] = [];
 	/** Таймер */
 	private debounceFetchValue: boolean = false;
 
@@ -175,10 +172,15 @@ export class Canbus extends EventEmitter
 	 */
 	private async query(obj: IBaseModel)
 	{
-		await this.lastPromise;
-		if (this.bluetooth.connected)
+		if (!this.bluetooth.connected) return;
+
+		this.queue.push(this.bluetooth.send(obj.get()));
+		if (!this.promises)
 		{
-			await (this.lastPromise = this.bluetooth.send(obj.get()));
+			this.promises = this.queue;
+			this.queue = [];
+			await Promise.all(this.promises);
+			this.promises = null;
 		}
 	}
 
@@ -194,38 +196,187 @@ export class Canbus extends EventEmitter
 			return;
 		}
 
-		await this.fetchConfig();
-		await this.fetchView();
-		await this.queryDevice();
+		await this.queryConfig();
+		await this.queryView();
+		await this.queryDeviceInfo();
 		this.queryDisabled = false;
 	}
 
-	/** Получить конфигурацию */
-	async fetchConfig()
+	/**
+	 * Отправить/получить конфигурацию
+	 * @param {number} type Тип конфигурации
+	 */
+	async queryConfig(type: number = 0)
 	{
-		await this.query(this.configs);
-	}
+		switch (type)
+		{
+			case API_EXEC_VARIABLE_CONFIG:
+				await this.query(this.configs.variable);
+				break;
 
-	/** Получить конфигурацию отображения значений */
-	async fetchView()
-	{
-		await this.query(this.views);
-	}
+			case API_EXEC_BUTTONS_CONFIG:
+				if (!this.queryDisabled) await this.query(this.configs.buttons);
+				break;
 
-	/** Получить значения */
-	async fetchValue()
-	{
-		if (!this.queryDisabled) await this.query(this.values);
+			case API_EXEC_CAR_CONFIG:
+				await this.query(this.configs.car);
+				break;
+
+			case API_EXEC_DEVICE_CONFIG:
+				await this.query(this.configs.device);
+				break;
+
+			case API_EXEC_TEYES_CONFIG:
+				await this.query(this.configs.teyes);
+				break;
+
+			case API_EXEC_VARIABLE_BOSE:
+				await this.query(this.configs.variable.bose);
+				break;
+
+			case API_EXEC_VARIABLE_ENGINE_CONFIG:
+				await this.query(this.configs.variable.engine);
+				break;
+
+			case API_EXEC_VARIABLE_FUEL_CONFIG:
+				await this.query(this.configs.variable.fuel);
+				break;
+
+			case API_EXEC_VARIABLE_VOLUME_CONFIG:
+				await this.query(this.configs.variable.volume);
+				break;
+
+			default:
+				await this.query(this.configs);
+				break;
+		}
 	}
 
 	/**
-	 * Отправка конфигурации или получение информации устройства
-	 * @param {boolean} config Отправить конфигурацию
+	 * Отправить/получить конфигурацию отображения значений
+	 * @param {number} type Тип конфигурации отображения значений
 	 */
-	async queryDevice(config = false)
+	async queryView(type: number = 0)
 	{
-		if (config) await this.query(this.device.config);
-		else await this.query(this.device.info);
+		switch (type)
+		{
+			case API_EXEC_VARIABLE_VIEW:
+				await this.query(this.views.variable);
+				break;
+
+			case API_EXEC_CAR_VIEW:
+				if (!this.queryDisabled) await this.query(this.views.car);
+				break;
+
+			case API_EXEC_TEYES_VIEW:
+				if (!this.queryDisabled) await this.query(this.views.teyes);
+				break;
+
+			case API_EXEC_VARIABLE_BOSE_VIEW:
+				if (!this.queryDisabled) await this.query(this.views.variable.bose);
+				break;
+
+			case API_EXEC_VARIABLE_CLIMATE_VIEW:
+				if (!this.queryDisabled) await this.query(this.views.variable.climate);
+				break;
+
+			case API_EXEC_VARIABLE_DOORS_VIEW:
+				if (!this.queryDisabled) await this.query(this.views.variable.doors);
+				break;
+
+			case API_EXEC_VARIABLE_ENGINE_VIEW:
+				if (!this.queryDisabled) await this.query(this.views.variable.engine);
+				break;
+
+			case API_EXEC_VARIABLE_FUEL_VIEW:
+				if (!this.queryDisabled) await this.query(this.views.variable.fuel);
+				break;
+
+			case API_EXEC_VARIABLE_MOVEMENT_VIEW:
+				if (!this.queryDisabled) await this.query(this.views.variable.movement);
+				break;
+
+			case API_EXEC_VARIABLE_SENSORS_VIEW:
+				if (!this.queryDisabled) await this.query(this.views.variable.sensors);
+				break;
+
+			case API_EXEC_VARIABLE_TEMPERATURE_VIEW:
+				if (!this.queryDisabled) await this.query(this.views.variable.temperature);
+				break;
+
+			case API_EXEC_VARIABLE_VOLUME_VIEW:
+				if (!this.queryDisabled) await this.query(this.views.variable.volume);
+				break;
+
+			default:
+				await this.query(this.views);
+				break;
+		}
+	}
+
+	/** Отправить/получить значения
+	 * @param {number} type Тип значения
+	 */
+	async queryValue(type: number = 0)
+	{
+		if (this.queryDisabled) return;
+
+		switch (type)
+		{
+			case API_EXEC_VARIABLE_VALUE:
+				await this.query(this.values.variable);
+				break;
+
+			case API_EXEC_DEVICE_VALUE:
+				await this.query(this.values.device);
+				break;
+
+			case API_EXEC_LCD_VALUE:
+				await this.query(this.values.lcd);
+				break;
+
+			case API_EXEC_VARIABLE_CLIMATE:
+				await this.query(this.values.variable.climate);
+				break;
+
+			case API_EXEC_VARIABLE_DOORS:
+				await this.query(this.values.variable.doors);
+				break;
+
+			case API_EXEC_VARIABLE_ENGINE:
+				await this.query(this.values.variable.engine);
+				break;
+
+			case API_EXEC_VARIABLE_FUEL:
+				await this.query(this.values.variable.fuel);
+				break;
+
+			case API_EXEC_VARIABLE_MOVEMENT:
+				await this.query(this.values.variable.movement);
+				break;
+
+			case API_EXEC_VARIABLE_SENSORS:
+				await this.query(this.values.variable.sensors);
+				break;
+
+			case API_EXEC_VARIABLE_TEMPERATURE:
+				await this.query(this.values.variable.temperature);
+				break;
+
+			case API_EXEC_VARIABLE_VOLUME:
+				await this.query(this.values.variable.volume);
+				break;
+
+			default:
+				await this.query(this.values);
+				break;
+		}
+	}
+
+	/** Получить информацию устройства */
+	async queryDeviceInfo()
+	{
+		await this.query(this.deviceInfo);
 	}
 
 	/**
@@ -237,7 +388,7 @@ export class Canbus extends EventEmitter
 		this.debounceFetchValue = true;
 		debounce(async () =>
 		{
-			await this.fetchValue();
+			await this.queryValue();
 			if (this.debounceFetchValue) this.startFetchValue(timeout);
 		}, timeout);
 	}
@@ -247,72 +398,6 @@ export class Canbus extends EventEmitter
 	{
 		this.debounceFetchValue = false;
 		clearDebounce();
-	}
-
-	/** Отправка конфигурации уровня звука */
-	async queryValueVolume()
-	{
-		if (!this.queryDisabled) await this.query(this.values.variable.volume);
-	}
-
-	/** Отправка значения LCD */
-	async queryValueLCD()
-	{
-		if (!this.queryDisabled) await this.query(this.values.lcd);
-	}
-
-	/** Отправка конфигурации кнопок */
-	async queryConfigsButtons()
-	{
-		if (!this.queryDisabled) await this.query(this.configs.buttons);
-	}
-
-	/** Отправка конфигурации отображения климата */
-	async queryViewsClimate()
-	{
-		if (!this.queryDisabled) await this.query(this.views.variable.climate);
-	}
-
-	/** Отправка конфигурации отображения дверей */
-	async queryViewsDoors()
-	{
-		if (!this.queryDisabled) await this.query(this.views.variable.doors);
-	}
-
-	/** Отправка конфигурации отображения ДВС */
-	async queryViewsEngine()
-	{
-		if (!this.queryDisabled) await this.query(this.views.variable.engine);
-	}
-
-	/** Отправка конфигурации отображения расхода */
-	async queryViewsFuel()
-	{
-		if (!this.queryDisabled) await this.query(this.views.variable.fuel);
-	}
-
-	/** Отправка конфигурации отображения температуры */
-	async queryViewsTemperature()
-	{
-		if (!this.queryDisabled) await this.query(this.views.variable.temperature);
-	}
-
-	/** Отправка конфигурации отображения датчиков */
-	async queryViewsSensors()
-	{
-		if (!this.queryDisabled) await this.query(this.views.variable.sensors);
-	}
-
-	/** Отправка конфигурации отображения движения */
-	async queryViewsMovement()
-	{
-		if (!this.queryDisabled) await this.query(this.views.variable.movement);
-	}
-
-	/** Отправка конфигурации отображения уровня звука */
-	async queryViewsVolume()
-	{
-		if (!this.queryDisabled) await this.query(this.views.variable.volume);
 	}
 
 	/**
@@ -376,6 +461,7 @@ export class Canbus extends EventEmitter
 				this.logVersion();
 
 				this.emit(API_EVENT_CONFIGS, this.configs);
+				this.emit(API_EVENT_DEVICE_CONFIG, this.configs.device);
 				this.emit(API_EVENT_BUTTONS_CONFIG, this.configs.buttons);
 				this.emit(API_EVENT_CAR_CONFIG, this.configs.car);
 				this.emit(API_EVENT_TEYES_CONFIG, this.configs.teyes);
@@ -401,12 +487,12 @@ export class Canbus extends EventEmitter
 				break;
 
 			case API_EXEC_INFO: // Информация об устройстве
-				this.device.info.set(data);
-				this.emit(API_EVENT_INFO, this.device.info);
+				this.deviceInfo.set(data);
+				this.emit(API_EVENT_INFO, this.deviceInfo);
 				break;
 			case API_EXEC_DEVICE_CONFIG: // Конфигурация устройства
-				this.device.config.set(data);
-				this.emit(API_EVENT_DEVICE_CONFIG, this.device.config);
+				this.configs.device.set(data);
+				this.emit(API_EVENT_DEVICE_CONFIG, this.configs.device);
 				break;
 			case API_EXEC_DEVICE_VALUE: // Значения устройства
 				this.values.device.set(data);
@@ -627,7 +713,7 @@ export class Canbus extends EventEmitter
 	/** Лог версии прошивки */
 	private logVersion()
 	{
-		const { major, minor, build, revision } = this.configs.version;
+		const { major, minor, build, revision } = this.values.version;
 		console.log(t("BLE.server.versionProtocol", { mj: major, mn: minor, bl: build, rv: revision }));
 	}
 
@@ -652,7 +738,7 @@ export class Canbus extends EventEmitter
 						newVersion.build = ver[2];
 						newVersion.revision = ver[3];
 
-						if (this.configs.version.compare(newVersion) > 0) resolve(newVersion);
+						if (this.values.version.compare(newVersion) > 0) resolve(newVersion);
 						else reject("Current version");
 					}
 					else reject("No data");

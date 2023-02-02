@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 /** Типы данных */
 export enum TTypeValue {
 	TYPE_BIT,

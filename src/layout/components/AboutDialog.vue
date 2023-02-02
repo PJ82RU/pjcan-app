@@ -38,14 +38,16 @@
 
 <script lang="ts">
 import { computed, onMounted, onUnmounted, ref, toRefs } from "vue";
-import canbus, { API_EVENT_CONFIGS, API_EVENT_DEVICE_CONFIG } from "@/api/canbus";
+import canbus, { API_EVENT_DEVICE, API_EVENT_VALUES } from "@/api/canbus";
 const pkg = require("/package.json");
 
 import DialogTemplate from "@/components/DialogTemplate.vue";
 import DeviceInfoDialog from "@/layout/components/DeviceInfoDialog.vue";
 
-import { IConfigs } from "@/models/pjcan/configs";
-import { IDeviceConfig } from "@/models/pjcan/device";
+import { getSerial } from "@/api/hash";
+
+import { API_EXEC_DEVICE_CONFIG, API_EXEC_DEVICE_VALUE, IDeviceValue } from "@/models/pjcan/device";
+import { IValues } from "@/models/pjcan/values";
 
 export default {
 	name: "AboutDialog",
@@ -73,19 +75,37 @@ export default {
 		}));
 
 		/** Обновление версии */
-		const updateInfo = (configs: IConfigs): void =>
+		const updateInfo = (values: IValues): void =>
 		{
-			versionFirmware.value = configs.version.toString;
-			if (!shaDevice.value.length) canbus.queryDevice(true);
+			versionFirmware.value = values.version.toString;
 		};
 		/** Обновление конфигурации устройства */
-		const onDeviceConfig = (res: IDeviceConfig): void =>
+		const onDevice = (res: IDeviceValue): void =>
 		{
 			if (res.isData)
 			{
 				let sha = "";
-				res.sha.forEach(x => (sha += x.toString(16)));
+				res.sha.forEach((x) =>
+				{
+					const hex = x.toString(16);
+					sha += (hex.length === 1 ? "0" : "") + hex;
+				});
 				shaDevice.value = sha;
+
+				console.log("activation", res.activation);
+				console.log("serial", canbus.configs.device.serial);
+				if (!res.activation && !canbus.configs.device.serial.length)
+				{
+					getSerial(sha)
+						.then((res: any) =>
+						{
+							canbus.configs.device.serial = res?.sha ?? "";
+							canbus.queryConfig(API_EXEC_DEVICE_CONFIG);
+							canbus.values.device.save = true;
+							canbus.values.device.reboot = true;
+							canbus.queryValue(API_EXEC_DEVICE_VALUE);
+						});
+				}
 			}
 		};
 
@@ -98,14 +118,14 @@ export default {
 
 		onMounted(() =>
 		{
-			canbus.addListener(API_EVENT_CONFIGS, updateInfo);
-			canbus.addListener(API_EVENT_DEVICE_CONFIG, onDeviceConfig);
-			onDeviceConfig(canbus.device.config);
+			canbus.addListener(API_EVENT_VALUES, updateInfo);
+			canbus.addListener(API_EVENT_DEVICE, onDevice);
+			onDevice(canbus.values.device);
 		});
 		onUnmounted(() =>
 		{
-			canbus.removeListener(API_EVENT_CONFIGS, updateInfo);
-			canbus.removeListener(API_EVENT_DEVICE_CONFIG, onDeviceConfig);
+			canbus.removeListener(API_EVENT_VALUES, updateInfo);
+			canbus.removeListener(API_EVENT_DEVICE, onDevice);
 		});
 
 		return {

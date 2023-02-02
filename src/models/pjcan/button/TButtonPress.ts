@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 /** Список ID действий кнопки */
 export enum TButtonPress {
 	RELEASE = 0,

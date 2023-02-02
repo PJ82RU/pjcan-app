@@ -7,7 +7,6 @@
 		icon="steering-wheel"
 		width="500px"
 		text
-		info
 		actions
 	>
 		<template #body>
@@ -102,7 +101,10 @@
 <script lang="ts">
 import DialogTemplate from "@/components/DialogTemplate.vue";
 import { computed, toRefs } from "vue";
+
 import canbus from "@/api/canbus";
+
+import { API_EXEC_LCD_VALUE } from "@/models/pjcan/lcd";
 
 export default {
 	name: "OnboardButtonsDialog",
@@ -134,9 +136,8 @@ export default {
 		 */
 		const onTouchPress = (name: string, toggle: boolean = false): void =>
 		{
-			// console.log("onTouchPress");
 			canbus.values.lcd[name] = !toggle ? true : !canbus.values.lcd[name];
-			canbus.queryValueLCD();
+			canbus.queryValue(API_EXEC_LCD_VALUE);
 			navigator.vibrate(30);
 
 			if (timeouts?.[name])
@@ -154,9 +155,8 @@ export default {
 		{
 			if (canbus.values.lcd[name])
 			{
-				// console.log("onTouchRelease");
 				canbus.values.lcd[name] = false;
-				canbus.queryValueLCD();
+				canbus.queryValue(API_EXEC_LCD_VALUE);
 				navigator.vibrate(20);
 			}
 

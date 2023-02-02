@@ -1,6 +1,6 @@
 import { BluetoothStruct } from "@/components/bluetooth";
 import { BaseModel } from "../base";
-import { API_SIZE_VERSION, Version } from "../version";
+import { API_SIZE_DEVICE_CONFIG, DeviceConfig } from "@/models/pjcan/device";
 import { API_SIZE_BUTTONS_CONFIG, ButtonsConfig } from "../button";
 import { API_SIZE_CAR_CONFIG, CarConfig } from "../car";
 import { API_SIZE_TEYES_CONFIG, TeyesConfig } from "../teyes";
@@ -10,13 +10,13 @@ import { StructConfigs } from "./StructConfigs";
 
 export const API_EXEC_CONFIG = 1;
 export const API_SIZE_CONFIG =
-	API_SIZE_VERSION + API_SIZE_BUTTONS_CONFIG + API_SIZE_CAR_CONFIG + API_SIZE_TEYES_CONFIG + API_SIZE_VARIABLE_CONFIG;
+	API_SIZE_DEVICE_CONFIG + API_SIZE_BUTTONS_CONFIG + API_SIZE_CAR_CONFIG + API_SIZE_TEYES_CONFIG + API_SIZE_VARIABLE_CONFIG;
 
 const struct = new BluetoothStruct(StructConfigs);
 
 export class Configs extends BaseModel implements IConfigs
 {
-	version = new Version();
+	device = new DeviceConfig();
 	buttons = new ButtonsConfig();
 	car = new CarConfig();
 	teyes = new TeyesConfig();
@@ -37,6 +37,7 @@ export class Configs extends BaseModel implements IConfigs
 		const result = this._set(this, API_EXEC_CONFIG, API_SIZE_CONFIG + 1, struct, buf);
 		if (result)
 		{
+			this.device.isData = true;
 			this.buttons.isData = true;
 			this.car.isData = true;
 			this.teyes.isData = true;

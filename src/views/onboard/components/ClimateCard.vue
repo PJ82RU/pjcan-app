@@ -82,17 +82,17 @@
 import { computed, onMounted, onUnmounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
-import canbus, { API_EVENT_VARIABLE_CLIMATE, API_EVENT_VARIABLE_CLIMATE_VIEW } from "@/api/canbus";
-
 import Card from "@/components/cards/Card.vue";
 import InputCardItem from "@/components/cards/InputCardItem.vue";
 import IconCardItem from "@/components/cards/IconCardItem.vue";
 import SwitchCardItem from "@/components/cards/SwitchCardItem.vue";
 import ViewSettingDialog from "./ViewSettingDialog.vue";
+import { IMenuItem } from "@/components/MenuDots.vue";
+
+import canbus, { API_EVENT_VARIABLE_CLIMATE, API_EVENT_VARIABLE_CLIMATE_VIEW } from "@/api/canbus";
 
 import { IViewConfig } from "@/models/pjcan/view";
-import { IClimateValue, IClimateView, TAir } from "@/models/pjcan/variables/climate";
-import { IMenuItem } from "@/components/MenuDots.vue";
+import { API_EXEC_VARIABLE_CLIMATE_VIEW, IClimateValue, IClimateView, TAir } from "@/models/pjcan/variables/climate";
 
 export default {
 	name: "ClimateCard",
@@ -187,7 +187,7 @@ export default {
 		const onViewSettingApply = (data: IViewConfig): void =>
 		{
 			canbus.views.variable.climate.view = data;
-			canbus.queryViewsClimate();
+			canbus.queryView(API_EXEC_VARIABLE_CLIMATE_VIEW);
 		};
 
 		return {

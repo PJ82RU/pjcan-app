@@ -37,7 +37,13 @@ import Flicking from "@egjs/vue3-flicking";
 import SettingsCard from "./components/SettingsCard.vue";
 import ButtonDefinitionDialog from "./components/ButtonDefinitionDialog.vue";
 
-import { IButtonsConfig, IButtonValue, TButtonItem, TButtonPress } from "@/models/pjcan/button";
+import {
+	API_EXEC_BUTTONS_CONFIG,
+	IButtonsConfig,
+	IButtonValue,
+	TButtonItem,
+	TButtonPress
+} from "@/models/pjcan/button";
 import { IConfigItem } from "@/models/interfaces/IConfigItem";
 
 export default {
@@ -133,7 +139,7 @@ export default {
 			if (enabled !== canbus.configs.buttons.sendValue)
 			{
 				canbus.configs.buttons.sendValue = enabled;
-				canbus.queryConfigsButtons();
+				canbus.queryConfig(API_EXEC_BUTTONS_CONFIG);
 			}
 		};
 
@@ -208,7 +214,7 @@ export default {
 				vals.exec[TButtonPress.PRESS_HOLD] = x.pressHold;
 				vals.exec[TButtonPress.RELEASE] = x.release;
 			});
-			canbus.queryConfigsButtons();
+			canbus.queryConfig(API_EXEC_BUTTONS_CONFIG);
 		};
 
 		/**
@@ -218,7 +224,7 @@ export default {
 		const onButtonDefinitionApply = (type: TButtonItem): void =>
 		{
 			canbus.configs.buttons.items[type].inR = resistanceButtonDefinition.value;
-			canbus.queryConfigsButtons();
+			canbus.queryConfig(API_EXEC_BUTTONS_CONFIG);
 			onReceiveConfig(canbus.configs.buttons);
 		};
 

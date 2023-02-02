@@ -53,7 +53,13 @@ import SliderCardItem from "@/components/cards/SliderCardItem.vue";
 import ViewSettingDialog from "./ViewSettingDialog.vue";
 
 import { IViewConfig } from "@/models/pjcan/view";
-import { IVolumeConfig, IVolumeValue, IVolumeView } from "@/models/pjcan/variables/volume";
+import {
+	API_EXEC_VARIABLE_VOLUME,
+	API_EXEC_VARIABLE_VOLUME_VIEW,
+	IVolumeConfig,
+	IVolumeValue,
+	IVolumeView
+} from "@/models/pjcan/variables/volume";
 import { IMenuItem } from "@/components/MenuDots.vue";
 
 export default {
@@ -77,7 +83,7 @@ export default {
 			if (isLoadedValue.value && canbus.values.variable.volume.mute !== val)
 			{
 				canbus.values.variable.volume.mute = val;
-				canbus.queryValueVolume();
+				canbus.queryValue(API_EXEC_VARIABLE_VOLUME);
 			}
 		});
 		watch(volume, (val: number) =>
@@ -91,9 +97,9 @@ export default {
 					setTimeout(() =>
 					{
 						queryValueVolumeDisabled = false;
-						canbus.queryValueVolume();
+						canbus.queryValue(API_EXEC_VARIABLE_VOLUME);
 					}, 250);
-					canbus.queryValueVolume();
+					canbus.queryValue(API_EXEC_VARIABLE_VOLUME);
 				}
 			}
 		});
@@ -174,7 +180,7 @@ export default {
 		const onViewSettingApply = (data: IViewConfig): void =>
 		{
 			canbus.views.variable.volume.view = data;
-			canbus.queryViewsVolume();
+			canbus.queryView(API_EXEC_VARIABLE_VOLUME_VIEW);
 		};
 
 		return {
