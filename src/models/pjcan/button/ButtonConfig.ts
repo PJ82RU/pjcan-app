@@ -5,7 +5,7 @@ import { IButtonsConfig } from "./IButtonsConfig";
 import { IButtonsConfigItem } from "./IButtonsConfigItem";
 
 export const API_EXEC_BUTTONS_CONFIG = 20;
-export const API_SIZE_BUTTONS_CONFIG = 62;
+export const API_SIZE_BUTTONS_CONFIG = 63;
 
 const struct = new BluetoothStruct(StructButtonsConfig);
 

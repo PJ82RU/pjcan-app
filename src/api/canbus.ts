@@ -660,11 +660,11 @@ export class Canbus extends EventEmitter
 		getFirmware()
 			.then((res: any) =>
 			{
-				if (res.data.byteLength > 0)
+				if (res?.byteLength > 0)
 				{
 					setTimeout(() =>
 					{
-						this.update.upload.data = new Uint8Array(res.data);
+						this.update.upload.data = new Uint8Array(res);
 						this.update.upload.offset = 0;
 						this.update.upload.last = true;
 						this.nextUpload().then();
@@ -720,9 +720,9 @@ export class Canbus extends EventEmitter
 				.then((res: any) =>
 				{
 					// проверяем версию прошивки
-					if (res.data?.current?.length === 4)
+					if (res.current?.length === 4)
 					{
-						const ver = res.data.current;
+						const ver = res.current;
 						const newVersion: IVersion = new Version();
 						newVersion.major = ver[0];
 						newVersion.minor = ver[1];

@@ -12,6 +12,14 @@
 
 			<v-spacer />
 
+			<v-btn
+				v-if="$vuetify.display.mdAndUp"
+				class="base-layout__onboard-buttons"
+				@click="visibleOnboardButtons = true"
+			>
+				<icon-custom name="steering-wheel" :colors="{ primary: 'white', secondary: 'white' }" />
+				<span class="pl-2">ONBOARD</span>
+			</v-btn>
 			<v-btn icon="mdi-fit-to-screen-outline" @click="toggleFullscreen" />
 
 			<bluetooth-btn />
@@ -53,13 +61,22 @@ import MenuDots, { IMenuItem } from "@/components/MenuDots.vue";
 import AboutDialog from "./components/AboutDialog.vue";
 import OnboardButtonsDialog from "./components/OnboardButtonsDialog.vue";
 import MessageDialog from "@/layout/components/MessageDialog.vue";
+import IconCustom from "@/components/common/icon-custom/IconCustom.vue";
 
 import { IMessage } from "@/models/interfaces/message/IMessage";
 import { Timeout } from "@/models/types/Timeout";
 
 export default {
 	name: "BaseLayout",
-	components: { BluetoothBtn, UpdateFirmwareDialog, MenuDots, AboutDialog, OnboardButtonsDialog, MessageDialog },
+	components: {
+		BluetoothBtn,
+		UpdateFirmwareDialog,
+		MenuDots,
+		AboutDialog,
+		OnboardButtonsDialog,
+		MessageDialog,
+		IconCustom
+	},
 	setup()
 	{
 		const { t, locale } = useI18n();
@@ -192,6 +209,11 @@ export default {
 		top: 50px;
 		left: 0;
 		padding: 16px;
+	}
+
+	&__onboard-buttons {
+		font-size: 1.25rem !important;
+		line-height: 1.5rem !important;
 	}
 }
 </style>
