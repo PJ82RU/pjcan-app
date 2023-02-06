@@ -28,6 +28,7 @@
 			<menu-dots :menu="menu" @click:item="onMenuClick" />
 			<about-dialog v-model="visibleAbout" />
 			<onboard-buttons-dialog v-model="visibleOnboardButtons" />
+			<test-dialog v-model="visibleTest" />
 		</v-app-bar>
 		<v-main>
 			<div class="base-layout__bg" />
@@ -60,6 +61,7 @@ import UpdateFirmwareDialog from "./components/UpdateFirmwareDialog.vue";
 import MenuDots, { IMenuItem } from "@/components/MenuDots.vue";
 import AboutDialog from "./components/AboutDialog.vue";
 import OnboardButtonsDialog from "./components/OnboardButtonsDialog.vue";
+import TestDialog from "./components/TestDialog.vue";
 import MessageDialog from "@/layout/components/MessageDialog.vue";
 import IconCustom from "@/components/common/icon-custom/IconCustom.vue";
 
@@ -74,6 +76,7 @@ export default {
 		MenuDots,
 		AboutDialog,
 		OnboardButtonsDialog,
+		TestDialog,
 		MessageDialog,
 		IconCustom
 	},
@@ -95,6 +98,7 @@ export default {
 				{ id: 0, title: t("menu.onboard"), disabled: name === "Onboard" },
 				{ id: 1, title: t("menu.settings.buttons"), disabled: name === "Buttons" },
 				{ id: 4, title: t("menu.onboardButtons") },
+				{ id: 5, title: t("menu.test") },
 				{} as IMenuItem,
 				{ id: 2, title: t("menu.language." + (locale.value !== "ru" ? "russian" : "english")) },
 				{ id: 3, title: t("menu.about") }
@@ -104,6 +108,7 @@ export default {
 		});
 		const visibleAbout = ref(false);
 		const visibleOnboardButtons = ref(false);
+		const visibleTest = ref(false);
 
 		/** Событие выбора пункта меню */
 		const onMenuClick = (data: any) =>
@@ -125,6 +130,9 @@ export default {
 					break;
 				case 4:
 					visibleOnboardButtons.value = true;
+					break;
+				case 5:
+					visibleTest.value = true;
 					break;
 			}
 		};
@@ -180,6 +188,7 @@ export default {
 			menu,
 			visibleAbout,
 			visibleOnboardButtons,
+			visibleTest,
 			pageWidth,
 			pageHeight,
 			visibleMessage,

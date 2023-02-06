@@ -62,6 +62,7 @@ import { API_EXEC_VALUE } from "@/models/pjcan/values/Values";
 import { API_EXEC_VARIABLE_VALUE } from "@/models/pjcan/variables/values/VariablesValue";
 import { IUpdateResult } from "@/models/pjcan/update/IUpdateResult";
 import { IVersion, Version } from "@/models/pjcan/version";
+import { ITestValue } from "@/models/pjcan/variables/test";
 
 export const API_EVENT_CONFIGS = "Configs";
 export const API_EVENT_VIEWS = "Views";
@@ -375,6 +376,18 @@ export class Canbus extends EventEmitter
 		if (!this.queryDisabled)
 		{
 			await this.query(this.deviceInfo);
+		}
+	}
+
+	/**
+	 * Отправить тест
+	 * @param {ITestValue} value Значение теста
+	 */
+	async queryTest(value: ITestValue)
+	{
+		if (!this.queryDisabled)
+		{
+			await this.query(value);
 		}
 	}
 

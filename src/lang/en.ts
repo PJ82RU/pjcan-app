@@ -62,9 +62,16 @@ export default {
 		title: "What are you watching,\nwrite PJ82"
 	},
 
+	rules: {
+		required: "Required",
+		counter: "Max {n} characters | Max {n} character | Max {n} characters | Max {n} characters",
+		english: "Invalid English"
+	},
+
 	menu: {
 		onboard: "On-board",
 		onboardButtons: "On-board computer buttons",
+		test: "Testing",
 		language: {
 			russian: "Русский язык",
 			english: "Английский язык"
@@ -405,5 +412,15 @@ export default {
 	onboardButtons: {
 		title: "On-board buttons",
 		description: "Buttons <b>H</b>, <b>M</b>, <b>RM</b> and <b>24/12</b> only work on the restyled version of the car"
+	},
+
+	test: {
+		title: "Testing",
+		description: "Enter the text (only Latin symbols and numbers), select style and leveling, indicate the display time and click \"Show\"",
+		text: {
+			title: "Text",
+			description: "The text displayed on the information screen"
+		},
+		btnShow: "Show"
 	}
 };

@@ -12,8 +12,7 @@
 			readonly
 			dense
 			:disabled="disabled"
-		>
-		</v-text-field>
+		/>
 	</div>
 </template>
 

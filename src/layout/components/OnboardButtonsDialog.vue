@@ -99,10 +99,10 @@
 </template>
 
 <script lang="ts">
-import DialogTemplate from "@/components/DialogTemplate.vue";
 import { computed, toRefs } from "vue";
-
 import canbus from "@/api/canbus";
+
+import DialogTemplate from "@/components/DialogTemplate.vue";
 
 import { API_EXEC_LCD_VALUE } from "@/models/pjcan/lcd";
 
