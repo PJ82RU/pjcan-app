@@ -68,7 +68,7 @@ CANBUS project for Mazda 3
 
   > uint8_t `id` = `0x14`
   >
-  > uint8_t  `data[62]` = [..]
+  > uint8_t  `data[63]` = [..]
   >
   > >**Структура** `data`:
   > >
@@ -89,7 +89,7 @@ CANBUS project for Mazda 3
   > >        bool reset: 1;          // сбросить значения
   > >        bool sendValue: 1;      // отправлять значение нажатой кнопки
   > >        bool nop: 4;
-  > >        uint8_t range;          // диапазон сигнала
+  > >        uint16_t range;         // диапазон сигнала
   > >        item_t items[6];        // настройки кнопок
   > >}
   > >```
