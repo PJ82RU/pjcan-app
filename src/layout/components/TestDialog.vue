@@ -87,11 +87,12 @@ export default {
 		});
 		const rules = computed(() => ({
 			required: (value: string): any => (!!value || t("rules.required")),
+			// @ts-ignore
 			counter: (value: string): any => (value.length <= 32 || t("rules.counter", 32, { n: 32 })),
 			english: (value: string): any => (/^[^а-яА-Я]+$/.test(value) || t("rules.english"))
 		}));
 
-		const text = ref("");
+		const text = ref(" -- TEST -- ");
 		const style = ref(0);
 		const time = ref(3);
 		const styleList = computed(() =>
