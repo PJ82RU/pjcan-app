@@ -122,6 +122,7 @@ export default {
 			}
 		};
 
+		/** Применить новые значения конфигурации автомобиля */
 		const onApplyCarConfig = (): void =>
 		{
 			const { car } = canbus.configs;
@@ -131,7 +132,10 @@ export default {
 			canbus.queryConfig(API_EXEC_CAR_CONFIG);
 		};
 
-		/** Входящие значения отображения расхода топлива */
+		/**
+		 * Входящие значения отображения
+		 * @param {ICarView} res
+		 */
 		const onReceiveCarView = (res: ICarView): void =>
 		{
 			loadedCarView.value = res.isData;

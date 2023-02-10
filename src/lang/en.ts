@@ -138,11 +138,7 @@ export default {
 			type: {
 				title: "Information display style",
 				description: "Display static text, blinking or in a ticker style",
-				items: [
-					"Plain text",
-					"Flashing text",
-					"Ticker"
-				]
+				items: ["Plain text", "Flashing text", "Ticker"]
 			},
 			time: {
 				title: "Display time, sec.",
@@ -412,12 +408,14 @@ export default {
 
 	onboardButtons: {
 		title: "On-board buttons",
-		description: "Buttons <b>H</b>, <b>M</b>, <b>RM</b> and <b>24/12</b> only work on the restyled version of the car"
+		description:
+			"Buttons <b>H</b>, <b>M</b>, <b>RM</b> and <b>24/12</b> only work on the restyled version of the car"
 	},
 
 	test: {
 		title: "Testing",
-		description: "Enter the text (only Latin symbols and numbers), select style and leveling, indicate the display time and click \"Show\"",
+		description:
+			'Enter the text (only Latin symbols and numbers), select style and leveling, indicate the display time and click "Show"',
 		text: {
 			title: "Text",
 			description: "The text displayed on the information screen"
@@ -435,7 +433,8 @@ export default {
 			},
 			logo: {
 				title: "Logo",
-				description: "The test displayed at the time of the absence of data for output to LCD. Maximum 12 characters",
+				description:
+					"The test displayed at the time of the absence of data for output to LCD. Maximum 12 characters",
 				menu: "LCD: Logo"
 			},
 			hello: {
@@ -445,7 +444,41 @@ export default {
 			}
 		},
 		teyes: {
-			title: "Teyes"
+			title: "Teyes",
+			receiveClock: {
+				title: "Take time",
+				description: "Take the incoming time value from Teyes"
+			},
+			receiveButtons: {
+				title: "Take the buttons",
+				description: "Take the incoming value of the Teyes buttons: CLOCK, HOUR, MIN"
+			},
+			receiveText: {
+				title: "Take the text",
+				description: "Take the incoming value of the text of the Teyes: name of radio stations, etc."
+			},
+			sendButton: {
+				title: "Send buttons press",
+				description: "Send Teyes pressing buttons on the steering wheel"
+			},
+			sendClimate: {
+				title: "Send climate values",
+				description: "Send the climate values obtained from CAN"
+			},
+			sendDoors: {
+				title: "Send the statuses of doors",
+				description: "Send Teyes the statuses of the car door received from CAN"
+			},
+			parseVolume: {
+				title: "Take sound levels",
+				description: "Take Teyes sound levels"
+			},
+			lcdShow: {
+				title: "Show the text Teyes",
+				description:
+					"Show the text of the Teyes on the information screen at the time of the absence of data display",
+				menu: "LCD: Show the text Teyes"
+			}
 		}
 	}
 };
