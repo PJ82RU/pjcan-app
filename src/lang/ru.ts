@@ -77,7 +77,8 @@ export default {
 			english: "English language"
 		},
 		settings: {
-			buttons: "Настройка кнопок руля"
+			buttons: "Настройка кнопок руля",
+			options: "Параметры"
 		},
 		about: "О программе"
 	},
@@ -432,5 +433,29 @@ export default {
 			description: "Текст отображаемый на информационном экране"
 		},
 		btnShow: "Показать"
+	},
+
+	options: {
+		title: "Параметры",
+		lcd: {
+			title: "LCD",
+			enabled: {
+				title: "LCD",
+				description: "Включить/выключить вывод информации на информационный экран"
+			},
+			logo: {
+				title: "Логотип",
+				description: "Тест отображаемый в момент отсутствия данных для вывода на LCD. Максимум 12 символов",
+				menu: "LCD: Логотип"
+			},
+			hello: {
+				title: "Текст приветствия",
+				description: "Тест отображаемый при включении ACC. Максимум 32 символов",
+				menu: "LCD: Текст приветствия"
+			}
+		},
+		teyes: {
+			title: "Teyes"
+		}
 	}
 };

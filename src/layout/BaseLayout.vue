@@ -97,6 +97,7 @@ export default {
 			result.push(
 				{ id: 0, title: t("menu.onboard"), disabled: name === "Onboard" },
 				{ id: 1, title: t("menu.settings.buttons"), disabled: name === "Buttons" },
+				{ id: 6, title: t("menu.settings.options"), disabled: name === "Options" },
 				{ id: 4, title: t("menu.onboardButtons") },
 				{ id: 5, title: t("menu.test") },
 				{} as IMenuItem,
@@ -133,6 +134,9 @@ export default {
 					break;
 				case 5:
 					visibleTest.value = true;
+					break;
+				case 6:
+					router.push({ name: "Options" });
 					break;
 			}
 		};

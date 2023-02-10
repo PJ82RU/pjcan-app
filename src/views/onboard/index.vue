@@ -8,8 +8,8 @@
 
 <script lang="ts">
 import { computed, onMounted, onUnmounted, provide, ref } from "vue";
-import store from "@/store";
 import { useDisplay } from "vuetify";
+import store from "@/store";
 
 import Flicking from "@egjs/vue3-flicking";
 import InfoCard from "./components/InfoCard.vue";
@@ -19,6 +19,7 @@ import MovementCard from "./components/MovementCard.vue";
 import DoorsCard from "./components/DoorsCard.vue";
 import VolumeCard from "./components/VolumeCard.vue";
 import ClimateCard from "./components/ClimateCard.vue";
+
 import canbus from "@/api/canbus";
 
 export default {

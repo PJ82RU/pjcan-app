@@ -17,6 +17,14 @@ const routes: Array<RouteRecordRaw> = [
 		meta: {
 			title: "buttons.title"
 		}
+	},
+	{
+		path: "/options",
+		name: "Options",
+		component: () => import("@/views/options/Loader.vue"),
+		meta: {
+			title: "options.title"
+		}
 	}
 ];
 

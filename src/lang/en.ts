@@ -77,7 +77,8 @@ export default {
 			english: "Английский язык"
 		},
 		settings: {
-			buttons: "Steering wheel button settings"
+			buttons: "Steering wheel button settings",
+			options: "Options"
 		},
 		about: "About"
 	},
@@ -422,5 +423,29 @@ export default {
 			description: "The text displayed on the information screen"
 		},
 		btnShow: "Show"
+	},
+
+	options: {
+		title: "Options",
+		lcd: {
+			title: "LCD",
+			enabled: {
+				title: "LCD",
+				description: "Turn on/off the output of the information on the information screen"
+			},
+			logo: {
+				title: "Logo",
+				description: "The test displayed at the time of the absence of data for output to LCD. Maximum 12 characters",
+				menu: "LCD: Logo"
+			},
+			hello: {
+				title: "Hello",
+				description: "Displayed test when switched by ACC. Maximum 32 characters",
+				menu: "LCD: Hello"
+			}
+		},
+		teyes: {
+			title: "Teyes"
+		}
 	}
 };
