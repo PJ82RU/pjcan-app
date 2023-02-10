@@ -38,7 +38,7 @@
 
 <script lang="ts">
 import { computed, onMounted, onUnmounted, ref, toRefs } from "vue";
-import canbus, { API_EVENT_CONFIGS, API_EVENT_DEVICE } from "@/api/canbus";
+import canbus, { API_EVENT_CAR_CONFIG, API_EVENT_CONFIGS, API_EVENT_DEVICE } from "@/api/canbus";
 const pkg = require("/package.json");
 import { toast } from "vue3-toastify";
 import { useI18n } from "vue-i18n";
@@ -51,6 +51,7 @@ import { getSerial } from "@/api/hash";
 import { API_EXEC_DEVICE_CONFIG, API_EXEC_DEVICE_VALUE, IDeviceValue } from "@/models/pjcan/device";
 import { ILooseObject } from "@/models/interfaces/ILooseObject";
 import { IConfigs } from "@/models/pjcan/configs";
+import { ICarConfig } from "@/models/pjcan/car";
 
 export default {
 	name: "AboutDialog",
@@ -71,26 +72,34 @@ export default {
 		const visibleDeviceInfo = ref(false);
 		const versionFirmware = ref("");
 		const shaDevice = ref("");
+		const carSupport = ref("Mazda");
 		const modelInfo = computed(() =>
 		{
 			const result: ILooseObject = {
 				version: pkg.version,
 				versionFirmware: versionFirmware.value,
-				carSupport: "Mazda 3 BK",
+				carSupport: carSupport.value,
 				author: pkg.author
 			};
 			if (!canbus.values.device.activation) result.sha = shaDevice.value;
 			return result;
 		});
 
-		/** Обновление версии */
-		const updateInfo = (configs: IConfigs): void =>
+		/**
+		 * Обновление версии
+		 * @param {IConfigs} res Общая конфигурация
+		 */
+		const onReceiveConfigs = (res: IConfigs): void =>
 		{
-			versionFirmware.value = configs.version.toString;
+			versionFirmware.value = res.version.toString;
 		};
+
 		let attempt: boolean = false;
-		/** Обновление конфигурации устройства */
-		const onDevice = (res: IDeviceValue): void =>
+		/**
+		 * Обновление значений устройства
+		 * @param {IDeviceValue} res Значения устройства
+		 */
+		const onReceiveDeviceValue = (res: IDeviceValue): void =>
 		{
 			if (res.isData)
 			{
@@ -105,6 +114,7 @@ export default {
 					shaDevice.value = sha;
 				}
 
+				// активация устройства
 				if (!attempt && !res.activation)
 				{
 					attempt = true;
@@ -126,6 +136,29 @@ export default {
 			}
 		};
 
+		/**
+		 * Входящие конфигурации автомобиля
+		 * @param {ICarConfig} res
+		 */
+		const onReceiveCarConfig = (res: ICarConfig): void =>
+		{
+			if (res.isData)
+			{
+				switch (res.carModel)
+				{
+					case 1:
+						carSupport.value = "Mazda 3 BK";
+						break;
+					case 2:
+						carSupport.value = "Mazda CX7";
+						break;
+					default:
+						carSupport.value = "Mazda";
+						break;
+				}
+			}
+		};
+
 		/** Открыть попап технической информации */
 		const onDeviceInfoClick = (): void =>
 		{
@@ -135,14 +168,17 @@ export default {
 
 		onMounted(() =>
 		{
-			canbus.addListener(API_EVENT_CONFIGS, updateInfo);
-			canbus.addListener(API_EVENT_DEVICE, onDevice);
-			onDevice(canbus.values.device);
+			canbus.addListener(API_EVENT_CONFIGS, onReceiveConfigs);
+			canbus.addListener(API_EVENT_DEVICE, onReceiveDeviceValue);
+			canbus.addListener(API_EVENT_CAR_CONFIG, onReceiveCarConfig);
+			onReceiveDeviceValue(canbus.values.device);
+			onReceiveCarConfig(canbus.configs.car);
 		});
 		onUnmounted(() =>
 		{
-			canbus.removeListener(API_EVENT_CONFIGS, updateInfo);
-			canbus.removeListener(API_EVENT_DEVICE, onDevice);
+			canbus.removeListener(API_EVENT_CONFIGS, onReceiveConfigs);
+			canbus.removeListener(API_EVENT_DEVICE, onReceiveDeviceValue);
+			canbus.removeListener(API_EVENT_CAR_CONFIG, onReceiveCarConfig);
 		});
 
 		return {
