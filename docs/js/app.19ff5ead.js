@@ -2409,8 +2409,8 @@ var map = {
 	"./kn.js": 5880,
 	"./ko": 6809,
 	"./ko.js": 6809,
-	"./ku": 6773,
-	"./ku.js": 6773,
+	"./ku": 7578,
+	"./ku.js": 7578,
 	"./ky": 5505,
 	"./ky.js": 5505,
 	"./lb": 553,
@@ -2559,7 +2559,7 @@ webpackContext.id = 6700;
 
 /***/ }),
 
-/***/ 6218:
+/***/ 9360:
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2568,9 +2568,13 @@ webpackContext.id = 6700;
 __webpack_require__.d(__webpack_exports__, {
   "lK": function() { return /* binding */ API_EVENT_BUTTON; },
   "Zy": function() { return /* binding */ API_EVENT_BUTTONS_CONFIG; },
+  "GF": function() { return /* binding */ API_EVENT_CAR_CONFIG; },
+  "zE": function() { return /* binding */ API_EVENT_CAR_VIEW; },
   "vN": function() { return /* binding */ API_EVENT_CONFIGS; },
   "x1": function() { return /* binding */ API_EVENT_DEVICE; },
   "OE": function() { return /* binding */ API_EVENT_INFO; },
+  "QS": function() { return /* binding */ API_EVENT_TEYES_CONFIG; },
+  "L8": function() { return /* binding */ API_EVENT_TEYES_VIEW; },
   "bP": function() { return /* binding */ API_EVENT_UPDATE_ERROR; },
   "hm": function() { return /* binding */ API_EVENT_VARIABLE_CLIMATE; },
   "OC": function() { return /* binding */ API_EVENT_VARIABLE_CLIMATE_VIEW; },
@@ -2592,7 +2596,7 @@ __webpack_require__.d(__webpack_exports__, {
   "ZP": function() { return /* binding */ api_canbus; }
 });
 
-// UNUSED EXPORTS: API_EVENT_CAR_CONFIG, API_EVENT_CAR_VIEW, API_EVENT_DEVICE_CONFIG, API_EVENT_LCD, API_EVENT_TEYES_CONFIG, API_EVENT_TEYES_TEXT, API_EVENT_TEYES_VIEW, API_EVENT_UPDATE_BEGIN_GZ, API_EVENT_UPDATE_UPLOAD_GZ, API_EVENT_VALUES, API_EVENT_VARIABLE_BOSE, API_EVENT_VARIABLE_BOSE_VIEW, API_EVENT_VARIABLE_CONFIGS, API_EVENT_VARIABLE_ENGINE_CONFIG, API_EVENT_VARIABLE_FUEL_CONFIG, API_EVENT_VARIABLE_VALUES, API_EVENT_VARIABLE_VIEWS, API_EVENT_VIEWS, Canbus
+// UNUSED EXPORTS: API_EVENT_DEVICE_CONFIG, API_EVENT_LCD, API_EVENT_TEYES_TEXT, API_EVENT_UPDATE_BEGIN_GZ, API_EVENT_UPDATE_UPLOAD_GZ, API_EVENT_VALUES, API_EVENT_VARIABLE_BOSE, API_EVENT_VARIABLE_BOSE_VIEW, API_EVENT_VARIABLE_CONFIGS, API_EVENT_VARIABLE_ENGINE_CONFIG, API_EVENT_VARIABLE_FUEL_CONFIG, API_EVENT_VARIABLE_VALUES, API_EVENT_VARIABLE_VIEWS, API_EVENT_VIEWS, Canbus
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/defineProperty.js
 var defineProperty = __webpack_require__(2482);
@@ -2704,213 +2708,10 @@ const StructVersion = {
 var device = __webpack_require__(1423);
 // EXTERNAL MODULE: ./src/models/pjcan/button/index.ts + 7 modules
 var pjcan_button = __webpack_require__(1483);
-;// CONCATENATED MODULE: ./src/models/pjcan/car/StructCarConfig.ts
-
-/** Структура данных */
-const StructCarConfig = {
-  lcd: bluetooth/* BluetoothStruct.bit */.GD.bit(),
-  carModel: bluetooth/* BluetoothStruct.uint8 */.GD.uint8(),
-  logo: bluetooth/* BluetoothStruct.char */.GD.char(13),
-  hello: bluetooth/* BluetoothStruct.char */.GD.char(33)
-};
-;// CONCATENATED MODULE: ./src/models/pjcan/car/CarConfig.ts
-
-
-
-
-const API_EXEC_CAR_CONFIG = 50;
-const API_SIZE_CAR_CONFIG = 48;
-const struct = new bluetooth/* BluetoothStruct */.GD(StructCarConfig);
-/** Модель параметров автомобиля */
-class CarConfig extends BaseModel/* BaseModel */.g {
-  constructor(data) {
-    super();
-    (0,defineProperty/* default */.Z)(this, "lcd", false);
-    (0,defineProperty/* default */.Z)(this, "carModel", 0);
-    (0,defineProperty/* default */.Z)(this, "logo", "");
-    (0,defineProperty/* default */.Z)(this, "hello", "");
-    if (data) this.set(data);
-  }
-  /**
-   * Запись данных
-   * @param {DataView} buf Буффер данных
-   */
-  set(buf) {
-    return this._set(this, API_EXEC_CAR_CONFIG, API_SIZE_CAR_CONFIG + 1, struct, buf);
-  }
-  /** Чтение данных */
-  get() {
-    return this._get(this, API_EXEC_CAR_CONFIG, API_SIZE_CAR_CONFIG + 1, struct);
-  }
-}
-// EXTERNAL MODULE: ./src/models/pjcan/view/index.ts + 3 modules
-var view = __webpack_require__(7037);
-;// CONCATENATED MODULE: ./src/models/pjcan/car/StructCarView.ts
-
-
-/** Структура данных */
-const StructCarView = {
-  logo: bluetooth/* BluetoothStruct.struct */.GD.struct(view/* StructViewConfig */.hQ),
-  hello: bluetooth/* BluetoothStruct.struct */.GD.struct(view/* StructViewConfig */.hQ)
-};
-;// CONCATENATED MODULE: ./src/models/pjcan/car/CarView.ts
-
-
-
-
-
-const API_EXEC_CAR_VIEW = 51;
-const API_SIZE_CAR_VIEW = view/* API_SIZE_VIEW */.lD * 2;
-const CarView_struct = new bluetooth/* BluetoothStruct */.GD(StructCarView);
-/** Модель параметров отображения данных автомобиля */
-class CarView extends BaseModel/* BaseModel */.g {
-  constructor(data) {
-    super();
-    (0,defineProperty/* default */.Z)(this, "logo", new view/* ViewConfig */.Fx());
-    (0,defineProperty/* default */.Z)(this, "hello", new view/* ViewConfig */.Fx());
-    if (data) this.set(data);
-  }
-  /**
-   * Запись данных
-   * @param {DataView} buf Буффер данных
-   */
-  set(buf) {
-    return this._set(this, API_EXEC_CAR_VIEW, API_SIZE_CAR_VIEW + 1, CarView_struct, buf);
-  }
-  /** Чтение данных */
-  get() {
-    return this._get(this, API_EXEC_CAR_VIEW, API_SIZE_CAR_VIEW + 1, CarView_struct);
-  }
-}
-;// CONCATENATED MODULE: ./src/models/pjcan/car/index.ts
-
-
-
-
-
-;// CONCATENATED MODULE: ./src/models/pjcan/teyes/StructTeyesConfig.ts
-
-/** Структура данных */
-const StructTeyesConfig = {
-  receiveClock: bluetooth/* BluetoothStruct.bit */.GD.bit(),
-  receiveButtons: bluetooth/* BluetoothStruct.bit */.GD.bit(),
-  receiveText: bluetooth/* BluetoothStruct.bit */.GD.bit(),
-  sendButton: bluetooth/* BluetoothStruct.bit */.GD.bit(),
-  sendClimate: bluetooth/* BluetoothStruct.bit */.GD.bit(),
-  sendDoors: bluetooth/* BluetoothStruct.bit */.GD.bit(),
-  parseVolume: bluetooth/* BluetoothStruct.bit */.GD.bit(),
-  lcdShow: bluetooth/* BluetoothStruct.bit */.GD.bit()
-};
-;// CONCATENATED MODULE: ./src/models/pjcan/teyes/TeyesConfig.ts
-
-
-
-
-const API_EXEC_TEYES_CONFIG = 30;
-const API_SIZE_TEYES_CONFIG = 1;
-const TeyesConfig_struct = new bluetooth/* BluetoothStruct */.GD(StructTeyesConfig);
-/** Модель параметров Teyes */
-class TeyesConfig extends BaseModel/* BaseModel */.g {
-  constructor(data) {
-    super();
-    (0,defineProperty/* default */.Z)(this, "receiveClock", false);
-    (0,defineProperty/* default */.Z)(this, "receiveButtons", false);
-    (0,defineProperty/* default */.Z)(this, "receiveText", false);
-    (0,defineProperty/* default */.Z)(this, "sendButton", false);
-    (0,defineProperty/* default */.Z)(this, "sendClimate", false);
-    (0,defineProperty/* default */.Z)(this, "sendDoors", false);
-    (0,defineProperty/* default */.Z)(this, "parseVolume", false);
-    (0,defineProperty/* default */.Z)(this, "lcdShow", false);
-    if (data) this.set(data);
-  }
-  /**
-   * Запись данных
-   * @param {DataView} buf Буффер данных
-   */
-  set(buf) {
-    return this._set(this, API_EXEC_TEYES_CONFIG, API_SIZE_TEYES_CONFIG + 1, TeyesConfig_struct, buf);
-  }
-  /** Чтение данных */
-  get() {
-    return this._get(this, API_EXEC_TEYES_CONFIG, API_SIZE_TEYES_CONFIG + 1, TeyesConfig_struct);
-  }
-}
-;// CONCATENATED MODULE: ./src/models/pjcan/teyes/StructTeyesText.ts
-
-/** Структура данных */
-const StructTeyesText = {
-  text: bluetooth/* BluetoothStruct.char */.GD.char(12)
-};
-;// CONCATENATED MODULE: ./src/models/pjcan/teyes/TeyesText.ts
-
-
-
-
-const API_EXEC_TEYES_TEXT = 31;
-const API_SIZE_TEYES_TEXT = 12;
-const TeyesText_struct = new bluetooth/* BluetoothStruct */.GD(StructTeyesText);
-/** Модель значения текста Teyes */
-class TeyesText extends BaseModel/* BaseModel */.g {
-  constructor(data) {
-    super();
-    (0,defineProperty/* default */.Z)(this, "text", "");
-    if (data) this.set(data);
-  }
-  /**
-   * Запись данных
-   * @param {DataView} buf Буффер данных
-   */
-  set(buf) {
-    return this._set(this, API_EXEC_TEYES_TEXT, API_SIZE_TEYES_TEXT + 1, TeyesText_struct, buf);
-  }
-  /** Чтение данных */
-  get() {
-    return this._get(this, API_EXEC_TEYES_TEXT, API_SIZE_TEYES_TEXT + 1, TeyesText_struct);
-  }
-}
-;// CONCATENATED MODULE: ./src/models/pjcan/teyes/StructTeyesView.ts
-
-
-/** Структура данных */
-const StructTeyesView = {
-  view: bluetooth/* BluetoothStruct.struct */.GD.struct(view/* StructViewConfig */.hQ)
-};
-;// CONCATENATED MODULE: ./src/models/pjcan/teyes/TeyesView.ts
-
-
-
-
-
-const API_EXEC_TEYES_VIEW = 32;
-const API_SIZE_TEYES_VIEW = view/* API_SIZE_VIEW */.lD;
-const TeyesView_struct = new bluetooth/* BluetoothStruct */.GD(StructTeyesView);
-/** Модель параметров отображения данных Teyes */
-class TeyesView extends BaseModel/* BaseModel */.g {
-  constructor(data) {
-    super();
-    (0,defineProperty/* default */.Z)(this, "view", new view/* ViewConfig */.Fx());
-    if (data) this.set(data);
-  }
-  /**
-   * Запись данных
-   * @param {DataView} buf Буффер данных
-   */
-  set(buf) {
-    return this._set(this, API_EXEC_TEYES_VIEW, API_SIZE_TEYES_VIEW + 1, TeyesView_struct, buf);
-  }
-  /** Чтение данных */
-  get() {
-    return this._get(this, API_EXEC_TEYES_VIEW, API_SIZE_TEYES_VIEW + 1, TeyesView_struct);
-  }
-}
-;// CONCATENATED MODULE: ./src/models/pjcan/teyes/index.ts
-
-
-
-
-
-
-
+// EXTERNAL MODULE: ./src/models/pjcan/car/index.ts + 4 modules
+var car = __webpack_require__(7530);
+// EXTERNAL MODULE: ./src/models/pjcan/teyes/index.ts + 6 modules
+var teyes = __webpack_require__(8674);
 ;// CONCATENATED MODULE: ./src/models/pjcan/variables/bose/StructBoseConfig.ts
 
 /** Структура данных */
@@ -2944,7 +2745,7 @@ var TCenterPoint;
 
 const API_EXEC_VARIABLE_BOSE = 110;
 const API_SIZE_VARIABLE_BOSE = 6;
-const BoseConfig_struct = new bluetooth/* BluetoothStruct */.GD(StructBoseConfig);
+const struct = new bluetooth/* BluetoothStruct */.GD(StructBoseConfig);
 /** Модель параметров Bose */
 class BoseConfig extends BaseModel/* BaseModel */.g {
   constructor(data) {
@@ -2965,13 +2766,15 @@ class BoseConfig extends BaseModel/* BaseModel */.g {
    * @param {DataView} buf Буффер данных
    */
   set(buf) {
-    return this._set(this, API_EXEC_VARIABLE_BOSE, API_SIZE_VARIABLE_BOSE + 1, BoseConfig_struct, buf);
+    return this._set(this, API_EXEC_VARIABLE_BOSE, API_SIZE_VARIABLE_BOSE + 1, struct, buf);
   }
   /** Чтение данных */
   get() {
-    return this._get(this, API_EXEC_VARIABLE_BOSE, API_SIZE_VARIABLE_BOSE + 1, BoseConfig_struct);
+    return this._get(this, API_EXEC_VARIABLE_BOSE, API_SIZE_VARIABLE_BOSE + 1, struct);
   }
 }
+// EXTERNAL MODULE: ./src/models/pjcan/view/index.ts + 3 modules
+var view = __webpack_require__(7037);
 ;// CONCATENATED MODULE: ./src/models/pjcan/variables/bose/StructBoseView.ts
 
 
@@ -3090,8 +2893,8 @@ const StructConfigs = {
   version: bluetooth/* BluetoothStruct.struct */.GD.struct(StructVersion),
   device: bluetooth/* BluetoothStruct.struct */.GD.struct(device/* StructDeviceConfig */.TY),
   buttons: bluetooth/* BluetoothStruct.struct */.GD.struct(pjcan_button/* StructButtonsConfig */.Rj),
-  car: bluetooth/* BluetoothStruct.struct */.GD.struct(StructCarConfig),
-  teyes: bluetooth/* BluetoothStruct.struct */.GD.struct(StructTeyesConfig),
+  car: bluetooth/* BluetoothStruct.struct */.GD.struct(car/* StructCarConfig */.p9),
+  teyes: bluetooth/* BluetoothStruct.struct */.GD.struct(teyes/* StructTeyesConfig */.wb),
   variable: bluetooth/* BluetoothStruct.struct */.GD.struct(StructVariableConfigs)
 };
 ;// CONCATENATED MODULE: ./src/models/pjcan/configs/Configs.ts
@@ -3106,7 +2909,7 @@ const StructConfigs = {
 
 
 const API_EXEC_CONFIG = 1;
-const API_SIZE_CONFIG = API_SIZE_VERSION + device/* API_SIZE_DEVICE_CONFIG */.of + pjcan_button/* API_SIZE_BUTTONS_CONFIG */.Zx + API_SIZE_CAR_CONFIG + API_SIZE_TEYES_CONFIG + API_SIZE_VARIABLE_CONFIG;
+const API_SIZE_CONFIG = API_SIZE_VERSION + device/* API_SIZE_DEVICE_CONFIG */.of + pjcan_button/* API_SIZE_BUTTONS_CONFIG */.Zx + car/* API_SIZE_CAR_CONFIG */.YI + teyes/* API_SIZE_TEYES_CONFIG */.HX + API_SIZE_VARIABLE_CONFIG;
 const Configs_struct = new bluetooth/* BluetoothStruct */.GD(StructConfigs);
 class Configs extends BaseModel/* BaseModel */.g {
   constructor(data) {
@@ -3114,8 +2917,8 @@ class Configs extends BaseModel/* BaseModel */.g {
     (0,defineProperty/* default */.Z)(this, "version", new Version());
     (0,defineProperty/* default */.Z)(this, "device", new device/* DeviceConfig */.W1());
     (0,defineProperty/* default */.Z)(this, "buttons", new pjcan_button/* ButtonsConfig */.Mx());
-    (0,defineProperty/* default */.Z)(this, "car", new CarConfig());
-    (0,defineProperty/* default */.Z)(this, "teyes", new TeyesConfig());
+    (0,defineProperty/* default */.Z)(this, "car", new car/* CarConfig */.XK());
+    (0,defineProperty/* default */.Z)(this, "teyes", new teyes/* TeyesConfig */.mL());
     (0,defineProperty/* default */.Z)(this, "variable", new VariableConfig());
     if (data) this.set(data);
   }
@@ -3274,8 +3077,8 @@ class VariableView extends BaseModel/* BaseModel */.g {
 
 
 const StructViews = {
-  car: bluetooth/* BluetoothStruct.struct */.GD.struct(StructCarView),
-  teyes: bluetooth/* BluetoothStruct.struct */.GD.struct(StructTeyesView),
+  car: bluetooth/* BluetoothStruct.struct */.GD.struct(car/* StructCarView */.MN),
+  teyes: bluetooth/* BluetoothStruct.struct */.GD.struct(teyes/* StructTeyesView */.Te),
   variable: bluetooth/* BluetoothStruct.struct */.GD.struct(StructVariableViews)
 };
 ;// CONCATENATED MODULE: ./src/models/pjcan/views/Views.ts
@@ -3288,13 +3091,13 @@ const StructViews = {
 
 
 const API_EXEC_VIEW = 2;
-const API_SIZE_VIEW = API_SIZE_CAR_VIEW + API_SIZE_TEYES_VIEW + API_SIZE_VARIABLE_VIEW;
+const API_SIZE_VIEW = car/* API_SIZE_CAR_VIEW */.hr + teyes/* API_SIZE_TEYES_VIEW */.VF + API_SIZE_VARIABLE_VIEW;
 const Views_struct = new bluetooth/* BluetoothStruct */.GD(StructViews);
 class Views extends BaseModel/* BaseModel */.g {
   constructor(data) {
     super();
-    (0,defineProperty/* default */.Z)(this, "car", new CarView());
-    (0,defineProperty/* default */.Z)(this, "teyes", new TeyesView());
+    (0,defineProperty/* default */.Z)(this, "car", new car/* CarView */.bs());
+    (0,defineProperty/* default */.Z)(this, "teyes", new teyes/* TeyesView */.U5());
     (0,defineProperty/* default */.Z)(this, "variable", new VariableView());
     if (data) this.set(data);
   }
@@ -3582,7 +3385,7 @@ class Canbus extends (eventemitter3_default()) {
       begin: new update/* UpdateBegin */.N7()
     });
     (0,defineProperty/* default */.Z)(this, "buttonValue", new pjcan_button/* ButtonValue */.js());
-    (0,defineProperty/* default */.Z)(this, "teyesText", new TeyesText());
+    (0,defineProperty/* default */.Z)(this, "teyesText", new teyes/* TeyesText */.VA());
     (0,defineProperty/* default */.Z)(this, "queryDisabled", true);
     (0,defineProperty/* default */.Z)(this, "promises", null);
     (0,defineProperty/* default */.Z)(this, "queue", []);
@@ -3631,13 +3434,13 @@ class Canbus extends (eventemitter3_default()) {
       case pjcan_button/* API_EXEC_BUTTONS_CONFIG */.zL:
         if (!this.queryDisabled) await this.query(this.configs.buttons);
         break;
-      case API_EXEC_CAR_CONFIG:
+      case car/* API_EXEC_CAR_CONFIG */.C0:
         await this.query(this.configs.car);
         break;
       case device/* API_EXEC_DEVICE_CONFIG */.Oh:
         await this.query(this.configs.device);
         break;
-      case API_EXEC_TEYES_CONFIG:
+      case teyes/* API_EXEC_TEYES_CONFIG */.hC:
         await this.query(this.configs.teyes);
         break;
       case API_EXEC_VARIABLE_BOSE:
@@ -3666,10 +3469,10 @@ class Canbus extends (eventemitter3_default()) {
       case API_EXEC_VARIABLE_VIEW:
         await this.query(this.views.variable);
         break;
-      case API_EXEC_CAR_VIEW:
+      case car/* API_EXEC_CAR_VIEW */.cU:
         if (!this.queryDisabled) await this.query(this.views.car);
         break;
-      case API_EXEC_TEYES_VIEW:
+      case teyes/* API_EXEC_TEYES_VIEW */.re:
         if (!this.queryDisabled) await this.query(this.views.teyes);
         break;
       case API_EXEC_VARIABLE_BOSE_VIEW:
@@ -3879,17 +3682,17 @@ class Canbus extends (eventemitter3_default()) {
         this.buttonValue.set(data);
         this.emit(API_EVENT_BUTTON, this.buttonValue);
         break;
-      case API_EXEC_TEYES_CONFIG:
+      case teyes/* API_EXEC_TEYES_CONFIG */.hC:
         // Конфигурация Teyes
         this.configs.teyes.set(data);
         this.emit(API_EVENT_TEYES_CONFIG, this.configs.teyes);
         break;
-      case API_EXEC_TEYES_VIEW:
+      case teyes/* API_EXEC_TEYES_VIEW */.re:
         // Параметры отображения Teyes
         this.views.teyes.set(data);
         this.emit(API_EVENT_TEYES_VIEW, this.views.teyes);
         break;
-      case API_EXEC_TEYES_TEXT:
+      case teyes/* API_EXEC_TEYES_TEXT */.h5:
         // Текст Teyes
         this.teyesText.set(data);
         this.emit(API_EVENT_TEYES_TEXT, this.teyesText);
@@ -3899,12 +3702,12 @@ class Canbus extends (eventemitter3_default()) {
         this.values.lcd.set(data);
         this.emit(API_EVENT_LCD, this.values.lcd);
         break;
-      case API_EXEC_CAR_CONFIG:
+      case car/* API_EXEC_CAR_CONFIG */.C0:
         // Конфигурация машины
         this.configs.car.set(data);
         this.emit(API_EVENT_CAR_CONFIG, this.configs.car);
         break;
-      case API_EXEC_CAR_VIEW:
+      case car/* API_EXEC_CAR_VIEW */.cU:
         // Параметры отображения машины
         this.views.car.set(data);
         this.emit(API_EVENT_CAR_VIEW, this.views.car);
@@ -4876,7 +4679,8 @@ var vue_i18n_esm_bundler = __webpack_require__(5658);
       english: "English language"
     },
     settings: {
-      buttons: "Настройка кнопок руля"
+      buttons: "Настройка кнопок руля",
+      options: "Параметры"
     },
     about: "О программе"
   },
@@ -5194,12 +4998,68 @@ var vue_i18n_esm_bundler = __webpack_require__(5658);
   },
   test: {
     title: "Тестирование",
-    description: "Введите текст (только латинские символы и цифры), выберите стиль и выравнивание, укажите время отображения и нажмите \"Показать\"",
+    description: 'Введите текст (только латинские символы и цифры), выберите стиль и выравнивание, укажите время отображения и нажмите "Показать"',
     text: {
       title: "Текст",
       description: "Текст отображаемый на информационном экране"
     },
     btnShow: "Показать"
+  },
+  options: {
+    title: "Параметры",
+    lcd: {
+      title: "LCD",
+      enabled: {
+        title: "LCD",
+        description: "Включить/выключить вывод информации на информационный экран"
+      },
+      logo: {
+        title: "Логотип",
+        description: "Тест отображаемый в момент отсутствия данных для вывода на LCD. Максимум 12 символов",
+        menu: "LCD: Логотип"
+      },
+      hello: {
+        title: "Текст приветствия",
+        description: "Тест отображаемый при включении ACC. Максимум 32 символов",
+        menu: "LCD: Текст приветствия"
+      }
+    },
+    teyes: {
+      title: "Teyes",
+      receiveClock: {
+        title: "Принимать время",
+        description: "Принимать входящее значение времени от ГУ Teyes"
+      },
+      receiveButtons: {
+        title: "Принимать кнопки",
+        description: "Принимать входящее значение кнопок ГУ: CLOCK, HOUR, MIN"
+      },
+      receiveText: {
+        title: "Принимать текст",
+        description: "Принимать входящее значение текста ГУ: название радиостанций и др."
+      },
+      sendButton: {
+        title: "Отправлять нажатие кнопок",
+        description: "Отправлять ГУ нажатие кнопок на руле"
+      },
+      sendClimate: {
+        title: "Отправлять значения климата",
+        description: "Отправлять ГУ значения климата полученные из can-шины"
+      },
+      sendDoors: {
+        title: "Отправлять статусы дверей",
+        description: "Отправлять ГУ статусы дверей автомобиля полученные из can-шины"
+      },
+      parseVolume: {
+        title: "Принимать уровень звука",
+        description: "Принимать значения уровня звука ГУ Teyes"
+      },
+      lcdShow: {
+        title: "Показывать текст ГУ",
+        description: "Показывать текст ГУ на информационном экране в момент отсутствия данных отображения",
+        menu: "LCD: Показывать текст ГУ"
+      }
+    }
   }
 });
 ;// CONCATENATED MODULE: ./src/lang/en.ts
@@ -5278,7 +5138,8 @@ var vue_i18n_esm_bundler = __webpack_require__(5658);
       english: "Английский язык"
     },
     settings: {
-      buttons: "Steering wheel button settings"
+      buttons: "Steering wheel button settings",
+      options: "Options"
     },
     about: "About"
   },
@@ -5586,12 +5447,68 @@ var vue_i18n_esm_bundler = __webpack_require__(5658);
   },
   test: {
     title: "Testing",
-    description: "Enter the text (only Latin symbols and numbers), select style and leveling, indicate the display time and click \"Show\"",
+    description: 'Enter the text (only Latin symbols and numbers), select style and leveling, indicate the display time and click "Show"',
     text: {
       title: "Text",
       description: "The text displayed on the information screen"
     },
     btnShow: "Show"
+  },
+  options: {
+    title: "Options",
+    lcd: {
+      title: "LCD",
+      enabled: {
+        title: "LCD",
+        description: "Turn on/off the output of the information on the information screen"
+      },
+      logo: {
+        title: "Logo",
+        description: "The test displayed at the time of the absence of data for output to LCD. Maximum 12 characters",
+        menu: "LCD: Logo"
+      },
+      hello: {
+        title: "Hello",
+        description: "Displayed test when switched by ACC. Maximum 32 characters",
+        menu: "LCD: Hello"
+      }
+    },
+    teyes: {
+      title: "Teyes",
+      receiveClock: {
+        title: "Take time",
+        description: "Take the incoming time value from Teyes"
+      },
+      receiveButtons: {
+        title: "Take the buttons",
+        description: "Take the incoming value of the Teyes buttons: CLOCK, HOUR, MIN"
+      },
+      receiveText: {
+        title: "Take the text",
+        description: "Take the incoming value of the text of the Teyes: name of radio stations, etc."
+      },
+      sendButton: {
+        title: "Send buttons press",
+        description: "Send Teyes pressing buttons on the steering wheel"
+      },
+      sendClimate: {
+        title: "Send climate values",
+        description: "Send the climate values obtained from CAN"
+      },
+      sendDoors: {
+        title: "Send the statuses of doors",
+        description: "Send Teyes the statuses of the car door received from CAN"
+      },
+      parseVolume: {
+        title: "Take sound levels",
+        description: "Take Teyes sound levels"
+      },
+      lcdShow: {
+        title: "Show the text Teyes",
+        description: "Show the text of the Teyes on the information screen at the time of the absence of data display",
+        menu: "LCD: Show the text Teyes"
+      }
+    }
   }
 });
 // EXTERNAL MODULE: ./node_modules/moment/moment.js
@@ -5643,7 +5560,7 @@ const t = i18n.global.t;
 
 /***/ }),
 
-/***/ 5691:
+/***/ 6773:
 /***/ (function(__unused_webpack_module, __unused_webpack___webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -6524,9 +6441,9 @@ const VMain = (0,defineComponent/* defineComponent */.aZ)({
     return {};
   }
 });
-;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/layout/BaseLayout.vue?vue&type=template&id=bed005e0&scoped=true&ts=true
+;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/layout/BaseLayout.vue?vue&type=template&id=3d9f126c&scoped=true&ts=true
 
-const _withScopeId = n => ((0,runtime_core_esm_bundler/* pushScopeId */.dD)("data-v-bed005e0"), n = n(), (0,runtime_core_esm_bundler/* popScopeId */.Cn)(), n);
+const _withScopeId = n => ((0,runtime_core_esm_bundler/* pushScopeId */.dD)("data-v-3d9f126c"), n = n(), (0,runtime_core_esm_bundler/* popScopeId */.Cn)(), n);
 const _hoisted_1 = {
   class: "text-h4"
 };
@@ -6536,7 +6453,7 @@ const _hoisted_2 = /*#__PURE__*/_withScopeId(() => /*#__PURE__*/(0,runtime_core_
 const _hoisted_3 = /*#__PURE__*/_withScopeId(() => /*#__PURE__*/(0,runtime_core_esm_bundler/* createElementVNode */._)("div", {
   class: "base-layout__bg"
 }, null, -1));
-function BaseLayoutvue_type_template_id_bed005e0_scoped_true_ts_true_render(_ctx, _cache, $props, $setup, $data, $options) {
+function BaseLayoutvue_type_template_id_3d9f126c_scoped_true_ts_true_render(_ctx, _cache, $props, $setup, $data, $options) {
                                                                           
                                                             
   const _component_icon_custom = (0,runtime_core_esm_bundler/* resolveComponent */.up)("icon-custom");
@@ -6625,7 +6542,7 @@ function BaseLayoutvue_type_template_id_bed005e0_scoped_true_ts_true_render(_ctx
 
 
 
-;// CONCATENATED MODULE: ./src/layout/BaseLayout.vue?vue&type=template&id=bed005e0&scoped=true&ts=true
+;// CONCATENATED MODULE: ./src/layout/BaseLayout.vue?vue&type=template&id=3d9f126c&scoped=true&ts=true
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.unshift.js
 var es_array_unshift = __webpack_require__(541);
@@ -9841,6 +9758,13 @@ const routes = [{
   meta: {
     title: "buttons.title"
   }
+}, {
+  path: "/options",
+  name: "Options",
+  component: () => __webpack_require__.e(/* import() */ 247).then(__webpack_require__.bind(__webpack_require__, 7247)),
+  meta: {
+    title: "options.title"
+  }
 }];
 const router = createRouter({
   history: createWebHistory("/pjcan-app/"),
@@ -13039,8 +12963,8 @@ var src_default = Vue3Toastify;
 var DialogTemplate = __webpack_require__(9355);
 // EXTERNAL MODULE: ./src/components/bluetooth/index.ts + 4 modules
 var bluetooth = __webpack_require__(9014);
-// EXTERNAL MODULE: ./src/api/canbus.ts + 44 modules
-var canbus = __webpack_require__(6218);
+// EXTERNAL MODULE: ./src/api/canbus.ts + 32 modules
+var canbus = __webpack_require__(9360);
 ;// CONCATENATED MODULE: ./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/layout/components/BluetoothBtn.vue?vue&type=script&lang=ts
 
 
@@ -13352,9 +13276,9 @@ var VRow = __webpack_require__(6824);
 var VCol = __webpack_require__(8521);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/components/VTextField/VTextField.mjs
 var VTextField = __webpack_require__(165);
-;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/layout/components/AboutDialog.vue?vue&type=template&id=342cadcf&ts=true
+;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/layout/components/AboutDialog.vue?vue&type=template&id=5dc51d8f&ts=true
 
-function AboutDialogvue_type_template_id_342cadcf_ts_true_render(_ctx, _cache, $props, $setup, $data, $options) {
+function AboutDialogvue_type_template_id_5dc51d8f_ts_true_render(_ctx, _cache, $props, $setup, $data, $options) {
                                                                     
                                                       
                                                       
@@ -13827,23 +13751,30 @@ const pkg = __webpack_require__(4147);
     const visibleDeviceInfo = (0,reactivity_esm_bundler/* ref */.iH)(false);
     const versionFirmware = (0,reactivity_esm_bundler/* ref */.iH)("");
     const shaDevice = (0,reactivity_esm_bundler/* ref */.iH)("");
+    const carSupport = (0,reactivity_esm_bundler/* ref */.iH)("Mazda");
     const modelInfo = (0,runtime_core_esm_bundler/* computed */.Fl)(() => {
       const result = {
         version: pkg.version,
         versionFirmware: versionFirmware.value,
-        carSupport: "Mazda 3 BK",
+        carSupport: carSupport.value,
         author: pkg.author
       };
       if (!canbus/* default.values.device.activation */.ZP.values.device.activation) result.sha = shaDevice.value;
       return result;
     });
-    /** Обновление версии */
-    const updateInfo = configs => {
-      versionFirmware.value = configs.version.toString;
+    /**
+     * Обновление версии
+     * @param {IConfigs} res Общая конфигурация
+     */
+    const onReceiveConfigs = res => {
+      versionFirmware.value = res.version.toString;
     };
     let attempt = false;
-    /** Обновление конфигурации устройства */
-    const onDevice = res => {
+    /**
+     * Обновление значений устройства
+     * @param {IDeviceValue} res Значения устройства
+     */
+    const onReceiveDeviceValue = res => {
       if (res.isData) {
         if (!shaDevice.value.length) {
           let sha = "";
@@ -13853,6 +13784,7 @@ const pkg = __webpack_require__(4147);
           });
           shaDevice.value = sha;
         }
+        // активация устройства
         if (!attempt && !res.activation) {
           attempt = true;
           getSerial(shaDevice.value).then(res => {
@@ -13868,19 +13800,41 @@ const pkg = __webpack_require__(4147);
         }
       }
     };
+    /**
+     * Входящие конфигурации автомобиля
+     * @param {ICarConfig} res
+     */
+    const onReceiveCarConfig = res => {
+      if (res.isData) {
+        switch (res.carModel) {
+          case 1:
+            carSupport.value = "Mazda 3 BK";
+            break;
+          case 2:
+            carSupport.value = "Mazda CX7";
+            break;
+          default:
+            carSupport.value = "Mazda";
+            break;
+        }
+      }
+    };
     /** Открыть попап технической информации */
     const onDeviceInfoClick = () => {
       visible.value = false;
       visibleDeviceInfo.value = true;
     };
     (0,runtime_core_esm_bundler/* onMounted */.bv)(() => {
-      canbus/* default.addListener */.ZP.addListener(canbus/* API_EVENT_CONFIGS */.vN, updateInfo);
-      canbus/* default.addListener */.ZP.addListener(canbus/* API_EVENT_DEVICE */.x1, onDevice);
-      onDevice(canbus/* default.values.device */.ZP.values.device);
+      canbus/* default.addListener */.ZP.addListener(canbus/* API_EVENT_CONFIGS */.vN, onReceiveConfigs);
+      canbus/* default.addListener */.ZP.addListener(canbus/* API_EVENT_DEVICE */.x1, onReceiveDeviceValue);
+      canbus/* default.addListener */.ZP.addListener(canbus/* API_EVENT_CAR_CONFIG */.GF, onReceiveCarConfig);
+      onReceiveDeviceValue(canbus/* default.values.device */.ZP.values.device);
+      onReceiveCarConfig(canbus/* default.configs.car */.ZP.configs.car);
     });
     (0,runtime_core_esm_bundler/* onUnmounted */.Ah)(() => {
-      canbus/* default.removeListener */.ZP.removeListener(canbus/* API_EVENT_CONFIGS */.vN, updateInfo);
-      canbus/* default.removeListener */.ZP.removeListener(canbus/* API_EVENT_DEVICE */.x1, onDevice);
+      canbus/* default.removeListener */.ZP.removeListener(canbus/* API_EVENT_CONFIGS */.vN, onReceiveConfigs);
+      canbus/* default.removeListener */.ZP.removeListener(canbus/* API_EVENT_DEVICE */.x1, onReceiveDeviceValue);
+      canbus/* default.removeListener */.ZP.removeListener(canbus/* API_EVENT_CAR_CONFIG */.GF, onReceiveCarConfig);
     });
     return {
       visible,
@@ -13898,7 +13852,7 @@ const pkg = __webpack_require__(4147);
 
 
 ;
-const AboutDialog_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(AboutDialogvue_type_script_lang_ts, [['render',AboutDialogvue_type_template_id_342cadcf_ts_true_render]])
+const AboutDialog_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(AboutDialogvue_type_script_lang_ts, [['render',AboutDialogvue_type_template_id_5dc51d8f_ts_true_render]])
 
 /* harmony default export */ var AboutDialog = (AboutDialog_exports_);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/components/VBtnGroup/VBtnGroup.mjs + 1 modules
@@ -14494,6 +14448,10 @@ var IconCustom = __webpack_require__(1776);
         title: t("menu.settings.buttons"),
         disabled: name === "Buttons"
       }, {
+        id: 6,
+        title: t("menu.settings.options"),
+        disabled: name === "Options"
+      }, {
         id: 4,
         title: t("menu.onboardButtons")
       }, {
@@ -14536,6 +14494,11 @@ var IconCustom = __webpack_require__(1776);
           break;
         case 5:
           visibleTest.value = true;
+          break;
+        case 6:
+          src_router.push({
+            name: "Options"
+          });
           break;
       }
     };
@@ -14589,10 +14552,10 @@ var IconCustom = __webpack_require__(1776);
 });
 ;// CONCATENATED MODULE: ./src/layout/BaseLayout.vue?vue&type=script&lang=ts
  
-;// CONCATENATED MODULE: ./node_modules/mini-css-extract-plugin/dist/loader.js??clonedRuleSet-22.use[0]!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/layout/BaseLayout.vue?vue&type=style&index=0&id=bed005e0&lang=scss&scoped=true
+;// CONCATENATED MODULE: ./node_modules/mini-css-extract-plugin/dist/loader.js??clonedRuleSet-22.use[0]!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/layout/BaseLayout.vue?vue&type=style&index=0&id=3d9f126c&lang=scss&scoped=true
 // extracted by mini-css-extract-plugin
 
-;// CONCATENATED MODULE: ./src/layout/BaseLayout.vue?vue&type=style&index=0&id=bed005e0&lang=scss&scoped=true
+;// CONCATENATED MODULE: ./src/layout/BaseLayout.vue?vue&type=style&index=0&id=3d9f126c&lang=scss&scoped=true
 
 ;// CONCATENATED MODULE: ./src/layout/BaseLayout.vue
 
@@ -14602,7 +14565,7 @@ var IconCustom = __webpack_require__(1776);
 ;
 
 
-const BaseLayout_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(BaseLayoutvue_type_script_lang_ts, [['render',BaseLayoutvue_type_template_id_bed005e0_scoped_true_ts_true_render],['__scopeId',"data-v-bed005e0"]])
+const BaseLayout_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(BaseLayoutvue_type_script_lang_ts, [['render',BaseLayoutvue_type_template_id_3d9f126c_scoped_true_ts_true_render],['__scopeId',"data-v-3d9f126c"]])
 
 /* harmony default export */ var BaseLayout = (BaseLayout_exports_);
 ;// CONCATENATED MODULE: ./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/App.vue?vue&type=script&lang=ts
@@ -23203,6 +23166,116 @@ var TButtonPress;
 
 /***/ }),
 
+/***/ 7530:
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+
+// EXPORTS
+__webpack_require__.d(__webpack_exports__, {
+  "C0": function() { return /* reexport */ API_EXEC_CAR_CONFIG; },
+  "cU": function() { return /* reexport */ API_EXEC_CAR_VIEW; },
+  "YI": function() { return /* reexport */ API_SIZE_CAR_CONFIG; },
+  "hr": function() { return /* reexport */ API_SIZE_CAR_VIEW; },
+  "XK": function() { return /* reexport */ CarConfig; },
+  "bs": function() { return /* reexport */ CarView; },
+  "p9": function() { return /* reexport */ StructCarConfig; },
+  "MN": function() { return /* reexport */ StructCarView; }
+});
+
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/defineProperty.js
+var defineProperty = __webpack_require__(2482);
+// EXTERNAL MODULE: ./src/components/bluetooth/index.ts + 4 modules
+var bluetooth = __webpack_require__(9014);
+// EXTERNAL MODULE: ./src/models/pjcan/base/BaseModel.ts
+var BaseModel = __webpack_require__(9036);
+;// CONCATENATED MODULE: ./src/models/pjcan/car/StructCarConfig.ts
+
+/** Структура данных */
+const StructCarConfig = {
+  lcd: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+  carModel: bluetooth/* BluetoothStruct.uint8 */.GD.uint8(),
+  logo: bluetooth/* BluetoothStruct.char */.GD.char(13),
+  hello: bluetooth/* BluetoothStruct.char */.GD.char(33)
+};
+;// CONCATENATED MODULE: ./src/models/pjcan/car/CarConfig.ts
+
+
+
+
+const API_EXEC_CAR_CONFIG = 50;
+const API_SIZE_CAR_CONFIG = 48;
+const struct = new bluetooth/* BluetoothStruct */.GD(StructCarConfig);
+/** Модель параметров автомобиля */
+class CarConfig extends BaseModel/* BaseModel */.g {
+  constructor(data) {
+    super();
+    (0,defineProperty/* default */.Z)(this, "lcd", false);
+    (0,defineProperty/* default */.Z)(this, "carModel", 0);
+    (0,defineProperty/* default */.Z)(this, "logo", "");
+    (0,defineProperty/* default */.Z)(this, "hello", "");
+    if (data) this.set(data);
+  }
+  /**
+   * Запись данных
+   * @param {DataView} buf Буффер данных
+   */
+  set(buf) {
+    return this._set(this, API_EXEC_CAR_CONFIG, API_SIZE_CAR_CONFIG + 1, struct, buf);
+  }
+  /** Чтение данных */
+  get() {
+    return this._get(this, API_EXEC_CAR_CONFIG, API_SIZE_CAR_CONFIG + 1, struct);
+  }
+}
+// EXTERNAL MODULE: ./src/models/pjcan/view/index.ts + 3 modules
+var view = __webpack_require__(7037);
+;// CONCATENATED MODULE: ./src/models/pjcan/car/StructCarView.ts
+
+
+/** Структура данных */
+const StructCarView = {
+  logo: bluetooth/* BluetoothStruct.struct */.GD.struct(view/* StructViewConfig */.hQ),
+  hello: bluetooth/* BluetoothStruct.struct */.GD.struct(view/* StructViewConfig */.hQ)
+};
+;// CONCATENATED MODULE: ./src/models/pjcan/car/CarView.ts
+
+
+
+
+
+const API_EXEC_CAR_VIEW = 51;
+const API_SIZE_CAR_VIEW = view/* API_SIZE_VIEW */.lD * 2;
+const CarView_struct = new bluetooth/* BluetoothStruct */.GD(StructCarView);
+/** Модель параметров отображения данных автомобиля */
+class CarView extends BaseModel/* BaseModel */.g {
+  constructor(data) {
+    super();
+    (0,defineProperty/* default */.Z)(this, "logo", new view/* ViewConfig */.Fx());
+    (0,defineProperty/* default */.Z)(this, "hello", new view/* ViewConfig */.Fx());
+    if (data) this.set(data);
+  }
+  /**
+   * Запись данных
+   * @param {DataView} buf Буффер данных
+   */
+  set(buf) {
+    return this._set(this, API_EXEC_CAR_VIEW, API_SIZE_CAR_VIEW + 1, CarView_struct, buf);
+  }
+  /** Чтение данных */
+  get() {
+    return this._get(this, API_EXEC_CAR_VIEW, API_SIZE_CAR_VIEW + 1, CarView_struct);
+  }
+}
+;// CONCATENATED MODULE: ./src/models/pjcan/car/index.ts
+
+
+
+
+
+
+/***/ }),
+
 /***/ 1423:
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
@@ -23495,6 +23568,161 @@ class LCDValue extends BaseModel/* BaseModel */.g {
   }
 }
 ;// CONCATENATED MODULE: ./src/models/pjcan/lcd/index.ts
+
+
+
+
+/***/ }),
+
+/***/ 8674:
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+
+// EXPORTS
+__webpack_require__.d(__webpack_exports__, {
+  "hC": function() { return /* reexport */ API_EXEC_TEYES_CONFIG; },
+  "h5": function() { return /* reexport */ API_EXEC_TEYES_TEXT; },
+  "re": function() { return /* reexport */ API_EXEC_TEYES_VIEW; },
+  "HX": function() { return /* reexport */ API_SIZE_TEYES_CONFIG; },
+  "VF": function() { return /* reexport */ API_SIZE_TEYES_VIEW; },
+  "wb": function() { return /* reexport */ StructTeyesConfig; },
+  "Te": function() { return /* reexport */ StructTeyesView; },
+  "mL": function() { return /* reexport */ TeyesConfig; },
+  "VA": function() { return /* reexport */ TeyesText; },
+  "U5": function() { return /* reexport */ TeyesView; }
+});
+
+// UNUSED EXPORTS: API_SIZE_TEYES_TEXT, StructTeyesText
+
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/defineProperty.js
+var defineProperty = __webpack_require__(2482);
+// EXTERNAL MODULE: ./src/components/bluetooth/index.ts + 4 modules
+var bluetooth = __webpack_require__(9014);
+// EXTERNAL MODULE: ./src/models/pjcan/base/BaseModel.ts
+var BaseModel = __webpack_require__(9036);
+;// CONCATENATED MODULE: ./src/models/pjcan/teyes/StructTeyesConfig.ts
+
+/** Структура данных */
+const StructTeyesConfig = {
+  receiveClock: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+  receiveButtons: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+  receiveText: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+  sendButton: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+  sendClimate: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+  sendDoors: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+  parseVolume: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+  lcdShow: bluetooth/* BluetoothStruct.bit */.GD.bit()
+};
+;// CONCATENATED MODULE: ./src/models/pjcan/teyes/TeyesConfig.ts
+
+
+
+
+const API_EXEC_TEYES_CONFIG = 30;
+const API_SIZE_TEYES_CONFIG = 1;
+const struct = new bluetooth/* BluetoothStruct */.GD(StructTeyesConfig);
+/** Модель параметров Teyes */
+class TeyesConfig extends BaseModel/* BaseModel */.g {
+  constructor(data) {
+    super();
+    (0,defineProperty/* default */.Z)(this, "receiveClock", false);
+    (0,defineProperty/* default */.Z)(this, "receiveButtons", false);
+    (0,defineProperty/* default */.Z)(this, "receiveText", false);
+    (0,defineProperty/* default */.Z)(this, "sendButton", false);
+    (0,defineProperty/* default */.Z)(this, "sendClimate", false);
+    (0,defineProperty/* default */.Z)(this, "sendDoors", false);
+    (0,defineProperty/* default */.Z)(this, "parseVolume", false);
+    (0,defineProperty/* default */.Z)(this, "lcdShow", false);
+    if (data) this.set(data);
+  }
+  /**
+   * Запись данных
+   * @param {DataView} buf Буффер данных
+   */
+  set(buf) {
+    return this._set(this, API_EXEC_TEYES_CONFIG, API_SIZE_TEYES_CONFIG + 1, struct, buf);
+  }
+  /** Чтение данных */
+  get() {
+    return this._get(this, API_EXEC_TEYES_CONFIG, API_SIZE_TEYES_CONFIG + 1, struct);
+  }
+}
+;// CONCATENATED MODULE: ./src/models/pjcan/teyes/StructTeyesText.ts
+
+/** Структура данных */
+const StructTeyesText = {
+  text: bluetooth/* BluetoothStruct.char */.GD.char(12)
+};
+;// CONCATENATED MODULE: ./src/models/pjcan/teyes/TeyesText.ts
+
+
+
+
+const API_EXEC_TEYES_TEXT = 31;
+const API_SIZE_TEYES_TEXT = 12;
+const TeyesText_struct = new bluetooth/* BluetoothStruct */.GD(StructTeyesText);
+/** Модель значения текста Teyes */
+class TeyesText extends BaseModel/* BaseModel */.g {
+  constructor(data) {
+    super();
+    (0,defineProperty/* default */.Z)(this, "text", "");
+    if (data) this.set(data);
+  }
+  /**
+   * Запись данных
+   * @param {DataView} buf Буффер данных
+   */
+  set(buf) {
+    return this._set(this, API_EXEC_TEYES_TEXT, API_SIZE_TEYES_TEXT + 1, TeyesText_struct, buf);
+  }
+  /** Чтение данных */
+  get() {
+    return this._get(this, API_EXEC_TEYES_TEXT, API_SIZE_TEYES_TEXT + 1, TeyesText_struct);
+  }
+}
+// EXTERNAL MODULE: ./src/models/pjcan/view/index.ts + 3 modules
+var view = __webpack_require__(7037);
+;// CONCATENATED MODULE: ./src/models/pjcan/teyes/StructTeyesView.ts
+
+
+/** Структура данных */
+const StructTeyesView = {
+  view: bluetooth/* BluetoothStruct.struct */.GD.struct(view/* StructViewConfig */.hQ)
+};
+;// CONCATENATED MODULE: ./src/models/pjcan/teyes/TeyesView.ts
+
+
+
+
+
+const API_EXEC_TEYES_VIEW = 32;
+const API_SIZE_TEYES_VIEW = view/* API_SIZE_VIEW */.lD;
+const TeyesView_struct = new bluetooth/* BluetoothStruct */.GD(StructTeyesView);
+/** Модель параметров отображения данных Teyes */
+class TeyesView extends BaseModel/* BaseModel */.g {
+  constructor(data) {
+    super();
+    (0,defineProperty/* default */.Z)(this, "view", new view/* ViewConfig */.Fx());
+    if (data) this.set(data);
+  }
+  /**
+   * Запись данных
+   * @param {DataView} buf Буффер данных
+   */
+  set(buf) {
+    return this._set(this, API_EXEC_TEYES_VIEW, API_SIZE_TEYES_VIEW + 1, TeyesView_struct, buf);
+  }
+  /** Чтение данных */
+  get() {
+    return this._get(this, API_EXEC_TEYES_VIEW, API_SIZE_TEYES_VIEW + 1, TeyesView_struct);
+  }
+}
+;// CONCATENATED MODULE: ./src/models/pjcan/teyes/index.ts
+
+
+
+
 
 
 
@@ -47813,7 +48041,7 @@ module.exports = typeof self == 'object' ? self.FormData : window.FormData;
 
 /***/ }),
 
-/***/ 6773:
+/***/ 7578:
 /***/ (function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -78512,6 +78740,6 @@ module.exports = JSON.parse('{"name":"pjcan","version":"0.1.0","private":true,"d
 },
 /******/ function(__webpack_require__) { // webpackRuntimeModules
 /******/ var __webpack_exec__ = function(moduleId) { return __webpack_require__(__webpack_require__.s = moduleId); }
-/******/ var __webpack_exports__ = (__webpack_exec__(5691));
+/******/ var __webpack_exports__ = (__webpack_exec__(6773));
 /******/ }
 ]);
