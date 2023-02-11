@@ -1,8 +1,10 @@
 import EventEmitter from "eventemitter3";
+import { toast } from "vue3-toastify";
 import { t } from "@/lang";
-import { clearDebounce, debounce } from "@/utils/debounce";
 import { getFirmware, getFirmwareVersion } from "@/api/firmware";
+import { getSerial } from "@/api/hash";
 
+import { clearDebounce, debounce } from "@/utils/debounce";
 import {
 	BLUETOOTH_EVENT_CONNECTED,
 	BLUETOOTH_EVENT_RECEIVE,
@@ -134,6 +136,8 @@ export class Canbus extends EventEmitter
 
 	/** Устройство */
 	deviceInfo: IDeviceInfo = new DeviceInfo();
+	/** SHA */
+	sha: string | undefined;
 
 	/** Обновление прошивки */
 	update: IUpdateResult = {
@@ -195,8 +199,11 @@ export class Canbus extends EventEmitter
 
 		await this.queryConfig();
 		await this.queryView();
-		await this.queryDeviceInfo();
 		this.queryDisabled = false;
+		if (!this.debounceFetchValue)
+		{
+			await this.queryValue();
+		}
 	}
 
 	/**
@@ -491,6 +498,10 @@ export class Canbus extends EventEmitter
 
 			case API_EXEC_VALUE: // Все значения
 				this.values.set(data);
+				if (!this.values.device.activation && !this.sha)
+				{
+					this.queryDeviceInfo().then();
+				}
 
 				this.emit(API_EVENT_VALUES, this.values);
 				this.emit(API_EVENT_DEVICE, this.values.device);
@@ -500,6 +511,7 @@ export class Canbus extends EventEmitter
 
 			case API_EXEC_INFO: // Информация об устройстве
 				this.deviceInfo.set(data);
+				if (!this.sha) this.getSHA();
 				this.emit(API_EVENT_INFO, this.deviceInfo);
 				break;
 			case API_EXEC_DEVICE_CONFIG: // Конфигурация устройства
@@ -749,6 +761,56 @@ export class Canbus extends EventEmitter
 				})
 				.catch((e) => reject(e));
 		});
+	}
+
+	/**
+	 * Перезагрузить устройство
+	 * @param {boolean} save Сохранить настройки перед загрузкой
+	 */
+	rebootDevice(save: boolean = false)
+	{
+		this.values.device.reboot = true;
+		this.values.device.save = save;
+		this.queryValue(API_EXEC_DEVICE_VALUE).then();
+	}
+
+	/**
+	 * Сбросить настройки устройства
+	 * @param {boolean} resetConfig Удалить конфигурацию
+	 * @param {boolean} resetView Удалить параметры отображения
+	 */
+	resetDevice(resetConfig: boolean = true, resetView: boolean = true)
+	{
+		this.values.device.resetConfig = resetConfig;
+		this.values.device.resetView = resetView;
+		this.sha = undefined;
+		this.rebootDevice();
+	}
+
+	private getSHA(): void
+	{
+		this.sha = "";
+		this.deviceInfo.sha.forEach((x) =>
+		{
+			const hex = x.toString(16);
+			this.sha += (hex.length === 1 ? "0" : "") + hex;
+		});
+
+		if (!this.values.device.activation)
+		{
+			getSerial(this.sha)
+				.then(async (res: any) =>
+				{
+					this.configs.device.serial = res?.sha ?? "";
+					await this.queryConfig(API_EXEC_DEVICE_CONFIG);
+					this.rebootDevice(true);
+					toast.success(t("activation.success"));
+				})
+				.catch(() =>
+				{
+					toast.error(t("activation.error"));
+				});
+		}
 	}
 }
 

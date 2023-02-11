@@ -110,7 +110,8 @@ export default {
 		sdkVersion: "SDK version",
 		sketchMD5: "Sketch MD5",
 		sketchSize: "Sketch size",
-		temperatureChip: "Temperature chip"
+		temperatureChip: "Temperature chip",
+		sha: "SHA"
 	},
 
 	deviceReset: {

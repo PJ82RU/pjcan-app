@@ -104,3 +104,11 @@ export default {
 	}
 };
 </script>
+
+<style lang="scss" scoped>
+.bluetooth-btn {
+	::v-deep(.mdi-bluetooth-off) {
+		color: $error;
+	}
+}
+</style>

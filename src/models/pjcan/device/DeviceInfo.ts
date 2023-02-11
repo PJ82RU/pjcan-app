@@ -1,10 +1,10 @@
 import { BluetoothStruct } from "@/components/bluetooth";
 import { BaseModel } from "../base";
-import { StructDeviceInfo } from "./StructDeviceInfo";
+import { API_SIZE_DEVICE_SHA, StructDeviceInfo } from "./StructDeviceInfo";
 import { IDeviceInfo } from "./IDeviceInfo";
 
 export const API_EXEC_INFO = 5;
-export const API_SIZE_INFO = 111;
+export const API_SIZE_INFO = 111 + API_SIZE_DEVICE_SHA;
 
 const struct = new BluetoothStruct(StructDeviceInfo);
 
@@ -33,6 +33,7 @@ export class DeviceInfo extends BaseModel implements IDeviceInfo
 	sketchMD5 = "";
 	sketchSize = 0;
 	temperatureChip = 0;
+	sha = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
 	constructor(data?: DataView)
 	{

@@ -8,6 +8,5 @@ export interface IDeviceValue extends IBaseModel {
 	activation: boolean; // Статус активации
 	save: boolean; // Сохранить данные принудительно
 	led: number; // Состояние мигания светодиода
-	sha: number[]; // Хеш
 	worktime: BigInt
 }

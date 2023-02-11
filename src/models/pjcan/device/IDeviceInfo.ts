@@ -24,4 +24,5 @@ export interface IDeviceInfo extends IBaseModel {
 	sketchMD5: string;
 	sketchSize: number;
 	temperatureChip: number;
+	sha: number[]; // Хеш
 }

@@ -68,6 +68,7 @@ export default {
 
 		const isLoadedValue = ref(false);
 		const modelDeviceInfo = ref({
+			temperatureChip: "",
 			chipCores: "",
 			chipRevision: "",
 			cpuFreqMHz: "",
@@ -79,7 +80,7 @@ export default {
 			sdkVersion: "",
 			sketchMD5: "",
 			sketchSize: "",
-			temperatureChip: ""
+			sha: ""
 		});
 
 		/** Входящие значения об устройстве */
@@ -102,6 +103,7 @@ export default {
 				value.sketchMD5 = canbus.deviceInfo.sketchMD5;
 				value.sketchSize = canbus.deviceInfo.sketchSize.toString();
 				value.temperatureChip = canbus.deviceInfo.temperatureChip.toFixed(2) + "°C";
+				value.sha = canbus.sha ?? "";
 			}
 		};
 

@@ -88,8 +88,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.dialog
-{
+.dialog {
 	&__title {
 		width: calc(100% - 32px);
 		overflow: hidden;

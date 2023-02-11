@@ -1,9 +1,9 @@
 {
 	"name": "pjcan",
-	"version": "0.1.0",
+	"version": "0.2.0",
 	"private": true,
 	"description": "CanBus project for Mazda 3",
-	"author": "PJ82 (Spiridonov Vladislav)",
+	"author": "PJ82. Spiridonov Vladislav",
 	"scripts": {
 		"serve": "vue-cli-service serve",
 		"build": "vue-cli-service build",

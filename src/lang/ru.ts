@@ -121,7 +121,8 @@ export default {
 		sdkVersion: "Версия SDK",
 		sketchMD5: "MD5 прошивки",
 		sketchSize: "Размер прошивки",
-		temperatureChip: "Температура чипа"
+		temperatureChip: "Температура чипа",
+		sha: "SHA"
 	},
 
 	deviceReset: {
