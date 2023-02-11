@@ -14908,7 +14908,7 @@ var reactivity_esm_bundler = __webpack_require__(4870);
 // EXTERNAL MODULE: ./node_modules/vue-i18n/dist/vue-i18n.esm-bundler.js + 4 modules
 var vue_i18n_esm_bundler = __webpack_require__(5658);
 // EXTERNAL MODULE: ./src/components/DialogTemplate.vue + 6 modules
-var DialogTemplate = __webpack_require__(9355);
+var DialogTemplate = __webpack_require__(6090);
 // EXTERNAL MODULE: ./src/components/cards/SwitchCardItem.vue + 6 modules
 var SwitchCardItem = __webpack_require__(1070);
 // EXTERNAL MODULE: ./src/components/common/NumberField.vue + 3 modules
@@ -15160,8 +15160,8 @@ var SwitchCardItem = __webpack_require__(1070);
 var ViewSettingDialog = __webpack_require__(8103);
 // EXTERNAL MODULE: ./src/models/pjcan/car/index.ts + 4 modules
 var pjcan_car = __webpack_require__(7530);
-// EXTERNAL MODULE: ./src/api/canbus.ts + 32 modules
-var canbus = __webpack_require__(9360);
+// EXTERNAL MODULE: ./src/api/canbus.ts + 82 modules
+var canbus = __webpack_require__(2223);
 ;// CONCATENATED MODULE: ./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/options/components/LcdCard.vue?vue&type=script&lang=ts
 
 

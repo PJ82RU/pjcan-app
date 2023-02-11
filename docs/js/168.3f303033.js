@@ -14908,7 +14908,7 @@ var reactivity_esm_bundler = __webpack_require__(4870);
 // EXTERNAL MODULE: ./node_modules/vue-i18n/dist/vue-i18n.esm-bundler.js + 4 modules
 var vue_i18n_esm_bundler = __webpack_require__(5658);
 // EXTERNAL MODULE: ./src/components/DialogTemplate.vue + 6 modules
-var DialogTemplate = __webpack_require__(9355);
+var DialogTemplate = __webpack_require__(6090);
 // EXTERNAL MODULE: ./src/components/cards/SwitchCardItem.vue + 6 modules
 var SwitchCardItem = __webpack_require__(1070);
 // EXTERNAL MODULE: ./src/components/common/NumberField.vue + 3 modules
@@ -15358,8 +15358,8 @@ const __exports__ = /*#__PURE__*/(0,exportHelper/* default */.Z)(IconCardItemvue
 /* harmony default export */ var IconCardItem = (__exports__);
 // EXTERNAL MODULE: ./src/views/onboard/components/ViewSettingDialog.vue + 5 modules
 var ViewSettingDialog = __webpack_require__(8103);
-// EXTERNAL MODULE: ./src/api/canbus.ts + 32 modules
-var canbus = __webpack_require__(9360);
+// EXTERNAL MODULE: ./src/api/canbus.ts + 82 modules
+var canbus = __webpack_require__(2223);
 // EXTERNAL MODULE: ./src/models/pjcan/variables/sensors/index.ts + 5 modules
 var variables_sensors = __webpack_require__(2775);
 // EXTERNAL MODULE: ./src/models/pjcan/variables/temperature/index.ts + 4 modules
