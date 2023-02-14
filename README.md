@@ -316,7 +316,7 @@ CANBUS project for Mazda 3
 * `volume_t` **Параметры уровня звука:**
 
   > uint8_t `id` = `0xc9`
-  > 
+  >
   > uint8_t  `data[3]` = [..]
   >
   > >**Структура** `data`:
@@ -325,7 +325,10 @@ CANBUS project for Mazda 3
   > >```c++
   > >struct
   > >{
-  > >        float ratio;        // коэффициент расхода топлива
+  > >        bool mute: 1;       // Выкл. звук
+  > >        bool nop: 7;
+  > >        uint8_t volume;     // Уровень звука
+  > >        uint8_t max;        // Максимальный уровень звука
   > >}
   > >```
 
