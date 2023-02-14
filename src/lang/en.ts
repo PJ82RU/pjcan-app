@@ -125,7 +125,8 @@ export default {
 		cancel: "Cancel",
 		close: "Close",
 		deviceInfo: "About device",
-		deviceReset: "Reset configuration"
+		deviceReset: "Reset configuration",
+		reset: "Reset"
 	},
 
 	onboard: {
@@ -222,6 +223,22 @@ export default {
 				title: "Coolant temperature",
 				description: "Coolant temperature",
 				menu: "LCD: Coolant temperature"
+			},
+			settings: {
+				title: "Settings of engine statistics",
+				menu: "Statistics settings",
+				showDays: {
+					title: "Show days in statistics",
+					description: "Display the mothers on the information screen in d.hh:mm:ss"
+				},
+				worktime: {
+					title: "Opening time, min.",
+					description: "Total engine operating time"
+				},
+				countRPM: {
+					title: "RPM counter",
+					description: "The total number of full speed of the crankshaft of the engine in thousands"
+				}
 			}
 		},
 

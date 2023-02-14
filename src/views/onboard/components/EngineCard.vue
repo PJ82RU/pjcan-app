@@ -81,6 +81,8 @@
 		:disabled="!isLoadedView"
 		@click:apply="onViewSettingApply"
 	/>
+
+	<engine-config-dialog v-model="settingsVisible" />
 </template>
 
 <script lang="ts">
@@ -92,6 +94,7 @@ import InputCardItem from "@/components/cards/InputCardItem.vue";
 import IconCardItem from "@/components/cards/IconCardItem.vue";
 import ProgressCardItem from "@/components/cards/ProgressCardItem.vue";
 import ViewSettingDialog from "./ViewSettingDialog.vue";
+import EngineConfigDialog from "./EngineConfigDialog.vue";
 import { IMenuItem } from "@/components/MenuDots.vue";
 
 import canbus, { API_EVENT_VARIABLE_ENGINE, API_EVENT_VARIABLE_ENGINE_VIEW } from "@/api/canbus";
@@ -101,7 +104,7 @@ import { API_EXEC_VARIABLE_ENGINE_VIEW, IEngineValue, IEngineView } from "@/mode
 
 export default {
 	name: "EngineCard",
-	components: { Card, InputCardItem, IconCardItem, ProgressCardItem, ViewSettingDialog },
+	components: { Card, InputCardItem, IconCardItem, ProgressCardItem, ViewSettingDialog, EngineConfigDialog },
 	setup()
 	{
 		const { t } = useI18n();
@@ -157,6 +160,7 @@ export default {
 		// МЕНЮ ОТОБРАЖЕНИЯ
 
 		const menu = computed((): IMenuItem[] => [
+			{ id: 7, title: t("onboard.engine.settings.menu") },
 			{ id: 0, title: t("onboard.engine.enabled.menu") },
 			{ id: 1, title: t("onboard.engine.RPM.menu") },
 			{ id: 2, title: t("onboard.engine.countRPM.menu") },
@@ -168,6 +172,7 @@ export default {
 		const menuVisible = ref(false);
 		const menuSelected = ref({} as IMenuItem);
 		const menuViewConfig = ref({} as IViewConfig);
+		const settingsVisible = ref(false);
 
 		/**
 		 * Выбор пункта меню отображения на информационном экране
@@ -175,39 +180,46 @@ export default {
 		 */
 		const onMenuClick = (item: IMenuItem): void =>
 		{
-			menuVisible.value = true;
-			menuSelected.value = item;
-
-			const { engine } = canbus.views.variable;
-			switch (item.id)
+			if (item.id < 7)
 			{
-				case 0:
-					menuViewConfig.value = engine.enabled;
-					return;
+				menuVisible.value = true;
+				menuSelected.value = item;
 
-				case 1:
-					menuViewConfig.value = engine.rpm;
-					break;
+				const { engine } = canbus.views.variable;
+				switch (item.id)
+				{
+					case 0:
+						menuViewConfig.value = engine.enabled;
+						return;
 
-				case 2:
-					menuViewConfig.value = engine.totalCountRPM;
-					break;
+					case 1:
+						menuViewConfig.value = engine.rpm;
+						break;
 
-				case 3:
-					menuViewConfig.value = engine.load;
-					break;
+					case 2:
+						menuViewConfig.value = engine.totalCountRPM;
+						break;
 
-				case 4:
-					menuViewConfig.value = engine.totalSeconds;
-					break;
+					case 3:
+						menuViewConfig.value = engine.load;
+						break;
 
-				case 5:
-					menuViewConfig.value = engine.throttle;
-					break;
+					case 4:
+						menuViewConfig.value = engine.totalSeconds;
+						break;
 
-				case 6:
-					menuViewConfig.value = engine.coolant;
-					break;
+					case 5:
+						menuViewConfig.value = engine.throttle;
+						break;
+
+					case 6:
+						menuViewConfig.value = engine.coolant;
+						break;
+				}
+			}
+			else
+			{
+				settingsVisible.value = true;
 			}
 		};
 
@@ -265,6 +277,7 @@ export default {
 			menuVisible,
 			menuSelected,
 			menuViewConfig,
+			settingsVisible,
 			onMenuClick,
 			onViewSettingApply
 		};
