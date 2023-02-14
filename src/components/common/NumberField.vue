@@ -8,8 +8,8 @@
 		:min="min"
 		:max="max"
 		oninput="
-			if(Number(this.value) > Number(this.max)) { this.value = this.max; }
-			else if (Number(this.value) < Number(this.min)) { this.value = ''; }
+			if(this.max && Number(this.value) > Number(this.max)) { this.value = this.max; }
+			else if (this.min && Number(this.value) < Number(this.min)) { this.value = ''; }
 		"
 		:disabled="disabled"
 		persistent-hint
@@ -33,13 +33,11 @@ export default {
 		hint: String,
 		/** Минимальное значение */
 		min: {
-			type: Number,
-			default: 1
+			type: Number
 		},
 		/** Максимальное значение */
 		max: {
-			type: Number,
-			default: 300
+			type: Number
 		},
 		/** Значение по умолчанию */
 		defaultValue: {
@@ -59,17 +57,17 @@ export default {
 			set: (val: string | number): void => emit("update:modelValue", Number(val))
 		});
 
-		/** Доп. проверка вводимых цыфр */
+		/** Доп. проверка вводимых цифр */
 		watch(value, (val: string) =>
 		{
-			if (Number(val) < min.value) value.value = "";
-			else if (Number(val) > max.value) value.value = max.value;
+			if (min.value && Number(val) < min.value) value.value = "";
+			else if (max.value && Number(val) > max.value) value.value = max.value;
 		});
 
 		/** Потеря фокуса */
 		const onBlur = () =>
 		{
-			if (Number(value.value) < min.value) value.value = defaultValue.value;
+			if (min.value && Number(value.value) < min.value) value.value = defaultValue.value;
 		};
 
 		return {

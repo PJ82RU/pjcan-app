@@ -37,6 +37,8 @@
 						:label="$t('onboard.viewSetting.time.title')"
 						:hint="$t('onboard.viewSetting.time.description')"
 						:disabled="disabled"
+						:min="1"
+						:max="300"
 					/>
 				</v-col>
 			</v-row>

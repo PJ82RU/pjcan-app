@@ -7,6 +7,7 @@
 						v-model="modelResistance"
 						:label="$t('buttons.resistance.title')"
 						:hint="$t('buttons.resistance.description')"
+						:min="1"
 						:max="3999"
 						:disabled="!isLoadedConfig"
 						@change="$emit('change')"
