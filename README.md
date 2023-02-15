@@ -608,28 +608,28 @@ struct {
   > >```c++
   > >struct
   > >{
-  > >        bool reboot: 1;             // перезагрузка устройства
-  > >        bool reset_config: 1;       // сбросить конфигурацию
-  > >        bool reset_view: 1;         // сбросить конфигурацию отображения
-  > >        bool activation: 1;         // статус активации
-  > >        bool save: 1;               // сохранить данные принудительно
-  > >        bool nop: 3;
-  > >        led_t led: 8;               // состояние мигания светодиода
-  > >        uint8_t sha[32];            // хеш устройства
-  > >        uint64_t worktime;          // время работы устройства
+  > >   bool reboot: 1;             // перезагрузка устройства
+  > >   bool reset_config: 1;       // сбросить конфигурацию
+  > >   bool reset_view: 1;         // сбросить конфигурацию отображения
+  > >   bool activation: 1;         // статус активации
+  > >   bool save: 1;               // сохранить данные принудительно
+  > >   bool nop: 3;
+  > >   led_t led: 8;               // состояние мигания светодиода
+  > >   uint8_t sha[32];            // хеш устройства
+  > >   uint64_t worktime;          // время работы устройства
   > >}
   > >```
   > >`led_t` **Значения состояния мигания светодиода**:
   > >
-  > > >`0` Светодиод не горит
-  > > >
-  > > >`1` Светодиод горит
-  > > >
-  > > >`2` Светодиод мигает с указанным интервалом
-  > > >
-  > > >`3` Двойное мигание светодиодом, с указанным интервалом
-  > > >
-  > > >`4` Тройное мигание светодиодом, с указанным интервалом
+  > >>`0` Светодиод не горит
+  > >>
+  > >>`1` Светодиод горит
+  > >>
+  > >>`2` Светодиод мигает с указанным интервалом
+  > >>
+  > >>`3` Двойное мигание светодиодом, с указанным интервалом
+  > >>
+  > >>`4` Тройное мигание светодиодом, с указанным интервалом
 
 
 
@@ -645,15 +645,30 @@ struct {
   > >```c++
   > >struct
   > >{
-  > >        bool reboot: 1;             // перезагрузка устройства
-  > >        bool reset_config: 1;       // сбросить конфигурацию
-  > >        bool reset_view: 1;         // сбросить конфигурацию отображения
-  > >        bool activation: 1;         // статус активации
-  > >        bool save: 1;               // сохранить данные принудительно
-  > >        bool nop: 3;
-  > >        led_t led: 8;               // состояние мигания светодиода
-  > >        uint8_t sha[32];            // хеш устройства
-  > >        uint64_t worktime;          // время работы устройства, мс
+  > >    bool ico_cdin: 1;           // CD IN
+  > >    bool ico_mdin: 1;           // MD IN
+  > >    bool ico_st: 1;             // ST
+  > >    bool ico_dolby: 1;          // Dolby
+  > >    bool ico_rpt: 1;            // RPT
+  > >    bool ico_rdm: 1;            // RDM
+  > >    bool ico_af: 1;             // AF
+  > >    bool ico_pty: 1;            // PTY
+  > >    bool ico_ta: 1;             // TA
+  > >    bool ico_tp: 1;             // TP
+  > >    bool ico_autom: 1;          // AUTO-M
+  > >    bool char_s1: 1;            // Символ ":" между 3-м и 4-м символами
+  > >    bool char_s2: 1;            // Символ "‘" между 11-м и 12-м символами
+  > >    bool char_s3: 1;            // Символ "." между 11-м и 12-м символами
+  > >    bool char_s4: 1;            // Символ "." между 10-м и 11-м символами
+  > >    bool btn_change: 1;         // Изменения при нажатии кнопок или вращающихся регуляторов
+  > >    bool btn_info: 1;           // кнопка Info
+  > >    bool btn_clock: 1;          // кнопка Clock
+  > >    bool btn_clock_m: 1;        // кнопка M (в режиме установки времени)
+  > >    bool btn_clock_h: 1;        // кнопка H (в режиме установки времени)
+  > >    bool btn_clock_rm: 1;       // сброс минут в 0
+  > >    bool flg_clock_24: 1;       // true = 24 ч., false = 12 ч. формат времени (в режиме установки времени)
+  > >    bool nop: 2;
+  > >    char buffer[12];            // буфер строки для отображения на LCD
   > >}
   > >```
 
@@ -979,29 +994,29 @@ struct {
   > >```c++
   > >struct
   > >{
-  > >   uint8_t chip_cores;             // количество ядер
-  > >   char chip_model[16];            // модель чипа
-  > >   uint8_t chip_revision;          // номер ревизии чипа
-  > >   uint32_t cpu_freq_mhz;          // частота ЦП, МГц
-  > >   uint32_t cycle_count;           // количество циклов
-  > >   uint64_t efuse_mac;             // MAC-адрес
-  > >   uint8_t flash_chip_mode;        // режим флеш-памяти
-  > >   uint32_t flash_chip_size;       // размер флеш-памяти, байт
-  > >   uint32_t flash_chip_speed;      // частота флеш-памяти
-  > >   uint32_t free_heap;             // свободной кучи в памяти
-  > >   uint32_t free_psram;            // свободной SPI RAM
-  > >   uint32_t free_sketch_space;     // свободное место для прошивки
-  > >   uint32_t heap_size;             // размер кучи в памяти
-  > >   uint32_t max_alloc_heap;        // размер самого большого блока кучи
-  > >   uint32_t max_alloc_psram;       // размер самого большого блока SPI RAM
-  > >   uint32_t min_free_heap;         // наименьший уровень свободной кучи
-  > >   uint32_t min_free_psram;        // наименьший уровень свободной SPI RAM
-  > >   uint32_t psram_size;            // размер SPI RAM
-  > >   char sdk_version[8];            // версия SDK
-  > >   char sketch_md5[16];            // MD5 прошивки
-  > >   uint32_t sketch_size;           // размер прошивки
-  > >   uint32_t temperature_chip;      // температура чипа (n/100)
-  > >   uint8_t sha[32];                // Хеш устройства
+  > >       uint8_t chip_cores;             // количество ядер
+  > >       char chip_model[16];            // модель чипа
+  > >       uint8_t chip_revision;          // номер ревизии чипа
+  > >       uint32_t cpu_freq_mhz;          // частота ЦП, МГц
+  > >       uint32_t cycle_count;           // количество циклов
+  > >       uint64_t efuse_mac;             // MAC-адрес
+  > >       uint8_t flash_chip_mode;        // режим флеш-памяти
+  > >       uint32_t flash_chip_size;       // размер флеш-памяти, байт
+  > >       uint32_t flash_chip_speed;      // частота флеш-памяти
+  > >       uint32_t free_heap;             // свободной кучи в памяти
+  > >       uint32_t free_psram;            // свободной SPI RAM
+  > >       uint32_t free_sketch_space;     // свободное место для прошивки
+  > >       uint32_t heap_size;             // размер кучи в памяти
+  > >       uint32_t max_alloc_heap;        // размер самого большого блока кучи
+  > >       uint32_t max_alloc_psram;       // размер самого большого блока SPI RAM
+  > >       uint32_t min_free_heap;         // наименьший уровень свободной кучи
+  > >       uint32_t min_free_psram;        // наименьший уровень свободной SPI RAM
+  > >       uint32_t psram_size;            // размер SPI RAM
+  > >       char sdk_version[8];            // версия SDK
+  > >       char sketch_md5[16];            // MD5 прошивки
+  > >       uint32_t sketch_size;           // размер прошивки
+  > >       uint32_t temperature_chip;      // температура чипа (n/100)
+  > >       uint8_t sha[32];                // хеш устройства
   > >}
   > >```
 
