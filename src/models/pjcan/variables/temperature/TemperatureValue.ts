@@ -4,7 +4,7 @@ import { StructTemperatureValue } from "./StructTemperatureValue";
 import { ITemperatureValue } from "./ITemperatureValue";
 
 export const API_EXEC_VARIABLE_TEMPERATURE = 180;
-export const API_SIZE_VARIABLE_TEMPERATURE = 8;
+export const API_SIZE_VARIABLE_TEMPERATURE = 4;
 
 const struct = new BluetoothStruct(StructTemperatureValue);
 

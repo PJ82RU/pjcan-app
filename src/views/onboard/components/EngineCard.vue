@@ -129,9 +129,9 @@ export default {
 				enabled.value = res.enabled;
 				rpm.value = res.rpm.toFixed();
 				countRPM.value = (res.totalCountRPM / 1000).toFixed();
-				load.value = res.load;
+				load.value = res.load / 1000;
 				motors.value = res.totalSeconds;
-				throttle.value = res.throttle;
+				throttle.value = res.throttle / 100;
 				coolant.value = res.coolant;
 			}
 		};
@@ -160,7 +160,7 @@ export default {
 		// МЕНЮ ОТОБРАЖЕНИЯ
 
 		const menu = computed((): IMenuItem[] => [
-			{ id: 7, title: t("onboard.engine.settings.menu") },
+			{ id: 10, title: t("onboard.engine.settings.menu") },
 			{ id: 0, title: t("onboard.engine.enabled.menu") },
 			{ id: 1, title: t("onboard.engine.RPM.menu") },
 			{ id: 2, title: t("onboard.engine.countRPM.menu") },
@@ -180,7 +180,7 @@ export default {
 		 */
 		const onMenuClick = (item: IMenuItem): void =>
 		{
-			if (item.id < 7)
+			if (item.id < 10)
 			{
 				menuVisible.value = true;
 				menuSelected.value = item;

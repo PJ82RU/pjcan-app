@@ -81,9 +81,9 @@ export default {
 			isLoadedValue.value = res.isData;
 			if (res.isData)
 			{
-				speed.value = res.speed.toFixed(2);
-				speedAVG.value = res.speedAVG.toString();
-				restWay.value = res.restWay.toFixed(2);
+				speed.value = (res.speed / 100).toFixed(2);
+				speedAVG.value = res.speedAVG.toFixed(0);
+				restWay.value = (res.restWay / 100).toFixed(2);
 			}
 		};
 

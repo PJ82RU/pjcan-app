@@ -51,6 +51,8 @@
 		:disabled="!isLoadedView"
 		@click:apply="onViewSettingApply"
 	/>
+
+	<fuel-config-dialog v-model="settingsVisible" />
 </template>
 
 <script lang="ts">
@@ -60,6 +62,7 @@ import { useI18n } from "vue-i18n";
 import Card from "@/components/cards/Card.vue";
 import InputCardItem from "@/components/cards/InputCardItem.vue";
 import ViewSettingDialog from "./ViewSettingDialog.vue";
+import FuelConfigDialog from "./FuelConfigDialog.vue";
 import { IMenuItem } from "@/components/MenuDots.vue";
 
 import canbus, { API_EVENT_VARIABLE_FUEL, API_EVENT_VARIABLE_FUEL_VIEW } from "@/api/canbus";
@@ -69,7 +72,7 @@ import { API_EXEC_VARIABLE_FUEL_VIEW, IFuelValue, IFuelView } from "@/models/pjc
 
 export default {
 	name: "FuelCard",
-	components: { Card, InputCardItem, ViewSettingDialog },
+	components: { Card, InputCardItem, ViewSettingDialog, FuelConfigDialog },
 	setup()
 	{
 		const { t } = useI18n();
@@ -88,10 +91,10 @@ export default {
 			isLoadedValue.value = res.isData;
 			if (res.isData)
 			{
-				current.value = res.current.toFixed(1);
-				avg.value = res.avg.toFixed(1);
-				// total.value = res.total.toFixed(2);
-				consumption.value = res.consumption.toFixed(2);
+				current.value = (res.current / 10).toFixed(1);
+				avg.value = (res.avg / 10).toFixed(1);
+				// total.value = (res.total / 100).toFixed(2);
+				consumption.value = (res.consumption / 100).toFixed(2);
 			}
 		};
 
@@ -119,6 +122,7 @@ export default {
 		// МЕНЮ ОТОБРАЖЕНИЯ
 
 		const menu = computed((): IMenuItem[] => [
+			{ id: 10, title: t("onboard.fuel.settings.menu") },
 			{ id: 0, title: t("onboard.fuel.current.menu") },
 			{ id: 1, title: t("onboard.fuel.avg.menu") },
 			// { id: 2, title: t("onboard.fuel.total.menu") },
@@ -127,6 +131,7 @@ export default {
 		const menuVisible = ref(false);
 		const menuSelected = ref({} as IMenuItem);
 		const menuViewConfig = ref({} as IViewConfig);
+		const settingsVisible = ref(false);
 
 		/**
 		 * Выбор пункта меню отображения на информационном экране
@@ -134,27 +139,34 @@ export default {
 		 */
 		const onMenuClick = (item: IMenuItem): void =>
 		{
-			menuVisible.value = true;
-			menuSelected.value = item;
-
-			const { fuel } = canbus.views.variable;
-			switch (item.id)
+			if (item.id < 10)
 			{
-				case 0:
-					menuViewConfig.value = fuel.current;
-					return;
+				menuVisible.value = true;
+				menuSelected.value = item;
 
-				case 1:
-					menuViewConfig.value = fuel.avg;
-					break;
+				const { fuel } = canbus.views.variable;
+				switch (item.id)
+				{
+					case 0:
+						menuViewConfig.value = fuel.current;
+						return;
 
-					// case 2:
-					// 	menuViewConfig.value = fuel.total;
-					// 	break;
+					case 1:
+						menuViewConfig.value = fuel.avg;
+						break;
 
-				case 3:
-					menuViewConfig.value = fuel.consumption;
-					break;
+						// case 2:
+						// 	menuViewConfig.value = fuel.total;
+						// 	break;
+
+					case 3:
+						menuViewConfig.value = fuel.consumption;
+						break;
+				}
+			}
+			else
+			{
+				settingsVisible.value = true;
 			}
 		};
 
@@ -197,6 +209,7 @@ export default {
 			menuVisible,
 			menuSelected,
 			menuViewConfig,
+			settingsVisible,
 			onMenuClick,
 			onViewSettingApply
 		};

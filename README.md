@@ -307,7 +307,7 @@ CANBUS project for Mazda 3
   > >```c++
   > >struct
   > >{
-  > >        float ratio;        // коэффициент расхода топлива
+  > >        uint16_t ratio;        // коэффициент расхода топлива (n/1000)
   > >}
   > >```
 
@@ -721,7 +721,7 @@ struct {
   > >        uint8_t air_type;               // вентиляция салона
   > >        uint8_t temp_type;              // измерение температуры (градусы Цельсия или Фаренгейта)
   > >        uint8_t temp_display;           // отображение температуры
-  > >        float temperature;              // температура
+  > >        uint16_t temperature;           // температура (n/10)
   > >}
   > >```
   > >**Тип вентиляции салона** `air_type`:
@@ -814,9 +814,9 @@ struct {
   > >        uint32_t mseconds;              // время работы двигателя с момента его запуска, мс
   > >        uint32_t total_seconds;         // счетчик моточасов, сек.
   > >        uint32_t total_count_rpm;       // счетчик коленчатого вала (RPM)
-  > >        float count_rpm;                // счетчик RPM с момента запуска двигателя
-  > >        float load;                     // нагрузка на ДВС, %
-  > >        float throttle;                 // положение дроссельной заслонки, %
+  > >        uint16_t count_rpm;             // счетчик RPM с момента запуска двигателя (n/100)
+  > >        uint16_t load;                  // нагрузка на ДВС, % (n/1000)
+  > >        uint16_t throttle;              // положение дроссельной заслонки, % (n/100)
   > >}
   > >```
 
@@ -840,10 +840,10 @@ struct {
   > >```c++
   > >struct
   > >{
-  > >        float consumption;      // текущий расход топлива, л/ч (экспериментальное значение)
-  > >        float current;          // текущий расход топлива, л/100 км
-  > >        float avg;              // средний расход топлива, л/100 км
-  > >        float total;            // текущее количество топлива, л (экспериментальное значение)
+  > >        uint32_t consumption;      // текущий расход топлива, л/ч (экспериментальное значение) (n/100)
+  > >        uint16_t current;          // текущий расход топлива, л/100 км (n/10)
+  > >        uint16_t avg;              // средний расход топлива, л/100 км (n/10)
+  > >        uint32_t total;            // текущее количество топлива, л (экспериментальное значение) (n/100)
   > >}
   > >```
 
@@ -867,9 +867,9 @@ struct {
   > >```c++
   > >struct
   > >{
-  > >         float speed;            // скорость автомобиля, км/ч
-  > >         float speed_avg;        // средняя скорость, км/ч
-  > >         float rest_way;         // остаток пути, км
+  > >         uint32_t speed;         // скорость автомобиля, км/ч (n/100)
+  > >         uint16_t speed_avg;     // средняя скорость, км/ч
+  > >         uint32_t rest_way;      // остаток пути, км (n/100)
   > >}
   > >```
 
@@ -932,8 +932,8 @@ struct {
   > >```c++
   > >struct
   > >{
-  > >         float in;       // температура в салоне (показывает температуру окружающего среды, хз почему так)
-  > >         float out;      // температура окружающего среды
+  > >         uint16_t in;    // температура в салоне (показывает температуру окружающего среды, хз почему так) (n/10)
+  > >         uint16_t out;   // температура окружающего среды (n/10)
   > >}
   > >```
 
@@ -979,28 +979,29 @@ struct {
   > >```c++
   > >struct
   > >{
-  > >        uint8_t chip_cores;             // количество ядер
-  > >        char chip_model[16];            // модель чипа
-  > >        uint8_t chip_revision;          // номер ревизии чипа
-  > >        uint32_t cpu_freq_mhz;          // частота ЦП, МГц
-  > >        uint32_t cycle_count;           // количество циклов
-  > >        uint64_t efuse_mac;             // MAC-адрес
-  > >        uint8_t flash_chip_mode;        // режим флеш-памяти
-  > >        uint32_t flash_chip_size;       // размер флеш-памяти, байт
-  > >        uint32_t flash_chip_speed;      // частота флеш-памяти
-  > >        uint32_t free_heap;             // свободной кучи в памяти
-  > >        uint32_t free_psram;            // свободной SPI RAM
-  > >        uint32_t free_sketch_space;     // свободное место для прошивки
-  > >        uint32_t heap_size;             // размер кучи в памяти
-  > >        uint32_t max_alloc_heap;        // размер самого большого блока кучи
-  > >        uint32_t max_alloc_psram;       // размер самого большого блока SPI RAM
-  > >        uint32_t min_free_heap;         // наименьший уровень свободной кучи
-  > >        uint32_t min_free_psram;        // наименьший уровень свободной SPI RAM
-  > >        uint32_t psram_size;            // размер SPI RAM
-  > >        char sdk_version[8];            // версия SDK
-  > >        char sketch_md5[16];            // MD5 прошивки
-  > >        uint32_t sketch_size;           // размер прошивки
-  > >        float temperature_chip;         // температура чипа
+  > >   uint8_t chip_cores;             // количество ядер
+  > >   char chip_model[16];            // модель чипа
+  > >   uint8_t chip_revision;          // номер ревизии чипа
+  > >   uint32_t cpu_freq_mhz;          // частота ЦП, МГц
+  > >   uint32_t cycle_count;           // количество циклов
+  > >   uint64_t efuse_mac;             // MAC-адрес
+  > >   uint8_t flash_chip_mode;        // режим флеш-памяти
+  > >   uint32_t flash_chip_size;       // размер флеш-памяти, байт
+  > >   uint32_t flash_chip_speed;      // частота флеш-памяти
+  > >   uint32_t free_heap;             // свободной кучи в памяти
+  > >   uint32_t free_psram;            // свободной SPI RAM
+  > >   uint32_t free_sketch_space;     // свободное место для прошивки
+  > >   uint32_t heap_size;             // размер кучи в памяти
+  > >   uint32_t max_alloc_heap;        // размер самого большого блока кучи
+  > >   uint32_t max_alloc_psram;       // размер самого большого блока SPI RAM
+  > >   uint32_t min_free_heap;         // наименьший уровень свободной кучи
+  > >   uint32_t min_free_psram;        // наименьший уровень свободной SPI RAM
+  > >   uint32_t psram_size;            // размер SPI RAM
+  > >   char sdk_version[8];            // версия SDK
+  > >   char sketch_md5[16];            // MD5 прошивки
+  > >   uint32_t sketch_size;           // размер прошивки
+  > >   uint32_t temperature_chip;      // температура чипа (n/100)
+  > >   uint8_t sha[32];                // Хеш устройства
   > >}
   > >```
 

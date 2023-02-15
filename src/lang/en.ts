@@ -99,13 +99,8 @@ export default {
 
 	deviceInfo: {
 		title: "Technical information",
-		chipCores: "Chip cores",
-		chipRevision: "Chip revision",
 		cpuFreqMHz: "CPU freq MHz",
 		efuseMac: "Efuse MAC",
-		flashChipMode: "Flash chip mode",
-		flashChipSize: "Flash chip size",
-		flashChipSpeed: "Flash chip speed",
 		freeSketchSpace: "Free sketch space",
 		sdkVersion: "SDK version",
 		sketchMD5: "Sketch MD5",
@@ -264,6 +259,14 @@ export default {
 				title: "Fuel consumption",
 				description: "Experimental value (calculated), l/h",
 				menu: "LCD: Fuel consumption"
+			},
+			settings: {
+				title: "Fuel consumption settings",
+				menu: "Consumption settings",
+				ratio: {
+					title: "Fuel consumption coefficient",
+					description: "To configure the gas flow rate or other type of fuel"
+				}
 			}
 		},
 

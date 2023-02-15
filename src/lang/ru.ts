@@ -100,15 +100,15 @@ export default {
 
 	deviceInfo: {
 		title: "Техническая информация",
-		chipCores: "Количество ядер",
+		// chipCores: "Количество ядер",
 		// chipModel: "Модель чипа",
-		chipRevision: "Номер ревизии чипа",
+		// chipRevision: "Номер ревизии чипа",
 		cpuFreqMHz: "Частота ЦП, МГц",
 		// cycleCount: "Количество циклов",
 		efuseMac: "MAC-адрес",
-		flashChipMode: "Режим флеш-памяти",
-		flashChipSize: "Размер флеш-памяти, байт",
-		flashChipSpeed: "Частота флеш-памяти",
+		// flashChipMode: "Режим флеш-памяти",
+		// flashChipSize: "Размер флеш-памяти, байт",
+		// flashChipSpeed: "Частота флеш-памяти",
 		// heapSize: "Размер кучи в памяти",
 		// freeHeap: "Свободной кучи в памяти",
 		// maxAllocHeap: "Размер самого большого блока кучи",
@@ -275,6 +275,14 @@ export default {
 				title: "Расход топлива",
 				description: "Экспериментальное значение (расчетное), л/ч",
 				menu: "LCD: Расход топлива"
+			},
+			settings: {
+				title: "Настройки расхода",
+				menu: "Настройки расхода",
+				ratio: {
+					title: "Коэффициент расхода топлива",
+					description: "Для корректировки расхода ГБО или др. вида топлива"
+				}
 			}
 		},
 

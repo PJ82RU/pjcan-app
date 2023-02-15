@@ -69,17 +69,17 @@ export default {
 		const isLoadedValue = ref(false);
 		const modelDeviceInfo = ref({
 			temperatureChip: "",
-			chipCores: "",
-			chipRevision: "",
+			// chipCores: "",
+			// chipRevision: "",
 			cpuFreqMHz: "",
-			efuseMac: "",
-			flashChipMode: "",
-			flashChipSize: "",
-			flashChipSpeed: "",
+			sketchSize: "",
 			freeSketchSpace: "",
 			sdkVersion: "",
+			efuseMac: "",
+			// flashChipMode: "",
+			// flashChipSize: "",
+			// flashChipSpeed: "",
 			sketchMD5: "",
-			sketchSize: "",
 			sha: ""
 		});
 
@@ -90,19 +90,19 @@ export default {
 			if (res.isData)
 			{
 				const { value } = modelDeviceInfo;
-				value.chipCores = canbus.deviceInfo.chipCores.toString();
-				value.chipRevision = canbus.deviceInfo.chipRevision.toString();
+				// value.chipCores = canbus.deviceInfo.chipCores.toString();
+				// value.chipRevision = canbus.deviceInfo.chipRevision.toString();
 				value.cpuFreqMHz = canbus.deviceInfo.cpuFreqMHz.toString();
 				const mac: string = canbus.deviceInfo.efuseMac.toString(16).toUpperCase();
 				value.efuseMac = mac.length % 2 > 0 ? "0" + mac : mac;
-				value.flashChipMode = canbus.deviceInfo.flashChipMode.toString();
-				value.flashChipSize = canbus.deviceInfo.flashChipSize.toString();
-				value.flashChipSpeed = canbus.deviceInfo.flashChipSpeed.toString();
+				// value.flashChipMode = canbus.deviceInfo.flashChipMode.toString();
+				// value.flashChipSize = canbus.deviceInfo.flashChipSize.toString();
+				// value.flashChipSpeed = canbus.deviceInfo.flashChipSpeed.toString();
 				value.freeSketchSpace = canbus.deviceInfo.freeSketchSpace.toString();
 				value.sdkVersion = canbus.deviceInfo.sdkVersion;
 				value.sketchMD5 = canbus.deviceInfo.sketchMD5;
 				value.sketchSize = canbus.deviceInfo.sketchSize.toString();
-				value.temperatureChip = canbus.deviceInfo.temperatureChip.toFixed(2) + "°C";
+				value.temperatureChip = (canbus.deviceInfo.temperatureChip / 100).toFixed(2) + "°C";
 				value.sha = canbus.sha ?? "";
 			}
 		};

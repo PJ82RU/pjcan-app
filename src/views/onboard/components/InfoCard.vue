@@ -198,7 +198,7 @@ export default {
 			isLoadedTemperatureValue.value = res.isData;
 			if (res.isData)
 			{
-				temperature.value = res.out;
+				temperature.value = res.out / 10;
 			}
 		};
 		/**

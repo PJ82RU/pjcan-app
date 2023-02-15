@@ -2,8 +2,8 @@ import { BluetoothStruct } from "@/components/bluetooth";
 
 /** Структура данных */
 export const StructFuelValue = {
-	consumption: BluetoothStruct.float32(),
-	current: BluetoothStruct.float32(),
-	avg: BluetoothStruct.float32(),
-	total: BluetoothStruct.float32()
+	consumption: BluetoothStruct.uint32(),
+	current: BluetoothStruct.uint16(),
+	avg: BluetoothStruct.uint16(),
+	total: BluetoothStruct.uint32()
 };

@@ -13,5 +13,5 @@ export const StructClimateValue = {
 	airType: BluetoothStruct.uint8(),
 	tempType: BluetoothStruct.uint8(),
 	tempDisplay: BluetoothStruct.uint8(),
-	temperature: BluetoothStruct.float32()
+	temperature: BluetoothStruct.uint16()
 };

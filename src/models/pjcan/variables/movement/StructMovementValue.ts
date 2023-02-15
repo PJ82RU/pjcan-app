@@ -2,7 +2,7 @@ import { BluetoothStruct } from "@/components/bluetooth";
 
 /** Структура данных */
 export const StructMovementValue = {
-	speed: BluetoothStruct.float32(),
-	speedAVG: BluetoothStruct.float32(),
-	restWay: BluetoothStruct.float32()
+	speed: BluetoothStruct.uint32(),
+	speedAVG: BluetoothStruct.uint16(),
+	restWay: BluetoothStruct.uint32()
 };

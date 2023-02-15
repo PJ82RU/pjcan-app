@@ -4,7 +4,7 @@ import { StructFuelValue } from "./StructFuelValue";
 import { IFuelValue } from "./IFuelValue";
 
 export const API_EXEC_VARIABLE_FUEL = 150;
-export const API_SIZE_VARIABLE_FUEL = 16;
+export const API_SIZE_VARIABLE_FUEL = 12;
 
 const struct = new BluetoothStruct(StructFuelValue);
 

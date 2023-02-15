@@ -8,7 +8,7 @@ export const StructEngineValue = {
 	mseconds: BluetoothStruct.uint32(),
 	totalSeconds: BluetoothStruct.uint32(),
 	totalCountRPM: BluetoothStruct.uint32(),
-	countRPM: BluetoothStruct.float32(),
-	load: BluetoothStruct.float32(),
-	throttle: BluetoothStruct.float32()
+	countRPM: BluetoothStruct.uint16(),
+	load: BluetoothStruct.uint16(),
+	throttle: BluetoothStruct.uint16()
 };

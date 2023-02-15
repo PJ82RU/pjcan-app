@@ -124,7 +124,7 @@ export default {
 				enabled.value = res.enabled;
 				autoMode.value = res.automode;
 				ac.value = res.ac;
-				temperature.value = res.temperature;
+				temperature.value = res.temperature / 10;
 				airEnabled.value = res.airType !== TAir.AIR_NONE;
 				airName.value = res.airType === TAir.AIR_STREET ? "air-fresh" : "air-cabin";
 				blowEnabled.value = res.airDBody || res.airDLegs;
