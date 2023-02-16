@@ -25,13 +25,16 @@
 
 		<template #btns>
 			<v-btn color="secondary" @click="onReset">
-				{{ $t("btn.reset") }}
+				<v-icon v-if="$vuetify.display.xs">mdi-restart</v-icon>
+				<span v-else> {{ $t("btn.reset") }} </span>
 			</v-btn>
 			<v-btn color="primary" @click="onApply">
-				{{ $t("btn.apply") }}
+				<v-icon v-if="$vuetify.display.xs">mdi-check</v-icon>
+				<span v-else> {{ $t("btn.apply") }} </span>
 			</v-btn>
 			<v-btn color="primary" @click="visible = false">
-				{{ $t("btn.cancel") }}
+				<v-icon v-if="$vuetify.display.xs">mdi-close</v-icon>
+				<span v-else> {{ $t("btn.cancel") }} </span>
 			</v-btn>
 		</template>
 	</dialog-template>

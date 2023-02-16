@@ -33,7 +33,7 @@
 			</v-card-text>
 
 			<v-card-actions v-if="actions" class="justify-end align-end">
-				<v-btn-group class="border-dialog-btns">
+				<v-btn-group class="border-dialog-btns dialog__btns">
 					<slot name="btns" />
 				</v-btn-group>
 			</v-card-actions>
@@ -115,6 +115,12 @@ export default {
 	&__icon {
 		::v-deep(.v-icon) {
 			margin-bottom: 4px;
+		}
+	}
+
+	&__btns {
+		::v-deep(.v-icon) {
+			font-size: 2rem !important;
 		}
 	}
 }
