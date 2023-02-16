@@ -1,5 +1,5 @@
 "use strict";
-(self["webpackChunkpjcan"] = self["webpackChunkpjcan"] || []).push([[634],{
+(self["webpackChunkpjcan"] = self["webpackChunkpjcan"] || []).push([[859],{
 
 /***/ 7637:
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
@@ -15021,7 +15021,7 @@ const __exports__ = /*#__PURE__*/(0,exportHelper/* default */.Z)(ViewSettingDial
 
 /***/ }),
 
-/***/ 2634:
+/***/ 6859:
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 // ESM COMPAT FLAG
@@ -15069,9 +15069,9 @@ var flicking_esm = __webpack_require__(7637);
 var VRow = __webpack_require__(6824);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/components/VGrid/VCol.mjs
 var VCol = __webpack_require__(8521);
-;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/onboard/components/InfoCard.vue?vue&type=template&id=2fcd373d&ts=true
+;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/onboard/components/InfoCard.vue?vue&type=template&id=18323cc9&ts=true
 
-function InfoCardvue_type_template_id_2fcd373d_ts_true_render(_ctx, _cache, $props, $setup, $data, $options) {
+function InfoCardvue_type_template_id_18323cc9_ts_true_render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_icon_card_item = (0,runtime_core_esm_bundler/* resolveComponent */.up)("icon-card-item");
                                                       
   const _component_input_card_item = (0,runtime_core_esm_bundler/* resolveComponent */.up)("input-card-item");
@@ -15445,7 +15445,7 @@ var variables_temperature = __webpack_require__(1044);
     const onReceiveTemperatureValue = res => {
       isLoadedTemperatureValue.value = res.isData;
       if (res.isData) {
-        temperature.value = res.out;
+        temperature.value = res.out / 10;
       }
     };
     /**
@@ -15589,12 +15589,12 @@ var variables_temperature = __webpack_require__(1044);
 
 
 ;
-const InfoCard_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(InfoCardvue_type_script_lang_ts, [['render',InfoCardvue_type_template_id_2fcd373d_ts_true_render]])
+const InfoCard_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(InfoCardvue_type_script_lang_ts, [['render',InfoCardvue_type_template_id_18323cc9_ts_true_render]])
 
 /* harmony default export */ var InfoCard = (InfoCard_exports_);
-;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/onboard/components/EngineCard.vue?vue&type=template&id=8e72b2a6&ts=true
+;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/onboard/components/EngineCard.vue?vue&type=template&id=f8f6d52e&ts=true
 
-function EngineCardvue_type_template_id_8e72b2a6_ts_true_render(_ctx, _cache, $props, $setup, $data, $options) {
+function EngineCardvue_type_template_id_f8f6d52e_ts_true_render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_icon_card_item = (0,runtime_core_esm_bundler/* resolveComponent */.up)("icon-card-item");
                                                       
   const _component_input_card_item = (0,runtime_core_esm_bundler/* resolveComponent */.up)("input-card-item");
@@ -16037,9 +16037,9 @@ const EngineConfigDialog_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)
         enabled.value = res.enabled;
         rpm.value = res.rpm.toFixed();
         countRPM.value = (res.totalCountRPM / 1000).toFixed();
-        load.value = res.load;
+        load.value = res.load / 1000;
         motors.value = res.totalSeconds;
-        throttle.value = res.throttle;
+        throttle.value = res.throttle / 100;
         coolant.value = res.coolant;
       }
     };
@@ -16061,7 +16061,7 @@ const EngineConfigDialog_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)
     });
     // МЕНЮ ОТОБРАЖЕНИЯ
     const menu = (0,runtime_core_esm_bundler/* computed */.Fl)(() => [{
-      id: 7,
+      id: 10,
       title: t("onboard.engine.settings.menu")
     }, {
       id: 0,
@@ -16094,7 +16094,7 @@ const EngineConfigDialog_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)
      * @param {IMenuItem} item Элемент меню
      */
     const onMenuClick = item => {
-      if (item.id < 7) {
+      if (item.id < 10) {
         menuVisible.value = true;
         menuSelected.value = item;
         const {
@@ -16188,17 +16188,18 @@ const EngineConfigDialog_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)
 
 
 ;
-const EngineCard_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(EngineCardvue_type_script_lang_ts, [['render',EngineCardvue_type_template_id_8e72b2a6_ts_true_render]])
+const EngineCard_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(EngineCardvue_type_script_lang_ts, [['render',EngineCardvue_type_template_id_f8f6d52e_ts_true_render]])
 
 /* harmony default export */ var EngineCard = (EngineCard_exports_);
-;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/onboard/components/FuelCard.vue?vue&type=template&id=1c1cf447&ts=true
+;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/onboard/components/FuelCard.vue?vue&type=template&id=e21c595c&ts=true
 
-function FuelCardvue_type_template_id_1c1cf447_ts_true_render(_ctx, _cache, $props, $setup, $data, $options) {
+function FuelCardvue_type_template_id_e21c595c_ts_true_render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_input_card_item = (0,runtime_core_esm_bundler/* resolveComponent */.up)("input-card-item");
                                                       
                                                       
   const _component_card = (0,runtime_core_esm_bundler/* resolveComponent */.up)("card");
   const _component_view_setting_dialog = (0,runtime_core_esm_bundler/* resolveComponent */.up)("view-setting-dialog");
+  const _component_fuel_config_dialog = (0,runtime_core_esm_bundler/* resolveComponent */.up)("fuel-config-dialog");
   return (0,runtime_core_esm_bundler/* openBlock */.wg)(), (0,runtime_core_esm_bundler/* createElementBlock */.iD)(runtime_core_esm_bundler/* Fragment */.HY, null, [(0,runtime_core_esm_bundler/* createVNode */.Wm)(_component_card, {
     class: "fuel-card",
     title: _ctx.$t('onboard.fuel.title'),
@@ -16255,16 +16256,159 @@ function FuelCardvue_type_template_id_1c1cf447_ts_true_render(_ctx, _cache, $pro
     time: $setup.menuViewConfig.time,
     disabled: !$setup.isLoadedView,
     "onClick:apply": $setup.onViewSettingApply
-  }, null, 8, ["modelValue", "title", "enabled", "type", "time", "disabled", "onClick:apply"])], 64);
+  }, null, 8, ["modelValue", "title", "enabled", "type", "time", "disabled", "onClick:apply"]), (0,runtime_core_esm_bundler/* createVNode */.Wm)(_component_fuel_config_dialog, {
+    modelValue: $setup.settingsVisible,
+    "onUpdate:modelValue": _cache[1] || (_cache[1] = $event => $setup.settingsVisible = $event)
+  }, null, 8, ["modelValue"])], 64);
 }
 
 /* Vuetify */
 
 
 
+;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/onboard/components/FuelConfigDialog.vue?vue&type=template&id=7f6f55fc&ts=true
+
+function FuelConfigDialogvue_type_template_id_7f6f55fc_ts_true_render(_ctx, _cache, $props, $setup, $data, $options) {
+  const _component_number_field = (0,runtime_core_esm_bundler/* resolveComponent */.up)("number-field");
+                                                      
+                                                      
+                                                      
+  const _component_dialog_template = (0,runtime_core_esm_bundler/* resolveComponent */.up)("dialog-template");
+  return (0,runtime_core_esm_bundler/* openBlock */.wg)(), (0,runtime_core_esm_bundler/* createBlock */.j4)(_component_dialog_template, {
+    "content-class": "device-reset",
+    modelValue: $setup.visible,
+    "onUpdate:modelValue": _cache[2] || (_cache[2] = $event => $setup.visible = $event),
+    title: _ctx.$t('onboard.fuel.settings.title'),
+    icon: "engine-statistic",
+    width: "500px",
+    text: "",
+    actions: ""
+  }, {
+    body: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VRow/* VRow */.o, {
+      class: "pb-2"
+    }, {
+      default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VCol/* VCol */.D, {
+        cols: "12",
+        class: "pb-0"
+      }, {
+        default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(_component_number_field, {
+          modelValue: $setup.ratio,
+          "onUpdate:modelValue": _cache[0] || (_cache[0] = $event => $setup.ratio = $event),
+          label: _ctx.$t('onboard.fuel.settings.ratio.title'),
+          hint: _ctx.$t('onboard.fuel.settings.ratio.description'),
+          min: 0,
+          max: 1,
+          disabled: !$setup.loaderConfigFuel
+        }, null, 8, ["modelValue", "label", "hint", "disabled"])]),
+        _: 1
+      })]),
+      _: 1
+    })]),
+    btns: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VBtn/* VBtn */.T, {
+      color: "secondary",
+      onClick: $setup.onReset
+    }, {
+      default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createTextVNode */.Uk)((0,shared_esm_bundler/* toDisplayString */.zw)(_ctx.$t("btn.reset")), 1)]),
+      _: 1
+    }, 8, ["onClick"]), (0,runtime_core_esm_bundler/* createVNode */.Wm)(VBtn/* VBtn */.T, {
+      color: "primary",
+      onClick: $setup.onApply
+    }, {
+      default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createTextVNode */.Uk)((0,shared_esm_bundler/* toDisplayString */.zw)(_ctx.$t("btn.apply")), 1)]),
+      _: 1
+    }, 8, ["onClick"]), (0,runtime_core_esm_bundler/* createVNode */.Wm)(VBtn/* VBtn */.T, {
+      color: "primary",
+      onClick: _cache[1] || (_cache[1] = $event => $setup.visible = false)
+    }, {
+      default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createTextVNode */.Uk)((0,shared_esm_bundler/* toDisplayString */.zw)(_ctx.$t("btn.cancel")), 1)]),
+      _: 1
+    })]),
+    _: 1
+  }, 8, ["modelValue", "title"]);
+}
+
+/* Vuetify */
+
+
+
+
 // EXTERNAL MODULE: ./src/models/pjcan/variables/fuel/index.ts + 6 modules
 var variables_fuel = __webpack_require__(4873);
+;// CONCATENATED MODULE: ./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/onboard/components/FuelConfigDialog.vue?vue&type=script&lang=ts
+
+
+
+
+
+
+/* harmony default export */ var FuelConfigDialogvue_type_script_lang_ts = ({
+  name: "FuelConfigDialog",
+  components: {
+    DialogTemplate: DialogTemplate/* default */.Z,
+    SwitchCardItem: SwitchCardItem/* default */.Z,
+    NumberField: NumberField/* default */.Z
+  },
+  props: {
+    modelValue: Boolean
+  },
+  emits: ["update:modelValue"],
+  setup(props, context) {
+    const {
+      modelValue
+    } = (0,reactivity_esm_bundler/* toRefs */.BK)(props);
+    const visible = (0,runtime_core_esm_bundler/* computed */.Fl)({
+      get: () => modelValue.value,
+      set: val => context.emit("update:modelValue", val)
+    });
+    const loaderConfigFuel = (0,reactivity_esm_bundler/* ref */.iH)(false);
+    const ratio = (0,reactivity_esm_bundler/* ref */.iH)(0);
+    const onReceiveConfigFuel = res => {
+      loaderConfigFuel.value = res.isData;
+      if (res.isData) {
+        ratio.value = res.ratio / 1000;
+      }
+    };
+    /** Сбросить */
+    const onReset = () => {
+      canbus/* default.configs.variable.fuel.ratio */.ZP.configs.variable.fuel.ratio = 1000;
+      canbus/* default.queryConfig */.ZP.queryConfig(variables_fuel/* API_EXEC_VARIABLE_FUEL_CONFIG */.q_);
+      visible.value = false;
+    };
+    /** Применить */
+    const onApply = () => {
+      canbus/* default.configs.variable.fuel.ratio */.ZP.configs.variable.fuel.ratio = ratio.value * 1000;
+      canbus/* default.queryConfig */.ZP.queryConfig(variables_fuel/* API_EXEC_VARIABLE_FUEL_CONFIG */.q_);
+      visible.value = false;
+    };
+    (0,runtime_core_esm_bundler/* onMounted */.bv)(() => {
+      canbus/* default.addListener */.ZP.addListener(canbus/* API_EVENT_VARIABLE_FUEL_CONFIG */.H3, onReceiveConfigFuel);
+      onReceiveConfigFuel(canbus/* default.configs.variable.fuel */.ZP.configs.variable.fuel);
+    });
+    (0,runtime_core_esm_bundler/* onUnmounted */.Ah)(() => {
+      canbus/* default.removeListener */.ZP.removeListener(canbus/* API_EVENT_VARIABLE_FUEL_CONFIG */.H3, onReceiveConfigFuel);
+    });
+    return {
+      visible,
+      loaderConfigFuel,
+      ratio,
+      onReset,
+      onApply
+    };
+  }
+});
+;// CONCATENATED MODULE: ./src/views/onboard/components/FuelConfigDialog.vue?vue&type=script&lang=ts
+ 
+;// CONCATENATED MODULE: ./src/views/onboard/components/FuelConfigDialog.vue
+
+
+
+
+;
+const FuelConfigDialog_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(FuelConfigDialogvue_type_script_lang_ts, [['render',FuelConfigDialogvue_type_template_id_7f6f55fc_ts_true_render]])
+
+/* harmony default export */ var FuelConfigDialog = (FuelConfigDialog_exports_);
 ;// CONCATENATED MODULE: ./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/onboard/components/FuelCard.vue?vue&type=script&lang=ts
+
 
 
 
@@ -16277,7 +16421,8 @@ var variables_fuel = __webpack_require__(4873);
   components: {
     Card: Card/* default */.Z,
     InputCardItem: InputCardItem/* default */.Z,
-    ViewSettingDialog: ViewSettingDialog/* default */.Z
+    ViewSettingDialog: ViewSettingDialog/* default */.Z,
+    FuelConfigDialog: FuelConfigDialog
   },
   setup() {
     const {
@@ -16293,10 +16438,10 @@ var variables_fuel = __webpack_require__(4873);
     const onReceiveValue = res => {
       isLoadedValue.value = res.isData;
       if (res.isData) {
-        current.value = res.current.toFixed(1);
-        avg.value = res.avg.toFixed(1);
-        // total.value = res.total.toFixed(2);
-        consumption.value = res.consumption.toFixed(2);
+        current.value = (res.current / 10).toFixed(1);
+        avg.value = (res.avg / 10).toFixed(1);
+        // total.value = (res.total / 100).toFixed(2);
+        consumption.value = (res.consumption / 100).toFixed(2);
       }
     };
     /** Входящие значения отображения расхода топлива */
@@ -16317,6 +16462,9 @@ var variables_fuel = __webpack_require__(4873);
     });
     // МЕНЮ ОТОБРАЖЕНИЯ
     const menu = (0,runtime_core_esm_bundler/* computed */.Fl)(() => [{
+      id: 10,
+      title: t("onboard.fuel.settings.menu")
+    }, {
       id: 0,
       title: t("onboard.fuel.current.menu")
     }, {
@@ -16331,29 +16479,34 @@ var variables_fuel = __webpack_require__(4873);
     const menuVisible = (0,reactivity_esm_bundler/* ref */.iH)(false);
     const menuSelected = (0,reactivity_esm_bundler/* ref */.iH)({});
     const menuViewConfig = (0,reactivity_esm_bundler/* ref */.iH)({});
+    const settingsVisible = (0,reactivity_esm_bundler/* ref */.iH)(false);
     /**
      * Выбор пункта меню отображения на информационном экране
      * @param {IMenuItem} item Элемент меню
      */
     const onMenuClick = item => {
-      menuVisible.value = true;
-      menuSelected.value = item;
-      const {
-        fuel
-      } = canbus/* default.views.variable */.ZP.views.variable;
-      switch (item.id) {
-        case 0:
-          menuViewConfig.value = fuel.current;
-          return;
-        case 1:
-          menuViewConfig.value = fuel.avg;
-          break;
-        // case 2:
-        // 	menuViewConfig.value = fuel.total;
-        // 	break;
-        case 3:
-          menuViewConfig.value = fuel.consumption;
-          break;
+      if (item.id < 10) {
+        menuVisible.value = true;
+        menuSelected.value = item;
+        const {
+          fuel
+        } = canbus/* default.views.variable */.ZP.views.variable;
+        switch (item.id) {
+          case 0:
+            menuViewConfig.value = fuel.current;
+            return;
+          case 1:
+            menuViewConfig.value = fuel.avg;
+            break;
+          // case 2:
+          // 	menuViewConfig.value = fuel.total;
+          // 	break;
+          case 3:
+            menuViewConfig.value = fuel.consumption;
+            break;
+        }
+      } else {
+        settingsVisible.value = true;
       }
     };
     /**
@@ -16391,6 +16544,7 @@ var variables_fuel = __webpack_require__(4873);
       menuVisible,
       menuSelected,
       menuViewConfig,
+      settingsVisible,
       onMenuClick,
       onViewSettingApply
     };
@@ -16404,12 +16558,12 @@ var variables_fuel = __webpack_require__(4873);
 
 
 ;
-const FuelCard_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(FuelCardvue_type_script_lang_ts, [['render',FuelCardvue_type_template_id_1c1cf447_ts_true_render]])
+const FuelCard_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(FuelCardvue_type_script_lang_ts, [['render',FuelCardvue_type_template_id_e21c595c_ts_true_render]])
 
 /* harmony default export */ var FuelCard = (FuelCard_exports_);
-;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/onboard/components/MovementCard.vue?vue&type=template&id=61482026&ts=true
+;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/onboard/components/MovementCard.vue?vue&type=template&id=493339aa&ts=true
 
-function MovementCardvue_type_template_id_61482026_ts_true_render(_ctx, _cache, $props, $setup, $data, $options) {
+function MovementCardvue_type_template_id_493339aa_ts_true_render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_input_card_item = (0,runtime_core_esm_bundler/* resolveComponent */.up)("input-card-item");
                                                       
                                                       
@@ -16510,9 +16664,9 @@ var variables_movement = __webpack_require__(8229);
     const onReceiveValue = res => {
       isLoadedValue.value = res.isData;
       if (res.isData) {
-        speed.value = res.speed.toFixed(2);
-        speedAVG.value = res.speedAVG.toString();
-        restWay.value = res.restWay.toFixed(2);
+        speed.value = (res.speed / 100).toFixed(2);
+        speedAVG.value = res.speedAVG.toFixed(0);
+        restWay.value = (res.restWay / 100).toFixed(2);
       }
     };
     /** Входящие значения отображения движения */
@@ -16613,7 +16767,7 @@ var variables_movement = __webpack_require__(8229);
 
 
 ;
-const MovementCard_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(MovementCardvue_type_script_lang_ts, [['render',MovementCardvue_type_template_id_61482026_ts_true_render]])
+const MovementCard_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(MovementCardvue_type_script_lang_ts, [['render',MovementCardvue_type_template_id_493339aa_ts_true_render]])
 
 /* harmony default export */ var MovementCard = (MovementCard_exports_);
 ;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/onboard/components/DoorsCard.vue?vue&type=template&id=4bd554a3&ts=true
@@ -17142,9 +17296,9 @@ var variables_volume = __webpack_require__(3057);
 const VolumeCard_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(VolumeCardvue_type_script_lang_ts, [['render',VolumeCardvue_type_template_id_2c51e124_ts_true_render]])
 
 /* harmony default export */ var VolumeCard = (VolumeCard_exports_);
-;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/onboard/components/ClimateCard.vue?vue&type=template&id=47cb1d1e&ts=true
+;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/onboard/components/ClimateCard.vue?vue&type=template&id=32c64a1d&ts=true
 
-function ClimateCardvue_type_template_id_47cb1d1e_ts_true_render(_ctx, _cache, $props, $setup, $data, $options) {
+function ClimateCardvue_type_template_id_32c64a1d_ts_true_render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_icon_card_item = (0,runtime_core_esm_bundler/* resolveComponent */.up)("icon-card-item");
                                                       
   const _component_switch_card_item = (0,runtime_core_esm_bundler/* resolveComponent */.up)("switch-card-item");
@@ -17302,7 +17456,7 @@ var climate = __webpack_require__(3910);
         enabled.value = res.enabled;
         autoMode.value = res.automode;
         ac.value = res.ac;
-        temperature.value = res.temperature;
+        temperature.value = res.temperature / 10;
         airEnabled.value = res.airType !== climate/* TAir.AIR_NONE */.T1.AIR_NONE;
         airName.value = res.airType === climate/* TAir.AIR_STREET */.T1.AIR_STREET ? "air-fresh" : "air-cabin";
         blowEnabled.value = res.airDBody || res.airDLegs;
@@ -17382,7 +17536,7 @@ var climate = __webpack_require__(3910);
 
 
 ;
-const ClimateCard_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(ClimateCardvue_type_script_lang_ts, [['render',ClimateCardvue_type_template_id_47cb1d1e_ts_true_render]])
+const ClimateCard_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(ClimateCardvue_type_script_lang_ts, [['render',ClimateCardvue_type_template_id_32c64a1d_ts_true_render]])
 
 /* harmony default export */ var ClimateCard = (ClimateCard_exports_);
 ;// CONCATENATED MODULE: ./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/onboard/index.vue?vue&type=script&lang=ts

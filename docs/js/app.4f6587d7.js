@@ -2584,6 +2584,7 @@ __webpack_require__.d(__webpack_exports__, {
   "LU": function() { return /* binding */ API_EVENT_VARIABLE_ENGINE_CONFIG; },
   "Sj": function() { return /* binding */ API_EVENT_VARIABLE_ENGINE_VIEW; },
   "ui": function() { return /* binding */ API_EVENT_VARIABLE_FUEL; },
+  "H3": function() { return /* binding */ API_EVENT_VARIABLE_FUEL_CONFIG; },
   "GU": function() { return /* binding */ API_EVENT_VARIABLE_FUEL_VIEW; },
   "dm": function() { return /* binding */ API_EVENT_VARIABLE_MOVEMENT; },
   "fJ": function() { return /* binding */ API_EVENT_VARIABLE_MOVEMENT_VIEW; },
@@ -2597,7 +2598,7 @@ __webpack_require__.d(__webpack_exports__, {
   "ZP": function() { return /* binding */ api_canbus; }
 });
 
-// UNUSED EXPORTS: API_EVENT_DEVICE_CONFIG, API_EVENT_LCD, API_EVENT_TEYES_TEXT, API_EVENT_UPDATE_BEGIN_GZ, API_EVENT_UPDATE_UPLOAD_GZ, API_EVENT_VALUES, API_EVENT_VARIABLE_BOSE, API_EVENT_VARIABLE_BOSE_VIEW, API_EVENT_VARIABLE_CONFIGS, API_EVENT_VARIABLE_FUEL_CONFIG, API_EVENT_VARIABLE_VALUES, API_EVENT_VARIABLE_VIEWS, API_EVENT_VIEWS, Canbus
+// UNUSED EXPORTS: API_EVENT_DEVICE_CONFIG, API_EVENT_LCD, API_EVENT_TEYES_TEXT, API_EVENT_UPDATE_BEGIN_GZ, API_EVENT_UPDATE_UPLOAD_GZ, API_EVENT_VALUES, API_EVENT_VARIABLE_BOSE, API_EVENT_VARIABLE_BOSE_VIEW, API_EVENT_VARIABLE_CONFIGS, API_EVENT_VARIABLE_VALUES, API_EVENT_VARIABLE_VIEWS, API_EVENT_VIEWS, Canbus
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/defineProperty.js
 var defineProperty = __webpack_require__(2482);
@@ -5647,7 +5648,7 @@ const StructDeviceInfo = {
   sdkVersion: bluetooth/* BluetoothStruct.char */.GD.char(8),
   sketchMD5: bluetooth/* BluetoothStruct.char */.GD.char(16),
   sketchSize: bluetooth/* BluetoothStruct.uint32 */.GD.uint32(),
-  temperatureChip: bluetooth/* BluetoothStruct.float32 */.GD.float32(),
+  temperatureChip: bluetooth/* BluetoothStruct.uint32 */.GD.uint32(),
   sha: bluetooth/* BluetoothStruct.uint8 */.GD.uint8(API_SIZE_DEVICE_SHA)
 };
 ;// CONCATENATED MODULE: ./src/models/pjcan/device/DeviceInfo.ts
@@ -7747,15 +7748,15 @@ var vue_i18n_esm_bundler = __webpack_require__(5658);
   },
   deviceInfo: {
     title: "Техническая информация",
-    chipCores: "Количество ядер",
+    // chipCores: "Количество ядер",
     // chipModel: "Модель чипа",
-    chipRevision: "Номер ревизии чипа",
+    // chipRevision: "Номер ревизии чипа",
     cpuFreqMHz: "Частота ЦП, МГц",
     // cycleCount: "Количество циклов",
     efuseMac: "MAC-адрес",
-    flashChipMode: "Режим флеш-памяти",
-    flashChipSize: "Размер флеш-памяти, байт",
-    flashChipSpeed: "Частота флеш-памяти",
+    // flashChipMode: "Режим флеш-памяти",
+    // flashChipSize: "Размер флеш-памяти, байт",
+    // flashChipSpeed: "Частота флеш-памяти",
     // heapSize: "Размер кучи в памяти",
     // freeHeap: "Свободной кучи в памяти",
     // maxAllocHeap: "Размер самого большого блока кучи",
@@ -7913,6 +7914,14 @@ var vue_i18n_esm_bundler = __webpack_require__(5658);
         title: "Расход топлива",
         description: "Экспериментальное значение (расчетное), л/ч",
         menu: "LCD: Расход топлива"
+      },
+      settings: {
+        title: "Настройки расхода",
+        menu: "Настройки расхода",
+        ratio: {
+          title: "Коэффициент расхода топлива",
+          description: "Для корректировки расхода ГБО или др. вида топлива"
+        }
       }
     },
     movement: {
@@ -8224,13 +8233,8 @@ var vue_i18n_esm_bundler = __webpack_require__(5658);
   },
   deviceInfo: {
     title: "Technical information",
-    chipCores: "Chip cores",
-    chipRevision: "Chip revision",
     cpuFreqMHz: "CPU freq MHz",
     efuseMac: "Efuse MAC",
-    flashChipMode: "Flash chip mode",
-    flashChipSize: "Flash chip size",
-    flashChipSpeed: "Flash chip speed",
     freeSketchSpace: "Free sketch space",
     sdkVersion: "SDK version",
     sketchMD5: "Sketch MD5",
@@ -8380,6 +8384,14 @@ var vue_i18n_esm_bundler = __webpack_require__(5658);
         title: "Fuel consumption",
         description: "Experimental value (calculated), l/h",
         menu: "LCD: Fuel consumption"
+      },
+      settings: {
+        title: "Fuel consumption settings",
+        menu: "Consumption settings",
+        ratio: {
+          title: "Fuel consumption coefficient",
+          description: "To configure the gas flow rate or other type of fuel"
+        }
       }
     },
     movement: {
@@ -8645,7 +8657,7 @@ const t = i18n.global.t;
 
 /***/ }),
 
-/***/ 3120:
+/***/ 2280:
 /***/ (function(__unused_webpack_module, __unused_webpack___webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -13399,9 +13411,9 @@ function AboutDialogvue_type_template_id_57729326_ts_true_render(_ctx, _cache, $
 
 
 
-;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/layout/components/DeviceInfoDialog.vue?vue&type=template&id=a0b792a2&ts=true
+;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/layout/components/DeviceInfoDialog.vue?vue&type=template&id=fd05ce3c&ts=true
 
-function DeviceInfoDialogvue_type_template_id_a0b792a2_ts_true_render(_ctx, _cache, $props, $setup, $data, $options) {
+function DeviceInfoDialogvue_type_template_id_fd05ce3c_ts_true_render(_ctx, _cache, $props, $setup, $data, $options) {
                                                                     
                                                       
                                                       
@@ -13687,17 +13699,17 @@ const DeviceResetDialog_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(
     const isLoadedValue = (0,reactivity_esm_bundler/* ref */.iH)(false);
     const modelDeviceInfo = (0,reactivity_esm_bundler/* ref */.iH)({
       temperatureChip: "",
-      chipCores: "",
-      chipRevision: "",
+      // chipCores: "",
+      // chipRevision: "",
       cpuFreqMHz: "",
-      efuseMac: "",
-      flashChipMode: "",
-      flashChipSize: "",
-      flashChipSpeed: "",
+      sketchSize: "",
       freeSketchSpace: "",
       sdkVersion: "",
+      efuseMac: "",
+      // flashChipMode: "",
+      // flashChipSize: "",
+      // flashChipSpeed: "",
       sketchMD5: "",
-      sketchSize: "",
       sha: ""
     });
     /** Входящие значения об устройстве */
@@ -13707,19 +13719,19 @@ const DeviceResetDialog_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(
         const {
           value
         } = modelDeviceInfo;
-        value.chipCores = canbus/* default.deviceInfo.chipCores.toString */.ZP.deviceInfo.chipCores.toString();
-        value.chipRevision = canbus/* default.deviceInfo.chipRevision.toString */.ZP.deviceInfo.chipRevision.toString();
+        // value.chipCores = canbus.deviceInfo.chipCores.toString();
+        // value.chipRevision = canbus.deviceInfo.chipRevision.toString();
         value.cpuFreqMHz = canbus/* default.deviceInfo.cpuFreqMHz.toString */.ZP.deviceInfo.cpuFreqMHz.toString();
         const mac = canbus/* default.deviceInfo.efuseMac.toString */.ZP.deviceInfo.efuseMac.toString(16).toUpperCase();
         value.efuseMac = mac.length % 2 > 0 ? "0" + mac : mac;
-        value.flashChipMode = canbus/* default.deviceInfo.flashChipMode.toString */.ZP.deviceInfo.flashChipMode.toString();
-        value.flashChipSize = canbus/* default.deviceInfo.flashChipSize.toString */.ZP.deviceInfo.flashChipSize.toString();
-        value.flashChipSpeed = canbus/* default.deviceInfo.flashChipSpeed.toString */.ZP.deviceInfo.flashChipSpeed.toString();
+        // value.flashChipMode = canbus.deviceInfo.flashChipMode.toString();
+        // value.flashChipSize = canbus.deviceInfo.flashChipSize.toString();
+        // value.flashChipSpeed = canbus.deviceInfo.flashChipSpeed.toString();
         value.freeSketchSpace = canbus/* default.deviceInfo.freeSketchSpace.toString */.ZP.deviceInfo.freeSketchSpace.toString();
         value.sdkVersion = canbus/* default.deviceInfo.sdkVersion */.ZP.deviceInfo.sdkVersion;
         value.sketchMD5 = canbus/* default.deviceInfo.sketchMD5 */.ZP.deviceInfo.sketchMD5;
         value.sketchSize = canbus/* default.deviceInfo.sketchSize.toString */.ZP.deviceInfo.sketchSize.toString();
-        value.temperatureChip = canbus/* default.deviceInfo.temperatureChip.toFixed */.ZP.deviceInfo.temperatureChip.toFixed(2) + "°C";
+        value.temperatureChip = (canbus/* default.deviceInfo.temperatureChip */.ZP.deviceInfo.temperatureChip / 100).toFixed(2) + "°C";
         value.sha = canbus/* default.sha */.ZP.sha ?? "";
       }
     };
@@ -13756,7 +13768,7 @@ const DeviceResetDialog_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(
 
 
 ;
-const DeviceInfoDialog_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(DeviceInfoDialogvue_type_script_lang_ts, [['render',DeviceInfoDialogvue_type_template_id_a0b792a2_ts_true_render]])
+const DeviceInfoDialog_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(DeviceInfoDialogvue_type_script_lang_ts, [['render',DeviceInfoDialogvue_type_template_id_fd05ce3c_ts_true_render]])
 
 /* harmony default export */ var DeviceInfoDialog = (DeviceInfoDialog_exports_);
 ;// CONCATENATED MODULE: ./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/layout/components/AboutDialog.vue?vue&type=script&lang=ts
@@ -23682,7 +23694,7 @@ const StructClimateValue = {
   airType: bluetooth/* BluetoothStruct.uint8 */.GD.uint8(),
   tempType: bluetooth/* BluetoothStruct.uint8 */.GD.uint8(),
   tempDisplay: bluetooth/* BluetoothStruct.uint8 */.GD.uint8(),
-  temperature: bluetooth/* BluetoothStruct.float32 */.GD.float32()
+  temperature: bluetooth/* BluetoothStruct.uint16 */.GD.uint16()
 };
 ;// CONCATENATED MODULE: ./src/models/pjcan/variables/climate/ClimateValue.ts
 
@@ -23690,7 +23702,7 @@ const StructClimateValue = {
 
 
 const API_EXEC_VARIABLE_CLIMATE = 120;
-const API_SIZE_VARIABLE_CLIMATE = 9;
+const API_SIZE_VARIABLE_CLIMATE = 7;
 const struct = new bluetooth/* BluetoothStruct */.GD(StructClimateValue);
 /** Модель значений климата */
 class ClimateValue extends BaseModel/* BaseModel */.g {
@@ -23961,9 +23973,9 @@ const StructEngineValue = {
   mseconds: bluetooth/* BluetoothStruct.uint32 */.GD.uint32(),
   totalSeconds: bluetooth/* BluetoothStruct.uint32 */.GD.uint32(),
   totalCountRPM: bluetooth/* BluetoothStruct.uint32 */.GD.uint32(),
-  countRPM: bluetooth/* BluetoothStruct.float32 */.GD.float32(),
-  load: bluetooth/* BluetoothStruct.float32 */.GD.float32(),
-  throttle: bluetooth/* BluetoothStruct.float32 */.GD.float32()
+  countRPM: bluetooth/* BluetoothStruct.uint16 */.GD.uint16(),
+  load: bluetooth/* BluetoothStruct.uint16 */.GD.uint16(),
+  throttle: bluetooth/* BluetoothStruct.uint16 */.GD.uint16()
 };
 ;// CONCATENATED MODULE: ./src/models/pjcan/variables/engine/EngineValue.ts
 
@@ -23971,7 +23983,7 @@ const StructEngineValue = {
 
 
 const API_EXEC_VARIABLE_ENGINE = 140;
-const API_SIZE_VARIABLE_ENGINE = 28;
+const API_SIZE_VARIABLE_ENGINE = 22;
 const EngineValue_struct = new bluetooth/* BluetoothStruct */.GD(StructEngineValue);
 /** Модель значений ДВС */
 class EngineValue extends BaseModel/* BaseModel */.g {
@@ -24090,7 +24102,7 @@ var BaseModel = __webpack_require__(9036);
 ;// CONCATENATED MODULE: ./src/models/pjcan/variables/fuel/StructFuelConfig.ts
 
 const StructFuelConfig = {
-  ratio: bluetooth/* BluetoothStruct.float32 */.GD.float32()
+  ratio: bluetooth/* BluetoothStruct.uint16 */.GD.uint16()
 };
 ;// CONCATENATED MODULE: ./src/models/pjcan/variables/fuel/FuelConfig.ts
 
@@ -24098,7 +24110,7 @@ const StructFuelConfig = {
 
 
 const API_EXEC_VARIABLE_FUEL_CONFIG = 151;
-const API_SIZE_VARIABLE_FUEL_CONFIG = 4;
+const API_SIZE_VARIABLE_FUEL_CONFIG = 2;
 const struct = new bluetooth/* BluetoothStruct */.GD(StructFuelConfig);
 /** Модель конфигурации расхода топлива */
 class FuelConfig extends BaseModel/* BaseModel */.g {
@@ -24123,10 +24135,10 @@ class FuelConfig extends BaseModel/* BaseModel */.g {
 
 /** Структура данных */
 const StructFuelValue = {
-  consumption: bluetooth/* BluetoothStruct.float32 */.GD.float32(),
-  current: bluetooth/* BluetoothStruct.float32 */.GD.float32(),
-  avg: bluetooth/* BluetoothStruct.float32 */.GD.float32(),
-  total: bluetooth/* BluetoothStruct.float32 */.GD.float32()
+  consumption: bluetooth/* BluetoothStruct.uint32 */.GD.uint32(),
+  current: bluetooth/* BluetoothStruct.uint16 */.GD.uint16(),
+  avg: bluetooth/* BluetoothStruct.uint16 */.GD.uint16(),
+  total: bluetooth/* BluetoothStruct.uint32 */.GD.uint32()
 };
 ;// CONCATENATED MODULE: ./src/models/pjcan/variables/fuel/FuelValue.ts
 
@@ -24134,7 +24146,7 @@ const StructFuelValue = {
 
 
 const API_EXEC_VARIABLE_FUEL = 150;
-const API_SIZE_VARIABLE_FUEL = 16;
+const API_SIZE_VARIABLE_FUEL = 12;
 const FuelValue_struct = new bluetooth/* BluetoothStruct */.GD(StructFuelValue);
 /** Модель значений расхода топлива */
 class FuelValue extends BaseModel/* BaseModel */.g {
@@ -24239,9 +24251,9 @@ var BaseModel = __webpack_require__(9036);
 
 /** Структура данных */
 const StructMovementValue = {
-  speed: bluetooth/* BluetoothStruct.float32 */.GD.float32(),
-  speedAVG: bluetooth/* BluetoothStruct.float32 */.GD.float32(),
-  restWay: bluetooth/* BluetoothStruct.float32 */.GD.float32()
+  speed: bluetooth/* BluetoothStruct.uint32 */.GD.uint32(),
+  speedAVG: bluetooth/* BluetoothStruct.uint16 */.GD.uint16(),
+  restWay: bluetooth/* BluetoothStruct.uint32 */.GD.uint32()
 };
 ;// CONCATENATED MODULE: ./src/models/pjcan/variables/movement/MovementValue.ts
 
@@ -24249,7 +24261,7 @@ const StructMovementValue = {
 
 
 const API_EXEC_VARIABLE_MOVEMENT = 160;
-const API_SIZE_VARIABLE_MOVEMENT = 12;
+const API_SIZE_VARIABLE_MOVEMENT = 10;
 const struct = new bluetooth/* BluetoothStruct */.GD(StructMovementValue);
 /** Модель значений движения */
 class MovementValue extends BaseModel/* BaseModel */.g {
@@ -24479,8 +24491,8 @@ var BaseModel = __webpack_require__(9036);
 
 /** Структура данных */
 const StructTemperatureValue = {
-  in: bluetooth/* BluetoothStruct.float32 */.GD.float32(),
-  out: bluetooth/* BluetoothStruct.float32 */.GD.float32()
+  in: bluetooth/* BluetoothStruct.uint16 */.GD.uint16(),
+  out: bluetooth/* BluetoothStruct.uint16 */.GD.uint16()
 };
 ;// CONCATENATED MODULE: ./src/models/pjcan/variables/temperature/TemperatureValue.ts
 
@@ -24488,7 +24500,7 @@ const StructTemperatureValue = {
 
 
 const API_EXEC_VARIABLE_TEMPERATURE = 180;
-const API_SIZE_VARIABLE_TEMPERATURE = 8;
+const API_SIZE_VARIABLE_TEMPERATURE = 4;
 const struct = new bluetooth/* BluetoothStruct */.GD(StructTemperatureValue);
 /** Модель значений температуры */
 class TemperatureValue extends BaseModel/* BaseModel */.g {
@@ -78753,6 +78765,6 @@ module.exports = JSON.parse('{"name":"pjcan","version":"0.2.1","private":true,"d
 },
 /******/ function(__webpack_require__) { // webpackRuntimeModules
 /******/ var __webpack_exec__ = function(moduleId) { return __webpack_require__(__webpack_require__.s = moduleId); }
-/******/ var __webpack_exports__ = (__webpack_exec__(3120));
+/******/ var __webpack_exports__ = (__webpack_exec__(2280));
 /******/ }
 ]);
