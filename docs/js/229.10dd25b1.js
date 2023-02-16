@@ -14910,7 +14910,7 @@ var reactivity_esm_bundler = __webpack_require__(4870);
 // EXTERNAL MODULE: ./node_modules/vue-i18n/dist/vue-i18n.esm-bundler.js + 4 modules
 var vue_i18n_esm_bundler = __webpack_require__(5658);
 // EXTERNAL MODULE: ./src/components/DialogTemplate.vue + 6 modules
-var DialogTemplate = __webpack_require__(6090);
+var DialogTemplate = __webpack_require__(8745);
 // EXTERNAL MODULE: ./src/components/cards/SwitchCardItem.vue + 6 modules
 var SwitchCardItem = __webpack_require__(1070);
 // EXTERNAL MODULE: ./src/components/common/NumberField.vue + 3 modules

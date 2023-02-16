@@ -8657,7 +8657,7 @@ const t = i18n.global.t;
 
 /***/ }),
 
-/***/ 2280:
+/***/ 2613:
 /***/ (function(__unused_webpack_module, __unused_webpack___webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -13021,7 +13021,7 @@ function BluetoothBtnvue_type_template_id_e00596fc_scoped_true_ts_true_render(_c
 // EXTERNAL MODULE: ./node_modules/vue3-toastify/dist/esm/index.js
 var esm = __webpack_require__(672);
 // EXTERNAL MODULE: ./src/components/DialogTemplate.vue + 6 modules
-var DialogTemplate = __webpack_require__(6090);
+var DialogTemplate = __webpack_require__(8745);
 // EXTERNAL MODULE: ./src/components/bluetooth/index.ts + 4 modules
 var bluetooth = __webpack_require__(9014);
 // EXTERNAL MODULE: ./src/api/canbus.ts + 82 modules
@@ -13411,9 +13411,9 @@ function AboutDialogvue_type_template_id_57729326_ts_true_render(_ctx, _cache, $
 
 
 
-;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/layout/components/DeviceInfoDialog.vue?vue&type=template&id=fd05ce3c&ts=true
+;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/layout/components/DeviceInfoDialog.vue?vue&type=template&id=7a43fecf&ts=true
 
-function DeviceInfoDialogvue_type_template_id_fd05ce3c_ts_true_render(_ctx, _cache, $props, $setup, $data, $options) {
+function DeviceInfoDialogvue_type_template_id_7a43fecf_ts_true_render(_ctx, _cache, $props, $setup, $data, $options) {
                                                                     
                                                       
                                                       
@@ -13722,8 +13722,10 @@ const DeviceResetDialog_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(
         // value.chipCores = canbus.deviceInfo.chipCores.toString();
         // value.chipRevision = canbus.deviceInfo.chipRevision.toString();
         value.cpuFreqMHz = canbus/* default.deviceInfo.cpuFreqMHz.toString */.ZP.deviceInfo.cpuFreqMHz.toString();
-        const mac = canbus/* default.deviceInfo.efuseMac.toString */.ZP.deviceInfo.efuseMac.toString(16).toUpperCase();
-        value.efuseMac = mac.length % 2 > 0 ? "0" + mac : mac;
+        let mac = canbus/* default.deviceInfo.efuseMac.toString */.ZP.deviceInfo.efuseMac.toString(16);
+        mac = mac.length % 2 > 0 ? "0" + mac : mac;
+        value.efuseMac = "";
+        for (let i = mac.length - 2; i >= 0; i -= 2) value.efuseMac += mac[i] + mac[i + 1] + (i > 0 ? ":" : "");
         // value.flashChipMode = canbus.deviceInfo.flashChipMode.toString();
         // value.flashChipSize = canbus.deviceInfo.flashChipSize.toString();
         // value.flashChipSpeed = canbus.deviceInfo.flashChipSpeed.toString();
@@ -13768,7 +13770,7 @@ const DeviceResetDialog_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(
 
 
 ;
-const DeviceInfoDialog_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(DeviceInfoDialogvue_type_script_lang_ts, [['render',DeviceInfoDialogvue_type_template_id_fd05ce3c_ts_true_render]])
+const DeviceInfoDialog_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(DeviceInfoDialogvue_type_script_lang_ts, [['render',DeviceInfoDialogvue_type_template_id_7a43fecf_ts_true_render]])
 
 /* harmony default export */ var DeviceInfoDialog = (DeviceInfoDialog_exports_);
 ;// CONCATENATED MODULE: ./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/layout/components/AboutDialog.vue?vue&type=script&lang=ts
@@ -64133,7 +64135,7 @@ var src_default = Vue3Toastify;
 
 /***/ }),
 
-/***/ 6090:
+/***/ 8745:
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -64169,9 +64171,9 @@ var VRow = __webpack_require__(6824);
 var VCol = __webpack_require__(8521);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/components/VIcon/VIcon.mjs + 1 modules
 var VIcon = __webpack_require__(3289);
-;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/DialogTemplate.vue?vue&type=template&id=8faac920&scoped=true&ts=true
+;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/DialogTemplate.vue?vue&type=template&id=7d896028&scoped=true&ts=true
 
-const _withScopeId = n => (_pushScopeId("data-v-8faac920"), n = n(), _popScopeId(), n);
+const _withScopeId = n => (_pushScopeId("data-v-7d896028"), n = n(), _popScopeId(), n);
 const _hoisted_1 = {
   class: "ml-2 text-h4 dialog__title"
 };
@@ -64247,7 +64249,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         class: "justify-end align-end"
       }, {
         default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VBtnGroup/* VBtnGroup */.Y, {
-          class: "border-dialog-btns"
+          class: "border-dialog-btns dialog__btns"
         }, {
           default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* renderSlot */.WI)(_ctx.$slots, "btns", {}, undefined, true)]),
           _: 3
@@ -64269,7 +64271,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 
 
 
-;// CONCATENATED MODULE: ./src/components/DialogTemplate.vue?vue&type=template&id=8faac920&scoped=true&ts=true
+;// CONCATENATED MODULE: ./src/components/DialogTemplate.vue?vue&type=template&id=7d896028&scoped=true&ts=true
 
 // EXTERNAL MODULE: ./node_modules/@vue/reactivity/dist/reactivity.esm-bundler.js
 var reactivity_esm_bundler = __webpack_require__(4870);
@@ -64321,10 +64323,10 @@ var IconCustom = __webpack_require__(1776);
 });
 ;// CONCATENATED MODULE: ./src/components/DialogTemplate.vue?vue&type=script&lang=ts
  
-;// CONCATENATED MODULE: ./node_modules/mini-css-extract-plugin/dist/loader.js??clonedRuleSet-22.use[0]!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/DialogTemplate.vue?vue&type=style&index=0&id=8faac920&lang=scss&scoped=true
+;// CONCATENATED MODULE: ./node_modules/mini-css-extract-plugin/dist/loader.js??clonedRuleSet-22.use[0]!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/DialogTemplate.vue?vue&type=style&index=0&id=7d896028&lang=scss&scoped=true
 // extracted by mini-css-extract-plugin
 
-;// CONCATENATED MODULE: ./src/components/DialogTemplate.vue?vue&type=style&index=0&id=8faac920&lang=scss&scoped=true
+;// CONCATENATED MODULE: ./src/components/DialogTemplate.vue?vue&type=style&index=0&id=7d896028&lang=scss&scoped=true
 
 // EXTERNAL MODULE: ./node_modules/vue-loader/dist/exportHelper.js
 var exportHelper = __webpack_require__(89);
@@ -64336,7 +64338,7 @@ var exportHelper = __webpack_require__(89);
 ;
 
 
-const __exports__ = /*#__PURE__*/(0,exportHelper/* default */.Z)(DialogTemplatevue_type_script_lang_ts, [['render',render],['__scopeId',"data-v-8faac920"]])
+const __exports__ = /*#__PURE__*/(0,exportHelper/* default */.Z)(DialogTemplatevue_type_script_lang_ts, [['render',render],['__scopeId',"data-v-7d896028"]])
 
 /* harmony default export */ var DialogTemplate = (__exports__);
 
@@ -78765,6 +78767,6 @@ module.exports = JSON.parse('{"name":"pjcan","version":"0.2.1","private":true,"d
 },
 /******/ function(__webpack_require__) { // webpackRuntimeModules
 /******/ var __webpack_exec__ = function(moduleId) { return __webpack_require__(__webpack_require__.s = moduleId); }
-/******/ var __webpack_exports__ = (__webpack_exec__(2280));
+/******/ var __webpack_exports__ = (__webpack_exec__(2613));
 /******/ }
 ]);
