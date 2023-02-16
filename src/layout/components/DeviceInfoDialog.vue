@@ -93,8 +93,10 @@ export default {
 				// value.chipCores = canbus.deviceInfo.chipCores.toString();
 				// value.chipRevision = canbus.deviceInfo.chipRevision.toString();
 				value.cpuFreqMHz = canbus.deviceInfo.cpuFreqMHz.toString();
-				const mac: string = canbus.deviceInfo.efuseMac.toString(16).toUpperCase();
-				value.efuseMac = mac.length % 2 > 0 ? "0" + mac : mac;
+				let mac: string = canbus.deviceInfo.efuseMac.toString(16);
+				mac = mac.length % 2 > 0 ? "0" + mac : mac;
+				value.efuseMac = "";
+				for (let i = mac.length - 2; i >= 0; i -= 2) value.efuseMac += mac[i] + mac[i + 1] + (i > 0 ? ":" : "");
 				// value.flashChipMode = canbus.deviceInfo.flashChipMode.toString();
 				// value.flashChipSize = canbus.deviceInfo.flashChipSize.toString();
 				// value.flashChipSpeed = canbus.deviceInfo.flashChipSpeed.toString();
