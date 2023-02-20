@@ -240,6 +240,7 @@ export default {
 				menu: "Настройки статистики",
 				showDays: {
 					title: "Показывать дни в статистике",
+					titleShort: "Показывать дни",
 					description: "Отображать моточасы на информационном экране в формате d.hh:mm:ss"
 				},
 				worktime: {

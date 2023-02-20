@@ -13,7 +13,7 @@
 				<v-col cols="12" class="pt-0 pb-0">
 					<switch-card-item
 						v-model="showDays"
-						:title="$t('onboard.engine.settings.showDays.title')"
+						:title="$t('onboard.engine.settings.showDays.' + ($vuetify.display.xs ? 'titleShort' : 'title'))"
 						:description="$t('onboard.engine.settings.showDays.description')"
 						:disabled="!loaderConfigEngine"
 					/>

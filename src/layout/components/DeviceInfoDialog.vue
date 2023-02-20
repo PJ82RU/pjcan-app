@@ -30,7 +30,7 @@
 
 		<template #btns>
 			<v-btn color="primary" @click="onResetClick">
-				{{ $t("btn.deviceReset") }}
+				{{  $vuetify.display.xs ? $t("btn.reset") : $t("btn.deviceReset") }}
 			</v-btn>
 			<v-btn color="primary" @click="visible = false">
 				{{ $t("btn.close") }}
