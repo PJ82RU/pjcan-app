@@ -7881,6 +7881,7 @@ var vue_i18n_esm_bundler = __webpack_require__(5658);
         menu: "Настройки статистики",
         showDays: {
           title: "Показывать дни в статистике",
+          titleShort: "Показывать дни",
           description: "Отображать моточасы на информационном экране в формате d.hh:mm:ss"
         },
         worktime: {
@@ -8657,7 +8658,7 @@ const t = i18n.global.t;
 
 /***/ }),
 
-/***/ 2613:
+/***/ 6205:
 /***/ (function(__unused_webpack_module, __unused_webpack___webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -8683,7 +8684,7 @@ __webpack_require__.d(components_namespaceObject, {
   "VBreadcrumbsDivider": function() { return VBreadcrumbsDivider; },
   "VBreadcrumbsItem": function() { return VBreadcrumbsItem; },
   "VBtn": function() { return VBtn/* VBtn */.T; },
-  "VBtnGroup": function() { return VBtnGroup/* VBtnGroup */.Y; },
+  "VBtnGroup": function() { return VBtnGroup/* VBtnGroup */.Yz; },
   "VBtnToggle": function() { return VBtnToggle/* VBtnToggle */.f; },
   "VCard": function() { return VCard/* VCard */._; },
   "VCardActions": function() { return VCardActions/* VCardActions */.h; },
@@ -8972,10 +8973,7 @@ function createLayout(props) {
     const uniquePriorities = [...new Set([...priorities.values()].map(p => p.value))].sort((a, b) => a - b);
     const layout = [];
     for (const p of uniquePriorities) {
-      const items = registered.value.filter(id => {
-        var _priorities$get;
-        return ((_priorities$get = priorities.get(id)) == null ? void 0 : _priorities$get.value) === p;
-      });
+      const items = registered.value.filter(id => priorities.get(id)?.value === p);
       layout.push(...items);
     }
     return generateLayers(layout, positions, layoutSizes, activeItems);
@@ -9040,7 +9038,7 @@ function createLayout(props) {
       layoutSizes.set(id, layoutSize);
       activeItems.set(id, active);
       disableTransitions && disabledTransitions.set(id, disableTransitions);
-      const instances = (0,helpers/* findChildrenWithProvide */.bY)(VuetifyLayoutItemKey, rootVm == null ? void 0 : rootVm.vnode);
+      const instances = (0,helpers/* findChildrenWithProvide */.bY)(VuetifyLayoutItemKey, rootVm?.vnode);
       const instanceIndex = instances.indexOf(vm);
       if (instanceIndex > -1) registered.value.splice(instanceIndex, 0, id);else registered.value.push(id);
       const index = (0,runtime_core_esm_bundler/* computed */.Fl)(() => items.value.findIndex(i => i.id === id));
@@ -9134,7 +9132,7 @@ var useRender = __webpack_require__(9888);
 
  // Utilities
 
-const VApp = (0,defineComponent/* defineComponent */.aZ)({
+const VApp = (0,defineComponent/* genericComponent */.ev)()({
   name: 'VApp',
   props: {
     ...makeLayoutProps({
@@ -9157,16 +9155,13 @@ const VApp = (0,defineComponent/* defineComponent */.aZ)({
     const {
       rtlClasses
     } = (0,composables_locale/* useRtl */.Vw)();
-    (0,useRender/* useRender */.L)(() => {
-      var _slots$default;
-      return (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
-        "ref": layoutRef,
-        "class": ['v-application', theme.themeClasses.value, layoutClasses.value, rtlClasses.value],
-        "style": layoutStyles.value
-      }, [(0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
-        "class": "v-application__wrap"
-      }, [(_slots$default = slots.default) == null ? void 0 : _slots$default.call(slots)])]);
-    });
+    (0,useRender/* useRender */.L)(() => (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
+      "ref": layoutRef,
+      "class": ['v-application', theme.themeClasses.value, layoutClasses.value, rtlClasses.value],
+      "style": layoutStyles.value
+    }, [(0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
+      "class": "v-application__wrap"
+    }, [slots.default?.()])]));
     return {
       getLayoutItem,
       items,
@@ -9193,25 +9188,25 @@ var tag = __webpack_require__(1138);
 // Composables
  // Utilities
  // Types
+const makeVToolbarTitleProps = (0,propsFactory/* propsFactory */.U)({
+  text: String,
+  ...(0,tag/* makeTagProps */.Q)()
+}, 'v-toolbar-title');
 const VToolbarTitle = (0,defineComponent/* genericComponent */.ev)()({
   name: 'VToolbarTitle',
-  props: {
-    text: String,
-    ...(0,tag/* makeTagProps */.Q)()
-  },
+  props: makeVToolbarTitleProps(),
   setup(props, _ref) {
     let {
       slots
     } = _ref;
     (0,useRender/* useRender */.L)(() => {
-      var _slots$default;
       const hasText = !!(slots.default || slots.text || props.text);
       return (0,runtime_core_esm_bundler/* createVNode */.Wm)(props.tag, {
         "class": "v-toolbar-title"
       }, {
         default: () => [hasText && (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
           "class": "v-toolbar-title__placeholder"
-        }, [slots.text ? slots.text() : props.text, (_slots$default = slots.default) == null ? void 0 : _slots$default.call(slots)])]
+        }, [slots.text ? slots.text() : props.text, slots.default?.()])]
       });
     });
     return {};
@@ -9281,7 +9276,6 @@ const VToolbar = (0,defineComponent/* genericComponent */.ev)()({
   name: 'VToolbar',
   props: makeVToolbarProps(),
   setup(props, _ref) {
-    var _slots$extension;
     let {
       slots
     } = _ref;
@@ -9301,7 +9295,7 @@ const VToolbar = (0,defineComponent/* genericComponent */.ev)()({
     const {
       themeClasses
     } = (0,composables_theme/* provideTheme */.ER)(props);
-    const isExtended = (0,reactivity_esm_bundler/* ref */.iH)(!!(props.extended || (_slots$extension = slots.extension) != null && _slots$extension.call(slots)));
+    const isExtended = (0,reactivity_esm_bundler/* ref */.iH)(!!(props.extended || slots.extension?.()));
     const contentHeight = (0,runtime_core_esm_bundler/* computed */.Fl)(() => parseInt(Number(props.height) + (props.density === 'prominent' ? Number(props.height) : 0) - (props.density === 'comfortable' ? 8 : 0) - (props.density === 'compact' ? 16 : 0), 10));
     const extensionHeight = (0,runtime_core_esm_bundler/* computed */.Fl)(() => isExtended.value ? parseInt(Number(props.extensionHeight) + (props.density === 'prominent' ? Number(props.extensionHeight) : 0) - (props.density === 'comfortable' ? 4 : 0) - (props.density === 'compact' ? 8 : 0), 10) : 0);
     (0,composables_defaults/* provideDefaults */.AF)({
@@ -9310,10 +9304,9 @@ const VToolbar = (0,defineComponent/* genericComponent */.ev)()({
       }
     });
     (0,useRender/* useRender */.L)(() => {
-      var _slots$extension2, _slots$image, _slots$prepend, _slots$default, _slots$append;
       const hasTitle = !!(props.title || slots.title);
       const hasImage = !!(slots.image || props.image);
-      const extension = (_slots$extension2 = slots.extension) == null ? void 0 : _slots$extension2.call(slots);
+      const extension = slots.extension?.();
       isExtended.value = !!(props.extended || extension);
       return (0,runtime_core_esm_bundler/* createVNode */.Wm)(props.tag, {
         "class": ['v-toolbar', {
@@ -9336,7 +9329,7 @@ const VToolbar = (0,defineComponent/* genericComponent */.ev)()({
             }
           }
         }, {
-          default: () => [slots.image ? (_slots$image = slots.image) == null ? void 0 : _slots$image.call(slots) : (0,runtime_core_esm_bundler/* createVNode */.Wm)(VImg/* VImg */.f, null, null)]
+          default: () => [slots.image ? slots.image?.() : (0,runtime_core_esm_bundler/* createVNode */.Wm)(VImg/* VImg */.f, null, null)]
         })]), (0,runtime_core_esm_bundler/* createVNode */.Wm)(VDefaultsProvider/* VDefaultsProvider */.z, {
           "defaults": {
             VTabs: {
@@ -9351,14 +9344,14 @@ const VToolbar = (0,defineComponent/* genericComponent */.ev)()({
             }
           }, [slots.prepend && (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
             "class": "v-toolbar__prepend"
-          }, [(_slots$prepend = slots.prepend) == null ? void 0 : _slots$prepend.call(slots)]), hasTitle && (0,runtime_core_esm_bundler/* createVNode */.Wm)(VToolbarTitle, {
+          }, [slots.prepend?.()]), hasTitle && (0,runtime_core_esm_bundler/* createVNode */.Wm)(VToolbarTitle, {
             "key": "title",
             "text": props.title
           }, {
             text: slots.title
-          }), (_slots$default = slots.default) == null ? void 0 : _slots$default.call(slots), slots.append && (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
+          }), slots.default?.(), slots.append && (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
             "class": "v-toolbar__append"
-          }, [(_slots$append = slots.append) == null ? void 0 : _slots$append.call(slots)])])]
+          }, [slots.append?.()])])]
         }), (0,runtime_core_esm_bundler/* createVNode */.Wm)(VDefaultsProvider/* VDefaultsProvider */.z, {
           "defaults": {
             VTabs: {
@@ -9384,10 +9377,30 @@ const VToolbar = (0,defineComponent/* genericComponent */.ev)()({
   }
 });
 function filterToolbarProps(props) {
-  return (0,helpers/* pick */.ei)(props, Object.keys((VToolbar == null ? void 0 : VToolbar.props) ?? {}));
+  return (0,helpers/* pick */.ei)(props, Object.keys(VToolbar?.props ?? {}));
 }
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/proxiedModel.mjs
 var proxiedModel = __webpack_require__(8717);
+;// CONCATENATED MODULE: ./node_modules/vuetify/lib/composables/ssrBoot.mjs
+// Utilities
+
+
+// Composables
+function useSsrBoot() {
+  const isBooted = (0,reactivity_esm_bundler/* ref */.iH)(false);
+  (0,runtime_core_esm_bundler/* onMounted */.bv)(() => {
+    window.requestAnimationFrame(() => {
+      isBooted.value = true;
+    });
+  });
+  const ssrBootStyles = (0,runtime_core_esm_bundler/* computed */.Fl)(() => !isBooted.value ? {
+    transition: 'none !important'
+  } : undefined);
+  return {
+    ssrBootStyles,
+    isBooted: (0,reactivity_esm_bundler/* readonly */.OT)(isBooted)
+  };
+}
 ;// CONCATENATED MODULE: ./node_modules/vuetify/lib/components/VAppBar/VAppBar.mjs
 
 // Styles
@@ -9395,6 +9408,7 @@ var proxiedModel = __webpack_require__(8717);
 
 // Components
  // Composables
+
 
  // Utilities
 
@@ -9435,11 +9449,13 @@ const VAppBar = (0,defineComponent/* genericComponent */.ev)()({
     const vToolbarRef = (0,reactivity_esm_bundler/* ref */.iH)();
     const isActive = (0,proxiedModel/* useProxiedModel */.z)(props, 'modelValue');
     const height = (0,runtime_core_esm_bundler/* computed */.Fl)(() => {
-      var _vToolbarRef$value, _vToolbarRef$value2;
-      const height = ((_vToolbarRef$value = vToolbarRef.value) == null ? void 0 : _vToolbarRef$value.contentHeight) ?? 0;
-      const extensionHeight = ((_vToolbarRef$value2 = vToolbarRef.value) == null ? void 0 : _vToolbarRef$value2.extensionHeight) ?? 0;
+      const height = vToolbarRef.value?.contentHeight ?? 0;
+      const extensionHeight = vToolbarRef.value?.extensionHeight ?? 0;
       return height + extensionHeight;
     });
+    const {
+      ssrBootStyles
+    } = useSsrBoot();
     const {
       layoutItemStyles
     } = useLayoutItem({
@@ -9460,7 +9476,8 @@ const VAppBar = (0,defineComponent/* genericComponent */.ev)()({
         }],
         "style": {
           ...layoutItemStyles.value,
-          height: undefined
+          height: undefined,
+          ...ssrBootStyles.value
         }
       }, toolbarProps), slots);
     });
@@ -9474,26 +9491,6 @@ var VSpacer = __webpack_require__(9234);
 ;// CONCATENATED MODULE: ./node_modules/vuetify/lib/components/VMain/VMain.css
 // extracted by mini-css-extract-plugin
 
-;// CONCATENATED MODULE: ./node_modules/vuetify/lib/composables/ssrBoot.mjs
-// Utilities
-
-
-// Composables
-function useSsrBoot() {
-  const isBooted = (0,reactivity_esm_bundler/* ref */.iH)(false);
-  (0,runtime_core_esm_bundler/* onMounted */.bv)(() => {
-    window.requestAnimationFrame(() => {
-      isBooted.value = true;
-    });
-  });
-  const ssrBootStyles = (0,runtime_core_esm_bundler/* computed */.Fl)(() => !isBooted.value ? {
-    transition: 'none !important'
-  } : undefined);
-  return {
-    ssrBootStyles,
-    isBooted: (0,reactivity_esm_bundler/* readonly */.OT)(isBooted)
-  };
-}
 ;// CONCATENATED MODULE: ./node_modules/vuetify/lib/components/VMain/VMain.mjs
 
 // Styles
@@ -9504,7 +9501,7 @@ function useSsrBoot() {
 
  // Utilities
 
-const VMain = (0,defineComponent/* defineComponent */.aZ)({
+const VMain = (0,defineComponent/* genericComponent */.ev)()({
   name: 'VMain',
   props: {
     scrollable: Boolean,
@@ -9522,19 +9519,16 @@ const VMain = (0,defineComponent/* defineComponent */.aZ)({
     const {
       ssrBootStyles
     } = useSsrBoot();
-    (0,useRender/* useRender */.L)(() => {
-      var _slots$default, _slots$default2;
-      return (0,runtime_core_esm_bundler/* createVNode */.Wm)(props.tag, {
-        "class": ['v-main', {
-          'v-main--scrollable': props.scrollable
-        }],
-        "style": [mainStyles.value, ssrBootStyles.value]
-      }, {
-        default: () => [props.scrollable ? (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
-          "class": "v-main__scroller"
-        }, [(_slots$default = slots.default) == null ? void 0 : _slots$default.call(slots)]) : (_slots$default2 = slots.default) == null ? void 0 : _slots$default2.call(slots)]
-      });
-    });
+    (0,useRender/* useRender */.L)(() => (0,runtime_core_esm_bundler/* createVNode */.Wm)(props.tag, {
+      "class": ['v-main', {
+        'v-main--scrollable': props.scrollable
+      }],
+      "style": [mainStyles.value, ssrBootStyles.value]
+    }, {
+      default: () => [props.scrollable ? (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
+        "class": "v-main__scroller"
+      }, [slots.default?.()]) : slots.default?.()]
+    }));
     return {};
   }
 });
@@ -13411,9 +13405,9 @@ function AboutDialogvue_type_template_id_57729326_ts_true_render(_ctx, _cache, $
 
 
 
-;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/layout/components/DeviceInfoDialog.vue?vue&type=template&id=7a43fecf&ts=true
+;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/layout/components/DeviceInfoDialog.vue?vue&type=template&id=4d08b525&ts=true
 
-function DeviceInfoDialogvue_type_template_id_7a43fecf_ts_true_render(_ctx, _cache, $props, $setup, $data, $options) {
+function DeviceInfoDialogvue_type_template_id_4d08b525_ts_true_render(_ctx, _cache, $props, $setup, $data, $options) {
                                                                     
                                                       
                                                       
@@ -13456,7 +13450,7 @@ function DeviceInfoDialogvue_type_template_id_7a43fecf_ts_true_render(_ctx, _cac
       color: "primary",
       onClick: $setup.onResetClick
     }, {
-      default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createTextVNode */.Uk)((0,shared_esm_bundler/* toDisplayString */.zw)(_ctx.$t("btn.deviceReset")), 1)]),
+      default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createTextVNode */.Uk)((0,shared_esm_bundler/* toDisplayString */.zw)(_ctx.$vuetify.display.xs ? _ctx.$t("btn.reset") : _ctx.$t("btn.deviceReset")), 1)]),
       _: 1
     }, 8, ["onClick"]), (0,runtime_core_esm_bundler/* createVNode */.Wm)(VBtn/* VBtn */.T, {
       color: "primary",
@@ -13497,8 +13491,8 @@ var composables_focus = __webpack_require__(8969);
  // Composables
  // Utilities
 
-
-const VCheckbox = (0,defineComponent/* defineComponent */.aZ)({
+ // Types
+const VCheckbox = (0,defineComponent/* genericComponent */.ev)()({
   name: 'VCheckbox',
   inheritAttrs: false,
   props: {
@@ -13770,7 +13764,7 @@ const DeviceResetDialog_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(
 
 
 ;
-const DeviceInfoDialog_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(DeviceInfoDialogvue_type_script_lang_ts, [['render',DeviceInfoDialogvue_type_template_id_7a43fecf_ts_true_render]])
+const DeviceInfoDialog_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(DeviceInfoDialogvue_type_script_lang_ts, [['render',DeviceInfoDialogvue_type_template_id_4d08b525_ts_true_render]])
 
 /* harmony default export */ var DeviceInfoDialog = (DeviceInfoDialog_exports_);
 ;// CONCATENATED MODULE: ./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/layout/components/AboutDialog.vue?vue&type=script&lang=ts
@@ -13898,7 +13892,7 @@ function OnboardButtonsDialogvue_type_template_id_3c53dcd2_scoped_true_ts_true_r
         cols: "12",
         class: "pb-0 d-flex justify-center"
       }, {
-        default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VBtnGroup/* VBtnGroup */.Y, {
+        default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VBtnGroup/* VBtnGroup */.Yz, {
           class: "onboard-buttons__btns-main"
         }, {
           default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VBtn/* VBtn */.T, {
@@ -13933,7 +13927,7 @@ function OnboardButtonsDialogvue_type_template_id_3c53dcd2_scoped_true_ts_true_r
         cols: "12",
         class: "d-flex justify-center"
       }, {
-        default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VBtnGroup/* VBtnGroup */.Y, {
+        default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VBtnGroup/* VBtnGroup */.Yz, {
           class: "onboard-buttons__btns-added"
         }, {
           default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VBtn/* VBtn */.T, {
@@ -14703,14 +14697,13 @@ function createVuetify() {
     locale
   };
 }
-const version = "3.1.2";
+const version = "3.1.5";
 createVuetify.version = version;
 
 // Vue's inject() can only be used in setup
 function framework_inject(key) {
-  var _vm$parent, _vm$vnode$appContext;
   const vm = this.$;
-  const provides = ((_vm$parent = vm.parent) == null ? void 0 : _vm$parent.provides) ?? ((_vm$vnode$appContext = vm.vnode.appContext) == null ? void 0 : _vm$vnode$appContext.provides);
+  const provides = vm.parent?.provides ?? vm.vnode.appContext?.provides;
   if (provides && key in provides) {
     return provides[key];
   }
@@ -14722,8 +14715,8 @@ function framework_inject(key) {
 // Components
  // Composables
  // Utilities
-
-const VAppBarNavIcon = (0,defineComponent/* defineComponent */.aZ)({
+ // Types
+const VAppBarNavIcon = (0,defineComponent/* genericComponent */.ev)()({
   name: 'VAppBarNavIcon',
   props: {
     icon: {
@@ -14744,14 +14737,13 @@ const VAppBarNavIcon = (0,defineComponent/* defineComponent */.aZ)({
 });
 ;// CONCATENATED MODULE: ./node_modules/vuetify/lib/components/VAppBar/VAppBarTitle.mjs
 
-// Composables
+// Components
  // Utilities
 
-const VAppBarTitle = (0,defineComponent/* defineComponent */.aZ)({
+ // Types
+const VAppBarTitle = (0,defineComponent/* genericComponent */.ev)()({
   name: 'VAppBarTitle',
-  props: {
-    ...VToolbarTitle.props
-  },
+  props: makeVToolbarTitleProps(),
   setup(props, _ref) {
     let {
       slots
@@ -14811,7 +14803,7 @@ var position = __webpack_require__(489);
 
  // Types
 const allowedTypes = ['success', 'info', 'warning', 'error'];
-const VAlert = (0,defineComponent/* defineComponent */.aZ)({
+const VAlert = (0,defineComponent/* genericComponent */.ev)()({
   name: 'VAlert',
   props: {
     border: {
@@ -14914,7 +14906,6 @@ const VAlert = (0,defineComponent/* defineComponent */.aZ)({
       }
     }));
     return () => {
-      var _slots$default, _slots$close;
       const hasPrepend = !!(slots.prepend || icon.value);
       const hasTitle = !!(slots.title || props.title);
       const hasText = !!(props.text || slots.text);
@@ -14952,7 +14943,7 @@ const VAlert = (0,defineComponent/* defineComponent */.aZ)({
           "key": "title"
         }, {
           default: () => [slots.title ? slots.title() : props.title]
-        }), hasText && (slots.text ? slots.text() : props.text), (_slots$default = slots.default) == null ? void 0 : _slots$default.call(slots)]), slots.append && (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
+        }), hasText && (slots.text ? slots.text() : props.text), slots.default?.()]), slots.append && (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
           "key": "append",
           "class": "v-alert__append"
         }, [slots.append()]), hasClose && (0,runtime_core_esm_bundler/* createVNode */.Wm)(VDefaultsProvider/* VDefaultsProvider */.z, {
@@ -14967,9 +14958,9 @@ const VAlert = (0,defineComponent/* defineComponent */.aZ)({
         }, {
           default: () => [(0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
             "class": "v-alert__close"
-          }, [((_slots$close = slots.close) == null ? void 0 : _slots$close.call(slots, {
+          }, [slots.close?.({
             props: closeProps.value
-          })) ?? (0,runtime_core_esm_bundler/* createVNode */.Wm)(VBtn/* VBtn */.T, closeProps.value, null)])]
+          }) ?? (0,runtime_core_esm_bundler/* createVNode */.Wm)(VBtn/* VBtn */.T, closeProps.value, null)])]
         })]
       });
     };
@@ -15019,26 +15010,25 @@ const makeFilterProps = (0,propsFactory/* propsFactory */.U)({
 function filterItems(items, query, options) {
   const array = [];
   // always ensure we fall back to a functioning filter
-  const filter = (options == null ? void 0 : options.default) ?? defaultFilter;
-  const keys = options != null && options.filterKeys ? (0,helpers/* wrapInArray */.FT)(options.filterKeys) : false;
-  const customFiltersLength = Object.keys((options == null ? void 0 : options.customKeyFilter) ?? {}).length;
-  if (!(items != null && items.length)) return array;
+  const filter = options?.default ?? defaultFilter;
+  const keys = options?.filterKeys ? (0,helpers/* wrapInArray */.FT)(options.filterKeys) : false;
+  const customFiltersLength = Object.keys(options?.customKeyFilter ?? {}).length;
+  if (!items?.length) return array;
   loop: for (let i = 0; i < items.length; i++) {
     const item = items[i];
     const customMatches = {};
     const defaultMatches = {};
     let match = -1;
-    if (query && !(options != null && options.noFilter)) {
+    if (query && !options?.noFilter) {
       if (typeof item === 'object') {
         const filterKeys = keys || Object.keys(item);
         for (const key of filterKeys) {
-          var _options$customKeyFil;
           const value = (0,helpers/* getPropertyFromItem */.qF)(item, key, item);
-          const keyFilter = options == null ? void 0 : (_options$customKeyFil = options.customKeyFilter) == null ? void 0 : _options$customKeyFil[key];
+          const keyFilter = options?.customKeyFilter?.[key];
           match = keyFilter ? keyFilter(value, query, item) : filter(value, query, item);
           if (match !== -1 && match !== false) {
             if (keyFilter) customMatches[key] = match;else defaultMatches[key] = match;
-          } else if ((options == null ? void 0 : options.filterMode) === 'every') {
+          } else if (options?.filterMode === 'every') {
             continue loop;
           }
         }
@@ -15051,8 +15041,8 @@ function filterItems(items, query, options) {
       const defaultMatchesLength = Object.keys(defaultMatches).length;
       const customMatchesLength = Object.keys(customMatches).length;
       if (!defaultMatchesLength && !customMatchesLength) continue;
-      if ((options == null ? void 0 : options.filterMode) === 'union' && customMatchesLength !== customFiltersLength && !defaultMatchesLength) continue;
-      if ((options == null ? void 0 : options.filterMode) === 'intersection' && (customMatchesLength !== customFiltersLength || !defaultMatchesLength)) continue;
+      if (options?.filterMode === 'union' && customMatchesLength !== customFiltersLength && !defaultMatchesLength) continue;
+      if (options?.filterMode === 'intersection' && (customMatchesLength !== customFiltersLength || !defaultMatchesLength)) continue;
     }
     array.push({
       index: i,
@@ -15065,7 +15055,7 @@ function filterItems(items, query, options) {
   return array;
 }
 function useFilter(props, items, query, options) {
-  const strQuery = (0,runtime_core_esm_bundler/* computed */.Fl)(() => typeof (query == null ? void 0 : query.value) !== 'string' && typeof (query == null ? void 0 : query.value) !== 'number' ? '' : String(query.value));
+  const strQuery = (0,runtime_core_esm_bundler/* computed */.Fl)(() => typeof query?.value !== 'string' && typeof query?.value !== 'number' ? '' : String(query.value));
   const filteredItems = (0,reactivity_esm_bundler/* ref */.iH)([]);
   const filteredMatches = (0,reactivity_esm_bundler/* ref */.iH)(new Map());
   (0,runtime_core_esm_bundler/* watchEffect */.m0)(() => {
@@ -15075,7 +15065,7 @@ function useFilter(props, items, query, options) {
     const results = filterItems(transformedItems, strQuery.value, {
       customKeyFilter: props.customKeyFilter,
       default: props.customFilter,
-      filterKeys: (0,reactivity_esm_bundler/* unref */.SU)(options == null ? void 0 : options.filterKeys) ?? props.filterKeys,
+      filterKeys: (0,reactivity_esm_bundler/* unref */.SU)(options?.filterKeys) ?? props.filterKeys,
       filterMode: props.filterMode,
       noFilter: props.noFilter
     });
@@ -15170,7 +15160,15 @@ const VAutocomplete = (0,defineComponent/* genericComponent */.ev)()({
     const vTextFieldRef = (0,reactivity_esm_bundler/* ref */.iH)();
     const isFocused = (0,reactivity_esm_bundler/* ref */.iH)(false);
     const isPristine = (0,reactivity_esm_bundler/* ref */.iH)(true);
-    const menu = (0,proxiedModel/* useProxiedModel */.z)(props, 'menu');
+    const vMenuRef = (0,reactivity_esm_bundler/* ref */.iH)();
+    const _menu = (0,proxiedModel/* useProxiedModel */.z)(props, 'menu');
+    const menu = (0,runtime_core_esm_bundler/* computed */.Fl)({
+      get: () => _menu.value,
+      set: v => {
+        if (_menu.value && !v && vMenuRef.value?.ΨopenChildren) return;
+        _menu.value = v;
+      }
+    });
     const {
       items,
       transformIn,
@@ -15200,18 +15198,20 @@ const VAutocomplete = (0,defineComponent/* genericComponent */.ev)()({
     const selected = (0,runtime_core_esm_bundler/* computed */.Fl)(() => selections.value.map(selection => selection.props.value));
     const listRef = (0,reactivity_esm_bundler/* ref */.iH)();
     function onClear(e) {
-      model.value = [];
       if (props.openOnClear) {
         menu.value = true;
       }
       search.value = '';
     }
-    function onClickControl() {
-      if (props.hideNoData && !items.value.length || props.readonly || form != null && form.isReadonly.value) return;
+    function onMousedownControl() {
+      if (props.hideNoData && !items.value.length || props.readonly || form?.isReadonly.value) return;
       menu.value = true;
     }
     function onKeydown(e) {
-      if (props.readonly || form != null && form.isReadonly.value) return;
+      if (props.readonly || form?.isReadonly.value) return;
+      if (['Enter', 'ArrowDown', 'ArrowUp'].includes(e.key)) {
+        e.preventDefault();
+      }
       if (['Enter', 'ArrowDown'].includes(e.key)) {
         menu.value = true;
       }
@@ -15222,13 +15222,9 @@ const VAutocomplete = (0,defineComponent/* genericComponent */.ev)()({
         isPristine.value = true;
       }
       if (e.key === 'ArrowDown') {
-        var _listRef$value;
-        e.preventDefault();
-        (_listRef$value = listRef.value) == null ? void 0 : _listRef$value.focus('next');
+        listRef.value?.focus('next');
       } else if (e.key === 'ArrowUp') {
-        var _listRef$value2;
-        e.preventDefault();
-        (_listRef$value2 = listRef.value) == null ? void 0 : _listRef$value2.focus('prev');
+        listRef.value?.focus('prev');
       }
     }
     function onInput(e) {
@@ -15242,8 +15238,7 @@ const VAutocomplete = (0,defineComponent/* genericComponent */.ev)()({
     }
     function onFocusout(e) {
       if (e.relatedTarget == null) {
-        var _vTextFieldRef$value;
-        (_vTextFieldRef$value = vTextFieldRef.value) == null ? void 0 : _vTextFieldRef$value.focus();
+        vTextFieldRef.value?.focus();
       }
     }
     const isSelecting = (0,reactivity_esm_bundler/* ref */.iH)(false);
@@ -15271,9 +15266,8 @@ const VAutocomplete = (0,defineComponent/* genericComponent */.ev)()({
     }
     (0,runtime_core_esm_bundler/* watch */.YP)(isFocused, val => {
       if (val) {
-        var _selections$value$at;
         isSelecting.value = true;
-        search.value = props.multiple || !!slots.selection ? '' : String(((_selections$value$at = selections.value.at(-1)) == null ? void 0 : _selections$value$at.props.title) ?? '');
+        search.value = props.multiple || !!slots.selection ? '' : String(selections.value.at(-1)?.props.title ?? '');
         isPristine.value = true;
         (0,runtime_core_esm_bundler/* nextTick */.Y3)(() => isSelecting.value = false);
       } else {
@@ -15309,104 +15303,97 @@ const VAutocomplete = (0,defineComponent/* genericComponent */.ev)()({
         "appendInnerIcon": props.menuIcon,
         "readonly": props.readonly,
         "onClick:clear": onClear,
-        "onClick:control": onClickControl,
-        "onClick:input": onClickControl,
+        "onMousedown:control": onMousedownControl,
         "onFocus": () => isFocused.value = true,
         "onBlur": () => isFocused.value = false,
         "onKeydown": onKeydown
       }), {
         ...slots,
-        default: () => {
-          var _slots$noData, _slots$prependItem, _slots$appendItem;
-          return (0,runtime_core_esm_bundler/* createVNode */.Wm)(runtime_core_esm_bundler/* Fragment */.HY, null, [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VMenu/* VMenu */.T, (0,runtime_core_esm_bundler/* mergeProps */.dG)({
-            "modelValue": menu.value,
-            "onUpdate:modelValue": $event => menu.value = $event,
-            "activator": "parent",
-            "contentClass": "v-autocomplete__content",
-            "eager": props.eager,
-            "maxHeight": 310,
-            "openOnClick": false,
-            "closeOnContentClick": false,
-            "transition": props.transition,
-            "onAfterLeave": onAfterLeave
-          }, props.menuProps), {
-            default: () => [hasList && (0,runtime_core_esm_bundler/* createVNode */.Wm)(VList/* VList */.i, {
-              "ref": listRef,
-              "selected": selected.value,
-              "selectStrategy": props.multiple ? 'independent' : 'single-independent',
-              "onMousedown": e => e.preventDefault(),
-              "onFocusin": onFocusin,
-              "onFocusout": onFocusout
-            }, {
-              default: () => [!displayItems.value.length && !props.hideNoData && (((_slots$noData = slots['no-data']) == null ? void 0 : _slots$noData.call(slots)) ?? (0,runtime_core_esm_bundler/* createVNode */.Wm)(VListItem/* VListItem */.l, {
-                "title": t(props.noDataText)
-              }, null)), (_slots$prependItem = slots['prepend-item']) == null ? void 0 : _slots$prependItem.call(slots), displayItems.value.map((item, index) => {
-                var _slots$item;
-                return ((_slots$item = slots.item) == null ? void 0 : _slots$item.call(slots, {
-                  item,
-                  index,
-                  props: (0,runtime_core_esm_bundler/* mergeProps */.dG)(item.props, {
-                    onClick: () => select(item)
-                  })
-                })) ?? (0,runtime_core_esm_bundler/* createVNode */.Wm)(VListItem/* VListItem */.l, (0,runtime_core_esm_bundler/* mergeProps */.dG)({
-                  "key": index
-                }, item.props, {
-                  "onClick": () => select(item)
-                }), {
-                  prepend: _ref2 => {
-                    let {
-                      isSelected
-                    } = _ref2;
-                    return props.multiple && !props.hideSelected ? (0,runtime_core_esm_bundler/* createVNode */.Wm)(VCheckboxBtn/* VCheckboxBtn */.pM, {
-                      "modelValue": isSelected,
-                      "ripple": false
-                    }, null) : undefined;
-                  },
-                  title: () => {
-                    var _getMatches, _search$value;
-                    return isPristine.value ? item.title : highlightResult(item.title, (_getMatches = getMatches(item)) == null ? void 0 : _getMatches.title, ((_search$value = search.value) == null ? void 0 : _search$value.length) ?? 0);
-                  }
-                });
-              }), (_slots$appendItem = slots['append-item']) == null ? void 0 : _slots$appendItem.call(slots)]
-            })]
-          }), selections.value.map((item, index) => {
-            function onChipClose(e) {
-              e.stopPropagation();
-              e.preventDefault();
-              select(item);
-            }
-            const slotProps = {
-              'onClick:close': onChipClose,
-              modelValue: true,
-              'onUpdate:modelValue': undefined
-            };
-            return (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
-              "key": item.value,
-              "class": "v-autocomplete__selection"
-            }, [hasChips ? (0,runtime_core_esm_bundler/* createVNode */.Wm)(VDefaultsProvider/* VDefaultsProvider */.z, {
-              "defaults": {
-                VChip: {
-                  closable: props.closableChips,
-                  size: 'small',
-                  text: item.title
-                }
-              }
-            }, {
-              default: () => [slots.chip ? slots.chip({
-                item,
-                index,
-                props: slotProps
-              }) : (0,runtime_core_esm_bundler/* createVNode */.Wm)(VChip/* VChip */.v, slotProps, null)]
-            }) : slots.selection ? slots.selection({
+        default: () => (0,runtime_core_esm_bundler/* createVNode */.Wm)(runtime_core_esm_bundler/* Fragment */.HY, null, [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VMenu/* VMenu */.T, (0,runtime_core_esm_bundler/* mergeProps */.dG)({
+          "ref": vMenuRef,
+          "modelValue": menu.value,
+          "onUpdate:modelValue": $event => menu.value = $event,
+          "activator": "parent",
+          "contentClass": "v-autocomplete__content",
+          "eager": props.eager,
+          "maxHeight": 310,
+          "openOnClick": false,
+          "closeOnContentClick": false,
+          "transition": props.transition,
+          "onAfterLeave": onAfterLeave
+        }, props.menuProps), {
+          default: () => [hasList && (0,runtime_core_esm_bundler/* createVNode */.Wm)(VList/* VList */.i, {
+            "ref": listRef,
+            "selected": selected.value,
+            "selectStrategy": props.multiple ? 'independent' : 'single-independent',
+            "onMousedown": e => e.preventDefault(),
+            "onFocusin": onFocusin,
+            "onFocusout": onFocusout
+          }, {
+            default: () => [!displayItems.value.length && !props.hideNoData && (slots['no-data']?.() ?? (0,runtime_core_esm_bundler/* createVNode */.Wm)(VListItem/* VListItem */.l, {
+              "title": t(props.noDataText)
+            }, null)), slots['prepend-item']?.(), displayItems.value.map((item, index) => slots.item?.({
               item,
-              index
-            }) : (0,runtime_core_esm_bundler/* createVNode */.Wm)("span", {
-              "class": "v-autocomplete__selection-text"
-            }, [item.title, props.multiple && index < selections.value.length - 1 && (0,runtime_core_esm_bundler/* createVNode */.Wm)("span", {
-              "class": "v-autocomplete__selection-comma"
-            }, [(0,runtime_core_esm_bundler/* createTextVNode */.Uk)(",")])])]);
-          })]);
-        }
+              index,
+              props: (0,runtime_core_esm_bundler/* mergeProps */.dG)(item.props, {
+                onClick: () => select(item)
+              })
+            }) ?? (0,runtime_core_esm_bundler/* createVNode */.Wm)(VListItem/* VListItem */.l, (0,runtime_core_esm_bundler/* mergeProps */.dG)({
+              "key": index
+            }, item.props, {
+              "onClick": () => select(item)
+            }), {
+              prepend: _ref2 => {
+                let {
+                  isSelected
+                } = _ref2;
+                return props.multiple && !props.hideSelected ? (0,runtime_core_esm_bundler/* createVNode */.Wm)(VCheckboxBtn/* VCheckboxBtn */.pM, {
+                  "modelValue": isSelected,
+                  "ripple": false
+                }, null) : undefined;
+              },
+              title: () => {
+                return isPristine.value ? item.title : highlightResult(item.title, getMatches(item)?.title, search.value?.length ?? 0);
+              }
+            })), slots['append-item']?.()]
+          })]
+        }), selections.value.map((item, index) => {
+          function onChipClose(e) {
+            e.stopPropagation();
+            e.preventDefault();
+            select(item);
+          }
+          const slotProps = {
+            'onClick:close': onChipClose,
+            modelValue: true,
+            'onUpdate:modelValue': undefined
+          };
+          return (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
+            "key": item.value,
+            "class": "v-autocomplete__selection"
+          }, [hasChips ? (0,runtime_core_esm_bundler/* createVNode */.Wm)(VDefaultsProvider/* VDefaultsProvider */.z, {
+            "defaults": {
+              VChip: {
+                closable: props.closableChips,
+                size: 'small',
+                text: item.title
+              }
+            }
+          }, {
+            default: () => [slots.chip ? slots.chip({
+              item,
+              index,
+              props: slotProps
+            }) : (0,runtime_core_esm_bundler/* createVNode */.Wm)(VChip/* VChip */.v, slotProps, null)]
+          }) : slots.selection ? slots.selection({
+            item,
+            index
+          }) : (0,runtime_core_esm_bundler/* createVNode */.Wm)("span", {
+            "class": "v-autocomplete__selection-text"
+          }, [item.title, props.multiple && index < selections.value.length - 1 && (0,runtime_core_esm_bundler/* createVNode */.Wm)("span", {
+            "class": "v-autocomplete__selection-comma"
+          }, [(0,runtime_core_esm_bundler/* createTextVNode */.Uk)(",")])])]);
+        })])
       });
     });
     return (0,forwardRefs/* forwardRefs */.F)({
@@ -15445,7 +15432,10 @@ var VAvatar = __webpack_require__(652);
  // Utilities
 
 
-const VBadge = (0,defineComponent/* defineComponent */.aZ)({
+
+// Types
+
+const VBadge = (0,defineComponent/* genericComponent */.ev)()({
   name: 'VBadge',
   inheritAttrs: false,
   props: {
@@ -15503,7 +15493,6 @@ const VBadge = (0,defineComponent/* defineComponent */.aZ)({
       return base + (['top', 'bottom'].includes(side) ? +(props.offsetY ?? 0) : ['left', 'right'].includes(side) ? +(props.offsetX ?? 0) : 0);
     });
     (0,useRender/* useRender */.L)(() => {
-      var _ctx$slots$default, _ctx$slots, _ctx$slots$badge, _ctx$slots2;
       const value = Number(props.content);
       const content = !props.max || isNaN(value) ? props.content : value <= props.max ? value : `${props.max}+`;
       const [badgeAttrs, attrs] = (0,helpers/* pick */.ei)(ctx.attrs, ['aria-atomic', 'aria-label', 'aria-live', 'role', 'title']);
@@ -15517,7 +15506,7 @@ const VBadge = (0,defineComponent/* defineComponent */.aZ)({
       }, attrs), {
         default: () => [(0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
           "class": "v-badge__wrapper"
-        }, [(_ctx$slots$default = (_ctx$slots = ctx.slots).default) == null ? void 0 : _ctx$slots$default.call(_ctx$slots), (0,runtime_core_esm_bundler/* createVNode */.Wm)(composables_transition/* MaybeTransition */.J, {
+        }, [ctx.slots.default?.(), (0,runtime_core_esm_bundler/* createVNode */.Wm)(composables_transition/* MaybeTransition */.J, {
           "transition": props.transition
         }, {
           default: () => [(0,runtime_core_esm_bundler/* withDirectives */.wy)((0,runtime_core_esm_bundler/* createVNode */.Wm)("span", (0,runtime_core_esm_bundler/* mergeProps */.dG)({
@@ -15527,7 +15516,7 @@ const VBadge = (0,defineComponent/* defineComponent */.aZ)({
             "aria-label": t(props.label, value),
             "aria-live": "polite",
             "role": "status"
-          }, badgeAttrs), [props.dot ? undefined : ctx.slots.badge ? (_ctx$slots$badge = (_ctx$slots2 = ctx.slots).badge) == null ? void 0 : _ctx$slots$badge.call(_ctx$slots2) : props.icon ? (0,runtime_core_esm_bundler/* createVNode */.Wm)(VIcon/* VIcon */.t, {
+          }, badgeAttrs), [props.dot ? undefined : ctx.slots.badge ? ctx.slots.badge?.() : props.icon ? (0,runtime_core_esm_bundler/* createVNode */.Wm)(VIcon/* VIcon */.t, {
             "icon": props.icon
           }, null) : content]), [[runtime_dom_esm_bundler/* vShow */.F8, props.modelValue]])]
         })])]
@@ -15546,7 +15535,7 @@ const VBadge = (0,defineComponent/* defineComponent */.aZ)({
 // Composables
  // Utility
 
-const VBannerActions = (0,defineComponent/* defineComponent */.aZ)({
+const VBannerActions = (0,defineComponent/* genericComponent */.ev)()({
   name: 'VBannerActions',
   props: {
     color: String,
@@ -15563,12 +15552,9 @@ const VBannerActions = (0,defineComponent/* defineComponent */.aZ)({
         variant: 'text'
       }
     });
-    (0,useRender/* useRender */.L)(() => {
-      var _slots$default;
-      return (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
-        "class": "v-banner-actions"
-      }, [(_slots$default = slots.default) == null ? void 0 : _slots$default.call(slots)]);
-    });
+    (0,useRender/* useRender */.L)(() => (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
+      "class": "v-banner-actions"
+    }, [slots.default?.()]));
     return {};
   }
 });
@@ -15602,7 +15588,7 @@ const VBannerText = (0,createSimpleFunctional/* createSimpleFunctional */.J)('v-
 
 // Types
 
-const VBanner = (0,defineComponent/* defineComponent */.aZ)({
+const VBanner = (0,defineComponent/* genericComponent */.ev)()({
   name: 'VBanner',
   props: {
     avatar: String,
@@ -15662,7 +15648,6 @@ const VBanner = (0,defineComponent/* defineComponent */.aZ)({
       }
     });
     (0,useRender/* useRender */.L)(() => {
-      var _slots$default;
       const hasText = !!(props.text || slots.text);
       const hasPrepend = !!(slots.prepend || props.avatar || props.icon);
       return (0,runtime_core_esm_bundler/* createVNode */.Wm)(props.tag, {
@@ -15694,7 +15679,7 @@ const VBanner = (0,defineComponent/* defineComponent */.aZ)({
           "key": "text"
         }, {
           default: () => [slots.text ? slots.text() : props.text]
-        }), (_slots$default = slots.default) == null ? void 0 : _slots$default.call(slots)]), slots.actions && (0,runtime_core_esm_bundler/* createVNode */.Wm)(VBannerActions, null, {
+        }), slots.default?.()]), slots.actions && (0,runtime_core_esm_bundler/* createVNode */.Wm)(VBannerActions, null, {
           default: () => [slots.actions()]
         })]
       });
@@ -15727,11 +15712,12 @@ var VBtnToggle = __webpack_require__(3748);
 
 
 
+
  // Utilities
 
  // Types
 
-const VBottomNavigation = (0,defineComponent/* defineComponent */.aZ)({
+const VBottomNavigation = (0,defineComponent/* genericComponent */.ev)()({
   name: 'VBottomNavigation',
   props: {
     bgColor: String,
@@ -15791,6 +15777,9 @@ const VBottomNavigation = (0,defineComponent/* defineComponent */.aZ)({
     const {
       roundedClasses
     } = (0,rounded/* useRounded */.b)(props);
+    const {
+      ssrBootStyles
+    } = useSsrBoot();
     const height = (0,runtime_core_esm_bundler/* computed */.Fl)(() => Number(props.height) - (props.density === 'comfortable' ? 8 : 0) - (props.density === 'compact' ? 16 : 0));
     const isActive = (0,reactivity_esm_bundler/* toRef */.Vh)(props, 'active');
     const {
@@ -15825,7 +15814,7 @@ const VBottomNavigation = (0,defineComponent/* defineComponent */.aZ)({
         "style": [backgroundColorStyles.value, layoutItemStyles.value, {
           height: (0,helpers/* convertToUnit */.kb)(height.value),
           transform: `translateY(${(0,helpers/* convertToUnit */.kb)(!isActive.value ? 100 : 0, '%')})`
-        }]
+        }, ssrBootStyles.value]
       }, {
         default: () => [slots.default && (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
           "class": "v-bottom-navigation__content"
@@ -15844,7 +15833,7 @@ const VBottomNavigation = (0,defineComponent/* defineComponent */.aZ)({
 
 // Utility
 
-const VBreadcrumbsDivider = (0,defineComponent/* defineComponent */.aZ)({
+const VBreadcrumbsDivider = (0,defineComponent/* genericComponent */.ev)()({
   name: 'VBreadcrumbsDivider',
   props: {
     divider: [Number, String]
@@ -15853,12 +15842,9 @@ const VBreadcrumbsDivider = (0,defineComponent/* defineComponent */.aZ)({
     let {
       slots
     } = _ref;
-    (0,useRender/* useRender */.L)(() => {
-      var _slots$default;
-      return (0,runtime_core_esm_bundler/* createVNode */.Wm)("li", {
-        "class": "v-breadcrumbs-divider"
-      }, [(slots == null ? void 0 : (_slots$default = slots.default) == null ? void 0 : _slots$default.call(slots)) ?? props.divider]);
-    });
+    (0,useRender/* useRender */.L)(() => (0,runtime_core_esm_bundler/* createVNode */.Wm)("li", {
+      "class": "v-breadcrumbs-divider"
+    }, [slots?.default?.() ?? props.divider]));
     return {};
   }
 });
@@ -15872,7 +15858,7 @@ var composables_router = __webpack_require__(6183);
  // Utilities
 
 
-const VBreadcrumbsItem = (0,defineComponent/* defineComponent */.aZ)({
+const VBreadcrumbsItem = (0,defineComponent/* genericComponent */.ev)()({
   name: 'VBreadcrumbsItem',
   props: {
     active: Boolean,
@@ -15892,17 +15878,13 @@ const VBreadcrumbsItem = (0,defineComponent/* defineComponent */.aZ)({
       attrs
     } = _ref;
     const link = (0,composables_router/* useLink */.nB)(props, attrs);
-    const isActive = (0,runtime_core_esm_bundler/* computed */.Fl)(() => {
-      var _link$isActive;
-      return props.active || ((_link$isActive = link.isActive) == null ? void 0 : _link$isActive.value);
-    });
+    const isActive = (0,runtime_core_esm_bundler/* computed */.Fl)(() => props.active || link.isActive?.value);
     const color = (0,runtime_core_esm_bundler/* computed */.Fl)(() => isActive.value ? props.activeColor : props.color);
     const {
       textColorClasses,
       textColorStyles
     } = (0,composables_color/* useTextColor */.rY)(color);
     (0,useRender/* useRender */.L)(() => {
-      var _slots$default;
       const Tag = link.isLink.value ? 'a' : props.tag;
       return (0,runtime_core_esm_bundler/* createVNode */.Wm)(Tag, {
         "class": ['v-breadcrumbs-item', {
@@ -15916,7 +15898,7 @@ const VBreadcrumbsItem = (0,defineComponent/* defineComponent */.aZ)({
         "aria-current": isActive.value ? 'page' : undefined,
         "onClick": link.navigate
       }, {
-        default: () => [((_slots$default = slots.default) == null ? void 0 : _slots$default.call(slots)) ?? props.title]
+        default: () => [slots.default?.() ?? props.title]
       });
     });
     return {};
@@ -15992,7 +15974,6 @@ const VBreadcrumbs = (0,defineComponent/* genericComponent */.ev)()({
       }
     });
     (0,useRender/* useRender */.L)(() => {
-      var _slots$default;
       const hasPrepend = !!(slots.prepend || props.icon);
       return (0,runtime_core_esm_bundler/* createVNode */.Wm)(props.tag, {
         "class": ['v-breadcrumbs', backgroundColorClasses.value, densityClasses.value, roundedClasses.value],
@@ -16016,22 +15997,16 @@ const VBreadcrumbs = (0,defineComponent/* genericComponent */.ev)()({
         }, typeof item === 'string' ? {
           title: item
         } : item), {
-          default: slots.title ? () => {
-            var _slots$title;
-            return (_slots$title = slots.title) == null ? void 0 : _slots$title.call(slots, {
-              item,
-              index
-            });
-          } : undefined
+          default: slots.title ? () => slots.title?.({
+            item,
+            index
+          }) : undefined
         }), index < array.length - 1 && (0,runtime_core_esm_bundler/* createVNode */.Wm)(VBreadcrumbsDivider, null, {
-          default: slots.divider ? () => {
-            var _slots$divider;
-            return (_slots$divider = slots.divider) == null ? void 0 : _slots$divider.call(slots, {
-              item,
-              index
-            });
-          } : undefined
-        })])), (_slots$default = slots.default) == null ? void 0 : _slots$default.call(slots)]
+          default: slots.divider ? () => slots.divider?.({
+            item,
+            index
+          }) : undefined
+        })])), slots.default?.()]
       });
     });
     return {};
@@ -16097,32 +16072,29 @@ const handleGesture = wrapper => {
   }
 };
 function touchstart(event, wrapper) {
-  var _wrapper$start;
   const touch = event.changedTouches[0];
   wrapper.touchstartX = touch.clientX;
   wrapper.touchstartY = touch.clientY;
-  (_wrapper$start = wrapper.start) == null ? void 0 : _wrapper$start.call(wrapper, {
+  wrapper.start?.({
     originalEvent: event,
     ...wrapper
   });
 }
 function touchend(event, wrapper) {
-  var _wrapper$end;
   const touch = event.changedTouches[0];
   wrapper.touchendX = touch.clientX;
   wrapper.touchendY = touch.clientY;
-  (_wrapper$end = wrapper.end) == null ? void 0 : _wrapper$end.call(wrapper, {
+  wrapper.end?.({
     originalEvent: event,
     ...wrapper
   });
   handleGesture(wrapper);
 }
 function touchmove(event, wrapper) {
-  var _wrapper$move;
   const touch = event.changedTouches[0];
   wrapper.touchmoveX = touch.clientX;
   wrapper.touchmoveY = touch.clientY;
-  (_wrapper$move = wrapper.move) == null ? void 0 : _wrapper$move.call(wrapper, {
+  wrapper.move?.({
     originalEvent: event,
     ...wrapper
   });
@@ -16153,13 +16125,12 @@ function createHandlers() {
   };
 }
 function mounted(el, binding) {
-  var _binding$instance;
   const value = binding.value;
-  const target = value != null && value.parent ? el.parentElement : el;
-  const options = (value == null ? void 0 : value.options) ?? {
+  const target = value?.parent ? el.parentElement : el;
+  const options = value?.options ?? {
     passive: true
   };
-  const uid = (_binding$instance = binding.instance) == null ? void 0 : _binding$instance.$.uid; // TODO: use custom uid generator
+  const uid = binding.instance?.$.uid; // TODO: use custom uid generator
 
   if (!target || !uid) return;
   const handlers = createHandlers(binding.value);
@@ -16170,10 +16141,9 @@ function mounted(el, binding) {
   });
 }
 function unmounted(el, binding) {
-  var _binding$value, _binding$instance2;
-  const target = (_binding$value = binding.value) != null && _binding$value.parent ? el.parentElement : el;
-  const uid = (_binding$instance2 = binding.instance) == null ? void 0 : _binding$instance2.$.uid;
-  if (!(target != null && target._touchHandlers) || !uid) return;
+  const target = binding.value?.parent ? el.parentElement : el;
+  const uid = binding.instance?.$.uid;
+  if (!target?._touchHandlers || !uid) return;
   const handlers = target._touchHandlers[uid];
   (0,helpers/* keys */.XP)(handlers).forEach(eventName => {
     target.removeEventListener(eventName, handlers[eventName]);
@@ -16345,28 +16315,25 @@ const VWindow = (0,defineComponent/* genericComponent */.ev)()({
         ...(props.touch === true ? {} : props.touch)
       };
     });
-    (0,useRender/* useRender */.L)(() => {
-      var _slots$default, _slots$additional;
-      return (0,runtime_core_esm_bundler/* withDirectives */.wy)((0,runtime_core_esm_bundler/* createVNode */.Wm)(props.tag, {
-        "ref": rootRef,
-        "class": ['v-window', {
-          'v-window--show-arrows-on-hover': props.showArrows === 'hover'
-        }, themeClasses.value]
-      }, {
-        default: () => [(0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
-          "class": "v-window__container",
-          "style": {
-            height: transitionHeight.value
-          }
-        }, [(_slots$default = slots.default) == null ? void 0 : _slots$default.call(slots, {
-          group
-        }), props.showArrows !== false && (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
-          "class": "v-window__controls"
-        }, [arrows.value])]), (_slots$additional = slots.additional) == null ? void 0 : _slots$additional.call(slots, {
-          group
-        })]
-      }), [[(0,runtime_core_esm_bundler/* resolveDirective */.Q2)("touch"), touchOptions.value]]);
-    });
+    (0,useRender/* useRender */.L)(() => (0,runtime_core_esm_bundler/* withDirectives */.wy)((0,runtime_core_esm_bundler/* createVNode */.Wm)(props.tag, {
+      "ref": rootRef,
+      "class": ['v-window', {
+        'v-window--show-arrows-on-hover': props.showArrows === 'hover'
+      }, themeClasses.value]
+    }, {
+      default: () => [(0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
+        "class": "v-window__container",
+        "style": {
+          height: transitionHeight.value
+        }
+      }, [slots.default?.({
+        group
+      }), props.showArrows !== false && (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
+        "class": "v-window__controls"
+      }, [arrows.value])]), slots.additional?.({
+        group
+      })]
+    }), [[(0,runtime_core_esm_bundler/* resolveDirective */.Q2)("touch"), touchOptions.value]]));
     return {
       group
     };
@@ -16390,7 +16357,7 @@ const VWindow = (0,defineComponent/* genericComponent */.ev)()({
 
 // Types
 
-const VCarousel = (0,defineComponent/* defineComponent */.aZ)({
+const VCarousel = (0,defineComponent/* genericComponent */.ev)()({
   name: 'VCarousel',
   props: {
     color: String,
@@ -16517,9 +16484,9 @@ var lazy = __webpack_require__(1136);
 
  // Utilities
 
+ // Types
 
-
-const VWindowItem = (0,defineComponent/* defineComponent */.aZ)({
+const VWindowItem = (0,defineComponent/* genericComponent */.ev)()({
   name: 'VWindowItem',
   directives: {
     Touch: touch
@@ -16575,9 +16542,8 @@ const VWindowItem = (0,defineComponent/* defineComponent */.aZ)({
       // Initialize transition state here.
       isTransitioning.value = true;
       if (window.transitionCount.value === 0) {
-        var _window$rootRef$value;
         // Set initial height for height transition.
-        window.transitionHeight.value = (0,helpers/* convertToUnit */.kb)((_window$rootRef$value = window.rootRef.value) == null ? void 0 : _window$rootRef$value.clientHeight);
+        window.transitionHeight.value = (0,helpers/* convertToUnit */.kb)(window.rootRef.value?.clientHeight);
       }
       window.transitionCount.value += 1;
     }
@@ -16615,16 +16581,13 @@ const VWindowItem = (0,defineComponent/* defineComponent */.aZ)({
     const {
       hasContent
     } = (0,lazy/* useLazy */.l)(props, groupItem.isSelected);
-    (0,useRender/* useRender */.L)(() => {
-      var _slots$default;
-      return (0,runtime_core_esm_bundler/* createVNode */.Wm)(composables_transition/* MaybeTransition */.J, {
-        "transition": isBooted.value && transition.value
-      }, {
-        default: () => [(0,runtime_core_esm_bundler/* withDirectives */.wy)((0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
-          "class": ['v-window-item', groupItem.selectedClass.value]
-        }, [hasContent.value && ((_slots$default = slots.default) == null ? void 0 : _slots$default.call(slots))]), [[runtime_dom_esm_bundler/* vShow */.F8, groupItem.isSelected.value]])]
-      });
-    });
+    (0,useRender/* useRender */.L)(() => (0,runtime_core_esm_bundler/* createVNode */.Wm)(composables_transition/* MaybeTransition */.J, {
+      "transition": isBooted.value && transition.value
+    }, {
+      default: () => [(0,runtime_core_esm_bundler/* withDirectives */.wy)((0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
+        "class": ['v-window-item', groupItem.selectedClass.value]
+      }, [hasContent.value && slots.default?.()]), [[runtime_dom_esm_bundler/* vShow */.F8, groupItem.isSelected.value]])]
+    }));
     return {};
   }
 });
@@ -16633,8 +16596,8 @@ const VWindowItem = (0,defineComponent/* defineComponent */.aZ)({
 // Components
 
  // Utilities
-
-const VCarouselItem = (0,defineComponent/* defineComponent */.aZ)({
+ // Types
+const VCarouselItem = (0,defineComponent/* genericComponent */.ev)()({
   name: 'VCarouselItem',
   inheritAttrs: false,
   props: {
@@ -16775,7 +16738,6 @@ const VColorPickerCanvas = (0,defineComponent/* defineComponent */.aZ)({
       window.removeEventListener('touchend', handleMouseUp);
     }
     (0,runtime_core_esm_bundler/* watch */.YP)(dotPosition, () => {
-      var _props$color, _props$color2;
       if (isOutsideUpdate.value) {
         isOutsideUpdate.value = false;
         return;
@@ -16790,21 +16752,20 @@ const VColorPickerCanvas = (0,defineComponent/* defineComponent */.aZ)({
         y
       } = dotPosition.value;
       emit('update:color', {
-        h: ((_props$color = props.color) == null ? void 0 : _props$color.h) ?? 0,
+        h: props.color?.h ?? 0,
         s: (0,helpers/* clamp */.uZ)(x, 0, width) / width,
         v: 1 - (0,helpers/* clamp */.uZ)(y, 0, height) / height,
-        a: ((_props$color2 = props.color) == null ? void 0 : _props$color2.a) ?? 1
+        a: props.color?.a ?? 1
       });
     });
     function updateCanvas() {
-      var _props$color3;
       if (!canvasRef.value) return;
       const canvas = canvasRef.value;
       const ctx = canvas.getContext('2d');
       if (!ctx) return;
       const saturationGradient = ctx.createLinearGradient(0, 0, canvas.width, 0);
       saturationGradient.addColorStop(0, 'hsla(0, 0%, 100%, 1)'); // white
-      saturationGradient.addColorStop(1, `hsla(${((_props$color3 = props.color) == null ? void 0 : _props$color3.h) ?? 0}, 100%, 50%, 1)`);
+      saturationGradient.addColorStop(1, `hsla(${props.color?.h ?? 0}, 100%, 50%, 1)`);
       ctx.fillStyle = saturationGradient;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
       const valueGradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
@@ -16813,10 +16774,7 @@ const VColorPickerCanvas = (0,defineComponent/* defineComponent */.aZ)({
       ctx.fillStyle = valueGradient;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
     }
-    (0,runtime_core_esm_bundler/* watch */.YP)(() => {
-      var _props$color4;
-      return (_props$color4 = props.color) == null ? void 0 : _props$color4.h;
-    }, updateCanvas, {
+    (0,runtime_core_esm_bundler/* watch */.YP)(() => props.color?.h, updateCanvas, {
       immediate: true
     });
     (0,runtime_core_esm_bundler/* watch */.YP)(() => props.color, () => {
@@ -16863,7 +16821,6 @@ const VColorPickerCanvas = (0,defineComponent/* defineComponent */.aZ)({
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/util/colorUtils.mjs + 2 modules
 var colorUtils = __webpack_require__(661);
 ;// CONCATENATED MODULE: ./node_modules/vuetify/lib/components/VColorPicker/util/index.mjs
-var _rgba$inputs;
 // Utilities
  // Types
 function has(obj, key) {
@@ -16980,7 +16937,7 @@ const rgba = {
 };
 const rgb = {
   ...rgba,
-  inputs: (_rgba$inputs = rgba.inputs) == null ? void 0 : _rgba$inputs.slice(0, 3)
+  inputs: rgba.inputs?.slice(0, 3)
 };
 const hsla = {
   inputProps: {
@@ -17114,11 +17071,10 @@ const VColorPickerEdit = (0,defineComponent/* defineComponent */.aZ)({
       }));
     });
     const inputs = (0,runtime_core_esm_bundler/* computed */.Fl)(() => {
-      var _mode$inputs;
       const mode = enabledModes.value.find(m => m.name === props.mode);
       if (!mode) return [];
       const color = props.color ? mode.to(props.color) : {};
-      return (_mode$inputs = mode.inputs) == null ? void 0 : _mode$inputs.map(_ref3 => {
+      return mode.inputs?.map(_ref3 => {
         let {
           getValue,
           getColor,
@@ -17137,20 +17093,17 @@ const VColorPickerEdit = (0,defineComponent/* defineComponent */.aZ)({
         };
       });
     });
-    (0,useRender/* useRender */.L)(() => {
-      var _inputs$value;
-      return (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
-        "class": "v-color-picker-edit"
-      }, [(_inputs$value = inputs.value) == null ? void 0 : _inputs$value.map(props => (0,runtime_core_esm_bundler/* createVNode */.Wm)(VColorPickerInput, props, null)), enabledModes.value.length > 1 && (0,runtime_core_esm_bundler/* createVNode */.Wm)(VBtn/* VBtn */.T, {
-        "icon": "$unfold",
-        "size": "x-small",
-        "variant": "plain",
-        "onClick": () => {
-          const mi = enabledModes.value.findIndex(m => m.name === props.mode);
-          emit('update:mode', enabledModes.value[(mi + 1) % enabledModes.value.length].name);
-        }
-      }, null)]);
-    });
+    (0,useRender/* useRender */.L)(() => (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
+      "class": "v-color-picker-edit"
+    }, [inputs.value?.map(props => (0,runtime_core_esm_bundler/* createVNode */.Wm)(VColorPickerInput, props, null)), enabledModes.value.length > 1 && (0,runtime_core_esm_bundler/* createVNode */.Wm)(VBtn/* VBtn */.T, {
+      "icon": "$unfold",
+      "size": "x-small",
+      "variant": "plain",
+      "onClick": () => {
+        const mi = enabledModes.value.findIndex(m => m.name === props.mode);
+        emit('update:mode', enabledModes.value[(mi + 1) % enabledModes.value.length].name);
+      }
+    }, null)]));
     return {};
   }
 });
@@ -17184,52 +17137,49 @@ const VColorPickerPreview = (0,defineComponent/* defineComponent */.aZ)({
     let {
       emit
     } = _ref;
-    (0,useRender/* useRender */.L)(() => {
-      var _props$color, _props$color2;
-      return (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
-        "class": ['v-color-picker-preview', {
-          'v-color-picker-preview--hide-alpha': props.hideAlpha
-        }]
-      }, [(0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
-        "class": "v-color-picker-preview__dot"
-      }, [(0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
-        "style": {
-          background: (0,colorUtils/* HSVtoCSS */.wQ)(props.color ?? nullColor)
-        }
-      }, null)]), (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
-        "class": "v-color-picker-preview__sliders"
-      }, [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VSlider/* VSlider */.R, {
-        "class": "v-color-picker-preview__track v-color-picker-preview__hue",
-        "modelValue": (_props$color = props.color) == null ? void 0 : _props$color.h,
-        "onUpdate:modelValue": h => emit('update:color', {
-          ...(props.color ?? nullColor),
-          h
-        }),
-        "step": 0,
-        "min": 0,
-        "max": 360,
-        "disabled": props.disabled,
-        "thumbSize": 14,
-        "trackSize": 8,
-        "trackFillColor": "white",
-        "hideDetails": true
-      }, null), !props.hideAlpha && (0,runtime_core_esm_bundler/* createVNode */.Wm)(VSlider/* VSlider */.R, {
-        "class": "v-color-picker-preview__track v-color-picker-preview__alpha",
-        "modelValue": (_props$color2 = props.color) == null ? void 0 : _props$color2.a,
-        "onUpdate:modelValue": a => emit('update:color', {
-          ...(props.color ?? nullColor),
-          a
-        }),
-        "step": 0,
-        "min": 0,
-        "max": 1,
-        "disabled": props.disabled,
-        "thumbSize": 14,
-        "trackSize": 8,
-        "trackFillColor": "white",
-        "hideDetails": true
-      }, null)])]);
-    });
+    (0,useRender/* useRender */.L)(() => (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
+      "class": ['v-color-picker-preview', {
+        'v-color-picker-preview--hide-alpha': props.hideAlpha
+      }]
+    }, [(0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
+      "class": "v-color-picker-preview__dot"
+    }, [(0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
+      "style": {
+        background: (0,colorUtils/* HSVtoCSS */.wQ)(props.color ?? nullColor)
+      }
+    }, null)]), (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
+      "class": "v-color-picker-preview__sliders"
+    }, [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VSlider/* VSlider */.R, {
+      "class": "v-color-picker-preview__track v-color-picker-preview__hue",
+      "modelValue": props.color?.h,
+      "onUpdate:modelValue": h => emit('update:color', {
+        ...(props.color ?? nullColor),
+        h
+      }),
+      "step": 0,
+      "min": 0,
+      "max": 360,
+      "disabled": props.disabled,
+      "thumbSize": 14,
+      "trackSize": 8,
+      "trackFillColor": "white",
+      "hideDetails": true
+    }, null), !props.hideAlpha && (0,runtime_core_esm_bundler/* createVNode */.Wm)(VSlider/* VSlider */.R, {
+      "class": "v-color-picker-preview__track v-color-picker-preview__alpha",
+      "modelValue": props.color?.a,
+      "onUpdate:modelValue": a => emit('update:color', {
+        ...(props.color ?? nullColor),
+        a
+      }),
+      "step": 0,
+      "min": 0,
+      "max": 1,
+      "disabled": props.disabled,
+      "thumbSize": 14,
+      "trackSize": 8,
+      "trackFillColor": "white",
+      "hideDetails": true
+    }, null)])]));
     return {};
   }
 });
@@ -17635,7 +17585,7 @@ const VColorPickerSwatches = (0,defineComponent/* defineComponent */.aZ)({
  // Utilities
 
 
-const VSheet = (0,defineComponent/* defineComponent */.aZ)({
+const VSheet = (0,defineComponent/* genericComponent */.ev)()({
   name: 'VSheet',
   props: {
     color: String,
@@ -17891,7 +17841,6 @@ const VCombobox = (0,defineComponent/* genericComponent */.ev)()({
     'update:menu': val => true
   },
   setup(props, _ref) {
-    var _model$value$;
     let {
       emit,
       slots
@@ -17902,12 +17851,17 @@ const VCombobox = (0,defineComponent/* genericComponent */.ev)()({
     const vTextFieldRef = (0,reactivity_esm_bundler/* ref */.iH)();
     const isFocused = (0,reactivity_esm_bundler/* ref */.iH)(false);
     const isPristine = (0,reactivity_esm_bundler/* ref */.iH)(true);
-    const menu = (0,proxiedModel/* useProxiedModel */.z)(props, 'menu');
-    const selectionIndex = (0,reactivity_esm_bundler/* ref */.iH)(-1);
-    const color = (0,runtime_core_esm_bundler/* computed */.Fl)(() => {
-      var _vTextFieldRef$value;
-      return (_vTextFieldRef$value = vTextFieldRef.value) == null ? void 0 : _vTextFieldRef$value.color;
+    const vMenuRef = (0,reactivity_esm_bundler/* ref */.iH)();
+    const _menu = (0,proxiedModel/* useProxiedModel */.z)(props, 'menu');
+    const menu = (0,runtime_core_esm_bundler/* computed */.Fl)({
+      get: () => _menu.value,
+      set: v => {
+        if (_menu.value && !v && vMenuRef.value?.ΨopenChildren) return;
+        _menu.value = v;
+      }
     });
+    const selectionIndex = (0,reactivity_esm_bundler/* ref */.iH)(-1);
+    const color = (0,runtime_core_esm_bundler/* computed */.Fl)(() => vTextFieldRef.value?.color);
     const {
       items,
       transformIn,
@@ -17922,18 +17876,17 @@ const VCombobox = (0,defineComponent/* genericComponent */.ev)()({
       return props.multiple ? transformed : transformed[0] ?? null;
     });
     const form = (0,composables_form/* useForm */.cI)();
-    const _search = (0,reactivity_esm_bundler/* ref */.iH)(!props.multiple ? ((_model$value$ = model.value[0]) == null ? void 0 : _model$value$.title) ?? '' : '');
+    const _search = (0,reactivity_esm_bundler/* ref */.iH)(!props.multiple ? model.value[0]?.title ?? '' : '');
     const search = (0,runtime_core_esm_bundler/* computed */.Fl)({
       get: () => {
         return _search.value;
       },
       set: val => {
-        var _props$delimiters;
         _search.value = val;
         if (!props.multiple) {
           model.value = [(0,composables_items/* transformItem */.Nb)(props, val)];
         }
-        if (val && props.multiple && (_props$delimiters = props.delimiters) != null && _props$delimiters.length) {
+        if (val && props.multiple && props.delimiters?.length) {
           const values = val.split(new RegExp(`(?:${props.delimiters.join('|')})+`));
           if (values.length > 1) {
             values.forEach(v => {
@@ -17953,8 +17906,7 @@ const VCombobox = (0,defineComponent/* genericComponent */.ev)()({
     });
     (0,runtime_core_esm_bundler/* watch */.YP)(model, value => {
       if (!props.multiple) {
-        var _value$;
-        _search.value = ((_value$ = value[0]) == null ? void 0 : _value$.title) ?? '';
+        _search.value = value[0]?.title ?? '';
       }
     });
     const {
@@ -17976,20 +17928,21 @@ const VCombobox = (0,defineComponent/* genericComponent */.ev)()({
     const selection = (0,runtime_core_esm_bundler/* computed */.Fl)(() => selections.value[selectionIndex.value]);
     const listRef = (0,reactivity_esm_bundler/* ref */.iH)();
     function onClear(e) {
-      model.value = [];
       if (props.openOnClear) {
         menu.value = true;
       }
     }
-    function onClickControl() {
-      if (props.hideNoData && !items.value.length || props.readonly || form != null && form.isReadonly.value) return;
+    function onMousedownControl() {
+      if (props.hideNoData && !items.value.length || props.readonly || form?.isReadonly.value) return;
       menu.value = true;
     }
     function onKeydown(e) {
-      if (props.readonly || form != null && form.isReadonly.value) return;
+      if (props.readonly || form?.isReadonly.value) return;
       const selectionStart = vTextFieldRef.value.selectionStart;
       const length = selected.value.length;
-      if (selectionIndex.value > -1) e.preventDefault();
+      if (selectionIndex.value > -1 || ['Enter', 'ArrowDown', 'ArrowUp'].includes(e.key)) {
+        e.preventDefault();
+      }
       if (['Enter', 'ArrowDown'].includes(e.key)) {
         menu.value = true;
       }
@@ -18000,13 +17953,9 @@ const VCombobox = (0,defineComponent/* genericComponent */.ev)()({
         isPristine.value = true;
       }
       if (e.key === 'ArrowDown') {
-        var _listRef$value;
-        e.preventDefault();
-        (_listRef$value = listRef.value) == null ? void 0 : _listRef$value.focus('next');
+        listRef.value?.focus('next');
       } else if (e.key === 'ArrowUp') {
-        var _listRef$value2;
-        e.preventDefault();
-        (_listRef$value2 = listRef.value) == null ? void 0 : _listRef$value2.focus('prev');
+        listRef.value?.focus('prev');
       }
       if (!props.multiple) return;
       if (['Backspace', 'Delete'].includes(e.key)) {
@@ -18074,8 +18023,7 @@ const VCombobox = (0,defineComponent/* genericComponent */.ev)()({
     }
     function onFocusout(e) {
       if (e.relatedTarget == null) {
-        var _vTextFieldRef$value2;
-        (_vTextFieldRef$value2 = vTextFieldRef.value) == null ? void 0 : _vTextFieldRef$value2.focus();
+        vTextFieldRef.value?.focus();
       }
     }
     (0,runtime_core_esm_bundler/* watch */.YP)(filteredItems, val => {
@@ -18113,105 +18061,98 @@ const VCombobox = (0,defineComponent/* genericComponent */.ev)()({
         "appendInnerIcon": props.items.length ? props.menuIcon : undefined,
         "readonly": props.readonly,
         "onClick:clear": onClear,
-        "onClick:control": onClickControl,
-        "onClick:input": onClickControl,
+        "onMousedown:control": onMousedownControl,
         "onFocus": () => isFocused.value = true,
         "onBlur": () => isFocused.value = false,
         "onKeydown": onKeydown
       }), {
         ...slots,
-        default: () => {
-          var _slots$noData, _slots$prependItem, _slots$appendItem;
-          return (0,runtime_core_esm_bundler/* createVNode */.Wm)(runtime_core_esm_bundler/* Fragment */.HY, null, [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VMenu/* VMenu */.T, (0,runtime_core_esm_bundler/* mergeProps */.dG)({
-            "modelValue": menu.value,
-            "onUpdate:modelValue": $event => menu.value = $event,
-            "activator": "parent",
-            "contentClass": "v-combobox__content",
-            "eager": props.eager,
-            "maxHeight": 310,
-            "openOnClick": false,
-            "closeOnContentClick": false,
-            "transition": props.transition,
-            "onAfterLeave": onAfterLeave
-          }, props.menuProps), {
-            default: () => [hasList && (0,runtime_core_esm_bundler/* createVNode */.Wm)(VList/* VList */.i, {
-              "ref": listRef,
-              "selected": selected.value,
-              "selectStrategy": props.multiple ? 'independent' : 'single-independent',
-              "onMousedown": e => e.preventDefault(),
-              "onFocusin": onFocusin,
-              "onFocusout": onFocusout
-            }, {
-              default: () => [!displayItems.value.length && !props.hideNoData && (((_slots$noData = slots['no-data']) == null ? void 0 : _slots$noData.call(slots)) ?? (0,runtime_core_esm_bundler/* createVNode */.Wm)(VListItem/* VListItem */.l, {
-                "title": t(props.noDataText)
-              }, null)), (_slots$prependItem = slots['prepend-item']) == null ? void 0 : _slots$prependItem.call(slots), displayItems.value.map((item, index) => {
-                var _slots$item;
-                return ((_slots$item = slots.item) == null ? void 0 : _slots$item.call(slots, {
-                  item,
-                  index,
-                  props: (0,runtime_core_esm_bundler/* mergeProps */.dG)(item.props, {
-                    onClick: () => select(item)
-                  })
-                })) ?? (0,runtime_core_esm_bundler/* createVNode */.Wm)(VListItem/* VListItem */.l, (0,runtime_core_esm_bundler/* mergeProps */.dG)({
-                  "key": index
-                }, item.props, {
-                  "onClick": () => select(item)
-                }), {
-                  prepend: _ref2 => {
-                    let {
-                      isSelected
-                    } = _ref2;
-                    return props.multiple && !props.hideSelected ? (0,runtime_core_esm_bundler/* createVNode */.Wm)(VCheckboxBtn/* VCheckboxBtn */.pM, {
-                      "modelValue": isSelected,
-                      "ripple": false
-                    }, null) : undefined;
-                  },
-                  title: () => {
-                    var _getMatches, _search$value;
-                    return isPristine.value ? item.title : VCombobox_highlightResult(item.title, (_getMatches = getMatches(item)) == null ? void 0 : _getMatches.title, ((_search$value = search.value) == null ? void 0 : _search$value.length) ?? 0);
-                  }
-                });
-              }), (_slots$appendItem = slots['append-item']) == null ? void 0 : _slots$appendItem.call(slots)]
-            })]
-          }), selections.value.map((item, index) => {
-            function onChipClose(e) {
-              e.stopPropagation();
-              e.preventDefault();
-              select(item);
-            }
-            const slotProps = {
-              'onClick:close': onChipClose,
-              modelValue: true,
-              'onUpdate:modelValue': undefined
-            };
-            return (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
-              "key": item.value,
-              "class": ['v-combobox__selection', index === selectionIndex.value && ['v-combobox__selection--selected', textColorClasses.value]],
-              "style": index === selectionIndex.value ? textColorStyles.value : {}
-            }, [hasChips ? (0,runtime_core_esm_bundler/* createVNode */.Wm)(VDefaultsProvider/* VDefaultsProvider */.z, {
-              "defaults": {
-                VChip: {
-                  closable: props.closableChips,
-                  size: 'small',
-                  text: item.title
-                }
-              }
-            }, {
-              default: () => [slots.chip ? slots.chip({
-                item,
-                index,
-                props: slotProps
-              }) : (0,runtime_core_esm_bundler/* createVNode */.Wm)(VChip/* VChip */.v, slotProps, null)]
-            }) : slots.selection ? slots.selection({
+        default: () => (0,runtime_core_esm_bundler/* createVNode */.Wm)(runtime_core_esm_bundler/* Fragment */.HY, null, [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VMenu/* VMenu */.T, (0,runtime_core_esm_bundler/* mergeProps */.dG)({
+          "ref": vMenuRef,
+          "modelValue": menu.value,
+          "onUpdate:modelValue": $event => menu.value = $event,
+          "activator": "parent",
+          "contentClass": "v-combobox__content",
+          "eager": props.eager,
+          "maxHeight": 310,
+          "openOnClick": false,
+          "closeOnContentClick": false,
+          "transition": props.transition,
+          "onAfterLeave": onAfterLeave
+        }, props.menuProps), {
+          default: () => [hasList && (0,runtime_core_esm_bundler/* createVNode */.Wm)(VList/* VList */.i, {
+            "ref": listRef,
+            "selected": selected.value,
+            "selectStrategy": props.multiple ? 'independent' : 'single-independent',
+            "onMousedown": e => e.preventDefault(),
+            "onFocusin": onFocusin,
+            "onFocusout": onFocusout
+          }, {
+            default: () => [!displayItems.value.length && !props.hideNoData && (slots['no-data']?.() ?? (0,runtime_core_esm_bundler/* createVNode */.Wm)(VListItem/* VListItem */.l, {
+              "title": t(props.noDataText)
+            }, null)), slots['prepend-item']?.(), displayItems.value.map((item, index) => slots.item?.({
               item,
-              index
-            }) : (0,runtime_core_esm_bundler/* createVNode */.Wm)("span", {
-              "class": "v-combobox__selection-text"
-            }, [item.title, props.multiple && index < selections.value.length - 1 && (0,runtime_core_esm_bundler/* createVNode */.Wm)("span", {
-              "class": "v-combobox__selection-comma"
-            }, [(0,runtime_core_esm_bundler/* createTextVNode */.Uk)(",")])])]);
-          })]);
-        }
+              index,
+              props: (0,runtime_core_esm_bundler/* mergeProps */.dG)(item.props, {
+                onClick: () => select(item)
+              })
+            }) ?? (0,runtime_core_esm_bundler/* createVNode */.Wm)(VListItem/* VListItem */.l, (0,runtime_core_esm_bundler/* mergeProps */.dG)({
+              "key": index
+            }, item.props, {
+              "onClick": () => select(item)
+            }), {
+              prepend: _ref2 => {
+                let {
+                  isSelected
+                } = _ref2;
+                return props.multiple && !props.hideSelected ? (0,runtime_core_esm_bundler/* createVNode */.Wm)(VCheckboxBtn/* VCheckboxBtn */.pM, {
+                  "modelValue": isSelected,
+                  "ripple": false
+                }, null) : undefined;
+              },
+              title: () => {
+                return isPristine.value ? item.title : VCombobox_highlightResult(item.title, getMatches(item)?.title, search.value?.length ?? 0);
+              }
+            })), slots['append-item']?.()]
+          })]
+        }), selections.value.map((item, index) => {
+          function onChipClose(e) {
+            e.stopPropagation();
+            e.preventDefault();
+            select(item);
+          }
+          const slotProps = {
+            'onClick:close': onChipClose,
+            modelValue: true,
+            'onUpdate:modelValue': undefined
+          };
+          return (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
+            "key": item.value,
+            "class": ['v-combobox__selection', index === selectionIndex.value && ['v-combobox__selection--selected', textColorClasses.value]],
+            "style": index === selectionIndex.value ? textColorStyles.value : {}
+          }, [hasChips ? (0,runtime_core_esm_bundler/* createVNode */.Wm)(VDefaultsProvider/* VDefaultsProvider */.z, {
+            "defaults": {
+              VChip: {
+                closable: props.closableChips,
+                size: 'small',
+                text: item.title
+              }
+            }
+          }, {
+            default: () => [slots.chip ? slots.chip({
+              item,
+              index,
+              props: slotProps
+            }) : (0,runtime_core_esm_bundler/* createVNode */.Wm)(VChip/* VChip */.v, slotProps, null)]
+          }) : slots.selection ? slots.selection({
+            item,
+            index
+          }) : (0,runtime_core_esm_bundler/* createVNode */.Wm)("span", {
+            "class": "v-combobox__selection-text"
+          }, [item.title, props.multiple && index < selections.value.length - 1 && (0,runtime_core_esm_bundler/* createVNode */.Wm)("span", {
+            "class": "v-combobox__selection-comma"
+          }, [(0,runtime_core_esm_bundler/* createTextVNode */.Uk)(",")])])]);
+        })])
       });
     });
     return (0,forwardRefs/* forwardRefs */.F)({
@@ -18258,7 +18199,7 @@ var VDivider = __webpack_require__(4075);
  // Types
 const VExpansionPanelSymbol = Symbol.for('vuetify:v-expansion-panel');
 const allowedVariants = ['default', 'accordion', 'inset', 'popout'];
-const VExpansionPanels = (0,defineComponent/* defineComponent */.aZ)({
+const VExpansionPanels = (0,defineComponent/* genericComponent */.ev)()({
   name: 'VExpansionPanels',
   props: {
     color: String,
@@ -18327,7 +18268,7 @@ const makeVExpansionPanelTitleProps = (0,propsFactory/* propsFactory */.U)({
   },
   readonly: Boolean
 }, 'v-expansion-panel-title');
-const VExpansionPanelTitle = (0,defineComponent/* defineComponent */.aZ)({
+const VExpansionPanelTitle = (0,defineComponent/* genericComponent */.ev)()({
   name: 'VExpansionPanelTitle',
   directives: {
     Ripple: ripple/* Ripple */.H
@@ -18352,26 +18293,23 @@ const VExpansionPanelTitle = (0,defineComponent/* defineComponent */.aZ)({
       expandIcon: props.expandIcon,
       readonly: props.readonly
     }));
-    (0,useRender/* useRender */.L)(() => {
-      var _slots$default;
-      return (0,runtime_core_esm_bundler/* withDirectives */.wy)((0,runtime_core_esm_bundler/* createVNode */.Wm)("button", {
-        "class": ['v-expansion-panel-title', {
-          'v-expansion-panel-title--active': expansionPanel.isSelected.value
-        }, backgroundColorClasses.value],
-        "style": backgroundColorStyles.value,
-        "type": "button",
-        "tabindex": expansionPanel.disabled.value ? -1 : undefined,
-        "disabled": expansionPanel.disabled.value,
-        "aria-expanded": expansionPanel.isSelected.value,
-        "onClick": !props.readonly ? expansionPanel.toggle : undefined
-      }, [(0,runtime_core_esm_bundler/* createVNode */.Wm)("span", {
-        "class": "v-expansion-panel-title__overlay"
-      }, null), (_slots$default = slots.default) == null ? void 0 : _slots$default.call(slots, slotProps.value), !props.hideActions && (0,runtime_core_esm_bundler/* createVNode */.Wm)("span", {
-        "class": "v-expansion-panel-title__icon"
-      }, [slots.actions ? slots.actions(slotProps.value) : (0,runtime_core_esm_bundler/* createVNode */.Wm)(VIcon/* VIcon */.t, {
-        "icon": expansionPanel.isSelected.value ? props.collapseIcon : props.expandIcon
-      }, null)])]), [[(0,runtime_core_esm_bundler/* resolveDirective */.Q2)("ripple"), props.ripple]]);
-    });
+    (0,useRender/* useRender */.L)(() => (0,runtime_core_esm_bundler/* withDirectives */.wy)((0,runtime_core_esm_bundler/* createVNode */.Wm)("button", {
+      "class": ['v-expansion-panel-title', {
+        'v-expansion-panel-title--active': expansionPanel.isSelected.value
+      }, backgroundColorClasses.value],
+      "style": backgroundColorStyles.value,
+      "type": "button",
+      "tabindex": expansionPanel.disabled.value ? -1 : undefined,
+      "disabled": expansionPanel.disabled.value,
+      "aria-expanded": expansionPanel.isSelected.value,
+      "onClick": !props.readonly ? expansionPanel.toggle : undefined
+    }, [(0,runtime_core_esm_bundler/* createVNode */.Wm)("span", {
+      "class": "v-expansion-panel-title__overlay"
+    }, null), slots.default?.(slotProps.value), !props.hideActions && (0,runtime_core_esm_bundler/* createVNode */.Wm)("span", {
+      "class": "v-expansion-panel-title__icon"
+    }, [slots.actions ? slots.actions(slotProps.value) : (0,runtime_core_esm_bundler/* createVNode */.Wm)(VIcon/* VIcon */.t, {
+      "icon": expansionPanel.isSelected.value ? props.collapseIcon : props.expandIcon
+    }, null)])]), [[(0,runtime_core_esm_bundler/* resolveDirective */.Q2)("ripple"), props.ripple]]));
     return {};
   }
 });
@@ -18383,7 +18321,7 @@ const VExpansionPanelTitle = (0,defineComponent/* defineComponent */.aZ)({
  // Utilities
 
 
-const VExpansionPanelText = (0,defineComponent/* defineComponent */.aZ)({
+const VExpansionPanelText = (0,defineComponent/* genericComponent */.ev)()({
   name: 'VExpansionPanelText',
   props: {
     ...(0,lazy/* makeLazyProps */.H)()
@@ -18398,18 +18336,15 @@ const VExpansionPanelText = (0,defineComponent/* defineComponent */.aZ)({
       hasContent,
       onAfterLeave
     } = (0,lazy/* useLazy */.l)(props, expansionPanel.isSelected);
-    (0,useRender/* useRender */.L)(() => {
-      var _slots$default;
-      return (0,runtime_core_esm_bundler/* createVNode */.Wm)(transitions/* VExpandTransition */.Fx, {
-        "onAfterLeave": onAfterLeave
-      }, {
-        default: () => [(0,runtime_core_esm_bundler/* withDirectives */.wy)((0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
-          "class": "v-expansion-panel-text"
-        }, [slots.default && hasContent.value && (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
-          "class": "v-expansion-panel-text__wrapper"
-        }, [(_slots$default = slots.default) == null ? void 0 : _slots$default.call(slots)])]), [[runtime_dom_esm_bundler/* vShow */.F8, expansionPanel.isSelected.value]])]
-      });
-    });
+    (0,useRender/* useRender */.L)(() => (0,runtime_core_esm_bundler/* createVNode */.Wm)(transitions/* VExpandTransition */.Fx, {
+      "onAfterLeave": onAfterLeave
+    }, {
+      default: () => [(0,runtime_core_esm_bundler/* withDirectives */.wy)((0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
+        "class": "v-expansion-panel-text"
+      }, [slots.default && hasContent.value && (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
+        "class": "v-expansion-panel-text__wrapper"
+      }, [slots.default?.()])]), [[runtime_dom_esm_bundler/* vShow */.F8, expansionPanel.isSelected.value]])]
+    }));
     return {};
   }
 });
@@ -18428,7 +18363,7 @@ const VExpansionPanelText = (0,defineComponent/* defineComponent */.aZ)({
  // Utilities
 
 
-const VExpansionPanel = (0,defineComponent/* defineComponent */.aZ)({
+const VExpansionPanel = (0,defineComponent/* genericComponent */.ev)()({
   name: 'VExpansionPanel',
   props: {
     title: String,
@@ -18459,7 +18394,7 @@ const VExpansionPanel = (0,defineComponent/* defineComponent */.aZ)({
     const {
       roundedClasses
     } = (0,rounded/* useRounded */.b)(props);
-    const isDisabled = (0,runtime_core_esm_bundler/* computed */.Fl)(() => (groupItem == null ? void 0 : groupItem.disabled.value) || props.disabled);
+    const isDisabled = (0,runtime_core_esm_bundler/* computed */.Fl)(() => groupItem?.disabled.value || props.disabled);
     const selectedIndices = (0,runtime_core_esm_bundler/* computed */.Fl)(() => groupItem.group.items.value.reduce((arr, item, index) => {
       if (groupItem.group.selected.value.includes(item.id)) arr.push(index);
       return arr;
@@ -18474,7 +18409,6 @@ const VExpansionPanel = (0,defineComponent/* defineComponent */.aZ)({
     });
     (0,runtime_core_esm_bundler/* provide */.JJ)(VExpansionPanelSymbol, groupItem);
     (0,useRender/* useRender */.L)(() => {
-      var _slots$default;
       const hasText = !!(slots.text || props.text);
       const hasTitle = !!(slots.title || props.title);
       return (0,runtime_core_esm_bundler/* createVNode */.Wm)(props.tag, {
@@ -18503,7 +18437,7 @@ const VExpansionPanel = (0,defineComponent/* defineComponent */.aZ)({
           "eager": props.eager
         }, {
           default: () => [slots.text ? slots.text() : props.text]
-        }), (_slots$default = slots.default) == null ? void 0 : _slots$default.call(slots)]
+        }), slots.default?.()]
       });
     });
     return {};
@@ -18540,7 +18474,7 @@ var VFieldLabel = __webpack_require__(2691);
  // Utilities
 
  // Types
-const VFileInput = (0,defineComponent/* defineComponent */.aZ)({
+const VFileInput = (0,defineComponent/* genericComponent */.ev)()({
   name: 'VFileInput',
   inheritAttrs: false,
   props: {
@@ -18581,6 +18515,7 @@ const VFileInput = (0,defineComponent/* defineComponent */.aZ)({
   },
   emits: {
     'click:control': e => true,
+    'mousedown:control': e => true,
     'update:modelValue': files => true
   },
   setup(props, _ref) {
@@ -18609,8 +18544,7 @@ const VFileInput = (0,defineComponent/* defineComponent */.aZ)({
       return !props.showSize ? name : `${name} (${(0,helpers/* humanReadableFileSize */.XE)(size, base.value)})`;
     }));
     const counterValue = (0,runtime_core_esm_bundler/* computed */.Fl)(() => {
-      var _model$value;
-      const fileCount = ((_model$value = model.value) == null ? void 0 : _model$value.length) ?? 0;
+      const fileCount = model.value?.length ?? 0;
       if (props.showSize) return t(props.counterSizeString, fileCount, totalBytesReadable.value);else return t(props.counterString, fileCount);
     });
     const vInputRef = (0,reactivity_esm_bundler/* ref */.iH)();
@@ -18622,8 +18556,7 @@ const VFileInput = (0,defineComponent/* defineComponent */.aZ)({
     });
     function onFocus() {
       if (inputRef.value !== document.activeElement) {
-        var _inputRef$value;
-        (_inputRef$value = inputRef.value) == null ? void 0 : _inputRef$value.focus();
+        inputRef.value?.focus();
       }
       if (!isFocused.value) {
         isFocused.value = true;
@@ -18633,9 +18566,11 @@ const VFileInput = (0,defineComponent/* defineComponent */.aZ)({
       (0,helpers/* callEvent */.dr)(props['onClick:prepend'], e);
       onControlClick(e);
     }
+    function onControlMousedown(e) {
+      emit('mousedown:control', e);
+    }
     function onControlClick(e) {
-      var _inputRef$value2;
-      (_inputRef$value2 = inputRef.value) == null ? void 0 : _inputRef$value2.click();
+      inputRef.value?.click();
       emit('click:control', e);
     }
     function onClear(e) {
@@ -18643,12 +18578,15 @@ const VFileInput = (0,defineComponent/* defineComponent */.aZ)({
       onFocus();
       (0,runtime_core_esm_bundler/* nextTick */.Y3)(() => {
         model.value = [];
-        if (inputRef != null && inputRef.value) {
-          inputRef.value.value = '';
-        }
         (0,helpers/* callEvent */.dr)(props['onClick:clear'], e);
       });
     }
+    (0,runtime_core_esm_bundler/* watch */.YP)(model, newValue => {
+      const hasModelReset = !Array.isArray(newValue) || !newValue.length;
+      if (hasModelReset && inputRef.value) {
+        inputRef.value.value = '';
+      }
+    });
     (0,useRender/* useRender */.L)(() => {
       const hasCounter = !!(slots.counter || props.counter);
       const hasDetails = !!(hasCounter || slots.details);
@@ -18681,7 +18619,8 @@ const VFileInput = (0,defineComponent/* defineComponent */.aZ)({
           return (0,runtime_core_esm_bundler/* createVNode */.Wm)(VField/* VField */.hF, (0,runtime_core_esm_bundler/* mergeProps */.dG)({
             "ref": vFieldRef,
             "prepend-icon": props.prependIcon,
-            "onClick:control": onControlClick,
+            "onMousedown": onControlMousedown,
+            "onClick": onControlClick,
             "onClick:clear": onClear,
             "onClick:prependInner": props['onClick:prependInner'],
             "onClick:appendInner": props['onClick:appendInner']
@@ -18694,7 +18633,6 @@ const VFileInput = (0,defineComponent/* defineComponent */.aZ)({
           }), {
             ...slots,
             default: _ref4 => {
-              var _model$value2;
               let {
                 props: {
                   class: fieldClass,
@@ -18721,7 +18659,7 @@ const VFileInput = (0,defineComponent/* defineComponent */.aZ)({
                 "onBlur": () => isFocused.value = false
               }, slotProps, inputAttrs), null), (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
                 "class": fieldClass
-              }, [!!((_model$value2 = model.value) != null && _model$value2.length) && (slots.selection ? slots.selection({
+              }, [!!model.value?.length && (slots.selection ? slots.selection({
                 fileNames: fileNames.value,
                 totalBytes: totalBytes.value,
                 totalBytesReadable: totalBytesReadable.value
@@ -18735,13 +18673,10 @@ const VFileInput = (0,defineComponent/* defineComponent */.aZ)({
             }
           });
         },
-        details: hasDetails ? slotProps => {
-          var _slots$details, _model$value3;
-          return (0,runtime_core_esm_bundler/* createVNode */.Wm)(runtime_core_esm_bundler/* Fragment */.HY, null, [(_slots$details = slots.details) == null ? void 0 : _slots$details.call(slots, slotProps), hasCounter && (0,runtime_core_esm_bundler/* createVNode */.Wm)(runtime_core_esm_bundler/* Fragment */.HY, null, [(0,runtime_core_esm_bundler/* createVNode */.Wm)("span", null, null), (0,runtime_core_esm_bundler/* createVNode */.Wm)(VCounter/* VCounter */._, {
-            "active": !!((_model$value3 = model.value) != null && _model$value3.length),
-            "value": counterValue.value
-          }, slots.counter)])]);
-        } : undefined
+        details: hasDetails ? slotProps => (0,runtime_core_esm_bundler/* createVNode */.Wm)(runtime_core_esm_bundler/* Fragment */.HY, null, [slots.details?.(slotProps), hasCounter && (0,runtime_core_esm_bundler/* createVNode */.Wm)(runtime_core_esm_bundler/* Fragment */.HY, null, [(0,runtime_core_esm_bundler/* createVNode */.Wm)("span", null, null), (0,runtime_core_esm_bundler/* createVNode */.Wm)(VCounter/* VCounter */._, {
+          "active": !!model.value?.length,
+          "value": counterValue.value
+        }, slots.counter)])]) : undefined
       });
     });
     return (0,forwardRefs/* forwardRefs */.F)({}, vInputRef, vFieldRef, inputRef);
@@ -18768,7 +18703,7 @@ const VFileInput = (0,defineComponent/* defineComponent */.aZ)({
  // Utilities
 
 
-const VFooter = (0,defineComponent/* defineComponent */.aZ)({
+const VFooter = (0,defineComponent/* genericComponent */.ev)()({
   name: 'VFooter',
   props: {
     app: Boolean,
@@ -18842,7 +18777,7 @@ const VFooter = (0,defineComponent/* defineComponent */.aZ)({
  // Utilities
 
  // Types
-const VForm = (0,defineComponent/* defineComponent */.aZ)({
+const VForm = (0,defineComponent/* genericComponent */.ev)()({
   name: 'VForm',
   props: {
     ...(0,composables_form/* makeFormProps */.vC)()
@@ -18875,23 +18810,19 @@ const VForm = (0,defineComponent/* defineComponent */.aZ)({
             valid
           } = _ref2;
           if (valid) {
-            var _formRef$value;
-            (_formRef$value = formRef.value) == null ? void 0 : _formRef$value.submit();
+            formRef.value?.submit();
           }
         });
       }
       e.preventDefault();
     }
-    (0,useRender/* useRender */.L)(() => {
-      var _slots$default;
-      return (0,runtime_core_esm_bundler/* createVNode */.Wm)("form", {
-        "ref": formRef,
-        "class": "v-form",
-        "novalidate": true,
-        "onReset": onReset,
-        "onSubmit": onSubmit
-      }, [(_slots$default = slots.default) == null ? void 0 : _slots$default.call(slots, form)]);
-    });
+    (0,useRender/* useRender */.L)(() => (0,runtime_core_esm_bundler/* createVNode */.Wm)("form", {
+      "ref": formRef,
+      "class": "v-form",
+      "novalidate": true,
+      "onReset": onReset,
+      "onSubmit": onSubmit
+    }, [slots.default?.(form)]));
     return (0,forwardRefs/* forwardRefs */.F)(form, formRef);
   }
 });
@@ -18911,7 +18842,7 @@ var delay = __webpack_require__(4525);
 
  // Utilities
 
-const VHover = (0,defineComponent/* defineComponent */.aZ)({
+const VHover = (0,defineComponent/* genericComponent */.ev)()({
   name: 'VHover',
   props: {
     disabled: Boolean,
@@ -18933,16 +18864,13 @@ const VHover = (0,defineComponent/* defineComponent */.aZ)({
       runOpenDelay,
       runCloseDelay
     } = (0,delay/* useDelay */.g)(props, value => !props.disabled && (isHovering.value = value));
-    return () => {
-      var _slots$default;
-      return (_slots$default = slots.default) == null ? void 0 : _slots$default.call(slots, {
-        isHovering: isHovering.value,
-        props: {
-          onMouseenter: runOpenDelay,
-          onMouseleave: runCloseDelay
-        }
-      });
-    };
+    return () => slots.default?.({
+      isHovering: isHovering.value,
+      props: {
+        onMouseenter: runOpenDelay,
+        onMouseleave: runCloseDelay
+      }
+    });
   }
 });
 ;// CONCATENATED MODULE: ./node_modules/vuetify/lib/components/VHover/index.mjs
@@ -18968,7 +18896,7 @@ const VHover = (0,defineComponent/* defineComponent */.aZ)({
  // Utilities
 
 const VItemGroupSymbol = Symbol.for('vuetify:v-item-group');
-const VItemGroup = (0,defineComponent/* defineComponent */.aZ)({
+const VItemGroup = (0,defineComponent/* genericComponent */.ev)()({
   name: 'VItemGroup',
   props: {
     ...(0,composables_group/* makeGroupProps */.k4)({
@@ -18994,20 +18922,17 @@ const VItemGroup = (0,defineComponent/* defineComponent */.aZ)({
       prev,
       selected
     } = (0,composables_group/* useGroup */._v)(props, VItemGroupSymbol);
-    return () => {
-      var _slots$default;
-      return (0,runtime_core_esm_bundler/* createVNode */.Wm)(props.tag, {
-        "class": ['v-item-group', themeClasses.value]
-      }, {
-        default: () => [(_slots$default = slots.default) == null ? void 0 : _slots$default.call(slots, {
-          isSelected,
-          select,
-          next,
-          prev,
-          selected: selected.value
-        })]
-      });
-    };
+    return () => (0,runtime_core_esm_bundler/* createVNode */.Wm)(props.tag, {
+      "class": ['v-item-group', themeClasses.value]
+    }, {
+      default: () => [slots.default?.({
+        isSelected,
+        select,
+        next,
+        prev,
+        selected: selected.value
+      })]
+    });
   }
 });
 ;// CONCATENATED MODULE: ./node_modules/vuetify/lib/components/VItemGroup/VItem.mjs
@@ -19033,17 +18958,14 @@ const VItem = (0,defineComponent/* genericComponent */.ev)()({
       value,
       disabled
     } = (0,composables_group/* useGroupItem */.Yt)(props, VItemGroupSymbol);
-    return () => {
-      var _slots$default;
-      return (_slots$default = slots.default) == null ? void 0 : _slots$default.call(slots, {
-        isSelected: isSelected.value,
-        selectedClass: selectedClass.value,
-        select,
-        toggle,
-        value: value.value,
-        disabled: disabled.value
-      });
-    };
+    return () => slots.default?.({
+      isSelected: isSelected.value,
+      selectedClass: selectedClass.value,
+      select,
+      toggle,
+      value: value.value,
+      disabled: disabled.value
+    });
   }
 });
 ;// CONCATENATED MODULE: ./node_modules/vuetify/lib/components/VItemGroup/index.mjs
@@ -19068,10 +18990,10 @@ var VLabel = __webpack_require__(7302);
 // Styles
 
 
-// Utilities
- // Composables
+// Composables
+ // Utilities
 
-const VLayout = (0,defineComponent/* defineComponent */.aZ)({
+const VLayout = (0,defineComponent/* genericComponent */.ev)()({
   name: 'VLayout',
   props: makeLayoutProps(),
   setup(props, _ref) {
@@ -19085,14 +19007,11 @@ const VLayout = (0,defineComponent/* defineComponent */.aZ)({
       items,
       layoutRef
     } = createLayout(props);
-    (0,useRender/* useRender */.L)(() => {
-      var _slots$default;
-      return (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
-        "ref": layoutRef,
-        "class": layoutClasses.value,
-        "style": layoutStyles.value
-      }, [(_slots$default = slots.default) == null ? void 0 : _slots$default.call(slots)]);
-    });
+    (0,useRender/* useRender */.L)(() => (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
+      "ref": layoutRef,
+      "class": layoutClasses.value,
+      "style": layoutStyles.value
+    }, [slots.default?.()]));
     return {
       getLayoutItem,
       items
@@ -19111,7 +19030,7 @@ const VLayout = (0,defineComponent/* defineComponent */.aZ)({
  // Utilities
 
  // Types
-const VLayoutItem = (0,defineComponent/* defineComponent */.aZ)({
+const VLayoutItem = (0,defineComponent/* genericComponent */.ev)()({
   name: 'VLayoutItem',
   props: {
     position: {
@@ -19140,13 +19059,10 @@ const VLayoutItem = (0,defineComponent/* defineComponent */.aZ)({
       active: (0,reactivity_esm_bundler/* toRef */.Vh)(props, 'modelValue'),
       absolute: (0,reactivity_esm_bundler/* toRef */.Vh)(props, 'absolute')
     });
-    return () => {
-      var _slots$default;
-      return (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
-        "class": ['v-layout-item'],
-        "style": layoutItemStyles.value
-      }, [(_slots$default = slots.default) == null ? void 0 : _slots$default.call(slots)]);
-    };
+    return () => (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
+      "class": ['v-layout-item'],
+      "style": layoutItemStyles.value
+    }, [slots.default?.()]);
   }
 });
 ;// CONCATENATED MODULE: ./node_modules/vuetify/lib/components/VLayout/index.mjs
@@ -19163,7 +19079,7 @@ var intersect = __webpack_require__(7052);
  // Directives
  // Utilities
  // Types
-const VLazy = (0,defineComponent/* defineComponent */.aZ)({
+const VLazy = (0,defineComponent/* genericComponent */.ev)()({
   name: 'VLazy',
   directives: {
     intersect: intersect/* default */.Z
@@ -19201,20 +19117,17 @@ const VLazy = (0,defineComponent/* defineComponent */.aZ)({
       if (isActive.value) return;
       isActive.value = isIntersecting;
     }
-    (0,useRender/* useRender */.L)(() => {
-      var _slots$default;
-      return (0,runtime_core_esm_bundler/* withDirectives */.wy)((0,runtime_core_esm_bundler/* createVNode */.Wm)(props.tag, {
-        "class": "v-lazy",
-        "style": dimensionStyles.value
+    (0,useRender/* useRender */.L)(() => (0,runtime_core_esm_bundler/* withDirectives */.wy)((0,runtime_core_esm_bundler/* createVNode */.Wm)(props.tag, {
+      "class": "v-lazy",
+      "style": dimensionStyles.value
+    }, {
+      default: () => [isActive.value && (0,runtime_core_esm_bundler/* createVNode */.Wm)(composables_transition/* MaybeTransition */.J, {
+        "transition": props.transition,
+        "appear": true
       }, {
-        default: () => [isActive.value && (0,runtime_core_esm_bundler/* createVNode */.Wm)(composables_transition/* MaybeTransition */.J, {
-          "transition": props.transition,
-          "appear": true
-        }, {
-          default: () => [(_slots$default = slots.default) == null ? void 0 : _slots$default.call(slots)]
-        })]
-      }), [[(0,runtime_core_esm_bundler/* resolveDirective */.Q2)("intersect"), onIntersect, props.options]]);
-    });
+        default: () => [slots.default?.()]
+      })]
+    }), [[(0,runtime_core_esm_bundler/* resolveDirective */.Q2)("intersect"), onIntersect, props.options]]));
     return {};
   }
 });
@@ -19230,7 +19143,7 @@ const VListImg = (0,createSimpleFunctional/* createSimpleFunctional */.J)('v-lis
 // Composables
  // Utilities
 
-const VListItemAction = (0,defineComponent/* defineComponent */.aZ)({
+const VListItemAction = (0,defineComponent/* genericComponent */.ev)()({
   name: 'VListItemAction',
   props: {
     start: Boolean,
@@ -19255,7 +19168,7 @@ const VListItemAction = (0,defineComponent/* defineComponent */.aZ)({
 // Composables
  // Utilities
 
-const VListItemMedia = (0,defineComponent/* defineComponent */.aZ)({
+const VListItemMedia = (0,defineComponent/* genericComponent */.ev)()({
   name: 'VListItemMedia',
   props: {
     start: Boolean,
@@ -19304,7 +19217,7 @@ var VListSubheader = __webpack_require__(7754);
 // Composables
  // Utilities
 
-const VLocaleProvider = (0,defineComponent/* defineComponent */.aZ)({
+const VLocaleProvider = (0,defineComponent/* genericComponent */.ev)()({
   name: 'VLocaleProvider',
   props: {
     locale: String,
@@ -19322,12 +19235,9 @@ const VLocaleProvider = (0,defineComponent/* defineComponent */.aZ)({
     const {
       rtlClasses
     } = (0,composables_locale/* provideLocale */.O4)(props);
-    (0,useRender/* useRender */.L)(() => {
-      var _slots$default;
-      return (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
-        "class": ['v-locale-provider', rtlClasses.value]
-      }, [(_slots$default = slots.default) == null ? void 0 : _slots$default.call(slots)]);
-    });
+    (0,useRender/* useRender */.L)(() => (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
+      "class": ['v-locale-provider', rtlClasses.value]
+    }, [slots.default?.()]));
     return {};
   }
 });
@@ -19474,8 +19384,7 @@ function useVelocity() {
     });
   }
   function getVelocity(id) {
-    var _touches$id;
-    const samples = (_touches$id = touches[id]) == null ? void 0 : _touches$id.values().reverse();
+    const samples = touches[id]?.values().reverse();
     if (!samples) {
       throw new Error(`No samples for touch id ${id}`);
     }
@@ -19546,7 +19455,7 @@ function useTouch(_ref) {
     window.removeEventListener('touchmove', onTouchmove);
     window.removeEventListener('touchend', onTouchend);
   });
-  const isHorizontal = (0,runtime_core_esm_bundler/* computed */.Fl)(() => position.value !== 'bottom');
+  const isHorizontal = (0,runtime_core_esm_bundler/* computed */.Fl)(() => ['left', 'right'].includes(position.value));
   const {
     addMovement,
     endTouch,
@@ -19558,11 +19467,11 @@ function useTouch(_ref) {
   const offset = (0,reactivity_esm_bundler/* ref */.iH)(0);
   let start;
   function getOffset(pos, active) {
-    return (position.value === 'left' ? pos : position.value === 'right' ? document.documentElement.clientWidth - pos : position.value === 'bottom' ? document.documentElement.clientHeight - pos : touch_oops()) - (active ? width.value : 0);
+    return (position.value === 'left' ? pos : position.value === 'right' ? document.documentElement.clientWidth - pos : position.value === 'top' ? pos : position.value === 'bottom' ? document.documentElement.clientHeight - pos : touch_oops()) - (active ? width.value : 0);
   }
   function getProgress(pos) {
     let limit = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
-    const progress = position.value === 'left' ? (pos - offset.value) / width.value : position.value === 'right' ? (document.documentElement.clientWidth - pos - offset.value) / width.value : position.value === 'bottom' ? (document.documentElement.clientHeight - pos - offset.value) / width.value : touch_oops();
+    const progress = position.value === 'left' ? (pos - offset.value) / width.value : position.value === 'right' ? (document.documentElement.clientWidth - pos - offset.value) / width.value : position.value === 'top' ? (pos - offset.value) / width.value : position.value === 'bottom' ? (document.documentElement.clientHeight - pos - offset.value) / width.value : touch_oops();
     return limit ? Math.max(0, Math.min(1, progress)) : progress;
   }
   function onTouchstart(e) {
@@ -19570,8 +19479,8 @@ function useTouch(_ref) {
     const touchX = e.changedTouches[0].clientX;
     const touchY = e.changedTouches[0].clientY;
     const touchZone = 25;
-    const inTouchZone = position.value === 'left' ? touchX < touchZone : position.value === 'right' ? touchX > document.documentElement.clientWidth - touchZone : position.value === 'bottom' ? touchY > document.documentElement.clientHeight - touchZone : touch_oops();
-    const inElement = isActive.value && (position.value === 'left' ? touchX < width.value : position.value === 'right' ? touchX > document.documentElement.clientWidth - width.value : position.value === 'bottom' ? touchY > document.documentElement.clientHeight - width.value : touch_oops());
+    const inTouchZone = position.value === 'left' ? touchX < touchZone : position.value === 'right' ? touchX > document.documentElement.clientWidth - touchZone : position.value === 'top' ? touchY < touchZone : position.value === 'bottom' ? touchY > document.documentElement.clientHeight - touchZone : touch_oops();
+    const inElement = isActive.value && (position.value === 'left' ? touchX < width.value : position.value === 'right' ? touchX > document.documentElement.clientWidth - width.value : position.value === 'top' ? touchY < width.value : position.value === 'bottom' ? touchY > document.documentElement.clientHeight - width.value : touch_oops());
     if (inTouchZone || inElement || isActive.value && isTemporary.value) {
       maybeDragging = true;
       start = [touchX, touchY];
@@ -19623,6 +19532,7 @@ function useTouch(_ref) {
       isActive.value = velocity.direction === ({
         left: 'right',
         right: 'left',
+        top: 'down',
         bottom: 'up'
       }[position.value] || touch_oops());
     } else {
@@ -19631,7 +19541,7 @@ function useTouch(_ref) {
   }
   const dragStyles = (0,runtime_core_esm_bundler/* computed */.Fl)(() => {
     return isDragging.value ? {
-      transform: position.value === 'left' ? `translateX(calc(-100% + ${dragProgress.value * width.value}px))` : position.value === 'right' ? `translateX(calc(100% - ${dragProgress.value * width.value}px))` : position.value === 'bottom' ? `translateY(calc(100% - ${dragProgress.value * width.value}px))` : touch_oops(),
+      transform: position.value === 'left' ? `translateX(calc(-100% + ${dragProgress.value * width.value}px))` : position.value === 'right' ? `translateX(calc(100% - ${dragProgress.value * width.value}px))` : position.value === 'top' ? `translateY(calc(-100% + ${dragProgress.value * width.value}px))` : position.value === 'bottom' ? `translateY(calc(100% - ${dragProgress.value * width.value}px))` : touch_oops(),
       transition: 'none'
     } : undefined;
   });
@@ -19669,8 +19579,8 @@ var util_anchor = __webpack_require__(2879);
  // Utilities
 
  // Types
-const locations = ['start', 'end', 'left', 'right', 'bottom'];
-const VNavigationDrawer = (0,defineComponent/* defineComponent */.aZ)({
+const locations = ['start', 'end', 'left', 'right', 'top', 'bottom'];
+const VNavigationDrawer = (0,defineComponent/* genericComponent */.ev)()({
   name: 'VNavigationDrawer',
   props: {
     color: String,
@@ -19841,7 +19751,6 @@ const VNavigationDrawer = (0,defineComponent/* defineComponent */.aZ)({
       }
     });
     (0,useRender/* useRender */.L)(() => {
-      var _slots$image, _slots$prepend, _slots$default, _slots$append;
       const hasImage = slots.image || props.image;
       return (0,runtime_core_esm_bundler/* createVNode */.Wm)(runtime_core_esm_bundler/* Fragment */.HY, null, [(0,runtime_core_esm_bundler/* createVNode */.Wm)(props.tag, (0,runtime_core_esm_bundler/* mergeProps */.dG)({
         "ref": rootEl,
@@ -19861,18 +19770,18 @@ const VNavigationDrawer = (0,defineComponent/* defineComponent */.aZ)({
         default: () => [hasImage && (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
           "key": "image",
           "class": "v-navigation-drawer__img"
-        }, [slots.image ? (_slots$image = slots.image) == null ? void 0 : _slots$image.call(slots, {
+        }, [slots.image ? slots.image?.({
           image: props.image
         }) : (0,runtime_core_esm_bundler/* createVNode */.Wm)("img", {
           "src": props.image,
           "alt": ""
         }, null)]), slots.prepend && (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
           "class": "v-navigation-drawer__prepend"
-        }, [(_slots$prepend = slots.prepend) == null ? void 0 : _slots$prepend.call(slots)]), (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
+        }, [slots.prepend?.()]), (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
           "class": "v-navigation-drawer__content"
-        }, [(_slots$default = slots.default) == null ? void 0 : _slots$default.call(slots)]), slots.append && (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
+        }, [slots.default?.()]), slots.append && (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
           "class": "v-navigation-drawer__append"
-        }, [(_slots$append = slots.append) == null ? void 0 : _slots$append.call(slots)])]
+        }, [slots.append?.()])]
       }), (0,runtime_core_esm_bundler/* createVNode */.Wm)(runtime_dom_esm_bundler/* Transition */.uT, {
         "name": "fade-transition"
       }, {
@@ -19903,10 +19812,7 @@ const VNoSsr = (0,defineComponent/* defineComponent */.aZ)({
       slots
     } = _ref;
     const show = (0,hydration/* useHydration */.x)();
-    return () => {
-      var _slots$default;
-      return show.value && ((_slots$default = slots.default) == null ? void 0 : _slots$default.call(slots));
-    };
+    return () => show.value && slots.default?.();
   }
 });
 ;// CONCATENATED MODULE: ./node_modules/vuetify/lib/components/VNoSsr/index.mjs
@@ -19954,11 +19860,11 @@ function useRefs() {
 
 
 
+
  // Utilities
 
  // Types
-
-const VPagination = (0,defineComponent/* defineComponent */.aZ)({
+const VPagination = (0,defineComponent/* genericComponent */.ev)()({
   name: 'VPagination',
   props: {
     activeColor: String,
@@ -20167,7 +20073,7 @@ const VPagination = (0,defineComponent/* defineComponent */.aZ)({
               disabled: !!props.disabled || props.length < 2,
               color: isActive ? props.activeColor : props.color,
               ariaCurrent: isActive,
-              ariaLabel: t(isActive ? props.currentPageAriaLabel : props.pageAriaLabel, index + 1),
+              ariaLabel: t(isActive ? props.currentPageAriaLabel : props.pageAriaLabel, item),
               onClick: e => setValue(e, item)
             }
           };
@@ -20209,9 +20115,8 @@ const VPagination = (0,defineComponent/* defineComponent */.aZ)({
       };
     });
     function updateFocus() {
-      var _refs$value$currentIn;
       const currentIndex = page.value - start.value;
-      (_refs$value$currentIn = refs.value[currentIndex]) == null ? void 0 : _refs$value$currentIn.$el.focus();
+      refs.value[currentIndex]?.$el.focus();
     }
     function onKeydown(e) {
       if (e.key === helpers/* keyValues.left */.ff.left && !props.disabled && page.value > props.start) {
@@ -20287,15 +20192,18 @@ var getScrollParent = __webpack_require__(8582);
 
 // Components
  // Composables
+
+
  // Utilities
 
 
 
+// Types
 
 function floor(val) {
   return Math.floor(Math.abs(val)) * Math.sign(val);
 }
-const VParallax = (0,defineComponent/* defineComponent */.aZ)({
+const VParallax = (0,defineComponent/* genericComponent */.ev)()({
   name: 'VParallax',
   props: {
     scale: {
@@ -20320,8 +20228,7 @@ const VParallax = (0,defineComponent/* defineComponent */.aZ)({
     } = (0,composables_display/* useDisplay */.AW)();
     const root = (0,reactivity_esm_bundler/* ref */.iH)();
     (0,runtime_core_esm_bundler/* watchEffect */.m0)(() => {
-      var _root$value;
-      intersectionRef.value = resizeRef.value = (_root$value = root.value) == null ? void 0 : _root$value.$el;
+      intersectionRef.value = resizeRef.value = root.value?.$el;
     });
     let scrollParent;
     (0,runtime_core_esm_bundler/* watch */.YP)(isIntersecting, val => {
@@ -20337,14 +20244,10 @@ const VParallax = (0,defineComponent/* defineComponent */.aZ)({
       }
     });
     (0,runtime_core_esm_bundler/* onBeforeUnmount */.Jd)(() => {
-      var _scrollParent;
-      (_scrollParent = scrollParent) == null ? void 0 : _scrollParent.removeEventListener('scroll', onScroll);
+      scrollParent?.removeEventListener('scroll', onScroll);
     });
     (0,runtime_core_esm_bundler/* watch */.YP)(displayHeight, onScroll);
-    (0,runtime_core_esm_bundler/* watch */.YP)(() => {
-      var _contentRect$value;
-      return (_contentRect$value = contentRect.value) == null ? void 0 : _contentRect$value.height;
-    }, onScroll);
+    (0,runtime_core_esm_bundler/* watch */.YP)(() => contentRect.value?.height, onScroll);
     const scale = (0,runtime_core_esm_bundler/* computed */.Fl)(() => {
       return 1 - (0,helpers/* clamp */.uZ)(+props.scale);
     });
@@ -20353,8 +20256,7 @@ const VParallax = (0,defineComponent/* defineComponent */.aZ)({
       if (!isIntersecting.value) return;
       cancelAnimationFrame(frame);
       frame = requestAnimationFrame(() => {
-        var _root$value2;
-        const el = ((_root$value2 = root.value) == null ? void 0 : _root$value2.$el).querySelector('.v-img__img');
+        const el = (root.value?.$el).querySelector('.v-img__img');
         if (!el) return;
         const scrollHeight = scrollParent.clientHeight ?? document.documentElement.clientHeight;
         const scrollPos = scrollParent.scrollTop ?? window.scrollY;
@@ -20392,8 +20294,8 @@ var VSelectionControl = __webpack_require__(6233);
 
 // Components
  // Utilities
-
-const VRadio = (0,defineComponent/* defineComponent */.aZ)({
+ // Types
+const VRadio = (0,defineComponent/* genericComponent */.ev)()({
   name: 'VRadio',
   props: {
     ...(0,VSelectionControl/* makeSelectionControlProps */.$9)({
@@ -20432,8 +20334,8 @@ var VSelectionControlGroup = __webpack_require__(835);
 
  // Utilities
 
-
-const VRadioGroup = (0,defineComponent/* defineComponent */.aZ)({
+ // Types
+const VRadioGroup = (0,defineComponent/* genericComponent */.ev)()({
   name: 'VRadioGroup',
   inheritAttrs: false,
   props: {
@@ -20544,7 +20446,7 @@ var VSliderTrack = __webpack_require__(9831);
  // Utilities
 
  // Types
-const VRangeSlider = (0,defineComponent/* defineComponent */.aZ)({
+const VRangeSlider = (0,defineComponent/* genericComponent */.ev)()({
   name: 'VRangeSlider',
   props: {
     ...(0,composables_focus/* makeFocusProps */.B)(),
@@ -20590,18 +20492,15 @@ const VRangeSlider = (0,defineComponent/* defineComponent */.aZ)({
       /* eslint-disable @typescript-eslint/no-use-before-define */
       props,
       handleSliderMouseUp: newValue => {
-        var _startThumbRef$value;
-        model.value = activeThumbRef.value === ((_startThumbRef$value = startThumbRef.value) == null ? void 0 : _startThumbRef$value.$el) ? [newValue, model.value[1]] : [model.value[0], newValue];
+        model.value = activeThumbRef.value === startThumbRef.value?.$el ? [newValue, model.value[1]] : [model.value[0], newValue];
       },
       handleMouseMove: newValue => {
-        var _startThumbRef$value3;
         const [start, stop] = model.value;
         if (!props.strict && start === stop && start !== min.value) {
-          var _stopThumbRef$value, _startThumbRef$value2, _activeThumbRef$value;
-          activeThumbRef.value = newValue > start ? (_stopThumbRef$value = stopThumbRef.value) == null ? void 0 : _stopThumbRef$value.$el : (_startThumbRef$value2 = startThumbRef.value) == null ? void 0 : _startThumbRef$value2.$el;
-          (_activeThumbRef$value = activeThumbRef.value) == null ? void 0 : _activeThumbRef$value.focus();
+          activeThumbRef.value = newValue > start ? stopThumbRef.value?.$el : startThumbRef.value?.$el;
+          activeThumbRef.value?.focus();
         }
-        if (activeThumbRef.value === ((_startThumbRef$value3 = startThumbRef.value) == null ? void 0 : _startThumbRef$value3.$el)) {
+        if (activeThumbRef.value === startThumbRef.value?.$el) {
           model.value = [Math.min(newValue, stop), stop];
         } else {
           model.value = [start, Math.max(start, newValue)];
@@ -20612,6 +20511,7 @@ const VRangeSlider = (0,defineComponent/* defineComponent */.aZ)({
     });
 
     const model = (0,proxiedModel/* useProxiedModel */.z)(props, 'modelValue', undefined, arr => {
+      // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
       if (!arr || !arr.length) return [0, 0];
       return arr.map(value => roundValue(value));
     });
@@ -20637,15 +20537,11 @@ const VRangeSlider = (0,defineComponent/* defineComponent */.aZ)({
         "focused": isFocused.value
       }), {
         ...slots,
-        prepend: hasPrepend ? slotProps => {
-          var _slots$label, _slots$prepend;
-          return (0,runtime_core_esm_bundler/* createVNode */.Wm)(runtime_core_esm_bundler/* Fragment */.HY, null, [((_slots$label = slots.label) == null ? void 0 : _slots$label.call(slots, slotProps)) ?? props.label ? (0,runtime_core_esm_bundler/* createVNode */.Wm)(VLabel/* VLabel */.J, {
-            "class": "v-slider__label",
-            "text": props.label
-          }, null) : undefined, (_slots$prepend = slots.prepend) == null ? void 0 : _slots$prepend.call(slots, slotProps)]);
-        } : undefined,
+        prepend: hasPrepend ? slotProps => (0,runtime_core_esm_bundler/* createVNode */.Wm)(runtime_core_esm_bundler/* Fragment */.HY, null, [slots.label?.(slotProps) ?? props.label ? (0,runtime_core_esm_bundler/* createVNode */.Wm)(VLabel/* VLabel */.J, {
+          "class": "v-slider__label",
+          "text": props.label
+        }, null) : undefined, slots.prepend?.(slotProps)]) : undefined,
         default: _ref2 => {
-          var _startThumbRef$value4, _stopThumbRef$value4;
           let {
             id,
             messagesId
@@ -20677,22 +20573,20 @@ const VRangeSlider = (0,defineComponent/* defineComponent */.aZ)({
           }), (0,runtime_core_esm_bundler/* createVNode */.Wm)(VSliderThumb/* VSliderThumb */.B, {
             "ref": startThumbRef,
             "aria-describedby": messagesId.value,
-            "focused": isFocused && activeThumbRef.value === ((_startThumbRef$value4 = startThumbRef.value) == null ? void 0 : _startThumbRef$value4.$el),
+            "focused": isFocused && activeThumbRef.value === startThumbRef.value?.$el,
             "modelValue": model.value[0],
             "onUpdate:modelValue": v => model.value = [v, model.value[1]],
             "onFocus": e => {
-              var _startThumbRef$value5, _stopThumbRef$value2;
               focus();
-              activeThumbRef.value = (_startThumbRef$value5 = startThumbRef.value) == null ? void 0 : _startThumbRef$value5.$el;
+              activeThumbRef.value = startThumbRef.value?.$el;
 
               // Make sure second thumb is focused if
               // the thumbs are on top of each other
               // and they are both at minimum value
               // but only if focused from outside.
-              if (model.value[0] === model.value[1] && model.value[1] === min.value && e.relatedTarget !== ((_stopThumbRef$value2 = stopThumbRef.value) == null ? void 0 : _stopThumbRef$value2.$el)) {
-                var _startThumbRef$value6, _stopThumbRef$value3;
-                (_startThumbRef$value6 = startThumbRef.value) == null ? void 0 : _startThumbRef$value6.$el.blur();
-                (_stopThumbRef$value3 = stopThumbRef.value) == null ? void 0 : _stopThumbRef$value3.$el.focus();
+              if (model.value[0] === model.value[1] && model.value[1] === min.value && e.relatedTarget !== stopThumbRef.value?.$el) {
+                startThumbRef.value?.$el.blur();
+                stopThumbRef.value?.$el.focus();
               }
             },
             "onBlur": () => {
@@ -20707,22 +20601,20 @@ const VRangeSlider = (0,defineComponent/* defineComponent */.aZ)({
           }), (0,runtime_core_esm_bundler/* createVNode */.Wm)(VSliderThumb/* VSliderThumb */.B, {
             "ref": stopThumbRef,
             "aria-describedby": messagesId.value,
-            "focused": isFocused && activeThumbRef.value === ((_stopThumbRef$value4 = stopThumbRef.value) == null ? void 0 : _stopThumbRef$value4.$el),
+            "focused": isFocused && activeThumbRef.value === stopThumbRef.value?.$el,
             "modelValue": model.value[1],
             "onUpdate:modelValue": v => model.value = [model.value[0], v],
             "onFocus": e => {
-              var _stopThumbRef$value5, _startThumbRef$value7;
               focus();
-              activeThumbRef.value = (_stopThumbRef$value5 = stopThumbRef.value) == null ? void 0 : _stopThumbRef$value5.$el;
+              activeThumbRef.value = stopThumbRef.value?.$el;
 
               // Make sure first thumb is focused if
               // the thumbs are on top of each other
               // and they are both at maximum value
               // but only if focused from outside.
-              if (model.value[0] === model.value[1] && model.value[0] === max.value && e.relatedTarget !== ((_startThumbRef$value7 = startThumbRef.value) == null ? void 0 : _startThumbRef$value7.$el)) {
-                var _stopThumbRef$value6, _startThumbRef$value8;
-                (_stopThumbRef$value6 = stopThumbRef.value) == null ? void 0 : _stopThumbRef$value6.$el.blur();
-                (_startThumbRef$value8 = startThumbRef.value) == null ? void 0 : _startThumbRef$value8.$el.focus();
+              if (model.value[0] === model.value[1] && model.value[0] === max.value && e.relatedTarget !== startThumbRef.value?.$el) {
+                stopThumbRef.value?.$el.blur();
+                startThumbRef.value?.$el.focus();
               }
             },
             "onBlur": () => {
@@ -20850,8 +20742,7 @@ const VRating = (0,defineComponent/* genericComponent */.ev)()({
       }
       function onFocus() {
         if (value === 0 && normalizedValue.value === 0) {
-          var _firstRef$value;
-          (_firstRef$value = firstRef.value) == null ? void 0 : _firstRef$value.focus();
+          firstRef.value?.focus();
         } else {
           focusIndex.value = value;
         }
@@ -20879,7 +20770,6 @@ const VRating = (0,defineComponent/* genericComponent */.ev)()({
     }
     const name = (0,runtime_core_esm_bundler/* computed */.Fl)(() => props.name ?? `v-rating-${(0,util_getCurrentInstance/* getUid */.sq)()}`);
     function VRatingItem(_ref2) {
-      var _itemState$value$inde, _itemState$value$inde2;
       let {
         value,
         index,
@@ -20894,10 +20784,10 @@ const VRating = (0,defineComponent/* genericComponent */.ev)()({
       } = eventState.value[index + 1];
       const id = `${name.value}-${String(value).replace('.', '-')}`;
       const btnProps = {
-        color: (_itemState$value$inde = itemState.value[index]) == null ? void 0 : _itemState$value$inde.color,
+        color: itemState.value[index]?.color,
         density: props.density,
         disabled: props.disabled,
-        icon: (_itemState$value$inde2 = itemState.value[index]) == null ? void 0 : _itemState$value$inde2.icon,
+        icon: itemState.value[index]?.icon,
         ripple: props.ripple,
         size: props.size,
         tag: 'span',
@@ -20941,8 +20831,7 @@ const VRating = (0,defineComponent/* genericComponent */.ev)()({
       return (0,runtime_core_esm_bundler/* createVNode */.Wm)("span", null, [(0,runtime_core_esm_bundler/* createTextVNode */.Uk)("\xA0")]);
     }
     (0,useRender/* useRender */.L)(() => {
-      var _props$itemLabels;
-      const hasLabels = !!((_props$itemLabels = props.itemLabels) != null && _props$itemLabels.length) || slots['item-label'];
+      const hasLabels = !!props.itemLabels?.length || slots['item-label'];
       return (0,runtime_core_esm_bundler/* createVNode */.Wm)(props.tag, {
         "class": ['v-rating', {
           'v-rating--hover': props.hover,
@@ -20953,33 +20842,30 @@ const VRating = (0,defineComponent/* genericComponent */.ev)()({
           "value": 0,
           "index": -1,
           "showStar": false
-        }, null), range.value.map((value, i) => {
-          var _props$itemLabels2, _props$itemLabels3;
-          return (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
-            "class": "v-rating__wrapper"
-          }, [hasLabels && props.itemLabelPosition === 'top' ? createLabel({
-            value,
-            index: i,
-            label: (_props$itemLabels2 = props.itemLabels) == null ? void 0 : _props$itemLabels2[i]
-          }) : undefined, (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
-            "class": ['v-rating__item', {
-              'v-rating__item--focused': Math.ceil(focusIndex.value) === value
-            }]
-          }, [props.halfIncrements ? (0,runtime_core_esm_bundler/* createVNode */.Wm)(runtime_core_esm_bundler/* Fragment */.HY, null, [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VRatingItem, {
-            "value": value - 0.5,
-            "index": i * 2
-          }, null), (0,runtime_core_esm_bundler/* createVNode */.Wm)(VRatingItem, {
-            "value": value,
-            "index": i * 2 + 1
-          }, null)]) : (0,runtime_core_esm_bundler/* createVNode */.Wm)(VRatingItem, {
-            "value": value,
-            "index": i
-          }, null)]), hasLabels && props.itemLabelPosition === 'bottom' ? createLabel({
-            value,
-            index: i,
-            label: (_props$itemLabels3 = props.itemLabels) == null ? void 0 : _props$itemLabels3[i]
-          }) : undefined]);
-        })]
+        }, null), range.value.map((value, i) => (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
+          "class": "v-rating__wrapper"
+        }, [hasLabels && props.itemLabelPosition === 'top' ? createLabel({
+          value,
+          index: i,
+          label: props.itemLabels?.[i]
+        }) : undefined, (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
+          "class": ['v-rating__item', {
+            'v-rating__item--focused': Math.ceil(focusIndex.value) === value
+          }]
+        }, [props.halfIncrements ? (0,runtime_core_esm_bundler/* createVNode */.Wm)(runtime_core_esm_bundler/* Fragment */.HY, null, [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VRatingItem, {
+          "value": value - 0.5,
+          "index": i * 2
+        }, null), (0,runtime_core_esm_bundler/* createVNode */.Wm)(VRatingItem, {
+          "value": value,
+          "index": i * 2 + 1
+        }, null)]) : (0,runtime_core_esm_bundler/* createVNode */.Wm)(VRatingItem, {
+          "value": value,
+          "index": i
+        }, null)]), hasLabels && props.itemLabelPosition === 'bottom' ? createLabel({
+          value,
+          index: i,
+          label: props.itemLabels?.[i]
+        }) : undefined]))]
       });
     });
     return {};
@@ -21219,8 +21105,7 @@ const VSlideGroup = (0,defineComponent/* genericComponent */.ev)()({
       isFocused.value = false;
     }
     function onFocus(e) {
-      var _contentRef$value;
-      if (!isFocused.value && !(e.relatedTarget && (_contentRef$value = contentRef.value) != null && _contentRef$value.contains(e.relatedTarget))) focus();
+      if (!isFocused.value && !(e.relatedTarget && contentRef.value?.contains(e.relatedTarget))) focus();
     }
     function onKeydown(e) {
       if (!contentRef.value) return;
@@ -21246,23 +21131,18 @@ const VSlideGroup = (0,defineComponent/* genericComponent */.ev)()({
     function focus(location) {
       if (!contentRef.value) return;
       if (!location) {
-        var _focusable$;
         const focusable = [...contentRef.value.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])')].filter(el => !el.hasAttribute('disabled'));
-        (_focusable$ = focusable[0]) == null ? void 0 : _focusable$.focus();
+        focusable[0]?.focus();
       } else if (location === 'next') {
-        var _contentRef$value$que;
-        const el = (_contentRef$value$que = contentRef.value.querySelector(':focus')) == null ? void 0 : _contentRef$value$que.nextElementSibling;
+        const el = contentRef.value.querySelector(':focus')?.nextElementSibling;
         if (el) el.focus();else focus('first');
       } else if (location === 'prev') {
-        var _contentRef$value$que2;
-        const el = (_contentRef$value$que2 = contentRef.value.querySelector(':focus')) == null ? void 0 : _contentRef$value$que2.previousElementSibling;
+        const el = contentRef.value.querySelector(':focus')?.previousElementSibling;
         if (el) el.focus();else focus('last');
       } else if (location === 'first') {
-        var _contentRef$value$fir;
-        (_contentRef$value$fir = contentRef.value.firstElementChild) == null ? void 0 : _contentRef$value$fir.focus();
+        contentRef.value.firstElementChild?.focus();
       } else if (location === 'last') {
-        var _contentRef$value$las;
-        (_contentRef$value$las = contentRef.value.lastElementChild) == null ? void 0 : _contentRef$value$las.focus();
+        contentRef.value.lastElementChild?.focus();
       }
     }
     function scrollTo(location) {
@@ -21323,55 +21203,52 @@ const VSlideGroup = (0,defineComponent/* genericComponent */.ev)()({
       // Check one scroll ahead to know the width of right-most item
       return contentSize.value > Math.abs(scrollOffset.value) + containerSize.value;
     });
-    (0,useRender/* useRender */.L)(() => {
-      var _slots$prev, _slots$default, _slots$next;
-      return (0,runtime_core_esm_bundler/* createVNode */.Wm)(props.tag, {
-        "class": ['v-slide-group', {
-          'v-slide-group--vertical': !isHorizontal.value,
-          'v-slide-group--has-affixes': hasAffixes.value,
-          'v-slide-group--is-overflowing': isOverflowing.value
+    (0,useRender/* useRender */.L)(() => (0,runtime_core_esm_bundler/* createVNode */.Wm)(props.tag, {
+      "class": ['v-slide-group', {
+        'v-slide-group--vertical': !isHorizontal.value,
+        'v-slide-group--has-affixes': hasAffixes.value,
+        'v-slide-group--is-overflowing': isOverflowing.value
+      }],
+      "tabindex": isFocused.value || group.selected.value.length ? -1 : 0,
+      "onFocus": onFocus
+    }, {
+      default: () => [hasAffixes.value && (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
+        "key": "prev",
+        "class": ['v-slide-group__prev', {
+          'v-slide-group__prev--disabled': !hasPrev.value
         }],
-        "tabindex": isFocused.value || group.selected.value.length ? -1 : 0,
-        "onFocus": onFocus
-      }, {
-        default: () => [hasAffixes.value && (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
-          "key": "prev",
-          "class": ['v-slide-group__prev', {
-            'v-slide-group__prev--disabled': !hasPrev.value
-          }],
-          "onClick": () => scrollTo('prev')
-        }, [((_slots$prev = slots.prev) == null ? void 0 : _slots$prev.call(slots, slotProps.value)) ?? (0,runtime_core_esm_bundler/* createVNode */.Wm)(transitions/* VFadeTransition */.Z5, null, {
-          default: () => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VIcon/* VIcon */.t, {
-            "icon": isRtl.value ? props.nextIcon : props.prevIcon
-          }, null)]
-        })]), (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
-          "key": "container",
-          "ref": containerRef,
-          "class": "v-slide-group__container",
-          "onScroll": onScroll
-        }, [(0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
-          "ref": contentRef,
-          "class": "v-slide-group__content",
-          "style": contentStyles.value,
-          "onTouchstartPassive": onTouchstart,
-          "onTouchmovePassive": onTouchmove,
-          "onTouchendPassive": onTouchend,
-          "onFocusin": onFocusin,
-          "onFocusout": onFocusout,
-          "onKeydown": onKeydown
-        }, [(_slots$default = slots.default) == null ? void 0 : _slots$default.call(slots, slotProps.value)])]), hasAffixes.value && (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
-          "key": "next",
-          "class": ['v-slide-group__next', {
-            'v-slide-group__next--disabled': !hasNext.value
-          }],
-          "onClick": () => scrollTo('next')
-        }, [((_slots$next = slots.next) == null ? void 0 : _slots$next.call(slots, slotProps.value)) ?? (0,runtime_core_esm_bundler/* createVNode */.Wm)(transitions/* VFadeTransition */.Z5, null, {
-          default: () => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VIcon/* VIcon */.t, {
-            "icon": isRtl.value ? props.prevIcon : props.nextIcon
-          }, null)]
-        })])]
-      });
-    });
+        "onClick": () => scrollTo('prev')
+      }, [slots.prev?.(slotProps.value) ?? (0,runtime_core_esm_bundler/* createVNode */.Wm)(transitions/* VFadeTransition */.Z5, null, {
+        default: () => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VIcon/* VIcon */.t, {
+          "icon": isRtl.value ? props.nextIcon : props.prevIcon
+        }, null)]
+      })]), (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
+        "key": "container",
+        "ref": containerRef,
+        "class": "v-slide-group__container",
+        "onScroll": onScroll
+      }, [(0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
+        "ref": contentRef,
+        "class": "v-slide-group__content",
+        "style": contentStyles.value,
+        "onTouchstartPassive": onTouchstart,
+        "onTouchmovePassive": onTouchmove,
+        "onTouchendPassive": onTouchend,
+        "onFocusin": onFocusin,
+        "onFocusout": onFocusout,
+        "onKeydown": onKeydown
+      }, [slots.default?.(slotProps.value)])]), hasAffixes.value && (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
+        "key": "next",
+        "class": ['v-slide-group__next', {
+          'v-slide-group__next--disabled': !hasNext.value
+        }],
+        "onClick": () => scrollTo('next')
+      }, [slots.next?.(slotProps.value) ?? (0,runtime_core_esm_bundler/* createVNode */.Wm)(transitions/* VFadeTransition */.Z5, null, {
+        default: () => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VIcon/* VIcon */.t, {
+          "icon": isRtl.value ? props.prevIcon : props.nextIcon
+        }, null)]
+      })])]
+    }));
     return {
       selected: group.selected,
       scrollTo,
@@ -21398,15 +21275,12 @@ const VSlideGroupItem = (0,defineComponent/* genericComponent */.ev)()({
       slots
     } = _ref;
     const slideGroupItem = (0,composables_group/* useGroupItem */.Yt)(props, VSlideGroupSymbol);
-    return () => {
-      var _slots$default;
-      return (_slots$default = slots.default) == null ? void 0 : _slots$default.call(slots, {
-        isSelected: slideGroupItem.isSelected.value,
-        select: slideGroupItem.select,
-        toggle: slideGroupItem.toggle,
-        selectedClass: slideGroupItem.selectedClass.value
-      });
-    };
+    return () => slots.default?.({
+      isSelected: slideGroupItem.isSelected.value,
+      select: slideGroupItem.select,
+      toggle: slideGroupItem.toggle,
+      selectedClass: slideGroupItem.selectedClass.value
+    });
   }
 });
 ;// CONCATENATED MODULE: ./node_modules/vuetify/lib/components/VSlideGroup/index.mjs
@@ -21437,7 +21311,7 @@ var composables_scopeId = __webpack_require__(5975);
  // Utilities
 
 
- // Types
+
 const VSnackbar = (0,defineComponent/* genericComponent */.ev)()({
   name: 'VSnackbar',
   props: {
@@ -21571,10 +21445,11 @@ var VSwitch = __webpack_require__(3104);
 
 
 
+
  // Utilities
 
 
-const VSystemBar = (0,defineComponent/* defineComponent */.aZ)({
+const VSystemBar = (0,defineComponent/* genericComponent */.ev)()({
   name: 'VSystemBar',
   props: {
     color: String,
@@ -21603,6 +21478,9 @@ const VSystemBar = (0,defineComponent/* defineComponent */.aZ)({
     const {
       roundedClasses
     } = (0,rounded/* useRounded */.b)(props);
+    const {
+      ssrBootStyles
+    } = useSsrBoot();
     const height = (0,runtime_core_esm_bundler/* computed */.Fl)(() => props.height ?? (props.window ? 32 : 24));
     const {
       layoutItemStyles
@@ -21619,7 +21497,7 @@ const VSystemBar = (0,defineComponent/* defineComponent */.aZ)({
       "class": ['v-system-bar', {
         'v-system-bar--window': props.window
       }, themeClasses.value, backgroundColorClasses.value, elevationClasses.value, roundedClasses.value],
-      "style": [backgroundColorStyles.value, layoutItemStyles.value]
+      "style": [backgroundColorStyles.value, layoutItemStyles.value, ssrBootStyles.value]
     }, slots));
     return {};
   }
@@ -21654,7 +21532,7 @@ const VTabsSymbol = Symbol.for('vuetify:v-tabs');
 
  // Types
 
-const VTab = (0,defineComponent/* defineComponent */.aZ)({
+const VTab = (0,defineComponent/* genericComponent */.ev)()({
   name: 'VTab',
   props: {
     fixed: Boolean,
@@ -21700,8 +21578,7 @@ const VTab = (0,defineComponent/* defineComponent */.aZ)({
       } = _ref2;
       isSelected.value = value;
       if (value) {
-        var _rootEl$value, _rootEl$value$$el$par;
-        const prevEl = (_rootEl$value = rootEl.value) == null ? void 0 : (_rootEl$value$$el$par = _rootEl$value.$el.parentElement) == null ? void 0 : _rootEl$value$$el$par.querySelector('.v-tab--selected .v-tab__slider');
+        const prevEl = rootEl.value?.$el.parentElement?.querySelector('.v-tab--selected .v-tab__slider');
         const nextEl = sliderEl.value;
         if (!prevEl || !nextEl) return;
         const color = getComputedStyle(prevEl).color;
@@ -21783,7 +21660,7 @@ function parseItems(items) {
     return item;
   });
 }
-const VTabs = (0,defineComponent/* defineComponent */.aZ)({
+const VTabs = (0,defineComponent/* genericComponent */.ev)()({
   name: 'VTabs',
   props: {
     alignTabs: {
@@ -21882,7 +21759,7 @@ const VTabs = (0,defineComponent/* defineComponent */.aZ)({
 
  // Utilities
 
-const VTable = (0,defineComponent/* defineComponent */.aZ)({
+const VTable = (0,defineComponent/* genericComponent */.ev)()({
   name: 'VTable',
   props: {
     fixedHeader: Boolean,
@@ -21903,26 +21780,23 @@ const VTable = (0,defineComponent/* defineComponent */.aZ)({
     const {
       densityClasses
     } = (0,composables_density/* useDensity */.t)(props);
-    (0,useRender/* useRender */.L)(() => {
-      var _slots$top, _slots$wrapper, _slots$bottom;
-      return (0,runtime_core_esm_bundler/* createVNode */.Wm)(props.tag, {
-        "class": ['v-table', {
-          'v-table--fixed-height': !!props.height,
-          'v-table--fixed-header': props.fixedHeader,
-          'v-table--fixed-footer': props.fixedFooter,
-          'v-table--has-top': !!slots.top,
-          'v-table--has-bottom': !!slots.bottom,
-          'v-table--hover': props.hover
-        }, themeClasses.value, densityClasses.value]
-      }, {
-        default: () => [(_slots$top = slots.top) == null ? void 0 : _slots$top.call(slots), slots.default ? (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
-          "class": "v-table__wrapper",
-          "style": {
-            height: (0,helpers/* convertToUnit */.kb)(props.height)
-          }
-        }, [(0,runtime_core_esm_bundler/* createVNode */.Wm)("table", null, [slots.default()])]) : (_slots$wrapper = slots.wrapper) == null ? void 0 : _slots$wrapper.call(slots), (_slots$bottom = slots.bottom) == null ? void 0 : _slots$bottom.call(slots)]
-      });
-    });
+    (0,useRender/* useRender */.L)(() => (0,runtime_core_esm_bundler/* createVNode */.Wm)(props.tag, {
+      "class": ['v-table', {
+        'v-table--fixed-height': !!props.height,
+        'v-table--fixed-header': props.fixedHeader,
+        'v-table--fixed-footer': props.fixedFooter,
+        'v-table--has-top': !!slots.top,
+        'v-table--has-bottom': !!slots.bottom,
+        'v-table--hover': props.hover
+      }, themeClasses.value, densityClasses.value]
+    }, {
+      default: () => [slots.top?.(), slots.default ? (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
+        "class": "v-table__wrapper",
+        "style": {
+          height: (0,helpers/* convertToUnit */.kb)(props.height)
+        }
+      }, [(0,runtime_core_esm_bundler/* createVNode */.Wm)("table", null, [slots.default()])]) : slots.wrapper?.(), slots.bottom?.()]
+    }));
     return {};
   }
 });
@@ -21950,7 +21824,7 @@ var VTextField_VTextField = __webpack_require__(348);
  // Utilities
 
  // Types
-const VTextarea = (0,defineComponent/* defineComponent */.aZ)({
+const VTextarea = (0,defineComponent/* genericComponent */.ev)()({
   name: 'VTextarea',
   directives: {
     Intersect: intersect/* default */.Z
@@ -21983,6 +21857,7 @@ const VTextarea = (0,defineComponent/* defineComponent */.aZ)({
   },
   emits: {
     'click:control': e => true,
+    'mousedown:control': e => true,
     'update:focused': focused => true,
     'update:modelValue': val => true
   },
@@ -22007,9 +21882,8 @@ const VTextarea = (0,defineComponent/* defineComponent */.aZ)({
       return props.counter;
     });
     function onIntersect(isIntersecting, entries) {
-      var _entries$0$target, _entries$0$target$foc;
       if (!props.autofocus || !isIntersecting) return;
-      (_entries$0$target = entries[0].target) == null ? void 0 : (_entries$0$target$foc = _entries$0$target.focus) == null ? void 0 : _entries$0$target$foc.call(_entries$0$target);
+      entries[0].target?.focus?.();
     }
     const vInputRef = (0,reactivity_esm_bundler/* ref */.iH)();
     const vFieldRef = (0,reactivity_esm_bundler/* ref */.iH)();
@@ -22021,14 +21895,16 @@ const VTextarea = (0,defineComponent/* defineComponent */.aZ)({
     });
     function onFocus() {
       if (textareaRef.value !== document.activeElement) {
-        var _textareaRef$value;
-        (_textareaRef$value = textareaRef.value) == null ? void 0 : _textareaRef$value.focus();
+        textareaRef.value?.focus();
       }
       if (!isFocused.value) focus();
     }
     function onControlClick(e) {
       onFocus();
       emit('click:control', e);
+    }
+    function onControlMousedown(e) {
+      emit('mousedown:control', e);
     }
     function onClear(e) {
       e.stopPropagation();
@@ -22067,13 +21943,11 @@ const VTextarea = (0,defineComponent/* defineComponent */.aZ)({
         observer = new ResizeObserver(calculateInputHeight);
         observer.observe(sizerRef.value);
       } else {
-        var _observer;
-        (_observer = observer) == null ? void 0 : _observer.disconnect();
+        observer?.disconnect();
       }
     });
     (0,runtime_core_esm_bundler/* onBeforeUnmount */.Jd)(() => {
-      var _observer2;
-      (_observer2 = observer) == null ? void 0 : _observer2.disconnect();
+      observer?.disconnect();
     });
     (0,useRender/* useRender */.L)(() => {
       const hasCounter = !!(slots.counter || props.counter || props.counterValue);
@@ -22116,7 +21990,8 @@ const VTextarea = (0,defineComponent/* defineComponent */.aZ)({
             "style": {
               '--v-textarea-control-height': controlHeight.value
             },
-            "onClick:control": onControlClick,
+            "onClick": onControlClick,
+            "onMousedown": onControlMousedown,
             "onClick:clear": onClear,
             "onClick:prependInner": props['onClick:prependInner'],
             "onClick:appendInner": props['onClick:appendInner'],
@@ -22166,14 +22041,11 @@ const VTextarea = (0,defineComponent/* defineComponent */.aZ)({
             }
           });
         },
-        details: hasDetails ? slotProps => {
-          var _slots$details;
-          return (0,runtime_core_esm_bundler/* createVNode */.Wm)(runtime_core_esm_bundler/* Fragment */.HY, null, [(_slots$details = slots.details) == null ? void 0 : _slots$details.call(slots, slotProps), hasCounter && (0,runtime_core_esm_bundler/* createVNode */.Wm)(runtime_core_esm_bundler/* Fragment */.HY, null, [(0,runtime_core_esm_bundler/* createVNode */.Wm)("span", null, null), (0,runtime_core_esm_bundler/* createVNode */.Wm)(VCounter/* VCounter */._, {
-            "active": props.persistentCounter || isFocused.value,
-            "value": counterValue.value,
-            "max": max.value
-          }, slots.counter)])]);
-        } : undefined
+        details: hasDetails ? slotProps => (0,runtime_core_esm_bundler/* createVNode */.Wm)(runtime_core_esm_bundler/* Fragment */.HY, null, [slots.details?.(slotProps), hasCounter && (0,runtime_core_esm_bundler/* createVNode */.Wm)(runtime_core_esm_bundler/* Fragment */.HY, null, [(0,runtime_core_esm_bundler/* createVNode */.Wm)("span", null, null), (0,runtime_core_esm_bundler/* createVNode */.Wm)(VCounter/* VCounter */._, {
+          "active": props.persistentCounter || isFocused.value,
+          "value": counterValue.value,
+          "max": max.value
+        }, slots.counter)])]) : undefined
       });
     });
     return (0,forwardRefs/* forwardRefs */.F)({}, vInputRef, vFieldRef, textareaRef);
@@ -22195,7 +22067,7 @@ const VTextarea = (0,defineComponent/* defineComponent */.aZ)({
 
  // Utilities
 
-const VThemeProvider = (0,defineComponent/* defineComponent */.aZ)({
+const VThemeProvider = (0,defineComponent/* genericComponent */.ev)()({
   name: 'VThemeProvider',
   props: {
     withBackground: Boolean,
@@ -22210,12 +22082,11 @@ const VThemeProvider = (0,defineComponent/* defineComponent */.aZ)({
       themeClasses
     } = (0,composables_theme/* provideTheme */.ER)(props);
     return () => {
-      var _slots$default, _slots$default2;
-      if (!props.withBackground) return (_slots$default = slots.default) == null ? void 0 : _slots$default.call(slots);
+      if (!props.withBackground) return slots.default?.();
       return (0,runtime_core_esm_bundler/* createVNode */.Wm)(props.tag, {
         "class": ['v-theme-provider', themeClasses.value]
       }, {
-        default: () => [(_slots$default2 = slots.default) == null ? void 0 : _slots$default2.call(slots)]
+        default: () => [slots.default?.()]
       });
     };
   }
@@ -22237,7 +22108,7 @@ const VThemeProvider = (0,defineComponent/* defineComponent */.aZ)({
  // Utilities
 
  // Types
-const VTimeline = (0,defineComponent/* defineComponent */.aZ)({
+const VTimeline = (0,defineComponent/* genericComponent */.ev)()({
   name: 'VTimeline',
   props: {
     align: {
@@ -22335,7 +22206,7 @@ const VTimeline = (0,defineComponent/* defineComponent */.aZ)({
  // Utilities
 
 
-const VTimelineDivider = (0,defineComponent/* defineComponent */.aZ)({
+const VTimelineDivider = (0,defineComponent/* genericComponent */.ev)()({
   name: 'VTimelineDivider',
   props: {
     dotColor: String,
@@ -22377,27 +22248,24 @@ const VTimelineDivider = (0,defineComponent/* defineComponent */.aZ)({
         size: (0,reactivity_esm_bundler/* toRef */.Vh)(props, 'size')
       }
     });
-    (0,useRender/* useRender */.L)(() => {
-      var _slots$default;
-      return (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
-        "class": ['v-timeline-divider', {
-          'v-timeline-divider--fill-dot': props.fillDot
-        }]
-      }, [(0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
-        "class": ['v-timeline-divider__before', lineColorClasses.value],
-        "style": lineColorStyles.value
-      }, null), !props.hideDot && (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
-        "key": "dot",
-        "class": ['v-timeline-divider__dot', elevationClasses.value, roundedClasses.value, sizeClasses.value],
-        "style": sizeStyles.value
-      }, [(0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
-        "class": ['v-timeline-divider__inner-dot', backgroundColorClasses.value, roundedClasses.value],
-        "style": backgroundColorStyles.value
-      }, [((_slots$default = slots.default) == null ? void 0 : _slots$default.call(slots)) ?? (props.icon ? (0,runtime_core_esm_bundler/* createVNode */.Wm)(VIcon/* VIcon */.t, null, null) : undefined)])]), (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
-        "class": ['v-timeline-divider__after', lineColorClasses.value],
-        "style": lineColorStyles.value
-      }, null)]);
-    });
+    (0,useRender/* useRender */.L)(() => (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
+      "class": ['v-timeline-divider', {
+        'v-timeline-divider--fill-dot': props.fillDot
+      }]
+    }, [(0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
+      "class": ['v-timeline-divider__before', lineColorClasses.value],
+      "style": lineColorStyles.value
+    }, null), !props.hideDot && (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
+      "key": "dot",
+      "class": ['v-timeline-divider__dot', elevationClasses.value, roundedClasses.value, sizeClasses.value],
+      "style": sizeStyles.value
+    }, [(0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
+      "class": ['v-timeline-divider__inner-dot', backgroundColorClasses.value, roundedClasses.value],
+      "style": backgroundColorStyles.value
+    }, [slots.default?.() ?? (props.icon ? (0,runtime_core_esm_bundler/* createVNode */.Wm)(VIcon/* VIcon */.t, null, null) : undefined)])]), (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
+      "class": ['v-timeline-divider__after', lineColorClasses.value],
+      "style": lineColorStyles.value
+    }, null)]));
     return {};
   }
 });
@@ -22413,7 +22281,10 @@ const VTimelineDivider = (0,defineComponent/* defineComponent */.aZ)({
 
 
 
-const VTimelineItem = (0,defineComponent/* defineComponent */.aZ)({
+
+// Types
+
+const VTimelineItem = (0,defineComponent/* genericComponent */.ev)()({
   name: 'VTimelineItem',
   props: {
     density: String,
@@ -22443,41 +22314,37 @@ const VTimelineItem = (0,defineComponent/* defineComponent */.aZ)({
     const dotSize = (0,reactivity_esm_bundler/* ref */.iH)(0);
     const dotRef = (0,reactivity_esm_bundler/* ref */.iH)();
     (0,runtime_core_esm_bundler/* watch */.YP)(dotRef, newValue => {
-      var _newValue$$el$querySe;
       if (!newValue) return;
-      dotSize.value = ((_newValue$$el$querySe = newValue.$el.querySelector('.v-timeline-divider__dot')) == null ? void 0 : _newValue$$el$querySe.getBoundingClientRect().width) ?? 0;
+      dotSize.value = newValue.$el.querySelector('.v-timeline-divider__dot')?.getBoundingClientRect().width ?? 0;
     }, {
       flush: 'post'
     });
-    (0,useRender/* useRender */.L)(() => {
-      var _slots$default, _slots$opposite;
-      return (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
-        "class": ['v-timeline-item', {
-          'v-timeline-item--fill-dot': props.fillDot
-        }],
-        "style": {
-          '--v-timeline-dot-size': (0,helpers/* convertToUnit */.kb)(dotSize.value),
-          '--v-timeline-line-inset': props.lineInset ? `calc(var(--v-timeline-dot-size) / 2 + ${(0,helpers/* convertToUnit */.kb)(props.lineInset)})` : (0,helpers/* convertToUnit */.kb)(0)
-        }
-      }, [(0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
-        "class": "v-timeline-item__body",
-        "style": dimensionStyles.value
-      }, [(_slots$default = slots.default) == null ? void 0 : _slots$default.call(slots)]), (0,runtime_core_esm_bundler/* createVNode */.Wm)(VTimelineDivider, {
-        "ref": dotRef,
-        "hideDot": props.hideDot,
-        "icon": props.icon,
-        "iconColor": props.iconColor,
-        "size": props.size,
-        "elevation": props.elevation,
-        "dotColor": props.dotColor,
-        "fillDot": props.fillDot,
-        "rounded": props.rounded
-      }, {
-        default: slots.icon
-      }), props.density !== 'compact' && (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
-        "class": "v-timeline-item__opposite"
-      }, [!props.hideOpposite && ((_slots$opposite = slots.opposite) == null ? void 0 : _slots$opposite.call(slots))])]);
-    });
+    (0,useRender/* useRender */.L)(() => (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
+      "class": ['v-timeline-item', {
+        'v-timeline-item--fill-dot': props.fillDot
+      }],
+      "style": {
+        '--v-timeline-dot-size': (0,helpers/* convertToUnit */.kb)(dotSize.value),
+        '--v-timeline-line-inset': props.lineInset ? `calc(var(--v-timeline-dot-size) / 2 + ${(0,helpers/* convertToUnit */.kb)(props.lineInset)})` : (0,helpers/* convertToUnit */.kb)(0)
+      }
+    }, [(0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
+      "class": "v-timeline-item__body",
+      "style": dimensionStyles.value
+    }, [slots.default?.()]), (0,runtime_core_esm_bundler/* createVNode */.Wm)(VTimelineDivider, {
+      "ref": dotRef,
+      "hideDot": props.hideDot,
+      "icon": props.icon,
+      "iconColor": props.iconColor,
+      "size": props.size,
+      "elevation": props.elevation,
+      "dotColor": props.dotColor,
+      "fillDot": props.fillDot,
+      "rounded": props.rounded
+    }, {
+      default: slots.icon
+    }), props.density !== 'compact' && (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
+      "class": "v-timeline-item__opposite"
+    }, [!props.hideOpposite && slots.opposite?.()])]));
     return {};
   }
 });
@@ -22491,7 +22358,7 @@ const VTimelineItem = (0,defineComponent/* defineComponent */.aZ)({
  // Utilities
 
 
-const VToolbarItems = (0,defineComponent/* defineComponent */.aZ)({
+const VToolbarItems = (0,defineComponent/* genericComponent */.ev)()({
   name: 'VToolbarItems',
   props: (0,variant/* makeVariantProps */.bk)({
     variant: 'text'
@@ -22507,12 +22374,9 @@ const VToolbarItems = (0,defineComponent/* defineComponent */.aZ)({
         variant: (0,reactivity_esm_bundler/* toRef */.Vh)(props, 'variant')
       }
     });
-    (0,useRender/* useRender */.L)(() => {
-      var _slots$default;
-      return (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
-        "class": "v-toolbar-items"
-      }, [(_slots$default = slots.default) == null ? void 0 : _slots$default.call(slots)]);
-    });
+    (0,useRender/* useRender */.L)(() => (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
+      "class": "v-toolbar-items"
+    }, [slots.default?.()]));
     return {};
   }
 });
@@ -22579,6 +22443,9 @@ const VTooltip = (0,defineComponent/* genericComponent */.ev)()({
       if (props.transition) return props.transition;
       return isActive.value ? 'scale-transition' : 'fade-transition';
     });
+    const activatorProps = (0,runtime_core_esm_bundler/* computed */.Fl)(() => (0,runtime_core_esm_bundler/* mergeProps */.dG)({
+      'aria-describedby': id.value
+    }, props.activatorProps));
     (0,useRender/* useRender */.L)(() => {
       const [overlayProps] = (0,VOverlay/* filterVOverlayProps */.Fe)(props);
       return (0,runtime_core_esm_bundler/* createVNode */.Wm)(VOverlay/* VOverlay */.yc, (0,runtime_core_esm_bundler/* mergeProps */.dG)({
@@ -22595,18 +22462,15 @@ const VTooltip = (0,defineComponent/* genericComponent */.ev)()({
         "persistent": true,
         "role": "tooltip",
         "eager": true,
-        "activatorProps": (0,runtime_core_esm_bundler/* mergeProps */.dG)({
-          'aria-describedby': id.value
-        }, props.activatorProps),
+        "activatorProps": activatorProps.value,
         "_disableGlobalStack": true
       }, scopeId), {
         activator: slots.activator,
         default: function () {
-          var _slots$default;
           for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
             args[_key] = arguments[_key];
           }
-          return ((_slots$default = slots.default) == null ? void 0 : _slots$default.call(slots, ...args)) ?? props.text;
+          return slots.default?.(...args) ?? props.text;
         }
       });
     });
@@ -22621,7 +22485,7 @@ var composables_validation = __webpack_require__(9911);
 // Composables
  // Utilities
 
-const VValidation = (0,defineComponent/* defineComponent */.aZ)({
+const VValidation = (0,defineComponent/* genericComponent */.ev)()({
   name: 'VValidation',
   props: {
     ...(0,composables_validation/* makeValidationProps */._)()
@@ -22634,10 +22498,7 @@ const VValidation = (0,defineComponent/* defineComponent */.aZ)({
       slots
     } = _ref;
     const validation = (0,composables_validation/* useValidation */.V)(props, 'validation');
-    return () => {
-      var _slots$default;
-      return (_slots$default = slots.default) == null ? void 0 : _slots$default.call(slots, validation);
-    };
+    return () => slots.default?.(validation);
   }
 });
 ;// CONCATENATED MODULE: ./node_modules/vuetify/lib/components/VValidation/index.mjs
@@ -22748,19 +22609,19 @@ function mutate_mounted(el, binding) {
   } = typeof value === 'object' ? value : {
     handler: value,
     options: {
-      attributes: (modifierKeys == null ? void 0 : modifierKeys.attr) ?? defaultValue,
-      characterData: (modifierKeys == null ? void 0 : modifierKeys.char) ?? defaultValue,
-      childList: (modifierKeys == null ? void 0 : modifierKeys.child) ?? defaultValue,
-      subtree: (modifierKeys == null ? void 0 : modifierKeys.sub) ?? defaultValue
+      attributes: modifierKeys?.attr ?? defaultValue,
+      characterData: modifierKeys?.char ?? defaultValue,
+      childList: modifierKeys?.child ?? defaultValue,
+      subtree: modifierKeys?.sub ?? defaultValue
     }
   };
   const observer = new MutationObserver(function () {
     let mutations = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
     let observer = arguments.length > 1 ? arguments[1] : undefined;
-    handler == null ? void 0 : handler(mutations, observer);
+    handler?.(mutations, observer);
     if (once) mutate_unmounted(el, binding);
   });
-  if (immediate) handler == null ? void 0 : handler([], observer);
+  if (immediate) handler?.([], observer);
   el._mutate = Object(el._mutate);
   el._mutate[binding.instance.$.uid] = {
     observer
@@ -22768,8 +22629,7 @@ function mutate_mounted(el, binding) {
   observer.observe(el, options);
 }
 function mutate_unmounted(el, binding) {
-  var _el$_mutate;
-  if (!((_el$_mutate = el._mutate) != null && _el$_mutate[binding.instance.$.uid])) return;
+  if (!el._mutate?.[binding.instance.$.uid]) return;
   el._mutate[binding.instance.$.uid].observer.disconnect();
   delete el._mutate[binding.instance.$.uid];
 }
@@ -22780,10 +22640,9 @@ const Mutate = {
 /* harmony default export */ var mutate = ((/* unused pure expression or super */ null && (Mutate)));
 ;// CONCATENATED MODULE: ./node_modules/vuetify/lib/directives/resize/index.mjs
 function resize_mounted(el, binding) {
-  var _binding$modifiers, _binding$modifiers2;
   const handler = binding.value;
   const options = {
-    passive: !((_binding$modifiers = binding.modifiers) != null && _binding$modifiers.active)
+    passive: !binding.modifiers?.active
   };
   window.addEventListener('resize', handler, options);
   el._onResize = Object(el._onResize);
@@ -22791,13 +22650,12 @@ function resize_mounted(el, binding) {
     handler,
     options
   };
-  if (!((_binding$modifiers2 = binding.modifiers) != null && _binding$modifiers2.quiet)) {
+  if (!binding.modifiers?.quiet) {
     handler();
   }
 }
 function resize_unmounted(el, binding) {
-  var _el$_onResize;
-  if (!((_el$_onResize = el._onResize) != null && _el$_onResize[binding.instance.$.uid])) return;
+  if (!el._onResize?.[binding.instance.$.uid]) return;
   const {
     handler,
     options
@@ -22832,8 +22690,7 @@ function scroll_mounted(el, binding) {
   };
 }
 function scroll_unmounted(el, binding) {
-  var _el$_onScroll;
-  if (!((_el$_onScroll = el._onScroll) != null && _el$_onScroll[binding.instance.$.uid])) return;
+  if (!el._onScroll?.[binding.instance.$.uid]) return;
   const {
     handler,
     options,
@@ -64248,7 +64105,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         key: 3,
         class: "justify-end align-end"
       }, {
-        default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VBtnGroup/* VBtnGroup */.Y, {
+        default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VBtnGroup/* VBtnGroup */.Yz, {
           class: "border-dialog-btns dialog__btns"
         }, {
           default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* renderSlot */.WI)(_ctx.$slots, "btns", {}, undefined, true)]),
@@ -64979,7 +64836,7 @@ const makeVAvatarProps = (0,propsFactory/* propsFactory */.U)({
     variant: 'flat'
   })
 }, 'v-avatar');
-const VAvatar = (0,defineComponent/* defineComponent */.aZ)({
+const VAvatar = (0,defineComponent/* genericComponent */.ev)()({
   name: 'VAvatar',
   props: makeVAvatarProps(),
   setup(props, _ref) {
@@ -65004,26 +64861,23 @@ const VAvatar = (0,defineComponent/* defineComponent */.aZ)({
       sizeClasses,
       sizeStyles
     } = (0,size/* useSize */.t)(props);
-    (0,useRender/* useRender */.L)(() => {
-      var _slots$default;
-      return (0,runtime_core_esm_bundler/* createVNode */.Wm)(props.tag, {
-        "class": ['v-avatar', {
-          'v-avatar--start': props.start,
-          'v-avatar--end': props.end
-        }, themeClasses.value, colorClasses.value, densityClasses.value, roundedClasses.value, sizeClasses.value, variantClasses.value],
-        "style": [colorStyles.value, sizeStyles.value]
-      }, {
-        default: () => [props.image ? (0,runtime_core_esm_bundler/* createVNode */.Wm)(VImg/* VImg */.f, {
-          "key": "image",
-          "src": props.image,
-          "alt": "",
-          "cover": true
-        }, null) : props.icon ? (0,runtime_core_esm_bundler/* createVNode */.Wm)(VIcon/* VIcon */.t, {
-          "key": "icon",
-          "icon": props.icon
-        }, null) : (_slots$default = slots.default) == null ? void 0 : _slots$default.call(slots), (0,variant/* genOverlays */.Ux)(false, 'v-avatar')]
-      });
-    });
+    (0,useRender/* useRender */.L)(() => (0,runtime_core_esm_bundler/* createVNode */.Wm)(props.tag, {
+      "class": ['v-avatar', {
+        'v-avatar--start': props.start,
+        'v-avatar--end': props.end
+      }, themeClasses.value, colorClasses.value, densityClasses.value, roundedClasses.value, sizeClasses.value, variantClasses.value],
+      "style": [colorStyles.value, sizeStyles.value]
+    }, {
+      default: () => [props.image ? (0,runtime_core_esm_bundler/* createVNode */.Wm)(VImg/* VImg */.f, {
+        "key": "image",
+        "src": props.image,
+        "alt": "",
+        "cover": true
+      }, null) : props.icon ? (0,runtime_core_esm_bundler/* createVNode */.Wm)(VIcon/* VIcon */.t, {
+        "key": "icon",
+        "icon": props.icon
+      }, null) : slots.default?.(), (0,variant/* genOverlays */.Ux)(false, 'v-avatar')]
+    }));
     return {};
   }
 });
@@ -65037,7 +64891,9 @@ const VAvatar = (0,defineComponent/* defineComponent */.aZ)({
 
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, {
-  "Y": function() { return /* binding */ VBtnGroup; }
+  "Yz": function() { return /* binding */ VBtnGroup; },
+  "jP": function() { return /* binding */ filterVBtnGroupProps; },
+  "Ti": function() { return /* binding */ makeVBtnGroupProps; }
 });
 
 // EXTERNAL MODULE: ./node_modules/@vue/runtime-core/dist/runtime-core.esm-bundler.js
@@ -65061,10 +64917,14 @@ var theme = __webpack_require__(7041);
 var variant = __webpack_require__(5221);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/defaults.mjs
 var defaults = __webpack_require__(8434);
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/util/propsFactory.mjs
+var propsFactory = __webpack_require__(3766);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/util/defineComponent.mjs + 1 modules
 var defineComponent = __webpack_require__(320);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/util/useRender.mjs
 var useRender = __webpack_require__(9888);
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/util/helpers.mjs
+var helpers = __webpack_require__(131);
 // EXTERNAL MODULE: ./node_modules/@vue/reactivity/dist/reactivity.esm-bundler.js
 var reactivity_esm_bundler = __webpack_require__(4870);
 ;// CONCATENATED MODULE: ./node_modules/vuetify/lib/components/VBtnGroup/VBtnGroup.mjs
@@ -65083,18 +64943,22 @@ var reactivity_esm_bundler = __webpack_require__(4870);
  // Utility
 
 
-const VBtnGroup = (0,defineComponent/* defineComponent */.aZ)({
+
+// Types
+
+const makeVBtnGroupProps = (0,propsFactory/* propsFactory */.U)({
+  divided: Boolean,
+  ...(0,border/* makeBorderProps */.m)(),
+  ...(0,density/* makeDensityProps */.f)(),
+  ...(0,elevation/* makeElevationProps */.c)(),
+  ...(0,rounded/* makeRoundedProps */.I)(),
+  ...(0,tag/* makeTagProps */.Q)(),
+  ...(0,theme/* makeThemeProps */.x$)(),
+  ...(0,variant/* makeVariantProps */.bk)()
+}, 'v-btn-group');
+const VBtnGroup = (0,defineComponent/* genericComponent */.ev)()({
   name: 'VBtnGroup',
-  props: {
-    divided: Boolean,
-    ...(0,border/* makeBorderProps */.m)(),
-    ...(0,density/* makeDensityProps */.f)(),
-    ...(0,elevation/* makeElevationProps */.c)(),
-    ...(0,rounded/* makeRoundedProps */.I)(),
-    ...(0,tag/* makeTagProps */.Q)(),
-    ...(0,theme/* makeThemeProps */.x$)(),
-    ...(0,variant/* makeVariantProps */.bk)()
-  },
+  props: makeVBtnGroupProps(),
   setup(props, _ref) {
     let {
       slots
@@ -65132,6 +64996,9 @@ const VBtnGroup = (0,defineComponent/* defineComponent */.aZ)({
     });
   }
 });
+function filterVBtnGroupProps(props) {
+  return (0,helpers/* pick */.ei)(props, Object.keys(VBtnGroup.props));
+}
 
 /***/ }),
 
@@ -65171,7 +65038,10 @@ var useRender = __webpack_require__(9888);
 const VBtnToggleSymbol = Symbol.for('vuetify:v-btn-toggle');
 const VBtnToggle = (0,defineComponent/* genericComponent */.ev)()({
   name: 'VBtnToggle',
-  props: (0,group/* makeGroupProps */.k4)(),
+  props: {
+    ...(0,VBtnGroup/* makeVBtnGroupProps */.Ti)(),
+    ...(0,group/* makeGroupProps */.k4)()
+  },
   emits: {
     'update:modelValue': value => true
   },
@@ -65187,11 +65057,11 @@ const VBtnToggle = (0,defineComponent/* genericComponent */.ev)()({
       selected
     } = (0,group/* useGroup */._v)(props, VBtnToggleSymbol);
     (0,useRender/* useRender */.L)(() => {
-      var _slots$default;
-      return (0,runtime_core_esm_bundler/* createVNode */.Wm)(VBtnGroup/* VBtnGroup */.Y, {
+      const [btnGroupProps] = (0,VBtnGroup/* filterVBtnGroupProps */.jP)(props);
+      return (0,runtime_core_esm_bundler/* createVNode */.Wm)(VBtnGroup/* VBtnGroup */.Yz, (0,runtime_core_esm_bundler/* mergeProps */.dG)({
         "class": "v-btn-toggle"
-      }, {
-        default: () => [(_slots$default = slots.default) == null ? void 0 : _slots$default.call(slots, {
+      }, btnGroupProps), {
+        default: () => [slots.default?.({
           isSelected,
           next,
           prev,
@@ -65272,10 +65142,7 @@ var theme = __webpack_require__(7041);
 // Types
 
 function useSelectLink(link, select) {
-  (0,runtime_core_esm_bundler/* watch */.YP)(() => {
-    var _link$isActive;
-    return (_link$isActive = link.isActive) == null ? void 0 : _link$isActive.value;
-  }, isActive => {
+  (0,runtime_core_esm_bundler/* watch */.YP)(() => link.isActive?.value, isActive => {
     if (link.isLink.value && isActive && select) {
       (0,runtime_core_esm_bundler/* nextTick */.Y3)(() => {
         select(true);
@@ -65318,7 +65185,7 @@ var useRender = __webpack_require__(9888);
  // Utilities
 
  // Types
-const VBtn = (0,defineComponent/* defineComponent */.aZ)({
+const VBtn = (0,defineComponent/* genericComponent */.ev)()({
   name: 'VBtn',
   directives: {
     Ripple: ripple/* Ripple */.H
@@ -65412,26 +65279,28 @@ const VBtn = (0,defineComponent/* defineComponent */.aZ)({
         return props.active;
       }
       if (link.isLink.value) {
-        var _link$isActive;
-        return (_link$isActive = link.isActive) == null ? void 0 : _link$isActive.value;
+        return link.isActive?.value;
       }
-      return group == null ? void 0 : group.isSelected.value;
+      return group?.isSelected.value;
     });
-    const isDisabled = (0,runtime_core_esm_bundler/* computed */.Fl)(() => (group == null ? void 0 : group.disabled.value) || props.disabled);
+    const isDisabled = (0,runtime_core_esm_bundler/* computed */.Fl)(() => group?.disabled.value || props.disabled);
     const isElevated = (0,runtime_core_esm_bundler/* computed */.Fl)(() => {
       return props.variant === 'elevated' && !(props.disabled || props.flat || props.border);
     });
-    useSelectLink(link, group == null ? void 0 : group.select);
+    const valueAttr = (0,runtime_core_esm_bundler/* computed */.Fl)(() => {
+      if (props.value === undefined) return undefined;
+      return Object(props.value) === props.value ? JSON.stringify(props.value, null, 0) : props.value;
+    });
+    useSelectLink(link, group?.select);
     (0,useRender/* useRender */.L)(() => {
-      var _slots$prepend, _slots$default, _slots$append, _slots$loader;
       const Tag = link.isLink.value ? 'a' : props.tag;
-      const hasColor = !group || isActive.value;
       const hasPrepend = !!(props.prependIcon || slots.prepend);
       const hasAppend = !!(props.appendIcon || slots.append);
       const hasIcon = !!(props.icon && props.icon !== true);
+      const hasColor = group?.isSelected.value && (!link.isLink.value || link.isActive?.value) || !group || link.isActive?.value;
       return (0,runtime_core_esm_bundler/* withDirectives */.wy)((0,runtime_core_esm_bundler/* createVNode */.Wm)(Tag, {
         "type": Tag === 'a' ? undefined : 'button',
-        "class": ['v-btn', group == null ? void 0 : group.selectedClass.value, {
+        "class": ['v-btn', group?.selectedClass.value, {
           'v-btn--active': isActive.value,
           'v-btn--block': props.block,
           'v-btn--disabled': isDisabled.value,
@@ -65445,11 +65314,11 @@ const VBtn = (0,defineComponent/* defineComponent */.aZ)({
         "disabled": isDisabled.value || undefined,
         "href": link.href.value,
         "onClick": e => {
-          var _link$navigate;
           if (isDisabled.value) return;
-          (_link$navigate = link.navigate) == null ? void 0 : _link$navigate.call(link, e);
-          group == null ? void 0 : group.toggle();
-        }
+          link.navigate?.(e);
+          group?.toggle();
+        },
+        "value": valueAttr.value
       }, {
         default: () => [(0,variant/* genOverlays */.Ux)(true, 'v-btn'), !props.icon && hasPrepend && (0,runtime_core_esm_bundler/* createVNode */.Wm)(VDefaultsProvider/* VDefaultsProvider */.z, {
           "key": "prepend",
@@ -65461,7 +65330,7 @@ const VBtn = (0,defineComponent/* defineComponent */.aZ)({
         }, {
           default: () => [(0,runtime_core_esm_bundler/* createVNode */.Wm)("span", {
             "class": "v-btn__prepend"
-          }, [((_slots$prepend = slots.prepend) == null ? void 0 : _slots$prepend.call(slots)) ?? (0,runtime_core_esm_bundler/* createVNode */.Wm)(VIcon/* VIcon */.t, null, null)])]
+          }, [slots.prepend?.() ?? (0,runtime_core_esm_bundler/* createVNode */.Wm)(VIcon/* VIcon */.t, null, null)])]
         }), (0,runtime_core_esm_bundler/* createVNode */.Wm)("span", {
           "class": "v-btn__content",
           "data-no-activator": ""
@@ -65473,7 +65342,7 @@ const VBtn = (0,defineComponent/* defineComponent */.aZ)({
             }
           }
         }, {
-          default: () => [((_slots$default = slots.default) == null ? void 0 : _slots$default.call(slots)) ?? (hasIcon && (0,runtime_core_esm_bundler/* createVNode */.Wm)(VIcon/* VIcon */.t, {
+          default: () => [slots.default?.() ?? (hasIcon && (0,runtime_core_esm_bundler/* createVNode */.Wm)(VIcon/* VIcon */.t, {
             "key": "icon"
           }, null))]
         })]), !props.icon && hasAppend && (0,runtime_core_esm_bundler/* createVNode */.Wm)(VDefaultsProvider/* VDefaultsProvider */.z, {
@@ -65486,11 +65355,11 @@ const VBtn = (0,defineComponent/* defineComponent */.aZ)({
         }, {
           default: () => [(0,runtime_core_esm_bundler/* createVNode */.Wm)("span", {
             "class": "v-btn__append"
-          }, [((_slots$append = slots.append) == null ? void 0 : _slots$append.call(slots)) ?? (0,runtime_core_esm_bundler/* createVNode */.Wm)(VIcon/* VIcon */.t, null, null)])]
+          }, [slots.append?.() ?? (0,runtime_core_esm_bundler/* createVNode */.Wm)(VIcon/* VIcon */.t, null, null)])]
         }), !!props.loading && (0,runtime_core_esm_bundler/* createVNode */.Wm)("span", {
           "key": "loader",
           "class": "v-btn__loader"
-        }, [((_slots$loader = slots.loader) == null ? void 0 : _slots$loader.call(slots)) ?? (0,runtime_core_esm_bundler/* createVNode */.Wm)(VProgressCircular/* VProgressCircular */.L, {
+        }, [slots.loader?.() ?? (0,runtime_core_esm_bundler/* createVNode */.Wm)(VProgressCircular/* VProgressCircular */.L, {
           "color": typeof props.loading === 'boolean' ? undefined : props.loading,
           "indeterminate": true,
           "size": "23",
@@ -65589,8 +65458,8 @@ var useRender = __webpack_require__(9888);
 
  // Utilities
 
-
-const VCard = (0,defineComponent/* defineComponent */.aZ)({
+ // Types
+const VCard = (0,defineComponent/* genericComponent */.ev)()({
   name: 'VCard',
   directives: {
     Ripple: ripple/* Ripple */.H
@@ -65671,7 +65540,6 @@ const VCard = (0,defineComponent/* defineComponent */.aZ)({
     const isLink = (0,runtime_core_esm_bundler/* computed */.Fl)(() => props.link !== false && link.isLink.value);
     const isClickable = (0,runtime_core_esm_bundler/* computed */.Fl)(() => !props.disabled && props.link !== false && (props.link || link.isClickable.value));
     (0,useRender/* useRender */.L)(() => {
-      var _slots$image, _slots$text, _slots$default;
       const Tag = isLink.value ? 'a' : props.tag;
       const hasTitle = !!(slots.title || props.title);
       const hasSubtitle = !!(slots.subtitle || props.subtitle);
@@ -65704,7 +65572,7 @@ const VCard = (0,defineComponent/* defineComponent */.aZ)({
         }, {
           default: () => [(0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
             "class": "v-card__image"
-          }, [((_slots$image = slots.image) == null ? void 0 : _slots$image.call(slots)) ?? (0,runtime_core_esm_bundler/* createVNode */.Wm)(VImg/* VImg */.f, null, null)])]
+          }, [slots.image?.() ?? (0,runtime_core_esm_bundler/* createVNode */.Wm)(VImg/* VImg */.f, null, null)])]
         }), (0,runtime_core_esm_bundler/* createVNode */.Wm)(loader/* LoaderSlot */.rD, {
           "name": "v-card",
           "active": !!props.loading,
@@ -65728,8 +65596,8 @@ const VCard = (0,defineComponent/* defineComponent */.aZ)({
         }), hasText && (0,runtime_core_esm_bundler/* createVNode */.Wm)(VCardText/* VCardText */.Z, {
           "key": "text"
         }, {
-          default: () => [((_slots$text = slots.text) == null ? void 0 : _slots$text.call(slots)) ?? props.text]
-        }), (_slots$default = slots.default) == null ? void 0 : _slots$default.call(slots), slots.actions && (0,runtime_core_esm_bundler/* createVNode */.Wm)(VCardActions/* VCardActions */.h, null, {
+          default: () => [slots.text?.() ?? props.text]
+        }), slots.default?.(), slots.actions && (0,runtime_core_esm_bundler/* createVNode */.Wm)(VCardActions/* VCardActions */.h, null, {
           default: slots.actions
         }), (0,variant/* genOverlays */.Ux)(isClickable.value, 'v-card')]
       }), [[(0,runtime_core_esm_bundler/* resolveDirective */.Q2)("ripple"), isClickable.value && props.ripple]]);
@@ -65753,8 +65621,8 @@ const VCard = (0,defineComponent/* defineComponent */.aZ)({
 /* harmony import */ var _util_index_mjs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(9888);
 
 // Composables
- // Utility
-
+ // Utilities
+ // Types
 const VCardActions = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_0__/* .defineComponent */ .aZ)({
   name: 'VCardActions',
   setup(_, _ref) {
@@ -65766,12 +65634,9 @@ const VCardActions = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_0__/* .defineCo
         variant: 'text'
       }
     });
-    (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_2__/* .useRender */ .L)(() => {
-      var _slots$default;
-      return (0,vue__WEBPACK_IMPORTED_MODULE_3__/* .createVNode */ .Wm)("div", {
-        "class": "v-card-actions"
-      }, [(_slots$default = slots.default) == null ? void 0 : _slots$default.call(slots)]);
-    });
+    (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_2__/* .useRender */ .L)(() => (0,vue__WEBPACK_IMPORTED_MODULE_3__/* .createVNode */ .Wm)("div", {
+      "class": "v-card-actions"
+    }, [slots.default?.()]));
     return {};
   }
 });
@@ -65802,8 +65667,8 @@ const VCardActions = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_0__/* .defineCo
  // Composables
 
  // Utility
-
-const VCardItem = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_0__/* .defineComponent */ .aZ)({
+ // Types
+const VCardItem = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_0__/* .genericComponent */ .ev)()({
   name: 'VCardItem',
   props: {
     appendAvatar: String,
@@ -65819,7 +65684,6 @@ const VCardItem = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_0__/* .defineCompo
       slots
     } = _ref;
     (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_3__/* .useRender */ .L)(() => {
-      var _slots$prepend, _slots$title, _slots$subtitle, _slots$default, _slots$append;
       const hasPrepend = !!(props.prependAvatar || props.prependIcon || slots.prepend);
       const hasAppend = !!(props.appendAvatar || props.appendIcon || slots.append);
       const hasTitle = !!(props.title || slots.title);
@@ -65842,18 +65706,18 @@ const VCardItem = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_0__/* .defineCompo
       }, {
         default: () => [(0,vue__WEBPACK_IMPORTED_MODULE_4__/* .createVNode */ .Wm)("div", {
           "class": "v-card-item__prepend"
-        }, [((_slots$prepend = slots.prepend) == null ? void 0 : _slots$prepend.call(slots)) ?? (0,vue__WEBPACK_IMPORTED_MODULE_4__/* .createVNode */ .Wm)(_VAvatar_index_mjs__WEBPACK_IMPORTED_MODULE_6__/* .VAvatar */ .V, null, null)])]
+        }, [slots.prepend?.() ?? (0,vue__WEBPACK_IMPORTED_MODULE_4__/* .createVNode */ .Wm)(_VAvatar_index_mjs__WEBPACK_IMPORTED_MODULE_6__/* .VAvatar */ .V, null, null)])]
       }), (0,vue__WEBPACK_IMPORTED_MODULE_4__/* .createVNode */ .Wm)("div", {
         "class": "v-card-item__content"
       }, [hasTitle && (0,vue__WEBPACK_IMPORTED_MODULE_4__/* .createVNode */ .Wm)(_VCardTitle_mjs__WEBPACK_IMPORTED_MODULE_7__/* .VCardTitle */ .E, {
         "key": "title"
       }, {
-        default: () => [((_slots$title = slots.title) == null ? void 0 : _slots$title.call(slots)) ?? props.title]
+        default: () => [slots.title?.() ?? props.title]
       }), hasSubtitle && (0,vue__WEBPACK_IMPORTED_MODULE_4__/* .createVNode */ .Wm)(_VCardSubtitle_mjs__WEBPACK_IMPORTED_MODULE_8__/* .VCardSubtitle */ .Q, {
         "key": "subtitle"
       }, {
-        default: () => [((_slots$subtitle = slots.subtitle) == null ? void 0 : _slots$subtitle.call(slots)) ?? props.subtitle]
-      }), (_slots$default = slots.default) == null ? void 0 : _slots$default.call(slots)]), hasAppend && (0,vue__WEBPACK_IMPORTED_MODULE_4__/* .createVNode */ .Wm)(_VDefaultsProvider_index_mjs__WEBPACK_IMPORTED_MODULE_5__/* .VDefaultsProvider */ .z, {
+        default: () => [slots.subtitle?.() ?? props.subtitle]
+      }), slots.default?.()]), hasAppend && (0,vue__WEBPACK_IMPORTED_MODULE_4__/* .createVNode */ .Wm)(_VDefaultsProvider_index_mjs__WEBPACK_IMPORTED_MODULE_5__/* .VDefaultsProvider */ .z, {
         "key": "append",
         "defaults": {
           VAvatar: {
@@ -65869,7 +65733,7 @@ const VCardItem = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_0__/* .defineCompo
       }, {
         default: () => [(0,vue__WEBPACK_IMPORTED_MODULE_4__/* .createVNode */ .Wm)("div", {
           "class": "v-card-item__append"
-        }, [((_slots$append = slots.append) == null ? void 0 : _slots$append.call(slots)) ?? (0,vue__WEBPACK_IMPORTED_MODULE_4__/* .createVNode */ .Wm)(_VAvatar_index_mjs__WEBPACK_IMPORTED_MODULE_6__/* .VAvatar */ .V, null, null)])]
+        }, [slots.append?.() ?? (0,vue__WEBPACK_IMPORTED_MODULE_4__/* .createVNode */ .Wm)(_VAvatar_index_mjs__WEBPACK_IMPORTED_MODULE_6__/* .VAvatar */ .V, null, null)])]
       })]);
     });
     return {};
@@ -65952,7 +65816,7 @@ const makeVCheckboxBtnProps = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_0__/* 
     trueIcon: '$checkboxOn'
   })
 }, 'v-checkbox-btn');
-const VCheckboxBtn = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_3__/* .defineComponent */ .aZ)({
+const VCheckboxBtn = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_3__/* .genericComponent */ .ev)()({
   name: 'VCheckboxBtn',
   props: makeVCheckboxBtnProps(),
   emits: {
@@ -66046,7 +65910,7 @@ var reactivity_esm_bundler = __webpack_require__(4870);
 // Types
 
 const VChipGroupSymbol = Symbol.for('vuetify:v-chip-group');
-const VChipGroup = (0,defineComponent/* defineComponent */.aZ)({
+const VChipGroup = (0,defineComponent/* genericComponent */.ev)()({
   name: 'VChipGroup',
   props: {
     column: Boolean,
@@ -66089,22 +65953,19 @@ const VChipGroup = (0,defineComponent/* defineComponent */.aZ)({
         variant: (0,reactivity_esm_bundler/* toRef */.Vh)(props, 'variant')
       }
     });
-    (0,useRender/* useRender */.L)(() => {
-      var _slots$default;
-      return (0,runtime_core_esm_bundler/* createVNode */.Wm)(props.tag, {
-        "class": ['v-chip-group', {
-          'v-chip-group--column': props.column
-        }, themeClasses.value]
-      }, {
-        default: () => [(_slots$default = slots.default) == null ? void 0 : _slots$default.call(slots, {
-          isSelected,
-          select,
-          next,
-          prev,
-          selected: selected.value
-        })]
-      });
-    });
+    (0,useRender/* useRender */.L)(() => (0,runtime_core_esm_bundler/* createVNode */.Wm)(props.tag, {
+      "class": ['v-chip-group', {
+        'v-chip-group--column': props.column
+      }, themeClasses.value]
+    }, {
+      default: () => [slots.default?.({
+        isSelected,
+        select,
+        next,
+        prev,
+        selected: selected.value
+      })]
+    }));
     return {};
   }
 });
@@ -66162,6 +66023,8 @@ var theme = __webpack_require__(7041);
 var proxiedModel = __webpack_require__(8717);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/icons.mjs + 1 modules
 var icons = __webpack_require__(4960);
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/locale.mjs + 3 modules
+var locale = __webpack_require__(1629);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/directives/ripple/index.mjs + 1 modules
 var ripple = __webpack_require__(3824);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/util/defineComponent.mjs + 1 modules
@@ -66191,11 +66054,15 @@ var helpers = __webpack_require__(131);
 
 
 
+
  // Directives
  // Utilities
 
 
-const VChip = (0,defineComponent/* defineComponent */.aZ)({
+
+// Types
+
+const VChip = (0,defineComponent/* genericComponent */.ev)()({
   name: 'VChip',
   directives: {
     Ripple: ripple/* Ripple */.H
@@ -66266,6 +66133,9 @@ const VChip = (0,defineComponent/* defineComponent */.aZ)({
       slots
     } = _ref;
     const {
+      t
+    } = (0,locale/* useLocale */.bU)();
+    const {
       borderClasses
     } = (0,border/* useBorder */.P)(props);
     const {
@@ -66298,11 +66168,10 @@ const VChip = (0,defineComponent/* defineComponent */.aZ)({
       emit('click:close', e);
     }
     function onClick(e) {
-      var _link$navigate;
       emit('click', e);
       if (!isClickable.value) return;
-      (_link$navigate = link.navigate) == null ? void 0 : _link$navigate.call(link, e);
-      group == null ? void 0 : group.toggle();
+      link.navigate?.(e);
+      group?.toggle();
     }
     function onKeyDown(e) {
       if (e.key === 'Enter' || e.key === ' ') {
@@ -66311,7 +66180,6 @@ const VChip = (0,defineComponent/* defineComponent */.aZ)({
       }
     }
     return () => {
-      var _slots$default;
       const Tag = link.isLink.value ? 'a' : props.tag;
       const hasAppend = !!(slots.append || props.appendIcon || props.appendAvatar);
       const hasClose = !!(slots.close || props.closable);
@@ -66325,7 +66193,7 @@ const VChip = (0,defineComponent/* defineComponent */.aZ)({
           'v-chip--link': isClickable.value,
           'v-chip--filter': hasFilter,
           'v-chip--pill': props.pill
-        }, themeClasses.value, borderClasses.value, hasColor ? colorClasses.value : undefined, densityClasses.value, elevationClasses.value, roundedClasses.value, sizeClasses.value, variantClasses.value, group == null ? void 0 : group.selectedClass.value],
+        }, themeClasses.value, borderClasses.value, hasColor ? colorClasses.value : undefined, densityClasses.value, elevationClasses.value, roundedClasses.value, sizeClasses.value, variantClasses.value, group?.selectedClass.value],
         "style": [hasColor ? colorStyles.value : undefined],
         "disabled": props.disabled || undefined,
         "draggable": props.draggable,
@@ -66365,14 +66233,14 @@ const VChip = (0,defineComponent/* defineComponent */.aZ)({
           }, null) : props.prependIcon ? (0,runtime_core_esm_bundler/* createVNode */.Wm)(VIcon/* VIcon */.t, {
             "start": true
           }, null) : undefined]
-        }), ((_slots$default = slots.default) == null ? void 0 : _slots$default.call(slots, {
-          isSelected: group == null ? void 0 : group.isSelected.value,
-          selectedClass: group == null ? void 0 : group.selectedClass.value,
-          select: group == null ? void 0 : group.select,
-          toggle: group == null ? void 0 : group.toggle,
-          value: group == null ? void 0 : group.value.value,
+        }), slots.default?.({
+          isSelected: group?.isSelected.value,
+          selectedClass: group?.selectedClass.value,
+          select: group?.select,
+          toggle: group?.toggle,
+          value: group?.value.value,
           disabled: props.disabled
-        })) ?? props.text, hasAppend && (0,runtime_core_esm_bundler/* createVNode */.Wm)(VDefaultsProvider/* VDefaultsProvider */.z, {
+        }) ?? props.text, hasAppend && (0,runtime_core_esm_bundler/* createVNode */.Wm)(VDefaultsProvider/* VDefaultsProvider */.z, {
           "key": "append",
           "defaults": {
             VAvatar: {
@@ -66401,6 +66269,7 @@ const VChip = (0,defineComponent/* defineComponent */.aZ)({
         }, {
           default: () => [(0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
             "class": "v-chip__close",
+            "aria-label": t(props.closeLabel),
             "onClick": onCloseClick
           }, [slots.close ? slots.close() : (0,runtime_core_esm_bundler/* createVNode */.Wm)(VIcon/* VIcon */.t, null, null)])]
         })]
@@ -66446,7 +66315,7 @@ var useRender = __webpack_require__(9888);
  // Utilities
 
 
-const VCounter = (0,defineComponent/* defineComponent */.aZ)({
+const VCounter = (0,defineComponent/* genericComponent */.ev)()({
   name: 'VCounter',
   functional: true,
   props: {
@@ -66494,15 +66363,13 @@ const VCounter = (0,defineComponent/* defineComponent */.aZ)({
 /* harmony export */   "z": function() { return /* binding */ VDefaultsProvider; }
 /* harmony export */ });
 /* harmony import */ var _composables_defaults_mjs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(8434);
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(3396);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4870);
+/* harmony import */ var _util_index_mjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(320);
 // Composables
  // Utilities
- // eslint-disable-line no-restricted-imports
 
-// Types
-
-const VDefaultsProvider = (0,vue__WEBPACK_IMPORTED_MODULE_0__/* .defineComponent */ .aZ)({
+ // Types
+const VDefaultsProvider = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_0__/* .genericComponent */ .ev)(false)({
   name: 'VDefaultsProvider',
   props: {
     defaults: Object,
@@ -66525,10 +66392,7 @@ const VDefaultsProvider = (0,vue__WEBPACK_IMPORTED_MODULE_0__/* .defineComponent
       root,
       scoped
     });
-    return () => {
-      var _slots$default;
-      return (_slots$default = slots.default) == null ? void 0 : _slots$default.call(slots);
-    };
+    return () => slots.default?.();
   }
 });
 
@@ -66615,12 +66479,11 @@ const VDialog = (0,defineComponent/* genericComponent */.ev)()({
     } = (0,composables_scopeId/* useScopeId */.a)();
     const overlay = (0,reactivity_esm_bundler/* ref */.iH)();
     function onFocusin(e) {
-      var _overlay$value, _overlay$value2;
       const before = e.relatedTarget;
       const after = e.target;
-      if (before !== after && (_overlay$value = overlay.value) != null && _overlay$value.contentEl &&
+      if (before !== after && overlay.value?.contentEl &&
       // We're the topmost dialog
-      (_overlay$value2 = overlay.value) != null && _overlay$value2.globalTop &&
+      overlay.value?.globalTop &&
       // It isn't the document or the dialog body
       ![document, overlay.value.contentEl].includes(after) &&
       // It isn't inside the dialog body
@@ -66646,17 +66509,19 @@ const VDialog = (0,defineComponent/* genericComponent */.ev)()({
     (0,runtime_core_esm_bundler/* watch */.YP)(isActive, async val => {
       await (0,runtime_core_esm_bundler/* nextTick */.Y3)();
       if (val) {
-        var _contentEl;
-        (_contentEl = overlay.value.contentEl) == null ? void 0 : _contentEl.focus({
+        overlay.value.contentEl?.focus({
           preventScroll: true
         });
       } else {
-        var _activatorEl;
-        (_activatorEl = overlay.value.activatorEl) == null ? void 0 : _activatorEl.focus({
+        overlay.value.activatorEl?.focus({
           preventScroll: true
         });
       }
     });
+    const activatorProps = (0,runtime_core_esm_bundler/* computed */.Fl)(() => (0,runtime_core_esm_bundler/* mergeProps */.dG)({
+      'aria-haspopup': 'dialog',
+      'aria-expanded': String(isActive.value)
+    }, props.activatorProps));
     (0,useRender/* useRender */.L)(() => {
       const [overlayProps] = (0,VOverlay/* filterVOverlayProps */.Fe)(props);
       return (0,runtime_core_esm_bundler/* createVNode */.Wm)(VOverlay/* VOverlay */.yc, (0,runtime_core_esm_bundler/* mergeProps */.dG)({
@@ -66670,21 +66535,17 @@ const VDialog = (0,defineComponent/* genericComponent */.ev)()({
         "onUpdate:modelValue": $event => isActive.value = $event,
         "aria-role": "dialog",
         "aria-modal": "true",
-        "activatorProps": (0,runtime_core_esm_bundler/* mergeProps */.dG)({
-          'aria-haspopup': 'dialog',
-          'aria-expanded': String(isActive.value)
-        }, props.activatorProps)
+        "activatorProps": activatorProps.value
       }, scopeId), {
         activator: slots.activator,
         default: function () {
-          var _slots$default;
           for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
             args[_key] = arguments[_key];
           }
           return (0,runtime_core_esm_bundler/* createVNode */.Wm)(VDefaultsProvider/* VDefaultsProvider */.z, {
             "root": true
           }, {
-            default: () => [(_slots$default = slots.default) == null ? void 0 : _slots$default.call(slots, ...args)]
+            default: () => [slots.default?.(...args)]
           });
         }
       });
@@ -66731,8 +66592,8 @@ var useRender = __webpack_require__(9888);
 
  // Utilities
 
- // Types
-const VDivider = (0,defineComponent/* defineComponent */.aZ)({
+
+const VDivider = (0,defineComponent/* genericComponent */.ev)()({
   name: 'VDivider',
   props: {
     color: String,
@@ -66750,9 +66611,9 @@ const VDivider = (0,defineComponent/* defineComponent */.aZ)({
       themeClasses
     } = (0,theme/* provideTheme */.ER)(props);
     const {
-      backgroundColorClasses,
-      backgroundColorStyles
-    } = (0,color/* useBackgroundColor */.Y5)((0,reactivity_esm_bundler/* toRef */.Vh)(props, 'color'));
+      textColorClasses,
+      textColorStyles
+    } = (0,color/* useTextColor */.rY)((0,reactivity_esm_bundler/* toRef */.Vh)(props, 'color'));
     const dividerStyles = (0,runtime_core_esm_bundler/* computed */.Fl)(() => {
       const styles = {};
       if (props.length) {
@@ -66768,8 +66629,8 @@ const VDivider = (0,defineComponent/* defineComponent */.aZ)({
         'v-divider': true,
         'v-divider--inset': props.inset,
         'v-divider--vertical': props.vertical
-      }, themeClasses.value, backgroundColorClasses.value],
-      "style": [dividerStyles.value, backgroundColorStyles.value],
+      }, themeClasses.value, textColorClasses.value],
+      "style": [dividerStyles.value, textColorStyles.value],
       "aria-orientation": !attrs.role || attrs.role === 'separator' ? props.vertical ? 'vertical' : 'horizontal' : undefined,
       "role": `${attrs.role || 'separator'}`
     }, null));
@@ -66885,7 +66746,6 @@ const VField = (0,defineComponent/* genericComponent */.ev)()({
     ...makeVFieldProps()
   },
   emits: {
-    'click:control': e => true,
     'update:focused': focused => true,
     'update:modelValue': val => true
   },
@@ -66932,32 +66792,34 @@ const VField = (0,defineComponent/* genericComponent */.ev)()({
       if (hasLabel.value) {
         const el = labelRef.value.$el;
         const targetEl = floatingLabelRef.value.$el;
-        const rect = (0,animation/* nullifyTransforms */.G)(el);
-        const targetRect = targetEl.getBoundingClientRect();
-        const x = targetRect.x - rect.x;
-        const y = targetRect.y - rect.y - (rect.height / 2 - targetRect.height / 2);
-        const targetWidth = targetRect.width / 0.75;
-        const width = Math.abs(targetWidth - rect.width) > 1 ? {
-          maxWidth: (0,helpers/* convertToUnit */.kb)(targetWidth)
-        } : undefined;
-        const style = getComputedStyle(el);
-        const targetStyle = getComputedStyle(targetEl);
-        const duration = parseFloat(style.transitionDuration) * 1000 || 150;
-        const scale = parseFloat(targetStyle.getPropertyValue('--v-field-label-scale'));
-        const color = targetStyle.getPropertyValue('color');
-        el.style.visibility = 'visible';
-        targetEl.style.visibility = 'hidden';
-        (0,animation/* animate */.j)(el, {
-          transform: `translate(${x}px, ${y}px) scale(${scale})`,
-          color,
-          ...width
-        }, {
-          duration,
-          easing: easing/* standardEasing */.Ly,
-          direction: val ? 'normal' : 'reverse'
-        }).finished.then(() => {
-          el.style.removeProperty('visibility');
-          targetEl.style.removeProperty('visibility');
+        requestAnimationFrame(() => {
+          const rect = (0,animation/* nullifyTransforms */.G)(el);
+          const targetRect = targetEl.getBoundingClientRect();
+          const x = targetRect.x - rect.x;
+          const y = targetRect.y - rect.y - (rect.height / 2 - targetRect.height / 2);
+          const targetWidth = targetRect.width / 0.75;
+          const width = Math.abs(targetWidth - rect.width) > 1 ? {
+            maxWidth: (0,helpers/* convertToUnit */.kb)(targetWidth)
+          } : undefined;
+          const style = getComputedStyle(el);
+          const targetStyle = getComputedStyle(targetEl);
+          const duration = parseFloat(style.transitionDuration) * 1000 || 150;
+          const scale = parseFloat(targetStyle.getPropertyValue('--v-field-label-scale'));
+          const color = targetStyle.getPropertyValue('color');
+          el.style.visibility = 'visible';
+          targetEl.style.visibility = 'hidden';
+          (0,animation/* animate */.j)(el, {
+            transform: `translate(${x}px, ${y}px) scale(${scale})`,
+            color,
+            ...width
+          }, {
+            duration,
+            easing: easing/* standardEasing */.Ly,
+            direction: val ? 'normal' : 'reverse'
+          }).finished.then(() => {
+            el.style.removeProperty('visibility');
+            targetEl.style.removeProperty('visibility');
+          });
         });
       }
     }, {
@@ -66974,10 +66836,8 @@ const VField = (0,defineComponent/* genericComponent */.ev)()({
       if (e.target !== document.activeElement) {
         e.preventDefault();
       }
-      emit('click:control', e);
     }
     (0,useRender/* useRender */.L)(() => {
-      var _slots$prependInner, _slots$default, _slots$appendInner;
       const isOutlined = props.variant === 'outlined';
       const hasPrepend = slots['prepend-inner'] || props.prependInnerIcon;
       const hasClear = !!(props.clearable || slots.clear);
@@ -67019,7 +66879,7 @@ const VField = (0,defineComponent/* genericComponent */.ev)()({
       }, [props.prependInnerIcon && (0,runtime_core_esm_bundler/* createVNode */.Wm)(InputIcon, {
         "key": "prepend-icon",
         "name": "prependInner"
-      }, null), (_slots$prependInner = slots['prepend-inner']) == null ? void 0 : _slots$prependInner.call(slots, slotProps.value)]), (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
+      }, null), slots['prepend-inner']?.(slotProps.value)]), (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
         "class": "v-field__field",
         "data-no-activator": ""
       }, [['solo', 'filled'].includes(props.variant) && hasLabel.value && (0,runtime_core_esm_bundler/* createVNode */.Wm)(VFieldLabel/* VFieldLabel */.z, {
@@ -67035,7 +66895,7 @@ const VField = (0,defineComponent/* genericComponent */.ev)()({
         "for": id.value
       }, {
         default: () => [label]
-      }), (_slots$default = slots.default) == null ? void 0 : _slots$default.call(slots, {
+      }), slots.default?.({
         ...slotProps.value,
         props: {
           id: id.value,
@@ -67055,7 +66915,7 @@ const VField = (0,defineComponent/* genericComponent */.ev)()({
       }), hasAppend && (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
         "key": "append",
         "class": "v-field__append-inner"
-      }, [(_slots$appendInner = slots['append-inner']) == null ? void 0 : _slots$appendInner.call(slots, slotProps.value), props.appendInnerIcon && (0,runtime_core_esm_bundler/* createVNode */.Wm)(InputIcon, {
+      }, [slots['append-inner']?.(slotProps.value), props.appendInnerIcon && (0,runtime_core_esm_bundler/* createVNode */.Wm)(InputIcon, {
         "key": "append-icon",
         "name": "appendInner"
       }, null)]), (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
@@ -67108,7 +66968,7 @@ function filterFieldProps(attrs) {
 // Components
  // Utilities
 
-const VFieldLabel = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_0__/* .defineComponent */ .aZ)({
+const VFieldLabel = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_0__/* .genericComponent */ .ev)()({
   name: 'VFieldLabel',
   props: {
     floating: Boolean
@@ -67208,7 +67068,7 @@ function breakpointClass(type, prop, val) {
   return className.toLowerCase();
 }
 const ALIGN_SELF_VALUES = ['auto', 'start', 'end', 'center', 'baseline', 'stretch'];
-const VCol = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_3__/* .defineComponent */ .aZ)({
+const VCol = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_3__/* .genericComponent */ .ev)()({
   name: 'VCol',
   props: {
     cols: {
@@ -67260,12 +67120,9 @@ const VCol = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_3__/* .defineComponent 
       });
       return classList;
     });
-    return () => {
-      var _slots$default;
-      return (0,vue__WEBPACK_IMPORTED_MODULE_5__.h)(props.tag, {
-        class: classes.value
-      }, (_slots$default = slots.default) == null ? void 0 : _slots$default.call(slots));
-    };
+    return () => (0,vue__WEBPACK_IMPORTED_MODULE_5__.h)(props.tag, {
+      class: classes.value
+    }, slots.default?.());
   }
 });
 
@@ -67290,7 +67147,7 @@ const VCol = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_3__/* .defineComponent 
 // Composables
  // Utilities
 
-const VContainer = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_1__/* .defineComponent */ .aZ)({
+const VContainer = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_1__/* .genericComponent */ .ev)()({
   name: 'VContainer',
   props: {
     fluid: {
@@ -67390,7 +67247,7 @@ function breakpointClass(type, prop, val) {
   className += `-${val}`;
   return className.toLowerCase();
 }
-const VRow = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_3__/* .defineComponent */ .aZ)({
+const VRow = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_3__/* .genericComponent */ .ev)()({
   name: 'VRow',
   props: {
     dense: Boolean,
@@ -67440,12 +67297,9 @@ const VRow = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_3__/* .defineComponent 
       });
       return classList;
     });
-    return () => {
-      var _slots$default;
-      return (0,vue__WEBPACK_IMPORTED_MODULE_5__.h)(props.tag, {
-        class: ['v-row', classes.value]
-      }, (_slots$default = slots.default) == null ? void 0 : _slots$default.call(slots));
-    };
+    return () => (0,vue__WEBPACK_IMPORTED_MODULE_5__.h)(props.tag, {
+      class: ['v-row', classes.value]
+    }, slots.default?.());
   }
 });
 
@@ -67525,7 +67379,7 @@ const makeVIconProps = (0,propsFactory/* propsFactory */.U)({
   }),
   ...(0,theme/* makeThemeProps */.x$)()
 }, 'v-icon');
-const VIcon = (0,defineComponent/* defineComponent */.aZ)({
+const VIcon = (0,defineComponent/* genericComponent */.ev)()({
   name: 'VIcon',
   props: makeVIconProps(),
   setup(props, _ref) {
@@ -67536,10 +67390,9 @@ const VIcon = (0,defineComponent/* defineComponent */.aZ)({
     let slotIcon;
     if (slots.default) {
       slotIcon = (0,runtime_core_esm_bundler/* computed */.Fl)(() => {
-        var _slots$default, _slot$filter$;
-        const slot = (_slots$default = slots.default) == null ? void 0 : _slots$default.call(slots);
+        const slot = slots.default?.();
         if (!slot) return;
-        return (_slot$filter$ = slot.filter(node => node.type === runtime_core_esm_bundler/* Text */.xv && node.children && typeof node.children === 'string')[0]) == null ? void 0 : _slot$filter$.children;
+        return slot.filter(node => node.type === runtime_core_esm_bundler/* Text */.xv && node.children && typeof node.children === 'string')[0]?.children;
       });
     }
     const {
@@ -67555,27 +67408,24 @@ const VIcon = (0,defineComponent/* defineComponent */.aZ)({
       textColorClasses,
       textColorStyles
     } = (0,color/* useTextColor */.rY)((0,reactivity_esm_bundler/* toRef */.Vh)(props, 'color'));
-    (0,useRender/* useRender */.L)(() => {
-      var _slots$default2;
-      return (0,runtime_core_esm_bundler/* createVNode */.Wm)(iconData.value.component, {
-        "tag": props.tag,
-        "icon": iconData.value.icon,
-        "class": ['v-icon', 'notranslate', themeClasses.value, sizeClasses.value, textColorClasses.value, {
-          'v-icon--clickable': !!attrs.onClick,
-          'v-icon--start': props.start,
-          'v-icon--end': props.end
-        }],
-        "style": [!sizeClasses.value ? {
-          fontSize: (0,helpers/* convertToUnit */.kb)(props.size),
-          height: (0,helpers/* convertToUnit */.kb)(props.size),
-          width: (0,helpers/* convertToUnit */.kb)(props.size)
-        } : undefined, textColorStyles.value],
-        "role": attrs.onClick ? 'button' : undefined,
-        "aria-hidden": !attrs.onClick
-      }, {
-        default: () => [(_slots$default2 = slots.default) == null ? void 0 : _slots$default2.call(slots)]
-      });
-    });
+    (0,useRender/* useRender */.L)(() => (0,runtime_core_esm_bundler/* createVNode */.Wm)(iconData.value.component, {
+      "tag": props.tag,
+      "icon": iconData.value.icon,
+      "class": ['v-icon', 'notranslate', themeClasses.value, sizeClasses.value, textColorClasses.value, {
+        'v-icon--clickable': !!attrs.onClick,
+        'v-icon--start': props.start,
+        'v-icon--end': props.end
+      }],
+      "style": [!sizeClasses.value ? {
+        fontSize: (0,helpers/* convertToUnit */.kb)(props.size),
+        height: (0,helpers/* convertToUnit */.kb)(props.size),
+        width: (0,helpers/* convertToUnit */.kb)(props.size)
+      } : undefined, textColorStyles.value],
+      "role": attrs.onClick ? 'button' : undefined,
+      "aria-hidden": !attrs.onClick
+    }, {
+      default: () => [slots.default?.()]
+    }));
     return {};
   }
 });
@@ -67625,7 +67475,7 @@ var helpers = __webpack_require__(131);
  // Utilities
 
  // Types
-const VImg = (0,defineComponent/* defineComponent */.aZ)({
+const VImg = (0,defineComponent/* genericComponent */.ev)()({
   name: 'VImg',
   directives: {
     intersect: intersect/* default */.Z
@@ -67710,9 +67560,8 @@ const VImg = (0,defineComponent/* defineComponent */.aZ)({
       }
       if (!normalisedSrc.value.src) return;
       (0,runtime_core_esm_bundler/* nextTick */.Y3)(() => {
-        var _image$value, _image$value2;
-        emit('loadstart', ((_image$value = image.value) == null ? void 0 : _image$value.currentSrc) || normalisedSrc.value.src);
-        if ((_image$value2 = image.value) != null && _image$value2.complete) {
+        emit('loadstart', image.value?.currentSrc || normalisedSrc.value.src);
+        if (image.value?.complete) {
           if (!image.value.naturalWidth) {
             onError();
           }
@@ -67726,15 +67575,13 @@ const VImg = (0,defineComponent/* defineComponent */.aZ)({
       });
     }
     function onLoad() {
-      var _image$value3;
       getSrc();
       state.value = 'loaded';
-      emit('load', ((_image$value3 = image.value) == null ? void 0 : _image$value3.currentSrc) || normalisedSrc.value.src);
+      emit('load', image.value?.currentSrc || normalisedSrc.value.src);
     }
     function onError() {
-      var _image$value4;
       state.value = 'error';
-      emit('error', ((_image$value4 = image.value) == null ? void 0 : _image$value4.currentSrc) || normalisedSrc.value.src);
+      emit('error', image.value?.currentSrc || normalisedSrc.value.src);
     }
     function getSrc() {
       const img = image.value;
@@ -67766,7 +67613,6 @@ const VImg = (0,defineComponent/* defineComponent */.aZ)({
       'v-img__img--contain': !props.cover
     }));
     const __image = () => {
-      var _slots$sources;
       if (!normalisedSrc.value.src || state.value === 'idle') return null;
       const img = (0,runtime_core_esm_bundler/* createVNode */.Wm)("img", {
         "class": ['v-img__img', containClasses.value],
@@ -67778,7 +67624,7 @@ const VImg = (0,defineComponent/* defineComponent */.aZ)({
         "onLoad": onLoad,
         "onError": onError
       }, null);
-      const sources = (_slots$sources = slots.sources) == null ? void 0 : _slots$sources.call(slots);
+      const sources = slots.sources?.();
       return (0,runtime_core_esm_bundler/* createVNode */.Wm)(transition/* MaybeTransition */.J, {
         "transition": props.transition,
         "appear": true
@@ -68035,28 +67881,27 @@ const VInput = (0,defineComponent/* genericComponent */.ev)()({
       validate
     }));
     (0,useRender/* useRender */.L)(() => {
-      var _props$messages, _slots$prepend, _slots$default, _slots$append, _slots$details;
       const hasPrepend = !!(slots.prepend || props.prependIcon);
       const hasAppend = !!(slots.append || props.appendIcon);
-      const hasMessages = !!((_props$messages = props.messages) != null && _props$messages.length || errorMessages.value.length);
+      const hasMessages = !!(props.messages?.length || errorMessages.value.length);
       const hasDetails = !props.hideDetails || props.hideDetails === 'auto' && (hasMessages || !!slots.details);
       return (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
         "class": ['v-input', `v-input--${props.direction}`, densityClasses.value, validationClasses.value]
       }, [hasPrepend && (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
         "key": "prepend",
         "class": "v-input__prepend"
-      }, [(_slots$prepend = slots.prepend) == null ? void 0 : _slots$prepend.call(slots, slotProps.value), props.prependIcon && (0,runtime_core_esm_bundler/* createVNode */.Wm)(InputIcon, {
+      }, [slots.prepend?.(slotProps.value), props.prependIcon && (0,runtime_core_esm_bundler/* createVNode */.Wm)(InputIcon, {
         "key": "prepend-icon",
         "name": "prepend"
       }, null)]), slots.default && (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
         "class": "v-input__control"
-      }, [(_slots$default = slots.default) == null ? void 0 : _slots$default.call(slots, slotProps.value)]), hasAppend && (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
+      }, [slots.default?.(slotProps.value)]), hasAppend && (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
         "key": "append",
         "class": "v-input__append"
       }, [props.appendIcon && (0,runtime_core_esm_bundler/* createVNode */.Wm)(InputIcon, {
         "key": "append-icon",
         "name": "append"
-      }, null), (_slots$append = slots.append) == null ? void 0 : _slots$append.call(slots, slotProps.value)]), hasDetails && (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
+      }, null), slots.append?.(slotProps.value)]), hasDetails && (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
         "class": "v-input__details"
       }, [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VMessages/* VMessages */.u, {
         "id": messagesId.value,
@@ -68064,7 +67909,7 @@ const VInput = (0,defineComponent/* genericComponent */.ev)()({
         "messages": errorMessages.value.length > 0 ? errorMessages.value : props.messages
       }, {
         message: slots.message
-      }), (_slots$details = slots.details) == null ? void 0 : _slots$details.call(slots, slotProps.value)])]);
+      }), slots.details?.(slotProps.value)])]);
     });
     return {
       reset,
@@ -68109,7 +67954,7 @@ var useRender = __webpack_require__(9888);
 // Composables
  // Utilities
 
-const VLabel = (0,defineComponent/* defineComponent */.aZ)({
+const VLabel = (0,defineComponent/* genericComponent */.ev)()({
   name: 'VLabel',
   props: {
     text: String,
@@ -68120,14 +67965,11 @@ const VLabel = (0,defineComponent/* defineComponent */.aZ)({
     let {
       slots
     } = _ref;
-    (0,useRender/* useRender */.L)(() => {
-      var _slots$default;
-      return (0,runtime_core_esm_bundler/* createVNode */.Wm)("label", {
-        "class": ['v-label', {
-          'v-label--clickable': props.clickable
-        }]
-      }, [props.text, (_slots$default = slots.default) == null ? void 0 : _slots$default.call(slots)]);
-    });
+    (0,useRender/* useRender */.L)(() => (0,runtime_core_esm_bundler/* createVNode */.Wm)("label", {
+      "class": ['v-label', {
+        'v-label--clickable': props.clickable
+      }]
+    }, [props.text, slots.default?.()]));
     return {};
   }
 });
@@ -68182,85 +68024,67 @@ const VListChildren = (0,defineComponent/* genericComponent */.ev)()({
       slots
     } = _ref;
     (0,list/* createList */.$l)();
-    return () => {
-      var _slots$default, _props$items;
-      return ((_slots$default = slots.default) == null ? void 0 : _slots$default.call(slots)) ?? ((_props$items = props.items) == null ? void 0 : _props$items.map(_ref2 => {
-        let {
-          children,
-          props: itemProps,
-          type,
-          raw: item
-        } = _ref2;
-        if (type === 'divider') {
-          var _slots$divider;
-          return ((_slots$divider = slots.divider) == null ? void 0 : _slots$divider.call(slots, {
-            props: itemProps
-          })) ?? (0,runtime_core_esm_bundler/* createVNode */.Wm)(VDivider/* VDivider */.J, itemProps, null);
-        }
-        if (type === 'subheader') {
-          var _slots$subheader;
-          return ((_slots$subheader = slots.subheader) == null ? void 0 : _slots$subheader.call(slots, {
-            props: itemProps
-          })) ?? (0,runtime_core_esm_bundler/* createVNode */.Wm)(VListSubheader/* VListSubheader */.b, itemProps, {
-            default: slots.subheader
-          });
-        }
-        const slotsWithItem = {
-          subtitle: slots.subtitle ? slotProps => {
-            var _slots$subtitle;
-            return (_slots$subtitle = slots.subtitle) == null ? void 0 : _slots$subtitle.call(slots, {
-              ...slotProps,
-              item
-            });
-          } : undefined,
-          prepend: slots.prepend ? slotProps => {
-            var _slots$prepend;
-            return (_slots$prepend = slots.prepend) == null ? void 0 : _slots$prepend.call(slots, {
-              ...slotProps,
-              item
-            });
-          } : undefined,
-          append: slots.append ? slotProps => {
-            var _slots$append;
-            return (_slots$append = slots.append) == null ? void 0 : _slots$append.call(slots, {
-              ...slotProps,
-              item
-            });
-          } : undefined,
-          default: slots.default ? slotProps => {
-            var _slots$default2;
-            return (_slots$default2 = slots.default) == null ? void 0 : _slots$default2.call(slots, {
-              ...slotProps,
-              item
-            });
-          } : undefined,
-          title: slots.title ? slotProps => {
-            var _slots$title;
-            return (_slots$title = slots.title) == null ? void 0 : _slots$title.call(slots, {
-              ...slotProps,
-              item
-            });
-          } : undefined
-        };
-        const [listGroupProps, _1] = (0,VListGroup/* filterListGroupProps */.vK)(itemProps);
-        return children ? (0,runtime_core_esm_bundler/* createVNode */.Wm)(VListGroup/* VListGroup */.NU, (0,runtime_core_esm_bundler/* mergeProps */.dG)({
-          "value": itemProps == null ? void 0 : itemProps.value
-        }, listGroupProps), {
-          activator: _ref3 => {
-            let {
-              props: activatorProps
-            } = _ref3;
-            return slots.header ? slots.header({
+    return () => slots.default?.() ?? props.items?.map(_ref2 => {
+      let {
+        children,
+        props: itemProps,
+        type,
+        raw: item
+      } = _ref2;
+      if (type === 'divider') {
+        return slots.divider?.({
+          props: itemProps
+        }) ?? (0,runtime_core_esm_bundler/* createVNode */.Wm)(VDivider/* VDivider */.J, itemProps, null);
+      }
+      if (type === 'subheader') {
+        return slots.subheader?.({
+          props: itemProps
+        }) ?? (0,runtime_core_esm_bundler/* createVNode */.Wm)(VListSubheader/* VListSubheader */.b, itemProps, {
+          default: slots.subheader
+        });
+      }
+      const slotsWithItem = {
+        subtitle: slots.subtitle ? slotProps => slots.subtitle?.({
+          ...slotProps,
+          item
+        }) : undefined,
+        prepend: slots.prepend ? slotProps => slots.prepend?.({
+          ...slotProps,
+          item
+        }) : undefined,
+        append: slots.append ? slotProps => slots.append?.({
+          ...slotProps,
+          item
+        }) : undefined,
+        default: slots.default ? slotProps => slots.default?.({
+          ...slotProps,
+          item
+        }) : undefined,
+        title: slots.title ? slotProps => slots.title?.({
+          ...slotProps,
+          item
+        }) : undefined
+      };
+      const [listGroupProps, _1] = (0,VListGroup/* filterListGroupProps */.vK)(itemProps);
+      return children ? (0,runtime_core_esm_bundler/* createVNode */.Wm)(VListGroup/* VListGroup */.NU, (0,runtime_core_esm_bundler/* mergeProps */.dG)({
+        "value": itemProps?.value
+      }, listGroupProps), {
+        activator: _ref3 => {
+          let {
+            props: activatorProps
+          } = _ref3;
+          return slots.header ? slots.header({
+            props: {
               ...itemProps,
               ...activatorProps
-            }) : (0,runtime_core_esm_bundler/* createVNode */.Wm)(VListItem/* VListItem */.l, (0,runtime_core_esm_bundler/* mergeProps */.dG)(itemProps, activatorProps), slotsWithItem);
-          },
-          default: () => (0,runtime_core_esm_bundler/* createVNode */.Wm)(VListChildren, {
-            "items": children
-          }, slots)
-        }) : slots.item ? slots.item(itemProps) : (0,runtime_core_esm_bundler/* createVNode */.Wm)(VListItem/* VListItem */.l, itemProps, slotsWithItem);
-      }));
-    };
+            }
+          }) : (0,runtime_core_esm_bundler/* createVNode */.Wm)(VListItem/* VListItem */.l, (0,runtime_core_esm_bundler/* mergeProps */.dG)(itemProps, activatorProps), slotsWithItem);
+        },
+        default: () => (0,runtime_core_esm_bundler/* createVNode */.Wm)(VListChildren, {
+          "items": children
+        }, slots)
+      }) : slots.item ? slots.item(itemProps) : (0,runtime_core_esm_bundler/* createVNode */.Wm)(VListItem/* VListItem */.l, itemProps, slotsWithItem);
+    });
   }
 });
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/border.mjs
@@ -68316,9 +68140,12 @@ var useRender = __webpack_require__(9888);
  // Utilities
 
  // Types
+function isPrimitive(value) {
+  return typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean';
+}
 function transformItem(props, item) {
   const type = (0,helpers/* getPropertyFromItem */.qF)(item, props.itemType, 'item');
-  const title = typeof item === 'string' ? item : (0,helpers/* getPropertyFromItem */.qF)(item, props.itemTitle);
+  const title = isPrimitive(item) ? item : (0,helpers/* getPropertyFromItem */.qF)(item, props.itemTitle);
   const value = (0,helpers/* getPropertyFromItem */.qF)(item, props.itemValue, undefined);
   const children = (0,helpers/* getPropertyFromItem */.qF)(item, props.itemChildren);
   const itemProps = props.itemProps === true ? (0,helpers/* pick */.ei)(item, ['children'])[1] : (0,helpers/* getPropertyFromItem */.qF)(item, props.itemProps);
@@ -68449,8 +68276,7 @@ const VList = (0,defineComponent/* genericComponent */.ev)()({
       isFocused.value = false;
     }
     function onFocus(e) {
-      var _contentRef$value;
-      if (!isFocused.value && !(e.relatedTarget && (_contentRef$value = contentRef.value) != null && _contentRef$value.contains(e.relatedTarget))) focus();
+      if (!isFocused.value && !(e.relatedTarget && contentRef.value?.contains(e.relatedTarget))) focus();
     }
     function onKeydown(e) {
       if (!contentRef.value) return;
@@ -68473,15 +68299,12 @@ const VList = (0,defineComponent/* genericComponent */.ev)()({
       const idx = focusable.indexOf(document.activeElement);
       if (!location) {
         if (!contentRef.value.contains(document.activeElement)) {
-          var _focusable$;
-          (_focusable$ = focusable[0]) == null ? void 0 : _focusable$.focus();
+          focusable[0]?.focus();
         }
       } else if (location === 'first') {
-        var _focusable$2;
-        (_focusable$2 = focusable[0]) == null ? void 0 : _focusable$2.focus();
+        focusable[0]?.focus();
       } else if (location === 'last') {
-        var _focusable$at;
-        (_focusable$at = focusable.at(-1)) == null ? void 0 : _focusable$at.focus();
+        focusable.at(-1)?.focus();
       } else {
         let el;
         let idxx = idx;
@@ -68562,10 +68385,7 @@ const VListGroupActivator = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_0__/* .d
       slots
     } = _ref;
     (0,_composables_nested_nested_mjs__WEBPACK_IMPORTED_MODULE_1__/* .useNestedGroupActivator */ ._$)();
-    return () => {
-      var _slots$default;
-      return (_slots$default = slots.default) == null ? void 0 : _slots$default.call(slots);
-    };
+    return () => slots.default?.();
   }
 });
 const makeVListGroupProps = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_2__/* .propsFactory */ .U)({
@@ -68612,44 +68432,41 @@ const VListGroup = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_0__/* .genericCom
       id: id.value
     }));
     const toggleIcon = (0,vue__WEBPACK_IMPORTED_MODULE_6__/* .computed */ .Fl)(() => isOpen.value ? props.collapseIcon : props.expandIcon);
-    (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_8__/* .useRender */ .L)(() => {
-      var _slots$default2;
-      return (0,vue__WEBPACK_IMPORTED_MODULE_6__/* .createVNode */ .Wm)(props.tag, {
-        "class": ['v-list-group', {
-          'v-list-group--prepend': list == null ? void 0 : list.hasPrepend.value,
-          'v-list-group--fluid': props.fluid,
-          'v-list-group--subgroup': props.subgroup,
-          'v-list-group--open': isOpen.value
-        }]
-      }, {
-        default: () => [slots.activator && (0,vue__WEBPACK_IMPORTED_MODULE_6__/* .createVNode */ .Wm)(_VDefaultsProvider_index_mjs__WEBPACK_IMPORTED_MODULE_9__/* .VDefaultsProvider */ .z, {
-          "defaults": {
-            VListItem: {
-              active: isOpen.value,
-              activeColor: props.activeColor,
-              color: props.color,
-              prependIcon: props.prependIcon || props.subgroup && toggleIcon.value,
-              appendIcon: props.appendIcon || !props.subgroup && toggleIcon.value,
-              title: props.title,
-              value: props.value
-            }
+    (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_8__/* .useRender */ .L)(() => (0,vue__WEBPACK_IMPORTED_MODULE_6__/* .createVNode */ .Wm)(props.tag, {
+      "class": ['v-list-group', {
+        'v-list-group--prepend': list?.hasPrepend.value,
+        'v-list-group--fluid': props.fluid,
+        'v-list-group--subgroup': props.subgroup,
+        'v-list-group--open': isOpen.value
+      }]
+    }, {
+      default: () => [slots.activator && (0,vue__WEBPACK_IMPORTED_MODULE_6__/* .createVNode */ .Wm)(_VDefaultsProvider_index_mjs__WEBPACK_IMPORTED_MODULE_9__/* .VDefaultsProvider */ .z, {
+        "defaults": {
+          VListItem: {
+            active: isOpen.value,
+            activeColor: props.activeColor,
+            color: props.color,
+            prependIcon: props.prependIcon || props.subgroup && toggleIcon.value,
+            appendIcon: props.appendIcon || !props.subgroup && toggleIcon.value,
+            title: props.title,
+            value: props.value
           }
-        }, {
-          default: () => [(0,vue__WEBPACK_IMPORTED_MODULE_6__/* .createVNode */ .Wm)(VListGroupActivator, null, {
-            default: () => [slots.activator({
-              props: activatorProps.value,
-              isOpen
-            })]
+        }
+      }, {
+        default: () => [(0,vue__WEBPACK_IMPORTED_MODULE_6__/* .createVNode */ .Wm)(VListGroupActivator, null, {
+          default: () => [slots.activator({
+            props: activatorProps.value,
+            isOpen: isOpen.value
           })]
-        }), (0,vue__WEBPACK_IMPORTED_MODULE_6__/* .createVNode */ .Wm)(_transitions_index_mjs__WEBPACK_IMPORTED_MODULE_10__/* .VExpandTransition */ .Fx, null, {
-          default: () => [(0,vue__WEBPACK_IMPORTED_MODULE_6__/* .withDirectives */ .wy)((0,vue__WEBPACK_IMPORTED_MODULE_6__/* .createVNode */ .Wm)("div", {
-            "class": "v-list-group__items",
-            "role": "group",
-            "aria-labelledby": id.value
-          }, [(_slots$default2 = slots.default) == null ? void 0 : _slots$default2.call(slots)]), [[vue__WEBPACK_IMPORTED_MODULE_11__/* .vShow */ .F8, isOpen.value]])]
         })]
-      });
-    });
+      }), (0,vue__WEBPACK_IMPORTED_MODULE_6__/* .createVNode */ .Wm)(_transitions_index_mjs__WEBPACK_IMPORTED_MODULE_10__/* .VExpandTransition */ .Fx, null, {
+        default: () => [(0,vue__WEBPACK_IMPORTED_MODULE_6__/* .withDirectives */ .wy)((0,vue__WEBPACK_IMPORTED_MODULE_6__/* .createVNode */ .Wm)("div", {
+          "class": "v-list-group__items",
+          "role": "group",
+          "aria-labelledby": id.value
+        }, [slots.default?.()]), [[vue__WEBPACK_IMPORTED_MODULE_11__/* .vShow */ .F8, isOpen.value]])]
+      })]
+    }));
     return {};
   }
 });
@@ -68807,10 +68624,7 @@ const VListItem = (0,defineComponent/* genericComponent */.ev)()({
       openOnSelect
     } = (0,nested/* useNestedItem */.Io)(id, false);
     const list = (0,VList_list/* useList */.sm)();
-    const isActive = (0,runtime_core_esm_bundler/* computed */.Fl)(() => {
-      var _link$isActive;
-      return props.active !== false && (props.active || ((_link$isActive = link.isActive) == null ? void 0 : _link$isActive.value) || isSelected.value);
-    });
+    const isActive = (0,runtime_core_esm_bundler/* computed */.Fl)(() => props.active !== false && (props.active || link.isActive?.value || isSelected.value));
     const isLink = (0,runtime_core_esm_bundler/* computed */.Fl)(() => props.link !== false && link.isLink.value);
     const isClickable = (0,runtime_core_esm_bundler/* computed */.Fl)(() => !props.disabled && props.link !== false && (props.link || link.isClickable.value || props.value != null && !!list));
     const roundedProps = (0,runtime_core_esm_bundler/* computed */.Fl)(() => props.rounded || props.nav);
@@ -68818,10 +68632,7 @@ const VListItem = (0,defineComponent/* genericComponent */.ev)()({
       color: isActive.value ? props.activeColor ?? props.color : props.color,
       variant: props.variant
     }));
-    (0,runtime_core_esm_bundler/* watch */.YP)(() => {
-      var _link$isActive2;
-      return (_link$isActive2 = link.isActive) == null ? void 0 : _link$isActive2.value;
-    }, val => {
+    (0,runtime_core_esm_bundler/* watch */.YP)(() => link.isActive?.value, val => {
       if (val && parent.value != null) {
         root.open(parent.value, true);
       }
@@ -68862,10 +68673,9 @@ const VListItem = (0,defineComponent/* genericComponent */.ev)()({
       isIndeterminate: isIndeterminate.value
     }));
     function onClick(e) {
-      var _link$navigate;
       emit('click', e);
       if (isGroupActivator || !isClickable.value) return;
-      (_link$navigate = link.navigate) == null ? void 0 : _link$navigate.call(link, e);
+      link.navigate?.(e);
       props.value != null && select(!isSelected.value, e);
     }
     function onKeyDown(e) {
@@ -68875,21 +68685,20 @@ const VListItem = (0,defineComponent/* genericComponent */.ev)()({
       }
     }
     (0,useRender/* useRender */.L)(() => {
-      var _slots$prepend, _slots$title, _slots$subtitle, _slots$default, _slots$append;
       const Tag = isLink.value ? 'a' : props.tag;
       const hasColor = !list || isSelected.value || isActive.value;
       const hasTitle = slots.title || props.title;
       const hasSubtitle = slots.subtitle || props.subtitle;
       const hasAppend = !!(slots.append || props.appendAvatar || props.appendIcon);
       const hasPrepend = !!(slots.prepend || props.prependAvatar || props.prependIcon);
-      list == null ? void 0 : list.updateHasPrepend(hasPrepend);
+      list?.updateHasPrepend(hasPrepend);
       return (0,runtime_core_esm_bundler/* withDirectives */.wy)((0,runtime_core_esm_bundler/* createVNode */.Wm)(Tag, {
         "class": ['v-list-item', {
           'v-list-item--active': isActive.value,
           'v-list-item--disabled': props.disabled,
           'v-list-item--link': isClickable.value,
           'v-list-item--nav': props.nav,
-          'v-list-item--prepend': !hasPrepend && (list == null ? void 0 : list.hasPrepend.value),
+          'v-list-item--prepend': !hasPrepend && list?.hasPrepend.value,
           [`${props.activeClass}`]: props.activeClass && isActive.value
         }, themeClasses.value, borderClasses.value, hasColor ? colorClasses.value : undefined, densityClasses.value, elevationClasses.value, lineClasses.value, roundedClasses.value, variantClasses.value],
         "style": [hasColor ? colorStyles.value : undefined, dimensionStyles.value],
@@ -68898,7 +68707,18 @@ const VListItem = (0,defineComponent/* genericComponent */.ev)()({
         "onClick": onClick,
         "onKeydown": isClickable.value && !isLink.value && onKeyDown
       }, {
-        default: () => [(0,variant/* genOverlays */.Ux)(isClickable.value || isActive.value, 'v-list-item'), hasPrepend && (0,runtime_core_esm_bundler/* createVNode */.Wm)(VDefaultsProvider/* VDefaultsProvider */.z, {
+        default: () => [(0,variant/* genOverlays */.Ux)(isClickable.value || isActive.value, 'v-list-item'), hasPrepend && (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
+          "key": "prepend",
+          "class": "v-list-item__prepend"
+        }, [props.prependAvatar && (0,runtime_core_esm_bundler/* createVNode */.Wm)(VAvatar/* VAvatar */.V, {
+          "key": "prepend-avatar",
+          "density": props.density,
+          "image": props.prependAvatar
+        }, null), props.prependIcon && (0,runtime_core_esm_bundler/* createVNode */.Wm)(VIcon/* VIcon */.t, {
+          "key": "prepend-icon",
+          "density": props.density,
+          "icon": props.prependIcon
+        }, null), slots.prepend && (0,runtime_core_esm_bundler/* createVNode */.Wm)(VDefaultsProvider/* VDefaultsProvider */.z, {
           "key": "prepend",
           "defaults": {
             VAvatar: {
@@ -68914,29 +68734,26 @@ const VListItem = (0,defineComponent/* genericComponent */.ev)()({
             }
           }
         }, {
-          default: () => [(0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
-            "class": "v-list-item__prepend"
-          }, [props.prependAvatar && (0,runtime_core_esm_bundler/* createVNode */.Wm)(VAvatar/* VAvatar */.V, {
-            "key": "prepend-avatar"
-          }, null), props.prependIcon && (0,runtime_core_esm_bundler/* createVNode */.Wm)(VIcon/* VIcon */.t, {
-            "key": "prepend-icon"
-          }, null), (_slots$prepend = slots.prepend) == null ? void 0 : _slots$prepend.call(slots, slotProps.value)])]
-        }), (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
+          default: () => [slots.prepend(slotProps.value)]
+        })]), (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
           "class": "v-list-item__content",
           "data-no-activator": ""
         }, [hasTitle && (0,runtime_core_esm_bundler/* createVNode */.Wm)(VListItemTitle/* VListItemTitle */.V, {
           "key": "title"
         }, {
-          default: () => [((_slots$title = slots.title) == null ? void 0 : _slots$title.call(slots, {
+          default: () => [slots.title?.({
             title: props.title
-          })) ?? props.title]
+          }) ?? props.title]
         }), hasSubtitle && (0,runtime_core_esm_bundler/* createVNode */.Wm)(VListItemSubtitle/* VListItemSubtitle */.o, {
           "key": "subtitle"
         }, {
-          default: () => [((_slots$subtitle = slots.subtitle) == null ? void 0 : _slots$subtitle.call(slots, {
+          default: () => [slots.subtitle?.({
             subtitle: props.subtitle
-          })) ?? props.subtitle]
-        }), (_slots$default = slots.default) == null ? void 0 : _slots$default.call(slots, slotProps.value)]), hasAppend && (0,runtime_core_esm_bundler/* createVNode */.Wm)(VDefaultsProvider/* VDefaultsProvider */.z, {
+          }) ?? props.subtitle]
+        }), slots.default?.(slotProps.value)]), hasAppend && (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
+          "key": "append",
+          "class": "v-list-item__append"
+        }, [slots.append && (0,runtime_core_esm_bundler/* createVNode */.Wm)(VDefaultsProvider/* VDefaultsProvider */.z, {
           "key": "append",
           "defaults": {
             VAvatar: {
@@ -68952,14 +68769,16 @@ const VListItem = (0,defineComponent/* genericComponent */.ev)()({
             }
           }
         }, {
-          default: () => [(0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
-            "class": "v-list-item__append"
-          }, [(_slots$append = slots.append) == null ? void 0 : _slots$append.call(slots, slotProps.value), props.appendIcon && (0,runtime_core_esm_bundler/* createVNode */.Wm)(VIcon/* VIcon */.t, {
-            "key": "append-icon"
-          }, null), props.appendAvatar && (0,runtime_core_esm_bundler/* createVNode */.Wm)(VAvatar/* VAvatar */.V, {
-            "key": "append-avatar"
-          }, null)])]
-        })]
+          default: () => [slots.append(slotProps.value)]
+        }), props.appendIcon && (0,runtime_core_esm_bundler/* createVNode */.Wm)(VIcon/* VIcon */.t, {
+          "key": "append-icon",
+          "density": props.density,
+          "icon": props.appendIcon
+        }, null), props.appendAvatar && (0,runtime_core_esm_bundler/* createVNode */.Wm)(VAvatar/* VAvatar */.V, {
+          "key": "append-avatar",
+          "density": props.density,
+          "image": props.appendAvatar
+        }, null)])]
       }), [[(0,runtime_core_esm_bundler/* resolveDirective */.Q2)("ripple"), isClickable.value && props.ripple]]);
     });
     return {};
@@ -69013,7 +68832,7 @@ const VListItemTitle = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_0__/* .create
  // Utilities
 
 
-const VListSubheader = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_0__/* .defineComponent */ .aZ)({
+const VListSubheader = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_0__/* .genericComponent */ .ev)()({
   name: 'VListSubheader',
   props: {
     color: String,
@@ -69031,7 +68850,6 @@ const VListSubheader = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_0__/* .define
       textColorStyles
     } = (0,_composables_color_mjs__WEBPACK_IMPORTED_MODULE_2__/* .useTextColor */ .rY)((0,vue__WEBPACK_IMPORTED_MODULE_3__/* .toRef */ .Vh)(props, 'color'));
     (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_4__/* .useRender */ .L)(() => {
-      var _slots$default;
       const hasText = !!(slots.default || props.title);
       return (0,vue__WEBPACK_IMPORTED_MODULE_5__/* .createVNode */ .Wm)(props.tag, {
         "class": ['v-list-subheader', {
@@ -69044,7 +68862,7 @@ const VListSubheader = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_0__/* .define
       }, {
         default: () => [hasText && (0,vue__WEBPACK_IMPORTED_MODULE_5__/* .createVNode */ .Wm)("div", {
           "class": "v-list-subheader__text"
-        }, [((_slots$default = slots.default) == null ? void 0 : _slots$default.call(slots)) ?? props.title])]
+        }, [slots.default?.() ?? props.title])]
       });
     });
     return {};
@@ -69073,7 +68891,7 @@ const VListSubheader = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_0__/* .define
 const DepthKey = Symbol.for('vuetify:depth');
 function useDepth(hasPrepend) {
   const parent = inject(DepthKey, ref(-1));
-  const depth = computed(() => parent.value + 1 + (hasPrepend != null && hasPrepend.value ? 1 : 0));
+  const depth = computed(() => parent.value + 1 + (hasPrepend?.value ? 1 : 0));
   provide(DepthKey, depth);
   return depth;
 }
@@ -69188,29 +69006,34 @@ const VMenu = (0,defineComponent/* genericComponent */.ev)()({
     const id = (0,runtime_core_esm_bundler/* computed */.Fl)(() => props.id || `v-menu-${uid}`);
     const overlay = (0,reactivity_esm_bundler/* ref */.iH)();
     const parent = (0,runtime_core_esm_bundler/* inject */.f3)(shared/* VMenuSymbol */.N, null);
-    let openChildren = 0;
+    const openChildren = (0,reactivity_esm_bundler/* ref */.iH)(0);
     (0,runtime_core_esm_bundler/* provide */.JJ)(shared/* VMenuSymbol */.N, {
       register() {
-        ++openChildren;
+        ++openChildren.value;
       },
       unregister() {
-        --openChildren;
+        --openChildren.value;
       },
       closeParents() {
         setTimeout(() => {
-          if (!openChildren) {
+          if (!openChildren.value) {
             isActive.value = false;
-            parent == null ? void 0 : parent.closeParents();
+            parent?.closeParents();
           }
         }, 40);
       }
     });
     (0,runtime_core_esm_bundler/* watch */.YP)(isActive, val => {
-      val ? parent == null ? void 0 : parent.register() : parent == null ? void 0 : parent.unregister();
+      val ? parent?.register() : parent?.unregister();
     });
     function onClickOutside() {
-      parent == null ? void 0 : parent.closeParents();
+      parent?.closeParents();
     }
+    const activatorProps = (0,runtime_core_esm_bundler/* computed */.Fl)(() => (0,runtime_core_esm_bundler/* mergeProps */.dG)({
+      'aria-haspopup': 'menu',
+      'aria-expanded': String(isActive.value),
+      'aria-owns': id.value
+    }, props.activatorProps));
     (0,useRender/* useRender */.L)(() => {
       const [overlayProps] = (0,VOverlay/* filterVOverlayProps */.Fe)(props);
       return (0,runtime_core_esm_bundler/* createVNode */.Wm)(VOverlay/* VOverlay */.yc, (0,runtime_core_esm_bundler/* mergeProps */.dG)({
@@ -69220,29 +69043,25 @@ const VMenu = (0,defineComponent/* genericComponent */.ev)()({
         "modelValue": isActive.value,
         "onUpdate:modelValue": $event => isActive.value = $event,
         "absolute": true,
-        "activatorProps": (0,runtime_core_esm_bundler/* mergeProps */.dG)({
-          'aria-haspopup': 'menu',
-          'aria-expanded': String(isActive.value),
-          'aria-owns': id.value
-        }, props.activatorProps),
+        "activatorProps": activatorProps.value,
         "onClick:outside": onClickOutside
       }, scopeId), {
         activator: slots.activator,
         default: function () {
-          var _slots$default;
           for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
             args[_key] = arguments[_key];
           }
           return (0,runtime_core_esm_bundler/* createVNode */.Wm)(VDefaultsProvider/* VDefaultsProvider */.z, {
             "root": true
           }, {
-            default: () => [(_slots$default = slots.default) == null ? void 0 : _slots$default.call(slots, ...args)]
+            default: () => [slots.default?.(...args)]
           });
         }
       });
     });
     return (0,forwardRefs/* forwardRefs */.F)({
-      id
+      id,
+      ΨopenChildren: openChildren
     }, overlay);
   }
 });
@@ -69298,7 +69117,7 @@ var useRender = __webpack_require__(9888);
  // Utilities
 
  // Types
-const VMessages = (0,defineComponent/* defineComponent */.aZ)({
+const VMessages = (0,defineComponent/* genericComponent */.ev)()({
   name: 'VMessages',
   props: {
     active: Boolean,
@@ -69486,7 +69305,7 @@ function useActivator(props, _ref) {
       const menu = (0,runtime_core_esm_bundler/* inject */.f3)(shared/* VMenuSymbol */.N, null);
       events.click = () => {
         isActive.value = false;
-        menu == null ? void 0 : menu.closeParents();
+        menu?.closeParents();
       };
     }
     return events;
@@ -69540,8 +69359,7 @@ function useActivator(props, _ref) {
     immediate: true
   });
   (0,reactivity_esm_bundler/* onScopeDispose */.EB)(() => {
-    var _scope;
-    (_scope = scope) == null ? void 0 : _scope.stop();
+    scope?.stop();
   });
   return {
     activatorEl,
@@ -69602,13 +69420,11 @@ function _useActivator(props, vm, _ref2) {
     });
   }
   function getActivator() {
-    var _activator;
     let selector = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : props.activator;
     let activator;
     if (selector) {
       if (selector === 'parent') {
-        var _vm$proxy, _vm$proxy$$el;
-        let el = vm == null ? void 0 : (_vm$proxy = vm.proxy) == null ? void 0 : (_vm$proxy$$el = _vm$proxy.$el) == null ? void 0 : _vm$proxy$$el.parentNode;
+        let el = vm?.proxy?.$el?.parentNode;
         while (el.hasAttribute('data-no-activator')) {
           el = el.parentNode;
         }
@@ -69626,7 +69442,7 @@ function _useActivator(props, vm, _ref2) {
     }
 
     // The activator should only be a valid element (Ignore comments and text nodes)
-    activatorEl.value = ((_activator = activator) == null ? void 0 : _activator.nodeType) === Node.ELEMENT_NODE ? activator : null;
+    activatorEl.value = activator?.nodeType === Node.ELEMENT_NODE ? activator : null;
     return activatorEl.value;
   }
 }
@@ -69711,12 +69527,15 @@ function anchorToPoint(anchor, box) {
     y: box.height / 2
   }, box);
 }
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/toggleScope.mjs
+var toggleScope = __webpack_require__(4770);
 ;// CONCATENATED MODULE: ./node_modules/vuetify/lib/components/VOverlay/locationStrategies.mjs
 
 // Utilities
 
 
 
+ // Composables
  // Types
 const locationStrategies = {
   static: staticLocationStrategy,
@@ -69743,38 +69562,28 @@ const makeLocationStrategyProps = (0,propsFactory/* propsFactory */.U)({
 function useLocationStrategies(props, data) {
   const contentStyles = (0,reactivity_esm_bundler/* ref */.iH)({});
   const updateLocation = (0,reactivity_esm_bundler/* ref */.iH)();
-  let scope;
-  (0,runtime_core_esm_bundler/* watchEffect */.m0)(async () => {
-    var _scope;
-    (_scope = scope) == null ? void 0 : _scope.stop();
-    updateLocation.value = undefined;
-    if (!(globals/* IN_BROWSER */.BR && data.isActive.value && props.locationStrategy)) return;
-    scope = (0,reactivity_esm_bundler/* effectScope */.B)();
-    if (!(props.locationStrategy === 'connected')) {
-      await (0,runtime_core_esm_bundler/* nextTick */.Y3)();
-    }
-    scope.run(() => {
+  if (globals/* IN_BROWSER */.BR) {
+    (0,toggleScope/* useToggleScope */.U)(() => !!(data.isActive.value && props.locationStrategy), reset => {
+      (0,runtime_core_esm_bundler/* watch */.YP)(() => props.locationStrategy, reset);
+      (0,reactivity_esm_bundler/* onScopeDispose */.EB)(() => {
+        updateLocation.value = undefined;
+      });
       if (typeof props.locationStrategy === 'function') {
-        var _props$locationStrate;
-        updateLocation.value = (_props$locationStrate = props.locationStrategy(data, props, contentStyles)) == null ? void 0 : _props$locationStrate.updateLocation;
+        updateLocation.value = props.locationStrategy(data, props, contentStyles)?.updateLocation;
       } else {
-        var _locationStrategies$p;
-        updateLocation.value = (_locationStrategies$p = locationStrategies[props.locationStrategy](data, props, contentStyles)) == null ? void 0 : _locationStrategies$p.updateLocation;
+        updateLocation.value = locationStrategies[props.locationStrategy](data, props, contentStyles)?.updateLocation;
       }
     });
-  });
-  globals/* IN_BROWSER */.BR && window.addEventListener('resize', onResize, {
-    passive: true
-  });
-  (0,reactivity_esm_bundler/* onScopeDispose */.EB)(() => {
-    var _scope2;
-    globals/* IN_BROWSER */.BR && window.removeEventListener('resize', onResize);
-    updateLocation.value = undefined;
-    (_scope2 = scope) == null ? void 0 : _scope2.stop();
-  });
+    window.addEventListener('resize', onResize, {
+      passive: true
+    });
+    (0,reactivity_esm_bundler/* onScopeDispose */.EB)(() => {
+      window.removeEventListener('resize', onResize);
+      updateLocation.value = undefined;
+    });
+  }
   function onResize(e) {
-    var _updateLocation$value;
-    (_updateLocation$value = updateLocation.value) == null ? void 0 : _updateLocation$value.call(updateLocation, e);
+    updateLocation.value?.(e);
   }
   return {
     contentStyles,
@@ -70065,13 +69874,30 @@ function connectedLocationStrategy(data, props, contentStyles) {
       maxWidth: (0,helpers/* convertToUnit */.kb)(pixelCeil((0,helpers/* clamp */.uZ)(available.x, minWidth.value === Infinity ? 0 : minWidth.value, maxWidth.value))),
       maxHeight: (0,helpers/* convertToUnit */.kb)(pixelCeil((0,helpers/* clamp */.uZ)(available.y, minHeight.value === Infinity ? 0 : minHeight.value, maxHeight.value)))
     });
+    return {
+      available,
+      contentBox
+    };
   }
-  (0,runtime_core_esm_bundler/* watch */.YP)(() => [preferredAnchor.value, preferredOrigin.value, props.offset, props.minWidth, props.minHeight, props.maxWidth, props.maxHeight], () => updateLocation(), {
-    immediate: !activatorFixed
-  });
-  if (activatorFixed) (0,runtime_core_esm_bundler/* nextTick */.Y3)(() => updateLocation());
-  requestAnimationFrame(() => {
-    if (contentStyles.value.maxHeight) updateLocation();
+  (0,runtime_core_esm_bundler/* watch */.YP)(() => [preferredAnchor.value, preferredOrigin.value, props.offset, props.minWidth, props.minHeight, props.maxWidth, props.maxHeight], () => updateLocation());
+  (0,runtime_core_esm_bundler/* nextTick */.Y3)(() => {
+    const result = updateLocation();
+
+    // TODO: overflowing content should only require a single updateLocation call
+    // Icky hack to make sure the content is positioned consistently
+    if (!result) return;
+    const {
+      available,
+      contentBox
+    } = result;
+    if (contentBox.height > available.y) {
+      requestAnimationFrame(() => {
+        updateLocation();
+        requestAnimationFrame(() => {
+          updateLocation();
+        });
+      });
+    }
   });
   return {
     updateLocation
@@ -70133,23 +69959,20 @@ function useScrollStrategies(props, data) {
   if (!globals/* IN_BROWSER */.BR) return;
   let scope;
   (0,runtime_core_esm_bundler/* watchEffect */.m0)(async () => {
-    var _scope;
-    (_scope = scope) == null ? void 0 : _scope.stop();
+    scope?.stop();
     if (!(data.isActive.value && props.scrollStrategy)) return;
     scope = (0,reactivity_esm_bundler/* effectScope */.B)();
     await (0,runtime_core_esm_bundler/* nextTick */.Y3)();
-    scope.run(() => {
+    scope.active && scope.run(() => {
       if (typeof props.scrollStrategy === 'function') {
-        props.scrollStrategy(data, props);
+        props.scrollStrategy(data, props, scope);
       } else {
-        var _scrollStrategies$pro;
-        (_scrollStrategies$pro = scrollStrategies[props.scrollStrategy]) == null ? void 0 : _scrollStrategies$pro.call(scrollStrategies, data, props);
+        scrollStrategies[props.scrollStrategy]?.(data, props, scope);
       }
     });
   });
   (0,reactivity_esm_bundler/* onScopeDispose */.EB)(() => {
-    var _scope2;
-    (_scope2 = scope) == null ? void 0 : _scope2.stop();
+    scope?.stop();
   });
 }
 function closeScrollStrategy(data) {
@@ -70159,8 +69982,7 @@ function closeScrollStrategy(data) {
   bindScroll(data.activatorEl.value ?? data.contentEl.value, onScroll);
 }
 function blockScrollStrategy(data, props) {
-  var _data$root$value;
-  const offsetParent = (_data$root$value = data.root.value) == null ? void 0 : _data$root$value.offsetParent;
+  const offsetParent = data.root.value?.offsetParent;
   const scrollElements = [...new Set([...(0,getScrollParent/* getScrollParents */.HA)(data.activatorEl.value, props.contained ? offsetParent : undefined), ...(0,getScrollParent/* getScrollParents */.HA)(data.contentEl.value, props.contained ? offsetParent : undefined)])].filter(el => !el.classList.contains('v-overlay-scroll-blocked'));
   const scrollbarWidth = window.innerWidth - document.documentElement.offsetWidth;
   const scrollableParent = (el => (0,getScrollParent/* hasScrollbar */.QA)(el) && el)(offsetParent || document.documentElement);
@@ -70189,33 +70011,41 @@ function blockScrollStrategy(data, props) {
     }
   });
 }
-function repositionScrollStrategy(data) {
+function repositionScrollStrategy(data, props, scope) {
   let slow = false;
   let raf = -1;
+  let ric = -1;
   function update(e) {
     requestNewFrame(() => {
-      var _data$updateLocation$, _data$updateLocation;
       const start = performance.now();
-      (_data$updateLocation$ = (_data$updateLocation = data.updateLocation).value) == null ? void 0 : _data$updateLocation$.call(_data$updateLocation, e);
+      data.updateLocation.value?.(e);
       const time = performance.now() - start;
       slow = time / (1000 / 60) > 2;
     });
   }
-  bindScroll(data.activatorEl.value ?? data.contentEl.value, e => {
-    if (slow) {
-      // If the position calculation is slow,
-      // defer updates until scrolling is finished.
-      // Browsers usually fire one scroll event per frame so
-      // we just wait until we've got two frames without an event
-      cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(() => {
-        raf = requestAnimationFrame(() => {
+  ric = (typeof requestIdleCallback === 'undefined' ? cb => cb() : requestIdleCallback)(() => {
+    scope.run(() => {
+      bindScroll(data.activatorEl.value ?? data.contentEl.value, e => {
+        if (slow) {
+          // If the position calculation is slow,
+          // defer updates until scrolling is finished.
+          // Browsers usually fire one scroll event per frame so
+          // we just wait until we've got two frames without an event
+          cancelAnimationFrame(raf);
+          raf = requestAnimationFrame(() => {
+            raf = requestAnimationFrame(() => {
+              update(e);
+            });
+          });
+        } else {
           update(e);
-        });
+        }
       });
-    } else {
-      update(e);
-    }
+    });
+  });
+  (0,reactivity_esm_bundler/* onScopeDispose */.EB)(() => {
+    cancelIdleCallback(ric);
+    cancelAnimationFrame(raf);
   });
 }
 
@@ -70249,8 +70079,6 @@ var hydration = __webpack_require__(1997);
 var locale = __webpack_require__(1629);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/scopeId.mjs
 var composables_scopeId = __webpack_require__(5975);
-// EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/toggleScope.mjs
-var toggleScope = __webpack_require__(4770);
 ;// CONCATENATED MODULE: ./node_modules/vuetify/lib/composables/stack.mjs
 
 
@@ -70268,26 +70096,24 @@ function useStack(isActive, zIndex, disableGlobalStack) {
   (0,runtime_core_esm_bundler/* provide */.JJ)(StackSymbol, stack);
   const _zIndex = (0,reactivity_esm_bundler/* ref */.iH)(+zIndex.value);
   (0,toggleScope/* useToggleScope */.U)(isActive, () => {
-    var _globalStack$at;
-    const lastZIndex = (_globalStack$at = globalStack.at(-1)) == null ? void 0 : _globalStack$at[1];
+    const lastZIndex = globalStack.at(-1)?.[1];
     _zIndex.value = lastZIndex ? lastZIndex + 10 : +zIndex.value;
     if (createStackEntry) {
       globalStack.push([vm.uid, _zIndex.value]);
     }
-    parent == null ? void 0 : parent.activeChildren.add(vm.uid);
+    parent?.activeChildren.add(vm.uid);
     (0,reactivity_esm_bundler/* onScopeDispose */.EB)(() => {
       if (createStackEntry) {
-        const idx = globalStack.findIndex(v => v[0] === vm.uid);
+        const idx = (0,reactivity_esm_bundler/* toRaw */.IU)(globalStack).findIndex(v => v[0] === vm.uid);
         globalStack.splice(idx, 1);
       }
-      parent == null ? void 0 : parent.activeChildren.delete(vm.uid);
+      parent?.activeChildren.delete(vm.uid);
     });
   });
   const globalTop = (0,reactivity_esm_bundler/* ref */.iH)(true);
   if (createStackEntry) {
     (0,runtime_core_esm_bundler/* watchEffect */.m0)(() => {
-      var _globalStack$at2;
-      const _isTop = ((_globalStack$at2 = globalStack.at(-1)) == null ? void 0 : _globalStack$at2[0]) === vm.uid;
+      const _isTop = globalStack.at(-1)?.[0] === vm.uid;
       setTimeout(() => globalTop.value = _isTop);
     });
   }
@@ -70313,7 +70139,7 @@ function useTeleport(target) {
       (0,runtime_core_esm_bundler/* warn */.ZK)(`Unable to locate target ${_target}`);
       return undefined;
     }
-    let container = targetElement.querySelector('.v-overlay-container');
+    let container = targetElement.querySelector(':scope > .v-overlay-container');
     if (!container) {
       container = document.createElement('div');
       container.className = 'v-overlay-container';
@@ -70553,54 +70379,51 @@ const VOverlay = (0,defineComponent/* genericComponent */.ev)()({
         easing: easing/* standardEasing */.Ly
       });
     }
-    (0,useRender/* useRender */.L)(() => {
-      var _slots$activator, _slots$default;
-      return (0,runtime_core_esm_bundler/* createVNode */.Wm)(runtime_core_esm_bundler/* Fragment */.HY, null, [(_slots$activator = slots.activator) == null ? void 0 : _slots$activator.call(slots, {
-        isActive: isActive.value,
-        props: (0,runtime_core_esm_bundler/* mergeProps */.dG)({
-          ref: activatorRef
-        }, (0,runtime_core_esm_bundler/* toHandlers */.mx)(activatorEvents.value), props.activatorProps)
-      }), isMounted.value && (0,runtime_core_esm_bundler/* createVNode */.Wm)(runtime_core_esm_bundler/* Teleport */.lR, {
-        "disabled": !teleportTarget.value,
-        "to": teleportTarget.value
+    (0,useRender/* useRender */.L)(() => (0,runtime_core_esm_bundler/* createVNode */.Wm)(runtime_core_esm_bundler/* Fragment */.HY, null, [slots.activator?.({
+      isActive: isActive.value,
+      props: (0,runtime_core_esm_bundler/* mergeProps */.dG)({
+        ref: activatorRef
+      }, (0,runtime_core_esm_bundler/* toHandlers */.mx)(activatorEvents.value), props.activatorProps)
+    }), isMounted.value && (0,runtime_core_esm_bundler/* createVNode */.Wm)(runtime_core_esm_bundler/* Teleport */.lR, {
+      "disabled": !teleportTarget.value,
+      "to": teleportTarget.value
+    }, {
+      default: () => [hasContent.value && (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", (0,runtime_core_esm_bundler/* mergeProps */.dG)({
+        "class": ['v-overlay', {
+          'v-overlay--absolute': props.absolute || props.contained,
+          'v-overlay--active': isActive.value,
+          'v-overlay--contained': props.contained
+        }, themeClasses.value, rtlClasses.value],
+        "style": [stackStyles.value, {
+          top: (0,helpers/* convertToUnit */.kb)(top.value)
+        }],
+        "ref": root
+      }, scopeId, attrs), [(0,runtime_core_esm_bundler/* createVNode */.Wm)(Scrim, (0,runtime_core_esm_bundler/* mergeProps */.dG)({
+        "color": scrimColor,
+        "modelValue": isActive.value && !!props.scrim
+      }, (0,runtime_core_esm_bundler/* toHandlers */.mx)(scrimEvents.value)), null), (0,runtime_core_esm_bundler/* createVNode */.Wm)(transition/* MaybeTransition */.J, {
+        "appear": true,
+        "persisted": true,
+        "transition": props.transition,
+        "target": activatorEl.value,
+        "onAfterLeave": () => {
+          onAfterLeave();
+          emit('afterLeave');
+        }
       }, {
-        default: () => [hasContent.value && (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", (0,runtime_core_esm_bundler/* mergeProps */.dG)({
-          "class": ['v-overlay', {
-            'v-overlay--absolute': props.absolute || props.contained,
-            'v-overlay--active': isActive.value,
-            'v-overlay--contained': props.contained
-          }, themeClasses.value, rtlClasses.value],
-          "style": [stackStyles.value, {
-            top: (0,helpers/* convertToUnit */.kb)(top.value)
-          }],
-          "ref": root
-        }, scopeId, attrs), [(0,runtime_core_esm_bundler/* createVNode */.Wm)(Scrim, (0,runtime_core_esm_bundler/* mergeProps */.dG)({
-          "color": scrimColor,
-          "modelValue": isActive.value && !!props.scrim
-        }, (0,runtime_core_esm_bundler/* toHandlers */.mx)(scrimEvents.value)), null), (0,runtime_core_esm_bundler/* createVNode */.Wm)(transition/* MaybeTransition */.J, {
-          "appear": true,
-          "persisted": true,
-          "transition": props.transition,
-          "target": activatorEl.value,
-          "onAfterLeave": () => {
-            onAfterLeave();
-            emit('afterLeave');
-          }
-        }, {
-          default: () => [(0,runtime_core_esm_bundler/* withDirectives */.wy)((0,runtime_core_esm_bundler/* createVNode */.Wm)("div", (0,runtime_core_esm_bundler/* mergeProps */.dG)({
-            "ref": contentEl,
-            "class": ['v-overlay__content', props.contentClass],
-            "style": [dimensionStyles.value, contentStyles.value]
-          }, (0,runtime_core_esm_bundler/* toHandlers */.mx)(contentEvents.value), props.contentProps), [(_slots$default = slots.default) == null ? void 0 : _slots$default.call(slots, {
-            isActive
-          })]), [[runtime_dom_esm_bundler/* vShow */.F8, isActive.value], [(0,runtime_core_esm_bundler/* resolveDirective */.Q2)("click-outside"), {
-            handler: onClickOutside,
-            closeConditional,
-            include: () => [activatorEl.value]
-          }]])]
-        })])]
-      })]);
-    });
+        default: () => [(0,runtime_core_esm_bundler/* withDirectives */.wy)((0,runtime_core_esm_bundler/* createVNode */.Wm)("div", (0,runtime_core_esm_bundler/* mergeProps */.dG)({
+          "ref": contentEl,
+          "class": ['v-overlay__content', props.contentClass],
+          "style": [dimensionStyles.value, contentStyles.value]
+        }, (0,runtime_core_esm_bundler/* toHandlers */.mx)(contentEvents.value), props.contentProps), [slots.default?.({
+          isActive
+        })]), [[runtime_dom_esm_bundler/* vShow */.F8, isActive.value], [(0,runtime_core_esm_bundler/* resolveDirective */.Q2)("click-outside"), {
+          handler: onClickOutside,
+          closeConditional,
+          include: () => [activatorEl.value]
+        }]])]
+      })])]
+    })]));
     return {
       activatorEl,
       animateClick,
@@ -70666,7 +70489,7 @@ var useRender = __webpack_require__(9888);
  // Utilities
 
  // Types
-const VProgressCircular = (0,defineComponent/* defineComponent */.aZ)({
+const VProgressCircular = (0,defineComponent/* genericComponent */.ev)()({
   name: 'VProgressCircular',
   props: {
     bgColor: String,
@@ -70838,7 +70661,7 @@ var helpers = __webpack_require__(131);
  // Utilities
 
 
-const VProgressLinear = (0,defineComponent/* defineComponent */.aZ)({
+const VProgressLinear = (0,defineComponent/* genericComponent */.ev)()({
   name: 'VProgressLinear',
   props: {
     absolute: Boolean,
@@ -71045,7 +70868,7 @@ function useAspectStyles(props) {
     })
   };
 }
-const VResponsive = (0,defineComponent/* defineComponent */.aZ)({
+const VResponsive = (0,defineComponent/* genericComponent */.ev)()({
   name: 'VResponsive',
   props: {
     aspectRatio: [String, Number],
@@ -71062,18 +70885,15 @@ const VResponsive = (0,defineComponent/* defineComponent */.aZ)({
     const {
       dimensionStyles
     } = (0,dimensions/* useDimension */.$)(props);
-    (0,useRender/* useRender */.L)(() => {
-      var _slots$additional;
-      return (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
-        "class": "v-responsive",
-        "style": dimensionStyles.value
-      }, [(0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
-        "class": "v-responsive__sizer",
-        "style": aspectStyles.value
-      }, null), (_slots$additional = slots.additional) == null ? void 0 : _slots$additional.call(slots), slots.default && (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
-        "class": ['v-responsive__content', props.contentClass]
-      }, [slots.default()])]);
-    });
+    (0,useRender/* useRender */.L)(() => (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
+      "class": "v-responsive",
+      "style": dimensionStyles.value
+    }, [(0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
+      "class": "v-responsive__sizer",
+      "style": aspectStyles.value
+    }, null), slots.additional?.(), slots.default && (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
+      "class": ['v-responsive__content', props.contentClass]
+    }, [slots.default()])]));
     return {};
   }
 });
@@ -71212,7 +71032,15 @@ const VSelect = (0,defineComponent/* genericComponent */.ev)()({
       t
     } = (0,locale/* useLocale */.bU)();
     const vTextFieldRef = (0,reactivity_esm_bundler/* ref */.iH)();
-    const menu = (0,proxiedModel/* useProxiedModel */.z)(props, 'menu');
+    const vMenuRef = (0,reactivity_esm_bundler/* ref */.iH)();
+    const _menu = (0,proxiedModel/* useProxiedModel */.z)(props, 'menu');
+    const menu = (0,runtime_core_esm_bundler/* computed */.Fl)({
+      get: () => _menu.value,
+      set: v => {
+        if (_menu.value && !v && vMenuRef.value?.ΨopenChildren) return;
+        _menu.value = v;
+      }
+    });
     const {
       items,
       transformIn,
@@ -71237,39 +71065,33 @@ const VSelect = (0,defineComponent/* genericComponent */.ev)()({
     });
     const listRef = (0,reactivity_esm_bundler/* ref */.iH)();
     function onClear(e) {
-      model.value = [];
       if (props.openOnClear) {
         menu.value = true;
       }
     }
-    function onClickControl() {
-      if (props.hideNoData && !items.value.length || props.readonly || form != null && form.isReadonly.value) return;
+    function onMousedownControl() {
+      if (props.hideNoData && !items.value.length || props.readonly || form?.isReadonly.value) return;
       menu.value = !menu.value;
     }
     function onKeydown(e) {
-      if (props.readonly || form != null && form.isReadonly.value) return;
-      if (['Enter', 'ArrowDown', ' '].includes(e.key)) {
+      if (props.readonly || form?.isReadonly.value) return;
+      if (['Enter', ' ', 'ArrowDown', 'ArrowUp', 'Home', 'End'].includes(e.key)) {
         e.preventDefault();
+      }
+      if (['Enter', 'ArrowDown', ' '].includes(e.key)) {
         menu.value = true;
       }
       if (['Escape', 'Tab'].includes(e.key)) {
         menu.value = false;
       }
       if (e.key === 'ArrowDown') {
-        var _listRef$value;
-        (_listRef$value = listRef.value) == null ? void 0 : _listRef$value.focus('next');
+        listRef.value?.focus('next');
       } else if (e.key === 'ArrowUp') {
-        var _listRef$value2;
-        e.preventDefault();
-        (_listRef$value2 = listRef.value) == null ? void 0 : _listRef$value2.focus('prev');
+        listRef.value?.focus('prev');
       } else if (e.key === 'Home') {
-        var _listRef$value3;
-        e.preventDefault();
-        (_listRef$value3 = listRef.value) == null ? void 0 : _listRef$value3.focus('first');
+        listRef.value?.focus('first');
       } else if (e.key === 'End') {
-        var _listRef$value4;
-        e.preventDefault();
-        (_listRef$value4 = listRef.value) == null ? void 0 : _listRef$value4.focus('last');
+        listRef.value?.focus('last');
       }
     }
     function select(item) {
@@ -71288,15 +71110,13 @@ const VSelect = (0,defineComponent/* genericComponent */.ev)()({
       }
     }
     function onBlur(e) {
-      var _listRef$value5;
-      if (!((_listRef$value5 = listRef.value) != null && _listRef$value5.$el.contains(e.relatedTarget))) {
+      if (!listRef.value?.$el.contains(e.relatedTarget)) {
         menu.value = false;
       }
     }
     function onFocusout(e) {
       if (e.relatedTarget == null) {
-        var _vTextFieldRef$value;
-        (_vTextFieldRef$value = vTextFieldRef.value) == null ? void 0 : _vTextFieldRef$value.focus();
+        vTextFieldRef.value?.focus();
       }
     }
     (0,useRender/* useRender */.L)(() => {
@@ -71321,99 +71141,96 @@ const VSelect = (0,defineComponent/* genericComponent */.ev)()({
         "appendInnerIcon": props.menuIcon,
         "readonly": true,
         "onClick:clear": onClear,
-        "onClick:control": onClickControl,
+        "onMousedown:control": onMousedownControl,
         "onBlur": onBlur,
         "onKeydown": onKeydown
       }), {
         ...slots,
-        default: () => {
-          var _slots$noData, _slots$prependItem, _slots$appendItem;
-          return (0,runtime_core_esm_bundler/* createVNode */.Wm)(runtime_core_esm_bundler/* Fragment */.HY, null, [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VMenu/* VMenu */.T, (0,runtime_core_esm_bundler/* mergeProps */.dG)({
-            "modelValue": menu.value,
-            "onUpdate:modelValue": $event => menu.value = $event,
-            "activator": "parent",
-            "contentClass": "v-select__content",
-            "eager": props.eager,
-            "maxHeight": 310,
-            "openOnClick": false,
-            "closeOnContentClick": false,
-            "transition": props.transition
-          }, props.menuProps), {
-            default: () => [hasList && (0,runtime_core_esm_bundler/* createVNode */.Wm)(VList/* VList */.i, {
-              "ref": listRef,
-              "selected": selected.value,
-              "selectStrategy": props.multiple ? 'independent' : 'single-independent',
-              "onMousedown": e => e.preventDefault(),
-              "onFocusout": onFocusout
-            }, {
-              default: () => [!displayItems.value.length && !props.hideNoData && (((_slots$noData = slots['no-data']) == null ? void 0 : _slots$noData.call(slots)) ?? (0,runtime_core_esm_bundler/* createVNode */.Wm)(VListItem/* VListItem */.l, {
-                "title": t(props.noDataText)
-              }, null)), (_slots$prependItem = slots['prepend-item']) == null ? void 0 : _slots$prependItem.call(slots), displayItems.value.map((item, index) => {
-                if (slots.item) {
-                  var _slots$item;
-                  return (_slots$item = slots.item) == null ? void 0 : _slots$item.call(slots, {
-                    item,
-                    index,
-                    props: (0,runtime_core_esm_bundler/* mergeProps */.dG)(item.props, {
-                      onClick: () => select(item)
-                    })
-                  });
-                }
-                return (0,runtime_core_esm_bundler/* createVNode */.Wm)(VListItem/* VListItem */.l, (0,runtime_core_esm_bundler/* mergeProps */.dG)({
-                  "key": index
-                }, item.props, {
-                  "onClick": () => select(item)
-                }), {
-                  prepend: _ref2 => {
-                    let {
-                      isSelected
-                    } = _ref2;
-                    return props.multiple && !props.hideSelected ? (0,runtime_core_esm_bundler/* createVNode */.Wm)(VCheckboxBtn/* VCheckboxBtn */.pM, {
-                      "modelValue": isSelected,
-                      "ripple": false
-                    }, null) : undefined;
-                  }
+        default: () => (0,runtime_core_esm_bundler/* createVNode */.Wm)(runtime_core_esm_bundler/* Fragment */.HY, null, [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VMenu/* VMenu */.T, (0,runtime_core_esm_bundler/* mergeProps */.dG)({
+          "ref": vMenuRef,
+          "modelValue": menu.value,
+          "onUpdate:modelValue": $event => menu.value = $event,
+          "activator": "parent",
+          "contentClass": "v-select__content",
+          "eager": props.eager,
+          "maxHeight": 310,
+          "openOnClick": false,
+          "closeOnContentClick": false,
+          "transition": props.transition
+        }, props.menuProps), {
+          default: () => [hasList && (0,runtime_core_esm_bundler/* createVNode */.Wm)(VList/* VList */.i, {
+            "ref": listRef,
+            "selected": selected.value,
+            "selectStrategy": props.multiple ? 'independent' : 'single-independent',
+            "onMousedown": e => e.preventDefault(),
+            "onFocusout": onFocusout
+          }, {
+            default: () => [!displayItems.value.length && !props.hideNoData && (slots['no-data']?.() ?? (0,runtime_core_esm_bundler/* createVNode */.Wm)(VListItem/* VListItem */.l, {
+              "title": t(props.noDataText)
+            }, null)), slots['prepend-item']?.(), displayItems.value.map((item, index) => {
+              if (slots.item) {
+                return slots.item?.({
+                  item,
+                  index,
+                  props: (0,runtime_core_esm_bundler/* mergeProps */.dG)(item.props, {
+                    onClick: () => select(item)
+                  })
                 });
-              }), (_slots$appendItem = slots['append-item']) == null ? void 0 : _slots$appendItem.call(slots)]
-            })]
-          }), selections.value.map((item, index) => {
-            function onChipClose(e) {
-              e.stopPropagation();
-              e.preventDefault();
-              select(item);
-            }
-            const slotProps = {
-              'onClick:close': onChipClose,
-              modelValue: true,
-              'onUpdate:modelValue': undefined
-            };
-            return (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
-              "key": item.value,
-              "class": "v-select__selection"
-            }, [hasChips ? (0,runtime_core_esm_bundler/* createVNode */.Wm)(VDefaultsProvider/* VDefaultsProvider */.z, {
-              "defaults": {
-                VChip: {
-                  closable: props.closableChips,
-                  size: 'small',
-                  text: item.title
-                }
               }
-            }, {
-              default: () => [slots.chip ? slots.chip({
-                item,
-                index,
-                props: slotProps
-              }) : (0,runtime_core_esm_bundler/* createVNode */.Wm)(VChip/* VChip */.v, slotProps, null)]
-            }) : slots.selection ? slots.selection({
+              return (0,runtime_core_esm_bundler/* createVNode */.Wm)(VListItem/* VListItem */.l, (0,runtime_core_esm_bundler/* mergeProps */.dG)({
+                "key": index
+              }, item.props, {
+                "onClick": () => select(item)
+              }), {
+                prepend: _ref2 => {
+                  let {
+                    isSelected
+                  } = _ref2;
+                  return props.multiple && !props.hideSelected ? (0,runtime_core_esm_bundler/* createVNode */.Wm)(VCheckboxBtn/* VCheckboxBtn */.pM, {
+                    "modelValue": isSelected,
+                    "ripple": false
+                  }, null) : undefined;
+                }
+              });
+            }), slots['append-item']?.()]
+          })]
+        }), selections.value.map((item, index) => {
+          function onChipClose(e) {
+            e.stopPropagation();
+            e.preventDefault();
+            select(item);
+          }
+          const slotProps = {
+            'onClick:close': onChipClose,
+            modelValue: true,
+            'onUpdate:modelValue': undefined
+          };
+          return (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
+            "key": item.value,
+            "class": "v-select__selection"
+          }, [hasChips ? (0,runtime_core_esm_bundler/* createVNode */.Wm)(VDefaultsProvider/* VDefaultsProvider */.z, {
+            "defaults": {
+              VChip: {
+                closable: props.closableChips,
+                size: 'small',
+                text: item.title
+              }
+            }
+          }, {
+            default: () => [slots.chip ? slots.chip({
               item,
-              index
-            }) : (0,runtime_core_esm_bundler/* createVNode */.Wm)("span", {
-              "class": "v-select__selection-text"
-            }, [item.title, props.multiple && index < selections.value.length - 1 && (0,runtime_core_esm_bundler/* createVNode */.Wm)("span", {
-              "class": "v-select__selection-comma"
-            }, [(0,runtime_core_esm_bundler/* createTextVNode */.Uk)(",")])])]);
-          })]);
-        }
+              index,
+              props: slotProps
+            }) : (0,runtime_core_esm_bundler/* createVNode */.Wm)(VChip/* VChip */.v, slotProps, null)]
+          }) : slots.selection ? slots.selection({
+            item,
+            index
+          }) : (0,runtime_core_esm_bundler/* createVNode */.Wm)("span", {
+            "class": "v-select__selection-text"
+          }, [item.title, props.multiple && index < selections.value.length - 1 && (0,runtime_core_esm_bundler/* createVNode */.Wm)("span", {
+            "class": "v-select__selection-comma"
+          }, [(0,runtime_core_esm_bundler/* createTextVNode */.Uk)(",")])])]);
+        })])
       });
     });
     return (0,forwardRefs/* forwardRefs */.F)({
@@ -71505,7 +71322,7 @@ const makeSelectionControlGroupProps = (0,propsFactory/* propsFactory */.U)({
   ...(0,theme/* makeThemeProps */.x$)(),
   ...(0,density/* makeDensityProps */.f)()
 }, 'v-selection-control-group');
-const VSelectionControlGroup = (0,defineComponent/* defineComponent */.aZ)({
+const VSelectionControlGroup = (0,defineComponent/* genericComponent */.ev)()({
   name: 'VSelectionControlGroup',
   props: {
     defaultsTarget: {
@@ -71556,15 +71373,12 @@ const VSelectionControlGroup = (0,defineComponent/* defineComponent */.aZ)({
         valueComparator: (0,reactivity_esm_bundler/* toRef */.Vh)(props, 'valueComparator')
       }
     });
-    (0,useRender/* useRender */.L)(() => {
-      var _slots$default;
-      return (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
-        "class": ['v-selection-control-group', {
-          'v-selection-control-group--inline': props.inline
-        }],
-        "role": props.type === 'radio' ? 'radiogroup' : undefined
-      }, [(_slots$default = slots.default) == null ? void 0 : _slots$default.call(slots)]);
-    });
+    (0,useRender/* useRender */.L)(() => (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
+      "class": ['v-selection-control-group', {
+        'v-selection-control-group--inline': props.inline
+      }],
+      "role": props.type === 'radio' ? 'radiogroup' : undefined
+    }, [slots.default?.()]));
     return {};
   }
 });
@@ -71715,7 +71529,7 @@ const VSelectionControl = (0,defineComponent/* genericComponent */.ev)()({
     const isFocused = (0,reactivity_esm_bundler/* ref */.iH)(false);
     const isFocusVisible = (0,reactivity_esm_bundler/* ref */.iH)(false);
     const input = (0,reactivity_esm_bundler/* ref */.iH)();
-    group == null ? void 0 : group.onForceUpdate(() => {
+    group?.onForceUpdate(() => {
       if (input.value) {
         input.value.checked = model.value;
       }
@@ -71737,7 +71551,6 @@ const VSelectionControl = (0,defineComponent/* genericComponent */.ev)()({
       model.value = e.target.checked;
     }
     (0,useRender/* useRender */.L)(() => {
-      var _slots$default, _slots$input;
       const label = slots.label ? slots.label({
         label: props.label,
         props: {
@@ -71757,7 +71570,7 @@ const VSelectionControl = (0,defineComponent/* genericComponent */.ev)()({
       }, rootAttrs), [(0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
         "class": ['v-selection-control__wrapper', textColorClasses.value],
         "style": textColorStyles.value
-      }, [(_slots$default = slots.default) == null ? void 0 : _slots$default.call(slots), (0,runtime_core_esm_bundler/* withDirectives */.wy)((0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
+      }, [slots.default?.(), (0,runtime_core_esm_bundler/* withDirectives */.wy)((0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
         "class": ['v-selection-control__input']
       }, [icon.value && (0,runtime_core_esm_bundler/* createVNode */.Wm)(VIcon/* VIcon */.t, {
         "key": "icon",
@@ -71775,7 +71588,7 @@ const VSelectionControl = (0,defineComponent/* genericComponent */.ev)()({
         "value": trueValue.value,
         "name": props.name,
         "aria-checked": props.type === 'checkbox' ? model.value : undefined
-      }, inputAttrs), null), (_slots$input = slots.input) == null ? void 0 : _slots$input.call(slots, {
+      }, inputAttrs), null), slots.input?.({
         model,
         textColorClasses,
         textColorStyles,
@@ -71835,8 +71648,8 @@ function filterControlProps(props) {
 
  // Utilities
 
-
-const VSlider = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_1__/* .defineComponent */ .aZ)({
+ // Types
+const VSlider = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_1__/* .genericComponent */ .ev)()({
   name: 'VSlider',
   props: {
     ...(0,_composables_focus_mjs__WEBPACK_IMPORTED_MODULE_2__/* .makeFocusProps */ .B)(),
@@ -71873,10 +71686,7 @@ const VSlider = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_1__/* .defineCompone
       handleSliderMouseUp: newValue => model.value = roundValue(newValue),
       // eslint-disable-next-line @typescript-eslint/no-use-before-define
       handleMouseMove: newValue => model.value = roundValue(newValue),
-      getActiveThumb: () => {
-        var _thumbContainerRef$va;
-        return (_thumbContainerRef$va = thumbContainerRef.value) == null ? void 0 : _thumbContainerRef$va.$el;
-      }
+      getActiveThumb: () => thumbContainerRef.value?.$el
     });
     const model = (0,_composables_proxiedModel_mjs__WEBPACK_IMPORTED_MODULE_6__/* .useProxiedModel */ .z)(props, 'modelValue', undefined, v => {
       const value = typeof v === 'string' ? parseFloat(v) : v == null ? min.value : v;
@@ -71902,14 +71712,11 @@ const VSlider = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_1__/* .defineCompone
         "focused": isFocused.value
       }), {
         ...slots,
-        prepend: hasPrepend ? slotProps => {
-          var _slots$label, _slots$prepend;
-          return (0,vue__WEBPACK_IMPORTED_MODULE_7__/* .createVNode */ .Wm)(vue__WEBPACK_IMPORTED_MODULE_7__/* .Fragment */ .HY, null, [((_slots$label = slots.label) == null ? void 0 : _slots$label.call(slots, slotProps)) ?? props.label ? (0,vue__WEBPACK_IMPORTED_MODULE_7__/* .createVNode */ .Wm)(_VLabel_index_mjs__WEBPACK_IMPORTED_MODULE_9__/* .VLabel */ .J, {
-            "id": slotProps.id,
-            "class": "v-slider__label",
-            "text": props.label
-          }, null) : undefined, (_slots$prepend = slots.prepend) == null ? void 0 : _slots$prepend.call(slots, slotProps)]);
-        } : undefined,
+        prepend: hasPrepend ? slotProps => (0,vue__WEBPACK_IMPORTED_MODULE_7__/* .createVNode */ .Wm)(vue__WEBPACK_IMPORTED_MODULE_7__/* .Fragment */ .HY, null, [slots.label?.(slotProps) ?? props.label ? (0,vue__WEBPACK_IMPORTED_MODULE_7__/* .createVNode */ .Wm)(_VLabel_index_mjs__WEBPACK_IMPORTED_MODULE_9__/* .VLabel */ .J, {
+          "id": slotProps.id,
+          "class": "v-slider__label",
+          "text": props.label
+        }, null) : undefined, slots.prepend?.(slotProps)]) : undefined,
         default: _ref2 => {
           let {
             id,
@@ -72002,7 +71809,7 @@ var useRender = __webpack_require__(9888);
  // Utilities
 
 
-const VSliderThumb = (0,defineComponent/* defineComponent */.aZ)({
+const VSliderThumb = (0,defineComponent/* genericComponent */.ev)()({
   name: 'VSliderThumb',
   directives: {
     Ripple: ripple/* default */.Z
@@ -72098,7 +71905,6 @@ const VSliderThumb = (0,defineComponent/* defineComponent */.aZ)({
       newValue != null && emit('update:modelValue', newValue);
     }
     (0,useRender/* useRender */.L)(() => {
-      var _slots$thumbLabel;
       const positionPercentage = (0,helpers/* convertToUnit */.kb)(vertical.value || isReversed.value ? 100 - props.position : props.position, '%');
       const {
         elevationClasses
@@ -72138,9 +71944,9 @@ const VSliderThumb = (0,defineComponent/* defineComponent */.aZ)({
           "class": "v-slider-thumb__label-container"
         }, [(0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
           "class": ['v-slider-thumb__label']
-        }, [(0,runtime_core_esm_bundler/* createVNode */.Wm)("div", null, [((_slots$thumbLabel = slots['thumb-label']) == null ? void 0 : _slots$thumbLabel.call(slots, {
+        }, [(0,runtime_core_esm_bundler/* createVNode */.Wm)("div", null, [slots['thumb-label']?.({
           modelValue: props.modelValue
-        })) ?? props.modelValue.toFixed(step.value ? decimals.value : 1)])])]), [[runtime_dom_esm_bundler/* vShow */.F8, thumbLabel.value && props.focused || thumbLabel.value === 'always']])]
+        }) ?? props.modelValue.toFixed(step.value ? decimals.value : 1)])])]), [[runtime_dom_esm_bundler/* vShow */.F8, thumbLabel.value && props.focused || thumbLabel.value === 'always']])]
       })]);
     });
     return {};
@@ -72187,7 +71993,7 @@ var useRender = __webpack_require__(9888);
  // Utilities
 
 
-const VSliderTrack = (0,defineComponent/* defineComponent */.aZ)({
+const VSliderTrack = (0,defineComponent/* genericComponent */.ev)()({
   name: 'VSliderTrack',
   props: {
     start: {
@@ -72249,7 +72055,6 @@ const VSliderTrack = (0,defineComponent/* defineComponent */.aZ)({
     const computedTicks = (0,runtime_core_esm_bundler/* computed */.Fl)(() => {
       const ticks = vertical.value ? parsedTicks.value.slice().reverse() : parsedTicks.value;
       return ticks.map((tick, index) => {
-        var _slots$tickLabel;
         const directionProperty = vertical.value ? 'bottom' : 'margin-inline-start';
         const directionValue = tick.value !== min.value && tick.value !== max.value ? (0,helpers/* convertToUnit */.kb)(tick.position, '%') : undefined;
         return (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
@@ -72264,10 +72069,10 @@ const VSliderTrack = (0,defineComponent/* defineComponent */.aZ)({
           }
         }, [(tick.label || slots['tick-label']) && (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
           "class": "v-slider-track__tick-label"
-        }, [((_slots$tickLabel = slots['tick-label']) == null ? void 0 : _slots$tickLabel.call(slots, {
+        }, [slots['tick-label']?.({
           tick,
           index
-        })) ?? tick.label])]);
+        }) ?? tick.label])]);
       });
     });
     (0,useRender/* useRender */.L)(() => {
@@ -72443,7 +72248,6 @@ const useSlider = _ref => {
     return parseFloat(Math.min(newValue, max.value).toFixed(decimals.value));
   }
   function parseMouseMove(e) {
-    var _trackContainerRef$va;
     const vertical = props.direction === 'vertical';
     const start = vertical ? 'top' : 'left';
     const length = vertical ? 'height' : 'width';
@@ -72451,7 +72255,7 @@ const useSlider = _ref => {
     const {
       [start]: trackStart,
       [length]: trackLength
-    } = (_trackContainerRef$va = trackContainerRef.value) == null ? void 0 : _trackContainerRef$va.$el.getBoundingClientRect();
+    } = trackContainerRef.value?.$el.getBoundingClientRect();
     const clickOffset = getPosition(e, position);
 
     // It is possible for left to be NaN, force to number
@@ -72498,16 +72302,14 @@ const useSlider = _ref => {
     window.removeEventListener('mouseup', onSliderMouseUp);
   }
   function onSliderTouchend(e) {
-    var _e$target;
     handleStop(e);
     window.removeEventListener('touchmove', onMouseMove, moveListenerOptions);
-    (_e$target = e.target) == null ? void 0 : _e$target.removeEventListener('touchend', onSliderTouchend);
+    e.target?.removeEventListener('touchend', onSliderTouchend);
   }
   function onSliderTouchstart(e) {
-    var _e$target2;
     handleStart(e);
     window.addEventListener('touchmove', onMouseMove, moveListenerOptions);
-    (_e$target2 = e.target) == null ? void 0 : _e$target2.addEventListener('touchend', onSliderTouchend, {
+    e.target?.addEventListener('touchend', onSliderTouchend, {
       passive: false
     });
   }
@@ -72642,8 +72444,8 @@ var helpers = __webpack_require__(131);
 
  // Utility
 
-
-const VSwitch = (0,defineComponent/* defineComponent */.aZ)({
+ // Types
+const VSwitch = (0,defineComponent/* genericComponent */.ev)()({
   name: 'VSwitch',
   inheritAttrs: false,
   props: {
@@ -72693,8 +72495,7 @@ const VSwitch = (0,defineComponent/* defineComponent */.aZ)({
       const [controlProps, _2] = (0,VSelectionControl/* filterControlProps */.fU)(props);
       const control = (0,reactivity_esm_bundler/* ref */.iH)();
       function onClick() {
-        var _control$value, _control$value$input;
-        (_control$value = control.value) == null ? void 0 : (_control$value$input = _control$value.input) == null ? void 0 : _control$value$input.click();
+        control.value?.input?.click();
       }
       return (0,runtime_core_esm_bundler/* createVNode */.Wm)(VInput/* VInput */.q8, (0,runtime_core_esm_bundler/* mergeProps */.dG)({
         "class": ['v-switch', {
@@ -72832,7 +72633,7 @@ const VTextField = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_4__/* .genericCom
   props: makeVTextFieldProps(),
   emits: {
     'click:control': e => true,
-    'click:input': e => true,
+    'mousedown:control': e => true,
     'update:focused': focused => true,
     'update:modelValue': val => true
   },
@@ -72857,9 +72658,8 @@ const VTextField = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_4__/* .genericCom
       return props.counter;
     });
     function onIntersect(isIntersecting, entries) {
-      var _entries$0$target, _entries$0$target$foc;
       if (!props.autofocus || !isIntersecting) return;
-      (_entries$0$target = entries[0].target) == null ? void 0 : (_entries$0$target$foc = _entries$0$target.focus) == null ? void 0 : _entries$0$target$foc.call(_entries$0$target);
+      entries[0].target?.focus?.();
     }
     const vInputRef = (0,vue__WEBPACK_IMPORTED_MODULE_9__/* .ref */ .iH)();
     const vFieldRef = (0,vue__WEBPACK_IMPORTED_MODULE_9__/* .ref */ .iH)();
@@ -72870,10 +72670,15 @@ const VTextField = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_4__/* .genericCom
     });
     function onFocus() {
       if (inputRef.value !== document.activeElement) {
-        var _inputRef$value;
-        (_inputRef$value = inputRef.value) == null ? void 0 : _inputRef$value.focus();
+        inputRef.value?.focus();
       }
       if (!isFocused.value) focus();
+    }
+    function onControlMousedown(e) {
+      emit('mousedown:control', e);
+      if (e.target === inputRef.value) return;
+      onFocus();
+      e.preventDefault();
     }
     function onControlClick(e) {
       onFocus();
@@ -72925,11 +72730,8 @@ const VTextField = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_4__/* .genericCom
           } = _ref2;
           return (0,vue__WEBPACK_IMPORTED_MODULE_8__/* .createVNode */ .Wm)(_VField_VField_mjs__WEBPACK_IMPORTED_MODULE_3__/* .VField */ .hF, (0,vue__WEBPACK_IMPORTED_MODULE_8__/* .mergeProps */ .dG)({
             "ref": vFieldRef,
-            "onMousedown": e => {
-              if (e.target === inputRef.value) return;
-              e.preventDefault();
-            },
-            "onClick:control": onControlClick,
+            "onMousedown": onControlMousedown,
+            "onClick": onControlClick,
             "onClick:clear": onClear,
             "onClick:prependInner": props['onClick:prependInner'],
             "onClick:appendInner": props['onClick:appendInner'],
@@ -72971,7 +72773,6 @@ const VTextField = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_4__/* .genericCom
                 "class": "v-text-field__prefix"
               }, [props.prefix]), slots.default ? (0,vue__WEBPACK_IMPORTED_MODULE_8__/* .createVNode */ .Wm)("div", {
                 "class": fieldClass,
-                "onClick": e => emit('click:input', e),
                 "data-no-activator": ""
               }, [slots.default(), inputNode]) : (0,vue__WEBPACK_IMPORTED_MODULE_8__/* .cloneVNode */ .Ho)(inputNode, {
                 class: fieldClass
@@ -72981,14 +72782,11 @@ const VTextField = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_4__/* .genericCom
             }
           });
         },
-        details: hasDetails ? slotProps => {
-          var _slots$details;
-          return (0,vue__WEBPACK_IMPORTED_MODULE_8__/* .createVNode */ .Wm)(vue__WEBPACK_IMPORTED_MODULE_8__/* .Fragment */ .HY, null, [(_slots$details = slots.details) == null ? void 0 : _slots$details.call(slots, slotProps), hasCounter && (0,vue__WEBPACK_IMPORTED_MODULE_8__/* .createVNode */ .Wm)(vue__WEBPACK_IMPORTED_MODULE_8__/* .Fragment */ .HY, null, [(0,vue__WEBPACK_IMPORTED_MODULE_8__/* .createVNode */ .Wm)("span", null, null), (0,vue__WEBPACK_IMPORTED_MODULE_8__/* .createVNode */ .Wm)(_VCounter_index_mjs__WEBPACK_IMPORTED_MODULE_12__/* .VCounter */ ._, {
-            "active": props.persistentCounter || isFocused.value,
-            "value": counterValue.value,
-            "max": max.value
-          }, slots.counter)])]);
-        } : undefined
+        details: hasDetails ? slotProps => (0,vue__WEBPACK_IMPORTED_MODULE_8__/* .createVNode */ .Wm)(vue__WEBPACK_IMPORTED_MODULE_8__/* .Fragment */ .HY, null, [slots.details?.(slotProps), hasCounter && (0,vue__WEBPACK_IMPORTED_MODULE_8__/* .createVNode */ .Wm)(vue__WEBPACK_IMPORTED_MODULE_8__/* .Fragment */ .HY, null, [(0,vue__WEBPACK_IMPORTED_MODULE_8__/* .createVNode */ .Wm)("span", null, null), (0,vue__WEBPACK_IMPORTED_MODULE_8__/* .createVNode */ .Wm)(_VCounter_index_mjs__WEBPACK_IMPORTED_MODULE_12__/* .VCounter */ ._, {
+          "active": props.persistentCounter || isFocused.value,
+          "value": counterValue.value,
+          "max": max.value
+        }, slots.counter)])]) : undefined
       });
     });
     return (0,_composables_forwardRefs_mjs__WEBPACK_IMPORTED_MODULE_13__/* .forwardRefs */ .F)({}, vInputRef, vFieldRef, inputRef);
@@ -73013,9 +72811,12 @@ function filterVTextFieldProps(props) {
 /* harmony import */ var _util_index_mjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(3122);
 /* harmony import */ var _util_index_mjs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(8587);
 
+// Components
 
 
-const VDialogTransition = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_0__/* .defineComponent */ .aZ)({
+// Utilities
+ // Types
+const VDialogTransition = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_0__/* .genericComponent */ .ev)()({
   name: 'VDialogTransition',
   props: {
     target: Object
@@ -73030,7 +72831,6 @@ const VDialogTransition = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_0__/* .def
         el.style.visibility = 'hidden';
       },
       async onEnter(el, done) {
-        var _getChildren;
         await new Promise(resolve => requestAnimationFrame(resolve));
         await new Promise(resolve => requestAnimationFrame(resolve));
         el.style.visibility = '';
@@ -73048,7 +72848,7 @@ const VDialogTransition = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_0__/* .def
           duration: 225 * speed,
           easing: _util_index_mjs__WEBPACK_IMPORTED_MODULE_2__/* .deceleratedEasing */ .uX
         });
-        (_getChildren = getChildren(el)) == null ? void 0 : _getChildren.forEach(el => {
+        getChildren(el)?.forEach(el => {
           (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_1__/* .animate */ .j)(el, [{
             opacity: 0
           }, {
@@ -73068,7 +72868,6 @@ const VDialogTransition = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_0__/* .def
         el.style.pointerEvents = 'none';
       },
       async onLeave(el, done) {
-        var _getChildren2;
         await new Promise(resolve => requestAnimationFrame(resolve));
         const {
           x,
@@ -73085,7 +72884,7 @@ const VDialogTransition = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_0__/* .def
           easing: _util_index_mjs__WEBPACK_IMPORTED_MODULE_2__/* .acceleratedEasing */ .x0
         });
         animation.finished.then(() => done());
-        (_getChildren2 = getChildren(el)) == null ? void 0 : _getChildren2.forEach(el => {
+        getChildren(el)?.forEach(el => {
           (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_1__/* .animate */ .j)(el, [{}, {
             opacity: 0,
             offset: 0.2
@@ -73115,8 +72914,7 @@ const VDialogTransition = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_0__/* .def
 
 /** Animatable children (card, sheet, list) */
 function getChildren(el) {
-  var _el$querySelector;
-  const els = (_el$querySelector = el.querySelector(':scope > .v-card, :scope > .v-sheet, :scope > .v-list')) == null ? void 0 : _el$querySelector.children;
+  const els = el.querySelector(':scope > .v-card, :scope > .v-sheet, :scope > .v-list')?.children;
   return els && [...els];
 }
 function getDimensions(target, el) {
@@ -73194,7 +72992,7 @@ var defineComponent = __webpack_require__(320);
 function createCssTransition(name) {
   let origin = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'top center 0';
   let mode = arguments.length > 2 ? arguments[2] : undefined;
-  return (0,defineComponent/* defineComponent */.aZ)({
+  return (0,defineComponent/* genericComponent */.ev)()({
     name,
     props: {
       group: Boolean,
@@ -73247,7 +73045,7 @@ function createCssTransition(name) {
             }
           },
           onAfterLeave(el) {
-            if (props.leaveAbsolute && el != null && el._transitionInitialStyles) {
+            if (props.leaveAbsolute && el?._transitionInitialStyles) {
               const {
                 position,
                 top,
@@ -73270,7 +73068,7 @@ function createCssTransition(name) {
 }
 function createJavascriptTransition(name, functions) {
   let mode = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'in-out';
-  return (0,defineComponent/* defineComponent */.aZ)({
+  return (0,defineComponent/* genericComponent */.ev)()({
     name,
     props: {
       mode: {
@@ -73519,7 +73317,7 @@ function useBackgroundColor(props, name) {
  // Types
 const DefaultsSymbol = Symbol.for('vuetify:defaults');
 function createDefaults(options) {
-  return (0,vue__WEBPACK_IMPORTED_MODULE_0__/* .ref */ .iH)(options ?? {});
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__/* .ref */ .iH)(options);
 }
 function useDefaults() {
   const defaults = (0,vue__WEBPACK_IMPORTED_MODULE_1__/* .inject */ .f3)(DefaultsSymbol);
@@ -73530,9 +73328,9 @@ function provideDefaults(defaults, options) {
   const injectedDefaults = useDefaults();
   const providedDefaults = (0,vue__WEBPACK_IMPORTED_MODULE_0__/* .ref */ .iH)(defaults);
   const newDefaults = (0,vue__WEBPACK_IMPORTED_MODULE_1__/* .computed */ .Fl)(() => {
-    const scoped = (0,vue__WEBPACK_IMPORTED_MODULE_0__/* .unref */ .SU)(options == null ? void 0 : options.scoped);
-    const reset = (0,vue__WEBPACK_IMPORTED_MODULE_0__/* .unref */ .SU)(options == null ? void 0 : options.reset);
-    const root = (0,vue__WEBPACK_IMPORTED_MODULE_0__/* .unref */ .SU)(options == null ? void 0 : options.root);
+    const scoped = (0,vue__WEBPACK_IMPORTED_MODULE_0__/* .unref */ .SU)(options?.scoped);
+    const reset = (0,vue__WEBPACK_IMPORTED_MODULE_0__/* .unref */ .SU)(options?.reset);
+    const root = (0,vue__WEBPACK_IMPORTED_MODULE_0__/* .unref */ .SU)(options?.root);
     let properties = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_2__/* .mergeDeep */ .Ee)(providedDefaults.value, {
       prev: injectedDefaults.value
     });
@@ -73540,7 +73338,9 @@ function provideDefaults(defaults, options) {
     if (reset || root) {
       const len = Number(reset || Infinity);
       for (let i = 0; i <= len; i++) {
-        if (!properties.prev) break;
+        if (!properties || !('prev' in properties)) {
+          break;
+        }
         properties = properties.prev;
       }
       return properties;
@@ -73583,7 +73383,7 @@ function useDelay(props, cb) {
     return new Promise(resolve => {
       const delay = parseInt(props[prop] ?? 0, 10);
       delays[prop] = window.setTimeout(() => {
-        cb == null ? void 0 : cb(active);
+        cb?.(active);
         resolve(active);
       }, delay);
     });
@@ -73925,7 +73725,6 @@ const FormKey = Symbol.for('vuetify:form');
 const makeFormProps = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_1__/* .propsFactory */ .U)({
   disabled: Boolean,
   fastFail: Boolean,
-  lazyValidation: Boolean,
   readonly: Boolean,
   modelValue: {
     type: Boolean,
@@ -74220,7 +74019,7 @@ function useGroup(props, injectKey) {
     // Is there a better way to fix this typing?
     const unwrapped = item;
     const key = Symbol.for(`${injectKey.description}:id`);
-    const children = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_6__/* .findChildrenWithProvide */ .bY)(key, groupVm == null ? void 0 : groupVm.vnode);
+    const children = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_6__/* .findChildrenWithProvide */ .bY)(key, groupVm?.vnode);
     const index = children.indexOf(vm);
     if (index > -1) {
       items.splice(index, 0, unwrapped);
@@ -74255,7 +74054,7 @@ function useGroup(props, injectKey) {
   });
   function select(id, value) {
     const item = items.find(item => item.id === id);
-    if (value && item != null && item.disabled) return;
+    if (value && item?.disabled) return;
     if (props.multiple) {
       const internalValue = selected.value.slice();
       const index = internalValue.findIndex(v => v === id);
@@ -74478,7 +74277,7 @@ const makeIconProps = (0,propsFactory/* propsFactory */.U)({
     required: true
   }
 }, 'icon');
-const VComponentIcon = (0,defineComponent/* defineComponent */.aZ)({
+const VComponentIcon = (0,defineComponent/* genericComponent */.ev)()({
   name: 'VComponentIcon',
   props: makeIconProps(),
   setup(props, _ref) {
@@ -74486,9 +74285,8 @@ const VComponentIcon = (0,defineComponent/* defineComponent */.aZ)({
       slots
     } = _ref;
     return () => {
-      var _slots$default;
       return (0,runtime_core_esm_bundler/* createVNode */.Wm)(props.tag, null, {
-        default: () => [props.icon ? (0,runtime_core_esm_bundler/* createVNode */.Wm)(props.icon, null, null) : (_slots$default = slots.default) == null ? void 0 : _slots$default.call(slots)]
+        default: () => [props.icon ? (0,runtime_core_esm_bundler/* createVNode */.Wm)(props.icon, null, null) : slots.default?.()]
       });
     };
   }
@@ -74572,8 +74370,7 @@ const useIcon = props => {
     if (typeof icon === 'string') {
       icon = icon.trim();
       if (icon.startsWith('$')) {
-        var _icons$aliases;
-        icon = (_icons$aliases = icons.aliases) == null ? void 0 : _icons$aliases[icon.slice(1)];
+        icon = icons.aliases?.[icon.slice(1)];
       }
     }
     if (!icon) throw new Error(`Could not find aliased icon "${iconAlias}"`);
@@ -74616,7 +74413,7 @@ function useIntersectionObserver(callback) {
   const isIntersecting = (0,vue__WEBPACK_IMPORTED_MODULE_0__/* .ref */ .iH)(false);
   if (_util_index_mjs__WEBPACK_IMPORTED_MODULE_1__/* .SUPPORTS_INTERSECTION */ .cu) {
     const observer = new IntersectionObserver(entries => {
-      callback == null ? void 0 : callback(entries, observer);
+      callback?.(entries, observer);
       isIntersecting.value = !!entries.find(entry => entry.isIntersecting);
     });
     (0,vue__WEBPACK_IMPORTED_MODULE_2__/* .onBeforeUnmount */ .Jd)(() => {
@@ -74796,16 +74593,15 @@ function useLoader(props) {
   };
 }
 function LoaderSlot(props, _ref) {
-  var _slots$default;
   let {
     slots
   } = _ref;
   return (0,vue__WEBPACK_IMPORTED_MODULE_2__/* .createVNode */ .Wm)("div", {
     "class": `${props.name}__loader`
-  }, [((_slots$default = slots.default) == null ? void 0 : _slots$default.call(slots, {
+  }, [slots.default?.({
     color: props.color,
     isActive: props.active
-  })) || (0,vue__WEBPACK_IMPORTED_MODULE_2__/* .createVNode */ .Wm)(_components_VProgressLinear_index_mjs__WEBPACK_IMPORTED_MODULE_3__/* .VProgressLinear */ .K, {
+  }) || (0,vue__WEBPACK_IMPORTED_MODULE_2__/* .createVNode */ .Wm)(_components_VProgressLinear_index_mjs__WEBPACK_IMPORTED_MODULE_3__/* .VProgressLinear */ .K, {
     "active": props.active,
     "color": props.color,
     "height": "2",
@@ -74906,8 +74702,8 @@ var proxiedModel = __webpack_require__(8717);
       root: 'Pagination Navigation',
       next: 'Next page',
       previous: 'Previous page',
-      page: 'Goto Page {0}',
-      currentPage: 'Page {0}, Current Page',
+      page: 'Go to page {0}',
+      currentPage: 'Page {0}, Current page',
       first: 'First page',
       last: 'Last page'
     }
@@ -74995,11 +74791,11 @@ function createProvideFunction(state) {
   };
 }
 function createVuetifyAdapter(options) {
-  const current = (0,reactivity_esm_bundler/* ref */.iH)((options == null ? void 0 : options.locale) ?? 'en');
-  const fallback = (0,reactivity_esm_bundler/* ref */.iH)((options == null ? void 0 : options.fallback) ?? 'en');
+  const current = (0,reactivity_esm_bundler/* ref */.iH)(options?.locale ?? 'en');
+  const fallback = (0,reactivity_esm_bundler/* ref */.iH)(options?.fallback ?? 'en');
   const messages = (0,reactivity_esm_bundler/* ref */.iH)({
     en: en,
-    ...(options == null ? void 0 : options.messages)
+    ...options?.messages
   });
   return {
     name: 'vuetify',
@@ -75110,7 +74906,7 @@ function isLocaleInstance(obj) {
   return obj.name != null;
 }
 function createLocale(options) {
-  const i18n = options != null && options.adapter && isLocaleInstance(options == null ? void 0 : options.adapter) ? options == null ? void 0 : options.adapter : createVuetifyAdapter(options);
+  const i18n = options?.adapter && isLocaleInstance(options?.adapter) ? options?.adapter : createVuetifyAdapter(options);
   const rtl = createRtl(i18n, options);
   return {
     ...i18n,
@@ -75139,7 +74935,7 @@ function provideLocale(props) {
 
 const RtlSymbol = Symbol.for('vuetify:rtl');
 function createRtl(i18n, options) {
-  const rtl = (0,reactivity_esm_bundler/* ref */.iH)((options == null ? void 0 : options.rtl) ?? defaultRtl);
+  const rtl = (0,reactivity_esm_bundler/* ref */.iH)(options?.rtl ?? defaultRtl);
   const isRtl = (0,runtime_core_esm_bundler/* computed */.Fl)(() => rtl.value[i18n.current.value] ?? false);
   return {
     isRtl,
@@ -75401,7 +75197,7 @@ const independentSingleSelectStrategy = mandatory => {
     },
     in: (v, children, parents) => {
       let map = new Map();
-      if (v != null && v.length) {
+      if (v?.length) {
         map = parentStrategy.in(v.slice(0, 1), children, parents);
       }
       return map;
@@ -75684,7 +75480,8 @@ const useNested = props => {
 };
 const useNestedItem = (id, isGroup) => {
   const parent = (0,runtime_core_esm_bundler/* inject */.f3)(VNestedSymbol, emptyNested);
-  const computedId = (0,runtime_core_esm_bundler/* computed */.Fl)(() => id.value ?? Symbol((0,getCurrentInstance/* getUid */.sq)()));
+  const uidSymbol = Symbol((0,getCurrentInstance/* getUid */.sq)());
+  const computedId = (0,runtime_core_esm_bundler/* computed */.Fl)(() => id.value ?? uidSymbol);
   const item = {
     ...parent,
     id: computedId,
@@ -75774,13 +75571,11 @@ function useProxiedModel(props, prop, defaultValue) {
   const kebabProp = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_2__/* .toKebabCase */ .mA)(prop);
   const checkKebab = kebabProp !== prop;
   const isControlled = checkKebab ? (0,vue__WEBPACK_IMPORTED_MODULE_3__/* .computed */ .Fl)(() => {
-    var _vm$vnode$props, _vm$vnode$props2, _vm$vnode$props3, _vm$vnode$props4;
     void props[prop];
-    return !!(((_vm$vnode$props = vm.vnode.props) != null && _vm$vnode$props.hasOwnProperty(prop) || (_vm$vnode$props2 = vm.vnode.props) != null && _vm$vnode$props2.hasOwnProperty(kebabProp)) && ((_vm$vnode$props3 = vm.vnode.props) != null && _vm$vnode$props3.hasOwnProperty(`onUpdate:${prop}`) || (_vm$vnode$props4 = vm.vnode.props) != null && _vm$vnode$props4.hasOwnProperty(`onUpdate:${kebabProp}`)));
+    return !!((vm.vnode.props?.hasOwnProperty(prop) || vm.vnode.props?.hasOwnProperty(kebabProp)) && (vm.vnode.props?.hasOwnProperty(`onUpdate:${prop}`) || vm.vnode.props?.hasOwnProperty(`onUpdate:${kebabProp}`)));
   }) : (0,vue__WEBPACK_IMPORTED_MODULE_3__/* .computed */ .Fl)(() => {
-    var _vm$vnode$props5, _vm$vnode$props6;
     void props[prop];
-    return !!((_vm$vnode$props5 = vm.vnode.props) != null && _vm$vnode$props5.hasOwnProperty(prop) && (_vm$vnode$props6 = vm.vnode.props) != null && _vm$vnode$props6.hasOwnProperty(`onUpdate:${prop}`));
+    return !!(vm.vnode.props?.hasOwnProperty(prop) && vm.vnode.props?.hasOwnProperty(`onUpdate:${prop}`));
   });
   (0,_toggleScope_mjs__WEBPACK_IMPORTED_MODULE_4__/* .useToggleScope */ .U)(() => !isControlled.value, () => {
     (0,vue__WEBPACK_IMPORTED_MODULE_3__/* .watch */ .YP)(() => props[prop], val => {
@@ -75789,15 +75584,16 @@ function useProxiedModel(props, prop, defaultValue) {
   });
   const model = (0,vue__WEBPACK_IMPORTED_MODULE_3__/* .computed */ .Fl)({
     get() {
-      return transformIn(isControlled.value ? props[prop] : internal.value);
+      return transformIn((0,vue__WEBPACK_IMPORTED_MODULE_1__/* .toRaw */ .IU)(isControlled.value ? props[prop] : internal.value));
     },
-    set(value) {
-      const newValue = transformOut(value);
-      if ((isControlled.value ? props[prop] : internal.value) === newValue || transformIn(isControlled.value ? props[prop] : internal.value) === value) {
+    set(internalValue) {
+      const newValue = transformOut(internalValue);
+      const value = (0,vue__WEBPACK_IMPORTED_MODULE_1__/* .toRaw */ .IU)(isControlled.value ? props[prop] : internal.value);
+      if (value === newValue || transformIn(value) === internalValue) {
         return;
       }
       internal.value = newValue;
-      vm == null ? void 0 : vm.emit(`update:${prop}`, newValue);
+      vm?.emit(`update:${prop}`, newValue);
     }
   });
   Object.defineProperty(model, 'externalValue', {
@@ -75827,7 +75623,7 @@ function useResizeObserver(callback) {
   const contentRect = (0,vue__WEBPACK_IMPORTED_MODULE_0__/* .ref */ .iH)();
   if (_util_globals_mjs__WEBPACK_IMPORTED_MODULE_1__/* .IN_BROWSER */ .BR) {
     const observer = new ResizeObserver(entries => {
-      callback == null ? void 0 : callback(entries, observer);
+      callback?.(entries, observer);
       if (!entries.length) return;
       contentRect.value = entries[0].contentRect;
     });
@@ -75922,20 +75718,16 @@ function useRounded(props) {
 
 function useRoute() {
   const vm = getCurrentInstance('useRoute');
-  return computed(() => {
-    var _vm$proxy;
-    return vm == null ? void 0 : (_vm$proxy = vm.proxy) == null ? void 0 : _vm$proxy.$route;
-  });
+  return computed(() => vm?.proxy?.$route);
 }
 function useRouter() {
-  var _getCurrentInstance, _getCurrentInstance$p;
-  return (_getCurrentInstance = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_0__/* .getCurrentInstance */ .FN)('useRouter')) == null ? void 0 : (_getCurrentInstance$p = _getCurrentInstance.proxy) == null ? void 0 : _getCurrentInstance$p.$router;
+  return (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_0__/* .getCurrentInstance */ .FN)('useRouter')?.proxy?.$router;
 }
 function useLink(props, attrs) {
   const RouterLink = (0,vue__WEBPACK_IMPORTED_MODULE_1__/* .resolveDynamicComponent */ .LL)('RouterLink');
   const isLink = (0,vue__WEBPACK_IMPORTED_MODULE_1__/* .computed */ .Fl)(() => !!(props.href || props.to));
   const isClickable = (0,vue__WEBPACK_IMPORTED_MODULE_1__/* .computed */ .Fl)(() => {
-    return (isLink == null ? void 0 : isLink.value) || (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_2__/* .hasEvent */ .B0)(attrs, 'click') || (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_2__/* .hasEvent */ .B0)(props, 'click');
+    return isLink?.value || (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_2__/* .hasEvent */ .B0)(attrs, 'click') || (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_2__/* .hasEvent */ .B0)(props, 'click');
   });
   if (typeof RouterLink === 'string') {
     return {
@@ -75948,13 +75740,10 @@ function useLink(props, attrs) {
   return {
     isLink,
     isClickable,
-    route: link == null ? void 0 : link.route,
-    navigate: link == null ? void 0 : link.navigate,
-    isActive: link && (0,vue__WEBPACK_IMPORTED_MODULE_1__/* .computed */ .Fl)(() => {
-      var _link$isExactActive, _link$isActive;
-      return props.exact ? (_link$isExactActive = link.isExactActive) == null ? void 0 : _link$isExactActive.value : (_link$isActive = link.isActive) == null ? void 0 : _link$isActive.value;
-    }),
-    href: (0,vue__WEBPACK_IMPORTED_MODULE_1__/* .computed */ .Fl)(() => props.to ? link == null ? void 0 : link.route.value.href : props.href)
+    route: link?.route,
+    navigate: link?.navigate,
+    isActive: link && (0,vue__WEBPACK_IMPORTED_MODULE_1__/* .computed */ .Fl)(() => props.exact ? link.isExactActive?.value : link.isActive?.value),
+    href: (0,vue__WEBPACK_IMPORTED_MODULE_1__/* .computed */ .Fl)(() => props.to ? link?.route.value.href : props.href)
   };
 }
 const makeRouterProps = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_4__/* .propsFactory */ .U)({
@@ -75971,7 +75760,7 @@ function useBackButton(router, cb) {
   if (_util_index_mjs__WEBPACK_IMPORTED_MODULE_5__/* .IN_BROWSER */ .BR) {
     (0,vue__WEBPACK_IMPORTED_MODULE_1__/* .nextTick */ .Y3)(() => {
       window.addEventListener('popstate', onPopstate);
-      removeBefore = router == null ? void 0 : router.beforeEach((to, from, next) => {
+      removeBefore = router?.beforeEach((to, from, next) => {
         if (!inTransition) {
           setTimeout(() => popped ? cb(next) : next());
         } else {
@@ -75979,20 +75768,18 @@ function useBackButton(router, cb) {
         }
         inTransition = true;
       });
-      removeAfter = router == null ? void 0 : router.afterEach(() => {
+      removeAfter = router?.afterEach(() => {
         inTransition = false;
       });
     });
     (0,vue__WEBPACK_IMPORTED_MODULE_3__/* .onScopeDispose */ .EB)(() => {
-      var _removeBefore, _removeAfter;
       window.removeEventListener('popstate', onPopstate);
-      (_removeBefore = removeBefore) == null ? void 0 : _removeBefore();
-      (_removeAfter = removeAfter) == null ? void 0 : _removeAfter();
+      removeBefore?.();
+      removeAfter?.();
     });
   }
   function onPopstate(e) {
-    var _e$state;
-    if ((_e$state = e.state) != null && _e$state.replaced) return;
+    if (e.state?.replaced) return;
     popped = true;
     setTimeout(() => popped = false);
   }
@@ -76299,8 +76086,7 @@ function parseThemeOptions() {
   };
   const themes = {};
   for (const [key, theme] of Object.entries(options.themes ?? {})) {
-    var _defaultThemeOptions$, _defaultThemeOptions$2;
-    const defaultTheme = theme.dark || key === 'dark' ? (_defaultThemeOptions$ = defaultThemeOptions.themes) == null ? void 0 : _defaultThemeOptions$.dark : (_defaultThemeOptions$2 = defaultThemeOptions.themes) == null ? void 0 : _defaultThemeOptions$2.light;
+    const defaultTheme = theme.dark || key === 'dark' ? defaultThemeOptions.themes?.dark : defaultThemeOptions.themes?.light;
     themes[key] = (0,helpers/* mergeDeep */.Ee)(defaultTheme, theme);
   }
   return (0,helpers/* mergeDeep */.Ee)(defaultThemeOptions, {
@@ -76447,7 +76233,7 @@ function provideTheme(props) {
   const theme = (0,runtime_core_esm_bundler/* inject */.f3)(ThemeSymbol, null);
   if (!theme) throw new Error('Could not find Vuetify theme injection');
   const name = (0,runtime_core_esm_bundler/* computed */.Fl)(() => {
-    return props.theme ?? (theme == null ? void 0 : theme.name.value);
+    return props.theme ?? theme?.name.value;
   });
   const themeClasses = (0,runtime_core_esm_bundler/* computed */.Fl)(() => theme.isDisabled ? undefined : `v-theme--${name.value}`);
   const newTheme = {
@@ -76490,26 +76276,30 @@ function genCssVariables(theme) {
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "U": function() { return /* binding */ useToggleScope; }
 /* harmony export */ });
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(3396);
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4870);
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(4870);
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(3396);
 
-function useToggleScope(source, cb) {
+function useToggleScope(source, fn) {
   let scope;
-  (0,vue__WEBPACK_IMPORTED_MODULE_0__/* .watch */ .YP)(source, active => {
+  function start() {
+    scope = (0,vue__WEBPACK_IMPORTED_MODULE_0__/* .effectScope */ .B)();
+    scope.run(() => fn.length ? fn(() => {
+      scope?.stop();
+      start();
+    }) : fn());
+  }
+  (0,vue__WEBPACK_IMPORTED_MODULE_1__/* .watch */ .YP)(source, active => {
     if (active && !scope) {
-      scope = (0,vue__WEBPACK_IMPORTED_MODULE_1__/* .effectScope */ .B)();
-      scope.run(cb);
+      start();
     } else if (!active) {
-      var _scope;
-      (_scope = scope) == null ? void 0 : _scope.stop();
+      scope?.stop();
       scope = undefined;
     }
   }, {
     immediate: true
   });
-  (0,vue__WEBPACK_IMPORTED_MODULE_1__/* .onScopeDispose */ .EB)(() => {
-    var _scope2;
-    (_scope2 = scope) == null ? void 0 : _scope2.stop();
+  (0,vue__WEBPACK_IMPORTED_MODULE_0__/* .onScopeDispose */ .EB)(() => {
+    scope?.stop();
   });
 }
 
@@ -76613,8 +76403,8 @@ function useValidation(props) {
   const internalErrorMessages = (0,vue__WEBPACK_IMPORTED_MODULE_7__/* .ref */ .iH)([]);
   const isPristine = (0,vue__WEBPACK_IMPORTED_MODULE_7__/* .ref */ .iH)(true);
   const isDirty = (0,vue__WEBPACK_IMPORTED_MODULE_5__/* .computed */ .Fl)(() => !!((0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_8__/* .wrapInArray */ .FT)(model.value === '' ? null : model.value).length || (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_8__/* .wrapInArray */ .FT)(validationModel.value === '' ? null : validationModel.value).length));
-  const isDisabled = (0,vue__WEBPACK_IMPORTED_MODULE_5__/* .computed */ .Fl)(() => !!(props.disabled || form != null && form.isDisabled.value));
-  const isReadonly = (0,vue__WEBPACK_IMPORTED_MODULE_5__/* .computed */ .Fl)(() => !!(props.readonly || form != null && form.isReadonly.value));
+  const isDisabled = (0,vue__WEBPACK_IMPORTED_MODULE_5__/* .computed */ .Fl)(() => !!(props.disabled || form?.isDisabled.value));
+  const isReadonly = (0,vue__WEBPACK_IMPORTED_MODULE_5__/* .computed */ .Fl)(() => !!(props.readonly || form?.isReadonly.value));
   const errorMessages = (0,vue__WEBPACK_IMPORTED_MODULE_5__/* .computed */ .Fl)(() => {
     return props.errorMessages.length ? (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_8__/* .wrapInArray */ .FT)(props.errorMessages).slice(0, Math.max(0, +props.maxErrors)) : internalErrorMessages.value;
   });
@@ -76634,7 +76424,7 @@ function useValidation(props) {
   });
   const uid = (0,vue__WEBPACK_IMPORTED_MODULE_5__/* .computed */ .Fl)(() => props.name ?? (0,vue__WEBPACK_IMPORTED_MODULE_7__/* .unref */ .SU)(id));
   (0,vue__WEBPACK_IMPORTED_MODULE_5__/* .onBeforeMount */ .wF)(() => {
-    form == null ? void 0 : form.register({
+    form?.register({
       id: uid.value,
       validate,
       reset,
@@ -76642,12 +76432,12 @@ function useValidation(props) {
     });
   });
   (0,vue__WEBPACK_IMPORTED_MODULE_5__/* .onBeforeUnmount */ .Jd)(() => {
-    form == null ? void 0 : form.unregister(uid.value);
+    form?.unregister(uid.value);
   });
-  const validateOn = (0,vue__WEBPACK_IMPORTED_MODULE_5__/* .computed */ .Fl)(() => props.validateOn || (form == null ? void 0 : form.validateOn.value) || 'input');
+  const validateOn = (0,vue__WEBPACK_IMPORTED_MODULE_5__/* .computed */ .Fl)(() => props.validateOn || form?.validateOn.value || 'input');
 
   // Set initial valid state, for inputs that might not have rules
-  (0,vue__WEBPACK_IMPORTED_MODULE_5__/* .onMounted */ .bv)(() => form == null ? void 0 : form.update(uid.value, isValid.value, errorMessages.value));
+  (0,vue__WEBPACK_IMPORTED_MODULE_5__/* .onMounted */ .bv)(() => form?.update(uid.value, isValid.value, errorMessages.value));
   (0,_toggleScope_mjs__WEBPACK_IMPORTED_MODULE_9__/* .useToggleScope */ .U)(() => validateOn.value === 'input', () => {
     (0,vue__WEBPACK_IMPORTED_MODULE_5__/* .watch */ .YP)(validationModel, () => {
       if (validationModel.value != null) {
@@ -76666,7 +76456,7 @@ function useValidation(props) {
     });
   });
   (0,vue__WEBPACK_IMPORTED_MODULE_5__/* .watch */ .YP)(isValid, () => {
-    form == null ? void 0 : form.update(uid.value, isValid.value, errorMessages.value);
+    form?.update(uid.value, isValid.value, errorMessages.value);
   });
   function reset() {
     resetValidation();
@@ -76850,7 +76640,7 @@ function checkEvent(e, el, binding) {
   // Toggleable can return true if it wants to deactivate.
   // Note that, because we're in the capture phase, this callback will occur before
   // the bubbling click event on any outside elements.
-  return !elements.some(el => el == null ? void 0 : el.contains(e.target));
+  return !elements.some(el => el?.contains(e.target));
 }
 function checkIsActive(e, binding) {
   const isActive = typeof binding.value === 'object' && binding.value.closeConditional || defaultConditional;
@@ -76897,8 +76687,7 @@ const ClickOutside = {
   unmounted(el, binding) {
     if (!el._clickOutside) return;
     handleShadow(el, app => {
-      var _el$_clickOutside;
-      if (!app || !((_el$_clickOutside = el._clickOutside) != null && _el$_clickOutside[binding.instance.$.uid])) return;
+      if (!app || !el._clickOutside?.[binding.instance.$.uid]) return;
       const {
         onClick,
         onMousedown
@@ -76935,10 +76724,9 @@ function mounted(el, binding) {
     options: {}
   };
   const observer = new IntersectionObserver(function () {
-    var _el$_observe;
     let entries = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
     let observer = arguments.length > 1 ? arguments[1] : undefined;
-    const _observe = (_el$_observe = el._observe) == null ? void 0 : _el$_observe[binding.instance.$.uid];
+    const _observe = el._observe?.[binding.instance.$.uid];
     if (!_observe) return; // Just in case, should never fire
 
     const isIntersecting = entries.some(entry => entry.isIntersecting);
@@ -76958,8 +76746,7 @@ function mounted(el, binding) {
   observer.observe(el);
 }
 function unmounted(el, binding) {
-  var _el$_observe2;
-  const observe = (_el$_observe2 = el._observe) == null ? void 0 : _el$_observe2[binding.instance.$.uid];
+  const observe = el._observe?.[binding.instance.$.uid];
   if (!observe) return;
   observe.observer.unobserve(el);
   delete el._observe[binding.instance.$.uid];
@@ -77000,9 +76787,6 @@ function transform(el, value) {
   el.style.transform = value;
   el.style.webkitTransform = value;
 }
-function opacity(el, value) {
-  el.style.opacity = `calc(${value} * var(--v-theme-overlay-multiplier))`;
-}
 function isTouchEvent(e) {
   return e.constructor.name === 'TouchEvent';
 }
@@ -77010,7 +76794,6 @@ function isKeyboardEvent(e) {
   return e.constructor.name === 'KeyboardEvent';
 }
 const calculate = function (e, el) {
-  var _el$_ripple;
   let value = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
   let localX = 0;
   let localY = 0;
@@ -77022,7 +76805,7 @@ const calculate = function (e, el) {
   }
   let radius = 0;
   let scale = 0.3;
-  if ((_el$_ripple = el._ripple) != null && _el$_ripple.circle) {
+  if (el._ripple?.circle) {
     scale = 0.15;
     radius = el.clientWidth / 2;
     radius = value.center ? radius : radius + Math.sqrt((localX - radius) ** 2 + (localY - radius) ** 2) / 4;
@@ -77045,9 +76828,8 @@ const calculate = function (e, el) {
 const ripples = {
   /* eslint-disable max-statements */
   show(e, el) {
-    var _el$_ripple2;
     let value = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
-    if (!(el != null && (_el$_ripple2 = el._ripple) != null && _el$_ripple2.enabled)) {
+    if (!el?._ripple?.enabled) {
       return;
     }
     const container = document.createElement('span');
@@ -77078,18 +76860,15 @@ const ripples = {
     animation.classList.add('v-ripple__animation--enter');
     animation.classList.add('v-ripple__animation--visible');
     transform(animation, `translate(${x}, ${y}) scale3d(${scale},${scale},${scale})`);
-    opacity(animation, 0);
     animation.dataset.activated = String(performance.now());
     setTimeout(() => {
       animation.classList.remove('v-ripple__animation--enter');
       animation.classList.add('v-ripple__animation--in');
       transform(animation, `translate(${centerX}, ${centerY}) scale3d(1,1,1)`);
-      opacity(animation, 0.08);
     }, 0);
   },
   hide(el) {
-    var _el$_ripple3;
-    if (!(el != null && (_el$_ripple3 = el._ripple) != null && _el$_ripple3.enabled)) return;
+    if (!el?._ripple?.enabled) return;
     const ripples = el.getElementsByClassName('v-ripple__animation');
     if (ripples.length === 0) return;
     const animation = ripples[ripples.length - 1];
@@ -77099,14 +76878,13 @@ const ripples = {
     setTimeout(() => {
       animation.classList.remove('v-ripple__animation--in');
       animation.classList.add('v-ripple__animation--out');
-      opacity(animation, 0);
       setTimeout(() => {
         const ripples = el.getElementsByClassName('v-ripple__animation');
         if (ripples.length === 1 && el.dataset.previousPosition) {
           el.style.position = el.dataset.previousPosition;
           delete el.dataset.previousPosition;
         }
-        animation.parentNode && el.removeChild(animation.parentNode);
+        if (animation.parentNode?.parentNode === el) el.removeChild(animation.parentNode);
       }, 300);
     }, delay);
   }
@@ -77117,7 +76895,7 @@ function isRippleEnabled(value) {
 function rippleShow(e) {
   const value = {};
   const element = e.currentTarget;
-  if (!(element != null && element._ripple) || element._ripple.touched || e[stopSymbol]) return;
+  if (!element?._ripple || element._ripple.touched || e[stopSymbol]) return;
 
   // Don't allow the event to trigger ripples on any other elements
   e[stopSymbol] = true;
@@ -77142,8 +76920,7 @@ function rippleShow(e) {
       ripples.show(e, element, value);
     };
     element._ripple.showTimer = window.setTimeout(() => {
-      var _element$_ripple;
-      if (element != null && (_element$_ripple = element._ripple) != null && _element$_ripple.showTimerCommit) {
+      if (element?._ripple?.showTimerCommit) {
         element._ripple.showTimerCommit();
         element._ripple.showTimerCommit = null;
       }
@@ -77157,7 +76934,7 @@ function rippleStop(e) {
 }
 function rippleHide(e) {
   const element = e.currentTarget;
-  if (!element || !element._ripple) return;
+  if (!element?._ripple) return;
   window.clearTimeout(element._ripple.showTimer);
 
   // The touch interaction occurs before the show timer is triggered.
@@ -77181,7 +76958,7 @@ function rippleHide(e) {
 }
 function rippleCancelShow(e) {
   const element = e.currentTarget;
-  if (!element || !element._ripple) return;
+  if (!element?._ripple) return;
   if (element._ripple.showTimerCommit) {
     element._ripple.showTimerCommit = null;
   }
@@ -77871,7 +77648,7 @@ function formatComponentName(vm, includeFile) {
   const file = options.__file;
   if (!name && file) {
     const match = file.match(/([^/\\]+)\.vue$/);
-    name = match == null ? void 0 : match[1];
+    name = match?.[1];
   }
   return (name ? `<${classify(name)}>` : `<Anonymous>`) + (file && includeFile !== false ? ` at ${file}` : '');
 }
@@ -77919,7 +77696,7 @@ function generateComponentTrace(vm) {
 function createSimpleFunctional(klass) {
   let tag = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'div';
   let name = arguments.length > 2 ? arguments[2] : undefined;
-  return (0,_defineComponent_mjs__WEBPACK_IMPORTED_MODULE_0__/* .defineComponent */ .aZ)({
+  return (0,_defineComponent_mjs__WEBPACK_IMPORTED_MODULE_0__/* .genericComponent */ .ev)()({
     name: name ?? (0,vue__WEBPACK_IMPORTED_MODULE_1__/* .capitalize */ .kC)((0,vue__WEBPACK_IMPORTED_MODULE_1__/* .camelize */ ._A)(klass.replace(/__/g, '-'))),
     props: {
       tag: {
@@ -77931,12 +77708,9 @@ function createSimpleFunctional(klass) {
       let {
         slots
       } = _ref;
-      return () => {
-        var _slots$default;
-        return (0,vue__WEBPACK_IMPORTED_MODULE_2__.h)(props.tag, {
-          class: klass
-        }, (_slots$default = slots.default) == null ? void 0 : _slots$default.call(slots));
-      };
+      return () => (0,vue__WEBPACK_IMPORTED_MODULE_2__.h)(props.tag, {
+        class: klass
+      }, slots.default?.());
     }
   });
 }
@@ -77977,12 +77751,12 @@ function injectSelf(key) {
     return provides[key];
   }
 }
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/util/propsFactory.mjs
+var propsFactory = __webpack_require__(3766);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/defaults.mjs
 var composables_defaults = __webpack_require__(8434);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/toggleScope.mjs
 var toggleScope = __webpack_require__(4770);
-// EXTERNAL MODULE: ./node_modules/vuetify/lib/util/propsFactory.mjs
-var propsFactory = __webpack_require__(3766);
 ;// CONCATENATED MODULE: ./node_modules/vuetify/lib/util/defineComponent.mjs
 // Utils
 
@@ -77990,11 +77764,10 @@ var propsFactory = __webpack_require__(3766);
 
 
 
- // Types
 
+ // Types
 function propIsDefined(vnode, prop) {
-  var _vnode$props, _vnode$props2;
-  return typeof ((_vnode$props = vnode.props) == null ? void 0 : _vnode$props[prop]) !== 'undefined' || typeof ((_vnode$props2 = vnode.props) == null ? void 0 : _vnode$props2[(0,helpers/* toKebabCase */.mA)(prop)]) !== 'undefined';
+  return typeof vnode.props?.[prop] !== 'undefined' || typeof vnode.props?.[(0,helpers/* toKebabCase */.mA)(prop)] !== 'undefined';
 }
 const defineComponent = function defineComponent(options) {
   options._setup = options._setup ?? options.setup;
@@ -78007,42 +77780,44 @@ const defineComponent = function defineComponent(options) {
     options.props = (0,propsFactory/* propsFactory */.U)(options.props, (0,helpers/* toKebabCase */.mA)(options.name))();
     options.props._as = String;
     options.setup = function setup(props, ctx) {
-      const vm = (0,runtime_core_esm_bundler/* getCurrentInstance */.FN)();
       const defaults = (0,composables_defaults/* useDefaults */.qy)();
-      const _subcomponentDefaults = (0,reactivity_esm_bundler/* shallowRef */.XI)();
-      const _props = (0,reactivity_esm_bundler/* shallowReactive */.Um)({
-        ...(0,reactivity_esm_bundler/* toRaw */.IU)(props)
+
+      // Skip props proxy if defaults are not provided
+      if (!defaults.value) return options._setup(props, ctx);
+      const vm = (0,runtime_core_esm_bundler/* getCurrentInstance */.FN)();
+      const componentDefaults = (0,runtime_core_esm_bundler/* computed */.Fl)(() => defaults.value[props._as ?? options.name]);
+      const _props = new Proxy(props, {
+        get(target, prop) {
+          if (typeof prop === 'string' && !propIsDefined(vm.vnode, prop)) {
+            return componentDefaults.value?.[prop] ?? defaults.value.global?.[prop] ?? target[prop];
+          }
+          return Reflect.get(target, prop);
+        }
       });
+      const _subcomponentDefaults = (0,reactivity_esm_bundler/* shallowRef */.XI)();
       (0,runtime_core_esm_bundler/* watchEffect */.m0)(() => {
-        const globalDefaults = defaults.value.global;
-        const componentDefaults = defaults.value[props._as ?? options.name];
-        if (componentDefaults) {
-          const subComponents = Object.entries(componentDefaults).filter(_ref => {
+        if (componentDefaults.value) {
+          const subComponents = Object.entries(componentDefaults.value).filter(_ref => {
             let [key] = _ref;
             return key.startsWith(key[0].toUpperCase());
           });
           if (subComponents.length) _subcomponentDefaults.value = Object.fromEntries(subComponents);
         }
-        for (const prop of Object.keys(props)) {
-          let newVal = props[prop];
-          if (!propIsDefined(vm.vnode, prop)) {
-            newVal = (componentDefaults == null ? void 0 : componentDefaults[prop]) ?? (globalDefaults == null ? void 0 : globalDefaults[prop]) ?? props[prop];
-          }
-          if (_props[prop] !== newVal) {
-            _props[prop] = newVal;
-          }
-        }
       });
       const setupBindings = options._setup(_props, ctx);
+
+      // If subcomponent defaults are provided, override any
+      // subcomponents provided by the component's setup function.
+      // This uses injectSelf so must be done after the original setup to work.
       (0,toggleScope/* useToggleScope */.U)(_subcomponentDefaults, () => {
-        var _injectSelf;
-        (0,composables_defaults/* provideDefaults */.AF)((0,helpers/* mergeDeep */.Ee)(((_injectSelf = injectSelf(composables_defaults/* DefaultsSymbol */.tI)) == null ? void 0 : _injectSelf.value) ?? {}, _subcomponentDefaults.value));
+        (0,composables_defaults/* provideDefaults */.AF)((0,helpers/* mergeDeep */.Ee)(injectSelf(composables_defaults/* DefaultsSymbol */.tI)?.value ?? {}, _subcomponentDefaults.value));
       });
       return setupBindings;
     };
   }
   return options;
 };
+// Implementation
 function genericComponent() {
   let exposeDefaults = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
   return options => (exposeDefaults ? defineComponent : runtime_core_esm_bundler/* defineComponent */.aZ)(options);
@@ -78094,7 +77869,7 @@ function getCurrentInstance(name, message) {
 function getCurrentInstanceName() {
   let name = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'composables';
   const vm = getCurrentInstance(name).type;
-  return (0,_helpers_mjs__WEBPACK_IMPORTED_MODULE_1__/* .toKebabCase */ .mA)((vm == null ? void 0 : vm.aliasName) || (vm == null ? void 0 : vm.name));
+  return (0,_helpers_mjs__WEBPACK_IMPORTED_MODULE_1__/* .toKebabCase */ .mA)(vm?.aliasName || vm?.name);
 }
 let _uid = 0;
 let _map = new WeakMap();
@@ -78201,7 +77976,7 @@ const SUPPORTS_FOCUS_VISIBLE = IN_BROWSER && typeof CSS !== 'undefined' && CSS.s
 /* harmony export */   "vZ": function() { return /* binding */ deepEqual; },
 /* harmony export */   "yo": function() { return /* binding */ chunk; }
 /* harmony export */ });
-/* unused harmony exports getNestedValue, getZIndex, escapeHTML, filterObjectOnKeys, arrayDiff, groupItems, defaultFilter, searchItems, debounce, throttle, getPrefixedSlots, camelizeObjectKeys, fillArray, flattenFragments, randomHexColor, findChildren */
+/* unused harmony exports getNestedValue, getZIndex, arrayDiff, groupItems, defaultFilter, searchItems, debounce, throttle, getPrefixedSlots, camelizeObjectKeys, fillArray, flattenFragments, randomHexColor, findChildren */
 /* harmony import */ var core_js_modules_es_array_push_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(7658);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4870);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(3396);
@@ -78314,24 +78089,6 @@ function getZIndex(el) {
   if (!index) return getZIndex(el.parentNode);
   return index;
 }
-const tagsToReplace = {
-  '&': '&amp;',
-  '<': '&lt;',
-  '>': '&gt;'
-};
-function escapeHTML(str) {
-  return str.replace(/[&<>]/g, tag => tagsToReplace[tag] || tag);
-}
-function filterObjectOnKeys(obj, keys) {
-  const filtered = {};
-  for (let i = 0; i < keys.length; i++) {
-    const key = keys[i];
-    if (typeof obj[key] !== 'undefined') {
-      filtered[key] = obj[key];
-    }
-  }
-  return filtered;
-}
 function convertToUnit(str) {
   let unit = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'px';
   if (str == null || str === '') {
@@ -78348,7 +78105,7 @@ function isObject(obj) {
   return obj !== null && typeof obj === 'object' && !Array.isArray(obj);
 }
 function isComponentInstance(obj) {
-  return obj == null ? void 0 : obj.$el;
+  return obj?.$el;
 }
 
 // KeyboardEvent.keyCode aliases
@@ -78574,8 +78331,12 @@ const randomHexColor = () => {
 };
 function toKebabCase() {
   let str = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
-  return str.replace(/[^a-z]/gi, '-').replace(/\B([A-Z])/g, '-$1').toLowerCase();
+  if (toKebabCase.cache.has(str)) return toKebabCase.cache.get(str);
+  const kebab = str.replace(/[^a-z]/gi, '-').replace(/\B([A-Z])/g, '-$1').toLowerCase();
+  toKebabCase.cache.set(str, kebab);
+  return kebab;
 }
+toKebabCase.cache = new Map();
 function findChildren(vnode) {
   if (!vnode || typeof vnode !== 'object') {
     return [];
@@ -78585,8 +78346,7 @@ function findChildren(vnode) {
   } else if (Array.isArray(vnode.children)) {
     return vnode.children.map(child => findChildren(child)).filter(v => v).flat(1);
   } else if (vnode.component) {
-    var _vnode$component;
-    return [vnode.component, ...findChildren((_vnode$component = vnode.component) == null ? void 0 : _vnode$component.subTree)].filter(v => v).flat(1);
+    return [vnode.component, ...findChildren(vnode.component?.subTree)].filter(v => v).flat(1);
   }
   return [];
 }
@@ -78760,13 +78520,13 @@ function useRender(render) {
 /***/ (function(module) {
 
 "use strict";
-module.exports = JSON.parse('{"name":"pjcan","version":"0.2.1","private":true,"description":"CanBus project for Mazda 3","author":"PJ82. Spiridonov Vladislav","scripts":{"serve":"vue-cli-service serve","build":"vue-cli-service build","lint":"vue-cli-service lint"},"dependencies":{"@egjs/vue3-flicking":"^4.10.2","@mdi/font":"7.0.96","axios":"^1.1.3","bitset":"^5.1.1","core-js":"^3.26.0","eventemitter3":"^4.0.7","moment":"^2.29.4","register-service-worker":"^1.7.2","roboto-fontface":"*","screenfull":"^6.0.2","vue":"^3.2.41","vue-i18n":"^9.2.2","vue-router":"^4.1.6","vue3-toastify":"^0.0.3","vuedraggable":"^2.24.3","vuetify":"^3.1.2","vuex":"^4.1.0","webfontloader":"^1.6.28"},"devDependencies":{"@types/node":"^12.0.2","@types/webfontloader":"^1.6.29","@typescript-eslint/eslint-plugin":"^5.42.0","@typescript-eslint/parser":"^5.42.0","@vue/cli-plugin-babel":"~5.0.8","@vue/cli-plugin-eslint":"~5.0.8","@vue/cli-plugin-pwa":"~5.0.8","@vue/cli-plugin-router":"~5.0.8","@vue/cli-plugin-typescript":"~5.0.8","@vue/cli-plugin-vuex":"~5.0.8","@vue/cli-service":"~5.0.8","@vue/eslint-config-typescript":"^11.0.2","@vueuse/core":"^9.4.0","eslint":"^8.26.0","eslint-config-prettier":"^8.5.0","eslint-plugin-prettier":"^4.2.1","eslint-plugin-vue":"^9.7.0","prettier":"^2.7.1","sass":"^1.56.0","sass-loader":"^13.1.0","script-ext-html-webpack-plugin":"^2.1.5","typescript":"~4.8.4","vue-cli-plugin-vuetify":"~2.5.8","webpack-plugin-vuetify":"^2.0.0"},"eslintConfig":{"root":true,"env":{"node":true},"extends":["plugin:vue/vue3-essential","eslint:recommended","@vue/typescript/recommended","plugin:prettier/recommended"],"parserOptions":{"ecmaVersion":2020},"rules":{}},"browserslist":["> 1%","last 2 versions","not dead","not ie 11"],"productName":"PJCan App"}');
+module.exports = JSON.parse('{"name":"pjcan","version":"0.2.1","private":true,"description":"CanBus project for Mazda 3","author":"PJ82. Spiridonov Vladislav","scripts":{"serve":"vue-cli-service serve","build":"vue-cli-service build","lint":"vue-cli-service lint"},"dependencies":{"@egjs/vue3-flicking":"^4.10.2","@mdi/font":"7.0.96","axios":"^1.1.3","bitset":"^5.1.1","core-js":"^3.26.0","eventemitter3":"^4.0.7","moment":"^2.29.4","register-service-worker":"^1.7.2","roboto-fontface":"*","screenfull":"^6.0.2","vue":"^3.2.41","vue-i18n":"^9.2.2","vue-router":"^4.1.6","vue3-toastify":"^0.0.3","vuedraggable":"^2.24.3","vuetify":"^3.1.5","vuex":"^4.1.0","webfontloader":"^1.6.28"},"devDependencies":{"@types/node":"^12.0.2","@types/webfontloader":"^1.6.29","@typescript-eslint/eslint-plugin":"^5.42.0","@typescript-eslint/parser":"^5.42.0","@vue/cli-plugin-babel":"~5.0.8","@vue/cli-plugin-eslint":"~5.0.8","@vue/cli-plugin-pwa":"~5.0.8","@vue/cli-plugin-router":"~5.0.8","@vue/cli-plugin-typescript":"~5.0.8","@vue/cli-plugin-vuex":"~5.0.8","@vue/cli-service":"~5.0.8","@vue/eslint-config-typescript":"^11.0.2","@vueuse/core":"^9.4.0","eslint":"^8.26.0","eslint-config-prettier":"^8.5.0","eslint-plugin-prettier":"^4.2.1","eslint-plugin-vue":"^9.7.0","prettier":"^2.7.1","sass":"^1.56.0","sass-loader":"^13.1.0","script-ext-html-webpack-plugin":"^2.1.5","typescript":"~4.8.4","vue-cli-plugin-vuetify":"~2.5.8","webpack-plugin-vuetify":"^2.0.0"},"eslintConfig":{"root":true,"env":{"node":true},"extends":["plugin:vue/vue3-essential","eslint:recommended","@vue/typescript/recommended","plugin:prettier/recommended"],"parserOptions":{"ecmaVersion":2020},"rules":{}},"browserslist":["> 1%","last 2 versions","not dead","not ie 11"],"productName":"PJCan App"}');
 
 /***/ })
 
 },
 /******/ function(__webpack_require__) { // webpackRuntimeModules
 /******/ var __webpack_exec__ = function(moduleId) { return __webpack_require__(__webpack_require__.s = moduleId); }
-/******/ var __webpack_exports__ = (__webpack_exec__(2613));
+/******/ var __webpack_exports__ = (__webpack_exec__(6205));
 /******/ }
 ]);

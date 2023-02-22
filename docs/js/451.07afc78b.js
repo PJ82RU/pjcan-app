@@ -1,5 +1,5 @@
 "use strict";
-(self["webpackChunkpjcan"] = self["webpackChunkpjcan"] || []).push([[401],{
+(self["webpackChunkpjcan"] = self["webpackChunkpjcan"] || []).push([[451],{
 
 /***/ 7637:
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
@@ -14599,7 +14599,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     }), (0,runtime_core_esm_bundler/* createVNode */.Wm)(VCardActions/* VCardActions */.h, {
       class: "justify-space-between"
     }, {
-      default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createElementVNode */._)("div", _hoisted_1, (0,shared_esm_bundler/* toDisplayString */.zw)($props.title), 1), (0,runtime_core_esm_bundler/* createVNode */.Wm)(VBtnGroup/* VBtnGroup */.Y, {
+      default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createElementVNode */._)("div", _hoisted_1, (0,shared_esm_bundler/* toDisplayString */.zw)($props.title), 1), (0,runtime_core_esm_bundler/* createVNode */.Wm)(VBtnGroup/* VBtnGroup */.Yz, {
         class: "border-dialog-btns"
       }, {
         default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [$props.custom !== undefined ? ((0,runtime_core_esm_bundler/* openBlock */.wg)(), (0,runtime_core_esm_bundler/* createBlock */.j4)(VBtn/* VBtn */.T, {
@@ -15021,7 +15021,7 @@ const __exports__ = /*#__PURE__*/(0,exportHelper/* default */.Z)(ViewSettingDial
 
 /***/ }),
 
-/***/ 3047:
+/***/ 4451:
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 // ESM COMPAT FLAG
@@ -15812,9 +15812,9 @@ const ProgressCardItem_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(P
 var VBtn = __webpack_require__(5101);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/components/VIcon/VIcon.mjs + 1 modules
 var VIcon = __webpack_require__(3289);
-;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/onboard/components/EngineConfigDialog.vue?vue&type=template&id=4788c61a&ts=true
+;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/onboard/components/EngineConfigDialog.vue?vue&type=template&id=1b85c2c8&ts=true
 
-const EngineConfigDialogvue_type_template_id_4788c61a_ts_true_hoisted_1 = {
+const EngineConfigDialogvue_type_template_id_1b85c2c8_ts_true_hoisted_1 = {
   key: 1
 };
 const _hoisted_2 = {
@@ -15823,7 +15823,7 @@ const _hoisted_2 = {
 const _hoisted_3 = {
   key: 1
 };
-function EngineConfigDialogvue_type_template_id_4788c61a_ts_true_render(_ctx, _cache, $props, $setup, $data, $options) {
+function EngineConfigDialogvue_type_template_id_1b85c2c8_ts_true_render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_switch_card_item = (0,runtime_core_esm_bundler/* resolveComponent */.up)("switch-card-item");
                                                       
   const _component_number_field = (0,runtime_core_esm_bundler/* resolveComponent */.up)("number-field");
@@ -15851,7 +15851,7 @@ function EngineConfigDialogvue_type_template_id_4788c61a_ts_true_render(_ctx, _c
         default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(_component_switch_card_item, {
           modelValue: $setup.showDays,
           "onUpdate:modelValue": _cache[0] || (_cache[0] = $event => $setup.showDays = $event),
-          title: _ctx.$t('onboard.engine.settings.showDays.title'),
+          title: _ctx.$t('onboard.engine.settings.showDays.' + (_ctx.$vuetify.display.xs ? 'titleShort' : 'title')),
           description: _ctx.$t('onboard.engine.settings.showDays.description'),
           disabled: !$setup.loaderConfigEngine
         }, null, 8, ["modelValue", "title", "description", "disabled"])]),
@@ -15894,7 +15894,7 @@ function EngineConfigDialogvue_type_template_id_4788c61a_ts_true_render(_ctx, _c
       }, {
         default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createTextVNode */.Uk)("mdi-restart")]),
         _: 1
-      })) : ((0,runtime_core_esm_bundler/* openBlock */.wg)(), (0,runtime_core_esm_bundler/* createElementBlock */.iD)("span", EngineConfigDialogvue_type_template_id_4788c61a_ts_true_hoisted_1, (0,shared_esm_bundler/* toDisplayString */.zw)(_ctx.$t("btn.reset")), 1))]),
+      })) : ((0,runtime_core_esm_bundler/* openBlock */.wg)(), (0,runtime_core_esm_bundler/* createElementBlock */.iD)("span", EngineConfigDialogvue_type_template_id_1b85c2c8_ts_true_hoisted_1, (0,shared_esm_bundler/* toDisplayString */.zw)(_ctx.$t("btn.reset")), 1))]),
       _: 1
     }, 8, ["onClick"]), (0,runtime_core_esm_bundler/* createVNode */.Wm)(VBtn/* VBtn */.T, {
       color: "primary",
@@ -15929,7 +15929,7 @@ function EngineConfigDialogvue_type_template_id_4788c61a_ts_true_render(_ctx, _c
 
 
 
-;// CONCATENATED MODULE: ./src/views/onboard/components/EngineConfigDialog.vue?vue&type=template&id=4788c61a&ts=true
+;// CONCATENATED MODULE: ./src/views/onboard/components/EngineConfigDialog.vue?vue&type=template&id=1b85c2c8&ts=true
 
 // EXTERNAL MODULE: ./src/components/DialogTemplate.vue + 6 modules
 var DialogTemplate = __webpack_require__(8745);
@@ -16023,7 +16023,7 @@ var variables_engine = __webpack_require__(7925);
 
 
 ;
-const EngineConfigDialog_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(EngineConfigDialogvue_type_script_lang_ts, [['render',EngineConfigDialogvue_type_template_id_4788c61a_ts_true_render]])
+const EngineConfigDialog_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(EngineConfigDialogvue_type_script_lang_ts, [['render',EngineConfigDialogvue_type_template_id_1b85c2c8_ts_true_render]])
 
 /* harmony default export */ var EngineConfigDialog = (EngineConfigDialog_exports_);
 ;// CONCATENATED MODULE: ./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/onboard/components/EngineCard.vue?vue&type=script&lang=ts
