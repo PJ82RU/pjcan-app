@@ -4,7 +4,7 @@
 			<span>{{ $t("update.dialog.new", { n: version }) }}</span>
 		</template>
 		<template #btns>
-			<v-btn color="primary" @click="onUpdateUpload">
+			<v-btn color="primary" @click="onUpdateStart">
 				{{ $t("update.btn.update") }}
 			</v-btn>
 			<v-btn color="primary" @click="onCancel">
@@ -15,9 +15,13 @@
 
 	<dialog-template v-model="visibleProcess" icon="mdi-update" :title="$t('update.title')" text>
 		<template #body>
-			<div class="pb-2 d-flex justify-space-between">
+			<div class="d-flex justify-space-between" :class="{ 'pb-3': progress === 0 || !timeLeft?.length }">
 				<span>{{ message }}</span>
 				<span>{{ uploading }}</span>
+			</div>
+			<div v-if="progress > 0 && timeLeft?.length" class="pb-3 d-flex justify-space-between">
+				<span>{{ $t("update.process.timeLeft") }}</span>
+				<span>{{ timeLeft }}</span>
 			</div>
 
 			<v-progress-linear
@@ -44,7 +48,9 @@ import { BLUETOOTH_EVENT_CONNECTED, TConnectedStatus } from "@/components/blueto
 import canbus, { API_EVENT_UPDATE_ERROR } from "@/api/canbus";
 
 import { Timeout } from "@/models/types/Timeout";
-import { UPDATE_BEGIN_EVENT_RESULT, UPDATE_UPLOAD_EVENT_RESULT } from "@/models/pjcan/update";
+import { API_EVENT_UPDATE } from "@/models/pjcan/update";
+
+import { getFormatTime } from "@/utils/time";
 
 // таймаут проверки обновления 5 мин.
 const DELAY_CHECK_VERSION = 300000;
@@ -62,6 +68,7 @@ export default {
 		const message = ref("");
 		const progress = ref(0);
 		const uploading = ref("");
+		const timeLeft = ref("");
 		let timerCheckVersion: Timeout;
 
 		/**
@@ -95,7 +102,7 @@ export default {
 			if (timerCheckVersion) clearTimeout(timerCheckVersion);
 
 			canbus.removeListener(API_EVENT_UPDATE_ERROR, onErrorUpdate);
-			canbus.update.upload.clear();
+			canbus.update.clear();
 		};
 
 		/**
@@ -104,7 +111,7 @@ export default {
 		 */
 		const onConnected = (status: TConnectedStatus) =>
 		{
-			if (canbus.update.upload.last)
+			if (canbus.update.total > 0)
 			{
 				if (status !== TConnectedStatus.CONNECT) return;
 
@@ -132,7 +139,7 @@ export default {
 		};
 
 		/** Событие запуска прошивки */
-		const onUpdateUpload = (): void =>
+		const onUpdateStart = (): void =>
 		{
 			message.value = t("update.process.preparation");
 			uploading.value = "";
@@ -141,44 +148,57 @@ export default {
 			visibleProcess.value = true;
 
 			canbus.addListener(API_EVENT_UPDATE_ERROR, onErrorUpdate);
-			canbus.beginUpload();
+			canbus.updateStart();
+		};
+
+		const last = {
+			value: 0,
+			offset: 0,
+			now: 0
 		};
 
 		/**
 		 * Событие загрузки прошивки на устройство PJCAN
-		 * @param {boolean} result Результат загрузки
+		 * @param {number} error Код ошибки
 		 */
-		const onUpload = (result: boolean) =>
+		const onUpdate = (error: number) =>
 		{
-			if (result)
+			if (error === 0)
 			{
-				message.value = t("update.process.upload");
-				progress.value = canbus.update.upload.uploading * 100;
-				uploading.value = progress.value.toFixed(2) + "%";
-
-				if (canbus.update.upload.offset === canbus.update.upload.data.byteLength)
+				if (canbus.update.offset < canbus.update.total)
 				{
-					canbus.beginUpdate();
-				}
-			}
-			else
-			{
-				onErrorUpdate(t("update.notify.error"));
-			}
-		};
+					message.value = t("update.process.upload");
+					progress.value = canbus.update.uploading * 100;
+					uploading.value = progress.value.toFixed(2) + "%";
+					canbus.updateUpload();
 
-		/**
-		 * Событие успешного начала прошивки устройства
-		 * @param {boolean} result Результат начала прошивки
-		 */
-		const onUpdate = (result: boolean) =>
-		{
-			if (result)
-			{
-				message.value = t("update.process.update");
-				progress.value = 0;
-				uploading.value = "";
-				canbus.configs.version.clear();
+					// подсчет оставшегося времени
+					if (!last.now)
+					{
+						last.value = 0;
+						last.offset = canbus.update.offset;
+						last.now = Date.now();
+					}
+					else
+					{
+						const value = Math.floor((canbus.update.total - canbus.update.offset) / (canbus.update.offset - last.offset) * (Date.now() - last.now));
+						last.value = Math.floor((last.value + value) / 2);
+						last.offset = canbus.update.offset;
+						last.now = Date.now();
+						timeLeft.value = getFormatTime(last.value);
+					}
+				}
+				else
+				{
+					message.value = t("update.process.update");
+					progress.value = 0;
+					uploading.value = "";
+
+					last.now = 0;
+					timeLeft.value = "";
+
+					canbus.configs.version.clear();
+				}
 			}
 			else
 			{
@@ -196,15 +216,13 @@ export default {
 		onMounted(() =>
 		{
 			canbus.bluetooth.addListener(BLUETOOTH_EVENT_CONNECTED, onConnected);
-			canbus.update.upload.addListener(UPDATE_UPLOAD_EVENT_RESULT, onUpload);
-			canbus.update.begin.addListener(UPDATE_BEGIN_EVENT_RESULT, onUpdate);
+			canbus.update.addListener(API_EVENT_UPDATE, onUpdate);
 		});
 
 		onUnmounted(() =>
 		{
 			canbus.bluetooth.removeListener(BLUETOOTH_EVENT_CONNECTED, onConnected);
-			canbus.update.upload.removeListener(UPDATE_UPLOAD_EVENT_RESULT, onUpload);
-			canbus.update.begin.removeListener(UPDATE_BEGIN_EVENT_RESULT, onUpdate);
+			canbus.update.removeListener(API_EVENT_UPDATE, onUpdate);
 			canbus.removeListener(API_EVENT_UPDATE_ERROR, onErrorUpdate);
 		});
 
@@ -214,9 +232,10 @@ export default {
 			version,
 			message,
 			uploading,
+			timeLeft,
 			progress,
 			onCancel,
-			onUpdateUpload
+			onUpdateStart
 		};
 	}
 };

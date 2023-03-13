@@ -45,8 +45,9 @@ export default {
 		},
 		process: {
 			preparation: "Preparing to upload...",
-			upload: "Uploading Firmware...",
-			update: "Firmware update..."
+			upload: "Uploading Firmware",
+			update: "Firmware update...",
+			timeLeft: "Time left"
 		},
 		notify: {
 			completed: "Firmware completed successfully",

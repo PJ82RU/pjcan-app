@@ -52,7 +52,7 @@ export default {
 		{
 			connected.value = status === TConnectedStatus.CONNECT;
 			// Не выводим сообщения об отключении/подключении Bluetooth в момент прошивки устройства
-			if (canbus.update.upload.last)
+			if (canbus.update.total > 0)
 			{
 				// Если устройство отключилось, значит возникли проблемы с восстановлением соединения.
 				// Просим подключить устройство

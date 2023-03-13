@@ -1,1 +1,5 @@
-{ "current": [4, 0, 0, 63] }
+{
+	"current": [ 4, 0, 0, 85 ],
+	"iv": "2eba9009bd8504cdfb3133ece1691a1b",
+	"url": "/firmware/firmware.bin.enc"
+}

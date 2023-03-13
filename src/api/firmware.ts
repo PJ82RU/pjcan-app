@@ -8,10 +8,10 @@ export const getFirmwareVersion = () =>
 	});
 };
 
-export const getFirmware = () =>
+export const getFirmware = (url: string | undefined) =>
 {
 	return request({
-		url: "/firmware/firmware.bin.gz",
+		url: url ?? "/firmware/firmware.bin.enc",
 		method: "GET",
 		responseType: "arraybuffer",
 		headers: { "Content-Type": "application/gzip" }

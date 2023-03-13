@@ -1,20 +1,9 @@
-import { API_EXEC_UPDATE_BEGIN_GZ, UPDATE_BEGIN_EVENT_RESULT, UpdateBegin } from "./UpdateBegin";
-import {
-	API_EXEC_UPDATE_UPLOAD_GZ,
-	UPDATE_UPLOAD_EVENT_RESULT,
-	UpdateData,
-	API_SIZE_UPDATE_UPLOAD_GZ
-} from "./UpdateData";
-import { IUpdateBegin } from "./IUpdateBegin";
-import { IUpdateData } from "./IUpdateData";
+import { API_EXEC_UPDATE, API_EVENT_UPDATE, Update } from "./Update";
+import { IUpdate } from "./IUpdate";
 
 export {
-	API_EXEC_UPDATE_BEGIN_GZ,
-	UPDATE_BEGIN_EVENT_RESULT,
-	API_EXEC_UPDATE_UPLOAD_GZ,
-	UPDATE_UPLOAD_EVENT_RESULT,
-	API_SIZE_UPDATE_UPLOAD_GZ,
-	UpdateBegin,
-	UpdateData
+	API_EXEC_UPDATE,
+	API_EVENT_UPDATE,
+	Update
 };
-export type { IUpdateBegin, IUpdateData };
+export type { IUpdate };

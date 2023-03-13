@@ -33,7 +33,7 @@ import {
 } from "@/models/pjcan/teyes";
 import { API_EXEC_LCD_VALUE } from "@/models/pjcan/lcd";
 import { API_EXEC_CAR_CONFIG, API_EXEC_CAR_VIEW } from "@/models/pjcan/car";
-import { API_EXEC_UPDATE_BEGIN_GZ, API_EXEC_UPDATE_UPLOAD_GZ, UpdateBegin, UpdateData } from "@/models/pjcan/update";
+import { API_EXEC_UPDATE, API_EVENT_UPDATE, Update } from "@/models/pjcan/update";
 import { API_EXEC_VARIABLE_BOSE, API_EXEC_VARIABLE_BOSE_VIEW } from "@/models/pjcan/variables/bose";
 import { API_EXEC_VARIABLE_CLIMATE, API_EXEC_VARIABLE_CLIMATE_VIEW } from "@/models/pjcan/variables/climate";
 import { API_EXEC_VARIABLE_DOORS, API_EXEC_VARIABLE_DOORS_VIEW } from "@/models/pjcan/variables/doors";
@@ -62,7 +62,7 @@ import { IValues, Values } from "@/models/pjcan/values";
 import { IVariablesValue } from "@/models/pjcan/variables/values";
 import { API_EXEC_VALUE } from "@/models/pjcan/values/Values";
 import { API_EXEC_VARIABLE_VALUE } from "@/models/pjcan/variables/values/VariablesValue";
-import { IUpdateResult } from "@/models/pjcan/update/IUpdateResult";
+import { IUpdate } from "@/models/pjcan/update/IUpdate";
 import { IVersion, Version } from "@/models/pjcan/version";
 import { ITestValue } from "@/models/pjcan/variables/test";
 
@@ -140,10 +140,7 @@ export class Canbus extends EventEmitter
 	sha: string | undefined;
 
 	/** Обновление прошивки */
-	update: IUpdateResult = {
-		upload: new UpdateData(),
-		begin: new UpdateBegin()
-	};
+	update: IUpdate = new Update();
 
 	/** Значения кнопки */
 	buttonValue: IButtonValue = new ButtonValue();
@@ -559,14 +556,9 @@ export class Canbus extends EventEmitter
 				this.emit(API_EVENT_CAR_VIEW, this.views.car);
 				break;
 
-			case API_EXEC_UPDATE_UPLOAD_GZ: // Загрузка файла прошивки
-				this.update.upload.set(data);
-				this.emit(API_EVENT_UPDATE_UPLOAD_GZ, this.update.upload);
-				this.nextUpload().then();
-				break;
-			case API_EXEC_UPDATE_BEGIN_GZ: // Запуск обновления прошивки
-				this.update.begin.set(data);
-				this.emit(API_EVENT_UPDATE_BEGIN_GZ, this.update.begin);
+			case API_EXEC_UPDATE: // Обновление прошивки
+				this.update.set(data);
+				this.emit(API_EVENT_UPDATE, this.update);
 				break;
 
 			case API_EXEC_VARIABLE_CONFIG: // Вся конфигурация переменных
@@ -680,53 +672,45 @@ export class Canbus extends EventEmitter
 	}
 
 	/** Запустить процесс загрузки прошивки на устройство */
-	beginUpload(): void
+	updateStart(): void
 	{
-		getFirmware()
+		getFirmware(this.update.firmwareUrl)
 			.then((res: any) =>
 			{
 				if (res?.byteLength > 0)
 				{
-					setTimeout(() =>
-					{
-						this.update.upload.data = new Uint8Array(res);
-						this.update.upload.offset = 0;
-						this.update.upload.last = true;
-						this.nextUpload().then();
-					}, 1000);
+					this.update.firmwareData = new Uint8Array(res);
+					this.update.total = res.byteLength;
+					this.update.offset = 0;
+					this.update.error = 0;
+					this.update.encrypt = this.update.iv;
+					setTimeout(() => this.updateUpload(), 1000);
 				}
 			})
 			.catch(() => this.emit(API_EVENT_UPDATE_ERROR, t("update.notify.errorDownload")));
 	}
 
 	/** Пишем данные файла прошивки в устройство PJ CAN */
-	async nextUpload()
+	async updateUpload()
 	{
-		if (
-			this.bluetooth.connected &&
-			this.update.upload.last &&
-			this.update.upload.offset < this.update.upload.data.byteLength
-		)
+		if (this.bluetooth.connected && this.update.error === 0 && this.update.offset <= this.update.total)
 		{
 			this.queryDisabled = true;
-			await this.bluetooth.send(this.update.upload.get());
+			await this.bluetooth.send(this.update.get());
 		}
-		else if (!this.update.upload.last)
+		else if (this.update.error !== 0)
 		{
 			this.queryDisabled = false;
 		}
 
-		debounce(() => this.emit(API_EVENT_UPDATE_ERROR, t("update.notify.errorUpload")), 5000);
-	}
-
-	/** Запустить процесс обновления устройства */
-	async beginUpdate()
-	{
-		if (this.bluetooth.connected)
+		if (this.update.end)
 		{
-			await this.bluetooth.send(this.update.begin.get());
+			debounce(() => this.emit(API_EVENT_UPDATE_ERROR, t("update.notify.errorWaitUpdate")), 60000);
 		}
-		debounce(() => this.emit(API_EVENT_UPDATE_ERROR, t("update.notify.errorWaitUpdate")), 60000);
+		else
+		{
+			debounce(() => this.emit(API_EVENT_UPDATE_ERROR, t("update.notify.errorUpload")), 5000);
+		}
 	}
 
 	/** Лог версии прошивки */
@@ -744,6 +728,9 @@ export class Canbus extends EventEmitter
 			getFirmwareVersion()
 				.then((res: any) =>
 				{
+					this.update.firmwareUrl = res?.url ?? "";
+					this.update.setIV(res?.iv);
+
 					// проверяем версию прошивки
 					if (res.current?.length === 4)
 					{
