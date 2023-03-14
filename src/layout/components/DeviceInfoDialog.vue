@@ -29,20 +29,22 @@
 		</template>
 
 		<template #btns>
-			<v-btn color="primary" @click="onResetClick">
-				{{  $vuetify.display.xs ? $t("btn.reset") : $t("btn.deviceReset") }}
-			</v-btn>
-			<v-btn color="primary" @click="visible = false">
+			<v-btn color="secondary" icon="mdi-magnify-scan" :disabled="!isLoadedValue" @click="onScanClick" />
+			<v-btn color="secondary" icon="mdi-restart" :disabled="!isLoadedValue" @click="onResetClick" />
+			<v-btn color="primary" prepend-icon="mdi-close" @click="visible = false">
 				{{ $t("btn.close") }}
 			</v-btn>
 		</template>
 	</dialog-template>
 
 	<device-reset-dialog v-model="visibleReset" />
+	<scanner v-model="startedScanner" />
 </template>
 
 <script lang="ts">
 import { computed, onMounted, onUnmounted, ref, toRefs, watch } from "vue";
+import { useI18n } from "vue-i18n";
+import store from "@/store";
 
 import DialogTemplate from "@/components/DialogTemplate.vue";
 import DeviceResetDialog from "./DeviceResetDialog.vue";
@@ -50,16 +52,19 @@ import DeviceResetDialog from "./DeviceResetDialog.vue";
 import canbus, { API_EVENT_INFO } from "@/api/canbus";
 
 import { IDeviceInfo } from "@/models/pjcan/device";
+import { IMessage } from "@/models/interfaces/message/IMessage";
+import Scanner from "@/layout/components/Scanner.vue";
 
 export default {
 	name: "DeviceInfoDialog",
-	components: { DialogTemplate, DeviceResetDialog },
+	components: { Scanner, DialogTemplate, DeviceResetDialog },
 	props: {
 		modelValue: Boolean
 	},
 	emits: ["update:modelValue"],
 	setup(props: any, context: any)
 	{
+		const { t } = useI18n();
 		const { modelValue } = toRefs(props);
 		const visible = computed({
 			get: (): boolean => modelValue.value,
@@ -132,12 +137,36 @@ export default {
 			visibleReset.value = true;
 		};
 
+		const startedScanner = ref(false);
+		/** Показать диалог запроса на сканирование can-шины */
+		const onScanClick = (): void =>
+		{
+			store.commit("app/setMessage", {
+				title: t("scanner.dialog.title"),
+				icon: "mdi-magnify-scan",
+				text: t("scanner.dialog.text"),
+				btns: [
+					{
+						title: t("scanner.btn.start"),
+						on: () =>
+						{
+							setTimeout(() => (visible.value = false), 200);
+							setTimeout(() => (startedScanner.value = true), 400);
+						}
+					},
+					{ title: t("btn.close"), icon: "mdi-close" }
+				]
+			} as IMessage);
+		};
+
 		return {
 			visible,
 			isLoadedValue,
 			modelDeviceInfo,
 			visibleReset,
-			onResetClick
+			startedScanner,
+			onResetClick,
+			onScanClick
 		};
 	}
 };
