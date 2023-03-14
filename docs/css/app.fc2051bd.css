@@ -2580,7 +2580,7 @@ html.v-overlay-scroll-blocked {
   max-height: calc(100% - 16px);
 }
 .dialog__title[data-v-7d896028]{width:calc(100% - 32px);overflow:hidden;text-overflow:ellipsis}.dialog__text[data-v-7d896028]{overflow-y:auto;color:#bbb}.dialog__info[data-v-7d896028]{font-weight:300;font-size:1rem;line-height:1.25rem;color:#78909c}.dialog__info[data-v-7d896028] b{color:#0b677b;font-weight:600}.dialog__icon[data-v-7d896028] .v-icon{margin-bottom:4px}.dialog__btns[data-v-7d896028] .v-icon{font-size:2rem !important}
-.bluetooth-btn[data-v-e00596fc] .mdi-bluetooth-off{color:#ef5350}
+.bluetooth-btn[data-v-553e80d3] .mdi-bluetooth-off{color:#ef5350}
 .v-menu .v-overlay__content {
   display: flex;
   flex-direction: column;

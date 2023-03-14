@@ -5452,9 +5452,9 @@ const getFirmwareVersion = () => {
     method: "GET"
   });
 };
-const getFirmware = () => {
+const getFirmware = url => {
   return request({
-    url: "/firmware/firmware.bin.gz",
+    url: url ?? "/firmware/firmware.bin.enc",
     method: "GET",
     responseType: "arraybuffer",
     headers: {
@@ -6136,7 +6136,7 @@ class Views extends BaseModel/* BaseModel */.g {
 // EXTERNAL MODULE: ./src/models/pjcan/lcd/index.ts + 2 modules
 var lcd = __webpack_require__(7689);
 // EXTERNAL MODULE: ./src/models/pjcan/update/index.ts + 2 modules
-var update = __webpack_require__(4312);
+var update = __webpack_require__(8293);
 ;// CONCATENATED MODULE: ./src/models/pjcan/variables/values/StructVariablesValue.ts
 
 
@@ -6387,10 +6387,7 @@ class Canbus extends (eventemitter3_default()) {
     (0,defineProperty/* default */.Z)(this, "values", new Values());
     (0,defineProperty/* default */.Z)(this, "deviceInfo", new DeviceInfo());
     (0,defineProperty/* default */.Z)(this, "sha", void 0);
-    (0,defineProperty/* default */.Z)(this, "update", {
-      upload: new update/* UpdateData */.k0(),
-      begin: new update/* UpdateBegin */.N7()
-    });
+    (0,defineProperty/* default */.Z)(this, "update", new update/* Update */.BN());
     (0,defineProperty/* default */.Z)(this, "buttonValue", new pjcan_button/* ButtonValue */.js());
     (0,defineProperty/* default */.Z)(this, "teyesText", new teyes/* TeyesText */.VA());
     (0,defineProperty/* default */.Z)(this, "queryDisabled", true);
@@ -6725,16 +6722,10 @@ class Canbus extends (eventemitter3_default()) {
         this.views.car.set(data);
         this.emit(API_EVENT_CAR_VIEW, this.views.car);
         break;
-      case update/* API_EXEC_UPDATE_UPLOAD_GZ */.g0:
-        // Загрузка файла прошивки
-        this.update.upload.set(data);
-        this.emit(API_EVENT_UPDATE_UPLOAD_GZ, this.update.upload);
-        this.nextUpload().then();
-        break;
-      case update/* API_EXEC_UPDATE_BEGIN_GZ */.c8:
-        // Запуск обновления прошивки
-        this.update.begin.set(data);
-        this.emit(API_EVENT_UPDATE_BEGIN_GZ, this.update.begin);
+      case update/* API_EXEC_UPDATE */.Wt:
+        // Обновление прошивки
+        this.update.set(data);
+        this.emit(update/* API_EVENT_UPDATE */.Ox, this.update);
         break;
       case API_EXEC_VARIABLE_CONFIG:
         // Вся конфигурация переменных
@@ -6859,34 +6850,31 @@ class Canbus extends (eventemitter3_default()) {
     }
   }
   /** Запустить процесс загрузки прошивки на устройство */
-  beginUpload() {
-    getFirmware().then(res => {
+  updateStart() {
+    getFirmware(this.update.firmwareUrl).then(res => {
       if (res?.byteLength > 0) {
-        setTimeout(() => {
-          this.update.upload.data = new Uint8Array(res);
-          this.update.upload.offset = 0;
-          this.update.upload.last = true;
-          this.nextUpload().then();
-        }, 1000);
+        this.update.firmwareData = new Uint8Array(res);
+        this.update.total = res.byteLength;
+        this.update.offset = 0;
+        this.update.error = 0;
+        this.update.encrypt = this.update.iv;
+        setTimeout(() => this.updateUpload(), 1000);
       }
     }).catch(() => this.emit(API_EVENT_UPDATE_ERROR, (0,lang.t)("update.notify.errorDownload")));
   }
   /** Пишем данные файла прошивки в устройство PJ CAN */
-  async nextUpload() {
-    if (this.bluetooth.connected && this.update.upload.last && this.update.upload.offset < this.update.upload.data.byteLength) {
+  async updateUpload() {
+    if (this.bluetooth.connected && this.update.error === 0 && this.update.offset <= this.update.total) {
       this.queryDisabled = true;
-      await this.bluetooth.send(this.update.upload.get());
-    } else if (!this.update.upload.last) {
+      await this.bluetooth.send(this.update.get());
+    } else if (this.update.error !== 0) {
       this.queryDisabled = false;
     }
-    debounce(() => this.emit(API_EVENT_UPDATE_ERROR, (0,lang.t)("update.notify.errorUpload")), 5000);
-  }
-  /** Запустить процесс обновления устройства */
-  async beginUpdate() {
-    if (this.bluetooth.connected) {
-      await this.bluetooth.send(this.update.begin.get());
+    if (this.update.end) {
+      debounce(() => this.emit(API_EVENT_UPDATE_ERROR, (0,lang.t)("update.notify.errorWaitUpdate")), 60000);
+    } else {
+      debounce(() => this.emit(API_EVENT_UPDATE_ERROR, (0,lang.t)("update.notify.errorUpload")), 5000);
     }
-    debounce(() => this.emit(API_EVENT_UPDATE_ERROR, (0,lang.t)("update.notify.errorWaitUpdate")), 60000);
   }
   /** Лог версии прошивки */
   logVersion() {
@@ -6907,6 +6895,8 @@ class Canbus extends (eventemitter3_default()) {
   checkVersion() {
     return new Promise((resolve, reject) => {
       getFirmwareVersion().then(res => {
+        this.update.firmwareUrl = res?.url ?? "";
+        this.update.setIV(res?.iv);
         // проверяем версию прошивки
         if (res.current?.length === 4) {
           const ver = res.current;
@@ -7700,8 +7690,9 @@ var vue_i18n_esm_bundler = __webpack_require__(5658);
     },
     process: {
       preparation: "Подготовка к загрузке ...",
-      upload: "Загрузка прошивки ...",
-      update: "Обновление прошивки ..."
+      upload: "Загрузка прошивки",
+      update: "Обновление прошивки ...",
+      timeLeft: "Оставшееся время"
     },
     notify: {
       completed: "Прошивка успешно завершена",
@@ -8186,8 +8177,9 @@ var vue_i18n_esm_bundler = __webpack_require__(5658);
     },
     process: {
       preparation: "Preparing to upload...",
-      upload: "Uploading Firmware...",
-      update: "Firmware update..."
+      upload: "Uploading Firmware",
+      update: "Firmware update...",
+      timeLeft: "Time left"
     },
     notify: {
       completed: "Firmware completed successfully",
@@ -8658,7 +8650,7 @@ const t = i18n.global.t;
 
 /***/ }),
 
-/***/ 6205:
+/***/ 3961:
 /***/ (function(__unused_webpack_module, __unused_webpack___webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -12982,9 +12974,9 @@ if (!nativeAPI) {
 /* harmony default export */ var node_modules_screenfull = (screenfull);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/components/VIcon/VIcon.mjs + 1 modules
 var VIcon = __webpack_require__(3289);
-;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/layout/components/BluetoothBtn.vue?vue&type=template&id=e00596fc&scoped=true&ts=true
+;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/layout/components/BluetoothBtn.vue?vue&type=template&id=553e80d3&scoped=true&ts=true
 
-function BluetoothBtnvue_type_template_id_e00596fc_scoped_true_ts_true_render(_ctx, _cache, $props, $setup, $data, $options) {
+function BluetoothBtnvue_type_template_id_553e80d3_scoped_true_ts_true_render(_ctx, _cache, $props, $setup, $data, $options) {
                                                         
                                                       
   return (0,runtime_core_esm_bundler/* openBlock */.wg)(), (0,runtime_core_esm_bundler/* createBlock */.j4)(VBtn/* VBtn */.T, {
@@ -13060,7 +13052,7 @@ var canbus = __webpack_require__(2223);
     const onConnected = status => {
       connected.value = status === bluetooth/* TConnectedStatus.CONNECT */.xz.CONNECT;
       // Не выводим сообщения об отключении/подключении Bluetooth в момент прошивки устройства
-      if (canbus/* default.update.upload.last */.ZP.update.upload.last) {
+      if (canbus/* default.update.total */.ZP.update.total > 0) {
         // Если устройство отключилось, значит возникли проблемы с восстановлением соединения.
         // Просим подключить устройство
         if (status === bluetooth/* TConnectedStatus.DISCONNECT */.xz.DISCONNECT) showMessage();
@@ -13101,10 +13093,10 @@ var canbus = __webpack_require__(2223);
 });
 ;// CONCATENATED MODULE: ./src/layout/components/BluetoothBtn.vue?vue&type=script&lang=ts
  
-;// CONCATENATED MODULE: ./node_modules/mini-css-extract-plugin/dist/loader.js??clonedRuleSet-22.use[0]!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/layout/components/BluetoothBtn.vue?vue&type=style&index=0&id=e00596fc&lang=scss&scoped=true
+;// CONCATENATED MODULE: ./node_modules/mini-css-extract-plugin/dist/loader.js??clonedRuleSet-22.use[0]!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/layout/components/BluetoothBtn.vue?vue&type=style&index=0&id=553e80d3&lang=scss&scoped=true
 // extracted by mini-css-extract-plugin
 
-;// CONCATENATED MODULE: ./src/layout/components/BluetoothBtn.vue?vue&type=style&index=0&id=e00596fc&lang=scss&scoped=true
+;// CONCATENATED MODULE: ./src/layout/components/BluetoothBtn.vue?vue&type=style&index=0&id=553e80d3&lang=scss&scoped=true
 
 // EXTERNAL MODULE: ./node_modules/vue-loader/dist/exportHelper.js
 var exportHelper = __webpack_require__(89);
@@ -13116,17 +13108,18 @@ var exportHelper = __webpack_require__(89);
 ;
 
 
-const __exports__ = /*#__PURE__*/(0,exportHelper/* default */.Z)(BluetoothBtnvue_type_script_lang_ts, [['render',BluetoothBtnvue_type_template_id_e00596fc_scoped_true_ts_true_render],['__scopeId',"data-v-e00596fc"]])
+const __exports__ = /*#__PURE__*/(0,exportHelper/* default */.Z)(BluetoothBtnvue_type_script_lang_ts, [['render',BluetoothBtnvue_type_template_id_553e80d3_scoped_true_ts_true_render],['__scopeId',"data-v-553e80d3"]])
 
 /* harmony default export */ var BluetoothBtn = (__exports__);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/components/VProgressLinear/VProgressLinear.mjs + 1 modules
 var VProgressLinear = __webpack_require__(7325);
-;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/layout/components/UpdateFirmwareDialog.vue?vue&type=template&id=bba1ae08&ts=true
+;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/layout/components/UpdateFirmwareDialog.vue?vue&type=template&id=5eef5244&ts=true
 
-const UpdateFirmwareDialogvue_type_template_id_bba1ae08_ts_true_hoisted_1 = {
-  class: "pb-2 d-flex justify-space-between"
+const UpdateFirmwareDialogvue_type_template_id_5eef5244_ts_true_hoisted_1 = {
+  key: 0,
+  class: "pb-3 d-flex justify-space-between"
 };
-function UpdateFirmwareDialogvue_type_template_id_bba1ae08_ts_true_render(_ctx, _cache, $props, $setup, $data, $options) {
+function UpdateFirmwareDialogvue_type_template_id_5eef5244_ts_true_render(_ctx, _cache, $props, $setup, $data, $options) {
                                                       
   const _component_dialog_template = (0,runtime_core_esm_bundler/* resolveComponent */.up)("dialog-template");
                                                                               
@@ -13143,7 +13136,7 @@ function UpdateFirmwareDialogvue_type_template_id_bba1ae08_ts_true_render(_ctx, 
     })), 1)]),
     btns: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VBtn/* VBtn */.T, {
       color: "primary",
-      onClick: $setup.onUpdateUpload
+      onClick: $setup.onUpdateStart
     }, {
       default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createTextVNode */.Uk)((0,shared_esm_bundler/* toDisplayString */.zw)(_ctx.$t("update.btn.update")), 1)]),
       _: 1
@@ -13162,7 +13155,11 @@ function UpdateFirmwareDialogvue_type_template_id_bba1ae08_ts_true_render(_ctx, 
     title: _ctx.$t('update.title'),
     text: ""
   }, {
-    body: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createElementVNode */._)("div", UpdateFirmwareDialogvue_type_template_id_bba1ae08_ts_true_hoisted_1, [(0,runtime_core_esm_bundler/* createElementVNode */._)("span", null, (0,shared_esm_bundler/* toDisplayString */.zw)($setup.message), 1), (0,runtime_core_esm_bundler/* createElementVNode */._)("span", null, (0,shared_esm_bundler/* toDisplayString */.zw)($setup.uploading), 1)]), (0,runtime_core_esm_bundler/* createVNode */.Wm)(VProgressLinear/* VProgressLinear */.K, {
+    body: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createElementVNode */._)("div", {
+      class: (0,shared_esm_bundler/* normalizeClass */.C_)(["d-flex justify-space-between", {
+        'pb-3': $setup.progress === 0 || !$setup.timeLeft?.length
+      }])
+    }, [(0,runtime_core_esm_bundler/* createElementVNode */._)("span", null, (0,shared_esm_bundler/* toDisplayString */.zw)($setup.message), 1), (0,runtime_core_esm_bundler/* createElementVNode */._)("span", null, (0,shared_esm_bundler/* toDisplayString */.zw)($setup.uploading), 1)], 2), $setup.progress > 0 && $setup.timeLeft?.length ? ((0,runtime_core_esm_bundler/* openBlock */.wg)(), (0,runtime_core_esm_bundler/* createElementBlock */.iD)("div", UpdateFirmwareDialogvue_type_template_id_5eef5244_ts_true_hoisted_1, [(0,runtime_core_esm_bundler/* createElementVNode */._)("span", null, (0,shared_esm_bundler/* toDisplayString */.zw)(_ctx.$t("update.process.timeLeft")), 1), (0,runtime_core_esm_bundler/* createElementVNode */._)("span", null, (0,shared_esm_bundler/* toDisplayString */.zw)($setup.timeLeft), 1)])) : (0,runtime_core_esm_bundler/* createCommentVNode */.kq)("", true), (0,runtime_core_esm_bundler/* createVNode */.Wm)(VProgressLinear/* VProgressLinear */.K, {
       "model-value": $setup.progress,
       color: "primary",
       height: "10",
@@ -13179,11 +13176,14 @@ function UpdateFirmwareDialogvue_type_template_id_bba1ae08_ts_true_render(_ctx, 
 
 
 
-;// CONCATENATED MODULE: ./src/layout/components/UpdateFirmwareDialog.vue?vue&type=template&id=bba1ae08&ts=true
+;// CONCATENATED MODULE: ./src/layout/components/UpdateFirmwareDialog.vue?vue&type=template&id=5eef5244&ts=true
 
 // EXTERNAL MODULE: ./src/models/pjcan/update/index.ts + 2 modules
-var update = __webpack_require__(4312);
+var update = __webpack_require__(8293);
+// EXTERNAL MODULE: ./src/utils/time.ts
+var time = __webpack_require__(2123);
 ;// CONCATENATED MODULE: ./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/layout/components/UpdateFirmwareDialog.vue?vue&type=script&lang=ts
+
 
 
 
@@ -13209,6 +13209,7 @@ const DELAY_CHECK_VERSION = 300000;
     const message = (0,reactivity_esm_bundler/* ref */.iH)("");
     const progress = (0,reactivity_esm_bundler/* ref */.iH)(0);
     const uploading = (0,reactivity_esm_bundler/* ref */.iH)("");
+    const timeLeft = (0,reactivity_esm_bundler/* ref */.iH)("");
     let timerCheckVersion;
     /**
      * Проверка версии прошивки
@@ -13230,14 +13231,14 @@ const DELAY_CHECK_VERSION = 300000;
       visibleProcess.value = false;
       if (timerCheckVersion) clearTimeout(timerCheckVersion);
       canbus/* default.removeListener */.ZP.removeListener(canbus/* API_EVENT_UPDATE_ERROR */.bP, onErrorUpdate);
-      canbus/* default.update.upload.clear */.ZP.update.upload.clear();
+      canbus/* default.update.clear */.ZP.update.clear();
     };
     /**
      * Событие подключения к Bluetooth
      * @param {TConnectedStatus} status Статус подключения Bluetooth
      */
     const onConnected = status => {
-      if (canbus/* default.update.upload.last */.ZP.update.upload.last) {
+      if (canbus/* default.update.total */.ZP.update.total > 0) {
         if (status !== bluetooth/* TConnectedStatus.CONNECT */.xz.CONNECT) return;
         // завершение прошивки
         setTimeout(() => {
@@ -13252,41 +13253,51 @@ const DELAY_CHECK_VERSION = 300000;
       }
     };
     /** Событие запуска прошивки */
-    const onUpdateUpload = () => {
+    const onUpdateStart = () => {
       message.value = t("update.process.preparation");
       uploading.value = "";
       progress.value = 0;
       visibleUpdate.value = false;
       visibleProcess.value = true;
       canbus/* default.addListener */.ZP.addListener(canbus/* API_EVENT_UPDATE_ERROR */.bP, onErrorUpdate);
-      canbus/* default.beginUpload */.ZP.beginUpload();
+      canbus/* default.updateStart */.ZP.updateStart();
+    };
+    const last = {
+      value: 0,
+      offset: 0,
+      now: 0
     };
     /**
      * Событие загрузки прошивки на устройство PJCAN
-     * @param {boolean} result Результат загрузки
+     * @param {number} error Код ошибки
      */
-    const onUpload = result => {
-      if (result) {
-        message.value = t("update.process.upload");
-        progress.value = canbus/* default.update.upload.uploading */.ZP.update.upload.uploading * 100;
-        uploading.value = progress.value.toFixed(2) + "%";
-        if (canbus/* default.update.upload.offset */.ZP.update.upload.offset === canbus/* default.update.upload.data.byteLength */.ZP.update.upload.data.byteLength) {
-          canbus/* default.beginUpdate */.ZP.beginUpdate();
+    const onUpdate = error => {
+      if (error === 0) {
+        if (canbus/* default.update.offset */.ZP.update.offset < canbus/* default.update.total */.ZP.update.total) {
+          message.value = t("update.process.upload");
+          progress.value = canbus/* default.update.uploading */.ZP.update.uploading * 100;
+          uploading.value = progress.value.toFixed(2) + "%";
+          canbus/* default.updateUpload */.ZP.updateUpload();
+          // подсчет оставшегося времени
+          if (!last.now) {
+            last.value = 0;
+            last.offset = canbus/* default.update.offset */.ZP.update.offset;
+            last.now = Date.now();
+          } else {
+            const value = Math.floor((canbus/* default.update.total */.ZP.update.total - canbus/* default.update.offset */.ZP.update.offset) / (canbus/* default.update.offset */.ZP.update.offset - last.offset) * (Date.now() - last.now));
+            last.value = Math.floor((last.value + value) / 2);
+            last.offset = canbus/* default.update.offset */.ZP.update.offset;
+            last.now = Date.now();
+            timeLeft.value = (0,time/* getFormatTime */.g)(last.value);
+          }
+        } else {
+          message.value = t("update.process.update");
+          progress.value = 0;
+          uploading.value = "";
+          last.now = 0;
+          timeLeft.value = "";
+          canbus/* default.configs.version.clear */.ZP.configs.version.clear();
         }
-      } else {
-        onErrorUpdate(t("update.notify.error"));
-      }
-    };
-    /**
-     * Событие успешного начала прошивки устройства
-     * @param {boolean} result Результат начала прошивки
-     */
-    const onUpdate = result => {
-      if (result) {
-        message.value = t("update.process.update");
-        progress.value = 0;
-        uploading.value = "";
-        canbus/* default.configs.version.clear */.ZP.configs.version.clear();
       } else {
         onErrorUpdate(t("update.notify.error"));
       }
@@ -13298,13 +13309,11 @@ const DELAY_CHECK_VERSION = 300000;
     };
     (0,runtime_core_esm_bundler/* onMounted */.bv)(() => {
       canbus/* default.bluetooth.addListener */.ZP.bluetooth.addListener(bluetooth/* BLUETOOTH_EVENT_CONNECTED */.Dx, onConnected);
-      canbus/* default.update.upload.addListener */.ZP.update.upload.addListener(update/* UPDATE_UPLOAD_EVENT_RESULT */.FB, onUpload);
-      canbus/* default.update.begin.addListener */.ZP.update.begin.addListener(update/* UPDATE_BEGIN_EVENT_RESULT */.ML, onUpdate);
+      canbus/* default.update.addListener */.ZP.update.addListener(update/* API_EVENT_UPDATE */.Ox, onUpdate);
     });
     (0,runtime_core_esm_bundler/* onUnmounted */.Ah)(() => {
       canbus/* default.bluetooth.removeListener */.ZP.bluetooth.removeListener(bluetooth/* BLUETOOTH_EVENT_CONNECTED */.Dx, onConnected);
-      canbus/* default.update.upload.removeListener */.ZP.update.upload.removeListener(update/* UPDATE_UPLOAD_EVENT_RESULT */.FB, onUpload);
-      canbus/* default.update.begin.removeListener */.ZP.update.begin.removeListener(update/* UPDATE_BEGIN_EVENT_RESULT */.ML, onUpdate);
+      canbus/* default.update.removeListener */.ZP.update.removeListener(update/* API_EVENT_UPDATE */.Ox, onUpdate);
       canbus/* default.removeListener */.ZP.removeListener(canbus/* API_EVENT_UPDATE_ERROR */.bP, onErrorUpdate);
     });
     return {
@@ -13313,9 +13322,10 @@ const DELAY_CHECK_VERSION = 300000;
       version,
       message,
       uploading,
+      timeLeft,
       progress,
       onCancel,
-      onUpdateUpload
+      onUpdateStart
     };
   }
 });
@@ -13327,7 +13337,7 @@ const DELAY_CHECK_VERSION = 300000;
 
 
 ;
-const UpdateFirmwareDialog_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(UpdateFirmwareDialogvue_type_script_lang_ts, [['render',UpdateFirmwareDialogvue_type_template_id_bba1ae08_ts_true_render]])
+const UpdateFirmwareDialog_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(UpdateFirmwareDialogvue_type_script_lang_ts, [['render',UpdateFirmwareDialogvue_type_template_id_5eef5244_ts_true_render]])
 
 /* harmony default export */ var UpdateFirmwareDialog = (UpdateFirmwareDialog_exports_);
 // EXTERNAL MODULE: ./src/components/MenuDots.vue + 3 modules
@@ -14180,8 +14190,8 @@ function TestDialogvue_type_template_id_031e535a_scoped_true_ts_true_render(_ctx
 
 
 
-// EXTERNAL MODULE: ./src/components/cards/InputCardItem.vue + 7 modules
-var InputCardItem = __webpack_require__(3728);
+// EXTERNAL MODULE: ./src/components/cards/InputCardItem.vue + 6 modules
+var InputCardItem = __webpack_require__(5943);
 // EXTERNAL MODULE: ./src/components/common/NumberField.vue + 3 modules
 var NumberField = __webpack_require__(3066);
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/defineProperty.js
@@ -22790,12 +22800,12 @@ const Vue3ToasityOptions = {
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "g": function() { return /* binding */ BaseModel; }
 /* harmony export */ });
-/* harmony import */ var C_Projects_PJ82_PJCAN_PJCAN_App_node_modules_babel_runtime_helpers_esm_defineProperty_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2482);
+/* harmony import */ var C_Projects_PJ82_PJCAN_pjcan_app_node_modules_babel_runtime_helpers_esm_defineProperty_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2482);
 
 /** Базовая модель */
 class BaseModel {
   constructor() {
-    (0,C_Projects_PJ82_PJCAN_PJCAN_App_node_modules_babel_runtime_helpers_esm_defineProperty_js__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z)(this, "isData", false);
+    (0,C_Projects_PJ82_PJCAN_pjcan_app_node_modules_babel_runtime_helpers_esm_defineProperty_js__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z)(this, "isData", false);
   }
   /**
    * Запись данных
@@ -23406,23 +23416,20 @@ class TeyesView extends BaseModel/* BaseModel */.g {
 
 /***/ }),
 
-/***/ 4312:
+/***/ 8293:
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, {
-  "c8": function() { return /* reexport */ API_EXEC_UPDATE_BEGIN_GZ; },
-  "g0": function() { return /* reexport */ API_EXEC_UPDATE_UPLOAD_GZ; },
-  "ML": function() { return /* reexport */ UPDATE_BEGIN_EVENT_RESULT; },
-  "FB": function() { return /* reexport */ UPDATE_UPLOAD_EVENT_RESULT; },
-  "N7": function() { return /* reexport */ UpdateBegin; },
-  "k0": function() { return /* reexport */ UpdateData; }
+  "Ox": function() { return /* reexport */ API_EVENT_UPDATE; },
+  "Wt": function() { return /* reexport */ API_EXEC_UPDATE; },
+  "BN": function() { return /* reexport */ Update; }
 });
 
-// UNUSED EXPORTS: API_SIZE_UPDATE_UPLOAD_GZ
-
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/defineProperty.js
+var defineProperty = __webpack_require__(2482);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.typed-array.find-last.js
 var es_typed_array_find_last = __webpack_require__(3408);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.typed-array.find-last-index.js
@@ -23430,85 +23437,119 @@ var es_typed_array_find_last_index = __webpack_require__(4590);
 // EXTERNAL MODULE: ./node_modules/eventemitter3/index.js
 var eventemitter3 = __webpack_require__(6856);
 var eventemitter3_default = /*#__PURE__*/__webpack_require__.n(eventemitter3);
-;// CONCATENATED MODULE: ./src/models/pjcan/update/UpdateBegin.ts
+// EXTERNAL MODULE: ./src/components/bluetooth/index.ts + 4 modules
+var bluetooth = __webpack_require__(9014);
+;// CONCATENATED MODULE: ./src/models/pjcan/update/StructUpdate.ts
 
-
-
-const API_EXEC_UPDATE_BEGIN_GZ = 93;
-const UPDATE_BEGIN_EVENT_RESULT = "begin_result";
-/** Модель начала обновления прошивки устройства */
-class UpdateBegin extends (eventemitter3_default()) {
-  constructor(data) {
-    super();
-    if (data) this.set(data);
-  }
-  /**
-   * Запись данных
-   * @param {DataView} buf Буффер данных
-   */
-  set(buf) {
-    if (buf.getUint8(0) === API_EXEC_UPDATE_BEGIN_GZ && buf.byteLength === 2) {
-      this.emit(UPDATE_BEGIN_EVENT_RESULT, buf.getUint8(1) === 0);
-    }
-  }
-  /** Чтение данных */
-  get() {
-    return new DataView(new Uint8Array([API_EXEC_UPDATE_BEGIN_GZ]).buffer);
-  }
-}
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/defineProperty.js
-var defineProperty = __webpack_require__(2482);
-;// CONCATENATED MODULE: ./src/models/pjcan/update/UpdateData.ts
+const UPDATE_VALUE_DATA_SIZE = 496;
+/** Структура данных */
+const StructUpdate = {
+  begin: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+  end: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+  abort: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+  encrypt: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+  iv: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+  total: bluetooth/* BluetoothStruct.uint32 */.GD.uint32(),
+  size: bluetooth/* BluetoothStruct.uint16 */.GD.uint16()
+};
+;// CONCATENATED MODULE: ./src/models/pjcan/update/Update.ts
 
 
 
 
-const API_EXEC_UPDATE_UPLOAD_GZ = 92;
-const API_SIZE_UPDATE_UPLOAD_GZ = 511;
-const UPDATE_UPLOAD_EVENT_RESULT = "UploadResult";
-/** Модель загрузки данных прошивки */
-class UpdateData extends (eventemitter3_default()) {
+
+
+const API_EXEC_UPDATE = 90;
+const API_SIZE_UPDATE = 503;
+const API_EVENT_UPDATE = "Update";
+const struct = new bluetooth/* BluetoothStruct */.GD(StructUpdate);
+/** Модель обновления прошивки */
+class Update extends (eventemitter3_default()) {
   get uploading() {
-    return this.offset > 0 ? this.offset / this.data.byteLength : 0;
+    return this.offset > 0 ? this.offset / this.total : 0;
   }
   constructor(data) {
     super();
-    (0,defineProperty/* default */.Z)(this, "data", new Uint8Array(0));
+    (0,defineProperty/* default */.Z)(this, "firmwareUrl", "");
+    (0,defineProperty/* default */.Z)(this, "firmwareData", new Uint8Array(0));
     (0,defineProperty/* default */.Z)(this, "offset", 0);
-    (0,defineProperty/* default */.Z)(this, "last", false);
+    (0,defineProperty/* default */.Z)(this, "error", 0);
+    (0,defineProperty/* default */.Z)(this, "encrypt", false);
+    (0,defineProperty/* default */.Z)(this, "iv", false);
+    (0,defineProperty/* default */.Z)(this, "ivData", new Uint8Array(0));
+    (0,defineProperty/* default */.Z)(this, "begin", false);
+    (0,defineProperty/* default */.Z)(this, "end", false);
+    (0,defineProperty/* default */.Z)(this, "abort", false);
+    (0,defineProperty/* default */.Z)(this, "total", 0);
+    (0,defineProperty/* default */.Z)(this, "size", 0);
     if (data) this.set(data);
   }
   /** Очистить данные */
   clear() {
-    this.data = new Uint8Array(0);
+    this.firmwareData = new Uint8Array(0);
     this.offset = 0;
-    this.last = false;
+    this.error = 0;
+    this.begin = false;
+    this.end = false;
+    this.abort = false;
+    this.encrypt = false;
+    this.total = 0;
+    this.size = 0;
+  }
+  /**
+   * Записать значение IV
+   * @param res
+   */
+  setIV(res) {
+    this.iv = !!res && res?.length % 2 === 0 && /^[a-f\d]+$/i.test(res);
+    if (this.iv) {
+      this.ivData = new Uint8Array(res.length / 2);
+      let pos = 0;
+      for (let i = 0; i < res.length; i += 2) {
+        this.ivData[pos] = parseInt(res.substring(i, i + 2), 16);
+        pos++;
+      }
+    }
+    return this.iv;
   }
   /**
    * Запись данных
    * @param {DataView} buf Буффер данных
    */
   set(buf) {
-    if (buf.getUint8(0) === API_EXEC_UPDATE_UPLOAD_GZ && buf.byteLength === 2) {
-      this.last = buf.getUint8(1) === 0;
-      this.emit(UPDATE_UPLOAD_EVENT_RESULT, this.last);
+    if (buf.getUint8(0) === API_EXEC_UPDATE && buf.byteLength === 2) {
+      this.error = buf.getUint8(1);
+      this.emit(API_EVENT_UPDATE, this.error);
     }
   }
   /** Чтение данных */
   get() {
-    let size = this.data.byteLength - this.offset;
-    if (size < 0) size = 0;else if (size > API_SIZE_UPDATE_UPLOAD_GZ) size = API_SIZE_UPDATE_UPLOAD_GZ;
-    const buf = new Uint8Array(size + 1);
-    buf[0] = API_EXEC_UPDATE_UPLOAD_GZ;
-    for (let i = 0; i < size; i++) {
-      buf[i + 1] = this.data[this.offset];
-      this.offset++;
+    try {
+      const buf = new DataView(new ArrayBuffer(API_SIZE_UPDATE + 1));
+      buf.setUint8(0, API_EXEC_UPDATE);
+      this.begin = !this.begin && this.offset === 0;
+      if (this.begin && this.encrypt && this.iv) {
+        this.size = this.ivData.length;
+        for (let i = 0; i < this.size; i++) {
+          buf.setUint8(8 + i, this.ivData[i]);
+        }
+      } else {
+        this.size = this.total - this.offset;
+        if (this.size > UPDATE_VALUE_DATA_SIZE) this.size = UPDATE_VALUE_DATA_SIZE;else if (this.size < 0) this.size = 0;
+        for (let i = 0; i < this.size; i++) {
+          buf.setUint8(8 + i, this.firmwareData[this.offset]);
+          this.offset++;
+        }
+      }
+      this.end = this.offset >= this.total;
+      struct?.encode(buf, this, 1);
+      return buf;
+    } catch (e) {
+      console.log(e);
     }
-    return new DataView(buf.buffer);
   }
 }
 ;// CONCATENATED MODULE: ./src/models/pjcan/update/index.ts
-
 
 
 
@@ -26241,6 +26282,33 @@ const store = createStore({
   strict: "production" === "development"
 });
 /* harmony default export */ var src_store = (store);
+
+/***/ }),
+
+/***/ 2123:
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "g": function() { return /* binding */ getFormatTime; }
+/* harmony export */ });
+/**
+ * Чтение форматированного времени типа hh:mm:ss
+ * @param {number|bigint} value Значение
+ * @param {boolean} msec Миллисекунды или секунды
+ */
+const getFormatTime = (value, msec = true) => {
+  let _msec = typeof value === "number" ? msec ? value / 1000 : value : msec ? Number(value / BigInt(1000)) : Number(value);
+  const second = Math.floor(_msec % 60);
+  _msec /= 60;
+  const minute = Math.floor(_msec % 60);
+  _msec /= 60;
+  const _second = second < 10 ? "0" + second.toString() : second.toString();
+  const _minute = minute < 10 ? "0" + minute.toString() : minute.toString();
+  const _hour = _msec < 10 ? "0" + Math.floor(_msec).toString() : Math.floor(_msec).toString();
+  return `${_hour}:${_minute}:${_second}`;
+};
+
 
 /***/ }),
 
@@ -64315,7 +64383,7 @@ const __exports__ = /*#__PURE__*/(0,exportHelper/* default */.Z)(MenuDotsvue_typ
 
 /***/ }),
 
-/***/ 3728:
+/***/ 5943:
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -64363,24 +64431,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 
 // EXTERNAL MODULE: ./node_modules/@vue/reactivity/dist/reactivity.esm-bundler.js
 var reactivity_esm_bundler = __webpack_require__(4870);
-;// CONCATENATED MODULE: ./src/utils/time.ts
-/**
- * Чтение форматированного времени типа hh:mm:ss
- * @param {number|bigint} value Значение
- * @param {boolean} msec Миллисекунды или секунды
- */
-const getFormatTime = (value, msec = true) => {
-  let _msec = typeof value === "number" ? msec ? value / 1000 : value : msec ? Number(value / BigInt(1000)) : Number(value);
-  const second = Math.floor(_msec % 60);
-  _msec /= 60;
-  const minute = Math.floor(_msec % 60);
-  _msec /= 60;
-  const _second = second < 10 ? "0" + second.toString() : second.toString();
-  const _minute = minute < 10 ? "0" + minute.toString() : minute.toString();
-  const _hour = _msec < 10 ? "0" + Math.floor(_msec).toString() : Math.floor(_msec).toString();
-  return `${_hour}:${_minute}:${_second}`;
-};
-
+// EXTERNAL MODULE: ./src/utils/time.ts
+var time = __webpack_require__(2123);
 ;// CONCATENATED MODULE: ./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/cards/InputCardItem.vue?vue&type=script&lang=ts
 
 
@@ -64416,7 +64468,7 @@ const getFormatTime = (value, msec = true) => {
             switch (typeof value.value) {
               case "number":
               case "bigint":
-                return getFormatTime(value.value);
+                return (0,time/* getFormatTime */.g)(value.value);
               case "string":
                 return value.value;
             }
@@ -64427,7 +64479,7 @@ const getFormatTime = (value, msec = true) => {
             switch (typeof value.value) {
               case "number":
               case "bigint":
-                return getFormatTime(value.value, false);
+                return (0,time/* getFormatTime */.g)(value.value, false);
               case "string":
                 return value.value;
             }
@@ -78520,13 +78572,13 @@ function useRender(render) {
 /***/ (function(module) {
 
 "use strict";
-module.exports = JSON.parse('{"name":"pjcan","version":"0.2.1","private":true,"description":"CanBus project for Mazda 3","author":"PJ82. Spiridonov Vladislav","scripts":{"serve":"vue-cli-service serve","build":"vue-cli-service build","lint":"vue-cli-service lint"},"dependencies":{"@egjs/vue3-flicking":"^4.10.2","@mdi/font":"7.0.96","axios":"^1.1.3","bitset":"^5.1.1","core-js":"^3.26.0","eventemitter3":"^4.0.7","moment":"^2.29.4","register-service-worker":"^1.7.2","roboto-fontface":"*","screenfull":"^6.0.2","vue":"^3.2.41","vue-i18n":"^9.2.2","vue-router":"^4.1.6","vue3-toastify":"^0.0.3","vuedraggable":"^2.24.3","vuetify":"^3.1.5","vuex":"^4.1.0","webfontloader":"^1.6.28"},"devDependencies":{"@types/node":"^12.0.2","@types/webfontloader":"^1.6.29","@typescript-eslint/eslint-plugin":"^5.42.0","@typescript-eslint/parser":"^5.42.0","@vue/cli-plugin-babel":"~5.0.8","@vue/cli-plugin-eslint":"~5.0.8","@vue/cli-plugin-pwa":"~5.0.8","@vue/cli-plugin-router":"~5.0.8","@vue/cli-plugin-typescript":"~5.0.8","@vue/cli-plugin-vuex":"~5.0.8","@vue/cli-service":"~5.0.8","@vue/eslint-config-typescript":"^11.0.2","@vueuse/core":"^9.4.0","eslint":"^8.26.0","eslint-config-prettier":"^8.5.0","eslint-plugin-prettier":"^4.2.1","eslint-plugin-vue":"^9.7.0","prettier":"^2.7.1","sass":"^1.56.0","sass-loader":"^13.1.0","script-ext-html-webpack-plugin":"^2.1.5","typescript":"~4.8.4","vue-cli-plugin-vuetify":"~2.5.8","webpack-plugin-vuetify":"^2.0.0"},"eslintConfig":{"root":true,"env":{"node":true},"extends":["plugin:vue/vue3-essential","eslint:recommended","@vue/typescript/recommended","plugin:prettier/recommended"],"parserOptions":{"ecmaVersion":2020},"rules":{}},"browserslist":["> 1%","last 2 versions","not dead","not ie 11"],"productName":"PJCan App"}');
+module.exports = JSON.parse('{"name":"pjcan","version":"0.3.0","private":true,"description":"CanBus project for Mazda 3","author":"PJ82. Spiridonov Vladislav","scripts":{"serve":"vue-cli-service serve","build":"vue-cli-service build","lint":"vue-cli-service lint"},"dependencies":{"@egjs/vue3-flicking":"^4.10.2","@mdi/font":"7.0.96","axios":"^1.1.3","bitset":"^5.1.1","core-js":"^3.26.0","eventemitter3":"^4.0.7","moment":"^2.29.4","register-service-worker":"^1.7.2","roboto-fontface":"*","screenfull":"^6.0.2","vue":"^3.2.41","vue-i18n":"^9.2.2","vue-router":"^4.1.6","vue3-toastify":"^0.0.3","vuedraggable":"^2.24.3","vuetify":"^3.1.5","vuex":"^4.1.0","webfontloader":"^1.6.28"},"devDependencies":{"@types/node":"^12.0.2","@types/webfontloader":"^1.6.29","@typescript-eslint/eslint-plugin":"^5.42.0","@typescript-eslint/parser":"^5.42.0","@vue/cli-plugin-babel":"~5.0.8","@vue/cli-plugin-eslint":"~5.0.8","@vue/cli-plugin-pwa":"~5.0.8","@vue/cli-plugin-router":"~5.0.8","@vue/cli-plugin-typescript":"~5.0.8","@vue/cli-plugin-vuex":"~5.0.8","@vue/cli-service":"~5.0.8","@vue/eslint-config-typescript":"^11.0.2","@vueuse/core":"^9.4.0","eslint":"^8.26.0","eslint-config-prettier":"^8.5.0","eslint-plugin-prettier":"^4.2.1","eslint-plugin-vue":"^9.7.0","prettier":"^2.7.1","sass":"^1.56.0","sass-loader":"^13.1.0","script-ext-html-webpack-plugin":"^2.1.5","typescript":"~4.8.4","vue-cli-plugin-vuetify":"~2.5.8","webpack-plugin-vuetify":"^2.0.0"},"eslintConfig":{"root":true,"env":{"node":true},"extends":["plugin:vue/vue3-essential","eslint:recommended","@vue/typescript/recommended","plugin:prettier/recommended"],"parserOptions":{"ecmaVersion":2020},"rules":{}},"browserslist":["> 1%","last 2 versions","not dead","not ie 11"],"productName":"PJCan App"}');
 
 /***/ })
 
 },
 /******/ function(__webpack_require__) { // webpackRuntimeModules
 /******/ var __webpack_exec__ = function(moduleId) { return __webpack_require__(__webpack_require__.s = moduleId); }
-/******/ var __webpack_exports__ = (__webpack_exec__(6205));
+/******/ var __webpack_exports__ = (__webpack_exec__(3961));
 /******/ }
 ]);
