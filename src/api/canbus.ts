@@ -508,7 +508,7 @@ export class Canbus extends EventEmitter
 
 			case API_EXEC_INFO: // Информация об устройстве
 				this.deviceInfo.set(data);
-				if (!this.sha) this.getSHA();
+				if (this.values.device.isData && !this.sha) this.getSHA();
 				this.emit(API_EVENT_INFO, this.deviceInfo);
 				break;
 			case API_EXEC_DEVICE_CONFIG: // Конфигурация устройства
