@@ -91,7 +91,7 @@
 		</template>
 
 		<template #btns>
-			<v-btn color="primary" @click="visible = false">
+			<v-btn color="primary" prepend-icon="mdi-close" @click="visible = false">
 				{{ $t("btn.close") }}
 			</v-btn>
 		</template>
