@@ -1,5 +1,5 @@
 <template>
-	<dialog-template v-model="visible" :icon="icon" :title="title" :text="!!text" :actions="!!btns">
+	<dialog-template v-model="visible" :icon="icon" :title="title" :text="!!text" :actions="!!btns" :width="width">
 		<template #body>
 			{{ text }}
 		</template>
@@ -8,6 +8,7 @@
 				v-for="(btn, i) in btns"
 				:key="`message-btn_${i}`"
 				:color="btn?.color ?? 'primary'"
+				:prepend-icon="btn?.icon"
 				@click="onClick(btn)"
 			>
 				{{ btn?.title }}
@@ -39,7 +40,9 @@ export default {
 		/** Текст */
 		text: String,
 		/** Список кнопок { title, ?color, on } */
-		btns: Array as () => IMessageBtn[]
+		btns: Array as () => IMessageBtn[],
+		/** Ширина диалога */
+		width: [Number, String]
 	},
 	emits: ["update:modelValue"],
 	setup(props: any, { emit }: { emit: any })

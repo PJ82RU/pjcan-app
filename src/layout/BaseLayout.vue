@@ -43,6 +43,7 @@
 				:icon="message?.icon"
 				:text="message.text"
 				:btns="message?.btns"
+				:width="message?.width"
 			/>
 		</v-main>
 	</v-app>

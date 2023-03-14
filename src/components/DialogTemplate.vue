@@ -98,6 +98,7 @@ export default {
 	&__text {
 		overflow-y: auto;
 		color: #bbb;
+		white-space: pre-line;
 	}
 
 	&__info {

@@ -6,4 +6,5 @@ export interface IMessage {
 	text: string;
 	btns?: IMessageBtn[];
 	timeout?: number;
+	width?: number | string;
 }
