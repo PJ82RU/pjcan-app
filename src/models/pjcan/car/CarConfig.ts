@@ -1,10 +1,9 @@
 import { BluetoothStruct } from "@/components/bluetooth";
 import { BaseModel } from "../base";
-import { StructCarConfig } from "./StructCarConfig";
+import { API_CAR_CONFIG_SIZE, StructCarConfig } from "./StructCarConfig";
 import { ICarConfig } from "./ICarConfig";
 
 export const API_CAR_CONFIG_EXEC = 50;
-export const API_SIZE_CAR_CONFIG = 48;
 
 const struct = new BluetoothStruct(StructCarConfig);
 
@@ -28,12 +27,12 @@ export class CarConfig extends BaseModel implements ICarConfig
 	 */
 	set(buf: DataView): boolean
 	{
-		return this._set(this, API_CAR_CONFIG_EXEC, API_SIZE_CAR_CONFIG + 1, struct, buf);
+		return this._set(this, API_CAR_CONFIG_EXEC, API_CAR_CONFIG_SIZE + 1, struct, buf);
 	}
 
 	/** Чтение данных */
 	get(): DataView | undefined
 	{
-		return this._get(this, API_CAR_CONFIG_EXEC, API_SIZE_CAR_CONFIG + 1, struct);
+		return this._get(this, API_CAR_CONFIG_EXEC, API_CAR_CONFIG_SIZE + 1, struct);
 	}
 }

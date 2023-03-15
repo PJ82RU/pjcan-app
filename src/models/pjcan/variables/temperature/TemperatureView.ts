@@ -1,11 +1,11 @@
 import { BluetoothStruct } from "@/components/bluetooth";
 import { BaseModel } from "../../base";
-import { API_SIZE_VIEW, ViewConfig } from "../../view";
+import { API_VIEW_SIZE, ViewConfig } from "../../view";
 import { StructTemperatureView } from "./StructTemperatureView";
 import { ITemperatureView } from "./ITemperatureView";
 
 export const API_VARIABLE_TEMPERATURE_VIEW_EXEC = 181;
-export const API_SIZE_VARIABLE_TEMPERATURE_VIEW = API_SIZE_VIEW;
+export const API_SIZE_VARIABLE_TEMPERATURE_VIEW = API_VIEW_SIZE;
 
 const struct = new BluetoothStruct(StructTemperatureView);
 

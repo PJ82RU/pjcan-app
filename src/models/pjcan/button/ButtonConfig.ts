@@ -1,11 +1,15 @@
 import { BluetoothStruct } from "@/components/bluetooth";
 import { BaseModel } from "../base";
-import { StructButtonsConfig, BUTTON_NUMBER, BUTTON_PRESS_TYPE_NUMBER } from "./StructButtonsConfig";
+import {
+	StructButtonsConfig,
+	BUTTON_NUMBER,
+	BUTTON_PRESS_TYPE_NUMBER,
+	API_BUTTONS_CONFIG_SIZE
+} from "./StructButtonsConfig";
 import { IButtonsConfig } from "./IButtonsConfig";
 import { IButtonsConfigItem } from "./IButtonsConfigItem";
 
 export const API_BUTTONS_CONFIG_EXEC = 20;
-export const API_SIZE_BUTTONS_CONFIG = 63;
 
 const struct = new BluetoothStruct(StructButtonsConfig);
 
@@ -37,12 +41,12 @@ export class ButtonsConfig extends BaseModel implements IButtonsConfig
 	 */
 	set(buf: DataView): boolean
 	{
-		return this._set(this, API_BUTTONS_CONFIG_EXEC, API_SIZE_BUTTONS_CONFIG + 1, struct, buf);
+		return this._set(this, API_BUTTONS_CONFIG_EXEC, API_BUTTONS_CONFIG_SIZE + 1, struct, buf);
 	}
 
 	/** Чтение данных */
 	get(): DataView | undefined
 	{
-		return this._get(this, API_BUTTONS_CONFIG_EXEC, API_SIZE_BUTTONS_CONFIG + 1, struct);
+		return this._get(this, API_BUTTONS_CONFIG_EXEC, API_BUTTONS_CONFIG_SIZE + 1, struct);
 	}
 }

@@ -1,17 +1,15 @@
 import { BluetoothStruct } from "@/components/bluetooth";
 import { BaseModel } from "../base";
-import { API_SIZE_VERSION, Version } from "@/models/pjcan/version";
-import { API_SIZE_DEVICE_CONFIG, DeviceConfig } from "@/models/pjcan/device";
-import { API_SIZE_BUTTONS_CONFIG, ButtonsConfig } from "../button";
-import { API_SIZE_CAR_CONFIG, CarConfig } from "../car";
-import { API_SIZE_TEYES_CONFIG, TeyesConfig } from "../teyes";
-import { API_SIZE_VARIABLE_CONFIG, VariableConfig } from "../variables/configs";
+import { Version } from "@/models/pjcan/version";
+import { DeviceConfig } from "@/models/pjcan/device";
+import { ButtonsConfig } from "../button";
+import { CarConfig } from "../car";
+import { TeyesConfig } from "../teyes";
+import { VariableConfig } from "../variables/configs";
 import { IConfigs } from "./IConfigs";
-import { StructConfigs } from "./StructConfigs";
+import { API_CONFIG_SIZE, StructConfigs } from "./StructConfigs";
 
 export const API_CONFIG_EXEC = 1;
-export const API_SIZE_CONFIG = API_SIZE_VERSION + API_SIZE_DEVICE_CONFIG + API_SIZE_BUTTONS_CONFIG + API_SIZE_CAR_CONFIG +
-	API_SIZE_TEYES_CONFIG + API_SIZE_VARIABLE_CONFIG;
 
 const struct = new BluetoothStruct(StructConfigs);
 
@@ -36,7 +34,7 @@ export class Configs extends BaseModel implements IConfigs
 	 */
 	set(buf: DataView): boolean
 	{
-		const result = this._set(this, API_CONFIG_EXEC, API_SIZE_CONFIG + 1, struct, buf);
+		const result = this._set(this, API_CONFIG_EXEC, API_CONFIG_SIZE + 1, struct, buf);
 		if (result)
 		{
 			this.device.isData = true;

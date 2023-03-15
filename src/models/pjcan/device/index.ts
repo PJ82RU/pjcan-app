@@ -1,26 +1,29 @@
-import { API_DEVICE_CONFIG_EXEC, DeviceConfig, API_SIZE_DEVICE_CONFIG } from "./DeviceConfig";
-import { API_DEVICE_VALUE_EXEC, DeviceValue, API_SIZE_DEVICE_VALUE } from "./DeviceValue";
-import { API_INFO_EXEC, DeviceInfo, API_SIZE_INFO } from "./DeviceInfo";
-import { StructDeviceConfig } from "./StructDeviceConfig";
-import { StructDeviceValue } from "./StructDeviceValue";
-import { StructDeviceInfo } from "./StructDeviceInfo";
+import { API_DEVICE_CONFIG_EXEC, DeviceConfig } from "./DeviceConfig";
+import { API_DEVICE_CONFIG_SIZE, StructDeviceConfig } from "./StructDeviceConfig";
 import { IDeviceConfig } from "./IDeviceConfig";
-import { IDeviceValue } from "./IDeviceValue";
+
+import { API_INFO_EXEC, DeviceInfo } from "./DeviceInfo";
+import { API_INFO_SIZE, StructDeviceInfo } from "./StructDeviceInfo";
 import { IDeviceInfo } from "./IDeviceInfo";
+
+import { API_DEVICE_VALUE_EXEC, DeviceValue } from "./DeviceValue";
+import { API_DEVICE_VALUE_SIZE, StructDeviceValue } from "./StructDeviceValue";
+import { IDeviceValue } from "./IDeviceValue";
+
 import { IDevice } from "./IDevice";
 
 export {
 	API_DEVICE_CONFIG_EXEC,
 	API_DEVICE_VALUE_EXEC,
-	API_INFO_EXEC,
-	API_SIZE_DEVICE_CONFIG,
-	API_SIZE_DEVICE_VALUE,
-	API_SIZE_INFO,
 	StructDeviceConfig,
-	StructDeviceValue,
-	StructDeviceInfo,
 	DeviceConfig,
-	DeviceValue,
-	DeviceInfo
+	API_INFO_EXEC,
+	API_INFO_SIZE,
+	StructDeviceInfo,
+	DeviceInfo,
+	API_DEVICE_CONFIG_SIZE,
+	API_DEVICE_VALUE_SIZE,
+	StructDeviceValue,
+	DeviceValue
 };
 export type { IDeviceConfig, IDeviceValue, IDeviceInfo, IDevice };

@@ -1,5 +1,7 @@
 import { BluetoothStruct } from "@/components/bluetooth";
 
+export const API_BUTTONS_VALUE_SIZE = 6;
+
 /** Структура данных */
 export const StructButtonsValue = {
 	index: BluetoothStruct.int8(),

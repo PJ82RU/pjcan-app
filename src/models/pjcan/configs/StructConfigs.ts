@@ -1,10 +1,18 @@
 import { BluetoothStruct } from "@/components/bluetooth";
-import { StructVersion } from "@/models/pjcan/version";
-import { StructDeviceConfig } from "@/models/pjcan/device";
-import { StructButtonsConfig } from "../button";
-import { StructCarConfig } from "../car";
-import { StructTeyesConfig } from "../teyes";
-import { StructVariableConfigs } from "../variables/configs";
+import { API_SIZE_VERSION, StructVersion } from "@/models/pjcan/version";
+import { API_DEVICE_CONFIG_SIZE, StructDeviceConfig } from "@/models/pjcan/device";
+import { API_BUTTONS_CONFIG_SIZE, StructButtonsConfig } from "../button";
+import { API_CAR_CONFIG_SIZE, StructCarConfig } from "../car";
+import { API_SIZE_TEYES_CONFIG, StructTeyesConfig } from "../teyes";
+import { API_SIZE_VARIABLE_CONFIG, StructVariableConfigs } from "../variables/configs";
+
+export const API_CONFIG_SIZE =
+	API_SIZE_VERSION +
+	API_DEVICE_CONFIG_SIZE +
+	API_BUTTONS_CONFIG_SIZE +
+	API_CAR_CONFIG_SIZE +
+	API_SIZE_TEYES_CONFIG +
+	API_SIZE_VARIABLE_CONFIG;
 
 export const StructConfigs = {
 	version: BluetoothStruct.struct(StructVersion),

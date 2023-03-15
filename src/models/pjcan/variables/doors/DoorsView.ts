@@ -1,11 +1,11 @@
 import { BluetoothStruct } from "@/components/bluetooth";
 import { BaseModel } from "../../base";
-import { API_SIZE_VIEW, ViewConfig } from "../../view";
+import { API_VIEW_SIZE, ViewConfig } from "../../view";
 import { StructDoorsView } from "./StructDoorsView";
 import { IDoorsView } from "./IDoorsView";
 
 export const API_VARIABLE_DOORS_VIEW_EXEC = 131;
-export const API_SIZE_VARIABLE_DOORS_VIEW = API_SIZE_VIEW;
+export const API_SIZE_VARIABLE_DOORS_VIEW = API_VIEW_SIZE;
 
 const struct = new BluetoothStruct(StructDoorsView);
 

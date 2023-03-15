@@ -1,11 +1,11 @@
 import { BluetoothStruct } from "@/components/bluetooth";
 import { BaseModel } from "../../base";
-import { API_SIZE_VIEW, ViewConfig } from "../../view";
+import { API_VIEW_SIZE, ViewConfig } from "../../view";
 import { StructEngineView } from "./StructEngineView";
 import { IEngineView } from "./IEngineView";
 
 export const API_VARIABLE_ENGINE_VIEW_EXEC = 142;
-export const API_SIZE_VARIABLE_ENGINE_VIEW = API_SIZE_VIEW * 7;
+export const API_SIZE_VARIABLE_ENGINE_VIEW = API_VIEW_SIZE * 7;
 
 const struct = new BluetoothStruct(StructEngineView);
 

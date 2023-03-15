@@ -1,10 +1,9 @@
 import { BluetoothStruct } from "@/components/bluetooth";
 import { BaseModel } from "../base";
-import { API_SIZE_DEVICE_SERIAL, StructDeviceConfig } from "./StructDeviceConfig";
+import { API_DEVICE_CONFIG_SIZE, StructDeviceConfig } from "./StructDeviceConfig";
 import { IDeviceConfig } from "./IDeviceConfig";
 
 export const API_DEVICE_CONFIG_EXEC = 10;
-export const API_SIZE_DEVICE_CONFIG = API_SIZE_DEVICE_SERIAL;
 
 const struct = new BluetoothStruct(StructDeviceConfig);
 
@@ -25,12 +24,12 @@ export class DeviceConfig extends BaseModel implements IDeviceConfig
 	 */
 	set(buf: DataView): boolean
 	{
-		return this._set(this, API_DEVICE_CONFIG_EXEC, API_SIZE_DEVICE_CONFIG + 1, struct, buf);
+		return this._set(this, API_DEVICE_CONFIG_EXEC, API_DEVICE_CONFIG_SIZE + 1, struct, buf);
 	}
 
 	/** Чтение данных */
 	get(): DataView | undefined
 	{
-		return this._get(this, API_DEVICE_CONFIG_EXEC, API_SIZE_DEVICE_CONFIG + 1, struct);
+		return this._get(this, API_DEVICE_CONFIG_EXEC, API_DEVICE_CONFIG_SIZE + 1, struct);
 	}
 }

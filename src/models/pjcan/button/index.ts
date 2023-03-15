@@ -1,27 +1,34 @@
-import { API_BUTTONS_CONFIG_EXEC, ButtonsConfig, API_SIZE_BUTTONS_CONFIG } from "./ButtonConfig";
-import { API_BUTTONS_VALUE_EXEC, ButtonValue, API_SIZE_BUTTONS_VALUE } from "./ButtonValue";
+import { API_BUTTONS_CONFIG_EXEC, ButtonsConfig } from "./ButtonConfig";
+import {
+	API_BUTTONS_CONFIG_SIZE,
+	BUTTON_NUMBER,
+	BUTTON_PRESS_TYPE_NUMBER,
+	StructButtonsConfig
+} from "./StructButtonsConfig";
+import { IButtonsConfig } from "./IButtonsConfig";
+
+import { API_BUTTONS_VALUE_EXEC, ButtonValue } from "./ButtonValue";
+import { API_BUTTONS_VALUE_SIZE, StructButtonsValue } from "./StructButtonsValue";
+import { IButtonValue } from "./IButtonValue";
+
 import { TButtonItem } from "./TButtonItem";
 import { TButtonExec } from "./TButtonExec";
 import { TButtonPress } from "./TButtonPress";
-import { BUTTON_NUMBER, BUTTON_PRESS_TYPE_NUMBER, StructButtonsConfig } from "./StructButtonsConfig";
-import { StructButtonsValue } from "./StructButtonsValue";
 import { IButtonsConfigItem } from "./IButtonsConfigItem";
-import { IButtonsConfig } from "./IButtonsConfig";
-import { IButtonValue } from "./IButtonValue";
 
 export {
 	API_BUTTONS_CONFIG_EXEC,
-	API_BUTTONS_VALUE_EXEC,
-	API_SIZE_BUTTONS_CONFIG,
-	API_SIZE_BUTTONS_VALUE,
+	API_BUTTONS_CONFIG_SIZE,
 	BUTTON_NUMBER,
 	BUTTON_PRESS_TYPE_NUMBER,
 	StructButtonsConfig,
+	ButtonsConfig,
+	API_BUTTONS_VALUE_EXEC,
+	API_BUTTONS_VALUE_SIZE,
 	StructButtonsValue,
+	ButtonValue,
 	TButtonItem,
 	TButtonPress,
-	TButtonExec,
-	ButtonsConfig,
-	ButtonValue
+	TButtonExec
 };
 export type { IButtonsConfigItem, IButtonsConfig, IButtonValue };

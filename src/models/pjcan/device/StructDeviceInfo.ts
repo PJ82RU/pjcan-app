@@ -1,6 +1,7 @@
 import { BluetoothStruct } from "@/components/bluetooth";
 
-export const API_SIZE_DEVICE_SHA = 32;
+export const API_DEVICE_SHA_SIZE = 32;
+export const API_INFO_SIZE = 111 + API_DEVICE_SHA_SIZE;
 
 /** Структура данных */
 export const StructDeviceInfo = {
@@ -26,5 +27,5 @@ export const StructDeviceInfo = {
 	sketchMD5: BluetoothStruct.char(16),
 	sketchSize: BluetoothStruct.uint32(),
 	temperatureChip: BluetoothStruct.uint32(),
-	sha: BluetoothStruct.uint8(API_SIZE_DEVICE_SHA)
+	sha: BluetoothStruct.uint8(API_DEVICE_SHA_SIZE)
 };

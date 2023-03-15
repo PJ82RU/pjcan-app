@@ -1,11 +1,11 @@
 import { BluetoothStruct } from "@/components/bluetooth";
-import { API_SIZE_VIEW, ViewConfig } from "../view";
+import { API_VIEW_SIZE, ViewConfig } from "../view";
 import { BaseModel } from "../base";
 import { StructTeyesView } from "./StructTeyesView";
 import { ITeyesView } from "./ITeyesView";
 
 export const API_TEYES_VIEW_EXEC = 32;
-export const API_SIZE_TEYES_VIEW = API_SIZE_VIEW;
+export const API_SIZE_TEYES_VIEW = API_VIEW_SIZE;
 
 const struct = new BluetoothStruct(StructTeyesView);
 

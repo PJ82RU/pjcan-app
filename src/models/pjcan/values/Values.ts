@@ -4,12 +4,12 @@ import { BluetoothStruct } from "@/components/bluetooth";
 import { BaseModel } from "../base";
 import { StructValues } from "./StructValues";
 import { IValues } from "./IValues";
-import { API_SIZE_DEVICE_VALUE, DeviceValue } from "../device";
+import { API_DEVICE_VALUE_SIZE, DeviceValue } from "../device";
 import { API_SIZE_LCD_VALUE, LCDValue } from "../lcd";
 import { API_SIZE_VARIABLE_VALUE, VariablesValue } from "../variables/values";
 
 export const API_VALUE_EXEC = 3;
-export const API_SIZE_VALUE = API_SIZE_DEVICE_VALUE + API_SIZE_LCD_VALUE + API_SIZE_VARIABLE_VALUE;
+export const API_SIZE_VALUE = API_DEVICE_VALUE_SIZE + API_SIZE_LCD_VALUE + API_SIZE_VARIABLE_VALUE;
 
 const struct = new BluetoothStruct(StructValues);
 
