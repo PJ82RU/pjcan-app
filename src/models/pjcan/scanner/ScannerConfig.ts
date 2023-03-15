@@ -1,6 +1,6 @@
 import { BluetoothStruct } from "@/components/bluetooth";
 import { BaseModel } from "@/models/pjcan/base";
-import { IScannerConfig } from "@/models/pjcan/scanner/IScannerConfig";
+import { IScannerConfig } from "./IScannerConfig";
 import { API_SCANNER_CONFIG_SIZE, StructScannerConfig } from "./StructScannerConfig";
 
 export const API_SCANNER_CONFIG_EXEC = 60;
