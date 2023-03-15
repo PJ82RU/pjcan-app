@@ -42,9 +42,9 @@ import { computed, onMounted, onUnmounted, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
 import canbus, {
-	API_EVENT_VARIABLE_VOLUME,
-	API_EVENT_VARIABLE_VOLUME_CONFIG,
-	API_EVENT_VARIABLE_VOLUME_VIEW
+	API_VARIABLE_VOLUME_EVENT,
+	API_VARIABLE_VOLUME_CONFIG_EVENT,
+	API_VARIABLE_VOLUME_VIEW_EVENT
 } from "@/api/canbus";
 
 import Card from "@/components/cards/Card.vue";
@@ -54,8 +54,8 @@ import ViewSettingDialog from "./ViewSettingDialog.vue";
 
 import { IViewConfig } from "@/models/pjcan/view";
 import {
-	API_EXEC_VARIABLE_VOLUME,
-	API_EXEC_VARIABLE_VOLUME_VIEW,
+	API_VARIABLE_VOLUME_EXEC,
+	API_VARIABLE_VOLUME_VIEW_EXEC,
 	IVolumeConfig,
 	IVolumeValue,
 	IVolumeView
@@ -83,7 +83,7 @@ export default {
 			if (isLoadedValue.value && canbus.values.variable.volume.mute !== val)
 			{
 				canbus.values.variable.volume.mute = val;
-				canbus.queryValue(API_EXEC_VARIABLE_VOLUME);
+				canbus.queryValue(API_VARIABLE_VOLUME_EXEC);
 			}
 		});
 		watch(volume, (val: number) =>
@@ -97,9 +97,9 @@ export default {
 					setTimeout(() =>
 					{
 						queryValueVolumeDisabled = false;
-						canbus.queryValue(API_EXEC_VARIABLE_VOLUME);
+						canbus.queryValue(API_VARIABLE_VOLUME_EXEC);
 					}, 250);
-					canbus.queryValue(API_EXEC_VARIABLE_VOLUME);
+					canbus.queryValue(API_VARIABLE_VOLUME_EXEC);
 				}
 			}
 		});
@@ -140,9 +140,9 @@ export default {
 		// регистрируем события
 		onMounted(() =>
 		{
-			canbus.addListener(API_EVENT_VARIABLE_VOLUME, onReceiveValue);
-			canbus.addListener(API_EVENT_VARIABLE_VOLUME_CONFIG, onReceiveConfig);
-			canbus.addListener(API_EVENT_VARIABLE_VOLUME_VIEW, onReceiveView);
+			canbus.addListener(API_VARIABLE_VOLUME_EVENT, onReceiveValue);
+			canbus.addListener(API_VARIABLE_VOLUME_CONFIG_EVENT, onReceiveConfig);
+			canbus.addListener(API_VARIABLE_VOLUME_VIEW_EVENT, onReceiveView);
 			onReceiveValue(canbus.values.variable.volume);
 			onReceiveConfig(canbus.configs.variable.volume);
 			onReceiveView(canbus.views.variable.volume);
@@ -150,9 +150,9 @@ export default {
 		// удаляем события
 		onUnmounted(() =>
 		{
-			canbus.removeListener(API_EVENT_VARIABLE_VOLUME, onReceiveValue);
-			canbus.removeListener(API_EVENT_VARIABLE_VOLUME_CONFIG, onReceiveConfig);
-			canbus.removeListener(API_EVENT_VARIABLE_VOLUME_VIEW, onReceiveView);
+			canbus.removeListener(API_VARIABLE_VOLUME_EVENT, onReceiveValue);
+			canbus.removeListener(API_VARIABLE_VOLUME_CONFIG_EVENT, onReceiveConfig);
+			canbus.removeListener(API_VARIABLE_VOLUME_VIEW_EVENT, onReceiveView);
 		});
 
 		// МЕНЮ ОТОБРАЖЕНИЯ
@@ -180,7 +180,7 @@ export default {
 		const onViewSettingApply = (data: IViewConfig): void =>
 		{
 			canbus.views.variable.volume.view = data;
-			canbus.queryView(API_EXEC_VARIABLE_VOLUME_VIEW);
+			canbus.queryView(API_VARIABLE_VOLUME_VIEW_EXEC);
 		};
 
 		return {

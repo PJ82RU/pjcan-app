@@ -31,14 +31,14 @@ import { computed, onMounted, onUnmounted, provide, ref, watch } from "vue";
 import { useDisplay } from "vuetify";
 import { useI18n } from "vue-i18n";
 
-import canbus, { API_EVENT_BUTTON, API_EVENT_BUTTONS_CONFIG } from "@/api/canbus";
+import canbus, { API_BUTTON_EVENT, API_BUTTONS_CONFIG_EVENT } from "@/api/canbus";
 
 import Flicking from "@egjs/vue3-flicking";
 import SettingsCard from "./components/SettingsCard.vue";
 import ButtonDefinitionDialog from "./components/ButtonDefinitionDialog.vue";
 
 import {
-	API_EXEC_BUTTONS_CONFIG,
+	API_BUTTONS_CONFIG_EXEC,
 	IButtonsConfig,
 	IButtonValue,
 	TButtonItem,
@@ -131,7 +131,7 @@ export default {
 			if (enabled !== canbus.configs.buttons.sendValue)
 			{
 				canbus.configs.buttons.sendValue = enabled;
-				canbus.queryConfig(API_EXEC_BUTTONS_CONFIG);
+				canbus.queryConfig(API_BUTTONS_CONFIG_EXEC);
 			}
 		};
 
@@ -169,16 +169,16 @@ export default {
 		// регистрируем события
 		onMounted(() =>
 		{
-			canbus.addListener(API_EVENT_BUTTONS_CONFIG, onReceiveConfig);
-			canbus.addListener(API_EVENT_BUTTON, onReceiveValue);
+			canbus.addListener(API_BUTTONS_CONFIG_EVENT, onReceiveConfig);
+			canbus.addListener(API_BUTTON_EVENT, onReceiveValue);
 			onReceiveConfig(canbus.configs.buttons);
 			// onReceiveValue(canbus.buttonValue);
 		});
 		// удаляем события
 		onUnmounted(() =>
 		{
-			canbus.removeListener(API_EVENT_BUTTONS_CONFIG, onReceiveConfig);
-			canbus.removeListener(API_EVENT_BUTTON, onReceiveValue);
+			canbus.removeListener(API_BUTTONS_CONFIG_EVENT, onReceiveConfig);
+			canbus.removeListener(API_BUTTON_EVENT, onReceiveValue);
 
 			enabledSendValue(false);
 		});
@@ -199,7 +199,7 @@ export default {
 				res.exec[TButtonPress.PRESS_HOLD] = x.pressHold;
 				res.exec[TButtonPress.RELEASE] = x.release;
 			});
-			canbus.queryConfig(API_EXEC_BUTTONS_CONFIG);
+			canbus.queryConfig(API_BUTTONS_CONFIG_EXEC);
 		};
 
 		/**
@@ -209,7 +209,7 @@ export default {
 		const onButtonDefinitionApply = (type: TButtonItem): void =>
 		{
 			canbus.configs.buttons.items[type].inR = resistanceButtonDefinition.value;
-			canbus.queryConfig(API_EXEC_BUTTONS_CONFIG);
+			canbus.queryConfig(API_BUTTONS_CONFIG_EXEC);
 			onReceiveConfig(canbus.configs.buttons);
 		};
 

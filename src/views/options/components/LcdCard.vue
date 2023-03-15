@@ -60,10 +60,10 @@ import SwitchCardItem from "@/components/cards/SwitchCardItem.vue";
 import ViewSettingDialog from "@/views/onboard/components/ViewSettingDialog.vue";
 import { IMenuItem } from "@/components/MenuDots.vue";
 
-import { API_EXEC_CAR_CONFIG, API_EXEC_CAR_VIEW, ICarConfig, ICarView } from "@/models/pjcan/car";
+import { API_CAR_CONFIG_EXEC, API_CAR_VIEW_EXEC, ICarConfig, ICarView } from "@/models/pjcan/car";
 import { IViewConfig } from "@/models/pjcan/view";
 
-import canbus, { API_EVENT_CAR_CONFIG, API_EVENT_CAR_VIEW } from "@/api/canbus";
+import canbus, { API_CAR_CONFIG_EVENT, API_CAR_VIEW_EVENT } from "@/api/canbus";
 
 export default {
 	name: "LcdCard",
@@ -129,7 +129,7 @@ export default {
 			car.lcd = enabled.value;
 			car.logo = logo.value;
 			car.hello = hello.value;
-			canbus.queryConfig(API_EXEC_CAR_CONFIG);
+			canbus.queryConfig(API_CAR_CONFIG_EXEC);
 		};
 
 		/**
@@ -144,16 +144,16 @@ export default {
 		// регистрируем события
 		onMounted(() =>
 		{
-			canbus.addListener(API_EVENT_CAR_CONFIG, onReceiveCarConfig);
-			canbus.addListener(API_EVENT_CAR_VIEW, onReceiveCarView);
+			canbus.addListener(API_CAR_CONFIG_EVENT, onReceiveCarConfig);
+			canbus.addListener(API_CAR_VIEW_EVENT, onReceiveCarView);
 			onReceiveCarConfig(canbus.configs.car);
 			onReceiveCarView(canbus.views.car);
 		});
 		// удаляем события
 		onUnmounted(() =>
 		{
-			canbus.removeListener(API_EVENT_CAR_CONFIG, onReceiveCarConfig);
-			canbus.removeListener(API_EVENT_CAR_VIEW, onReceiveCarView);
+			canbus.removeListener(API_CAR_CONFIG_EVENT, onReceiveCarConfig);
+			canbus.removeListener(API_CAR_VIEW_EVENT, onReceiveCarView);
 		});
 
 		// МЕНЮ ОТОБРАЖЕНИЯ
@@ -202,7 +202,7 @@ export default {
 					car.hello = data;
 					break;
 			}
-			canbus.queryView(API_EXEC_CAR_VIEW);
+			canbus.queryView(API_CAR_VIEW_EXEC);
 		};
 
 		return {

@@ -4,7 +4,7 @@ import { API_SIZE_VIEW, ViewConfig } from "../../view";
 import { StructSensorsView } from "./StructSensorsView";
 import { ISensorsView } from "./ISensorsView";
 
-export const API_EXEC_VARIABLE_SENSORS_VIEW = 171;
+export const API_VARIABLE_SENSORS_VIEW_EXEC = 171;
 export const API_SIZE_VARIABLE_SENSORS_VIEW = API_SIZE_VIEW * 4;
 
 const struct = new BluetoothStruct(StructSensorsView);
@@ -29,12 +29,12 @@ export class SensorsView extends BaseModel implements ISensorsView
 	 */
 	set(buf: DataView): boolean
 	{
-		return this._set(this, API_EXEC_VARIABLE_SENSORS_VIEW, API_SIZE_VARIABLE_SENSORS_VIEW + 1, struct, buf);
+		return this._set(this, API_VARIABLE_SENSORS_VIEW_EXEC, API_SIZE_VARIABLE_SENSORS_VIEW + 1, struct, buf);
 	}
 
 	/** Чтение данных */
 	get(): DataView | undefined
 	{
-		return this._get(this, API_EXEC_VARIABLE_SENSORS_VIEW, API_SIZE_VARIABLE_SENSORS_VIEW + 1, struct);
+		return this._get(this, API_VARIABLE_SENSORS_VIEW_EXEC, API_SIZE_VARIABLE_SENSORS_VIEW + 1, struct);
 	}
 }

@@ -4,7 +4,7 @@ import { BaseModel } from "../base";
 import { StructCarView } from "./StructCarView";
 import { ICarView } from "./ICarView";
 
-export const API_EXEC_CAR_VIEW = 51;
+export const API_CAR_VIEW_EXEC = 51;
 export const API_SIZE_CAR_VIEW = API_SIZE_VIEW * 2;
 
 const struct = new BluetoothStruct(StructCarView);
@@ -27,12 +27,12 @@ export class CarView extends BaseModel implements ICarView
 	 */
 	set(buf: DataView): boolean
 	{
-		return this._set(this, API_EXEC_CAR_VIEW, API_SIZE_CAR_VIEW + 1, struct, buf);
+		return this._set(this, API_CAR_VIEW_EXEC, API_SIZE_CAR_VIEW + 1, struct, buf);
 	}
 
 	/** Чтение данных */
 	get(): DataView | undefined
 	{
-		return this._get(this, API_EXEC_CAR_VIEW, API_SIZE_CAR_VIEW + 1, struct);
+		return this._get(this, API_CAR_VIEW_EXEC, API_SIZE_CAR_VIEW + 1, struct);
 	}
 }

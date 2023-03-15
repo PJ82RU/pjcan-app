@@ -3,7 +3,7 @@ import { BaseModel } from "../base";
 import { API_SIZE_DEVICE_SHA, StructDeviceInfo } from "./StructDeviceInfo";
 import { IDeviceInfo } from "./IDeviceInfo";
 
-export const API_EXEC_INFO = 5;
+export const API_INFO_EXEC = 5;
 export const API_SIZE_INFO = 111 + API_SIZE_DEVICE_SHA;
 
 const struct = new BluetoothStruct(StructDeviceInfo);
@@ -47,12 +47,12 @@ export class DeviceInfo extends BaseModel implements IDeviceInfo
 	 */
 	set(buf: DataView): boolean
 	{
-		return this._set(this, API_EXEC_INFO, API_SIZE_INFO + 1, struct, buf);
+		return this._set(this, API_INFO_EXEC, API_SIZE_INFO + 1, struct, buf);
 	}
 
 	/** Чтение данных */
 	get(): DataView | undefined
 	{
-		return this._get(this, API_EXEC_INFO, 1);
+		return this._get(this, API_INFO_EXEC, 1);
 	}
 }

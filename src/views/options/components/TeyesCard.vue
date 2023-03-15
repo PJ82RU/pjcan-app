@@ -114,10 +114,10 @@ import SwitchCardItem from "@/components/cards/SwitchCardItem.vue";
 import ViewSettingDialog from "@/views/onboard/components/ViewSettingDialog.vue";
 import { IMenuItem } from "@/components/MenuDots.vue";
 
-import { API_EXEC_TEYES_CONFIG, API_EXEC_TEYES_VIEW, ITeyesConfig, ITeyesView } from "@/models/pjcan/teyes";
+import { API_TEYES_CONFIG_EXEC, API_TEYES_VIEW_EXEC, ITeyesConfig, ITeyesView } from "@/models/pjcan/teyes";
 import { IViewConfig } from "@/models/pjcan/view";
 
-import canbus, { API_EVENT_TEYES_CONFIG, API_EVENT_TEYES_VIEW } from "@/api/canbus";
+import canbus, { API_TEYES_CONFIG_EVENT, API_TEYES_VIEW_EVENT } from "@/api/canbus";
 
 export default {
 	name: "TeyesCard",
@@ -172,7 +172,7 @@ export default {
 			teyes.sendDoors = sendDoors.value;
 			teyes.parseVolume = parseVolume.value;
 			teyes.lcdShow = lcdShow.value;
-			canbus.queryConfig(API_EXEC_TEYES_CONFIG);
+			canbus.queryConfig(API_TEYES_CONFIG_EXEC);
 		};
 
 		/**
@@ -187,16 +187,16 @@ export default {
 		// регистрируем события
 		onMounted(() =>
 		{
-			canbus.addListener(API_EVENT_TEYES_CONFIG, onReceiveTeyesConfig);
-			canbus.addListener(API_EVENT_TEYES_VIEW, onReceiveTeyesView);
+			canbus.addListener(API_TEYES_CONFIG_EVENT, onReceiveTeyesConfig);
+			canbus.addListener(API_TEYES_VIEW_EVENT, onReceiveTeyesView);
 			onReceiveTeyesConfig(canbus.configs.teyes);
 			onReceiveTeyesView(canbus.views.teyes);
 		});
 		// удаляем события
 		onUnmounted(() =>
 		{
-			canbus.removeListener(API_EVENT_TEYES_CONFIG, onReceiveTeyesConfig);
-			canbus.removeListener(API_EVENT_TEYES_VIEW, onReceiveTeyesView);
+			canbus.removeListener(API_TEYES_CONFIG_EVENT, onReceiveTeyesConfig);
+			canbus.removeListener(API_TEYES_VIEW_EVENT, onReceiveTeyesView);
 		});
 
 		// МЕНЮ ОТОБРАЖЕНИЯ
@@ -221,7 +221,7 @@ export default {
 		const onViewSettingApply = (data: IViewConfig): void =>
 		{
 			canbus.views.teyes.view = data;
-			canbus.queryView(API_EXEC_TEYES_VIEW);
+			canbus.queryView(API_TEYES_VIEW_EXEC);
 		};
 
 		return {

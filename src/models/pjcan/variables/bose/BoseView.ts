@@ -4,7 +4,7 @@ import { API_SIZE_VIEW, ViewConfig } from "../../view";
 import { StructBoseView } from "./StructBoseView";
 import { IBoseView } from "./IBoseView";
 
-export const API_EXEC_VARIABLE_BOSE_VIEW = 111;
+export const API_VARIABLE_BOSE_VIEW_EXEC = 111;
 export const API_SIZE_VARIABLE_BOSE_VIEW = API_SIZE_VIEW;
 
 const struct = new BluetoothStruct(StructBoseView);
@@ -26,12 +26,12 @@ export class BoseView extends BaseModel implements IBoseView
 	 */
 	set(buf: DataView): boolean
 	{
-		return this._set(this, API_EXEC_VARIABLE_BOSE_VIEW, API_SIZE_VARIABLE_BOSE_VIEW + 1, struct, buf);
+		return this._set(this, API_VARIABLE_BOSE_VIEW_EXEC, API_SIZE_VARIABLE_BOSE_VIEW + 1, struct, buf);
 	}
 
 	/** Чтение данных */
 	get(): DataView | undefined
 	{
-		return this._get(this, API_EXEC_VARIABLE_BOSE_VIEW, API_SIZE_VARIABLE_BOSE_VIEW + 1, struct);
+		return this._get(this, API_VARIABLE_BOSE_VIEW_EXEC, API_SIZE_VARIABLE_BOSE_VIEW + 1, struct);
 	}
 }

@@ -53,10 +53,10 @@ import InputCardItem from "@/components/cards/InputCardItem.vue";
 import ViewSettingDialog from "./ViewSettingDialog.vue";
 import { IMenuItem } from "@/components/MenuDots.vue";
 
-import canbus, { API_EVENT_VARIABLE_MOVEMENT, API_EVENT_VARIABLE_MOVEMENT_VIEW } from "@/api/canbus";
+import canbus, { API_VARIABLE_MOVEMENT_EVENT, API_VARIABLE_MOVEMENT_VIEW_EVENT } from "@/api/canbus";
 
 import { IViewConfig } from "@/models/pjcan/view";
-import { API_EXEC_VARIABLE_MOVEMENT_VIEW, IMovementValue, IMovementView } from "@/models/pjcan/variables/movement";
+import { API_VARIABLE_MOVEMENT_VIEW_EXEC, IMovementValue, IMovementView } from "@/models/pjcan/variables/movement";
 
 export default {
 	name: "MovementCard",
@@ -96,16 +96,16 @@ export default {
 		// регистрируем события
 		onMounted(() =>
 		{
-			canbus.addListener(API_EVENT_VARIABLE_MOVEMENT, onReceiveValue);
-			canbus.addListener(API_EVENT_VARIABLE_MOVEMENT_VIEW, onReceiveView);
+			canbus.addListener(API_VARIABLE_MOVEMENT_EVENT, onReceiveValue);
+			canbus.addListener(API_VARIABLE_MOVEMENT_VIEW_EVENT, onReceiveView);
 			onReceiveValue(canbus.values.variable.movement);
 			onReceiveView(canbus.views.variable.movement);
 		});
 		// удаляем события
 		onUnmounted(() =>
 		{
-			canbus.removeListener(API_EVENT_VARIABLE_MOVEMENT, onReceiveValue);
-			canbus.removeListener(API_EVENT_VARIABLE_MOVEMENT_VIEW, onReceiveView);
+			canbus.removeListener(API_VARIABLE_MOVEMENT_EVENT, onReceiveValue);
+			canbus.removeListener(API_VARIABLE_MOVEMENT_VIEW_EVENT, onReceiveView);
 		});
 
 		// МЕНЮ ОТОБРАЖЕНИЯ
@@ -166,7 +166,7 @@ export default {
 					movement.restWay = data;
 					break;
 			}
-			canbus.queryView(API_EXEC_VARIABLE_MOVEMENT_VIEW);
+			canbus.queryView(API_VARIABLE_MOVEMENT_VIEW_EXEC);
 		};
 
 		return {

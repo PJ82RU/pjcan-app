@@ -3,7 +3,7 @@ import { BaseModel } from "../../base";
 import { StructClimateValue } from "./StructClimateValue";
 import { IClimateValue } from "./IClimateValue";
 
-export const API_EXEC_VARIABLE_CLIMATE = 120;
+export const API_VARIABLE_CLIMATE_EXEC = 120;
 export const API_SIZE_VARIABLE_CLIMATE = 7;
 
 const struct = new BluetoothStruct(StructClimateValue);
@@ -36,12 +36,12 @@ export class ClimateValue extends BaseModel implements IClimateValue
 	 */
 	set(buf: DataView): boolean
 	{
-		return this._set(this, API_EXEC_VARIABLE_CLIMATE, API_SIZE_VARIABLE_CLIMATE + 1, struct, buf);
+		return this._set(this, API_VARIABLE_CLIMATE_EXEC, API_SIZE_VARIABLE_CLIMATE + 1, struct, buf);
 	}
 
 	/** Чтение данных */
 	get(): DataView | undefined
 	{
-		return this._get(this, API_EXEC_VARIABLE_CLIMATE, API_SIZE_VARIABLE_CLIMATE + 1, struct);
+		return this._get(this, API_VARIABLE_CLIMATE_EXEC, API_SIZE_VARIABLE_CLIMATE + 1, struct);
 	}
 }

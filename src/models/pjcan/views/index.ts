@@ -1,6 +1,6 @@
-import { Views, API_EXEC_VIEW } from "./Views";
+import { Views, API_VIEW_EXEC } from "./Views";
 import { StructViews } from "./StructViews";
 import { IViews } from "./IViews";
 
-export { API_EXEC_VIEW, StructViews, Views };
+export { API_VIEW_EXEC, StructViews, Views };
 export type { IViews };

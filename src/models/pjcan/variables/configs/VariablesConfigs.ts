@@ -7,7 +7,7 @@ import { API_SIZE_VARIABLE_VOLUME_CONFIG, VolumeConfig } from "../volume";
 import { StructVariableConfigs } from "./StructVariableConfigs";
 import { IVariableConfigs } from "./IVariableConfigs";
 
-export const API_EXEC_VARIABLE_CONFIG = 100;
+export const API_VARIABLE_CONFIG_EXEC = 100;
 export const API_SIZE_VARIABLE_CONFIG =
 	API_SIZE_VARIABLE_BOSE +
 	API_SIZE_VARIABLE_ENGINE_CONFIG +
@@ -36,7 +36,7 @@ export class VariableConfig extends BaseModel implements IVariableConfigs
 	 */
 	set(buf: DataView): boolean
 	{
-		const result = this._set(this, API_EXEC_VARIABLE_CONFIG, API_SIZE_VARIABLE_CONFIG + 1, struct, buf);
+		const result = this._set(this, API_VARIABLE_CONFIG_EXEC, API_SIZE_VARIABLE_CONFIG + 1, struct, buf);
 		if (result)
 		{
 			this.bose.isData = true;
@@ -50,6 +50,6 @@ export class VariableConfig extends BaseModel implements IVariableConfigs
 	/** Чтение данных */
 	get(): DataView | undefined
 	{
-		return this._get(this, API_EXEC_VARIABLE_CONFIG, 1);
+		return this._get(this, API_VARIABLE_CONFIG_EXEC, 1);
 	}
 }

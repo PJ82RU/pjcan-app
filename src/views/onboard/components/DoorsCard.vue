@@ -76,10 +76,10 @@ import SwitchCardItem from "@/components/cards/SwitchCardItem.vue";
 import ViewSettingDialog from "./ViewSettingDialog.vue";
 import { IMenuItem } from "@/components/MenuDots.vue";
 
-import canbus, { API_EVENT_VARIABLE_DOORS, API_EVENT_VARIABLE_DOORS_VIEW } from "@/api/canbus";
+import canbus, { API_VARIABLE_DOORS_EVENT, API_VARIABLE_DOORS_VIEW_EVENT } from "@/api/canbus";
 
 import { IViewConfig } from "@/models/pjcan/view";
-import { API_EXEC_VARIABLE_DOORS_VIEW, IDoorsValue, IDoorsView } from "@/models/pjcan/variables/doors";
+import { API_VARIABLE_DOORS_VIEW_EXEC, IDoorsValue, IDoorsView } from "@/models/pjcan/variables/doors";
 
 export default {
 	name: "DoorsCard",
@@ -119,16 +119,16 @@ export default {
 		// регистрируем события
 		onMounted(() =>
 		{
-			canbus.addListener(API_EVENT_VARIABLE_DOORS, onReceiveValue);
-			canbus.addListener(API_EVENT_VARIABLE_DOORS_VIEW, onReceiveView);
+			canbus.addListener(API_VARIABLE_DOORS_EVENT, onReceiveValue);
+			canbus.addListener(API_VARIABLE_DOORS_VIEW_EVENT, onReceiveView);
 			onReceiveValue(canbus.values.variable.doors);
 			onReceiveView(canbus.views.variable.doors);
 		});
 		// удаляем события
 		onUnmounted(() =>
 		{
-			canbus.removeListener(API_EVENT_VARIABLE_DOORS, onReceiveValue);
-			canbus.removeListener(API_EVENT_VARIABLE_DOORS_VIEW, onReceiveView);
+			canbus.removeListener(API_VARIABLE_DOORS_EVENT, onReceiveValue);
+			canbus.removeListener(API_VARIABLE_DOORS_VIEW_EVENT, onReceiveView);
 		});
 
 		// МЕНЮ ОТОБРАЖЕНИЯ
@@ -156,7 +156,7 @@ export default {
 		const onViewSettingApply = (data: IViewConfig): void =>
 		{
 			canbus.views.variable.doors.view = data;
-			canbus.queryView(API_EXEC_VARIABLE_DOORS_VIEW);
+			canbus.queryView(API_VARIABLE_DOORS_VIEW_EXEC);
 		};
 
 		return {

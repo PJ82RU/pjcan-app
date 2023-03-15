@@ -9,7 +9,7 @@ import { API_SIZE_VARIABLE_CONFIG, VariableConfig } from "../variables/configs";
 import { IConfigs } from "./IConfigs";
 import { StructConfigs } from "./StructConfigs";
 
-export const API_EXEC_CONFIG = 1;
+export const API_CONFIG_EXEC = 1;
 export const API_SIZE_CONFIG = API_SIZE_VERSION + API_SIZE_DEVICE_CONFIG + API_SIZE_BUTTONS_CONFIG + API_SIZE_CAR_CONFIG +
 	API_SIZE_TEYES_CONFIG + API_SIZE_VARIABLE_CONFIG;
 
@@ -36,7 +36,7 @@ export class Configs extends BaseModel implements IConfigs
 	 */
 	set(buf: DataView): boolean
 	{
-		const result = this._set(this, API_EXEC_CONFIG, API_SIZE_CONFIG + 1, struct, buf);
+		const result = this._set(this, API_CONFIG_EXEC, API_SIZE_CONFIG + 1, struct, buf);
 		if (result)
 		{
 			this.device.isData = true;
@@ -54,6 +54,6 @@ export class Configs extends BaseModel implements IConfigs
 	/** Чтение данных */
 	get(): DataView | undefined
 	{
-		return this._get(this, API_EXEC_CONFIG, 1);
+		return this._get(this, API_CONFIG_EXEC, 1);
 	}
 }

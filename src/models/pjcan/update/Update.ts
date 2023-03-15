@@ -3,9 +3,9 @@ import { IUpdate } from "./IUpdate";
 import { BluetoothStruct } from "@/components/bluetooth";
 import { StructUpdate, UPDATE_VALUE_DATA_SIZE } from "./StructUpdate";
 
-export const API_EXEC_UPDATE = 90;
+export const API_UPDATE_EXEC = 90;
 export const API_SIZE_UPDATE = 503;
-export const API_EVENT_UPDATE = "Update";
+export const API_UPDATE_EVENT = "Update";
 
 const struct = new BluetoothStruct(StructUpdate);
 
@@ -77,10 +77,10 @@ export class Update extends EventEmitter implements IUpdate
 	 */
 	set(buf: DataView): void
 	{
-		if (buf.getUint8(0) === API_EXEC_UPDATE && buf.byteLength === 2)
+		if (buf.getUint8(0) === API_UPDATE_EXEC && buf.byteLength === 2)
 		{
 			this.error = buf.getUint8(1);
-			this.emit(API_EVENT_UPDATE, this.error);
+			this.emit(API_UPDATE_EVENT, this.error);
 		}
 	}
 
@@ -90,7 +90,7 @@ export class Update extends EventEmitter implements IUpdate
 		try
 		{
 			const buf: DataView = new DataView(new ArrayBuffer(API_SIZE_UPDATE + 1));
-			buf.setUint8(0, API_EXEC_UPDATE);
+			buf.setUint8(0, API_UPDATE_EXEC);
 
 			this.begin = !this.begin && this.offset === 0;
 			if (this.begin && this.encrypt && this.iv)

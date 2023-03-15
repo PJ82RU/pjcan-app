@@ -102,21 +102,21 @@ import ViewSettingDialog from "./ViewSettingDialog.vue";
 import { IMenuItem } from "@/components/MenuDots.vue";
 
 import canbus, {
-	API_EVENT_DEVICE,
-	API_EVENT_VARIABLE_SENSORS,
-	API_EVENT_VARIABLE_SENSORS_VIEW,
-	API_EVENT_VARIABLE_TEMPERATURE,
-	API_EVENT_VARIABLE_TEMPERATURE_VIEW
+	API_DEVICE_EVENT,
+	API_VARIABLE_SENSORS_EVENT,
+	API_VARIABLE_SENSORS_VIEW_EVENT,
+	API_VARIABLE_TEMPERATURE_EVENT,
+	API_VARIABLE_TEMPERATURE_VIEW_EVENT
 } from "@/api/canbus";
 
 import {
-	API_EXEC_VARIABLE_SENSORS_VIEW,
+	API_VARIABLE_SENSORS_VIEW_EXEC,
 	ISensorsValue,
 	ISensorsView,
 	TSensorsSignal
 } from "@/models/pjcan/variables/sensors";
 import {
-	API_EXEC_VARIABLE_TEMPERATURE_VIEW,
+	API_VARIABLE_TEMPERATURE_VIEW_EXEC,
 	ITemperatureValue,
 	ITemperatureView
 } from "@/models/pjcan/variables/temperature";
@@ -213,11 +213,11 @@ export default {
 		// регистрируем события
 		onMounted(() =>
 		{
-			canbus.addListener(API_EVENT_DEVICE, onReceiveDeviceValue);
-			canbus.addListener(API_EVENT_VARIABLE_SENSORS, onReceiveSensorValue);
-			canbus.addListener(API_EVENT_VARIABLE_SENSORS_VIEW, onReceiveSensorView);
-			canbus.addListener(API_EVENT_VARIABLE_TEMPERATURE, onReceiveTemperatureValue);
-			canbus.addListener(API_EVENT_VARIABLE_TEMPERATURE_VIEW, onReceiveTemperatureView);
+			canbus.addListener(API_DEVICE_EVENT, onReceiveDeviceValue);
+			canbus.addListener(API_VARIABLE_SENSORS_EVENT, onReceiveSensorValue);
+			canbus.addListener(API_VARIABLE_SENSORS_VIEW_EVENT, onReceiveSensorView);
+			canbus.addListener(API_VARIABLE_TEMPERATURE_EVENT, onReceiveTemperatureValue);
+			canbus.addListener(API_VARIABLE_TEMPERATURE_VIEW_EVENT, onReceiveTemperatureView);
 			onReceiveDeviceValue(canbus.values.device);
 			onReceiveSensorValue(canbus.values.variable.sensors);
 			onReceiveSensorView(canbus.views.variable.sensors);
@@ -227,11 +227,11 @@ export default {
 		// удаляем события
 		onUnmounted(() =>
 		{
-			canbus.removeListener(API_EVENT_DEVICE, onReceiveDeviceValue);
-			canbus.removeListener(API_EVENT_VARIABLE_SENSORS, onReceiveSensorValue);
-			canbus.removeListener(API_EVENT_VARIABLE_SENSORS_VIEW, onReceiveSensorView);
-			canbus.removeListener(API_EVENT_VARIABLE_TEMPERATURE, onReceiveTemperatureValue);
-			canbus.removeListener(API_EVENT_VARIABLE_TEMPERATURE_VIEW, onReceiveTemperatureView);
+			canbus.removeListener(API_DEVICE_EVENT, onReceiveDeviceValue);
+			canbus.removeListener(API_VARIABLE_SENSORS_EVENT, onReceiveSensorValue);
+			canbus.removeListener(API_VARIABLE_SENSORS_VIEW_EVENT, onReceiveSensorView);
+			canbus.removeListener(API_VARIABLE_TEMPERATURE_EVENT, onReceiveTemperatureValue);
+			canbus.removeListener(API_VARIABLE_TEMPERATURE_VIEW_EVENT, onReceiveTemperatureView);
 		});
 
 		// МЕНЮ ОТОБРАЖЕНИЯ
@@ -295,7 +295,7 @@ export default {
 			{
 				case 0:
 					temperature.view = data;
-					canbus.queryView(API_EXEC_VARIABLE_TEMPERATURE_VIEW);
+					canbus.queryView(API_VARIABLE_TEMPERATURE_VIEW_EXEC);
 					return;
 
 				case 1:
@@ -314,7 +314,7 @@ export default {
 					sensors.signal = data;
 					break;
 			}
-			canbus.queryView(API_EXEC_VARIABLE_SENSORS_VIEW);
+			canbus.queryView(API_VARIABLE_SENSORS_VIEW_EXEC);
 		};
 
 		return {

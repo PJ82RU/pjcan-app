@@ -3,7 +3,7 @@ import { BaseModel } from "../base";
 import { StructButtonsValue } from "./StructButtonsValue";
 import { IButtonValue } from "./IButtonValue";
 
-export const API_EXEC_BUTTONS_VALUE = 21;
+export const API_BUTTONS_VALUE_EXEC = 21;
 export const API_SIZE_BUTTONS_VALUE = 6;
 
 const struct = new BluetoothStruct(StructButtonsValue);
@@ -29,12 +29,12 @@ export class ButtonValue extends BaseModel implements IButtonValue
 	 */
 	set(buf: DataView): boolean
 	{
-		return this._set(this, API_EXEC_BUTTONS_VALUE, API_SIZE_BUTTONS_VALUE + 1, struct, buf);
+		return this._set(this, API_BUTTONS_VALUE_EXEC, API_SIZE_BUTTONS_VALUE + 1, struct, buf);
 	}
 
 	/** Чтение данных */
 	get(): DataView | undefined
 	{
-		return this._get(this, API_EXEC_BUTTONS_VALUE, API_SIZE_BUTTONS_VALUE + 1, struct);
+		return this._get(this, API_BUTTONS_VALUE_EXEC, API_SIZE_BUTTONS_VALUE + 1, struct);
 	}
 }

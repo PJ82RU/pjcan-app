@@ -4,7 +4,7 @@ import { API_SIZE_VIEW, ViewConfig } from "../../view";
 import { StructFuelView } from "./StructFuelView";
 import { IFuelView } from "./IFuelView";
 
-export const API_EXEC_VARIABLE_FUEL_VIEW = 152;
+export const API_VARIABLE_FUEL_VIEW_EXEC = 152;
 export const API_SIZE_VARIABLE_FUEL_VIEW = API_SIZE_VIEW * 4;
 
 const struct = new BluetoothStruct(StructFuelView);
@@ -29,12 +29,12 @@ export class FuelView extends BaseModel implements IFuelView
 	 */
 	set(buf: DataView): boolean
 	{
-		return this._set(this, API_EXEC_VARIABLE_FUEL_VIEW, API_SIZE_VARIABLE_FUEL_VIEW + 1, struct, buf);
+		return this._set(this, API_VARIABLE_FUEL_VIEW_EXEC, API_SIZE_VARIABLE_FUEL_VIEW + 1, struct, buf);
 	}
 
 	/** Чтение данных */
 	get(): DataView | undefined
 	{
-		return this._get(this, API_EXEC_VARIABLE_FUEL_VIEW, API_SIZE_VARIABLE_FUEL_VIEW + 1, struct);
+		return this._get(this, API_VARIABLE_FUEL_VIEW_EXEC, API_SIZE_VARIABLE_FUEL_VIEW + 1, struct);
 	}
 }

@@ -12,116 +12,114 @@ import {
 	TConnectedStatus
 } from "@/components/bluetooth";
 import { IBaseModel } from "@/models/pjcan/base";
-import { API_EXEC_CONFIG, Configs, IConfigs } from "@/models/pjcan/configs";
-import { API_EXEC_VIEW, Views, IViews } from "@/models/pjcan/views";
-import { API_EXEC_VARIABLE_CONFIG, IVariableConfigs } from "@/models/pjcan/variables/configs";
-import { API_EXEC_VARIABLE_VIEW, IVariableViews } from "@/models/pjcan/variables/views";
+import { API_CONFIG_EXEC, Configs, IConfigs } from "@/models/pjcan/configs";
+import { API_VIEW_EXEC, Views, IViews } from "@/models/pjcan/views";
+import { API_VARIABLE_CONFIG_EXEC, IVariableConfigs } from "@/models/pjcan/variables/configs";
+import { API_VARIABLE_VIEW_EXEC, IVariableViews } from "@/models/pjcan/variables/views";
 import {
-	API_EXEC_DEVICE_CONFIG,
-	API_EXEC_DEVICE_VALUE,
-	API_EXEC_INFO,
+	API_DEVICE_CONFIG_EXEC,
+	API_DEVICE_VALUE_EXEC,
+	API_INFO_EXEC,
 	DeviceInfo,
 	IDeviceInfo
 } from "@/models/pjcan/device";
-import { API_EXEC_BUTTONS_CONFIG, API_EXEC_BUTTONS_VALUE, ButtonValue, IButtonValue } from "@/models/pjcan/button";
+import { API_BUTTONS_CONFIG_EXEC, API_BUTTONS_VALUE_EXEC, ButtonValue, IButtonValue } from "@/models/pjcan/button";
 import {
-	API_EXEC_TEYES_CONFIG,
-	API_EXEC_TEYES_TEXT,
-	API_EXEC_TEYES_VIEW,
+	API_TEYES_CONFIG_EXEC,
+	API_TEYES_TEXT_EXEC,
+	API_TEYES_VIEW_EXEC,
 	ITeyesText,
 	TeyesText
 } from "@/models/pjcan/teyes";
-import { API_EXEC_LCD_VALUE } from "@/models/pjcan/lcd";
-import { API_EXEC_CAR_CONFIG, API_EXEC_CAR_VIEW } from "@/models/pjcan/car";
-import { API_EXEC_UPDATE, API_EVENT_UPDATE, Update } from "@/models/pjcan/update";
-import { API_EXEC_VARIABLE_BOSE, API_EXEC_VARIABLE_BOSE_VIEW } from "@/models/pjcan/variables/bose";
-import { API_EXEC_VARIABLE_CLIMATE, API_EXEC_VARIABLE_CLIMATE_VIEW } from "@/models/pjcan/variables/climate";
-import { API_EXEC_VARIABLE_DOORS, API_EXEC_VARIABLE_DOORS_VIEW } from "@/models/pjcan/variables/doors";
+import { API_LCD_VALUE_EXEC } from "@/models/pjcan/lcd";
+import { API_CAR_CONFIG_EXEC, API_CAR_VIEW_EXEC } from "@/models/pjcan/car";
+import { API_UPDATE_EXEC, API_UPDATE_EVENT, Update } from "@/models/pjcan/update";
+import { API_VARIABLE_BOSE_EXEC, API_VARIABLE_BOSE_VIEW_EXEC } from "@/models/pjcan/variables/bose";
+import { API_VARIABLE_CLIMATE_EXEC, API_VARIABLE_CLIMATE_VIEW_EXEC } from "@/models/pjcan/variables/climate";
+import { API_VARIABLE_DOORS_EXEC, API_VARIABLE_DOORS_VIEW_EXEC } from "@/models/pjcan/variables/doors";
 import {
-	API_EXEC_VARIABLE_ENGINE,
-	API_EXEC_VARIABLE_ENGINE_CONFIG,
-	API_EXEC_VARIABLE_ENGINE_VIEW
+	API_VARIABLE_ENGINE_EXEC,
+	API_VARIABLE_ENGINE_CONFIG_EXEC,
+	API_VARIABLE_ENGINE_VIEW_EXEC
 } from "@/models/pjcan/variables/engine";
 import {
-	API_EXEC_VARIABLE_FUEL,
-	API_EXEC_VARIABLE_FUEL_CONFIG,
-	API_EXEC_VARIABLE_FUEL_VIEW
+	API_VARIABLE_FUEL_EXEC,
+	API_VARIABLE_FUEL_CONFIG_EXEC,
+	API_VARIABLE_FUEL_VIEW_EXEC
 } from "@/models/pjcan/variables/fuel";
-import { API_EXEC_VARIABLE_MOVEMENT, API_EXEC_VARIABLE_MOVEMENT_VIEW } from "@/models/pjcan/variables/movement";
-import { API_EXEC_VARIABLE_SENSORS, API_EXEC_VARIABLE_SENSORS_VIEW } from "@/models/pjcan/variables/sensors";
+import { API_VARIABLE_MOVEMENT_EXEC, API_VARIABLE_MOVEMENT_VIEW_EXEC } from "@/models/pjcan/variables/movement";
+import { API_VARIABLE_SENSORS_EXEC, API_VARIABLE_SENSORS_VIEW_EXEC } from "@/models/pjcan/variables/sensors";
 import {
-	API_EXEC_VARIABLE_TEMPERATURE,
-	API_EXEC_VARIABLE_TEMPERATURE_VIEW
+	API_VARIABLE_TEMPERATURE_EXEC,
+	API_VARIABLE_TEMPERATURE_VIEW_EXEC
 } from "@/models/pjcan/variables/temperature";
 import {
-	API_EXEC_VARIABLE_VOLUME,
-	API_EXEC_VARIABLE_VOLUME_CONFIG,
-	API_EXEC_VARIABLE_VOLUME_VIEW
+	API_VARIABLE_VOLUME_EXEC,
+	API_VARIABLE_VOLUME_CONFIG_EXEC,
+	API_VARIABLE_VOLUME_VIEW_EXEC
 } from "@/models/pjcan/variables/volume";
 import { IValues, Values } from "@/models/pjcan/values";
 import { IVariablesValue } from "@/models/pjcan/variables/values";
-import { API_EXEC_VALUE } from "@/models/pjcan/values/Values";
-import { API_EXEC_VARIABLE_VALUE } from "@/models/pjcan/variables/values/VariablesValue";
+import { API_VALUE_EXEC } from "@/models/pjcan/values/Values";
+import { API_VARIABLE_VALUE_EXEC } from "@/models/pjcan/variables/values/VariablesValue";
 import { IUpdate } from "@/models/pjcan/update/IUpdate";
 import { IVersion, Version } from "@/models/pjcan/version";
 import { ITestValue } from "@/models/pjcan/variables/test";
 
-export const API_EVENT_CONFIGS = "Configs";
-export const API_EVENT_VIEWS = "Views";
-export const API_EVENT_VALUES = "Values";
+export const API_CONFIGS_EVENT = "Configs";
+export const API_VIEWS_EVENT = "Views";
+export const API_VALUES_EVENT = "Values";
 
-export const API_EVENT_VARIABLE_CONFIGS = "VariableConfigs";
-export const API_EVENT_VARIABLE_VIEWS = "VariableViews";
-export const API_EVENT_VARIABLE_VALUES = "VariableValues";
+export const API_VARIABLE_CONFIGS_EVENT = "VariableConfigs";
+export const API_VARIABLE_VIEWS_EVENT = "VariableViews";
+export const API_VARIABLE_VALUES_EVENT = "VariableValues";
 
-export const API_EVENT_BUTTONS_CONFIG = "ButtonsConfig";
-export const API_EVENT_BUTTON = "ButtonsValue";
+export const API_BUTTONS_CONFIG_EVENT = "ButtonsConfig";
+export const API_BUTTON_EVENT = "ButtonsValue";
 
-export const API_EVENT_CAR_CONFIG = "CarConfig";
-export const API_EVENT_CAR_VIEW = "CarView";
+export const API_CAR_CONFIG_EVENT = "CarConfig";
+export const API_CAR_VIEW_EVENT = "CarView";
 
-export const API_EVENT_DEVICE_CONFIG = "DeviceConfig";
-export const API_EVENT_DEVICE = "DeviceValue";
-export const API_EVENT_INFO = "Info";
+export const API_DEVICE_CONFIG_EVENT = "DeviceConfig";
+export const API_DEVICE_EVENT = "DeviceValue";
+export const API_INFO_EVENT = "Info";
 
-export const API_EVENT_LCD = "LCDValue";
-export const API_EVENT_TEYES_CONFIG = "TeyesConfig";
-export const API_EVENT_TEYES_VIEW = "TeyesView";
-export const API_EVENT_TEYES_TEXT = "TeyesText";
+export const API_LCD_EVENT = "LCDValue";
+export const API_TEYES_CONFIG_EVENT = "TeyesConfig";
+export const API_TEYES_VIEW_EVENT = "TeyesView";
+export const API_TEYES_TEXT_EVENT = "TeyesText";
 
-export const API_EVENT_VARIABLE_BOSE = "VariableBoseConfig";
-export const API_EVENT_VARIABLE_BOSE_VIEW = "VariableBoseView";
+export const API_VARIABLE_BOSE_VIEW_EVENT = "VariableBoseView";
+export const API_VARIABLE_BOSE_EVENT = "VariableBoseConfig";
 
-export const API_EVENT_VARIABLE_CLIMATE_VIEW = "VariableClimateView";
-export const API_EVENT_VARIABLE_CLIMATE = "VariableClimateValue";
+export const API_VARIABLE_CLIMATE_VIEW_EVENT = "VariableClimateView";
+export const API_VARIABLE_CLIMATE_EVENT = "VariableClimateValue";
 
-export const API_EVENT_VARIABLE_DOORS_VIEW = "VariableDoorsView";
-export const API_EVENT_VARIABLE_DOORS = "VariableDoorsValue";
+export const API_VARIABLE_DOORS_VIEW_EVENT = "VariableDoorsView";
+export const API_VARIABLE_DOORS_EVENT = "VariableDoorsValue";
 
-export const API_EVENT_VARIABLE_ENGINE_CONFIG = "VariableEngineConfig";
-export const API_EVENT_VARIABLE_ENGINE_VIEW = "VariableEngineView";
-export const API_EVENT_VARIABLE_ENGINE = "VariableEngineValue";
+export const API_VARIABLE_ENGINE_CONFIG_EVENT = "VariableEngineConfig";
+export const API_VARIABLE_ENGINE_VIEW_EVENT = "VariableEngineView";
+export const API_VARIABLE_ENGINE_EVENT = "VariableEngineValue";
 
-export const API_EVENT_VARIABLE_FUEL_CONFIG = "VariableFuelConfig";
-export const API_EVENT_VARIABLE_FUEL_VIEW = "VariableFuelView";
-export const API_EVENT_VARIABLE_FUEL = "VariableFuelValue";
+export const API_VARIABLE_FUEL_CONFIG_EVENT = "VariableFuelConfig";
+export const API_VARIABLE_FUEL_VIEW_EVENT = "VariableFuelView";
+export const API_VARIABLE_FUEL_EVENT = "VariableFuelValue";
 
-export const API_EVENT_VARIABLE_MOVEMENT_VIEW = "VariableMovementView";
-export const API_EVENT_VARIABLE_MOVEMENT = "VariableMovementValue";
+export const API_VARIABLE_MOVEMENT_VIEW_EVENT = "VariableMovementView";
+export const API_VARIABLE_MOVEMENT_EVENT = "VariableMovementValue";
 
-export const API_EVENT_VARIABLE_SENSORS_VIEW = "VariableSensorsView";
-export const API_EVENT_VARIABLE_SENSORS = "VariableSensorsValue";
+export const API_VARIABLE_SENSORS_VIEW_EVENT = "VariableSensorsView";
+export const API_VARIABLE_SENSORS_EVENT = "VariableSensorsValue";
 
-export const API_EVENT_VARIABLE_TEMPERATURE_VIEW = "VariableTemperatureView";
-export const API_EVENT_VARIABLE_TEMPERATURE = "VariableTemperatureValue";
+export const API_VARIABLE_TEMPERATURE_VIEW_EVENT = "VariableTemperatureView";
+export const API_VARIABLE_TEMPERATURE_EVENT = "VariableTemperatureValue";
 
-export const API_EVENT_VARIABLE_VOLUME = "VariableVolumeValue";
-export const API_EVENT_VARIABLE_VOLUME_CONFIG = "VariableVolumeConfig";
-export const API_EVENT_VARIABLE_VOLUME_VIEW = "VariableVolumeView";
+export const API_VARIABLE_VOLUME_CONFIG_EVENT = "VariableVolumeConfig";
+export const API_VARIABLE_VOLUME_VIEW_EVENT = "VariableVolumeView";
+export const API_VARIABLE_VOLUME_EVENT = "VariableVolumeValue";
 
-export const API_EVENT_UPDATE_UPLOAD_GZ = "UpdateUploadGZ";
-export const API_EVENT_UPDATE_BEGIN_GZ = "UpdateBeginGZ";
-export const API_EVENT_UPDATE_ERROR = "ErrorUpdate";
+export const API_UPDATE_EVENT_ERROR = "ErrorUpdate";
 
 export class Canbus extends EventEmitter
 {
@@ -211,39 +209,39 @@ export class Canbus extends EventEmitter
 	{
 		switch (type)
 		{
-			case API_EXEC_VARIABLE_CONFIG:
+			case API_VARIABLE_CONFIG_EXEC:
 				await this.query(this.configs.variable);
 				break;
 
-			case API_EXEC_BUTTONS_CONFIG:
+			case API_BUTTONS_CONFIG_EXEC:
 				if (!this.queryDisabled) await this.query(this.configs.buttons);
 				break;
 
-			case API_EXEC_CAR_CONFIG:
+			case API_CAR_CONFIG_EXEC:
 				await this.query(this.configs.car);
 				break;
 
-			case API_EXEC_DEVICE_CONFIG:
+			case API_DEVICE_CONFIG_EXEC:
 				await this.query(this.configs.device);
 				break;
 
-			case API_EXEC_TEYES_CONFIG:
+			case API_TEYES_CONFIG_EXEC:
 				await this.query(this.configs.teyes);
 				break;
 
-			case API_EXEC_VARIABLE_BOSE:
+			case API_VARIABLE_BOSE_EXEC:
 				await this.query(this.configs.variable.bose);
 				break;
 
-			case API_EXEC_VARIABLE_ENGINE_CONFIG:
+			case API_VARIABLE_ENGINE_CONFIG_EXEC:
 				await this.query(this.configs.variable.engine);
 				break;
 
-			case API_EXEC_VARIABLE_FUEL_CONFIG:
+			case API_VARIABLE_FUEL_CONFIG_EXEC:
 				await this.query(this.configs.variable.fuel);
 				break;
 
-			case API_EXEC_VARIABLE_VOLUME_CONFIG:
+			case API_VARIABLE_VOLUME_CONFIG_EXEC:
 				await this.query(this.configs.variable.volume);
 				break;
 
@@ -261,51 +259,51 @@ export class Canbus extends EventEmitter
 	{
 		switch (type)
 		{
-			case API_EXEC_VARIABLE_VIEW:
+			case API_VARIABLE_VIEW_EXEC:
 				await this.query(this.views.variable);
 				break;
 
-			case API_EXEC_CAR_VIEW:
+			case API_CAR_VIEW_EXEC:
 				if (!this.queryDisabled) await this.query(this.views.car);
 				break;
 
-			case API_EXEC_TEYES_VIEW:
+			case API_TEYES_VIEW_EXEC:
 				if (!this.queryDisabled) await this.query(this.views.teyes);
 				break;
 
-			case API_EXEC_VARIABLE_BOSE_VIEW:
+			case API_VARIABLE_BOSE_VIEW_EXEC:
 				if (!this.queryDisabled) await this.query(this.views.variable.bose);
 				break;
 
-			case API_EXEC_VARIABLE_CLIMATE_VIEW:
+			case API_VARIABLE_CLIMATE_VIEW_EXEC:
 				if (!this.queryDisabled) await this.query(this.views.variable.climate);
 				break;
 
-			case API_EXEC_VARIABLE_DOORS_VIEW:
+			case API_VARIABLE_DOORS_VIEW_EXEC:
 				if (!this.queryDisabled) await this.query(this.views.variable.doors);
 				break;
 
-			case API_EXEC_VARIABLE_ENGINE_VIEW:
+			case API_VARIABLE_ENGINE_VIEW_EXEC:
 				if (!this.queryDisabled) await this.query(this.views.variable.engine);
 				break;
 
-			case API_EXEC_VARIABLE_FUEL_VIEW:
+			case API_VARIABLE_FUEL_VIEW_EXEC:
 				if (!this.queryDisabled) await this.query(this.views.variable.fuel);
 				break;
 
-			case API_EXEC_VARIABLE_MOVEMENT_VIEW:
+			case API_VARIABLE_MOVEMENT_VIEW_EXEC:
 				if (!this.queryDisabled) await this.query(this.views.variable.movement);
 				break;
 
-			case API_EXEC_VARIABLE_SENSORS_VIEW:
+			case API_VARIABLE_SENSORS_VIEW_EXEC:
 				if (!this.queryDisabled) await this.query(this.views.variable.sensors);
 				break;
 
-			case API_EXEC_VARIABLE_TEMPERATURE_VIEW:
+			case API_VARIABLE_TEMPERATURE_VIEW_EXEC:
 				if (!this.queryDisabled) await this.query(this.views.variable.temperature);
 				break;
 
-			case API_EXEC_VARIABLE_VOLUME_VIEW:
+			case API_VARIABLE_VOLUME_VIEW_EXEC:
 				if (!this.queryDisabled) await this.query(this.views.variable.volume);
 				break;
 
@@ -324,47 +322,47 @@ export class Canbus extends EventEmitter
 
 		switch (type)
 		{
-			case API_EXEC_VARIABLE_VALUE:
+			case API_VARIABLE_VALUE_EXEC:
 				await this.query(this.values.variable);
 				break;
 
-			case API_EXEC_DEVICE_VALUE:
+			case API_DEVICE_VALUE_EXEC:
 				await this.query(this.values.device);
 				break;
 
-			case API_EXEC_LCD_VALUE:
+			case API_LCD_VALUE_EXEC:
 				await this.query(this.values.lcd);
 				break;
 
-			case API_EXEC_VARIABLE_CLIMATE:
+			case API_VARIABLE_CLIMATE_EXEC:
 				await this.query(this.values.variable.climate);
 				break;
 
-			case API_EXEC_VARIABLE_DOORS:
+			case API_VARIABLE_DOORS_EXEC:
 				await this.query(this.values.variable.doors);
 				break;
 
-			case API_EXEC_VARIABLE_ENGINE:
+			case API_VARIABLE_ENGINE_EXEC:
 				await this.query(this.values.variable.engine);
 				break;
 
-			case API_EXEC_VARIABLE_FUEL:
+			case API_VARIABLE_FUEL_EXEC:
 				await this.query(this.values.variable.fuel);
 				break;
 
-			case API_EXEC_VARIABLE_MOVEMENT:
+			case API_VARIABLE_MOVEMENT_EXEC:
 				await this.query(this.values.variable.movement);
 				break;
 
-			case API_EXEC_VARIABLE_SENSORS:
+			case API_VARIABLE_SENSORS_EXEC:
 				await this.query(this.values.variable.sensors);
 				break;
 
-			case API_EXEC_VARIABLE_TEMPERATURE:
+			case API_VARIABLE_TEMPERATURE_EXEC:
 				await this.query(this.values.variable.temperature);
 				break;
 
-			case API_EXEC_VARIABLE_VOLUME:
+			case API_VARIABLE_VOLUME_EXEC:
 				await this.query(this.values.variable.volume);
 				break;
 
@@ -422,11 +420,11 @@ export class Canbus extends EventEmitter
 	 */
 	private emitVariableConfigs(config: IVariableConfigs): void
 	{
-		this.emit(API_EVENT_VARIABLE_CONFIGS, config);
-		this.emit(API_EVENT_VARIABLE_BOSE, config.bose);
-		this.emit(API_EVENT_VARIABLE_ENGINE_CONFIG, config.engine);
-		this.emit(API_EVENT_VARIABLE_FUEL_CONFIG, config.fuel);
-		this.emit(API_EVENT_VARIABLE_VOLUME_CONFIG, config.volume);
+		this.emit(API_VARIABLE_CONFIGS_EVENT, config);
+		this.emit(API_VARIABLE_BOSE_EVENT, config.bose);
+		this.emit(API_VARIABLE_ENGINE_CONFIG_EVENT, config.engine);
+		this.emit(API_VARIABLE_FUEL_CONFIG_EVENT, config.fuel);
+		this.emit(API_VARIABLE_VOLUME_CONFIG_EVENT, config.volume);
 	}
 
 	/**
@@ -435,16 +433,16 @@ export class Canbus extends EventEmitter
 	 */
 	private emitVariableViews(view: IVariableViews): void
 	{
-		this.emit(API_EVENT_VARIABLE_VIEWS, view);
-		this.emit(API_EVENT_VARIABLE_BOSE_VIEW, view.bose);
-		this.emit(API_EVENT_VARIABLE_CLIMATE_VIEW, view.climate);
-		this.emit(API_EVENT_VARIABLE_DOORS_VIEW, view.doors);
-		this.emit(API_EVENT_VARIABLE_ENGINE_VIEW, view.engine);
-		this.emit(API_EVENT_VARIABLE_FUEL_VIEW, view.fuel);
-		this.emit(API_EVENT_VARIABLE_MOVEMENT_VIEW, view.movement);
-		this.emit(API_EVENT_VARIABLE_SENSORS_VIEW, view.sensors);
-		this.emit(API_EVENT_VARIABLE_TEMPERATURE_VIEW, view.temperature);
-		this.emit(API_EVENT_VARIABLE_VOLUME_VIEW, view.volume);
+		this.emit(API_VARIABLE_VIEWS_EVENT, view);
+		this.emit(API_VARIABLE_BOSE_VIEW_EVENT, view.bose);
+		this.emit(API_VARIABLE_CLIMATE_VIEW_EVENT, view.climate);
+		this.emit(API_VARIABLE_DOORS_VIEW_EVENT, view.doors);
+		this.emit(API_VARIABLE_ENGINE_VIEW_EVENT, view.engine);
+		this.emit(API_VARIABLE_FUEL_VIEW_EVENT, view.fuel);
+		this.emit(API_VARIABLE_MOVEMENT_VIEW_EVENT, view.movement);
+		this.emit(API_VARIABLE_SENSORS_VIEW_EVENT, view.sensors);
+		this.emit(API_VARIABLE_TEMPERATURE_VIEW_EVENT, view.temperature);
+		this.emit(API_VARIABLE_VOLUME_VIEW_EVENT, view.volume);
 	}
 
 	/**
@@ -453,15 +451,15 @@ export class Canbus extends EventEmitter
 	 */
 	private emitVariableValues(value: IVariablesValue): void
 	{
-		this.emit(API_EVENT_VARIABLE_VALUES, value);
-		this.emit(API_EVENT_VARIABLE_CLIMATE, value.climate);
-		this.emit(API_EVENT_VARIABLE_DOORS, value.doors);
-		this.emit(API_EVENT_VARIABLE_ENGINE, value.engine);
-		this.emit(API_EVENT_VARIABLE_FUEL, value.fuel);
-		this.emit(API_EVENT_VARIABLE_MOVEMENT, value.movement);
-		this.emit(API_EVENT_VARIABLE_SENSORS, value.sensors);
-		this.emit(API_EVENT_VARIABLE_TEMPERATURE, value.temperature);
-		this.emit(API_EVENT_VARIABLE_VOLUME, value.volume);
+		this.emit(API_VARIABLE_VALUES_EVENT, value);
+		this.emit(API_VARIABLE_CLIMATE_EVENT, value.climate);
+		this.emit(API_VARIABLE_DOORS_EVENT, value.doors);
+		this.emit(API_VARIABLE_ENGINE_EVENT, value.engine);
+		this.emit(API_VARIABLE_FUEL_EVENT, value.fuel);
+		this.emit(API_VARIABLE_MOVEMENT_EVENT, value.movement);
+		this.emit(API_VARIABLE_SENSORS_EVENT, value.sensors);
+		this.emit(API_VARIABLE_TEMPERATURE_EVENT, value.temperature);
+		this.emit(API_VARIABLE_VOLUME_EVENT, value.volume);
 	}
 
 	/**
@@ -472,201 +470,201 @@ export class Canbus extends EventEmitter
 	{
 		switch (data.getUint8(0))
 		{
-			case API_EXEC_CONFIG: // Вся конфигурация
+			case API_CONFIG_EXEC: // Вся конфигурация
 				this.configs.set(data);
 				this.logVersion();
 
-				this.emit(API_EVENT_CONFIGS, this.configs);
-				this.emit(API_EVENT_DEVICE_CONFIG, this.configs.device);
-				this.emit(API_EVENT_BUTTONS_CONFIG, this.configs.buttons);
-				this.emit(API_EVENT_CAR_CONFIG, this.configs.car);
-				this.emit(API_EVENT_TEYES_CONFIG, this.configs.teyes);
+				this.emit(API_CONFIGS_EVENT, this.configs);
+				this.emit(API_DEVICE_CONFIG_EVENT, this.configs.device);
+				this.emit(API_BUTTONS_CONFIG_EVENT, this.configs.buttons);
+				this.emit(API_CAR_CONFIG_EVENT, this.configs.car);
+				this.emit(API_TEYES_CONFIG_EVENT, this.configs.teyes);
 				this.emitVariableConfigs(this.configs.variable);
 				break;
 
-			case API_EXEC_VIEW: // Все параметры отображения
+			case API_VIEW_EXEC: // Все параметры отображения
 				this.views.set(data);
 
-				this.emit(API_EVENT_VIEWS, this.views);
-				this.emit(API_EVENT_CAR_VIEW, this.views.car);
-				this.emit(API_EVENT_TEYES_VIEW, this.views.teyes);
+				this.emit(API_VIEWS_EVENT, this.views);
+				this.emit(API_CAR_VIEW_EVENT, this.views.car);
+				this.emit(API_TEYES_VIEW_EVENT, this.views.teyes);
 				this.emitVariableViews(this.views.variable);
 				break;
 
-			case API_EXEC_VALUE: // Все значения
+			case API_VALUE_EXEC: // Все значения
 				this.values.set(data);
 				if (!this.values.device.activation && !this.sha)
 				{
 					this.queryDeviceInfo().then();
 				}
 
-				this.emit(API_EVENT_VALUES, this.values);
-				this.emit(API_EVENT_DEVICE, this.values.device);
-				this.emit(API_EVENT_LCD, this.values.lcd);
+				this.emit(API_VALUES_EVENT, this.values);
+				this.emit(API_DEVICE_EVENT, this.values.device);
+				this.emit(API_LCD_EVENT, this.values.lcd);
 				this.emitVariableValues(this.values.variable);
 				break;
 
-			case API_EXEC_INFO: // Информация об устройстве
+			case API_INFO_EXEC: // Информация об устройстве
 				this.deviceInfo.set(data);
 				if (this.values.device.isData && !this.sha) this.getSHA();
-				this.emit(API_EVENT_INFO, this.deviceInfo);
+				this.emit(API_INFO_EVENT, this.deviceInfo);
 				break;
-			case API_EXEC_DEVICE_CONFIG: // Конфигурация устройства
+			case API_DEVICE_CONFIG_EXEC: // Конфигурация устройства
 				this.configs.device.set(data);
-				this.emit(API_EVENT_DEVICE_CONFIG, this.configs.device);
+				this.emit(API_DEVICE_CONFIG_EVENT, this.configs.device);
 				break;
-			case API_EXEC_DEVICE_VALUE: // Значения устройства
+			case API_DEVICE_VALUE_EXEC: // Значения устройства
 				this.values.device.set(data);
-				this.emit(API_EVENT_DEVICE, this.values.device);
+				this.emit(API_DEVICE_EVENT, this.values.device);
 				break;
 
-			case API_EXEC_BUTTONS_CONFIG: // Конфигурация кнопок
+			case API_BUTTONS_CONFIG_EXEC: // Конфигурация кнопок
 				this.configs.buttons.set(data);
-				this.emit(API_EVENT_BUTTONS_CONFIG, this.configs.buttons);
+				this.emit(API_BUTTONS_CONFIG_EVENT, this.configs.buttons);
 				break;
-			case API_EXEC_BUTTONS_VALUE: // Значения кнопки
+			case API_BUTTONS_VALUE_EXEC: // Значения кнопки
 				this.buttonValue.set(data);
-				this.emit(API_EVENT_BUTTON, this.buttonValue);
+				this.emit(API_BUTTON_EVENT, this.buttonValue);
 				break;
 
-			case API_EXEC_TEYES_CONFIG: // Конфигурация Teyes
+			case API_TEYES_CONFIG_EXEC: // Конфигурация Teyes
 				this.configs.teyes.set(data);
-				this.emit(API_EVENT_TEYES_CONFIG, this.configs.teyes);
+				this.emit(API_TEYES_CONFIG_EVENT, this.configs.teyes);
 				break;
-			case API_EXEC_TEYES_VIEW: // Параметры отображения Teyes
+			case API_TEYES_VIEW_EXEC: // Параметры отображения Teyes
 				this.views.teyes.set(data);
-				this.emit(API_EVENT_TEYES_VIEW, this.views.teyes);
+				this.emit(API_TEYES_VIEW_EVENT, this.views.teyes);
 				break;
-			case API_EXEC_TEYES_TEXT: // Текст Teyes
+			case API_TEYES_TEXT_EXEC: // Текст Teyes
 				this.teyesText.set(data);
-				this.emit(API_EVENT_TEYES_TEXT, this.teyesText);
+				this.emit(API_TEYES_TEXT_EVENT, this.teyesText);
 				break;
 
-			case API_EXEC_LCD_VALUE: // Значения LCD
+			case API_LCD_VALUE_EXEC: // Значения LCD
 				this.values.lcd.set(data);
-				this.emit(API_EVENT_LCD, this.values.lcd);
+				this.emit(API_LCD_EVENT, this.values.lcd);
 				break;
 
-			case API_EXEC_CAR_CONFIG: // Конфигурация машины
+			case API_CAR_CONFIG_EXEC: // Конфигурация машины
 				this.configs.car.set(data);
-				this.emit(API_EVENT_CAR_CONFIG, this.configs.car);
+				this.emit(API_CAR_CONFIG_EVENT, this.configs.car);
 				break;
-			case API_EXEC_CAR_VIEW: // Параметры отображения машины
+			case API_CAR_VIEW_EXEC: // Параметры отображения машины
 				this.views.car.set(data);
-				this.emit(API_EVENT_CAR_VIEW, this.views.car);
+				this.emit(API_CAR_VIEW_EVENT, this.views.car);
 				break;
 
-			case API_EXEC_UPDATE: // Обновление прошивки
+			case API_UPDATE_EXEC: // Обновление прошивки
 				this.update.set(data);
-				this.emit(API_EVENT_UPDATE, this.update);
+				this.emit(API_UPDATE_EVENT, this.update);
 				break;
 
-			case API_EXEC_VARIABLE_CONFIG: // Вся конфигурация переменных
+			case API_VARIABLE_CONFIG_EXEC: // Вся конфигурация переменных
 				this.configs.variable.set(data);
 				this.emitVariableConfigs(this.configs.variable);
 				break;
 
-			case API_EXEC_VARIABLE_VIEW: // Все параметры отображения переменных
+			case API_VARIABLE_VIEW_EXEC: // Все параметры отображения переменных
 				this.views.variable.set(data);
 				this.emitVariableViews(this.views.variable);
 				break;
 
-			case API_EXEC_VARIABLE_VALUE: // Все значения переменных
+			case API_VARIABLE_VALUE_EXEC: // Все значения переменных
 				this.values.variable.set(data);
 				this.emitVariableValues(this.values.variable);
 				break;
 
-			case API_EXEC_VARIABLE_BOSE: // Конфигурация Bose
+			case API_VARIABLE_BOSE_EXEC: // Конфигурация Bose
 				this.configs.variable.bose.set(data);
-				this.emit(API_EVENT_VARIABLE_BOSE, this.configs.variable.bose);
+				this.emit(API_VARIABLE_BOSE_EVENT, this.configs.variable.bose);
 				break;
-			case API_EXEC_VARIABLE_BOSE_VIEW: // Параметры отображения Bose
+			case API_VARIABLE_BOSE_VIEW_EXEC: // Параметры отображения Bose
 				this.views.variable.bose.set(data);
-				this.emit(API_EVENT_VARIABLE_BOSE_VIEW, this.views.variable.bose);
+				this.emit(API_VARIABLE_BOSE_VIEW_EVENT, this.views.variable.bose);
 				break;
 
-			case API_EXEC_VARIABLE_CLIMATE: // Значения климата
+			case API_VARIABLE_CLIMATE_EXEC: // Значения климата
 				this.values.variable.climate.set(data);
-				this.emit(API_EVENT_VARIABLE_CLIMATE, this.values.variable.climate);
+				this.emit(API_VARIABLE_CLIMATE_EVENT, this.values.variable.climate);
 				break;
-			case API_EXEC_VARIABLE_CLIMATE_VIEW: // Параметры отображения климата
+			case API_VARIABLE_CLIMATE_VIEW_EXEC: // Параметры отображения климата
 				this.views.variable.climate.set(data);
-				this.emit(API_EVENT_VARIABLE_CLIMATE_VIEW, this.views.variable.climate);
+				this.emit(API_VARIABLE_CLIMATE_VIEW_EVENT, this.views.variable.climate);
 				break;
 
-			case API_EXEC_VARIABLE_DOORS: // Значения дверей
+			case API_VARIABLE_DOORS_EXEC: // Значения дверей
 				this.values.variable.doors.set(data);
-				this.emit(API_EVENT_VARIABLE_DOORS, this.values.variable.doors);
+				this.emit(API_VARIABLE_DOORS_EVENT, this.values.variable.doors);
 				break;
-			case API_EXEC_VARIABLE_DOORS_VIEW: // Параметры отображения дверей
+			case API_VARIABLE_DOORS_VIEW_EXEC: // Параметры отображения дверей
 				this.views.variable.doors.set(data);
-				this.emit(API_EVENT_VARIABLE_DOORS_VIEW, this.views.variable.doors);
+				this.emit(API_VARIABLE_DOORS_VIEW_EVENT, this.views.variable.doors);
 				break;
 
-			case API_EXEC_VARIABLE_ENGINE: // Значения ДВС
+			case API_VARIABLE_ENGINE_EXEC: // Значения ДВС
 				this.values.variable.engine.set(data);
-				this.emit(API_EVENT_VARIABLE_ENGINE, this.values.variable.engine);
+				this.emit(API_VARIABLE_ENGINE_EVENT, this.values.variable.engine);
 				break;
-			case API_EXEC_VARIABLE_ENGINE_CONFIG: // Конфигурация ДВС
+			case API_VARIABLE_ENGINE_CONFIG_EXEC: // Конфигурация ДВС
 				this.configs.variable.engine.set(data);
-				this.emit(API_EVENT_VARIABLE_ENGINE_CONFIG, this.configs.variable.engine);
+				this.emit(API_VARIABLE_ENGINE_CONFIG_EVENT, this.configs.variable.engine);
 				break;
-			case API_EXEC_VARIABLE_ENGINE_VIEW: // Параметры отображения ДВС
+			case API_VARIABLE_ENGINE_VIEW_EXEC: // Параметры отображения ДВС
 				this.views.variable.engine.set(data);
-				this.emit(API_EVENT_VARIABLE_ENGINE_VIEW, this.views.variable.engine);
+				this.emit(API_VARIABLE_ENGINE_VIEW_EVENT, this.views.variable.engine);
 				break;
 
-			case API_EXEC_VARIABLE_FUEL: // Значения расхода
+			case API_VARIABLE_FUEL_EXEC: // Значения расхода
 				this.values.variable.fuel.set(data);
-				this.emit(API_EVENT_VARIABLE_FUEL, this.values.variable.fuel);
+				this.emit(API_VARIABLE_FUEL_EVENT, this.values.variable.fuel);
 				break;
-			case API_EXEC_VARIABLE_FUEL_CONFIG: // Конфигурация расхода
+			case API_VARIABLE_FUEL_CONFIG_EXEC: // Конфигурация расхода
 				this.configs.variable.fuel.set(data);
-				this.emit(API_EVENT_VARIABLE_FUEL_CONFIG, this.configs.variable.fuel);
+				this.emit(API_VARIABLE_FUEL_CONFIG_EVENT, this.configs.variable.fuel);
 				break;
-			case API_EXEC_VARIABLE_FUEL_VIEW: // Параметры отображения расхода
+			case API_VARIABLE_FUEL_VIEW_EXEC: // Параметры отображения расхода
 				this.views.variable.fuel.set(data);
-				this.emit(API_EVENT_VARIABLE_FUEL_VIEW, this.views.variable.fuel);
+				this.emit(API_VARIABLE_FUEL_VIEW_EVENT, this.views.variable.fuel);
 				break;
 
-			case API_EXEC_VARIABLE_MOVEMENT: // Значения движения
+			case API_VARIABLE_MOVEMENT_EXEC: // Значения движения
 				this.values.variable.movement.set(data);
-				this.emit(API_EVENT_VARIABLE_MOVEMENT, this.values.variable.movement);
+				this.emit(API_VARIABLE_MOVEMENT_EVENT, this.values.variable.movement);
 				break;
-			case API_EXEC_VARIABLE_MOVEMENT_VIEW: // Параметры отображения движения
+			case API_VARIABLE_MOVEMENT_VIEW_EXEC: // Параметры отображения движения
 				this.views.variable.movement.set(data);
-				this.emit(API_EVENT_VARIABLE_MOVEMENT_VIEW, this.views.variable.movement);
+				this.emit(API_VARIABLE_MOVEMENT_VIEW_EVENT, this.views.variable.movement);
 				break;
 
-			case API_EXEC_VARIABLE_SENSORS: // Значения датчиков
+			case API_VARIABLE_SENSORS_EXEC: // Значения датчиков
 				this.values.variable.sensors.set(data);
-				this.emit(API_EVENT_VARIABLE_SENSORS, this.values.variable.sensors);
+				this.emit(API_VARIABLE_SENSORS_EVENT, this.values.variable.sensors);
 				break;
-			case API_EXEC_VARIABLE_SENSORS_VIEW: // Параметры отображения датчиков
+			case API_VARIABLE_SENSORS_VIEW_EXEC: // Параметры отображения датчиков
 				this.views.variable.movement.set(data);
-				this.emit(API_EVENT_VARIABLE_SENSORS_VIEW, this.views.variable.movement);
+				this.emit(API_VARIABLE_SENSORS_VIEW_EVENT, this.views.variable.movement);
 				break;
 
-			case API_EXEC_VARIABLE_TEMPERATURE: // Значения температуры
+			case API_VARIABLE_TEMPERATURE_EXEC: // Значения температуры
 				this.values.variable.temperature.set(data);
-				this.emit(API_EVENT_VARIABLE_TEMPERATURE, this.values.variable.temperature);
+				this.emit(API_VARIABLE_TEMPERATURE_EVENT, this.values.variable.temperature);
 				break;
-			case API_EXEC_VARIABLE_TEMPERATURE_VIEW: // Параметры отображения температуры
+			case API_VARIABLE_TEMPERATURE_VIEW_EXEC: // Параметры отображения температуры
 				this.views.variable.temperature.set(data);
-				this.emit(API_EVENT_VARIABLE_TEMPERATURE_VIEW, this.views.variable.temperature);
+				this.emit(API_VARIABLE_TEMPERATURE_VIEW_EVENT, this.views.variable.temperature);
 				break;
 
-			case API_EXEC_VARIABLE_VOLUME: // Значения уровня звука
+			case API_VARIABLE_VOLUME_EXEC: // Значения уровня звука
 				this.values.variable.volume.set(data);
-				this.emit(API_EVENT_VARIABLE_VOLUME, this.values.variable.volume);
+				this.emit(API_VARIABLE_VOLUME_EVENT, this.values.variable.volume);
 				break;
-			case API_EXEC_VARIABLE_VOLUME_CONFIG: // Конфигурация уровня звука
+			case API_VARIABLE_VOLUME_CONFIG_EXEC: // Конфигурация уровня звука
 				this.configs.variable.volume.set(data);
-				this.emit(API_EVENT_VARIABLE_VOLUME_CONFIG, this.configs.variable.volume);
+				this.emit(API_VARIABLE_VOLUME_CONFIG_EVENT, this.configs.variable.volume);
 				break;
-			case API_EXEC_VARIABLE_VOLUME_VIEW: // Параметры отображения уровня звука
+			case API_VARIABLE_VOLUME_VIEW_EXEC: // Параметры отображения уровня звука
 				this.views.variable.volume.set(data);
-				this.emit(API_EVENT_VARIABLE_VOLUME_VIEW, this.views.variable.volume);
+				this.emit(API_VARIABLE_VOLUME_VIEW_EVENT, this.views.variable.volume);
 				break;
 		}
 	}
@@ -687,7 +685,7 @@ export class Canbus extends EventEmitter
 					setTimeout(() => this.updateUpload(), 1000);
 				}
 			})
-			.catch(() => this.emit(API_EVENT_UPDATE_ERROR, t("update.notify.errorDownload")));
+			.catch(() => this.emit(API_UPDATE_EVENT_ERROR, t("update.notify.errorDownload")));
 	}
 
 	/** Пишем данные файла прошивки в устройство PJ CAN */
@@ -705,11 +703,11 @@ export class Canbus extends EventEmitter
 
 		if (this.update.end)
 		{
-			debounce(() => this.emit(API_EVENT_UPDATE_ERROR, t("update.notify.errorWaitUpdate")), 60000);
+			debounce(() => this.emit(API_UPDATE_EVENT_ERROR, t("update.notify.errorWaitUpdate")), 60000);
 		}
 		else
 		{
-			debounce(() => this.emit(API_EVENT_UPDATE_ERROR, t("update.notify.errorUpload")), 5000);
+			debounce(() => this.emit(API_UPDATE_EVENT_ERROR, t("update.notify.errorUpload")), 5000);
 		}
 	}
 
@@ -758,7 +756,7 @@ export class Canbus extends EventEmitter
 	{
 		this.values.device.reboot = true;
 		this.values.device.save = save;
-		this.queryValue(API_EXEC_DEVICE_VALUE).then();
+		this.queryValue(API_DEVICE_VALUE_EXEC).then();
 	}
 
 	/**
@@ -789,7 +787,7 @@ export class Canbus extends EventEmitter
 				.then(async (res: any) =>
 				{
 					this.configs.device.serial = res?.sha ?? "";
-					await this.queryConfig(API_EXEC_DEVICE_CONFIG);
+					await this.queryConfig(API_DEVICE_CONFIG_EXEC);
 					this.rebootDevice(true);
 					toast.success(t("activation.success"));
 				})

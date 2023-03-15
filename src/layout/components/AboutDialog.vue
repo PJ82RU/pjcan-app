@@ -38,7 +38,7 @@
 
 <script lang="ts">
 import { computed, onMounted, onUnmounted, ref, toRefs } from "vue";
-import canbus, { API_EVENT_CAR_CONFIG, API_EVENT_CONFIGS } from "@/api/canbus";
+import canbus, { API_CAR_CONFIG_EVENT, API_CONFIGS_EVENT } from "@/api/canbus";
 const pkg = require("/package.json");
 
 import DialogTemplate from "@/components/DialogTemplate.vue";
@@ -118,14 +118,14 @@ export default {
 
 		onMounted(() =>
 		{
-			canbus.addListener(API_EVENT_CONFIGS, onReceiveConfigs);
-			canbus.addListener(API_EVENT_CAR_CONFIG, onReceiveCarConfig);
+			canbus.addListener(API_CONFIGS_EVENT, onReceiveConfigs);
+			canbus.addListener(API_CAR_CONFIG_EVENT, onReceiveCarConfig);
 			onReceiveCarConfig(canbus.configs.car);
 		});
 		onUnmounted(() =>
 		{
-			canbus.removeListener(API_EVENT_CONFIGS, onReceiveConfigs);
-			canbus.removeListener(API_EVENT_CAR_CONFIG, onReceiveCarConfig);
+			canbus.removeListener(API_CONFIGS_EVENT, onReceiveConfigs);
+			canbus.removeListener(API_CAR_CONFIG_EVENT, onReceiveCarConfig);
 		});
 
 		return {

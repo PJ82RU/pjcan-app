@@ -3,7 +3,7 @@ import { BaseModel } from "../base";
 import { StructLCDValue } from "./StructLCDValue";
 import { ILCDValue } from "./ILCDValue";
 
-export const API_EXEC_LCD_VALUE = 40;
+export const API_LCD_VALUE_EXEC = 40;
 export const API_SIZE_LCD_VALUE = 15;
 
 const struct = new BluetoothStruct(StructLCDValue);
@@ -47,12 +47,12 @@ export class LCDValue extends BaseModel implements ILCDValue
 	 */
 	set(buf: DataView): boolean
 	{
-		return this._set(this, API_EXEC_LCD_VALUE, API_SIZE_LCD_VALUE + 1, struct, buf);
+		return this._set(this, API_LCD_VALUE_EXEC, API_SIZE_LCD_VALUE + 1, struct, buf);
 	}
 
 	/** Чтение данных */
 	get(): DataView | undefined
 	{
-		return this._get(this, API_EXEC_LCD_VALUE, API_SIZE_LCD_VALUE + 1, struct);
+		return this._get(this, API_LCD_VALUE_EXEC, API_SIZE_LCD_VALUE + 1, struct);
 	}
 }

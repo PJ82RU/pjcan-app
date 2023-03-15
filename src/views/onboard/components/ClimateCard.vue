@@ -89,10 +89,10 @@ import SwitchCardItem from "@/components/cards/SwitchCardItem.vue";
 import ViewSettingDialog from "./ViewSettingDialog.vue";
 import { IMenuItem } from "@/components/MenuDots.vue";
 
-import canbus, { API_EVENT_VARIABLE_CLIMATE, API_EVENT_VARIABLE_CLIMATE_VIEW } from "@/api/canbus";
+import canbus, { API_VARIABLE_CLIMATE_EVENT, API_VARIABLE_CLIMATE_VIEW_EVENT } from "@/api/canbus";
 
 import { IViewConfig } from "@/models/pjcan/view";
-import { API_EXEC_VARIABLE_CLIMATE_VIEW, IClimateValue, IClimateView, TAir } from "@/models/pjcan/variables/climate";
+import { API_VARIABLE_CLIMATE_VIEW_EXEC, IClimateValue, IClimateView, TAir } from "@/models/pjcan/variables/climate";
 
 export default {
 	name: "ClimateCard",
@@ -150,16 +150,16 @@ export default {
 		// регистрируем события
 		onMounted(() =>
 		{
-			canbus.addListener(API_EVENT_VARIABLE_CLIMATE, onReceiveValue);
-			canbus.addListener(API_EVENT_VARIABLE_CLIMATE_VIEW, onReceiveView);
+			canbus.addListener(API_VARIABLE_CLIMATE_EVENT, onReceiveValue);
+			canbus.addListener(API_VARIABLE_CLIMATE_VIEW_EVENT, onReceiveView);
 			onReceiveValue(canbus.values.variable.climate);
 			onReceiveView(canbus.views.variable.climate);
 		});
 		// удаляем события
 		onUnmounted(() =>
 		{
-			canbus.removeListener(API_EVENT_VARIABLE_CLIMATE, onReceiveValue);
-			canbus.removeListener(API_EVENT_VARIABLE_CLIMATE_VIEW, onReceiveView);
+			canbus.removeListener(API_VARIABLE_CLIMATE_EVENT, onReceiveValue);
+			canbus.removeListener(API_VARIABLE_CLIMATE_VIEW_EVENT, onReceiveView);
 		});
 
 		// МЕНЮ ОТОБРАЖЕНИЯ
@@ -187,7 +187,7 @@ export default {
 		const onViewSettingApply = (data: IViewConfig): void =>
 		{
 			canbus.views.variable.climate.view = data;
-			canbus.queryView(API_EXEC_VARIABLE_CLIMATE_VIEW);
+			canbus.queryView(API_VARIABLE_CLIMATE_VIEW_EXEC);
 		};
 
 		return {

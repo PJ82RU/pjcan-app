@@ -14,7 +14,7 @@ import { API_SIZE_VARIABLE_SENSORS, SensorsValue } from "../sensors";
 import { API_SIZE_VARIABLE_TEMPERATURE, TemperatureValue } from "../temperature";
 import { API_SIZE_VARIABLE_VOLUME, VolumeValue } from "../volume";
 
-export const API_EXEC_VARIABLE_VALUE = 102;
+export const API_VARIABLE_VALUE_EXEC = 102;
 export const API_SIZE_VARIABLE_VALUE =
 	API_SIZE_VARIABLE_CLIMATE +
 	API_SIZE_VARIABLE_CLOCK +
@@ -53,7 +53,7 @@ export class VariablesValue extends BaseModel implements IVariablesValue
 	 */
 	set(buf: DataView): boolean
 	{
-		const result = this._set(this, API_EXEC_VARIABLE_VALUE, API_SIZE_VARIABLE_VALUE + 1, struct, buf);
+		const result = this._set(this, API_VARIABLE_VALUE_EXEC, API_SIZE_VARIABLE_VALUE + 1, struct, buf);
 		if (result)
 		{
 			this.climate.isData = true;
@@ -71,6 +71,6 @@ export class VariablesValue extends BaseModel implements IVariablesValue
 	/** Чтение данных */
 	get(): DataView | undefined
 	{
-		return this._get(this, API_EXEC_VARIABLE_VALUE, API_SIZE_VARIABLE_VALUE + 1, struct);
+		return this._get(this, API_VARIABLE_VALUE_EXEC, API_SIZE_VARIABLE_VALUE + 1, struct);
 	}
 }

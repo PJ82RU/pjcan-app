@@ -49,7 +49,7 @@ import store from "@/store";
 import DialogTemplate from "@/components/DialogTemplate.vue";
 import DeviceResetDialog from "./DeviceResetDialog.vue";
 
-import canbus, { API_EVENT_INFO } from "@/api/canbus";
+import canbus, { API_INFO_EVENT } from "@/api/canbus";
 
 import { IDeviceInfo } from "@/models/pjcan/device";
 import { IMessage } from "@/models/interfaces/message/IMessage";
@@ -116,12 +116,12 @@ export default {
 
 		onMounted(() =>
 		{
-			canbus.addListener(API_EVENT_INFO, onReceiveInfo);
+			canbus.addListener(API_INFO_EVENT, onReceiveInfo);
 			onReceiveInfo(canbus.deviceInfo);
 		});
 		onUnmounted(() =>
 		{
-			canbus.removeListener(API_EVENT_INFO, onReceiveInfo);
+			canbus.removeListener(API_INFO_EVENT, onReceiveInfo);
 		});
 
 		watch(modelValue, (val: boolean): void =>

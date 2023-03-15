@@ -14,7 +14,7 @@ import { StructVariableViews } from "./StructVariableViews";
 import { IVariableViews } from "./IVariableViews";
 import { API_SIZE_VARIABLE_CLOCK_VIEW } from "@/models/pjcan/variables/clock";
 
-export const API_EXEC_VARIABLE_VIEW = 101;
+export const API_VARIABLE_VIEW_EXEC = 101;
 export const API_SIZE_VARIABLE_VIEW =
 	API_SIZE_VARIABLE_BOSE_VIEW +
 	API_SIZE_VARIABLE_CLIMATE_VIEW +
@@ -55,7 +55,7 @@ export class VariableView extends BaseModel implements IVariableViews
 	 */
 	set(buf: DataView): boolean
 	{
-		const result = this._set(this, API_EXEC_VARIABLE_VIEW, API_SIZE_VARIABLE_VIEW + 1, struct, buf);
+		const result = this._set(this, API_VARIABLE_VIEW_EXEC, API_SIZE_VARIABLE_VIEW + 1, struct, buf);
 		if (result)
 		{
 			this.bose.isData = true;
@@ -74,6 +74,6 @@ export class VariableView extends BaseModel implements IVariableViews
 	/** Чтение данных */
 	get(): DataView | undefined
 	{
-		return this._get(this, API_EXEC_VARIABLE_VIEW, 1);
+		return this._get(this, API_VARIABLE_VIEW_EXEC, 1);
 	}
 }

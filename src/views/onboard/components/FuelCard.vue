@@ -65,10 +65,10 @@ import ViewSettingDialog from "./ViewSettingDialog.vue";
 import FuelConfigDialog from "./FuelConfigDialog.vue";
 import { IMenuItem } from "@/components/MenuDots.vue";
 
-import canbus, { API_EVENT_VARIABLE_FUEL, API_EVENT_VARIABLE_FUEL_VIEW } from "@/api/canbus";
+import canbus, { API_VARIABLE_FUEL_EVENT, API_VARIABLE_FUEL_VIEW_EVENT } from "@/api/canbus";
 
 import { IViewConfig } from "@/models/pjcan/view";
-import { API_EXEC_VARIABLE_FUEL_VIEW, IFuelValue, IFuelView } from "@/models/pjcan/variables/fuel";
+import { API_VARIABLE_FUEL_VIEW_EXEC, IFuelValue, IFuelView } from "@/models/pjcan/variables/fuel";
 
 export default {
 	name: "FuelCard",
@@ -107,16 +107,16 @@ export default {
 		// регистрируем события
 		onMounted(() =>
 		{
-			canbus.addListener(API_EVENT_VARIABLE_FUEL, onReceiveValue);
-			canbus.addListener(API_EVENT_VARIABLE_FUEL_VIEW, onReceiveView);
+			canbus.addListener(API_VARIABLE_FUEL_EVENT, onReceiveValue);
+			canbus.addListener(API_VARIABLE_FUEL_VIEW_EVENT, onReceiveView);
 			onReceiveValue(canbus.values.variable.fuel);
 			onReceiveView(canbus.views.variable.fuel);
 		});
 		// удаляем события
 		onUnmounted(() =>
 		{
-			canbus.removeListener(API_EVENT_VARIABLE_FUEL, onReceiveValue);
-			canbus.removeListener(API_EVENT_VARIABLE_FUEL_VIEW, onReceiveView);
+			canbus.removeListener(API_VARIABLE_FUEL_EVENT, onReceiveValue);
+			canbus.removeListener(API_VARIABLE_FUEL_VIEW_EVENT, onReceiveView);
 		});
 
 		// МЕНЮ ОТОБРАЖЕНИЯ
@@ -195,7 +195,7 @@ export default {
 					fuel.consumption = data;
 					break;
 			}
-			canbus.queryView(API_EXEC_VARIABLE_FUEL_VIEW);
+			canbus.queryView(API_VARIABLE_FUEL_VIEW_EXEC);
 		};
 
 		return {

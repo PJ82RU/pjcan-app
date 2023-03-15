@@ -97,10 +97,10 @@ import ViewSettingDialog from "./ViewSettingDialog.vue";
 import EngineConfigDialog from "./EngineConfigDialog.vue";
 import { IMenuItem } from "@/components/MenuDots.vue";
 
-import canbus, { API_EVENT_VARIABLE_ENGINE, API_EVENT_VARIABLE_ENGINE_VIEW } from "@/api/canbus";
+import canbus, { API_VARIABLE_ENGINE_EVENT, API_VARIABLE_ENGINE_VIEW_EVENT } from "@/api/canbus";
 
 import { IViewConfig } from "@/models/pjcan/view";
-import { API_EXEC_VARIABLE_ENGINE_VIEW, IEngineValue, IEngineView } from "@/models/pjcan/variables/engine";
+import { API_VARIABLE_ENGINE_VIEW_EXEC, IEngineValue, IEngineView } from "@/models/pjcan/variables/engine";
 
 export default {
 	name: "EngineCard",
@@ -145,16 +145,16 @@ export default {
 		// регистрируем события
 		onMounted(() =>
 		{
-			canbus.addListener(API_EVENT_VARIABLE_ENGINE, onReceiveValue);
-			canbus.addListener(API_EVENT_VARIABLE_ENGINE_VIEW, onReceiveView);
+			canbus.addListener(API_VARIABLE_ENGINE_EVENT, onReceiveValue);
+			canbus.addListener(API_VARIABLE_ENGINE_VIEW_EVENT, onReceiveView);
 			onReceiveValue(canbus.values.variable.engine);
 			onReceiveView(canbus.views.variable.engine);
 		});
 		// удаляем события
 		onUnmounted(() =>
 		{
-			canbus.removeListener(API_EVENT_VARIABLE_ENGINE, onReceiveValue);
-			canbus.removeListener(API_EVENT_VARIABLE_ENGINE_VIEW, onReceiveView);
+			canbus.removeListener(API_VARIABLE_ENGINE_EVENT, onReceiveValue);
+			canbus.removeListener(API_VARIABLE_ENGINE_VIEW_EVENT, onReceiveView);
 		});
 
 		// МЕНЮ ОТОБРАЖЕНИЯ
@@ -260,7 +260,7 @@ export default {
 					engine.coolant = data;
 					break;
 			}
-			canbus.queryView(API_EXEC_VARIABLE_ENGINE_VIEW);
+			canbus.queryView(API_VARIABLE_ENGINE_VIEW_EXEC);
 		};
 
 		return {

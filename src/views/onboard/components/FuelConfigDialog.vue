@@ -47,9 +47,9 @@ import DialogTemplate from "@/components/DialogTemplate.vue";
 import SwitchCardItem from "@/components/cards/SwitchCardItem.vue";
 import NumberField from "@/components/common/NumberField.vue";
 
-import canbus, { API_EVENT_VARIABLE_FUEL_CONFIG } from "@/api/canbus";
+import canbus, { API_VARIABLE_FUEL_CONFIG_EVENT } from "@/api/canbus";
 
-import { API_EXEC_VARIABLE_FUEL_CONFIG, IFuelConfig } from "@/models/pjcan/variables/fuel";
+import { API_VARIABLE_FUEL_CONFIG_EXEC, IFuelConfig } from "@/models/pjcan/variables/fuel";
 
 export default {
 	name: "FuelConfigDialog",
@@ -82,7 +82,7 @@ export default {
 		const onReset = (): void =>
 		{
 			canbus.configs.variable.fuel.ratio = 1000;
-			canbus.queryConfig(API_EXEC_VARIABLE_FUEL_CONFIG);
+			canbus.queryConfig(API_VARIABLE_FUEL_CONFIG_EXEC);
 			visible.value = false;
 		};
 
@@ -90,18 +90,18 @@ export default {
 		const onApply = (): void =>
 		{
 			canbus.configs.variable.fuel.ratio = ratio.value * 1000;
-			canbus.queryConfig(API_EXEC_VARIABLE_FUEL_CONFIG);
+			canbus.queryConfig(API_VARIABLE_FUEL_CONFIG_EXEC);
 			visible.value = false;
 		};
 
 		onMounted(() =>
 		{
-			canbus.addListener(API_EVENT_VARIABLE_FUEL_CONFIG, onReceiveConfigFuel);
+			canbus.addListener(API_VARIABLE_FUEL_CONFIG_EVENT, onReceiveConfigFuel);
 			onReceiveConfigFuel(canbus.configs.variable.fuel);
 		});
 		onUnmounted(() =>
 		{
-			canbus.removeListener(API_EVENT_VARIABLE_FUEL_CONFIG, onReceiveConfigFuel);
+			canbus.removeListener(API_VARIABLE_FUEL_CONFIG_EVENT, onReceiveConfigFuel);
 		});
 
 		return {

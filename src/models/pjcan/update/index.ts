@@ -1,9 +1,9 @@
-import { API_EXEC_UPDATE, API_EVENT_UPDATE, Update } from "./Update";
+import { API_UPDATE_EXEC, API_UPDATE_EVENT, Update } from "./Update";
 import { IUpdate } from "./IUpdate";
 
 export {
-	API_EXEC_UPDATE,
-	API_EVENT_UPDATE,
+	API_UPDATE_EXEC,
+	API_UPDATE_EVENT,
 	Update
 };
 export type { IUpdate };

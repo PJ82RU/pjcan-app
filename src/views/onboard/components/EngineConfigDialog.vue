@@ -63,9 +63,9 @@ import DialogTemplate from "@/components/DialogTemplate.vue";
 import SwitchCardItem from "@/components/cards/SwitchCardItem.vue";
 import NumberField from "@/components/common/NumberField.vue";
 
-import canbus, { API_EVENT_VARIABLE_ENGINE_CONFIG } from "@/api/canbus";
+import canbus, { API_VARIABLE_ENGINE_CONFIG_EVENT } from "@/api/canbus";
 
-import { API_EXEC_VARIABLE_ENGINE_CONFIG, IEngineConfig } from "@/models/pjcan/variables/engine";
+import { API_VARIABLE_ENGINE_CONFIG_EXEC, IEngineConfig } from "@/models/pjcan/variables/engine";
 
 export default {
 	name: "EngineConfig",
@@ -105,7 +105,7 @@ export default {
 			engine.showDays = showDays.value;
 			engine.totalSeconds = 0;
 			engine.totalCountRPM = 0;
-			canbus.queryConfig(API_EXEC_VARIABLE_ENGINE_CONFIG);
+			canbus.queryConfig(API_VARIABLE_ENGINE_CONFIG_EXEC);
 			visible.value = false;
 		};
 
@@ -116,18 +116,18 @@ export default {
 			engine.showDays = showDays.value;
 			engine.totalSeconds = worktime.value * 60;
 			engine.totalCountRPM = totalCountRPM.value;
-			canbus.queryConfig(API_EXEC_VARIABLE_ENGINE_CONFIG);
+			canbus.queryConfig(API_VARIABLE_ENGINE_CONFIG_EXEC);
 			visible.value = false;
 		};
 
 		onMounted(() =>
 		{
-			canbus.addListener(API_EVENT_VARIABLE_ENGINE_CONFIG, onReceiveConfigEngine);
+			canbus.addListener(API_VARIABLE_ENGINE_CONFIG_EVENT, onReceiveConfigEngine);
 			onReceiveConfigEngine(canbus.configs.variable.engine);
 		});
 		onUnmounted(() =>
 		{
-			canbus.removeListener(API_EVENT_VARIABLE_ENGINE_CONFIG, onReceiveConfigEngine);
+			canbus.removeListener(API_VARIABLE_ENGINE_CONFIG_EVENT, onReceiveConfigEngine);
 		});
 
 		return {

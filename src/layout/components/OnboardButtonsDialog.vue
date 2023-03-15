@@ -104,7 +104,7 @@ import canbus from "@/api/canbus";
 
 import DialogTemplate from "@/components/DialogTemplate.vue";
 
-import { API_EXEC_LCD_VALUE } from "@/models/pjcan/lcd";
+import { API_LCD_VALUE_EXEC } from "@/models/pjcan/lcd";
 
 export default {
 	name: "OnboardButtonsDialog",
@@ -137,7 +137,7 @@ export default {
 		const onTouchPress = (name: string, toggle: boolean = false): void =>
 		{
 			canbus.values.lcd[name] = !toggle ? true : !canbus.values.lcd[name];
-			canbus.queryValue(API_EXEC_LCD_VALUE);
+			canbus.queryValue(API_LCD_VALUE_EXEC);
 			navigator.vibrate(30);
 
 			if (timeouts?.[name])
@@ -156,7 +156,7 @@ export default {
 			if (canbus.values.lcd[name])
 			{
 				canbus.values.lcd[name] = false;
-				canbus.queryValue(API_EXEC_LCD_VALUE);
+				canbus.queryValue(API_LCD_VALUE_EXEC);
 				navigator.vibrate(20);
 			}
 

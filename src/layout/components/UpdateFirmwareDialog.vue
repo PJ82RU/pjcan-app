@@ -45,10 +45,10 @@ import { useI18n } from "vue-i18n";
 import DialogTemplate from "@/components/DialogTemplate.vue";
 import { BLUETOOTH_EVENT_CONNECTED, TConnectedStatus } from "@/components/bluetooth";
 
-import canbus, { API_EVENT_UPDATE_ERROR } from "@/api/canbus";
+import canbus, { API_UPDATE_EVENT_ERROR } from "@/api/canbus";
 
 import { Timeout } from "@/models/types/Timeout";
-import { API_EVENT_UPDATE } from "@/models/pjcan/update";
+import { API_UPDATE_EVENT } from "@/models/pjcan/update";
 
 import { getFormatTime } from "@/utils/time";
 
@@ -101,7 +101,7 @@ export default {
 			visibleProcess.value = false;
 			if (timerCheckVersion) clearTimeout(timerCheckVersion);
 
-			canbus.removeListener(API_EVENT_UPDATE_ERROR, onErrorUpdate);
+			canbus.removeListener(API_UPDATE_EVENT_ERROR, onErrorUpdate);
 			canbus.update.clear();
 		};
 
@@ -147,7 +147,7 @@ export default {
 			visibleUpdate.value = false;
 			visibleProcess.value = true;
 
-			canbus.addListener(API_EVENT_UPDATE_ERROR, onErrorUpdate);
+			canbus.addListener(API_UPDATE_EVENT_ERROR, onErrorUpdate);
 			canbus.updateStart();
 		};
 
@@ -216,14 +216,14 @@ export default {
 		onMounted(() =>
 		{
 			canbus.bluetooth.addListener(BLUETOOTH_EVENT_CONNECTED, onConnected);
-			canbus.update.addListener(API_EVENT_UPDATE, onUpdate);
+			canbus.update.addListener(API_UPDATE_EVENT, onUpdate);
 		});
 
 		onUnmounted(() =>
 		{
 			canbus.bluetooth.removeListener(BLUETOOTH_EVENT_CONNECTED, onConnected);
-			canbus.update.removeListener(API_EVENT_UPDATE, onUpdate);
-			canbus.removeListener(API_EVENT_UPDATE_ERROR, onErrorUpdate);
+			canbus.update.removeListener(API_UPDATE_EVENT, onUpdate);
+			canbus.removeListener(API_UPDATE_EVENT_ERROR, onErrorUpdate);
 		});
 
 		return {
