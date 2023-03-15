@@ -1,7 +1,7 @@
-import { ViewConfig, API_VIEW_SIZE } from "./ViewConfig";
+import { ViewConfig } from "./ViewConfig";
+import { API_VIEW_SIZE, StructViewConfig } from "./StructViewConfig";
 import { TViewType } from "./TViewType";
-import { StructViewConfig } from "./StructViewConfig";
 import { IViewConfig } from "./IViewConfig";
 
-export { API_VIEW_SIZE, TViewType, StructViewConfig, ViewConfig };
+export { API_VIEW_SIZE, StructViewConfig, TViewType, ViewConfig };
 export type { IViewConfig };

@@ -1,6 +1,6 @@
-import { Version, API_SIZE_VERSION } from "./Version";
+import { Version } from "./Version";
 import { IVersion } from "./IVersion";
-import { StructVersion } from "./StructVersion";
+import { API_VERSION_SIZE, StructVersion } from "./StructVersion";
 
-export { API_SIZE_VERSION, StructVersion, Version };
+export { API_VERSION_SIZE, StructVersion, Version };
 export type { IVersion };

@@ -1,7 +1,5 @@
 import { IVersion } from "./IVersion";
 
-export const API_SIZE_VERSION = 4;
-
 /** Модель версии */
 export class Version implements IVersion
 {

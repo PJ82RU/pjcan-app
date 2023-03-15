@@ -1,5 +1,7 @@
 import { BluetoothStruct } from "@/components/bluetooth";
 
+export const API_LCD_VALUE_SIZE = 15;
+
 /** Структура данных */
 export const StructLCDValue = {
 	icoCDIN: BluetoothStruct.bit(),

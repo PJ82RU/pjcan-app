@@ -1,6 +1,7 @@
 import { BluetoothStruct } from "@/components/bluetooth";
 
 export const UPDATE_VALUE_DATA_SIZE = 496;
+export const API_UPDATE_SIZE = 503;
 
 /** Структура данных */
 export const StructUpdate = {

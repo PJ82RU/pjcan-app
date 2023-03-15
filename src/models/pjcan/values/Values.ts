@@ -1,15 +1,12 @@
-// noinspection DuplicatedCode
-
 import { BluetoothStruct } from "@/components/bluetooth";
 import { BaseModel } from "../base";
-import { StructValues } from "./StructValues";
+import { API_VALUE_SIZE, StructValues } from "./StructValues";
 import { IValues } from "./IValues";
-import { API_DEVICE_VALUE_SIZE, DeviceValue } from "../device";
-import { API_SIZE_LCD_VALUE, LCDValue } from "../lcd";
-import { API_SIZE_VARIABLE_VALUE, VariablesValue } from "../variables/values";
+import { DeviceValue } from "../device";
+import { LCDValue } from "../lcd";
+import { VariablesValue } from "../variables/values";
 
 export const API_VALUE_EXEC = 3;
-export const API_SIZE_VALUE = API_DEVICE_VALUE_SIZE + API_SIZE_LCD_VALUE + API_SIZE_VARIABLE_VALUE;
 
 const struct = new BluetoothStruct(StructValues);
 
@@ -31,7 +28,7 @@ export class Values extends BaseModel implements IValues
 	 */
 	set(buf: DataView): boolean
 	{
-		const result = this._set(this, API_VALUE_EXEC, API_SIZE_VALUE + 1, struct, buf);
+		const result = this._set(this, API_VALUE_EXEC, API_VALUE_SIZE + 1, struct, buf);
 		if (result)
 		{
 			this.device.isData = true;

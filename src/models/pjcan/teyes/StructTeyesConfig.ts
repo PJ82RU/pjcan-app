@@ -1,5 +1,7 @@
 import { BluetoothStruct } from "@/components/bluetooth";
 
+export const API_TEYES_CONFIG_SIZE = 1;
+
 /** Структура данных */
 export const StructTeyesConfig = {
 	receiveClock: BluetoothStruct.bit(),

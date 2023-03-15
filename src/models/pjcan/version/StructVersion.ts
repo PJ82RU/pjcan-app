@@ -1,5 +1,7 @@
 import { BluetoothStruct } from "@/components/bluetooth";
 
+export const API_VERSION_SIZE = 4;
+
 /** Структура данных */
 export const StructVersion = {
 	major: BluetoothStruct.uint8(),

@@ -1,10 +1,9 @@
 import EventEmitter from "eventemitter3";
 import { IUpdate } from "./IUpdate";
 import { BluetoothStruct } from "@/components/bluetooth";
-import { StructUpdate, UPDATE_VALUE_DATA_SIZE } from "./StructUpdate";
+import { API_UPDATE_SIZE, StructUpdate, UPDATE_VALUE_DATA_SIZE } from "./StructUpdate";
 
 export const API_UPDATE_EXEC = 90;
-export const API_SIZE_UPDATE = 503;
 export const API_UPDATE_EVENT = "Update";
 
 const struct = new BluetoothStruct(StructUpdate);
@@ -89,7 +88,7 @@ export class Update extends EventEmitter implements IUpdate
 	{
 		try
 		{
-			const buf: DataView = new DataView(new ArrayBuffer(API_SIZE_UPDATE + 1));
+			const buf: DataView = new DataView(new ArrayBuffer(API_UPDATE_SIZE + 1));
 			buf.setUint8(0, API_UPDATE_EXEC);
 
 			this.begin = !this.begin && this.offset === 0;
