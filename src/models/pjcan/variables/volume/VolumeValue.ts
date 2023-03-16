@@ -1,10 +1,9 @@
 import { BluetoothStruct } from "@/components/bluetooth";
 import { BaseModel } from "../../base";
-import { StructVolumeValue } from "./StructVolumeValue";
+import { API_VARIABLE_VOLUME_SIZE, StructVolumeValue } from "./StructVolumeValue";
 import { IVolumeValue } from "./IVolumeValue";
 
 export const API_VARIABLE_VOLUME_EXEC = 200;
-export const API_SIZE_VARIABLE_VOLUME = 2;
 
 const struct = new BluetoothStruct(StructVolumeValue);
 
@@ -26,12 +25,12 @@ export class VolumeValue extends BaseModel implements IVolumeValue
 	 */
 	set(buf: DataView): boolean
 	{
-		return this._set(this, API_VARIABLE_VOLUME_EXEC, API_SIZE_VARIABLE_VOLUME + 1, struct, buf);
+		return this._set(this, API_VARIABLE_VOLUME_EXEC, API_VARIABLE_VOLUME_SIZE + 1, struct, buf);
 	}
 
 	/** Чтение данных */
 	get(): DataView | undefined
 	{
-		return this._get(this, API_VARIABLE_VOLUME_EXEC, API_SIZE_VARIABLE_VOLUME + 1, struct);
+		return this._get(this, API_VARIABLE_VOLUME_EXEC, API_VARIABLE_VOLUME_SIZE + 1, struct);
 	}
 }

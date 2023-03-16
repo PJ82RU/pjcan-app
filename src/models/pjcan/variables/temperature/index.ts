@@ -1,18 +1,19 @@
-import { TemperatureValue, API_VARIABLE_TEMPERATURE_EXEC, API_SIZE_VARIABLE_TEMPERATURE } from "./TemperatureValue";
-import { TemperatureView, API_VARIABLE_TEMPERATURE_VIEW_EXEC, API_SIZE_VARIABLE_TEMPERATURE_VIEW } from "./TemperatureView";
+import { API_VARIABLE_TEMPERATURE_EXEC, TemperatureValue } from "./TemperatureValue";
+import { API_VARIABLE_TEMPERATURE_SIZE, StructTemperatureValue } from "./StructTemperatureValue";
 import { ITemperatureValue } from "./ITemperatureValue";
+
+import { API_VARIABLE_TEMPERATURE_VIEW_EXEC, TemperatureView } from "./TemperatureView";
+import { API_VARIABLE_TEMPERATURE_VIEW_SIZE, StructTemperatureView } from "./StructTemperatureView";
 import { ITemperatureView } from "./ITemperatureView";
-import { StructTemperatureValue } from "./StructTemperatureValue";
-import { StructTemperatureView } from "./StructTemperatureView";
 
 export {
 	API_VARIABLE_TEMPERATURE_EXEC,
-	API_VARIABLE_TEMPERATURE_VIEW_EXEC,
-	API_SIZE_VARIABLE_TEMPERATURE,
-	API_SIZE_VARIABLE_TEMPERATURE_VIEW,
+	API_VARIABLE_TEMPERATURE_SIZE,
 	StructTemperatureValue,
-	StructTemperatureView,
 	TemperatureValue,
+	API_VARIABLE_TEMPERATURE_VIEW_EXEC,
+	API_VARIABLE_TEMPERATURE_VIEW_SIZE,
+	StructTemperatureView,
 	TemperatureView
 };
 export type { ITemperatureValue, ITemperatureView };

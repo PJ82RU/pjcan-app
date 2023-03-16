@@ -1,20 +1,22 @@
-import { BoseConfig, API_VARIABLE_BOSE_EXEC, API_SIZE_VARIABLE_BOSE } from "./BoseConfig";
-import { BoseView, API_VARIABLE_BOSE_VIEW_EXEC, API_SIZE_VARIABLE_BOSE_VIEW } from "./BoseView";
+import { API_VARIABLE_BOSE_EXEC, BoseConfig } from "./BoseConfig";
+import { API_VARIABLE_BOSE_SIZE, StructBoseConfig } from "./StructBoseConfig";
 import { IBoseConfig } from "./IBoseConfig";
+
+import { API_VARIABLE_BOSE_VIEW_EXEC, BoseView } from "./BoseView";
+import { API_VARIABLE_BOSE_VIEW_SIZE, StructBoseView } from "./StructBoseView";
 import { IBoseView } from "./IBoseView";
-import { StructBoseConfig } from "./StructBoseConfig";
-import { StructBoseView } from "./StructBoseView";
+
 import { TCenterPoint } from "./TCenterPoint";
 
 export {
 	API_VARIABLE_BOSE_EXEC,
-	API_VARIABLE_BOSE_VIEW_EXEC,
-	API_SIZE_VARIABLE_BOSE,
-	API_SIZE_VARIABLE_BOSE_VIEW,
-	TCenterPoint,
+	API_VARIABLE_BOSE_SIZE,
 	StructBoseConfig,
-	StructBoseView,
 	BoseConfig,
-	BoseView
+	API_VARIABLE_BOSE_VIEW_EXEC,
+	API_VARIABLE_BOSE_VIEW_SIZE,
+	StructBoseView,
+	BoseView,
+	TCenterPoint
 };
 export type { IBoseConfig, IBoseView };

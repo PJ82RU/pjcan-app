@@ -9,11 +9,11 @@ import { IScannerValue } from "./IScannerValue";
 export {
 	API_SCANNER_CONFIG_EXEC,
 	API_SCANNER_CONFIG_SIZE,
-	ScannerConfig,
 	StructScannerConfig,
+	ScannerConfig,
 	API_SCANNER_VALUE_EXEC,
 	API_SCANNER_VALUE_SIZE,
-	ScannerValue,
-	StructScannerValue
+	StructScannerValue,
+	ScannerValue
 };
 export type { IScannerConfig, IScannerValue };

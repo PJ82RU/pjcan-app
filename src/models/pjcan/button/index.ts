@@ -19,14 +19,14 @@ import { IButtonsConfigItem } from "./IButtonsConfigItem";
 export {
 	API_BUTTONS_CONFIG_EXEC,
 	API_BUTTONS_CONFIG_SIZE,
-	BUTTON_NUMBER,
-	BUTTON_PRESS_TYPE_NUMBER,
 	StructButtonsConfig,
 	ButtonsConfig,
 	API_BUTTONS_VALUE_EXEC,
 	API_BUTTONS_VALUE_SIZE,
 	StructButtonsValue,
 	ButtonValue,
+	BUTTON_NUMBER,
+	BUTTON_PRESS_TYPE_NUMBER,
 	TButtonItem,
 	TButtonPress,
 	TButtonExec

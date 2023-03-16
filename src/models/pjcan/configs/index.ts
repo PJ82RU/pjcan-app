@@ -1,4 +1,4 @@
-import { Configs, API_CONFIG_EXEC } from "./Configs";
+import { API_CONFIG_EXEC, Configs } from "./Configs";
 import { API_CONFIG_SIZE, StructConfigs } from "./StructConfigs";
 import { IConfigs } from "./IConfigs";
 

@@ -1,25 +1,27 @@
-import { FuelConfig, API_VARIABLE_FUEL_CONFIG_EXEC, API_SIZE_VARIABLE_FUEL_CONFIG } from "./FuelConfig";
-import { FuelValue, API_VARIABLE_FUEL_EXEC, API_SIZE_VARIABLE_FUEL } from "./FuelValue";
-import { FuelView, API_VARIABLE_FUEL_VIEW_EXEC, API_SIZE_VARIABLE_FUEL_VIEW } from "./FuelView";
+import { API_VARIABLE_FUEL_CONFIG_EXEC, FuelConfig } from "./FuelConfig";
+import { API_VARIABLE_FUEL_CONFIG_SIZE, StructFuelConfig } from "./StructFuelConfig";
 import { IFuelConfig } from "./IFuelConfig";
+
+import { API_VARIABLE_FUEL_EXEC, FuelValue } from "./FuelValue";
+import { API_VARIABLE_FUEL_SIZE, StructFuelValue } from "./StructFuelValue";
 import { IFuelValue } from "./IFuelValue";
+
+import { API_VARIABLE_FUEL_VIEW_EXEC, FuelView } from "./FuelView";
+import { API_VARIABLE_FUEL_VIEW_SIZE, StructFuelView } from "./StructFuelView";
 import { IFuelView } from "./IFuelView";
-import { StructFuelConfig } from "./StructFuelConfig";
-import { StructFuelValue } from "./StructFuelValue";
-import { StructFuelView } from "./StructFuelView";
 
 export {
 	API_VARIABLE_FUEL_CONFIG_EXEC,
-	API_VARIABLE_FUEL_EXEC,
-	API_VARIABLE_FUEL_VIEW_EXEC,
-	API_SIZE_VARIABLE_FUEL_CONFIG,
-	API_SIZE_VARIABLE_FUEL,
-	API_SIZE_VARIABLE_FUEL_VIEW,
+	API_VARIABLE_FUEL_CONFIG_SIZE,
 	StructFuelConfig,
-	StructFuelValue,
-	StructFuelView,
 	FuelConfig,
+	API_VARIABLE_FUEL_EXEC,
+	API_VARIABLE_FUEL_SIZE,
+	StructFuelValue,
 	FuelValue,
+	API_VARIABLE_FUEL_VIEW_EXEC,
+	API_VARIABLE_FUEL_VIEW_SIZE,
+	StructFuelView,
 	FuelView
 };
 export type { IFuelConfig, IFuelValue, IFuelView };

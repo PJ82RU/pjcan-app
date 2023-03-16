@@ -1,10 +1,9 @@
 import { BluetoothStruct } from "@/components/bluetooth";
 import { BaseModel } from "../../base";
-import { StructEngineValue } from "./StructEngineValue";
+import { API_VARIABLE_ENGINE_SIZE, StructEngineValue } from "./StructEngineValue";
 import { IEngineValue } from "./IEngineValue";
 
 export const API_VARIABLE_ENGINE_EXEC = 140;
-export const API_SIZE_VARIABLE_ENGINE = 22;
 
 const struct = new BluetoothStruct(StructEngineValue);
 
@@ -33,12 +32,12 @@ export class EngineValue extends BaseModel implements IEngineValue
 	 */
 	set(buf: DataView): boolean
 	{
-		return this._set(this, API_VARIABLE_ENGINE_EXEC, API_SIZE_VARIABLE_ENGINE + 1, struct, buf);
+		return this._set(this, API_VARIABLE_ENGINE_EXEC, API_VARIABLE_ENGINE_SIZE + 1, struct, buf);
 	}
 
 	/** Чтение данных */
 	get(): DataView | undefined
 	{
-		return this._get(this, API_VARIABLE_ENGINE_EXEC, API_SIZE_VARIABLE_ENGINE + 1, struct);
+		return this._get(this, API_VARIABLE_ENGINE_EXEC, API_VARIABLE_ENGINE_SIZE + 1, struct);
 	}
 }

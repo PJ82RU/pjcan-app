@@ -1,5 +1,7 @@
 import { BluetoothStruct } from "@/components/bluetooth";
 
+export const API_VARIABLE_BOSE_SIZE = 6;
+
 /** Структура данных */
 export const StructBoseConfig = {
 	enabled: BluetoothStruct.bit(),

@@ -1,5 +1,7 @@
 import { BluetoothStruct } from "@/components/bluetooth";
 
+export const API_VARIABLE_ENGINE_SIZE = 22;
+
 /** Структура данных */
 export const StructEngineValue = {
 	enabled: BluetoothStruct.bit(),

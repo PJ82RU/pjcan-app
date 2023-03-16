@@ -1,11 +1,10 @@
 import { BluetoothStruct } from "@/components/bluetooth";
 import { BaseModel } from "../../base";
-import { API_VIEW_SIZE, ViewConfig } from "../../view";
-import { StructTemperatureView } from "./StructTemperatureView";
+import { ViewConfig } from "../../view";
+import { API_VARIABLE_TEMPERATURE_VIEW_SIZE, StructTemperatureView } from "./StructTemperatureView";
 import { ITemperatureView } from "./ITemperatureView";
 
 export const API_VARIABLE_TEMPERATURE_VIEW_EXEC = 181;
-export const API_SIZE_VARIABLE_TEMPERATURE_VIEW = API_VIEW_SIZE;
 
 const struct = new BluetoothStruct(StructTemperatureView);
 
@@ -26,12 +25,12 @@ export class TemperatureView extends BaseModel implements ITemperatureView
 	 */
 	set(buf: DataView): boolean
 	{
-		return this._set(this, API_VARIABLE_TEMPERATURE_VIEW_EXEC, API_SIZE_VARIABLE_TEMPERATURE_VIEW + 1, struct, buf);
+		return this._set(this, API_VARIABLE_TEMPERATURE_VIEW_EXEC, API_VARIABLE_TEMPERATURE_VIEW_SIZE + 1, struct, buf);
 	}
 
 	/** Чтение данных */
 	get(): DataView | undefined
 	{
-		return this._get(this, API_VARIABLE_TEMPERATURE_VIEW_EXEC, API_SIZE_VARIABLE_TEMPERATURE_VIEW + 1, struct);
+		return this._get(this, API_VARIABLE_TEMPERATURE_VIEW_EXEC, API_VARIABLE_TEMPERATURE_VIEW_SIZE + 1, struct);
 	}
 }

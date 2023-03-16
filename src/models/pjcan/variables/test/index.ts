@@ -1,6 +1,6 @@
-import { TestValue, API_EXEC_VARIABLE_TEST, API_SIZE_VARIABLE_TEST } from "./TestValue";
+import { API_EXEC_VARIABLE_TEST, TestValue } from "./TestValue";
+import { API_VARIABLE_TEST_SIZE, StructTestValue } from "./StructTestValue";
 import { ITestValue } from "./ITestValue";
-import { StructTestValue } from "./StructTestValue";
 
-export { API_EXEC_VARIABLE_TEST, API_SIZE_VARIABLE_TEST, StructTestValue, TestValue };
+export { API_EXEC_VARIABLE_TEST, API_VARIABLE_TEST_SIZE, StructTestValue, TestValue };
 export type { ITestValue };

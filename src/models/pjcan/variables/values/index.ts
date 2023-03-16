@@ -1,6 +1,6 @@
-import { VariablesValue, API_VARIABLE_VALUE_EXEC, API_SIZE_VARIABLE_VALUE } from "./VariablesValue";
-import { StructVariablesValue } from "./StructVariablesValue";
+import { API_VARIABLE_VALUE_EXEC, VariablesValue } from "./VariablesValue";
+import { API_VARIABLE_VALUE_SIZE, StructVariablesValue } from "./StructVariablesValue";
 import { IVariablesValue } from "./IVariablesValue";
 
-export { API_VARIABLE_VALUE_EXEC, API_SIZE_VARIABLE_VALUE, VariablesValue, StructVariablesValue };
+export { API_VARIABLE_VALUE_EXEC, API_VARIABLE_VALUE_SIZE, StructVariablesValue, VariablesValue };
 export type { IVariablesValue };

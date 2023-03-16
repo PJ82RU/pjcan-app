@@ -1,11 +1,10 @@
 import { BluetoothStruct } from "@/components/bluetooth";
 import { BaseModel } from "../../base";
 import { ViewConfig } from "../../view";
-import { StructTestValue } from "./StructTestValue";
+import { API_VARIABLE_TEST_SIZE, StructTestValue } from "./StructTestValue";
 import { ITestValue } from "./ITestValue";
 
 export const API_EXEC_VARIABLE_TEST = 190;
-export const API_SIZE_VARIABLE_TEST = 36;
 
 const struct = new BluetoothStruct(StructTestValue);
 
@@ -27,12 +26,12 @@ export class TestValue extends BaseModel implements ITestValue
 	 */
 	set(buf: DataView): boolean
 	{
-		return this._set(this, API_EXEC_VARIABLE_TEST, API_SIZE_VARIABLE_TEST + 1, struct, buf);
+		return this._set(this, API_EXEC_VARIABLE_TEST, API_VARIABLE_TEST_SIZE + 1, struct, buf);
 	}
 
 	/** Чтение данных */
 	get(): DataView | undefined
 	{
-		return this._get(this, API_EXEC_VARIABLE_TEST, API_SIZE_VARIABLE_TEST + 1, struct);
+		return this._get(this, API_EXEC_VARIABLE_TEST, API_VARIABLE_TEST_SIZE + 1, struct);
 	}
 }

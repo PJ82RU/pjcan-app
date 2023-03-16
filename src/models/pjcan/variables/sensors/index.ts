@@ -1,20 +1,22 @@
-import { SensorsValue, API_VARIABLE_SENSORS_EXEC, API_SIZE_VARIABLE_SENSORS } from "./SensorsValue";
-import { SensorsView, API_VARIABLE_SENSORS_VIEW_EXEC, API_SIZE_VARIABLE_SENSORS_VIEW } from "./SensorsView";
+import { API_VARIABLE_SENSORS_EXEC, SensorsValue } from "./SensorsValue";
+import { API_VARIABLE_SENSORS_SIZE, StructSensorsValue } from "./StructSensorsValue";
 import { ISensorsValue } from "./ISensorsValue";
+
+import { API_VARIABLE_SENSORS_VIEW_EXEC, SensorsView } from "./SensorsView";
+import { API_VARIABLE_SENSORS_VIEW_SIZE, StructSensorsView } from "./StructSensorsView";
 import { ISensorsView } from "./ISensorsView";
-import { StructSensorsValue } from "./StructSensorsValue";
-import { StructSensorsView } from "./StructSensorsView";
+
 import { TSensorsSignal } from "./TSensorsSignal";
 
 export {
 	API_VARIABLE_SENSORS_EXEC,
-	API_VARIABLE_SENSORS_VIEW_EXEC,
-	API_SIZE_VARIABLE_SENSORS,
-	API_SIZE_VARIABLE_SENSORS_VIEW,
+	API_VARIABLE_SENSORS_SIZE,
 	StructSensorsValue,
-	StructSensorsView,
-	TSensorsSignal,
 	SensorsValue,
-	SensorsView
+	API_VARIABLE_SENSORS_VIEW_EXEC,
+	API_VARIABLE_SENSORS_VIEW_SIZE,
+	StructSensorsView,
+	SensorsView,
+	TSensorsSignal
 };
 export type { ISensorsValue, ISensorsView };

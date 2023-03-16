@@ -1,5 +1,7 @@
 import { BluetoothStruct } from "@/components/bluetooth";
 
+export const API_VARIABLE_FUEL_SIZE = 12;
+
 /** Структура данных */
 export const StructFuelValue = {
 	consumption: BluetoothStruct.uint32(),

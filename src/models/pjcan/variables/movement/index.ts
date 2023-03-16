@@ -1,18 +1,19 @@
-import { MovementValue, API_VARIABLE_MOVEMENT_EXEC, API_SIZE_VARIABLE_MOVEMENT } from "./MovementValue";
-import { MovementView, API_VARIABLE_MOVEMENT_VIEW_EXEC, API_SIZE_VARIABLE_MOVEMENT_VIEW } from "./MovementView";
+import { API_VARIABLE_MOVEMENT_EXEC, MovementValue } from "./MovementValue";
+import { API_VARIABLE_MOVEMENT_SIZE, StructMovementValue } from "./StructMovementValue";
 import { IMovementValue } from "./IMovementValue";
+
+import { API_VARIABLE_MOVEMENT_VIEW_EXEC, MovementView } from "./MovementView";
+import { API_VARIABLE_MOVEMENT_VIEW_SIZE, StructMovementView } from "./StructMovementView";
 import { IMovementView } from "./IMovementView";
-import { StructMovementValue } from "./StructMovementValue";
-import { StructMovementView } from "./StructMovementView";
 
 export {
 	API_VARIABLE_MOVEMENT_EXEC,
-	API_VARIABLE_MOVEMENT_VIEW_EXEC,
-	API_SIZE_VARIABLE_MOVEMENT,
-	API_SIZE_VARIABLE_MOVEMENT_VIEW,
+	API_VARIABLE_MOVEMENT_SIZE,
 	StructMovementValue,
-	StructMovementView,
 	MovementValue,
+	API_VARIABLE_MOVEMENT_VIEW_EXEC,
+	API_VARIABLE_MOVEMENT_VIEW_SIZE,
+	StructMovementView,
 	MovementView
 };
 export type { IMovementValue, IMovementView };
