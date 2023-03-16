@@ -1,5 +1,5 @@
 "use strict";
-(self["webpackChunkpjcan"] = self["webpackChunkpjcan"] || []).push([[229],{
+(self["webpackChunkpjcan"] = self["webpackChunkpjcan"] || []).push([[349],{
 
 /***/ 7637:
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
@@ -14793,7 +14793,7 @@ const __exports__ = /*#__PURE__*/(0,exportHelper/* default */.Z)(SwitchCardItemv
 
 /***/ }),
 
-/***/ 2683:
+/***/ 3491:
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 
@@ -14814,7 +14814,7 @@ var VRow = __webpack_require__(6824);
 var VCol = __webpack_require__(8521);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/components/VSelect/VSelect.mjs + 1 modules
 var VSelect = __webpack_require__(240);
-;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/onboard/components/ViewSettingDialog.vue?vue&type=template&id=2a0f8805&scoped=true&ts=true
+;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/onboard/components/ViewSettingDialog.vue?vue&type=template&id=1cb5e267&scoped=true&ts=true
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_switch_card_item = (0,runtime_core_esm_bundler/* resolveComponent */.up)("switch-card-item");
@@ -14883,6 +14883,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     })]),
     btns: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VBtn/* VBtn */.T, {
       color: "primary",
+      "prepend-icon": "mdi-check",
       onClick: $setup.onApplyClick,
       disabled: $props.disabled
     }, {
@@ -14890,6 +14891,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       _: 1
     }, 8, ["onClick", "disabled"]), (0,runtime_core_esm_bundler/* createVNode */.Wm)(VBtn/* VBtn */.T, {
       color: "primary",
+      "prepend-icon": "mdi-close",
       onClick: _cache[3] || (_cache[3] = $event => $setup.visible = false)
     }, {
       default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createTextVNode */.Uk)((0,shared_esm_bundler/* toDisplayString */.zw)(_ctx.$t("btn.close")), 1)]),
@@ -14910,7 +14912,7 @@ var reactivity_esm_bundler = __webpack_require__(4870);
 // EXTERNAL MODULE: ./node_modules/vue-i18n/dist/vue-i18n.esm-bundler.js + 4 modules
 var vue_i18n_esm_bundler = __webpack_require__(5658);
 // EXTERNAL MODULE: ./src/components/DialogTemplate.vue + 6 modules
-var DialogTemplate = __webpack_require__(8745);
+var DialogTemplate = __webpack_require__(8334);
 // EXTERNAL MODULE: ./src/components/cards/SwitchCardItem.vue + 6 modules
 var SwitchCardItem = __webpack_require__(1070);
 // EXTERNAL MODULE: ./src/components/common/NumberField.vue + 3 modules
@@ -15000,10 +15002,10 @@ var NumberField = __webpack_require__(3066);
 });
 ;// CONCATENATED MODULE: ./src/views/onboard/components/ViewSettingDialog.vue?vue&type=script&lang=ts
  
-;// CONCATENATED MODULE: ./node_modules/mini-css-extract-plugin/dist/loader.js??clonedRuleSet-22.use[0]!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/onboard/components/ViewSettingDialog.vue?vue&type=style&index=0&id=2a0f8805&lang=scss&scoped=true
+;// CONCATENATED MODULE: ./node_modules/mini-css-extract-plugin/dist/loader.js??clonedRuleSet-22.use[0]!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/onboard/components/ViewSettingDialog.vue?vue&type=style&index=0&id=1cb5e267&lang=scss&scoped=true
 // extracted by mini-css-extract-plugin
 
-;// CONCATENATED MODULE: ./src/views/onboard/components/ViewSettingDialog.vue?vue&type=style&index=0&id=2a0f8805&lang=scss&scoped=true
+;// CONCATENATED MODULE: ./src/views/onboard/components/ViewSettingDialog.vue?vue&type=style&index=0&id=1cb5e267&lang=scss&scoped=true
 
 // EXTERNAL MODULE: ./node_modules/vue-loader/dist/exportHelper.js
 var exportHelper = __webpack_require__(89);
@@ -15015,13 +15017,13 @@ var exportHelper = __webpack_require__(89);
 ;
 
 
-const __exports__ = /*#__PURE__*/(0,exportHelper/* default */.Z)(ViewSettingDialogvue_type_script_lang_ts, [['render',render],['__scopeId',"data-v-2a0f8805"]])
+const __exports__ = /*#__PURE__*/(0,exportHelper/* default */.Z)(ViewSettingDialogvue_type_script_lang_ts, [['render',render],['__scopeId',"data-v-1cb5e267"]])
 
 /* harmony default export */ var ViewSettingDialog = (__exports__);
 
 /***/ }),
 
-/***/ 9229:
+/***/ 5349:
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 // ESM COMPAT FLAG
@@ -15029,26 +15031,26 @@ __webpack_require__.r(__webpack_exports__);
 
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, {
-  "default": function() { return /* binding */ options; }
+  "default": function() { return /* binding */ onboard; }
 });
 
 // EXTERNAL MODULE: ./node_modules/@vue/runtime-core/dist/runtime-core.esm-bundler.js
 var runtime_core_esm_bundler = __webpack_require__(3396);
 // EXTERNAL MODULE: ./node_modules/@vue/shared/dist/shared.esm-bundler.js
 var shared_esm_bundler = __webpack_require__(7139);
-;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/options/index.vue?vue&type=template&id=d43f7346&scoped=true&ts=true
+;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/onboard/index.vue?vue&type=template&id=5fa82662&scoped=true&ts=true
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_flicking = (0,runtime_core_esm_bundler/* resolveComponent */.up)("flicking");
   return (0,runtime_core_esm_bundler/* openBlock */.wg)(), (0,runtime_core_esm_bundler/* createBlock */.j4)(_component_flicking, {
     ref: "flicking",
-    class: "setting",
+    class: "onboard",
     options: {
       bound: true,
       align: 'prev'
     }
   }, {
-    default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [((0,runtime_core_esm_bundler/* openBlock */.wg)(true), (0,runtime_core_esm_bundler/* createElementBlock */.iD)(runtime_core_esm_bundler/* Fragment */.HY, null, (0,runtime_core_esm_bundler/* renderList */.Ko)($setup.cards, name => {
+    default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [((0,runtime_core_esm_bundler/* openBlock */.wg)(true), (0,runtime_core_esm_bundler/* createElementBlock */.iD)(runtime_core_esm_bundler/* Fragment */.HY, null, (0,runtime_core_esm_bundler/* renderList */.Ko)($setup.onboardCardList, name => {
       return (0,runtime_core_esm_bundler/* openBlock */.wg)(), (0,runtime_core_esm_bundler/* createElementBlock */.iD)("div", {
         key: name,
         class: (0,shared_esm_bundler/* normalizeClass */.C_)(["mr-4", `flicking-${$setup.display}`])
@@ -15061,75 +15063,130 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 var reactivity_esm_bundler = __webpack_require__(4870);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/display.mjs
 var composables_display = __webpack_require__(8157);
+// EXTERNAL MODULE: ./src/store/index.ts + 10 modules
+var store = __webpack_require__(5986);
 // EXTERNAL MODULE: ./node_modules/@egjs/vue3-flicking/dist/flicking.esm.js + 7 modules
 var flicking_esm = __webpack_require__(7637);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/components/VGrid/VRow.mjs
 var VRow = __webpack_require__(6824);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/components/VGrid/VCol.mjs
 var VCol = __webpack_require__(8521);
-// EXTERNAL MODULE: ./node_modules/vuetify/lib/components/VTextField/VTextField.mjs
-var VTextField = __webpack_require__(165);
-;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/options/components/LcdCard.vue?vue&type=template&id=8c5c9b96&ts=true
+;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/onboard/components/InfoCard.vue?vue&type=template&id=7cb8bc98&ts=true
 
-function LcdCardvue_type_template_id_8c5c9b96_ts_true_render(_ctx, _cache, $props, $setup, $data, $options) {
-  const _component_switch_card_item = (0,runtime_core_esm_bundler/* resolveComponent */.up)("switch-card-item");
+function InfoCardvue_type_template_id_7cb8bc98_ts_true_render(_ctx, _cache, $props, $setup, $data, $options) {
+  const _component_icon_card_item = (0,runtime_core_esm_bundler/* resolveComponent */.up)("icon-card-item");
                                                       
-                                                                    
+  const _component_input_card_item = (0,runtime_core_esm_bundler/* resolveComponent */.up)("input-card-item");
+  const _component_switch_card_item = (0,runtime_core_esm_bundler/* resolveComponent */.up)("switch-card-item");
                                                       
   const _component_card = (0,runtime_core_esm_bundler/* resolveComponent */.up)("card");
   const _component_view_setting_dialog = (0,runtime_core_esm_bundler/* resolveComponent */.up)("view-setting-dialog");
   return (0,runtime_core_esm_bundler/* openBlock */.wg)(), (0,runtime_core_esm_bundler/* createElementBlock */.iD)(runtime_core_esm_bundler/* Fragment */.HY, null, [(0,runtime_core_esm_bundler/* createVNode */.Wm)(_component_card, {
-    class: "lcd-card",
-    title: _ctx.$t('options.lcd.title'),
+    class: "info-card",
+    title: _ctx.$t('onboard.info.title'),
     menu: $setup.menu,
     "onClick:menu": $setup.onMenuClick
   }, {
     body: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VRow/* VRow */.o, null, {
       default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VCol/* VCol */.D, {
         cols: "12",
+        class: "pb-0"
+      }, {
+        default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(_component_icon_card_item, {
+          "model-value": [$setup.acc],
+          title: _ctx.$t('onboard.info.acc.title'),
+          description: _ctx.$t('onboard.info.acc.description'),
+          "icon-name": ['key'],
+          nodata: !$setup.isLoadedSensorValue,
+          disabled: !$setup.isLoadedSensorView
+        }, null, 8, ["model-value", "title", "description", "nodata", "disabled"])]),
+        _: 1
+      }), (0,runtime_core_esm_bundler/* createVNode */.Wm)(VCol/* VCol */.D, {
+        cols: "12",
+        class: "pt-0 pb-0"
+      }, {
+        default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(_component_input_card_item, {
+          value: $setup.worktime,
+          title: _ctx.$t('onboard.info.worktime.title'),
+          description: _ctx.$t('onboard.info.worktime.description'),
+          type: "mtime",
+          nodata: !$setup.isLoadedDeviceValue,
+          disabled: !$setup.isLoadedSensorView
+        }, null, 8, ["value", "title", "description", "nodata", "disabled"])]),
+        _: 1
+      }), (0,runtime_core_esm_bundler/* createVNode */.Wm)(VCol/* VCol */.D, {
+        cols: "12",
+        class: "pt-0 pb-0"
+      }, {
+        default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(_component_input_card_item, {
+          value: $setup.temperature,
+          title: _ctx.$t('onboard.info.temperature.title'),
+          description: _ctx.$t('onboard.info.temperature.description'),
+          type: "temperature",
+          nodata: !$setup.isLoadedTemperatureValue,
+          disabled: !$setup.isLoadedTemperatureView
+        }, null, 8, ["value", "title", "description", "nodata", "disabled"])]),
+        _: 1
+      }), (0,runtime_core_esm_bundler/* createVNode */.Wm)(VCol/* VCol */.D, {
+        cols: "12",
         class: "pt-0 pb-0"
       }, {
         default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(_component_switch_card_item, {
-          modelValue: $setup.enabled,
-          "onUpdate:modelValue": _cache[0] || (_cache[0] = $event => $setup.enabled = $event),
-          title: _ctx.$t('options.lcd.enabled.title'),
-          description: _ctx.$t('options.lcd.enabled.description'),
-          color: "success",
-          nodata: !$setup.loadedCarConfig,
-          disabled: !$setup.loadedCarConfig
-        }, null, 8, ["modelValue", "title", "description", "nodata", "disabled"])]),
+          "model-value": $setup.handbrake,
+          title: _ctx.$t('onboard.info.handbrake.title'),
+          description: _ctx.$t('onboard.info.handbrake.description'),
+          color: "error",
+          nodata: !$setup.isLoadedSensorValue,
+          disabled: !$setup.isLoadedSensorView
+        }, null, 8, ["model-value", "title", "description", "nodata", "disabled"])]),
         _: 1
       }), (0,runtime_core_esm_bundler/* createVNode */.Wm)(VCol/* VCol */.D, {
         cols: "12",
-        class: "pb-0"
+        class: "pt-0 pb-0"
       }, {
-        default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VTextField/* VTextField */.hw, {
-          modelValue: $setup.logo,
-          "onUpdate:modelValue": _cache[1] || (_cache[1] = $event => $setup.logo = $event),
-          label: _ctx.$t('options.lcd.logo.title'),
-          hint: _ctx.$t('options.lcd.logo.description'),
-          variant: "underlined",
-          disabled: !$setup.loadedCarConfig,
-          "persistent-hint": "",
-          dense: "",
-          onBlur: $setup.onApplyCarConfig
-        }, null, 8, ["modelValue", "label", "hint", "disabled", "onBlur"])]),
+        default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(_component_switch_card_item, {
+          "model-value": $setup.reverse,
+          title: _ctx.$t('onboard.info.reverse.title'),
+          description: _ctx.$t('onboard.info.reverse.description'),
+          color: "warning",
+          nodata: !$setup.isLoadedSensorValue,
+          disabled: !$setup.isLoadedSensorView
+        }, null, 8, ["model-value", "title", "description", "nodata", "disabled"])]),
         _: 1
       }), (0,runtime_core_esm_bundler/* createVNode */.Wm)(VCol/* VCol */.D, {
         cols: "12",
-        class: "pb-0"
+        class: "pt-0 pb-0"
       }, {
-        default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VTextField/* VTextField */.hw, {
-          modelValue: $setup.hello,
-          "onUpdate:modelValue": _cache[2] || (_cache[2] = $event => $setup.hello = $event),
-          label: _ctx.$t('options.lcd.hello.title'),
-          hint: _ctx.$t('options.lcd.hello.description'),
-          variant: "underlined",
-          disabled: !$setup.loadedCarConfig,
-          "persistent-hint": "",
-          dense: "",
-          onBlur: $setup.onApplyCarConfig
-        }, null, 8, ["modelValue", "label", "hint", "disabled", "onBlur"])]),
+        default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(_component_icon_card_item, {
+          "model-value": [$setup.seatbeltPassenger, $setup.seatbeltDriver],
+          title: _ctx.$t('onboard.info.safetyBelt.title'),
+          description: _ctx.$t('onboard.info.safetyBelt.description'),
+          "icon-name": ['passenger', 'passenger'],
+          colorsTrue: $setup.acc ? {
+            primary: 'success'
+          } : undefined,
+          colorsFalse: $setup.acc ? {
+            primary: 'error'
+          } : undefined,
+          nodata: !$setup.isLoadedSensorValue,
+          disabled: !$setup.isLoadedSensorView
+        }, null, 8, ["model-value", "title", "description", "colorsTrue", "colorsFalse", "nodata", "disabled"])]),
+        _: 1
+      }), (0,runtime_core_esm_bundler/* createVNode */.Wm)(VCol/* VCol */.D, {
+        cols: "12",
+        class: "pt-0 pb-0"
+      }, {
+        default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(_component_icon_card_item, {
+          "model-value": [$setup.signalRight, $setup.signalLeft],
+          title: _ctx.$t('onboard.info.signal.title'),
+          description: _ctx.$t('onboard.info.signal.description'),
+          "icon-name": ['arrow-right', 'arrow-left'],
+          colorsTrue: {
+            primary: 'success'
+          },
+          nodata: !$setup.isLoadedSensorValue,
+          disabled: !$setup.isLoadedSensorView
+        }, null, 8, ["model-value", "title", "description", "nodata", "disabled"])]),
         _: 1
       })]),
       _: 1
@@ -15137,18 +15194,17 @@ function LcdCardvue_type_template_id_8c5c9b96_ts_true_render(_ctx, _cache, $prop
     _: 1
   }, 8, ["title", "menu", "onClick:menu"]), (0,runtime_core_esm_bundler/* createVNode */.Wm)(_component_view_setting_dialog, {
     modelValue: $setup.menuVisible,
-    "onUpdate:modelValue": _cache[3] || (_cache[3] = $event => $setup.menuVisible = $event),
+    "onUpdate:modelValue": _cache[0] || (_cache[0] = $event => $setup.menuVisible = $event),
     title: $setup.menuSelected.title,
     enabled: $setup.menuViewConfig.enabled,
     type: $setup.menuViewConfig.type,
     time: $setup.menuViewConfig.time,
-    disabled: !$setup.loadedCarView,
+    disabled: !$setup.isLoadedSensorView,
     "onClick:apply": $setup.onViewSettingApply
   }, null, 8, ["modelValue", "title", "enabled", "type", "time", "disabled", "onClick:apply"])], 64);
 }
 
 /* Vuetify */
-
 
 
 
@@ -15156,15 +15212,165 @@ function LcdCardvue_type_template_id_8c5c9b96_ts_true_render(_ctx, _cache, $prop
 var vue_i18n_esm_bundler = __webpack_require__(5658);
 // EXTERNAL MODULE: ./src/components/cards/Card.vue + 6 modules
 var Card = __webpack_require__(242);
+// EXTERNAL MODULE: ./src/components/cards/InputCardItem.vue + 6 modules
+var InputCardItem = __webpack_require__(5943);
 // EXTERNAL MODULE: ./src/components/cards/SwitchCardItem.vue + 6 modules
 var SwitchCardItem = __webpack_require__(1070);
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/components/VTextField/VTextField.mjs
+var VTextField = __webpack_require__(165);
+;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/cards/IconCardItem.vue?vue&type=template&id=078f2a4c&scoped=true&ts=true
+
+const _withScopeId = n => (_pushScopeId("data-v-078f2a4c"), n = n(), _popScopeId(), n);
+const _hoisted_1 = {
+  class: "icon-card-item"
+};
+function IconCardItemvue_type_template_id_078f2a4c_scoped_true_ts_true_render(_ctx, _cache, $props, $setup, $data, $options) {
+                                                                    
+  const _component_icon_custom = (0,runtime_core_esm_bundler/* resolveComponent */.up)("icon-custom");
+  return (0,runtime_core_esm_bundler/* openBlock */.wg)(), (0,runtime_core_esm_bundler/* createElementBlock */.iD)("div", _hoisted_1, [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VTextField/* VTextField */.hw, {
+    "model-value": $props.title,
+    hint: $props.description,
+    variant: "underlined",
+    density: "compact",
+    "persistent-hint": "",
+    readonly: "",
+    dense: "",
+    disabled: $props.disabled
+  }, null, 8, ["model-value", "hint", "disabled"]), ((0,runtime_core_esm_bundler/* openBlock */.wg)(true), (0,runtime_core_esm_bundler/* createElementBlock */.iD)(runtime_core_esm_bundler/* Fragment */.HY, null, (0,runtime_core_esm_bundler/* renderList */.Ko)($setup.iconList, (item, index) => {
+    return (0,runtime_core_esm_bundler/* openBlock */.wg)(), (0,runtime_core_esm_bundler/* createBlock */.j4)(_component_icon_custom, {
+      key: `icon-card-item_${index}`,
+      class: "icon-card-item__icon",
+      style: (0,shared_esm_bundler/* normalizeStyle */.j5)({
+        right: `${parseInt($props.size) * index + ($props.margin ? $props.margin * index : 0)}px`
+      }),
+      name: item.name,
+      colors: item.colors,
+      size: $props.size,
+      onClick: $event => $setup.modelSwitch[index] = !$setup.modelSwitch[index]
+    }, null, 8, ["style", "name", "colors", "size", "onClick"]);
+  }), 128))]);
+}
+
+/* Vuetify */
+
+
+
+;// CONCATENATED MODULE: ./src/components/cards/IconCardItem.vue?vue&type=template&id=078f2a4c&scoped=true&ts=true
+
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.push.js
+var es_array_push = __webpack_require__(7658);
+// EXTERNAL MODULE: ./src/components/common/icon-custom/IconCustom.vue + 5 modules
+var IconCustom = __webpack_require__(1776);
+;// CONCATENATED MODULE: ./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/cards/IconCardItem.vue?vue&type=script&lang=ts
+
+
+
+/* harmony default export */ var IconCardItemvue_type_script_lang_ts = ({
+  name: "IconCardItem",
+  components: {
+    IconCustom: IconCustom/* default */.Z
+  },
+  props: {
+    /** Список значений иконок */
+    modelValue: Array,
+    /** Заголовок */
+    title: String,
+    /** Описание */
+    description: String,
+    /** Список имен иконок */
+    iconName: Array,
+    /** Цвета вкл. иконки */
+    colorsTrue: {
+      type: Object,
+      default: () => ({
+        primary: "success",
+        secondary: "#e2e2e2"
+      })
+    },
+    /** Цвета выкл. иконки */
+    colorsFalse: {
+      type: Object,
+      default: () => ({
+        primary: "disable",
+        secondary: "disable"
+      })
+    },
+    /** Размер иконок */
+    size: {
+      type: String,
+      default: "44px"
+    },
+    /** Отступ */
+    margin: Number,
+    /** Нет данных */
+    nodata: Boolean,
+    /** Выкл. */
+    disabled: Boolean
+  },
+  emits: ["update:modelValue"],
+  setup(props, {
+    emit
+  }) {
+    const {
+      modelValue,
+      iconName,
+      colorsTrue,
+      colorsFalse,
+      nodata,
+      disabled
+    } = (0,reactivity_esm_bundler/* toRefs */.BK)(props);
+    const modelSwitch = (0,runtime_core_esm_bundler/* computed */.Fl)({
+      get: () => modelValue.value,
+      set: val => emit("update:modelValue", val)
+    });
+    /** Список параметров иконок */
+    const iconList = (0,runtime_core_esm_bundler/* computed */.Fl)(() => {
+      const result = [];
+      modelSwitch.value?.forEach((x, i) => {
+        result.push({
+          name: iconName.value[i],
+          colors: x && !nodata.value && !disabled.value ? colorsTrue.value : colorsFalse.value
+        });
+      });
+      return result;
+    });
+    return {
+      modelSwitch,
+      iconList
+    };
+  }
+});
+;// CONCATENATED MODULE: ./src/components/cards/IconCardItem.vue?vue&type=script&lang=ts
+ 
+;// CONCATENATED MODULE: ./node_modules/mini-css-extract-plugin/dist/loader.js??clonedRuleSet-22.use[0]!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/cards/IconCardItem.vue?vue&type=style&index=0&id=078f2a4c&lang=scss&scoped=true
+// extracted by mini-css-extract-plugin
+
+;// CONCATENATED MODULE: ./src/components/cards/IconCardItem.vue?vue&type=style&index=0&id=078f2a4c&lang=scss&scoped=true
+
+// EXTERNAL MODULE: ./node_modules/vue-loader/dist/exportHelper.js
+var exportHelper = __webpack_require__(89);
+;// CONCATENATED MODULE: ./src/components/cards/IconCardItem.vue
+
+
+
+
+;
+
+
+const __exports__ = /*#__PURE__*/(0,exportHelper/* default */.Z)(IconCardItemvue_type_script_lang_ts, [['render',IconCardItemvue_type_template_id_078f2a4c_scoped_true_ts_true_render],['__scopeId',"data-v-078f2a4c"]])
+
+/* harmony default export */ var IconCardItem = (__exports__);
 // EXTERNAL MODULE: ./src/views/onboard/components/ViewSettingDialog.vue + 5 modules
-var ViewSettingDialog = __webpack_require__(2683);
-// EXTERNAL MODULE: ./src/models/pjcan/car/index.ts + 4 modules
-var pjcan_car = __webpack_require__(7530);
-// EXTERNAL MODULE: ./src/api/canbus.ts + 82 modules
-var canbus = __webpack_require__(2223);
-;// CONCATENATED MODULE: ./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/options/components/LcdCard.vue?vue&type=script&lang=ts
+var ViewSettingDialog = __webpack_require__(3491);
+// EXTERNAL MODULE: ./src/models/pjcan/variables/sensors/index.ts + 5 modules
+var variables_sensors = __webpack_require__(2775);
+// EXTERNAL MODULE: ./src/models/pjcan/variables/temperature/index.ts + 4 modules
+var variables_temperature = __webpack_require__(1044);
+// EXTERNAL MODULE: ./src/models/pjcan/device/index.ts + 6 modules
+var device = __webpack_require__(1423);
+// EXTERNAL MODULE: ./src/api/canbus.ts + 18 modules
+var canbus = __webpack_require__(3956);
+;// CONCATENATED MODULE: ./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/onboard/components/InfoCard.vue?vue&type=script&lang=ts
 
 
 
@@ -15172,95 +15378,130 @@ var canbus = __webpack_require__(2223);
 
 
 
-/* harmony default export */ var LcdCardvue_type_script_lang_ts = ({
-  name: "LcdCard",
+
+
+
+
+/* harmony default export */ var InfoCardvue_type_script_lang_ts = ({
+  name: "InfoCard",
   components: {
     Card: Card/* default */.Z,
+    InputCardItem: InputCardItem/* default */.Z,
     SwitchCardItem: SwitchCardItem/* default */.Z,
+    IconCardItem: IconCardItem,
     ViewSettingDialog: ViewSettingDialog/* default */.Z
   },
   setup() {
     const {
       t
     } = (0,vue_i18n_esm_bundler/* useI18n */.QT)();
-    const loadedCarConfig = (0,reactivity_esm_bundler/* ref */.iH)(false);
-    const loadedCarView = (0,reactivity_esm_bundler/* ref */.iH)(false);
-    const enabled = (0,reactivity_esm_bundler/* ref */.iH)(false);
-    const logo = (0,reactivity_esm_bundler/* ref */.iH)("");
-    const hello = (0,reactivity_esm_bundler/* ref */.iH)("");
-    const menuVisible = (0,reactivity_esm_bundler/* ref */.iH)(false);
-    const menuSelected = (0,reactivity_esm_bundler/* ref */.iH)({});
-    const menuViewConfig = (0,reactivity_esm_bundler/* ref */.iH)({});
+    const isLoadedDeviceValue = (0,reactivity_esm_bundler/* ref */.iH)(false);
+    const isLoadedSensorValue = (0,reactivity_esm_bundler/* ref */.iH)(false);
+    const isLoadedSensorView = (0,reactivity_esm_bundler/* ref */.iH)(false);
+    const isLoadedTemperatureValue = (0,reactivity_esm_bundler/* ref */.iH)(false);
+    const isLoadedTemperatureView = (0,reactivity_esm_bundler/* ref */.iH)(false);
+    const acc = (0,reactivity_esm_bundler/* ref */.iH)(false);
+    const worktime = (0,reactivity_esm_bundler/* ref */.iH)(BigInt(0));
+    const temperature = (0,reactivity_esm_bundler/* ref */.iH)(0);
+    const handbrake = (0,reactivity_esm_bundler/* ref */.iH)(false);
+    const reverse = (0,reactivity_esm_bundler/* ref */.iH)(false);
+    const seatbeltDriver = (0,reactivity_esm_bundler/* ref */.iH)(false);
+    const seatbeltPassenger = (0,reactivity_esm_bundler/* ref */.iH)(false);
+    const signalLeft = (0,reactivity_esm_bundler/* ref */.iH)(false);
+    const signalRight = (0,reactivity_esm_bundler/* ref */.iH)(false);
     /**
-     * Проверка ввода
-     * @param {Ref<string>} input Объект ввода
-     * @param {number} max Максимальное количество символов
+     * Входящие значения устройства
+     * @param {IDeviceValue} res
      */
-    const onInput = (input, max) => {
-      const {
-        value
-      } = input;
-      const length = value.length;
-      if (length > max) input.value = value.substring(0, max);else if (!/^[^а-яА-я]*$/.test(value)) input.value = value.substring(0, length - 1);
-    };
-    (0,runtime_core_esm_bundler/* watch */.YP)(enabled, () => {
-      (0,runtime_core_esm_bundler/* nextTick */.Y3)(() => onApplyCarConfig());
-    });
-    (0,runtime_core_esm_bundler/* watch */.YP)(logo, () => {
-      (0,runtime_core_esm_bundler/* nextTick */.Y3)(() => onInput(logo, 12));
-    });
-    (0,runtime_core_esm_bundler/* watch */.YP)(hello, () => {
-      (0,runtime_core_esm_bundler/* nextTick */.Y3)(() => onInput(hello, 32));
-    });
-    /**
-     * Входящие настройки автомобиля
-     * @param {ICarConfig} res
-     */
-    const onReceiveCarConfig = res => {
-      loadedCarConfig.value = res.isData;
+    const onReceiveDeviceValue = res => {
+      isLoadedDeviceValue.value = res.isData;
       if (res.isData) {
-        enabled.value = res.lcd;
-        logo.value = res.logo;
-        hello.value = res.hello;
+        // @ts-ignore
+        worktime.value = res.worktime;
       }
     };
-    /** Применить новые значения конфигурации автомобиля */
-    const onApplyCarConfig = () => {
-      const {
-        car
-      } = canbus/* default.configs */.ZP.configs;
-      car.lcd = enabled.value;
-      car.logo = logo.value;
-      car.hello = hello.value;
-      canbus/* default.queryConfig */.ZP.queryConfig(pjcan_car/* API_EXEC_CAR_CONFIG */.C0);
+    /**
+     * Входящие значения датчиков
+     * @param {ISensorsValue} res
+     */
+    const onReceiveSensorValue = res => {
+      isLoadedSensorValue.value = res.isData;
+      if (res.isData) {
+        acc.value = res.acc;
+        handbrake.value = res.handbrake;
+        reverse.value = res.reverse;
+        seatbeltDriver.value = res.seatbeltDriver;
+        seatbeltPassenger.value = res.seatbeltPassenger;
+        signalLeft.value = res.signal === variables_sensors/* TSensorsSignal.SIGNAL_LEFT */.Mq.SIGNAL_LEFT || res.signal === variables_sensors/* TSensorsSignal.SIGNAL_EMERGENCY */.Mq.SIGNAL_EMERGENCY;
+        signalRight.value = res.signal === variables_sensors/* TSensorsSignal.SIGNAL_RIGHT */.Mq.SIGNAL_RIGHT || res.signal === variables_sensors/* TSensorsSignal.SIGNAL_EMERGENCY */.Mq.SIGNAL_EMERGENCY;
+      }
     };
     /**
-     * Входящие значения отображения
-     * @param {ICarView} res
+     * Входящие значения отображения датчиков
+     * @param {ISensorsView} res
      */
-    const onReceiveCarView = res => {
-      loadedCarView.value = res.isData;
+    const onReceiveSensorView = res => {
+      isLoadedSensorView.value = res.isData;
+    };
+    /**
+     * Входящие значения температуры
+     * @param {ITemperatureValue} res
+     */
+    const onReceiveTemperatureValue = res => {
+      isLoadedTemperatureValue.value = res.isData;
+      if (res.isData) {
+        temperature.value = res.out / 10;
+      }
+    };
+    /**
+     * Входящие значения отображения температуры
+     * @param {ITemperatureView} res
+     */
+    const onReceiveTemperatureView = res => {
+      isLoadedTemperatureView.value = res.isData;
     };
     // регистрируем события
     (0,runtime_core_esm_bundler/* onMounted */.bv)(() => {
-      canbus/* default.addListener */.ZP.addListener(canbus/* API_EVENT_CAR_CONFIG */.GF, onReceiveCarConfig);
-      canbus/* default.addListener */.ZP.addListener(canbus/* API_EVENT_CAR_VIEW */.zE, onReceiveCarView);
-      onReceiveCarConfig(canbus/* default.configs.car */.ZP.configs.car);
-      onReceiveCarView(canbus/* default.views.car */.ZP.views.car);
+      canbus/* default.addListener */.Z.addListener(device/* API_DEVICE_EVENT */.kS, onReceiveDeviceValue);
+      canbus/* default.addListener */.Z.addListener(variables_sensors/* API_VARIABLE_SENSORS_EVENT */.bs, onReceiveSensorValue);
+      canbus/* default.addListener */.Z.addListener(variables_sensors/* API_VARIABLE_SENSORS_VIEW_EVENT */.Ht, onReceiveSensorView);
+      canbus/* default.addListener */.Z.addListener(variables_temperature/* API_VARIABLE_TEMPERATURE_EVENT */.Yk, onReceiveTemperatureValue);
+      canbus/* default.addListener */.Z.addListener(variables_temperature/* API_VARIABLE_TEMPERATURE_VIEW_EVENT */.LN, onReceiveTemperatureView);
+      onReceiveDeviceValue(canbus/* default.values.device */.Z.values.device);
+      onReceiveSensorValue(canbus/* default.values.variable.sensors */.Z.values.variable.sensors);
+      onReceiveSensorView(canbus/* default.views.variable.sensors */.Z.views.variable.sensors);
+      onReceiveTemperatureValue(canbus/* default.values.variable.temperature */.Z.values.variable.temperature);
+      onReceiveTemperatureView(canbus/* default.views.variable.temperature */.Z.views.variable.temperature);
     });
     // удаляем события
     (0,runtime_core_esm_bundler/* onUnmounted */.Ah)(() => {
-      canbus/* default.removeListener */.ZP.removeListener(canbus/* API_EVENT_CAR_CONFIG */.GF, onReceiveCarConfig);
-      canbus/* default.removeListener */.ZP.removeListener(canbus/* API_EVENT_CAR_VIEW */.zE, onReceiveCarView);
+      canbus/* default.removeListener */.Z.removeListener(device/* API_DEVICE_EVENT */.kS, onReceiveDeviceValue);
+      canbus/* default.removeListener */.Z.removeListener(variables_sensors/* API_VARIABLE_SENSORS_EVENT */.bs, onReceiveSensorValue);
+      canbus/* default.removeListener */.Z.removeListener(variables_sensors/* API_VARIABLE_SENSORS_VIEW_EVENT */.Ht, onReceiveSensorView);
+      canbus/* default.removeListener */.Z.removeListener(variables_temperature/* API_VARIABLE_TEMPERATURE_EVENT */.Yk, onReceiveTemperatureValue);
+      canbus/* default.removeListener */.Z.removeListener(variables_temperature/* API_VARIABLE_TEMPERATURE_VIEW_EVENT */.LN, onReceiveTemperatureView);
     });
     // МЕНЮ ОТОБРАЖЕНИЯ
     const menu = (0,runtime_core_esm_bundler/* computed */.Fl)(() => [{
       id: 0,
-      title: t("options.lcd.logo.menu")
+      title: t("onboard.info.temperature.menu")
     }, {
       id: 1,
-      title: t("options.lcd.hello.menu")
+      title: t("onboard.info.handbrake.menu")
+    }, {
+      id: 2,
+      title: t("onboard.info.reverse.menu")
+    }, {
+      id: 3,
+      title: t("onboard.info.safetyBelt.menu")
+    }, {
+      id: 4,
+      title: t("onboard.info.signal.menu")
     }]);
+    const menuVisible = (0,reactivity_esm_bundler/* ref */.iH)(false);
+    const menuSelected = (0,reactivity_esm_bundler/* ref */.iH)({});
+    const menuViewConfig = (0,reactivity_esm_bundler/* ref */.iH)({});
+    const isLoaded = (0,reactivity_esm_bundler/* ref */.iH)(false);
     /**
      * Выбор пункта меню отображения на информационном экране
      * @param {IMenuItem} item Элемент меню
@@ -15269,15 +15510,656 @@ var canbus = __webpack_require__(2223);
       menuVisible.value = true;
       menuSelected.value = item;
       const {
-        car
-      } = canbus/* default.views */.ZP.views;
+        temperature,
+        sensors
+      } = canbus/* default.views.variable */.Z.views.variable;
       switch (item.id) {
         case 0:
-          menuViewConfig.value = car.logo;
+          menuViewConfig.value = temperature.view;
+          isLoaded.value = isLoadedTemperatureView.value;
           return;
         case 1:
-          menuViewConfig.value = car.hello;
+          menuViewConfig.value = sensors.handbrake;
           break;
+        case 2:
+          menuViewConfig.value = sensors.reverse;
+          break;
+        case 3:
+          menuViewConfig.value = sensors.seatbelt;
+          break;
+        case 4:
+          menuViewConfig.value = sensors.signal;
+          break;
+      }
+      isLoaded.value = isLoadedSensorView.value;
+    };
+    /**
+     * Применить параметры отображения на информационном экране
+     * @param {IViewConfig} data Новые параметры отображения
+     */
+    const onViewSettingApply = data => {
+      const {
+        temperature,
+        sensors
+      } = canbus/* default.views.variable */.Z.views.variable;
+      switch (menuSelected.value.id) {
+        case 0:
+          temperature.view = data;
+          canbus/* default.queryView */.Z.queryView(variables_temperature/* API_VARIABLE_TEMPERATURE_VIEW_EXEC */.kh);
+          return;
+        case 1:
+          sensors.handbrake = data;
+          break;
+        case 2:
+          sensors.reverse = data;
+          break;
+        case 3:
+          sensors.seatbelt = data;
+          break;
+        case 4:
+          sensors.signal = data;
+          break;
+      }
+      canbus/* default.queryView */.Z.queryView(variables_sensors/* API_VARIABLE_SENSORS_VIEW_EXEC */.Sw);
+    };
+    return {
+      isLoadedDeviceValue,
+      isLoadedSensorValue,
+      isLoadedSensorView,
+      isLoadedTemperatureValue,
+      isLoadedTemperatureView,
+      acc,
+      worktime,
+      temperature,
+      handbrake,
+      reverse,
+      seatbeltDriver,
+      seatbeltPassenger,
+      signalLeft,
+      signalRight,
+      menu,
+      menuVisible,
+      menuSelected,
+      menuViewConfig,
+      onMenuClick,
+      onViewSettingApply
+    };
+  }
+});
+;// CONCATENATED MODULE: ./src/views/onboard/components/InfoCard.vue?vue&type=script&lang=ts
+ 
+;// CONCATENATED MODULE: ./src/views/onboard/components/InfoCard.vue
+
+
+
+
+;
+const InfoCard_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(InfoCardvue_type_script_lang_ts, [['render',InfoCardvue_type_template_id_7cb8bc98_ts_true_render]])
+
+/* harmony default export */ var InfoCard = (InfoCard_exports_);
+;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/onboard/components/EngineCard.vue?vue&type=template&id=151e36b4&ts=true
+
+function EngineCardvue_type_template_id_151e36b4_ts_true_render(_ctx, _cache, $props, $setup, $data, $options) {
+  const _component_icon_card_item = (0,runtime_core_esm_bundler/* resolveComponent */.up)("icon-card-item");
+                                                      
+  const _component_input_card_item = (0,runtime_core_esm_bundler/* resolveComponent */.up)("input-card-item");
+  const _component_progress_card_item = (0,runtime_core_esm_bundler/* resolveComponent */.up)("progress-card-item");
+                                                      
+  const _component_card = (0,runtime_core_esm_bundler/* resolveComponent */.up)("card");
+  const _component_view_setting_dialog = (0,runtime_core_esm_bundler/* resolveComponent */.up)("view-setting-dialog");
+  const _component_engine_config_dialog = (0,runtime_core_esm_bundler/* resolveComponent */.up)("engine-config-dialog");
+  return (0,runtime_core_esm_bundler/* openBlock */.wg)(), (0,runtime_core_esm_bundler/* createElementBlock */.iD)(runtime_core_esm_bundler/* Fragment */.HY, null, [(0,runtime_core_esm_bundler/* createVNode */.Wm)(_component_card, {
+    class: "engine-card",
+    title: _ctx.$t('onboard.engine.title'),
+    menu: $setup.menu,
+    "onClick:menu": $setup.onMenuClick
+  }, {
+    body: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VRow/* VRow */.o, null, {
+      default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VCol/* VCol */.D, {
+        cols: "12",
+        class: "pb-0"
+      }, {
+        default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(_component_icon_card_item, {
+          "model-value": [$setup.enabled],
+          title: _ctx.$t('onboard.engine.enabled.title'),
+          description: _ctx.$t('onboard.engine.enabled.description'),
+          "icon-name": ['start-stop'],
+          nodata: !$setup.isLoadedValue,
+          disabled: !$setup.isLoadedView
+        }, null, 8, ["model-value", "title", "description", "nodata", "disabled"])]),
+        _: 1
+      }), (0,runtime_core_esm_bundler/* createVNode */.Wm)(VCol/* VCol */.D, {
+        cols: "12",
+        class: "pt-0 pb-0"
+      }, {
+        default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(_component_input_card_item, {
+          value: $setup.rpm,
+          title: _ctx.$t('onboard.engine.RPM.title'),
+          description: _ctx.$t('onboard.engine.RPM.description'),
+          nodata: !$setup.enabled,
+          disabled: !$setup.isLoadedView
+        }, null, 8, ["value", "title", "description", "nodata", "disabled"])]),
+        _: 1
+      }), (0,runtime_core_esm_bundler/* createVNode */.Wm)(VCol/* VCol */.D, {
+        cols: "12",
+        class: "pt-0 pb-0"
+      }, {
+        default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(_component_input_card_item, {
+          value: $setup.countRPM,
+          title: _ctx.$t('onboard.engine.countRPM.title'),
+          description: _ctx.$t('onboard.engine.countRPM.description'),
+          nodata: !$setup.enabled,
+          disabled: !$setup.isLoadedView
+        }, null, 8, ["value", "title", "description", "nodata", "disabled"])]),
+        _: 1
+      }), (0,runtime_core_esm_bundler/* createVNode */.Wm)(VCol/* VCol */.D, {
+        cols: "12",
+        class: "pt-0 pb-0"
+      }, {
+        default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(_component_input_card_item, {
+          value: $setup.motors,
+          title: _ctx.$t('onboard.engine.motors.title'),
+          description: _ctx.$t('onboard.engine.motors.description'),
+          type: "time",
+          nodata: !$setup.enabled,
+          disabled: !$setup.isLoadedView
+        }, null, 8, ["value", "title", "description", "nodata", "disabled"])]),
+        _: 1
+      }), (0,runtime_core_esm_bundler/* createVNode */.Wm)(VCol/* VCol */.D, {
+        cols: "12",
+        class: "pt-0 pb-0"
+      }, {
+        default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(_component_progress_card_item, {
+          value: $setup.load,
+          title: _ctx.$t('onboard.engine.load.title'),
+          description: _ctx.$t('onboard.engine.load.description'),
+          nodata: !$setup.enabled,
+          disabled: !$setup.isLoadedView
+        }, null, 8, ["value", "title", "description", "nodata", "disabled"])]),
+        _: 1
+      }), (0,runtime_core_esm_bundler/* createVNode */.Wm)(VCol/* VCol */.D, {
+        cols: "12",
+        class: "pt-0 pb-0"
+      }, {
+        default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(_component_progress_card_item, {
+          value: $setup.throttle,
+          title: _ctx.$t('onboard.engine.throttle.title'),
+          description: _ctx.$t('onboard.engine.throttle.description'),
+          nodata: !$setup.enabled,
+          disabled: !$setup.isLoadedView
+        }, null, 8, ["value", "title", "description", "nodata", "disabled"])]),
+        _: 1
+      }), (0,runtime_core_esm_bundler/* createVNode */.Wm)(VCol/* VCol */.D, {
+        cols: "12",
+        class: "pt-0 pb-0"
+      }, {
+        default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(_component_input_card_item, {
+          value: $setup.coolant,
+          title: _ctx.$t('onboard.engine.coolant.title'),
+          description: _ctx.$t('onboard.engine.coolant.description'),
+          type: "temperature",
+          nodata: !$setup.enabled,
+          disabled: !$setup.isLoadedView
+        }, null, 8, ["value", "title", "description", "nodata", "disabled"])]),
+        _: 1
+      })]),
+      _: 1
+    })]),
+    _: 1
+  }, 8, ["title", "menu", "onClick:menu"]), (0,runtime_core_esm_bundler/* createVNode */.Wm)(_component_view_setting_dialog, {
+    modelValue: $setup.menuVisible,
+    "onUpdate:modelValue": _cache[0] || (_cache[0] = $event => $setup.menuVisible = $event),
+    title: $setup.menuSelected.title,
+    enabled: $setup.menuViewConfig.enabled,
+    type: $setup.menuViewConfig.type,
+    time: $setup.menuViewConfig.time,
+    disabled: !$setup.isLoadedView,
+    "onClick:apply": $setup.onViewSettingApply
+  }, null, 8, ["modelValue", "title", "enabled", "type", "time", "disabled", "onClick:apply"]), (0,runtime_core_esm_bundler/* createVNode */.Wm)(_component_engine_config_dialog, {
+    modelValue: $setup.settingsVisible,
+    "onUpdate:modelValue": _cache[1] || (_cache[1] = $event => $setup.settingsVisible = $event)
+  }, null, 8, ["modelValue"])], 64);
+}
+
+/* Vuetify */
+
+
+
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/components/VProgressCircular/VProgressCircular.mjs + 1 modules
+var VProgressCircular = __webpack_require__(3173);
+;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/cards/ProgressCardItem.vue?vue&type=template&id=a652b4a6&scoped=true&ts=true
+
+const ProgressCardItemvue_type_template_id_a652b4a6_scoped_true_ts_true_withScopeId = n => (_pushScopeId("data-v-a652b4a6"), n = n(), _popScopeId(), n);
+const ProgressCardItemvue_type_template_id_a652b4a6_scoped_true_ts_true_hoisted_1 = {
+  class: "progress-card-item"
+};
+function ProgressCardItemvue_type_template_id_a652b4a6_scoped_true_ts_true_render(_ctx, _cache, $props, $setup, $data, $options) {
+                                                                    
+                                                                                  
+  return (0,runtime_core_esm_bundler/* openBlock */.wg)(), (0,runtime_core_esm_bundler/* createElementBlock */.iD)("div", ProgressCardItemvue_type_template_id_a652b4a6_scoped_true_ts_true_hoisted_1, [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VTextField/* VTextField */.hw, {
+    "model-value": $props.title,
+    hint: $props.description,
+    variant: "underlined",
+    density: "compact",
+    "persistent-hint": "",
+    readonly: "",
+    dense: "",
+    disabled: $props.disabled
+  }, null, 8, ["model-value", "hint", "disabled"]), (0,runtime_core_esm_bundler/* createVNode */.Wm)(VProgressCircular/* VProgressCircular */.L, {
+    class: "progress-card-item__progress",
+    color: $props.color,
+    "model-value": $props.value,
+    size: $props.size,
+    width: 6,
+    disabled: $props.nodata || $props.disabled
+  }, {
+    default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createTextVNode */.Uk)((0,shared_esm_bundler/* toDisplayString */.zw)(!$props.nodata && !$props.disabled ? $props.value.toFixed() : ""), 1)]),
+    _: 1
+  }, 8, ["color", "model-value", "size", "disabled"])]);
+}
+
+/* Vuetify */
+
+
+
+
+;// CONCATENATED MODULE: ./src/components/cards/ProgressCardItem.vue?vue&type=template&id=a652b4a6&scoped=true&ts=true
+
+;// CONCATENATED MODULE: ./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/cards/ProgressCardItem.vue?vue&type=script&lang=ts
+
+/* harmony default export */ var ProgressCardItemvue_type_script_lang_ts = ({
+  name: "ProgressCardItem",
+  components: {
+    IconCustom: IconCustom/* default */.Z
+  },
+  props: {
+    /** Значение */
+    value: Number,
+    /** Заголовок */
+    title: String,
+    /** Описание */
+    description: String,
+    /** Цвет прогресса */
+    color: {
+      type: String,
+      default: "success"
+    },
+    /** Размер иконок */
+    size: {
+      type: Number,
+      default: 44
+    },
+    /** Нет данных */
+    nodata: Boolean,
+    /** Выкл. */
+    disabled: Boolean
+  }
+});
+;// CONCATENATED MODULE: ./src/components/cards/ProgressCardItem.vue?vue&type=script&lang=ts
+ 
+;// CONCATENATED MODULE: ./node_modules/mini-css-extract-plugin/dist/loader.js??clonedRuleSet-22.use[0]!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/cards/ProgressCardItem.vue?vue&type=style&index=0&id=a652b4a6&lang=scss&scoped=true
+// extracted by mini-css-extract-plugin
+
+;// CONCATENATED MODULE: ./src/components/cards/ProgressCardItem.vue?vue&type=style&index=0&id=a652b4a6&lang=scss&scoped=true
+
+;// CONCATENATED MODULE: ./src/components/cards/ProgressCardItem.vue
+
+
+
+
+;
+
+
+const ProgressCardItem_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(ProgressCardItemvue_type_script_lang_ts, [['render',ProgressCardItemvue_type_template_id_a652b4a6_scoped_true_ts_true_render],['__scopeId',"data-v-a652b4a6"]])
+
+/* harmony default export */ var ProgressCardItem = (ProgressCardItem_exports_);
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/components/VBtn/VBtn.mjs + 2 modules
+var VBtn = __webpack_require__(5101);
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/components/VIcon/VIcon.mjs + 1 modules
+var VIcon = __webpack_require__(3289);
+;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/onboard/components/EngineConfigDialog.vue?vue&type=template&id=d2ede228&ts=true
+
+const EngineConfigDialogvue_type_template_id_d2ede228_ts_true_hoisted_1 = {
+  key: 1
+};
+const _hoisted_2 = {
+  key: 1
+};
+const _hoisted_3 = {
+  key: 1
+};
+function EngineConfigDialogvue_type_template_id_d2ede228_ts_true_render(_ctx, _cache, $props, $setup, $data, $options) {
+  const _component_switch_card_item = (0,runtime_core_esm_bundler/* resolveComponent */.up)("switch-card-item");
+                                                      
+  const _component_number_field = (0,runtime_core_esm_bundler/* resolveComponent */.up)("number-field");
+                                                      
+                                                        
+                                                      
+  const _component_dialog_template = (0,runtime_core_esm_bundler/* resolveComponent */.up)("dialog-template");
+  return (0,runtime_core_esm_bundler/* openBlock */.wg)(), (0,runtime_core_esm_bundler/* createBlock */.j4)(_component_dialog_template, {
+    "content-class": "device-reset",
+    modelValue: $setup.visible,
+    "onUpdate:modelValue": _cache[4] || (_cache[4] = $event => $setup.visible = $event),
+    title: _ctx.$t('onboard.engine.settings.title'),
+    icon: "engine-statistic",
+    width: "500px",
+    text: "",
+    actions: ""
+  }, {
+    body: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VRow/* VRow */.o, {
+      class: "pb-2"
+    }, {
+      default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VCol/* VCol */.D, {
+        cols: "12",
+        class: "pt-0 pb-0"
+      }, {
+        default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(_component_switch_card_item, {
+          modelValue: $setup.showDays,
+          "onUpdate:modelValue": _cache[0] || (_cache[0] = $event => $setup.showDays = $event),
+          title: _ctx.$t('onboard.engine.settings.showDays.' + (_ctx.$vuetify.display.xs ? 'titleShort' : 'title')),
+          description: _ctx.$t('onboard.engine.settings.showDays.description'),
+          disabled: !$setup.loaderConfigEngine
+        }, null, 8, ["modelValue", "title", "description", "disabled"])]),
+        _: 1
+      }), (0,runtime_core_esm_bundler/* createVNode */.Wm)(VCol/* VCol */.D, {
+        cols: "12",
+        class: "pb-0"
+      }, {
+        default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(_component_number_field, {
+          modelValue: $setup.worktime,
+          "onUpdate:modelValue": _cache[1] || (_cache[1] = $event => $setup.worktime = $event),
+          label: _ctx.$t('onboard.engine.settings.worktime.title'),
+          hint: _ctx.$t('onboard.engine.settings.worktime.description'),
+          min: 0,
+          disabled: !$setup.loaderConfigEngine
+        }, null, 8, ["modelValue", "label", "hint", "disabled"])]),
+        _: 1
+      }), (0,runtime_core_esm_bundler/* createVNode */.Wm)(VCol/* VCol */.D, {
+        cols: "12",
+        class: "pb-0"
+      }, {
+        default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(_component_number_field, {
+          modelValue: $setup.totalCountRPM,
+          "onUpdate:modelValue": _cache[2] || (_cache[2] = $event => $setup.totalCountRPM = $event),
+          label: _ctx.$t('onboard.engine.settings.countRPM.title'),
+          hint: _ctx.$t('onboard.engine.settings.countRPM.description'),
+          min: 0,
+          disabled: !$setup.loaderConfigEngine
+        }, null, 8, ["modelValue", "label", "hint", "disabled"])]),
+        _: 1
+      })]),
+      _: 1
+    })]),
+    btns: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VBtn/* VBtn */.T, {
+      color: "secondary",
+      onClick: $setup.onReset
+    }, {
+      default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [_ctx.$vuetify.display.xs ? ((0,runtime_core_esm_bundler/* openBlock */.wg)(), (0,runtime_core_esm_bundler/* createBlock */.j4)(VIcon/* VIcon */.t, {
+        key: 0
+      }, {
+        default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createTextVNode */.Uk)("mdi-restart")]),
+        _: 1
+      })) : ((0,runtime_core_esm_bundler/* openBlock */.wg)(), (0,runtime_core_esm_bundler/* createElementBlock */.iD)("span", EngineConfigDialogvue_type_template_id_d2ede228_ts_true_hoisted_1, (0,shared_esm_bundler/* toDisplayString */.zw)(_ctx.$t("btn.reset")), 1))]),
+      _: 1
+    }, 8, ["onClick"]), (0,runtime_core_esm_bundler/* createVNode */.Wm)(VBtn/* VBtn */.T, {
+      color: "primary",
+      onClick: $setup.onApply
+    }, {
+      default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [_ctx.$vuetify.display.xs ? ((0,runtime_core_esm_bundler/* openBlock */.wg)(), (0,runtime_core_esm_bundler/* createBlock */.j4)(VIcon/* VIcon */.t, {
+        key: 0
+      }, {
+        default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createTextVNode */.Uk)("mdi-check")]),
+        _: 1
+      })) : ((0,runtime_core_esm_bundler/* openBlock */.wg)(), (0,runtime_core_esm_bundler/* createElementBlock */.iD)("span", _hoisted_2, (0,shared_esm_bundler/* toDisplayString */.zw)(_ctx.$t("btn.apply")), 1))]),
+      _: 1
+    }, 8, ["onClick"]), (0,runtime_core_esm_bundler/* createVNode */.Wm)(VBtn/* VBtn */.T, {
+      color: "primary",
+      onClick: _cache[3] || (_cache[3] = $event => $setup.visible = false)
+    }, {
+      default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [_ctx.$vuetify.display.xs ? ((0,runtime_core_esm_bundler/* openBlock */.wg)(), (0,runtime_core_esm_bundler/* createBlock */.j4)(VIcon/* VIcon */.t, {
+        key: 0
+      }, {
+        default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createTextVNode */.Uk)("mdi-close")]),
+        _: 1
+      })) : ((0,runtime_core_esm_bundler/* openBlock */.wg)(), (0,runtime_core_esm_bundler/* createElementBlock */.iD)("span", _hoisted_3, (0,shared_esm_bundler/* toDisplayString */.zw)(_ctx.$t("btn.cancel")), 1))]),
+      _: 1
+    })]),
+    _: 1
+  }, 8, ["modelValue", "title"]);
+}
+
+/* Vuetify */
+
+
+
+
+
+;// CONCATENATED MODULE: ./src/views/onboard/components/EngineConfigDialog.vue?vue&type=template&id=d2ede228&ts=true
+
+// EXTERNAL MODULE: ./src/components/DialogTemplate.vue + 6 modules
+var DialogTemplate = __webpack_require__(8334);
+// EXTERNAL MODULE: ./src/components/common/NumberField.vue + 3 modules
+var NumberField = __webpack_require__(3066);
+// EXTERNAL MODULE: ./src/models/pjcan/variables/engine/index.ts + 6 modules
+var variables_engine = __webpack_require__(7925);
+;// CONCATENATED MODULE: ./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/onboard/components/EngineConfigDialog.vue?vue&type=script&lang=ts
+
+
+
+
+
+
+/* harmony default export */ var EngineConfigDialogvue_type_script_lang_ts = ({
+  name: "EngineConfig",
+  components: {
+    DialogTemplate: DialogTemplate/* default */.Z,
+    SwitchCardItem: SwitchCardItem/* default */.Z,
+    NumberField: NumberField/* default */.Z
+  },
+  props: {
+    modelValue: Boolean
+  },
+  emits: ["update:modelValue"],
+  setup(props, context) {
+    const {
+      modelValue
+    } = (0,reactivity_esm_bundler/* toRefs */.BK)(props);
+    const visible = (0,runtime_core_esm_bundler/* computed */.Fl)({
+      get: () => modelValue.value,
+      set: val => context.emit("update:modelValue", val)
+    });
+    const loaderConfigEngine = (0,reactivity_esm_bundler/* ref */.iH)(false);
+    const showDays = (0,reactivity_esm_bundler/* ref */.iH)(false);
+    const worktime = (0,reactivity_esm_bundler/* ref */.iH)(0);
+    const totalCountRPM = (0,reactivity_esm_bundler/* ref */.iH)(0);
+    const onReceiveConfigEngine = res => {
+      loaderConfigEngine.value = res.isData;
+      if (res.isData) {
+        showDays.value = res.showDays;
+        worktime.value = res.totalSeconds > 0 ? res.totalSeconds / 60 : 0;
+        totalCountRPM.value = res.totalCountRPM;
+      }
+    };
+    /** Сбросить */
+    const onReset = () => {
+      const {
+        engine
+      } = canbus/* default.configs.variable */.Z.configs.variable;
+      engine.showDays = showDays.value;
+      engine.totalSeconds = 0;
+      engine.totalCountRPM = 0;
+      canbus/* default.queryConfig */.Z.queryConfig(variables_engine/* API_VARIABLE_ENGINE_CONFIG_EXEC */.LH);
+      visible.value = false;
+    };
+    /** Применить */
+    const onApply = () => {
+      const {
+        engine
+      } = canbus/* default.configs.variable */.Z.configs.variable;
+      engine.showDays = showDays.value;
+      engine.totalSeconds = worktime.value * 60;
+      engine.totalCountRPM = totalCountRPM.value;
+      canbus/* default.queryConfig */.Z.queryConfig(variables_engine/* API_VARIABLE_ENGINE_CONFIG_EXEC */.LH);
+      visible.value = false;
+    };
+    (0,runtime_core_esm_bundler/* onMounted */.bv)(() => {
+      canbus/* default.addListener */.Z.addListener(variables_engine/* API_VARIABLE_ENGINE_CONFIG_EVENT */.f2, onReceiveConfigEngine);
+      onReceiveConfigEngine(canbus/* default.configs.variable.engine */.Z.configs.variable.engine);
+    });
+    (0,runtime_core_esm_bundler/* onUnmounted */.Ah)(() => {
+      canbus/* default.removeListener */.Z.removeListener(variables_engine/* API_VARIABLE_ENGINE_CONFIG_EVENT */.f2, onReceiveConfigEngine);
+    });
+    return {
+      visible,
+      loaderConfigEngine,
+      showDays,
+      worktime,
+      totalCountRPM,
+      onReset,
+      onApply
+    };
+  }
+});
+;// CONCATENATED MODULE: ./src/views/onboard/components/EngineConfigDialog.vue?vue&type=script&lang=ts
+ 
+;// CONCATENATED MODULE: ./src/views/onboard/components/EngineConfigDialog.vue
+
+
+
+
+;
+const EngineConfigDialog_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(EngineConfigDialogvue_type_script_lang_ts, [['render',EngineConfigDialogvue_type_template_id_d2ede228_ts_true_render]])
+
+/* harmony default export */ var EngineConfigDialog = (EngineConfigDialog_exports_);
+;// CONCATENATED MODULE: ./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/onboard/components/EngineCard.vue?vue&type=script&lang=ts
+
+
+
+
+
+
+
+
+
+
+/* harmony default export */ var EngineCardvue_type_script_lang_ts = ({
+  name: "EngineCard",
+  components: {
+    Card: Card/* default */.Z,
+    InputCardItem: InputCardItem/* default */.Z,
+    IconCardItem: IconCardItem,
+    ProgressCardItem: ProgressCardItem,
+    ViewSettingDialog: ViewSettingDialog/* default */.Z,
+    EngineConfigDialog: EngineConfigDialog
+  },
+  setup() {
+    const {
+      t
+    } = (0,vue_i18n_esm_bundler/* useI18n */.QT)();
+    const isLoadedValue = (0,reactivity_esm_bundler/* ref */.iH)(false);
+    const isLoadedView = (0,reactivity_esm_bundler/* ref */.iH)(false);
+    const enabled = (0,reactivity_esm_bundler/* ref */.iH)(false);
+    const rpm = (0,reactivity_esm_bundler/* ref */.iH)("");
+    const countRPM = (0,reactivity_esm_bundler/* ref */.iH)("");
+    const load = (0,reactivity_esm_bundler/* ref */.iH)(0);
+    const motors = (0,reactivity_esm_bundler/* ref */.iH)(0);
+    const throttle = (0,reactivity_esm_bundler/* ref */.iH)(0);
+    const coolant = (0,reactivity_esm_bundler/* ref */.iH)(0);
+    /** Входящие значения ДВС */
+    const onReceiveValue = res => {
+      isLoadedValue.value = res.isData;
+      if (res.isData) {
+        enabled.value = res.enabled;
+        rpm.value = res.rpm.toFixed();
+        countRPM.value = (res.totalCountRPM / 1000).toFixed();
+        load.value = res.load / 1000;
+        motors.value = res.totalSeconds;
+        throttle.value = res.throttle / 100;
+        coolant.value = res.coolant;
+      }
+    };
+    /** Входящие значения отображения ДВС */
+    const onReceiveView = res => {
+      isLoadedView.value = res.isData;
+    };
+    // регистрируем события
+    (0,runtime_core_esm_bundler/* onMounted */.bv)(() => {
+      canbus/* default.addListener */.Z.addListener(variables_engine/* API_VARIABLE_ENGINE_EVENT */.tk, onReceiveValue);
+      canbus/* default.addListener */.Z.addListener(variables_engine/* API_VARIABLE_ENGINE_VIEW_EVENT */.P8, onReceiveView);
+      onReceiveValue(canbus/* default.values.variable.engine */.Z.values.variable.engine);
+      onReceiveView(canbus/* default.views.variable.engine */.Z.views.variable.engine);
+    });
+    // удаляем события
+    (0,runtime_core_esm_bundler/* onUnmounted */.Ah)(() => {
+      canbus/* default.removeListener */.Z.removeListener(variables_engine/* API_VARIABLE_ENGINE_EVENT */.tk, onReceiveValue);
+      canbus/* default.removeListener */.Z.removeListener(variables_engine/* API_VARIABLE_ENGINE_VIEW_EVENT */.P8, onReceiveView);
+    });
+    // МЕНЮ ОТОБРАЖЕНИЯ
+    const menu = (0,runtime_core_esm_bundler/* computed */.Fl)(() => [{
+      id: 10,
+      title: t("onboard.engine.settings.menu")
+    }, {
+      id: 0,
+      title: t("onboard.engine.enabled.menu")
+    }, {
+      id: 1,
+      title: t("onboard.engine.RPM.menu")
+    }, {
+      id: 2,
+      title: t("onboard.engine.countRPM.menu")
+    }, {
+      id: 3,
+      title: t("onboard.engine.load.menu")
+    }, {
+      id: 4,
+      title: t("onboard.engine.motors.menu")
+    }, {
+      id: 5,
+      title: t("onboard.engine.throttle.menu")
+    }, {
+      id: 6,
+      title: t("onboard.engine.coolant.menu")
+    }]);
+    const menuVisible = (0,reactivity_esm_bundler/* ref */.iH)(false);
+    const menuSelected = (0,reactivity_esm_bundler/* ref */.iH)({});
+    const menuViewConfig = (0,reactivity_esm_bundler/* ref */.iH)({});
+    const settingsVisible = (0,reactivity_esm_bundler/* ref */.iH)(false);
+    /**
+     * Выбор пункта меню отображения на информационном экране
+     * @param {IMenuItem} item Элемент меню
+     */
+    const onMenuClick = item => {
+      if (item.id < 10) {
+        menuVisible.value = true;
+        menuSelected.value = item;
+        const {
+          engine
+        } = canbus/* default.views.variable */.Z.views.variable;
+        switch (item.id) {
+          case 0:
+            menuViewConfig.value = engine.enabled;
+            return;
+          case 1:
+            menuViewConfig.value = engine.rpm;
+            break;
+          case 2:
+            menuViewConfig.value = engine.totalCountRPM;
+            break;
+          case 3:
+            menuViewConfig.value = engine.load;
+            break;
+          case 4:
+            menuViewConfig.value = engine.totalSeconds;
+            break;
+          case 5:
+            menuViewConfig.value = engine.throttle;
+            break;
+          case 6:
+            menuViewConfig.value = engine.coolant;
+            break;
+        }
+      } else {
+        settingsVisible.value = true;
       }
     };
     /**
@@ -15286,167 +16168,115 @@ var canbus = __webpack_require__(2223);
      */
     const onViewSettingApply = data => {
       const {
-        car
-      } = canbus/* default.views */.ZP.views;
+        engine
+      } = canbus/* default.views.variable */.Z.views.variable;
       switch (menuSelected.value.id) {
         case 0:
-          car.logo = data;
+          engine.enabled = data;
           break;
         case 1:
-          car.hello = data;
+          engine.rpm = data;
+          break;
+        case 2:
+          engine.totalCountRPM = data;
+          break;
+        case 3:
+          engine.load = data;
+          break;
+        case 4:
+          engine.totalSeconds = data;
+          break;
+        case 5:
+          engine.throttle = data;
+          break;
+        case 6:
+          engine.coolant = data;
           break;
       }
-      canbus/* default.queryView */.ZP.queryView(pjcan_car/* API_EXEC_CAR_VIEW */.cU);
+      canbus/* default.queryView */.Z.queryView(variables_engine/* API_VARIABLE_ENGINE_VIEW_EXEC */._L);
     };
     return {
-      loadedCarConfig,
-      loadedCarView,
+      isLoadedValue,
+      isLoadedView,
       enabled,
-      logo,
-      hello,
+      rpm,
+      countRPM,
+      load,
+      motors,
+      throttle,
+      coolant,
       menu,
       menuVisible,
       menuSelected,
       menuViewConfig,
-      onInput,
-      onApplyCarConfig,
+      settingsVisible,
       onMenuClick,
       onViewSettingApply
     };
   }
 });
-;// CONCATENATED MODULE: ./src/views/options/components/LcdCard.vue?vue&type=script&lang=ts
+;// CONCATENATED MODULE: ./src/views/onboard/components/EngineCard.vue?vue&type=script&lang=ts
  
-// EXTERNAL MODULE: ./node_modules/vue-loader/dist/exportHelper.js
-var exportHelper = __webpack_require__(89);
-;// CONCATENATED MODULE: ./src/views/options/components/LcdCard.vue
+;// CONCATENATED MODULE: ./src/views/onboard/components/EngineCard.vue
 
 
 
 
 ;
-const __exports__ = /*#__PURE__*/(0,exportHelper/* default */.Z)(LcdCardvue_type_script_lang_ts, [['render',LcdCardvue_type_template_id_8c5c9b96_ts_true_render]])
+const EngineCard_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(EngineCardvue_type_script_lang_ts, [['render',EngineCardvue_type_template_id_151e36b4_ts_true_render]])
 
-/* harmony default export */ var LcdCard = (__exports__);
-;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/options/components/TeyesCard.vue?vue&type=template&id=a6fde4f2&ts=true
+/* harmony default export */ var EngineCard = (EngineCard_exports_);
+;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/onboard/components/FuelCard.vue?vue&type=template&id=0ad2d237&ts=true
 
-function TeyesCardvue_type_template_id_a6fde4f2_ts_true_render(_ctx, _cache, $props, $setup, $data, $options) {
-  const _component_switch_card_item = (0,runtime_core_esm_bundler/* resolveComponent */.up)("switch-card-item");
+function FuelCardvue_type_template_id_0ad2d237_ts_true_render(_ctx, _cache, $props, $setup, $data, $options) {
+  const _component_input_card_item = (0,runtime_core_esm_bundler/* resolveComponent */.up)("input-card-item");
                                                       
                                                       
   const _component_card = (0,runtime_core_esm_bundler/* resolveComponent */.up)("card");
   const _component_view_setting_dialog = (0,runtime_core_esm_bundler/* resolveComponent */.up)("view-setting-dialog");
+  const _component_fuel_config_dialog = (0,runtime_core_esm_bundler/* resolveComponent */.up)("fuel-config-dialog");
   return (0,runtime_core_esm_bundler/* openBlock */.wg)(), (0,runtime_core_esm_bundler/* createElementBlock */.iD)(runtime_core_esm_bundler/* Fragment */.HY, null, [(0,runtime_core_esm_bundler/* createVNode */.Wm)(_component_card, {
-    class: "teyes-card",
-    title: _ctx.$t('options.teyes.title'),
+    class: "fuel-card",
+    title: _ctx.$t('onboard.fuel.title'),
     menu: $setup.menu,
     "onClick:menu": $setup.onMenuClick
   }, {
     body: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VRow/* VRow */.o, null, {
       default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VCol/* VCol */.D, {
         cols: "12",
-        class: "pt-0 pb-0"
+        class: "pb-0"
       }, {
-        default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(_component_switch_card_item, {
-          modelValue: $setup.lcdShow,
-          "onUpdate:modelValue": _cache[0] || (_cache[0] = $event => $setup.lcdShow = $event),
-          title: _ctx.$t('options.teyes.lcdShow.title'),
-          description: _ctx.$t('options.teyes.lcdShow.description'),
-          color: "success",
-          nodata: !$setup.loadedTeyesConfig,
-          disabled: !$setup.loadedTeyesConfig,
-          onChange: $setup.onApplyTeyesConfig
-        }, null, 8, ["modelValue", "title", "description", "nodata", "disabled", "onChange"])]),
+        default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(_component_input_card_item, {
+          value: $setup.current,
+          title: _ctx.$t('onboard.fuel.current.title'),
+          description: _ctx.$t('onboard.fuel.current.description'),
+          nodata: !$setup.isLoadedValue || Number($setup.current) <= 0,
+          disabled: !$setup.isLoadedView
+        }, null, 8, ["value", "title", "description", "nodata", "disabled"])]),
         _: 1
       }), (0,runtime_core_esm_bundler/* createVNode */.Wm)(VCol/* VCol */.D, {
         cols: "12",
         class: "pt-0 pb-0"
       }, {
-        default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(_component_switch_card_item, {
-          modelValue: $setup.sendButton,
-          "onUpdate:modelValue": _cache[1] || (_cache[1] = $event => $setup.sendButton = $event),
-          title: _ctx.$t('options.teyes.sendButton.title'),
-          description: _ctx.$t('options.teyes.sendButton.description'),
-          color: "success",
-          nodata: !$setup.loadedTeyesConfig,
-          disabled: !$setup.loadedTeyesConfig,
-          onChange: $setup.onApplyTeyesConfig
-        }, null, 8, ["modelValue", "title", "description", "nodata", "disabled", "onChange"])]),
+        default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(_component_input_card_item, {
+          value: $setup.avg,
+          title: _ctx.$t('onboard.fuel.avg.title'),
+          description: _ctx.$t('onboard.fuel.avg.description'),
+          nodata: !$setup.isLoadedValue || Number($setup.avg) <= 0,
+          disabled: !$setup.isLoadedView
+        }, null, 8, ["value", "title", "description", "nodata", "disabled"])]),
         _: 1
       }), (0,runtime_core_esm_bundler/* createVNode */.Wm)(VCol/* VCol */.D, {
         cols: "12",
         class: "pt-0 pb-0"
       }, {
-        default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(_component_switch_card_item, {
-          modelValue: $setup.sendClimate,
-          "onUpdate:modelValue": _cache[2] || (_cache[2] = $event => $setup.sendClimate = $event),
-          title: _ctx.$t('options.teyes.sendClimate.title'),
-          description: _ctx.$t('options.teyes.sendClimate.description'),
-          color: "success",
-          nodata: !$setup.loadedTeyesConfig,
-          disabled: !$setup.loadedTeyesConfig,
-          onChange: $setup.onApplyTeyesConfig
-        }, null, 8, ["modelValue", "title", "description", "nodata", "disabled", "onChange"])]),
-        _: 1
-      }), (0,runtime_core_esm_bundler/* createVNode */.Wm)(VCol/* VCol */.D, {
-        cols: "12",
-        class: "pt-0 pb-0"
-      }, {
-        default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(_component_switch_card_item, {
-          modelValue: $setup.sendDoors,
-          "onUpdate:modelValue": _cache[3] || (_cache[3] = $event => $setup.sendDoors = $event),
-          title: _ctx.$t('options.teyes.sendDoors.title'),
-          description: _ctx.$t('options.teyes.sendDoors.description'),
-          color: "success",
-          nodata: !$setup.loadedTeyesConfig,
-          disabled: !$setup.loadedTeyesConfig,
-          onChange: $setup.onApplyTeyesConfig
-        }, null, 8, ["modelValue", "title", "description", "nodata", "disabled", "onChange"])]),
-        _: 1
-      }), (0,runtime_core_esm_bundler/* createVNode */.Wm)(VCol/* VCol */.D, {
-        cols: "12",
-        class: "pt-0 pb-0"
-      }, {
-        default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(_component_switch_card_item, {
-          modelValue: $setup.parseVolume,
-          "onUpdate:modelValue": _cache[4] || (_cache[4] = $event => $setup.parseVolume = $event),
-          title: _ctx.$t('options.teyes.parseVolume.title'),
-          description: _ctx.$t('options.teyes.parseVolume.description'),
-          color: "success",
-          nodata: !$setup.loadedTeyesConfig,
-          disabled: !$setup.loadedTeyesConfig,
-          onChange: $setup.onApplyTeyesConfig
-        }, null, 8, ["modelValue", "title", "description", "nodata", "disabled", "onChange"])]),
-        _: 1
-      }), (0,runtime_core_esm_bundler/* createVNode */.Wm)(VCol/* VCol */.D, {
-        cols: "12",
-        class: "pt-0 pb-0"
-      }, {
-        default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(_component_switch_card_item, {
-          modelValue: $setup.receiveText,
-          "onUpdate:modelValue": _cache[5] || (_cache[5] = $event => $setup.receiveText = $event),
-          title: _ctx.$t('options.teyes.receiveText.title'),
-          description: _ctx.$t('options.teyes.receiveText.description'),
-          color: "success",
-          nodata: !$setup.loadedTeyesConfig,
-          disabled: !$setup.loadedTeyesConfig,
-          onChange: $setup.onApplyTeyesConfig
-        }, null, 8, ["modelValue", "title", "description", "nodata", "disabled", "onChange"])]),
-        _: 1
-      }), (0,runtime_core_esm_bundler/* createVNode */.Wm)(VCol/* VCol */.D, {
-        cols: "12",
-        class: "pt-0 pb-0"
-      }, {
-        default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(_component_switch_card_item, {
-          modelValue: $setup.receiveButtons,
-          "onUpdate:modelValue": _cache[6] || (_cache[6] = $event => $setup.receiveButtons = $event),
-          title: _ctx.$t('options.teyes.receiveButtons.title'),
-          description: _ctx.$t('options.teyes.receiveButtons.description'),
-          color: "success",
-          nodata: !$setup.loadedTeyesConfig,
-          disabled: !$setup.loadedTeyesConfig,
-          onChange: $setup.onApplyTeyesConfig
-        }, null, 8, ["modelValue", "title", "description", "nodata", "disabled", "onChange"])]),
+        default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(_component_input_card_item, {
+          value: $setup.consumption,
+          title: _ctx.$t('onboard.fuel.consumption.title'),
+          description: _ctx.$t('onboard.fuel.consumption.description'),
+          nodata: !$setup.isLoadedValue || Number($setup.consumption) <= 0,
+          disabled: !$setup.isLoadedView
+        }, null, 8, ["value", "title", "description", "nodata", "disabled"])]),
         _: 1
       })]),
       _: 1
@@ -15454,12 +16284,409 @@ function TeyesCardvue_type_template_id_a6fde4f2_ts_true_render(_ctx, _cache, $pr
     _: 1
   }, 8, ["title", "menu", "onClick:menu"]), (0,runtime_core_esm_bundler/* createVNode */.Wm)(_component_view_setting_dialog, {
     modelValue: $setup.menuVisible,
-    "onUpdate:modelValue": _cache[7] || (_cache[7] = $event => $setup.menuVisible = $event),
+    "onUpdate:modelValue": _cache[0] || (_cache[0] = $event => $setup.menuVisible = $event),
     title: $setup.menuSelected.title,
     enabled: $setup.menuViewConfig.enabled,
     type: $setup.menuViewConfig.type,
     time: $setup.menuViewConfig.time,
-    disabled: !$setup.loadedTeyesView,
+    disabled: !$setup.isLoadedView,
+    "onClick:apply": $setup.onViewSettingApply
+  }, null, 8, ["modelValue", "title", "enabled", "type", "time", "disabled", "onClick:apply"]), (0,runtime_core_esm_bundler/* createVNode */.Wm)(_component_fuel_config_dialog, {
+    modelValue: $setup.settingsVisible,
+    "onUpdate:modelValue": _cache[1] || (_cache[1] = $event => $setup.settingsVisible = $event)
+  }, null, 8, ["modelValue"])], 64);
+}
+
+/* Vuetify */
+
+
+
+;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/onboard/components/FuelConfigDialog.vue?vue&type=template&id=653e0263&ts=true
+
+const FuelConfigDialogvue_type_template_id_653e0263_ts_true_hoisted_1 = {
+  key: 1
+};
+const FuelConfigDialogvue_type_template_id_653e0263_ts_true_hoisted_2 = {
+  key: 1
+};
+const FuelConfigDialogvue_type_template_id_653e0263_ts_true_hoisted_3 = {
+  key: 1
+};
+function FuelConfigDialogvue_type_template_id_653e0263_ts_true_render(_ctx, _cache, $props, $setup, $data, $options) {
+  const _component_number_field = (0,runtime_core_esm_bundler/* resolveComponent */.up)("number-field");
+                                                      
+                                                      
+                                                        
+                                                      
+  const _component_dialog_template = (0,runtime_core_esm_bundler/* resolveComponent */.up)("dialog-template");
+  return (0,runtime_core_esm_bundler/* openBlock */.wg)(), (0,runtime_core_esm_bundler/* createBlock */.j4)(_component_dialog_template, {
+    "content-class": "device-reset",
+    modelValue: $setup.visible,
+    "onUpdate:modelValue": _cache[2] || (_cache[2] = $event => $setup.visible = $event),
+    title: _ctx.$t('onboard.fuel.settings.title'),
+    icon: "engine-statistic",
+    width: "500px",
+    text: "",
+    actions: ""
+  }, {
+    body: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VRow/* VRow */.o, {
+      class: "pb-2"
+    }, {
+      default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VCol/* VCol */.D, {
+        cols: "12",
+        class: "pb-0"
+      }, {
+        default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(_component_number_field, {
+          modelValue: $setup.ratio,
+          "onUpdate:modelValue": _cache[0] || (_cache[0] = $event => $setup.ratio = $event),
+          label: _ctx.$t('onboard.fuel.settings.ratio.title'),
+          hint: _ctx.$t('onboard.fuel.settings.ratio.description'),
+          min: 0,
+          max: 1,
+          disabled: !$setup.loaderConfigFuel
+        }, null, 8, ["modelValue", "label", "hint", "disabled"])]),
+        _: 1
+      })]),
+      _: 1
+    })]),
+    btns: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VBtn/* VBtn */.T, {
+      color: "secondary",
+      onClick: $setup.onReset
+    }, {
+      default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [_ctx.$vuetify.display.xs ? ((0,runtime_core_esm_bundler/* openBlock */.wg)(), (0,runtime_core_esm_bundler/* createBlock */.j4)(VIcon/* VIcon */.t, {
+        key: 0
+      }, {
+        default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createTextVNode */.Uk)("mdi-restart")]),
+        _: 1
+      })) : ((0,runtime_core_esm_bundler/* openBlock */.wg)(), (0,runtime_core_esm_bundler/* createElementBlock */.iD)("span", FuelConfigDialogvue_type_template_id_653e0263_ts_true_hoisted_1, (0,shared_esm_bundler/* toDisplayString */.zw)(_ctx.$t("btn.reset")), 1))]),
+      _: 1
+    }, 8, ["onClick"]), (0,runtime_core_esm_bundler/* createVNode */.Wm)(VBtn/* VBtn */.T, {
+      color: "primary",
+      onClick: $setup.onApply
+    }, {
+      default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [_ctx.$vuetify.display.xs ? ((0,runtime_core_esm_bundler/* openBlock */.wg)(), (0,runtime_core_esm_bundler/* createBlock */.j4)(VIcon/* VIcon */.t, {
+        key: 0
+      }, {
+        default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createTextVNode */.Uk)("mdi-check")]),
+        _: 1
+      })) : ((0,runtime_core_esm_bundler/* openBlock */.wg)(), (0,runtime_core_esm_bundler/* createElementBlock */.iD)("span", FuelConfigDialogvue_type_template_id_653e0263_ts_true_hoisted_2, (0,shared_esm_bundler/* toDisplayString */.zw)(_ctx.$t("btn.apply")), 1))]),
+      _: 1
+    }, 8, ["onClick"]), (0,runtime_core_esm_bundler/* createVNode */.Wm)(VBtn/* VBtn */.T, {
+      color: "primary",
+      onClick: _cache[1] || (_cache[1] = $event => $setup.visible = false)
+    }, {
+      default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [_ctx.$vuetify.display.xs ? ((0,runtime_core_esm_bundler/* openBlock */.wg)(), (0,runtime_core_esm_bundler/* createBlock */.j4)(VIcon/* VIcon */.t, {
+        key: 0
+      }, {
+        default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createTextVNode */.Uk)("mdi-close")]),
+        _: 1
+      })) : ((0,runtime_core_esm_bundler/* openBlock */.wg)(), (0,runtime_core_esm_bundler/* createElementBlock */.iD)("span", FuelConfigDialogvue_type_template_id_653e0263_ts_true_hoisted_3, (0,shared_esm_bundler/* toDisplayString */.zw)(_ctx.$t("btn.cancel")), 1))]),
+      _: 1
+    })]),
+    _: 1
+  }, 8, ["modelValue", "title"]);
+}
+
+/* Vuetify */
+
+
+
+
+
+;// CONCATENATED MODULE: ./src/views/onboard/components/FuelConfigDialog.vue?vue&type=template&id=653e0263&ts=true
+
+// EXTERNAL MODULE: ./src/models/pjcan/variables/fuel/index.ts + 6 modules
+var variables_fuel = __webpack_require__(4873);
+;// CONCATENATED MODULE: ./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/onboard/components/FuelConfigDialog.vue?vue&type=script&lang=ts
+
+
+
+
+
+
+/* harmony default export */ var FuelConfigDialogvue_type_script_lang_ts = ({
+  name: "FuelConfigDialog",
+  components: {
+    DialogTemplate: DialogTemplate/* default */.Z,
+    SwitchCardItem: SwitchCardItem/* default */.Z,
+    NumberField: NumberField/* default */.Z
+  },
+  props: {
+    modelValue: Boolean
+  },
+  emits: ["update:modelValue"],
+  setup(props, context) {
+    const {
+      modelValue
+    } = (0,reactivity_esm_bundler/* toRefs */.BK)(props);
+    const visible = (0,runtime_core_esm_bundler/* computed */.Fl)({
+      get: () => modelValue.value,
+      set: val => context.emit("update:modelValue", val)
+    });
+    const loaderConfigFuel = (0,reactivity_esm_bundler/* ref */.iH)(false);
+    const ratio = (0,reactivity_esm_bundler/* ref */.iH)(0);
+    const onReceiveConfigFuel = res => {
+      loaderConfigFuel.value = res.isData;
+      if (res.isData) {
+        ratio.value = res.ratio / 1000;
+      }
+    };
+    /** Сбросить */
+    const onReset = () => {
+      canbus/* default.configs.variable.fuel.ratio */.Z.configs.variable.fuel.ratio = 1000;
+      canbus/* default.queryConfig */.Z.queryConfig(variables_fuel/* API_VARIABLE_FUEL_CONFIG_EXEC */.Wm);
+      visible.value = false;
+    };
+    /** Применить */
+    const onApply = () => {
+      canbus/* default.configs.variable.fuel.ratio */.Z.configs.variable.fuel.ratio = ratio.value * 1000;
+      canbus/* default.queryConfig */.Z.queryConfig(variables_fuel/* API_VARIABLE_FUEL_CONFIG_EXEC */.Wm);
+      visible.value = false;
+    };
+    (0,runtime_core_esm_bundler/* onMounted */.bv)(() => {
+      canbus/* default.addListener */.Z.addListener(variables_fuel/* API_VARIABLE_FUEL_CONFIG_EVENT */.Lw, onReceiveConfigFuel);
+      onReceiveConfigFuel(canbus/* default.configs.variable.fuel */.Z.configs.variable.fuel);
+    });
+    (0,runtime_core_esm_bundler/* onUnmounted */.Ah)(() => {
+      canbus/* default.removeListener */.Z.removeListener(variables_fuel/* API_VARIABLE_FUEL_CONFIG_EVENT */.Lw, onReceiveConfigFuel);
+    });
+    return {
+      visible,
+      loaderConfigFuel,
+      ratio,
+      onReset,
+      onApply
+    };
+  }
+});
+;// CONCATENATED MODULE: ./src/views/onboard/components/FuelConfigDialog.vue?vue&type=script&lang=ts
+ 
+;// CONCATENATED MODULE: ./src/views/onboard/components/FuelConfigDialog.vue
+
+
+
+
+;
+const FuelConfigDialog_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(FuelConfigDialogvue_type_script_lang_ts, [['render',FuelConfigDialogvue_type_template_id_653e0263_ts_true_render]])
+
+/* harmony default export */ var FuelConfigDialog = (FuelConfigDialog_exports_);
+;// CONCATENATED MODULE: ./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/onboard/components/FuelCard.vue?vue&type=script&lang=ts
+
+
+
+
+
+
+
+
+/* harmony default export */ var FuelCardvue_type_script_lang_ts = ({
+  name: "FuelCard",
+  components: {
+    Card: Card/* default */.Z,
+    InputCardItem: InputCardItem/* default */.Z,
+    ViewSettingDialog: ViewSettingDialog/* default */.Z,
+    FuelConfigDialog: FuelConfigDialog
+  },
+  setup() {
+    const {
+      t
+    } = (0,vue_i18n_esm_bundler/* useI18n */.QT)();
+    const isLoadedValue = (0,reactivity_esm_bundler/* ref */.iH)(false);
+    const isLoadedView = (0,reactivity_esm_bundler/* ref */.iH)(false);
+    const current = (0,reactivity_esm_bundler/* ref */.iH)("");
+    const avg = (0,reactivity_esm_bundler/* ref */.iH)("");
+    // const total = ref("");
+    const consumption = (0,reactivity_esm_bundler/* ref */.iH)("");
+    /** Входящие значения расхода топлива */
+    const onReceiveValue = res => {
+      isLoadedValue.value = res.isData;
+      if (res.isData) {
+        current.value = (res.current / 10).toFixed(1);
+        avg.value = (res.avg / 10).toFixed(1);
+        // total.value = (res.total / 100).toFixed(2);
+        consumption.value = (res.consumption / 100).toFixed(2);
+      }
+    };
+    /** Входящие значения отображения расхода топлива */
+    const onReceiveView = res => {
+      isLoadedView.value = res.isData;
+    };
+    // регистрируем события
+    (0,runtime_core_esm_bundler/* onMounted */.bv)(() => {
+      canbus/* default.addListener */.Z.addListener(variables_fuel/* API_VARIABLE_FUEL_EVENT */.Je, onReceiveValue);
+      canbus/* default.addListener */.Z.addListener(variables_fuel/* API_VARIABLE_FUEL_VIEW_EVENT */.S, onReceiveView);
+      onReceiveValue(canbus/* default.values.variable.fuel */.Z.values.variable.fuel);
+      onReceiveView(canbus/* default.views.variable.fuel */.Z.views.variable.fuel);
+    });
+    // удаляем события
+    (0,runtime_core_esm_bundler/* onUnmounted */.Ah)(() => {
+      canbus/* default.removeListener */.Z.removeListener(variables_fuel/* API_VARIABLE_FUEL_EVENT */.Je, onReceiveValue);
+      canbus/* default.removeListener */.Z.removeListener(variables_fuel/* API_VARIABLE_FUEL_VIEW_EVENT */.S, onReceiveView);
+    });
+    // МЕНЮ ОТОБРАЖЕНИЯ
+    const menu = (0,runtime_core_esm_bundler/* computed */.Fl)(() => [{
+      id: 10,
+      title: t("onboard.fuel.settings.menu")
+    }, {
+      id: 0,
+      title: t("onboard.fuel.current.menu")
+    }, {
+      id: 1,
+      title: t("onboard.fuel.avg.menu")
+    },
+    // { id: 2, title: t("onboard.fuel.total.menu") },
+    {
+      id: 3,
+      title: t("onboard.fuel.consumption.menu")
+    }]);
+    const menuVisible = (0,reactivity_esm_bundler/* ref */.iH)(false);
+    const menuSelected = (0,reactivity_esm_bundler/* ref */.iH)({});
+    const menuViewConfig = (0,reactivity_esm_bundler/* ref */.iH)({});
+    const settingsVisible = (0,reactivity_esm_bundler/* ref */.iH)(false);
+    /**
+     * Выбор пункта меню отображения на информационном экране
+     * @param {IMenuItem} item Элемент меню
+     */
+    const onMenuClick = item => {
+      if (item.id < 10) {
+        menuVisible.value = true;
+        menuSelected.value = item;
+        const {
+          fuel
+        } = canbus/* default.views.variable */.Z.views.variable;
+        switch (item.id) {
+          case 0:
+            menuViewConfig.value = fuel.current;
+            return;
+          case 1:
+            menuViewConfig.value = fuel.avg;
+            break;
+          // case 2:
+          // 	menuViewConfig.value = fuel.total;
+          // 	break;
+          case 3:
+            menuViewConfig.value = fuel.consumption;
+            break;
+        }
+      } else {
+        settingsVisible.value = true;
+      }
+    };
+    /**
+     * Применить параметры отображения на информационном экране
+     * @param {IViewConfig} data Новые параметры отображения
+     */
+    const onViewSettingApply = data => {
+      const {
+        fuel
+      } = canbus/* default.views.variable */.Z.views.variable;
+      switch (menuSelected.value.id) {
+        case 0:
+          fuel.current = data;
+          break;
+        case 1:
+          fuel.avg = data;
+          break;
+        // case 2:
+        // 	fuel.total = data;
+        // 	break;
+        case 3:
+          fuel.consumption = data;
+          break;
+      }
+      canbus/* default.queryView */.Z.queryView(variables_fuel/* API_VARIABLE_FUEL_VIEW_EXEC */.ES);
+    };
+    return {
+      isLoadedView,
+      isLoadedValue,
+      current,
+      avg,
+      // total,
+      consumption,
+      menu,
+      menuVisible,
+      menuSelected,
+      menuViewConfig,
+      settingsVisible,
+      onMenuClick,
+      onViewSettingApply
+    };
+  }
+});
+;// CONCATENATED MODULE: ./src/views/onboard/components/FuelCard.vue?vue&type=script&lang=ts
+ 
+;// CONCATENATED MODULE: ./src/views/onboard/components/FuelCard.vue
+
+
+
+
+;
+const FuelCard_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(FuelCardvue_type_script_lang_ts, [['render',FuelCardvue_type_template_id_0ad2d237_ts_true_render]])
+
+/* harmony default export */ var FuelCard = (FuelCard_exports_);
+;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/onboard/components/MovementCard.vue?vue&type=template&id=43af5f46&ts=true
+
+function MovementCardvue_type_template_id_43af5f46_ts_true_render(_ctx, _cache, $props, $setup, $data, $options) {
+  const _component_input_card_item = (0,runtime_core_esm_bundler/* resolveComponent */.up)("input-card-item");
+                                                      
+                                                      
+  const _component_card = (0,runtime_core_esm_bundler/* resolveComponent */.up)("card");
+  const _component_view_setting_dialog = (0,runtime_core_esm_bundler/* resolveComponent */.up)("view-setting-dialog");
+  return (0,runtime_core_esm_bundler/* openBlock */.wg)(), (0,runtime_core_esm_bundler/* createElementBlock */.iD)(runtime_core_esm_bundler/* Fragment */.HY, null, [(0,runtime_core_esm_bundler/* createVNode */.Wm)(_component_card, {
+    class: "movement-card",
+    title: _ctx.$t('onboard.movement.title'),
+    menu: $setup.menu,
+    "onClick:menu": $setup.onMenuClick
+  }, {
+    body: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VRow/* VRow */.o, null, {
+      default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VCol/* VCol */.D, {
+        cols: "12",
+        class: "pb-0"
+      }, {
+        default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(_component_input_card_item, {
+          value: $setup.speed,
+          title: _ctx.$t('onboard.movement.speed.title'),
+          description: _ctx.$t('onboard.movement.speed.description'),
+          nodata: !$setup.isLoadedValue,
+          disabled: !$setup.isLoadedView
+        }, null, 8, ["value", "title", "description", "nodata", "disabled"])]),
+        _: 1
+      }), (0,runtime_core_esm_bundler/* createVNode */.Wm)(VCol/* VCol */.D, {
+        cols: "12",
+        class: "pt-0 pb-0"
+      }, {
+        default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(_component_input_card_item, {
+          value: $setup.speedAVG,
+          title: _ctx.$t('onboard.movement.speedAVG.title'),
+          description: _ctx.$t('onboard.movement.speedAVG.description'),
+          nodata: !$setup.isSpeedAVG,
+          disabled: !$setup.isLoadedView
+        }, null, 8, ["value", "title", "description", "nodata", "disabled"])]),
+        _: 1
+      }), (0,runtime_core_esm_bundler/* createVNode */.Wm)(VCol/* VCol */.D, {
+        cols: "12",
+        class: "pt-0 pb-0"
+      }, {
+        default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(_component_input_card_item, {
+          value: $setup.restWay,
+          title: _ctx.$t('onboard.movement.restWay.title'),
+          description: _ctx.$t('onboard.movement.restWay.description'),
+          nodata: !$setup.isRestWay,
+          disabled: !$setup.isLoadedView
+        }, null, 8, ["value", "title", "description", "nodata", "disabled"])]),
+        _: 1
+      })]),
+      _: 1
+    })]),
+    _: 1
+  }, 8, ["title", "menu", "onClick:menu"]), (0,runtime_core_esm_bundler/* createVNode */.Wm)(_component_view_setting_dialog, {
+    modelValue: $setup.menuVisible,
+    "onUpdate:modelValue": _cache[0] || (_cache[0] = $event => $setup.menuVisible = $event),
+    title: $setup.menuSelected.title,
+    enabled: $setup.menuViewConfig.enabled,
+    type: $setup.menuViewConfig.type,
+    time: $setup.menuViewConfig.time,
+    disabled: !$setup.isLoadedView,
     "onClick:apply": $setup.onViewSettingApply
   }, null, 8, ["modelValue", "title", "enabled", "type", "time", "disabled", "onClick:apply"])], 64);
 }
@@ -15468,9 +16695,9 @@ function TeyesCardvue_type_template_id_a6fde4f2_ts_true_render(_ctx, _cache, $pr
 
 
 
-// EXTERNAL MODULE: ./src/models/pjcan/teyes/index.ts + 6 modules
-var pjcan_teyes = __webpack_require__(8674);
-;// CONCATENATED MODULE: ./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/options/components/TeyesCard.vue?vue&type=script&lang=ts
+// EXTERNAL MODULE: ./src/models/pjcan/variables/movement/index.ts + 4 modules
+var variables_movement = __webpack_require__(8229);
+;// CONCATENATED MODULE: ./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/onboard/components/MovementCard.vue?vue&type=script&lang=ts
 
 
 
@@ -15478,8 +16705,246 @@ var pjcan_teyes = __webpack_require__(8674);
 
 
 
-/* harmony default export */ var TeyesCardvue_type_script_lang_ts = ({
-  name: "TeyesCard",
+/* harmony default export */ var MovementCardvue_type_script_lang_ts = ({
+  name: "MovementCard",
+  components: {
+    Card: Card/* default */.Z,
+    InputCardItem: InputCardItem/* default */.Z,
+    ViewSettingDialog: ViewSettingDialog/* default */.Z
+  },
+  setup() {
+    const {
+      t
+    } = (0,vue_i18n_esm_bundler/* useI18n */.QT)();
+    const isLoadedView = (0,reactivity_esm_bundler/* ref */.iH)(false);
+    const isLoadedValue = (0,reactivity_esm_bundler/* ref */.iH)(false);
+    const speed = (0,reactivity_esm_bundler/* ref */.iH)("");
+    const speedAVG = (0,reactivity_esm_bundler/* ref */.iH)("");
+    const restWay = (0,reactivity_esm_bundler/* ref */.iH)("");
+    const isSpeedAVG = (0,runtime_core_esm_bundler/* computed */.Fl)(() => isLoadedValue.value && canbus/* default.values.variable.movement.speedAVG */.Z.values.variable.movement.speedAVG > 0);
+    const isRestWay = (0,runtime_core_esm_bundler/* computed */.Fl)(() => isLoadedValue.value && canbus/* default.values.variable.movement.restWay */.Z.values.variable.movement.restWay > 0);
+    /** Входящие значения движения */
+    const onReceiveValue = res => {
+      isLoadedValue.value = res.isData;
+      if (res.isData) {
+        speed.value = (res.speed / 100).toFixed(2);
+        speedAVG.value = res.speedAVG.toFixed(0);
+        restWay.value = (res.restWay / 100).toFixed(2);
+      }
+    };
+    /** Входящие значения отображения движения */
+    const onReceiveView = res => {
+      isLoadedView.value = res.isData;
+    };
+    // регистрируем события
+    (0,runtime_core_esm_bundler/* onMounted */.bv)(() => {
+      canbus/* default.addListener */.Z.addListener(variables_movement/* API_VARIABLE_MOVEMENT_EVENT */.Ju, onReceiveValue);
+      canbus/* default.addListener */.Z.addListener(variables_movement/* API_VARIABLE_MOVEMENT_VIEW_EVENT */.YT, onReceiveView);
+      onReceiveValue(canbus/* default.values.variable.movement */.Z.values.variable.movement);
+      onReceiveView(canbus/* default.views.variable.movement */.Z.views.variable.movement);
+    });
+    // удаляем события
+    (0,runtime_core_esm_bundler/* onUnmounted */.Ah)(() => {
+      canbus/* default.removeListener */.Z.removeListener(variables_movement/* API_VARIABLE_MOVEMENT_EVENT */.Ju, onReceiveValue);
+      canbus/* default.removeListener */.Z.removeListener(variables_movement/* API_VARIABLE_MOVEMENT_VIEW_EVENT */.YT, onReceiveView);
+    });
+    // МЕНЮ ОТОБРАЖЕНИЯ
+    const menu = (0,runtime_core_esm_bundler/* computed */.Fl)(() => [{
+      id: 0,
+      title: t("onboard.movement.speed.menu")
+    }, {
+      id: 1,
+      title: t("onboard.movement.speedAVG.menu")
+    }, {
+      id: 2,
+      title: t("onboard.movement.restWay.menu")
+    }]);
+    const menuVisible = (0,reactivity_esm_bundler/* ref */.iH)(false);
+    const menuSelected = (0,reactivity_esm_bundler/* ref */.iH)({});
+    const menuViewConfig = (0,reactivity_esm_bundler/* ref */.iH)({});
+    /**
+     * Выбор пункта меню отображения на информационном экране
+     * @param {IMenuItem} item Элемент меню
+     */
+    const onMenuClick = item => {
+      menuVisible.value = true;
+      menuSelected.value = item;
+      const {
+        movement
+      } = canbus/* default.views.variable */.Z.views.variable;
+      switch (item.id) {
+        case 0:
+          menuViewConfig.value = movement.speed;
+          return;
+        case 1:
+          menuViewConfig.value = movement.speedAVG;
+          break;
+        case 2:
+          menuViewConfig.value = movement.restWay;
+          break;
+      }
+    };
+    /**
+     * Применить параметры отображения на информационном экране
+     * @param {IViewConfig} data Новые параметры отображения
+     */
+    const onViewSettingApply = data => {
+      const {
+        movement
+      } = canbus/* default.views.variable */.Z.views.variable;
+      switch (menuSelected.value.id) {
+        case 0:
+          movement.speed = data;
+          break;
+        case 1:
+          movement.speedAVG = data;
+          break;
+        case 2:
+          movement.restWay = data;
+          break;
+      }
+      canbus/* default.queryView */.Z.queryView(variables_movement/* API_VARIABLE_MOVEMENT_VIEW_EXEC */.hQ);
+    };
+    return {
+      isLoadedView,
+      isLoadedValue,
+      isSpeedAVG,
+      isRestWay,
+      speed,
+      speedAVG,
+      restWay,
+      menu,
+      menuVisible,
+      menuSelected,
+      menuViewConfig,
+      onMenuClick,
+      onViewSettingApply
+    };
+  }
+});
+;// CONCATENATED MODULE: ./src/views/onboard/components/MovementCard.vue?vue&type=script&lang=ts
+ 
+;// CONCATENATED MODULE: ./src/views/onboard/components/MovementCard.vue
+
+
+
+
+;
+const MovementCard_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(MovementCardvue_type_script_lang_ts, [['render',MovementCardvue_type_template_id_43af5f46_ts_true_render]])
+
+/* harmony default export */ var MovementCard = (MovementCard_exports_);
+;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/onboard/components/DoorsCard.vue?vue&type=template&id=5d33d7c0&ts=true
+
+function DoorsCardvue_type_template_id_5d33d7c0_ts_true_render(_ctx, _cache, $props, $setup, $data, $options) {
+  const _component_switch_card_item = (0,runtime_core_esm_bundler/* resolveComponent */.up)("switch-card-item");
+                                                      
+                                                      
+  const _component_card = (0,runtime_core_esm_bundler/* resolveComponent */.up)("card");
+  const _component_view_setting_dialog = (0,runtime_core_esm_bundler/* resolveComponent */.up)("view-setting-dialog");
+  return (0,runtime_core_esm_bundler/* openBlock */.wg)(), (0,runtime_core_esm_bundler/* createElementBlock */.iD)(runtime_core_esm_bundler/* Fragment */.HY, null, [(0,runtime_core_esm_bundler/* createVNode */.Wm)(_component_card, {
+    class: "doors-card",
+    title: _ctx.$t('onboard.doors.title'),
+    menu: $setup.menu,
+    "onClick:menu": $setup.onMenuClick
+  }, {
+    body: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VRow/* VRow */.o, null, {
+      default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VCol/* VCol */.D, {
+        cols: "12",
+        class: "pb-0"
+      }, {
+        default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(_component_switch_card_item, {
+          "model-value": $setup.doorFL,
+          title: _ctx.$t('onboard.doors.doorFL.title'),
+          description: _ctx.$t('onboard.doors.doorFL.description'),
+          color: "error",
+          nodata: !$setup.isLoadedValue,
+          disabled: !$setup.isLoadedView
+        }, null, 8, ["model-value", "title", "description", "nodata", "disabled"])]),
+        _: 1
+      }), (0,runtime_core_esm_bundler/* createVNode */.Wm)(VCol/* VCol */.D, {
+        cols: "12",
+        class: "pt-0 pb-0"
+      }, {
+        default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(_component_switch_card_item, {
+          "model-value": $setup.doorFR,
+          title: _ctx.$t('onboard.doors.doorFR.title'),
+          description: _ctx.$t('onboard.doors.doorFR.description'),
+          color: "error",
+          nodata: !$setup.isLoadedValue,
+          disabled: !$setup.isLoadedView
+        }, null, 8, ["model-value", "title", "description", "nodata", "disabled"])]),
+        _: 1
+      }), (0,runtime_core_esm_bundler/* createVNode */.Wm)(VCol/* VCol */.D, {
+        cols: "12",
+        class: "pt-0 pb-0"
+      }, {
+        default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(_component_switch_card_item, {
+          "model-value": $setup.doorBL,
+          title: _ctx.$t('onboard.doors.doorBL.title'),
+          description: _ctx.$t('onboard.doors.doorBL.description'),
+          color: "error",
+          nodata: !$setup.isLoadedValue,
+          disabled: !$setup.isLoadedView
+        }, null, 8, ["model-value", "title", "description", "nodata", "disabled"])]),
+        _: 1
+      }), (0,runtime_core_esm_bundler/* createVNode */.Wm)(VCol/* VCol */.D, {
+        cols: "12",
+        class: "pt-0 pb-0"
+      }, {
+        default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(_component_switch_card_item, {
+          "model-value": $setup.doorBR,
+          title: _ctx.$t('onboard.doors.doorBR.title'),
+          description: _ctx.$t('onboard.doors.doorBR.description'),
+          color: "error",
+          nodata: !$setup.isLoadedValue,
+          disabled: !$setup.isLoadedView
+        }, null, 8, ["model-value", "title", "description", "nodata", "disabled"])]),
+        _: 1
+      }), (0,runtime_core_esm_bundler/* createVNode */.Wm)(VCol/* VCol */.D, {
+        cols: "12",
+        class: "pt-0 pb-0"
+      }, {
+        default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(_component_switch_card_item, {
+          "model-value": $setup.trunk,
+          title: _ctx.$t('onboard.doors.trunk.title'),
+          description: _ctx.$t('onboard.doors.trunk.description'),
+          color: "error",
+          nodata: !$setup.isLoadedValue,
+          disabled: !$setup.isLoadedView
+        }, null, 8, ["model-value", "title", "description", "nodata", "disabled"])]),
+        _: 1
+      })]),
+      _: 1
+    })]),
+    _: 1
+  }, 8, ["title", "menu", "onClick:menu"]), (0,runtime_core_esm_bundler/* createVNode */.Wm)(_component_view_setting_dialog, {
+    modelValue: $setup.menuVisible,
+    "onUpdate:modelValue": _cache[0] || (_cache[0] = $event => $setup.menuVisible = $event),
+    title: $setup.menuSelected.title,
+    enabled: $setup.menuViewConfig.enabled,
+    type: $setup.menuViewConfig.type,
+    time: $setup.menuViewConfig.time,
+    disabled: !$setup.isLoadedView,
+    "onClick:apply": $setup.onViewSettingApply
+  }, null, 8, ["modelValue", "title", "enabled", "type", "time", "disabled", "onClick:apply"])], 64);
+}
+
+/* Vuetify */
+
+
+
+// EXTERNAL MODULE: ./src/models/pjcan/variables/doors/index.ts + 4 modules
+var doors = __webpack_require__(1971);
+;// CONCATENATED MODULE: ./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/onboard/components/DoorsCard.vue?vue&type=script&lang=ts
+
+
+
+
+
+
+
+/* harmony default export */ var DoorsCardvue_type_script_lang_ts = ({
+  name: "DoorsCard",
   components: {
     Card: Card/* default */.Z,
     SwitchCardItem: SwitchCardItem/* default */.Z,
@@ -15489,75 +16954,48 @@ var pjcan_teyes = __webpack_require__(8674);
     const {
       t
     } = (0,vue_i18n_esm_bundler/* useI18n */.QT)();
-    const loadedTeyesConfig = (0,reactivity_esm_bundler/* ref */.iH)(false);
-    const loadedTeyesView = (0,reactivity_esm_bundler/* ref */.iH)(false);
-    const receiveClock = (0,reactivity_esm_bundler/* ref */.iH)(false);
-    const receiveButtons = (0,reactivity_esm_bundler/* ref */.iH)(false);
-    const receiveText = (0,reactivity_esm_bundler/* ref */.iH)(false);
-    const sendButton = (0,reactivity_esm_bundler/* ref */.iH)(false);
-    const sendClimate = (0,reactivity_esm_bundler/* ref */.iH)(false);
-    const sendDoors = (0,reactivity_esm_bundler/* ref */.iH)(false);
-    const parseVolume = (0,reactivity_esm_bundler/* ref */.iH)(false);
-    const lcdShow = (0,reactivity_esm_bundler/* ref */.iH)(false);
-    const menuVisible = (0,reactivity_esm_bundler/* ref */.iH)(false);
-    const menuSelected = (0,reactivity_esm_bundler/* ref */.iH)({});
-    const menuViewConfig = (0,reactivity_esm_bundler/* ref */.iH)({});
-    /**
-     * Входящая конфигурация Teyes
-     * @param {ITeyesConfig} res
-     */
-    const onReceiveTeyesConfig = res => {
-      loadedTeyesConfig.value = res.isData;
+    const isLoadedView = (0,reactivity_esm_bundler/* ref */.iH)(false);
+    const isLoadedValue = (0,reactivity_esm_bundler/* ref */.iH)(false);
+    const doorFL = (0,reactivity_esm_bundler/* ref */.iH)(false);
+    const doorFR = (0,reactivity_esm_bundler/* ref */.iH)(false);
+    const doorBL = (0,reactivity_esm_bundler/* ref */.iH)(false);
+    const doorBR = (0,reactivity_esm_bundler/* ref */.iH)(false);
+    const trunk = (0,reactivity_esm_bundler/* ref */.iH)(false);
+    /** Входящие значения открытых дверей */
+    const onReceiveValue = res => {
+      isLoadedValue.value = res.isData;
       if (res.isData) {
-        receiveClock.value = res.receiveClock;
-        receiveButtons.value = res.receiveButtons;
-        receiveText.value = res.receiveText;
-        sendButton.value = res.sendButton;
-        sendClimate.value = res.sendClimate;
-        sendDoors.value = res.sendDoors;
-        parseVolume.value = res.parseVolume;
-        lcdShow.value = res.lcdShow;
+        doorFL.value = res.frontLeft;
+        doorFR.value = res.frontRight;
+        doorBL.value = res.backLeft;
+        doorBR.value = res.backRight;
+        trunk.value = res.trunk;
       }
     };
-    /** Применить новые значения конфигурации Teyes */
-    const onApplyTeyesConfig = () => {
-      const {
-        teyes
-      } = canbus/* default.configs */.ZP.configs;
-      teyes.receiveClock = receiveClock.value;
-      teyes.receiveButtons = receiveButtons.value;
-      teyes.receiveText = receiveText.value;
-      teyes.sendButton = sendButton.value;
-      teyes.sendClimate = sendClimate.value;
-      teyes.sendDoors = sendDoors.value;
-      teyes.parseVolume = parseVolume.value;
-      teyes.lcdShow = lcdShow.value;
-      canbus/* default.queryConfig */.ZP.queryConfig(pjcan_teyes/* API_EXEC_TEYES_CONFIG */.hC);
-    };
-    /**
-     * Входящие значения отображения
-     * @param {ITeyesView} res
-     */
-    const onReceiveTeyesView = res => {
-      loadedTeyesView.value = res.isData;
+    /** Входящие значения отображения открытых дверей */
+    const onReceiveView = res => {
+      isLoadedView.value = res.isData;
     };
     // регистрируем события
     (0,runtime_core_esm_bundler/* onMounted */.bv)(() => {
-      canbus/* default.addListener */.ZP.addListener(canbus/* API_EVENT_TEYES_CONFIG */.QS, onReceiveTeyesConfig);
-      canbus/* default.addListener */.ZP.addListener(canbus/* API_EVENT_TEYES_VIEW */.L8, onReceiveTeyesView);
-      onReceiveTeyesConfig(canbus/* default.configs.teyes */.ZP.configs.teyes);
-      onReceiveTeyesView(canbus/* default.views.teyes */.ZP.views.teyes);
+      canbus/* default.addListener */.Z.addListener(doors/* API_VARIABLE_DOORS_EVENT */.bI, onReceiveValue);
+      canbus/* default.addListener */.Z.addListener(doors/* API_VARIABLE_DOORS_VIEW_EVENT */.Xl, onReceiveView);
+      onReceiveValue(canbus/* default.values.variable.doors */.Z.values.variable.doors);
+      onReceiveView(canbus/* default.views.variable.doors */.Z.views.variable.doors);
     });
     // удаляем события
     (0,runtime_core_esm_bundler/* onUnmounted */.Ah)(() => {
-      canbus/* default.removeListener */.ZP.removeListener(canbus/* API_EVENT_TEYES_CONFIG */.QS, onReceiveTeyesConfig);
-      canbus/* default.removeListener */.ZP.removeListener(canbus/* API_EVENT_TEYES_VIEW */.L8, onReceiveTeyesView);
+      canbus/* default.removeListener */.Z.removeListener(doors/* API_VARIABLE_DOORS_EVENT */.bI, onReceiveValue);
+      canbus/* default.removeListener */.Z.removeListener(doors/* API_VARIABLE_DOORS_VIEW_EVENT */.Xl, onReceiveView);
     });
     // МЕНЮ ОТОБРАЖЕНИЯ
     const menu = (0,runtime_core_esm_bundler/* computed */.Fl)(() => [{
       id: 0,
-      title: t("options.teyes.lcdShow.menu")
+      title: t("onboard.doors.menu")
     }]);
+    const menuVisible = (0,reactivity_esm_bundler/* ref */.iH)(false);
+    const menuSelected = (0,reactivity_esm_bundler/* ref */.iH)({});
+    const menuViewConfig = (0,reactivity_esm_bundler/* ref */.iH)({});
     /**
      * Выбор пункта меню отображения на информационном экране
      * @param {IMenuItem} item Элемент меню
@@ -15565,60 +17003,629 @@ var pjcan_teyes = __webpack_require__(8674);
     const onMenuClick = item => {
       menuVisible.value = true;
       menuSelected.value = item;
-      menuViewConfig.value = canbus/* default.views.teyes.view */.ZP.views.teyes.view;
+      menuViewConfig.value = canbus/* default.views.variable.doors.view */.Z.views.variable.doors.view;
     };
     /**
      * Применить параметры отображения на информационном экране
      * @param {IViewConfig} data Новые параметры отображения
      */
     const onViewSettingApply = data => {
-      canbus/* default.views.teyes.view */.ZP.views.teyes.view = data;
-      canbus/* default.queryView */.ZP.queryView(pjcan_teyes/* API_EXEC_TEYES_VIEW */.re);
+      canbus/* default.views.variable.doors.view */.Z.views.variable.doors.view = data;
+      canbus/* default.queryView */.Z.queryView(doors/* API_VARIABLE_DOORS_VIEW_EXEC */.EJ);
     };
     return {
-      loadedTeyesConfig,
-      loadedTeyesView,
-      receiveClock,
-      receiveButtons,
-      receiveText,
-      sendButton,
-      sendClimate,
-      sendDoors,
-      parseVolume,
-      lcdShow,
+      isLoadedView,
+      isLoadedValue,
+      doorFL,
+      doorFR,
+      doorBL,
+      doorBR,
+      trunk,
       menu,
       menuVisible,
       menuSelected,
       menuViewConfig,
-      onApplyTeyesConfig,
       onMenuClick,
       onViewSettingApply
     };
   }
 });
-;// CONCATENATED MODULE: ./src/views/options/components/TeyesCard.vue?vue&type=script&lang=ts
+;// CONCATENATED MODULE: ./src/views/onboard/components/DoorsCard.vue?vue&type=script&lang=ts
  
-;// CONCATENATED MODULE: ./src/views/options/components/TeyesCard.vue
+;// CONCATENATED MODULE: ./src/views/onboard/components/DoorsCard.vue
 
 
 
 
 ;
-const TeyesCard_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(TeyesCardvue_type_script_lang_ts, [['render',TeyesCardvue_type_template_id_a6fde4f2_ts_true_render]])
+const DoorsCard_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(DoorsCardvue_type_script_lang_ts, [['render',DoorsCardvue_type_template_id_5d33d7c0_ts_true_render]])
 
-/* harmony default export */ var TeyesCard = (TeyesCard_exports_);
-;// CONCATENATED MODULE: ./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/options/index.vue?vue&type=script&lang=ts
+/* harmony default export */ var DoorsCard = (DoorsCard_exports_);
+;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/onboard/components/VolumeCard.vue?vue&type=template&id=0b0da0dc&ts=true
+
+function VolumeCardvue_type_template_id_0b0da0dc_ts_true_render(_ctx, _cache, $props, $setup, $data, $options) {
+  const _component_slider_card_item = (0,runtime_core_esm_bundler/* resolveComponent */.up)("slider-card-item");
+                                                      
+                                                      
+  const _component_card = (0,runtime_core_esm_bundler/* resolveComponent */.up)("card");
+  const _component_view_setting_dialog = (0,runtime_core_esm_bundler/* resolveComponent */.up)("view-setting-dialog");
+  return (0,runtime_core_esm_bundler/* openBlock */.wg)(), (0,runtime_core_esm_bundler/* createElementBlock */.iD)(runtime_core_esm_bundler/* Fragment */.HY, null, [(0,runtime_core_esm_bundler/* createVNode */.Wm)(_component_card, {
+    class: "volume-card",
+    title: _ctx.$t('onboard.volume.title'),
+    menu: $setup.menu,
+    "onClick:menu": $setup.onMenuClick
+  }, {
+    body: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VRow/* VRow */.o, null, {
+      default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VCol/* VCol */.D, {
+        cols: "12",
+        class: "pb-0"
+      }, {
+        default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(_component_slider_card_item, {
+          modelValue: $setup.volume,
+          "onUpdate:modelValue": _cache[0] || (_cache[0] = $event => $setup.volume = $event),
+          title: _ctx.$t('onboard.volume.level.title'),
+          description: _ctx.$t('onboard.volume.level.description'),
+          max: $setup.max,
+          nodata: !$setup.isLoadedValue,
+          disabled: !$setup.isLoadedView
+        }, null, 8, ["modelValue", "title", "description", "max", "nodata", "disabled"])]),
+        _: 1
+      })]),
+      _: 1
+    })]),
+    _: 1
+  }, 8, ["title", "menu", "onClick:menu"]), (0,runtime_core_esm_bundler/* createVNode */.Wm)(_component_view_setting_dialog, {
+    modelValue: $setup.menuVisible,
+    "onUpdate:modelValue": _cache[1] || (_cache[1] = $event => $setup.menuVisible = $event),
+    title: $setup.menuSelected.title,
+    enabled: $setup.menuViewConfig.enabled,
+    type: $setup.menuViewConfig.type,
+    time: $setup.menuViewConfig.time,
+    disabled: !$setup.isLoadedView,
+    "onClick:apply": $setup.onViewSettingApply
+  }, null, 8, ["modelValue", "title", "enabled", "type", "time", "disabled", "onClick:apply"])], 64);
+}
+
+/* Vuetify */
+
+
+
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/components/VSlider/VSlider.mjs
+var VSlider = __webpack_require__(5999);
+;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/cards/SliderCardItem.vue?vue&type=template&id=6e405fe2&scoped=true&ts=true
+
+const SliderCardItemvue_type_template_id_6e405fe2_scoped_true_ts_true_withScopeId = n => (_pushScopeId("data-v-6e405fe2"), n = n(), _popScopeId(), n);
+const SliderCardItemvue_type_template_id_6e405fe2_scoped_true_ts_true_hoisted_1 = {
+  class: "slider-card-item"
+};
+const SliderCardItemvue_type_template_id_6e405fe2_scoped_true_ts_true_hoisted_2 = {
+  class: "text-h4"
+};
+const SliderCardItemvue_type_template_id_6e405fe2_scoped_true_ts_true_hoisted_3 = {
+  class: "mt-1 slider-card-item__description"
+};
+function SliderCardItemvue_type_template_id_6e405fe2_scoped_true_ts_true_render(_ctx, _cache, $props, $setup, $data, $options) {
+                                                            
+  return (0,runtime_core_esm_bundler/* openBlock */.wg)(), (0,runtime_core_esm_bundler/* createElementBlock */.iD)("div", SliderCardItemvue_type_template_id_6e405fe2_scoped_true_ts_true_hoisted_1, [(0,runtime_core_esm_bundler/* createElementVNode */._)("div", SliderCardItemvue_type_template_id_6e405fe2_scoped_true_ts_true_hoisted_2, (0,shared_esm_bundler/* toDisplayString */.zw)($props.title), 1), (0,runtime_core_esm_bundler/* createVNode */.Wm)(VSlider/* VSlider */.R, {
+    modelValue: $setup.modelSlider,
+    "onUpdate:modelValue": _cache[0] || (_cache[0] = $event => $setup.modelSlider = $event),
+    min: $props.min,
+    max: $props.max,
+    "prepend-icon": $props.prependIconMdi,
+    "append-icon": $props.appendIconMdi,
+    color: $setup.color(),
+    step: 1,
+    "hide-details": "",
+    "onUpdate:focused": $setup.onFocusedUpdate
+  }, null, 8, ["modelValue", "min", "max", "prepend-icon", "append-icon", "color", "onUpdate:focused"]), (0,runtime_core_esm_bundler/* createElementVNode */._)("div", SliderCardItemvue_type_template_id_6e405fe2_scoped_true_ts_true_hoisted_3, (0,shared_esm_bundler/* toDisplayString */.zw)($props.description), 1)]);
+}
+
+/* Vuetify */
+
+
+
+;// CONCATENATED MODULE: ./src/components/cards/SliderCardItem.vue?vue&type=template&id=6e405fe2&scoped=true&ts=true
+
+;// CONCATENATED MODULE: ./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/cards/SliderCardItem.vue?vue&type=script&lang=ts
+
+/* harmony default export */ var SliderCardItemvue_type_script_lang_ts = ({
+  name: "SliderCardItem",
+  props: {
+    /** Значение slider */
+    modelValue: Number,
+    /** Заголовок */
+    title: String,
+    /** Описание */
+    description: String,
+    /** Минимальное значение */
+    min: {
+      type: Number,
+      default: 0
+    },
+    /** Максимальное значение */
+    max: {
+      type: Number,
+      default: 32
+    },
+    /** Имя MDI иконки в начале */
+    prependIconMdi: {
+      type: String,
+      default: "mdi-volume-minus"
+    },
+    /** Имя MDI иконки в конце */
+    appendIconMdi: {
+      type: String,
+      default: "mdi-volume-plus"
+    },
+    /** Точки */
+    points: {
+      type: Array,
+      default: () => [7, 18, 26, 32]
+    },
+    /** Цвет точки */
+    pointColors: {
+      type: Array,
+      default: () => ["primary", "success", "warning", "error"]
+    }
+  },
+  emits: ["update:modelValue"],
+  setup(props, {
+    emit
+  }) {
+    const {
+      modelValue,
+      points,
+      pointColors
+    } = (0,reactivity_esm_bundler/* toRefs */.BK)(props);
+    const flicking = (0,runtime_core_esm_bundler/* inject */.f3)("flicking");
+    const modelSlider = (0,runtime_core_esm_bundler/* computed */.Fl)({
+      get: () => modelValue.value,
+      set: val => emit("update:modelValue", val)
+    });
+    /**
+     * Блокировка flicking
+     * @param {boolean} ev Статус фокуса
+     */
+    const onFocusedUpdate = ev => {
+      if (ev) flicking.value.disableInput();else flicking.value.enableInput();
+    };
+    /** Цвет */
+    const color = () => {
+      const index = points.value?.findIndex(x => modelSlider.value <= x);
+      return pointColors.value?.[index] ?? "error";
+    };
+    return {
+      flicking,
+      modelSlider,
+      onFocusedUpdate,
+      color
+    };
+  }
+});
+;// CONCATENATED MODULE: ./src/components/cards/SliderCardItem.vue?vue&type=script&lang=ts
+ 
+;// CONCATENATED MODULE: ./node_modules/mini-css-extract-plugin/dist/loader.js??clonedRuleSet-22.use[0]!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/cards/SliderCardItem.vue?vue&type=style&index=0&id=6e405fe2&lang=scss&scoped=true
+// extracted by mini-css-extract-plugin
+
+;// CONCATENATED MODULE: ./src/components/cards/SliderCardItem.vue?vue&type=style&index=0&id=6e405fe2&lang=scss&scoped=true
+
+;// CONCATENATED MODULE: ./src/components/cards/SliderCardItem.vue
+
+
+
+
+;
+
+
+const SliderCardItem_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(SliderCardItemvue_type_script_lang_ts, [['render',SliderCardItemvue_type_template_id_6e405fe2_scoped_true_ts_true_render],['__scopeId',"data-v-6e405fe2"]])
+
+/* harmony default export */ var SliderCardItem = (SliderCardItem_exports_);
+// EXTERNAL MODULE: ./src/models/pjcan/variables/volume/index.ts + 6 modules
+var variables_volume = __webpack_require__(3057);
+;// CONCATENATED MODULE: ./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/onboard/components/VolumeCard.vue?vue&type=script&lang=ts
 
 
 
 
 
-/* harmony default export */ var optionsvue_type_script_lang_ts = ({
-  name: "setting",
+
+
+
+/* harmony default export */ var VolumeCardvue_type_script_lang_ts = ({
+  name: "VolumeCard",
+  components: {
+    Card: Card/* default */.Z,
+    SwitchCardItem: SwitchCardItem/* default */.Z,
+    SliderCardItem: SliderCardItem,
+    ViewSettingDialog: ViewSettingDialog/* default */.Z
+  },
+  setup() {
+    const {
+      t
+    } = (0,vue_i18n_esm_bundler/* useI18n */.QT)();
+    const isLoadedValue = (0,reactivity_esm_bundler/* ref */.iH)(false);
+    const isLoadedView = (0,reactivity_esm_bundler/* ref */.iH)(false);
+    const mute = (0,reactivity_esm_bundler/* ref */.iH)(false);
+    const volume = (0,reactivity_esm_bundler/* ref */.iH)(0);
+    const max = (0,reactivity_esm_bundler/* ref */.iH)(0);
+    let queryValueVolumeDisabled = false;
+    (0,runtime_core_esm_bundler/* watch */.YP)(mute, val => {
+      if (isLoadedValue.value && canbus/* default.values.variable.volume.mute */.Z.values.variable.volume.mute !== val) {
+        canbus/* default.values.variable.volume.mute */.Z.values.variable.volume.mute = val;
+        canbus/* default.queryValue */.Z.queryValue(variables_volume/* API_VARIABLE_VOLUME_EXEC */.pf);
+      }
+    });
+    (0,runtime_core_esm_bundler/* watch */.YP)(volume, val => {
+      if (isLoadedValue.value && canbus/* default.values.variable.volume.volume */.Z.values.variable.volume.volume !== val) {
+        canbus/* default.values.variable.volume.volume */.Z.values.variable.volume.volume = val;
+        if (!queryValueVolumeDisabled) {
+          queryValueVolumeDisabled = true;
+          setTimeout(() => {
+            queryValueVolumeDisabled = false;
+            canbus/* default.queryValue */.Z.queryValue(variables_volume/* API_VARIABLE_VOLUME_EXEC */.pf);
+          }, 250);
+          canbus/* default.queryValue */.Z.queryValue(variables_volume/* API_VARIABLE_VOLUME_EXEC */.pf);
+        }
+      }
+    });
+    // watch(max, (val: number) =>
+    // {
+    // 	if (isLoadedValue.value && canbus.configs.variable.volume.max !== val)
+    // 	{
+    // 		canbus.configs.variable.volume.max = val;
+    // 	}
+    // });
+    /** Входящие значения звука */
+    const onReceiveValue = res => {
+      isLoadedValue.value = res.isData;
+      if (res.isData) {
+        mute.value = res.mute;
+        volume.value = res.volume;
+      }
+    };
+    /** Входящие конфигурация звука */
+    const onReceiveConfig = res => {
+      if (res.isData) {
+        max.value = res.max;
+      }
+    };
+    /** Входящие значения отображения звука */
+    const onReceiveView = res => {
+      isLoadedView.value = res.isData;
+    };
+    // регистрируем события
+    (0,runtime_core_esm_bundler/* onMounted */.bv)(() => {
+      canbus/* default.addListener */.Z.addListener(variables_volume/* API_VARIABLE_VOLUME_EVENT */.FN, onReceiveValue);
+      canbus/* default.addListener */.Z.addListener(variables_volume/* API_VARIABLE_VOLUME_CONFIG_EVENT */.Vy, onReceiveConfig);
+      canbus/* default.addListener */.Z.addListener(variables_volume/* API_VARIABLE_VOLUME_VIEW_EVENT */.H7, onReceiveView);
+      onReceiveValue(canbus/* default.values.variable.volume */.Z.values.variable.volume);
+      onReceiveConfig(canbus/* default.configs.variable.volume */.Z.configs.variable.volume);
+      onReceiveView(canbus/* default.views.variable.volume */.Z.views.variable.volume);
+    });
+    // удаляем события
+    (0,runtime_core_esm_bundler/* onUnmounted */.Ah)(() => {
+      canbus/* default.removeListener */.Z.removeListener(variables_volume/* API_VARIABLE_VOLUME_EVENT */.FN, onReceiveValue);
+      canbus/* default.removeListener */.Z.removeListener(variables_volume/* API_VARIABLE_VOLUME_CONFIG_EVENT */.Vy, onReceiveConfig);
+      canbus/* default.removeListener */.Z.removeListener(variables_volume/* API_VARIABLE_VOLUME_VIEW_EVENT */.H7, onReceiveView);
+    });
+    // МЕНЮ ОТОБРАЖЕНИЯ
+    const menu = (0,runtime_core_esm_bundler/* computed */.Fl)(() => [{
+      id: 0,
+      title: t("onboard.volume.menu")
+    }]);
+    const menuVisible = (0,reactivity_esm_bundler/* ref */.iH)(false);
+    const menuSelected = (0,reactivity_esm_bundler/* ref */.iH)({});
+    const menuViewConfig = (0,reactivity_esm_bundler/* ref */.iH)({});
+    /**
+     * Выбор пункта меню отображения на информационном экране
+     * @param {IMenuItem} item Элемент меню
+     */
+    const onMenuClick = item => {
+      menuVisible.value = true;
+      menuSelected.value = item;
+      menuViewConfig.value = canbus/* default.views.variable.volume.view */.Z.views.variable.volume.view;
+    };
+    /**
+     * Применить параметры отображения на информационном экране
+     * @param {IViewConfig} data Новые параметры отображения
+     */
+    const onViewSettingApply = data => {
+      canbus/* default.views.variable.volume.view */.Z.views.variable.volume.view = data;
+      canbus/* default.queryView */.Z.queryView(variables_volume/* API_VARIABLE_VOLUME_VIEW_EXEC */.Ge);
+    };
+    return {
+      isLoadedValue,
+      isLoadedView,
+      mute,
+      volume,
+      max,
+      menu,
+      menuVisible,
+      menuSelected,
+      menuViewConfig,
+      onMenuClick,
+      onViewSettingApply
+    };
+  }
+});
+;// CONCATENATED MODULE: ./src/views/onboard/components/VolumeCard.vue?vue&type=script&lang=ts
+ 
+;// CONCATENATED MODULE: ./src/views/onboard/components/VolumeCard.vue
+
+
+
+
+;
+const VolumeCard_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(VolumeCardvue_type_script_lang_ts, [['render',VolumeCardvue_type_template_id_0b0da0dc_ts_true_render]])
+
+/* harmony default export */ var VolumeCard = (VolumeCard_exports_);
+;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/onboard/components/ClimateCard.vue?vue&type=template&id=0cf699c6&ts=true
+
+function ClimateCardvue_type_template_id_0cf699c6_ts_true_render(_ctx, _cache, $props, $setup, $data, $options) {
+  const _component_icon_card_item = (0,runtime_core_esm_bundler/* resolveComponent */.up)("icon-card-item");
+                                                      
+  const _component_switch_card_item = (0,runtime_core_esm_bundler/* resolveComponent */.up)("switch-card-item");
+  const _component_input_card_item = (0,runtime_core_esm_bundler/* resolveComponent */.up)("input-card-item");
+                                                      
+  const _component_card = (0,runtime_core_esm_bundler/* resolveComponent */.up)("card");
+  const _component_view_setting_dialog = (0,runtime_core_esm_bundler/* resolveComponent */.up)("view-setting-dialog");
+  return (0,runtime_core_esm_bundler/* openBlock */.wg)(), (0,runtime_core_esm_bundler/* createElementBlock */.iD)(runtime_core_esm_bundler/* Fragment */.HY, null, [(0,runtime_core_esm_bundler/* createVNode */.Wm)(_component_card, {
+    class: "climate-card",
+    title: _ctx.$t('onboard.climate.title'),
+    menu: $setup.menu,
+    "onClick:menu": $setup.onMenuClick
+  }, {
+    body: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VRow/* VRow */.o, null, {
+      default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VCol/* VCol */.D, {
+        cols: "12",
+        class: "pb-0"
+      }, {
+        default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(_component_icon_card_item, {
+          "model-value": [$setup.enabled],
+          title: _ctx.$t('onboard.climate.enabled.title'),
+          description: _ctx.$t('onboard.climate.enabled.description'),
+          "icon-name": ['climate'],
+          nodata: !$setup.isLoadedValue,
+          disabled: !$setup.isLoadedView
+        }, null, 8, ["model-value", "title", "description", "nodata", "disabled"])]),
+        _: 1
+      }), (0,runtime_core_esm_bundler/* createVNode */.Wm)(VCol/* VCol */.D, {
+        cols: "12",
+        class: "pt-0 pb-0"
+      }, {
+        default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(_component_switch_card_item, {
+          "model-value": $setup.autoMode,
+          title: _ctx.$t('onboard.climate.autoMode.title'),
+          description: _ctx.$t('onboard.climate.autoMode.description'),
+          color: "success",
+          nodata: !$setup.isLoadedValue,
+          disabled: !$setup.isLoadedView
+        }, null, 8, ["model-value", "title", "description", "nodata", "disabled"])]),
+        _: 1
+      }), (0,runtime_core_esm_bundler/* createVNode */.Wm)(VCol/* VCol */.D, {
+        cols: "12",
+        class: "pt-0 pb-0"
+      }, {
+        default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(_component_switch_card_item, {
+          "model-value": $setup.ac,
+          title: _ctx.$t('onboard.climate.ac.title'),
+          description: _ctx.$t('onboard.climate.ac.description'),
+          color: "success",
+          nodata: !$setup.isLoadedValue,
+          disabled: !$setup.isLoadedView
+        }, null, 8, ["model-value", "title", "description", "nodata", "disabled"])]),
+        _: 1
+      }), (0,runtime_core_esm_bundler/* createVNode */.Wm)(VCol/* VCol */.D, {
+        cols: "12",
+        class: "pt-0 pb-0"
+      }, {
+        default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(_component_input_card_item, {
+          value: $setup.temperature,
+          title: _ctx.$t('onboard.climate.temperature.title'),
+          description: _ctx.$t('onboard.climate.temperature.description'),
+          type: "temperature",
+          nodata: !$setup.isLoadedValue,
+          disabled: !$setup.isLoadedView
+        }, null, 8, ["value", "title", "description", "nodata", "disabled"])]),
+        _: 1
+      }), (0,runtime_core_esm_bundler/* createVNode */.Wm)(VCol/* VCol */.D, {
+        cols: "12",
+        class: "pt-0 pb-0"
+      }, {
+        default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(_component_icon_card_item, {
+          "model-value": [$setup.airEnabled],
+          title: _ctx.$t('onboard.climate.air.title'),
+          description: _ctx.$t('onboard.climate.air.description'),
+          "icon-name": [$setup.airName],
+          nodata: !$setup.isLoadedValue,
+          disabled: !$setup.isLoadedView
+        }, null, 8, ["model-value", "title", "description", "icon-name", "nodata", "disabled"])]),
+        _: 1
+      }), (0,runtime_core_esm_bundler/* createVNode */.Wm)(VCol/* VCol */.D, {
+        cols: "12",
+        class: "pt-0 pb-0"
+      }, {
+        default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(_component_icon_card_item, {
+          "model-value": [$setup.blowWindshield, $setup.blowEnabled],
+          title: _ctx.$t('onboard.climate.blow.title'),
+          description: _ctx.$t('onboard.climate.blow.description'),
+          "icon-name": ['blow-windshield', $setup.blowName],
+          margin: 10,
+          nodata: !$setup.isLoadedValue,
+          disabled: !$setup.isLoadedView
+        }, null, 8, ["model-value", "title", "description", "icon-name", "nodata", "disabled"])]),
+        _: 1
+      })]),
+      _: 1
+    })]),
+    _: 1
+  }, 8, ["title", "menu", "onClick:menu"]), (0,runtime_core_esm_bundler/* createVNode */.Wm)(_component_view_setting_dialog, {
+    modelValue: $setup.menuVisible,
+    "onUpdate:modelValue": _cache[0] || (_cache[0] = $event => $setup.menuVisible = $event),
+    title: $setup.menuSelected.title,
+    enabled: $setup.menuViewConfig.enabled,
+    type: $setup.menuViewConfig.type,
+    time: $setup.menuViewConfig.time,
+    disabled: !$setup.isLoadedView,
+    "onClick:apply": $setup.onViewSettingApply
+  }, null, 8, ["modelValue", "title", "enabled", "type", "time", "disabled", "onClick:apply"])], 64);
+}
+
+/* Vuetify */
+
+
+
+// EXTERNAL MODULE: ./src/models/pjcan/variables/climate/index.ts + 5 modules
+var climate = __webpack_require__(3910);
+;// CONCATENATED MODULE: ./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/onboard/components/ClimateCard.vue?vue&type=script&lang=ts
+
+
+
+
+
+
+
+
+
+/* harmony default export */ var ClimateCardvue_type_script_lang_ts = ({
+  name: "ClimateCard",
+  components: {
+    Card: Card/* default */.Z,
+    InputCardItem: InputCardItem/* default */.Z,
+    IconCardItem: IconCardItem,
+    SwitchCardItem: SwitchCardItem/* default */.Z,
+    ViewSettingDialog: ViewSettingDialog/* default */.Z
+  },
+  setup() {
+    const {
+      t
+    } = (0,vue_i18n_esm_bundler/* useI18n */.QT)();
+    const isLoadedValue = (0,reactivity_esm_bundler/* ref */.iH)(false);
+    const isLoadedView = (0,reactivity_esm_bundler/* ref */.iH)(false);
+    const enabled = (0,reactivity_esm_bundler/* ref */.iH)(false);
+    const autoMode = (0,reactivity_esm_bundler/* ref */.iH)(false);
+    const ac = (0,reactivity_esm_bundler/* ref */.iH)(false);
+    const temperature = (0,reactivity_esm_bundler/* ref */.iH)(0);
+    const airEnabled = (0,reactivity_esm_bundler/* ref */.iH)(false);
+    const airName = (0,reactivity_esm_bundler/* ref */.iH)("");
+    const blowEnabled = (0,reactivity_esm_bundler/* ref */.iH)(false);
+    const blowName = (0,reactivity_esm_bundler/* ref */.iH)("");
+    const blowWindshield = (0,reactivity_esm_bundler/* ref */.iH)(false);
+    const speedRotation = (0,reactivity_esm_bundler/* ref */.iH)(0);
+    /** Входящие значения климат-контроля */
+    const onReceiveValue = res => {
+      isLoadedValue.value = res.isData;
+      if (res.isData) {
+        enabled.value = res.enabled;
+        autoMode.value = res.automode;
+        ac.value = res.ac;
+        temperature.value = res.temperature / 10;
+        airEnabled.value = res.airType !== climate/* TAir.AIR_NONE */.T1.AIR_NONE;
+        airName.value = res.airType === climate/* TAir.AIR_STREET */.T1.AIR_STREET ? "air-fresh" : "air-cabin";
+        blowEnabled.value = res.airDBody || res.airDLegs;
+        blowName.value = res.airDLegs && res.airDBody ? "blow-feet-body" : res.airDLegs ? "blow-feet" : res.airDBody ? "blow-body" : "blow-none";
+        blowWindshield.value = res.airDWindshield;
+        speedRotation.value = res.airRate > 0 ? res.airRate + 2 : 0;
+      }
+    };
+    /** Входящие значения отображения климат-контроля */
+    const onReceiveView = res => {
+      isLoadedView.value = res.isData;
+    };
+    // регистрируем события
+    (0,runtime_core_esm_bundler/* onMounted */.bv)(() => {
+      canbus/* default.addListener */.Z.addListener(climate/* API_VARIABLE_CLIMATE_EVENT */.n$, onReceiveValue);
+      canbus/* default.addListener */.Z.addListener(climate/* API_VARIABLE_CLIMATE_VIEW_EVENT */.j6, onReceiveView);
+      onReceiveValue(canbus/* default.values.variable.climate */.Z.values.variable.climate);
+      onReceiveView(canbus/* default.views.variable.climate */.Z.views.variable.climate);
+    });
+    // удаляем события
+    (0,runtime_core_esm_bundler/* onUnmounted */.Ah)(() => {
+      canbus/* default.removeListener */.Z.removeListener(climate/* API_VARIABLE_CLIMATE_EVENT */.n$, onReceiveValue);
+      canbus/* default.removeListener */.Z.removeListener(climate/* API_VARIABLE_CLIMATE_VIEW_EVENT */.j6, onReceiveView);
+    });
+    // МЕНЮ ОТОБРАЖЕНИЯ
+    const menu = (0,runtime_core_esm_bundler/* computed */.Fl)(() => [{
+      id: 0,
+      title: t("onboard.climate.menu")
+    }]);
+    const menuVisible = (0,reactivity_esm_bundler/* ref */.iH)(false);
+    const menuSelected = (0,reactivity_esm_bundler/* ref */.iH)({});
+    const menuViewConfig = (0,reactivity_esm_bundler/* ref */.iH)({});
+    /**
+     * Выбор пункта меню отображения на информационном экране
+     * @param {IMenuItem} item Элемент меню
+     */
+    const onMenuClick = item => {
+      menuVisible.value = true;
+      menuSelected.value = item;
+      menuViewConfig.value = canbus/* default.views.variable.climate.view */.Z.views.variable.climate.view;
+    };
+    /**
+     * Применить параметры отображения на информационном экране
+     * @param {IViewConfig} data Новые параметры отображения
+     */
+    const onViewSettingApply = data => {
+      canbus/* default.views.variable.climate.view */.Z.views.variable.climate.view = data;
+      canbus/* default.queryView */.Z.queryView(climate/* API_VARIABLE_CLIMATE_VIEW_EXEC */.EW);
+    };
+    return {
+      isLoadedValue,
+      isLoadedView,
+      enabled,
+      autoMode,
+      ac,
+      temperature,
+      airEnabled,
+      airName,
+      blowEnabled,
+      blowName,
+      blowWindshield,
+      speedRotation,
+      menu,
+      menuVisible,
+      menuSelected,
+      menuViewConfig,
+      onMenuClick,
+      onViewSettingApply
+    };
+  }
+});
+;// CONCATENATED MODULE: ./src/views/onboard/components/ClimateCard.vue?vue&type=script&lang=ts
+ 
+;// CONCATENATED MODULE: ./src/views/onboard/components/ClimateCard.vue
+
+
+
+
+;
+const ClimateCard_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(ClimateCardvue_type_script_lang_ts, [['render',ClimateCardvue_type_template_id_0cf699c6_ts_true_render]])
+
+/* harmony default export */ var ClimateCard = (ClimateCard_exports_);
+;// CONCATENATED MODULE: ./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/onboard/index.vue?vue&type=script&lang=ts
+
+
+
+
+
+
+
+
+
+
+
+
+/* harmony default export */ var onboardvue_type_script_lang_ts = ({
+  name: "onboard",
   components: {
     Flicking: flicking_esm/* default */.Co,
-    LcdCard: LcdCard,
-    TeyesCard: TeyesCard
+    InfoCard: InfoCard,
+    EngineCard: EngineCard,
+    FuelCard: FuelCard,
+    MovementCard: MovementCard,
+    DoorsCard: DoorsCard,
+    VolumeCard: VolumeCard,
+    ClimateCard: ClimateCard
   },
   setup() {
     const {
@@ -15626,22 +17633,24 @@ const TeyesCard_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(TeyesCar
     } = (0,composables_display/* useDisplay */.AW)();
     const flicking = (0,reactivity_esm_bundler/* ref */.iH)(null);
     (0,runtime_core_esm_bundler/* provide */.JJ)("flicking", flicking);
-    const cards = (0,runtime_core_esm_bundler/* computed */.Fl)(() => ["lcd", "teyes"]);
+    const onboardCardList = (0,runtime_core_esm_bundler/* computed */.Fl)(() => store/* default.getters.app/onboardCardList */.Z.getters["app/onboardCardList"]);
+    (0,runtime_core_esm_bundler/* onMounted */.bv)(() => canbus/* default.startFetchValue */.Z.startFetchValue());
+    (0,runtime_core_esm_bundler/* onUnmounted */.Ah)(() => canbus/* default.stopFetchValue */.Z.stopFetchValue());
     return {
       flicking,
-      cards,
+      onboardCardList,
       display
     };
   }
 });
-;// CONCATENATED MODULE: ./src/views/options/index.vue?vue&type=script&lang=ts
+;// CONCATENATED MODULE: ./src/views/onboard/index.vue?vue&type=script&lang=ts
  
-;// CONCATENATED MODULE: ./node_modules/mini-css-extract-plugin/dist/loader.js??clonedRuleSet-22.use[0]!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/options/index.vue?vue&type=style&index=0&id=d43f7346&lang=scss&scoped=true
+;// CONCATENATED MODULE: ./node_modules/mini-css-extract-plugin/dist/loader.js??clonedRuleSet-22.use[0]!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/onboard/index.vue?vue&type=style&index=0&id=5fa82662&lang=scss&scoped=true
 // extracted by mini-css-extract-plugin
 
-;// CONCATENATED MODULE: ./src/views/options/index.vue?vue&type=style&index=0&id=d43f7346&lang=scss&scoped=true
+;// CONCATENATED MODULE: ./src/views/onboard/index.vue?vue&type=style&index=0&id=5fa82662&lang=scss&scoped=true
 
-;// CONCATENATED MODULE: ./src/views/options/index.vue
+;// CONCATENATED MODULE: ./src/views/onboard/index.vue
 
 
 
@@ -15649,9 +17658,9 @@ const TeyesCard_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(TeyesCar
 ;
 
 
-const options_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(optionsvue_type_script_lang_ts, [['render',render],['__scopeId',"data-v-d43f7346"]])
+const onboard_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(onboardvue_type_script_lang_ts, [['render',render],['__scopeId',"data-v-5fa82662"]])
 
-/* harmony default export */ var options = (options_exports_);
+/* harmony default export */ var onboard = (onboard_exports_);
 
 /***/ })
 

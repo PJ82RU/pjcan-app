@@ -2579,8 +2579,8 @@ html.v-overlay-scroll-blocked {
   margin-top: 8px;
   max-height: calc(100% - 16px);
 }
-.dialog__title[data-v-7d896028]{width:calc(100% - 32px);overflow:hidden;text-overflow:ellipsis}.dialog__text[data-v-7d896028]{overflow-y:auto;color:#bbb}.dialog__info[data-v-7d896028]{font-weight:300;font-size:1rem;line-height:1.25rem;color:#78909c}.dialog__info[data-v-7d896028] b{color:#0b677b;font-weight:600}.dialog__icon[data-v-7d896028] .v-icon{margin-bottom:4px}.dialog__btns[data-v-7d896028] .v-icon{font-size:2rem !important}
-.bluetooth-btn[data-v-553e80d3] .mdi-bluetooth-off{color:#ef5350}
+.dialog__title[data-v-de2bc336]{width:calc(100% - 32px);overflow:hidden;text-overflow:ellipsis}.dialog__text[data-v-de2bc336]{overflow-y:auto;color:#bbb;white-space:pre-line}.dialog__info[data-v-de2bc336]{font-weight:300;font-size:1rem;line-height:1.25rem;color:#78909c}.dialog__info[data-v-de2bc336] b{color:#0b677b;font-weight:600}.dialog__icon[data-v-de2bc336] .v-icon{margin-bottom:4px}.dialog__btns[data-v-de2bc336] .v-icon{font-size:2rem !important}
+.bluetooth-btn[data-v-690e3d95] .mdi-bluetooth-off{color:#ef5350}
 .v-menu .v-overlay__content {
   display: flex;
   flex-direction: column;
@@ -3909,9 +3909,9 @@ textarea.v-field__input::placeholder {
   font-size: 12px;
   transition-duration: 150ms;
 }
-.onboard-buttons__btns-main[data-v-3c53dcd2]{width:100%;height:64px}.onboard-buttons__btns-main[data-v-3c53dcd2] .v-btn{width:50%}.onboard-buttons__btns-main[data-v-3c53dcd2] .v-btn__content{font-size:2rem;line-height:2.25rem}.onboard-buttons__btns-added[data-v-3c53dcd2]{width:100%}.onboard-buttons__btns-added[data-v-3c53dcd2] .v-btn{width:25%}.onboard-buttons__btns-main[data-v-3c53dcd2],.onboard-buttons__btns-added[data-v-3c53dcd2]{box-shadow:0 3px 1px -2px var(--v-shadow-key-umbra-opacity, rgba(0, 0, 0, 0.2)),0px 2px 2px 0px var(--v-shadow-key-penumbra-opacity, rgba(0, 0, 0, 0.14)),0px 1px 5px 0px var(--v-shadow-key-penumbra-opacity, rgba(0, 0, 0, 0.12))}
+.onboard-buttons__btns-main[data-v-04c12fd8]{width:100%;height:64px}.onboard-buttons__btns-main[data-v-04c12fd8] .v-btn{width:50%}.onboard-buttons__btns-main[data-v-04c12fd8] .v-btn__content{font-size:2rem;line-height:2.25rem}.onboard-buttons__btns-added[data-v-04c12fd8]{width:100%}.onboard-buttons__btns-added[data-v-04c12fd8] .v-btn{width:25%}.onboard-buttons__btns-main[data-v-04c12fd8],.onboard-buttons__btns-added[data-v-04c12fd8]{box-shadow:0 3px 1px -2px var(--v-shadow-key-umbra-opacity, rgba(0, 0, 0, 0.2)),0px 2px 2px 0px var(--v-shadow-key-penumbra-opacity, rgba(0, 0, 0, 0.14)),0px 1px 5px 0px var(--v-shadow-key-penumbra-opacity, rgba(0, 0, 0, 0.12))}
 .input-card-item__message.nodata[data-v-43fa4ace] .v-text-field__suffix{color:#676b6d}.input-card-item__message[data-v-43fa4ace] .v-text-field__suffix{font-family:"Jura","Roboto",sans-serif !important}.input-card-item__value[data-v-43fa4ace]{max-width:80px;min-width:80px;font-family:"Jura","Roboto",sans-serif}.input-card-item__value.nodata[data-v-43fa4ace]{color:#676b6d}.input-card-item__value[data-v-43fa4ace] input{color:var(--v-theme-primary)}
-.test__text[data-v-031e535a]{width:100%}.test__text[data-v-031e535a] .v-text-field__suffix{font-family:"Jura","Roboto",sans-serif !important}
+.test__text[data-v-27d22c97]{width:100%}.test__text[data-v-27d22c97] .v-text-field__suffix{font-family:"Jura","Roboto",sans-serif !important}
 .v-input--density-default {
   --select-chips-margin-bottom: 0px;
 }
@@ -4420,7 +4420,7 @@ textarea.v-field__input::placeholder {
   flex-wrap: wrap;
   white-space: normal;
 }
-.base-layout__bg[data-v-3d9f126c]{position:fixed;top:0;left:0;width:100%;height:100%;background:center url(/pjcan-app/img/tire-track.7207681b.svg);opacity:10%;z-index:0}.base-layout__main[data-v-3d9f126c]{position:fixed;top:50px;left:0;padding:16px}.base-layout__onboard-buttons[data-v-3d9f126c]{font-size:1.25rem !important;line-height:1.5rem !important}
+.base-layout__bg[data-v-6c00d974]{position:fixed;top:0;left:0;width:100%;height:100%;background:center url(/pjcan-app/img/tire-track.7207681b.svg);opacity:10%;z-index:0}.base-layout__main[data-v-6c00d974]{position:fixed;top:50px;left:0;padding:16px}.base-layout__onboard-buttons[data-v-6c00d974]{font-size:1.25rem !important;line-height:1.5rem !important}
 /* MaterialDesignIcons.com */
 @font-face {
   font-family: "Material Design Icons";

@@ -1,5 +1,5 @@
 "use strict";
-(self["webpackChunkpjcan"] = self["webpackChunkpjcan"] || []).push([[603],{
+(self["webpackChunkpjcan"] = self["webpackChunkpjcan"] || []).push([[724],{
 
 /***/ 7637:
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
@@ -14680,7 +14680,7 @@ const __exports__ = /*#__PURE__*/(0,exportHelper/* default */.Z)(Cardvue_type_sc
 
 /***/ }),
 
-/***/ 603:
+/***/ 4724:
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 // ESM COMPAT FLAG
@@ -14695,7 +14695,7 @@ __webpack_require__.d(__webpack_exports__, {
 var runtime_core_esm_bundler = __webpack_require__(3396);
 // EXTERNAL MODULE: ./node_modules/@vue/shared/dist/shared.esm-bundler.js
 var shared_esm_bundler = __webpack_require__(7139);
-;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/buttons/index.vue?vue&type=template&id=84b5a296&scoped=true&ts=true
+;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/buttons/index.vue?vue&type=template&id=11d0497a&scoped=true&ts=true
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_settings_card = (0,runtime_core_esm_bundler/* resolveComponent */.up)("settings-card");
@@ -14751,8 +14751,6 @@ var reactivity_esm_bundler = __webpack_require__(4870);
 var composables_display = __webpack_require__(8157);
 // EXTERNAL MODULE: ./node_modules/vue-i18n/dist/vue-i18n.esm-bundler.js + 4 modules
 var vue_i18n_esm_bundler = __webpack_require__(5658);
-// EXTERNAL MODULE: ./src/api/canbus.ts + 82 modules
-var canbus = __webpack_require__(2223);
 // EXTERNAL MODULE: ./node_modules/@egjs/vue3-flicking/dist/flicking.esm.js + 7 modules
 var flicking_esm = __webpack_require__(7637);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/components/VGrid/VRow.mjs
@@ -15101,7 +15099,7 @@ function ButtonDefinitionDialogvue_type_template_id_0c5763c9_scoped_true_ts_true
 
 
 // EXTERNAL MODULE: ./src/components/DialogTemplate.vue + 6 modules
-var DialogTemplate = __webpack_require__(8745);
+var DialogTemplate = __webpack_require__(8334);
 ;// CONCATENATED MODULE: ./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/buttons/components/ButtonDefinitionDialog.vue?vue&type=script&lang=ts
 
 
@@ -15177,6 +15175,8 @@ const ButtonDefinitionDialog_exports_ = /*#__PURE__*/(0,exportHelper/* default *
 /* harmony default export */ var ButtonDefinitionDialog = (ButtonDefinitionDialog_exports_);
 // EXTERNAL MODULE: ./src/models/pjcan/button/index.ts + 7 modules
 var pjcan_button = __webpack_require__(1483);
+// EXTERNAL MODULE: ./src/api/canbus.ts + 18 modules
+var canbus = __webpack_require__(3956);
 ;// CONCATENATED MODULE: ./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/buttons/index.vue?vue&type=script&lang=ts
 
 
@@ -15210,7 +15210,7 @@ var pjcan_button = __webpack_require__(1483);
     const buttons = (0,reactivity_esm_bundler/* ref */.iH)([]);
     /** Обновление списка конфигураций кнопок */
     const buttonItemsUpdate = () => {
-      canbus/* default.configs.buttons.items */.ZP.configs.buttons.items?.forEach((x, i) => {
+      canbus/* default.configs.buttons.items */.Z.configs.buttons.items?.forEach((x, i) => {
         if (!buttons.value?.[i]) buttons.value.push({});
         const res = buttons.value[i];
         res.inR = x.inR;
@@ -15259,9 +15259,9 @@ var pjcan_button = __webpack_require__(1483);
      * @param {boolean} enabled Вкл/выкл
      */
     const enabledSendValue = enabled => {
-      if (enabled !== canbus/* default.configs.buttons.sendValue */.ZP.configs.buttons.sendValue) {
-        canbus/* default.configs.buttons.sendValue */.ZP.configs.buttons.sendValue = enabled;
-        canbus/* default.queryConfig */.ZP.queryConfig(pjcan_button/* API_EXEC_BUTTONS_CONFIG */.zL);
+      if (enabled !== canbus/* default.configs.buttons.sendValue */.Z.configs.buttons.sendValue) {
+        canbus/* default.configs.buttons.sendValue */.Z.configs.buttons.sendValue = enabled;
+        canbus/* default.queryConfig */.Z.queryConfig(pjcan_button/* API_BUTTONS_CONFIG_EXEC */.XY);
       }
     };
     /**
@@ -15290,15 +15290,15 @@ var pjcan_button = __webpack_require__(1483);
     };
     // регистрируем события
     (0,runtime_core_esm_bundler/* onMounted */.bv)(() => {
-      canbus/* default.addListener */.ZP.addListener(canbus/* API_EVENT_BUTTONS_CONFIG */.Zy, onReceiveConfig);
-      canbus/* default.addListener */.ZP.addListener(canbus/* API_EVENT_BUTTON */.lK, onReceiveValue);
-      onReceiveConfig(canbus/* default.configs.buttons */.ZP.configs.buttons);
+      canbus/* default.addListener */.Z.addListener(pjcan_button/* API_BUTTONS_CONFIG_EVENT */.MM, onReceiveConfig);
+      canbus/* default.addListener */.Z.addListener(pjcan_button/* API_BUTTON_EVENT */.Ai, onReceiveValue);
+      onReceiveConfig(canbus/* default.configs.buttons */.Z.configs.buttons);
       // onReceiveValue(canbus.buttonValue);
     });
     // удаляем события
     (0,runtime_core_esm_bundler/* onUnmounted */.Ah)(() => {
-      canbus/* default.removeListener */.ZP.removeListener(canbus/* API_EVENT_BUTTONS_CONFIG */.Zy, onReceiveConfig);
-      canbus/* default.removeListener */.ZP.removeListener(canbus/* API_EVENT_BUTTON */.lK, onReceiveValue);
+      canbus/* default.removeListener */.Z.removeListener(pjcan_button/* API_BUTTONS_CONFIG_EVENT */.MM, onReceiveConfig);
+      canbus/* default.removeListener */.Z.removeListener(pjcan_button/* API_BUTTON_EVENT */.Ai, onReceiveValue);
       enabledSendValue(false);
     });
     /** Изменение значений конфигурации кнопок */
@@ -15306,7 +15306,7 @@ var pjcan_button = __webpack_require__(1483);
       if (receiveConfig) return;
       const {
         items
-      } = canbus/* default.configs.buttons */.ZP.configs.buttons;
+      } = canbus/* default.configs.buttons */.Z.configs.buttons;
       buttons.value.forEach((x, i) => {
         const res = items[i];
         res.inR = x.inR;
@@ -15316,16 +15316,16 @@ var pjcan_button = __webpack_require__(1483);
         res.exec[pjcan_button/* TButtonPress.PRESS_HOLD */.AV.PRESS_HOLD] = x.pressHold;
         res.exec[pjcan_button/* TButtonPress.RELEASE */.AV.RELEASE] = x.release;
       });
-      canbus/* default.queryConfig */.ZP.queryConfig(pjcan_button/* API_EXEC_BUTTONS_CONFIG */.zL);
+      canbus/* default.queryConfig */.Z.queryConfig(pjcan_button/* API_BUTTONS_CONFIG_EXEC */.XY);
     };
     /**
      * Применить новый тип не определенной кнопки
      * @param {number} type Тип кнопки
      */
     const onButtonDefinitionApply = type => {
-      canbus/* default.configs.buttons.items */.ZP.configs.buttons.items[type].inR = resistanceButtonDefinition.value;
-      canbus/* default.queryConfig */.ZP.queryConfig(pjcan_button/* API_EXEC_BUTTONS_CONFIG */.zL);
-      onReceiveConfig(canbus/* default.configs.buttons */.ZP.configs.buttons);
+      canbus/* default.configs.buttons.items */.Z.configs.buttons.items[type].inR = resistanceButtonDefinition.value;
+      canbus/* default.queryConfig */.Z.queryConfig(pjcan_button/* API_BUTTONS_CONFIG_EXEC */.XY);
+      onReceiveConfig(canbus/* default.configs.buttons */.Z.configs.buttons);
     };
     return {
       flicking,
@@ -15343,10 +15343,10 @@ var pjcan_button = __webpack_require__(1483);
 });
 ;// CONCATENATED MODULE: ./src/views/buttons/index.vue?vue&type=script&lang=ts
  
-;// CONCATENATED MODULE: ./node_modules/mini-css-extract-plugin/dist/loader.js??clonedRuleSet-22.use[0]!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/buttons/index.vue?vue&type=style&index=0&id=84b5a296&lang=scss&scoped=true
+;// CONCATENATED MODULE: ./node_modules/mini-css-extract-plugin/dist/loader.js??clonedRuleSet-22.use[0]!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/buttons/index.vue?vue&type=style&index=0&id=11d0497a&lang=scss&scoped=true
 // extracted by mini-css-extract-plugin
 
-;// CONCATENATED MODULE: ./src/views/buttons/index.vue?vue&type=style&index=0&id=84b5a296&lang=scss&scoped=true
+;// CONCATENATED MODULE: ./src/views/buttons/index.vue?vue&type=style&index=0&id=11d0497a&lang=scss&scoped=true
 
 ;// CONCATENATED MODULE: ./src/views/buttons/index.vue
 
@@ -15356,7 +15356,7 @@ var pjcan_button = __webpack_require__(1483);
 ;
 
 
-const buttons_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(buttonsvue_type_script_lang_ts, [['render',render],['__scopeId',"data-v-84b5a296"]])
+const buttons_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(buttonsvue_type_script_lang_ts, [['render',render],['__scopeId',"data-v-11d0497a"]])
 
 /* harmony default export */ var buttons = (buttons_exports_);
 
