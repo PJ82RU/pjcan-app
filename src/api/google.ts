@@ -1,14 +1,14 @@
 import request from "@/utils/request";
 import { IScanCan } from "@/models/interfaces/IScanCan";
 
-export const setScanCan = (
-	data: IScanCan,
-	deflationId: string = "AKfycbwwyYUAfw0ku3nx9C__GLF4FByf3UF70jNL5oFgNnHaRqkj5vqzxWDcrhQiX6w463yPSw"
-) =>
+export const setScanCan = (data: IScanCan) =>
 {
+	const id = process.env.APP_GOOGLE_APPS_SCRIPT_ID;
 	return request({
-		url: `https://script.google.com/macros/s/${deflationId}/exec`,
-		data: JSON.stringify(data),
-		method: "POST"
+		url: `https://script.google.com/macros/s/${id}/exec`,
+		method: "POST",
+		params: {
+			data: JSON.stringify(data)
+		}
 	});
 };

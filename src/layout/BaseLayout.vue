@@ -171,7 +171,38 @@ export default {
 			// ТЕСТИРОВАНИЕ
 			const data: IScanCan = {
 				mac: "a1:76:4e:19:9c:14",
-				rows: [{ id: 1024, data: [0, 1, 2, 3], hexId: "0x400", hexData: "0x00010203" }]
+				rows: [
+					{ id: 1024, data: [0, 1, 2, 3], hexId: "0x400", hexData: "0x00010203" },
+					{ id: 1024, data: [0, 1, 2, 3], hexId: "0x400", hexData: "0x00010203" },
+					{ id: 1024, data: [0, 1, 2, 3], hexId: "0x400", hexData: "0x00010203" },
+					{ id: 1024, data: [0, 1, 2, 3], hexId: "0x400", hexData: "0x00010203" },
+					{ id: 1024, data: [0, 1, 2, 3], hexId: "0x400", hexData: "0x00010203" },
+					{ id: 1024, data: [0, 1, 2, 3], hexId: "0x400", hexData: "0x00010203" },
+					{ id: 1024, data: [0, 1, 2, 3], hexId: "0x400", hexData: "0x00010203" },
+					{ id: 1024, data: [0, 1, 2, 3], hexId: "0x400", hexData: "0x00010203" },
+					{ id: 1024, data: [0, 1, 2, 3], hexId: "0x400", hexData: "0x00010203" },
+					{ id: 1024, data: [0, 1, 2, 3], hexId: "0x400", hexData: "0x00010203" },
+					{ id: 1024, data: [0, 1, 2, 3], hexId: "0x400", hexData: "0x00010203" },
+					{ id: 1024, data: [0, 1, 2, 3], hexId: "0x400", hexData: "0x00010203" },
+					{ id: 1024, data: [0, 1, 2, 3], hexId: "0x400", hexData: "0x00010203" },
+					{ id: 1024, data: [0, 1, 2, 3], hexId: "0x400", hexData: "0x00010203" },
+					{ id: 1024, data: [0, 1, 2, 3], hexId: "0x400", hexData: "0x00010203" },
+					{ id: 1024, data: [0, 1, 2, 3], hexId: "0x400", hexData: "0x00010203" },
+					{ id: 1024, data: [0, 1, 2, 3], hexId: "0x400", hexData: "0x00010203" },
+					{ id: 1024, data: [0, 1, 2, 3], hexId: "0x400", hexData: "0x00010203" },
+					{ id: 1024, data: [0, 1, 2, 3], hexId: "0x400", hexData: "0x00010203" },
+					{ id: 1024, data: [0, 1, 2, 3], hexId: "0x400", hexData: "0x00010203" },
+					{ id: 1024, data: [0, 1, 2, 3], hexId: "0x400", hexData: "0x00010203" },
+					{ id: 1024, data: [0, 1, 2, 3], hexId: "0x400", hexData: "0x00010203" },
+					{ id: 1024, data: [0, 1, 2, 3], hexId: "0x400", hexData: "0x00010203" },
+					{ id: 1024, data: [0, 1, 2, 3], hexId: "0x400", hexData: "0x00010203" },
+					{ id: 1024, data: [0, 1, 2, 3], hexId: "0x400", hexData: "0x00010203" },
+					{ id: 1024, data: [0, 1, 2, 3], hexId: "0x400", hexData: "0x00010203" },
+					{ id: 1024, data: [0, 1, 2, 3], hexId: "0x400", hexData: "0x00010203" },
+					{ id: 1024, data: [0, 1, 2, 3], hexId: "0x400", hexData: "0x00010203" },
+					{ id: 1024, data: [0, 1, 2, 3], hexId: "0x400", hexData: "0x00010203" },
+					{ id: 1024, data: [0, 1, 2, 3], hexId: "0x400", hexData: "0x00010203" }
+				]
 			};
 			console.log("setScanCan", data);
 			setScanCan(data).then(res =>
