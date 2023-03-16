@@ -4,6 +4,7 @@ import { API_LCD_VALUE_SIZE, StructLCDValue } from "./StructLCDValue";
 import { ILCDValue } from "./ILCDValue";
 
 export const API_LCD_VALUE_EXEC = 40;
+export const API_LCD_EVENT = "LCDValue";
 
 const struct = new BluetoothStruct(StructLCDValue);
 

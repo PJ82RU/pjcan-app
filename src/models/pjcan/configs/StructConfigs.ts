@@ -4,7 +4,7 @@ import { API_DEVICE_CONFIG_SIZE, StructDeviceConfig } from "@/models/pjcan/devic
 import { API_BUTTONS_CONFIG_SIZE, StructButtonsConfig } from "../button";
 import { API_CAR_CONFIG_SIZE, StructCarConfig } from "../car";
 import { API_TEYES_CONFIG_SIZE, StructTeyesConfig } from "../teyes";
-import { API_VARIABLE_CONFIG_SIZE, StructVariableConfigs } from "../variables/configs";
+import { API_VARIABLE_CONFIGS_SIZE, StructVariableConfigs } from "../variables/configs";
 
 export const API_CONFIG_SIZE =
 	API_VERSION_SIZE +
@@ -12,7 +12,7 @@ export const API_CONFIG_SIZE =
 	API_BUTTONS_CONFIG_SIZE +
 	API_CAR_CONFIG_SIZE +
 	API_TEYES_CONFIG_SIZE +
-	API_VARIABLE_CONFIG_SIZE;
+	API_VARIABLE_CONFIGS_SIZE;
 
 export const StructConfigs = {
 	version: BluetoothStruct.struct(StructVersion),

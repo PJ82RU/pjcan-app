@@ -1,12 +1,13 @@
 import { BluetoothStruct } from "@/components/bluetooth";
 import { BaseModel } from "../base";
-import { API_VALUE_SIZE, StructValues } from "./StructValues";
+import { API_VALUES_SIZE, StructValues } from "./StructValues";
 import { IValues } from "./IValues";
 import { DeviceValue } from "../device";
 import { LCDValue } from "../lcd";
 import { VariablesValue } from "../variables/values";
 
-export const API_VALUE_EXEC = 3;
+export const API_VALUES_EXEC = 3;
+export const API_VALUES_EVENT = "Values";
 
 const struct = new BluetoothStruct(StructValues);
 
@@ -28,7 +29,7 @@ export class Values extends BaseModel implements IValues
 	 */
 	set(buf: DataView): boolean
 	{
-		const result = this._set(this, API_VALUE_EXEC, API_VALUE_SIZE + 1, struct, buf);
+		const result = this._set(this, API_VALUES_EXEC, API_VALUES_SIZE + 1, struct, buf);
 		if (result)
 		{
 			this.device.isData = true;
@@ -48,6 +49,6 @@ export class Values extends BaseModel implements IValues
 	/** Чтение данных */
 	get(): DataView | undefined
 	{
-		return this._get(this, API_VALUE_EXEC, 1);
+		return this._get(this, API_VALUES_EXEC, 1);
 	}
 }

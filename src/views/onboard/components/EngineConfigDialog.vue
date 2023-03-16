@@ -13,7 +13,9 @@
 				<v-col cols="12" class="pt-0 pb-0">
 					<switch-card-item
 						v-model="showDays"
-						:title="$t('onboard.engine.settings.showDays.' + ($vuetify.display.xs ? 'titleShort' : 'title'))"
+						:title="
+							$t('onboard.engine.settings.showDays.' + ($vuetify.display.xs ? 'titleShort' : 'title'))
+						"
 						:description="$t('onboard.engine.settings.showDays.description')"
 						:disabled="!loaderConfigEngine"
 					/>
@@ -63,9 +65,13 @@ import DialogTemplate from "@/components/DialogTemplate.vue";
 import SwitchCardItem from "@/components/cards/SwitchCardItem.vue";
 import NumberField from "@/components/common/NumberField.vue";
 
-import canbus, { API_VARIABLE_ENGINE_CONFIG_EVENT } from "@/api/canbus";
+import {
+	API_VARIABLE_ENGINE_CONFIG_EXEC,
+	API_VARIABLE_ENGINE_CONFIG_EVENT,
+	IEngineConfig
+} from "@/models/pjcan/variables/engine";
 
-import { API_VARIABLE_ENGINE_CONFIG_EXEC, IEngineConfig } from "@/models/pjcan/variables/engine";
+import canbus from "@/api/canbus";
 
 export default {
 	name: "EngineConfig",

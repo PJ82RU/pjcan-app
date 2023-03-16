@@ -114,10 +114,17 @@ import SwitchCardItem from "@/components/cards/SwitchCardItem.vue";
 import ViewSettingDialog from "@/views/onboard/components/ViewSettingDialog.vue";
 import { IMenuItem } from "@/components/MenuDots.vue";
 
-import { API_TEYES_CONFIG_EXEC, API_TEYES_VIEW_EXEC, ITeyesConfig, ITeyesView } from "@/models/pjcan/teyes";
+import {
+	API_TEYES_CONFIG_EVENT,
+	API_TEYES_CONFIG_EXEC,
+	API_TEYES_VIEW_EVENT,
+	API_TEYES_VIEW_EXEC,
+	ITeyesConfig,
+	ITeyesView
+} from "@/models/pjcan/teyes";
 import { IViewConfig } from "@/models/pjcan/view";
 
-import canbus, { API_TEYES_CONFIG_EVENT, API_TEYES_VIEW_EVENT } from "@/api/canbus";
+import canbus from "@/api/canbus";
 
 export default {
 	name: "TeyesCard",

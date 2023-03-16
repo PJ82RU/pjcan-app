@@ -4,6 +4,7 @@ import { API_VARIABLE_CLIMATE_SIZE, StructClimateValue } from "./StructClimateVa
 import { IClimateValue } from "./IClimateValue";
 
 export const API_VARIABLE_CLIMATE_EXEC = 120;
+export const API_VARIABLE_CLIMATE_EVENT = "VariableClimateValue";
 
 const struct = new BluetoothStruct(StructClimateValue);
 

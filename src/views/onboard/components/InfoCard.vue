@@ -101,27 +101,25 @@ import IconCardItem from "@/components/cards/IconCardItem.vue";
 import ViewSettingDialog from "./ViewSettingDialog.vue";
 import { IMenuItem } from "@/components/MenuDots.vue";
 
-import canbus, {
-	API_DEVICE_EVENT,
+import {
 	API_VARIABLE_SENSORS_EVENT,
 	API_VARIABLE_SENSORS_VIEW_EVENT,
-	API_VARIABLE_TEMPERATURE_EVENT,
-	API_VARIABLE_TEMPERATURE_VIEW_EVENT
-} from "@/api/canbus";
-
-import {
 	API_VARIABLE_SENSORS_VIEW_EXEC,
 	ISensorsValue,
 	ISensorsView,
 	TSensorsSignal
 } from "@/models/pjcan/variables/sensors";
 import {
+	API_VARIABLE_TEMPERATURE_EVENT,
+	API_VARIABLE_TEMPERATURE_VIEW_EVENT,
 	API_VARIABLE_TEMPERATURE_VIEW_EXEC,
 	ITemperatureValue,
 	ITemperatureView
 } from "@/models/pjcan/variables/temperature";
 import { IViewConfig } from "@/models/pjcan/view";
-import { IDeviceValue } from "@/models/pjcan/device";
+import { API_DEVICE_EVENT, IDeviceValue } from "@/models/pjcan/device";
+
+import canbus from "@/api/canbus";
 
 export default {
 	name: "InfoCard",

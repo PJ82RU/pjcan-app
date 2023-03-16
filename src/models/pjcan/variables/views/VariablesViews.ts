@@ -10,10 +10,11 @@ import { MovementView } from "../movement";
 import { SensorsView } from "../sensors";
 import { TemperatureView } from "../temperature";
 import { VolumeView } from "../volume";
-import { API_VARIABLE_VIEW_SIZE, StructVariableViews } from "./StructVariableViews";
+import { API_VARIABLE_VIEWS_SIZE, StructVariableViews } from "./StructVariableViews";
 import { IVariableViews } from "./IVariableViews";
 
-export const API_VARIABLE_VIEW_EXEC = 101;
+export const API_VARIABLE_VIEWS_EXEC = 101;
+export const API_VARIABLE_VIEWS_EVENT = "VariableViews";
 
 const struct = new BluetoothStruct(StructVariableViews);
 
@@ -43,7 +44,7 @@ export class VariableView extends BaseModel implements IVariableViews
 	 */
 	set(buf: DataView): boolean
 	{
-		const result = this._set(this, API_VARIABLE_VIEW_EXEC, API_VARIABLE_VIEW_SIZE + 1, struct, buf);
+		const result = this._set(this, API_VARIABLE_VIEWS_EXEC, API_VARIABLE_VIEWS_SIZE + 1, struct, buf);
 		if (result)
 		{
 			this.bose.isData = true;
@@ -62,6 +63,6 @@ export class VariableView extends BaseModel implements IVariableViews
 	/** Чтение данных */
 	get(): DataView | undefined
 	{
-		return this._get(this, API_VARIABLE_VIEW_EXEC, 1);
+		return this._get(this, API_VARIABLE_VIEWS_EXEC, 1);
 	}
 }

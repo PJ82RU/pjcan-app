@@ -9,7 +9,7 @@ import { API_VARIABLE_SENSORS_SIZE, StructSensorsValue } from "../sensors";
 import { API_VARIABLE_TEMPERATURE_SIZE, StructTemperatureValue } from "../temperature";
 import { API_VARIABLE_VOLUME_SIZE, StructVolumeValue } from "../volume";
 
-export const API_VARIABLE_VALUE_SIZE =
+export const API_VARIABLE_VALUES_SIZE =
 	API_VARIABLE_CLIMATE_SIZE +
 	API_VARIABLE_CLOCK_SIZE +
 	API_VARIABLE_DOORS_SIZE +

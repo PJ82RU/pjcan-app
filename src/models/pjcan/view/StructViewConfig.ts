@@ -1,6 +1,6 @@
 import { BluetoothStruct } from "@/components/bluetooth";
 
-export const API_VIEW_SIZE = 4;
+export const API_VIEWS_SIZE = 4;
 
 /** Структура данных */
 export const StructViewConfig = {

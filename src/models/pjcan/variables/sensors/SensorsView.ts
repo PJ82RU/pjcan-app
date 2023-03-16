@@ -5,6 +5,7 @@ import { API_VARIABLE_SENSORS_VIEW_SIZE, StructSensorsView } from "./StructSenso
 import { ISensorsView } from "./ISensorsView";
 
 export const API_VARIABLE_SENSORS_VIEW_EXEC = 171;
+export const API_VARIABLE_SENSORS_VIEW_EVENT = "VariableSensorsView";
 
 const struct = new BluetoothStruct(StructSensorsView);
 

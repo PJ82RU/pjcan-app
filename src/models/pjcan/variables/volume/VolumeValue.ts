@@ -4,6 +4,7 @@ import { API_VARIABLE_VOLUME_SIZE, StructVolumeValue } from "./StructVolumeValue
 import { IVolumeValue } from "./IVolumeValue";
 
 export const API_VARIABLE_VOLUME_EXEC = 200;
+export const API_VARIABLE_VOLUME_EVENT = "VariableVolumeValue";
 
 const struct = new BluetoothStruct(StructVolumeValue);
 

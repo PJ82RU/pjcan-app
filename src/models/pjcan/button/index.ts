@@ -1,4 +1,4 @@
-import { API_BUTTONS_CONFIG_EXEC, ButtonsConfig } from "./ButtonConfig";
+import { API_BUTTONS_CONFIG_EXEC, API_BUTTONS_CONFIG_EVENT, ButtonsConfig } from "./ButtonConfig";
 import {
 	API_BUTTONS_CONFIG_SIZE,
 	BUTTON_NUMBER,
@@ -7,7 +7,7 @@ import {
 } from "./StructButtonsConfig";
 import { IButtonsConfig } from "./IButtonsConfig";
 
-import { API_BUTTONS_VALUE_EXEC, ButtonValue } from "./ButtonValue";
+import { API_BUTTONS_VALUE_EXEC, API_BUTTON_EVENT, ButtonValue } from "./ButtonValue";
 import { API_BUTTONS_VALUE_SIZE, StructButtonsValue } from "./StructButtonsValue";
 import { IButtonValue } from "./IButtonValue";
 
@@ -18,10 +18,12 @@ import { IButtonsConfigItem } from "./IButtonsConfigItem";
 
 export {
 	API_BUTTONS_CONFIG_EXEC,
+	API_BUTTONS_CONFIG_EVENT,
 	API_BUTTONS_CONFIG_SIZE,
 	StructButtonsConfig,
 	ButtonsConfig,
 	API_BUTTONS_VALUE_EXEC,
+	API_BUTTON_EVENT,
 	API_BUTTONS_VALUE_SIZE,
 	StructButtonsValue,
 	ButtonValue,

@@ -47,9 +47,13 @@ import DialogTemplate from "@/components/DialogTemplate.vue";
 import SwitchCardItem from "@/components/cards/SwitchCardItem.vue";
 import NumberField from "@/components/common/NumberField.vue";
 
-import canbus, { API_VARIABLE_FUEL_CONFIG_EVENT } from "@/api/canbus";
+import {
+	API_VARIABLE_FUEL_CONFIG_EXEC,
+	API_VARIABLE_FUEL_CONFIG_EVENT,
+	IFuelConfig
+} from "@/models/pjcan/variables/fuel";
 
-import { API_VARIABLE_FUEL_CONFIG_EXEC, IFuelConfig } from "@/models/pjcan/variables/fuel";
+import canbus from "@/api/canbus";
 
 export default {
 	name: "FuelConfigDialog",

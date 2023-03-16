@@ -39,18 +39,19 @@
 <script lang="ts">
 import { onMounted, onUnmounted, ref } from "vue";
 import { toast } from "vue3-toastify";
-import router from "@/router";
 import { useI18n } from "vue-i18n";
+import router from "@/router";
 
 import DialogTemplate from "@/components/DialogTemplate.vue";
+
 import { BLUETOOTH_EVENT_CONNECTED, TConnectedStatus } from "@/components/bluetooth";
 
-import canbus, { API_UPDATE_EVENT_ERROR } from "@/api/canbus";
-
 import { Timeout } from "@/models/types/Timeout";
-import { API_UPDATE_EVENT } from "@/models/pjcan/update";
+import { API_UPDATE_EVENT, API_UPDATE_EVENT_ERROR } from "@/models/pjcan/update";
 
 import { getFormatTime } from "@/utils/time";
+
+import canbus from "@/api/canbus";
 
 // таймаут проверки обновления 5 мин.
 const DELAY_CHECK_VERSION = 300000;
@@ -181,7 +182,10 @@ export default {
 					}
 					else
 					{
-						const value = Math.floor((canbus.update.total - canbus.update.offset) / (canbus.update.offset - last.offset) * (Date.now() - last.now));
+						const value = Math.floor(
+							((canbus.update.total - canbus.update.offset) / (canbus.update.offset - last.offset)) *
+								(Date.now() - last.now)
+						);
 						last.value = Math.floor((last.value + value) / 2);
 						last.offset = canbus.update.offset;
 						last.now = Date.now();

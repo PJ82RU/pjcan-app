@@ -3,10 +3,11 @@ import { BaseModel } from "../base";
 import { CarView } from "../car";
 import { VariableView } from "../variables/views";
 import { TeyesView } from "../teyes";
-import { API_VIEW_SIZE, StructViews } from "./StructViews";
+import { API_VIEWS_SIZE, StructViews } from "./StructViews";
 import { IViews } from "./IViews";
 
-export const API_VIEW_EXEC = 2;
+export const API_VIEWS_EXEC = 2;
+export const API_VIEWS_EVENT = "Views";
 
 const struct = new BluetoothStruct(StructViews);
 
@@ -28,7 +29,7 @@ export class Views extends BaseModel implements IViews
 	 */
 	set(buf: DataView): boolean
 	{
-		const result = this._set(this, API_VIEW_EXEC, API_VIEW_SIZE + 1, struct, buf);
+		const result = this._set(this, API_VIEWS_EXEC, API_VIEWS_SIZE + 1, struct, buf);
 		if (result)
 		{
 			this.car.isData = true;
@@ -49,6 +50,6 @@ export class Views extends BaseModel implements IViews
 	/** Чтение данных */
 	get(): DataView | undefined
 	{
-		return this._get(this, API_VIEW_EXEC, 1);
+		return this._get(this, API_VIEWS_EXEC, 1);
 	}
 }

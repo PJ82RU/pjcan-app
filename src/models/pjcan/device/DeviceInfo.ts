@@ -4,6 +4,7 @@ import { API_INFO_SIZE, StructDeviceInfo } from "./StructDeviceInfo";
 import { IDeviceInfo } from "./IDeviceInfo";
 
 export const API_INFO_EXEC = 5;
+export const API_INFO_EVENT = "Info";
 
 const struct = new BluetoothStruct(StructDeviceInfo);
 

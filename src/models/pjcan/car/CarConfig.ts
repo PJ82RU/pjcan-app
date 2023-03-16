@@ -4,6 +4,7 @@ import { API_CAR_CONFIG_SIZE, StructCarConfig } from "./StructCarConfig";
 import { ICarConfig } from "./ICarConfig";
 
 export const API_CAR_CONFIG_EXEC = 50;
+export const API_CAR_CONFIG_EVENT = "CarConfig";
 
 const struct = new BluetoothStruct(StructCarConfig);
 

@@ -4,6 +4,7 @@ import { API_VARIABLE_DOORS_SIZE, StructDoorsValue } from "./StructDoorsValue";
 import { IDoorsValue } from "./IDoorsValue";
 
 export const API_VARIABLE_DOORS_EXEC = 130;
+export const API_VARIABLE_DOORS_EVENT = "VariableDoorsValue";
 
 const struct = new BluetoothStruct(StructDoorsValue);
 

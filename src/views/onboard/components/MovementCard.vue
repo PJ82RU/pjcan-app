@@ -53,10 +53,16 @@ import InputCardItem from "@/components/cards/InputCardItem.vue";
 import ViewSettingDialog from "./ViewSettingDialog.vue";
 import { IMenuItem } from "@/components/MenuDots.vue";
 
-import canbus, { API_VARIABLE_MOVEMENT_EVENT, API_VARIABLE_MOVEMENT_VIEW_EVENT } from "@/api/canbus";
-
 import { IViewConfig } from "@/models/pjcan/view";
-import { API_VARIABLE_MOVEMENT_VIEW_EXEC, IMovementValue, IMovementView } from "@/models/pjcan/variables/movement";
+import {
+	API_VARIABLE_MOVEMENT_EVENT,
+	API_VARIABLE_MOVEMENT_VIEW_EVENT,
+	API_VARIABLE_MOVEMENT_VIEW_EXEC,
+	IMovementValue,
+	IMovementView
+} from "@/models/pjcan/variables/movement";
+
+import canbus from "@/api/canbus";
 
 export default {
 	name: "MovementCard",

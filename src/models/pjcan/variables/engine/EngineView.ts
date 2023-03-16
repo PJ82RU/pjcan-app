@@ -5,6 +5,7 @@ import { API_VARIABLE_ENGINE_VIEW_SIZE, StructEngineView } from "./StructEngineV
 import { IEngineView } from "./IEngineView";
 
 export const API_VARIABLE_ENGINE_VIEW_EXEC = 142;
+export const API_VARIABLE_ENGINE_VIEW_EVENT = "VariableEngineView";
 
 const struct = new BluetoothStruct(StructEngineView);
 

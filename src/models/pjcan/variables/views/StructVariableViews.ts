@@ -11,7 +11,7 @@ import { API_VARIABLE_TEMPERATURE_VIEW_SIZE, StructTemperatureView } from "../te
 import { API_VARIABLE_VOLUME_VIEW_SIZE, StructVolumeView } from "../volume";
 import { API_VARIABLE_CLOCK_VIEW_SIZE } from "@/models/pjcan/variables/clock";
 
-export const API_VARIABLE_VIEW_SIZE =
+export const API_VARIABLE_VIEWS_SIZE =
 	API_VARIABLE_BOSE_VIEW_SIZE +
 	API_VARIABLE_CLIMATE_VIEW_SIZE +
 	API_VARIABLE_CLOCK_VIEW_SIZE +

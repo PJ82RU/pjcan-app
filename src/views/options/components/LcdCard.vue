@@ -60,10 +60,17 @@ import SwitchCardItem from "@/components/cards/SwitchCardItem.vue";
 import ViewSettingDialog from "@/views/onboard/components/ViewSettingDialog.vue";
 import { IMenuItem } from "@/components/MenuDots.vue";
 
-import { API_CAR_CONFIG_EXEC, API_CAR_VIEW_EXEC, ICarConfig, ICarView } from "@/models/pjcan/car";
+import {
+	API_CAR_CONFIG_EVENT,
+	API_CAR_CONFIG_EXEC,
+	API_CAR_VIEW_EVENT,
+	API_CAR_VIEW_EXEC,
+	ICarConfig,
+	ICarView
+} from "@/models/pjcan/car";
 import { IViewConfig } from "@/models/pjcan/view";
 
-import canbus, { API_CAR_CONFIG_EVENT, API_CAR_VIEW_EVENT } from "@/api/canbus";
+import canbus from "@/api/canbus";
 
 export default {
 	name: "LcdCard",

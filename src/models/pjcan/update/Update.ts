@@ -5,6 +5,7 @@ import { API_UPDATE_SIZE, StructUpdate, UPDATE_VALUE_DATA_SIZE } from "./StructU
 
 export const API_UPDATE_EXEC = 90;
 export const API_UPDATE_EVENT = "Update";
+export const API_UPDATE_EVENT_ERROR = "ErrorUpdate";
 
 const struct = new BluetoothStruct(StructUpdate);
 

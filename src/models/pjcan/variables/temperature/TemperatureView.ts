@@ -5,6 +5,7 @@ import { API_VARIABLE_TEMPERATURE_VIEW_SIZE, StructTemperatureView } from "./Str
 import { ITemperatureView } from "./ITemperatureView";
 
 export const API_VARIABLE_TEMPERATURE_VIEW_EXEC = 181;
+export const API_VARIABLE_TEMPERATURE_VIEW_EVENT = "VariableTemperatureView";
 
 const struct = new BluetoothStruct(StructTemperatureView);
 

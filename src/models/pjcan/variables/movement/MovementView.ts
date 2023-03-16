@@ -5,6 +5,7 @@ import { API_VARIABLE_MOVEMENT_VIEW_SIZE, StructMovementView } from "./StructMov
 import { IMovementView } from "./IMovementView";
 
 export const API_VARIABLE_MOVEMENT_VIEW_EXEC = 161;
+export const API_VARIABLE_MOVEMENT_VIEW_EVENT = "VariableMovementView";
 
 const struct = new BluetoothStruct(StructMovementView);
 

@@ -4,6 +4,7 @@ import { API_VARIABLE_VOLUME_CONFIG_SIZE, StructVolumeConfig } from "./StructVol
 import { IVolumeConfig } from "./IVolumeConfig";
 
 export const API_VARIABLE_VOLUME_CONFIG_EXEC = 201;
+export const API_VARIABLE_VOLUME_CONFIG_EVENT = "VariableVolumeConfig";
 
 const struct = new BluetoothStruct(StructVolumeConfig);
 

@@ -5,6 +5,7 @@ import { IBoseConfig } from "./IBoseConfig";
 import { TCenterPoint } from "./TCenterPoint";
 
 export const API_VARIABLE_BOSE_EXEC = 110;
+export const API_VARIABLE_BOSE_EVENT = "VariableBoseConfig";
 
 const struct = new BluetoothStruct(StructBoseConfig);
 

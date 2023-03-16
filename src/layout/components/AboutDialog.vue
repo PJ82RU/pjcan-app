@@ -38,15 +38,17 @@
 
 <script lang="ts">
 import { computed, onMounted, onUnmounted, ref, toRefs } from "vue";
-import canbus, { API_CAR_CONFIG_EVENT, API_CONFIGS_EVENT } from "@/api/canbus";
-const pkg = require("/package.json");
 
 import DialogTemplate from "@/components/DialogTemplate.vue";
 import DeviceInfoDialog from "@/layout/components/DeviceInfoDialog.vue";
 
 import { ILooseObject } from "@/models/interfaces/ILooseObject";
-import { IConfigs } from "@/models/pjcan/configs";
-import { ICarConfig } from "@/models/pjcan/car";
+import { API_CONFIGS_EVENT, IConfigs } from "@/models/pjcan/configs";
+import { API_CAR_CONFIG_EVENT, ICarConfig } from "@/models/pjcan/car";
+
+import canbus from "@/api/canbus";
+
+const pkg = require("/package.json");
 
 export default {
 	name: "AboutDialog",

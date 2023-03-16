@@ -89,10 +89,17 @@ import SwitchCardItem from "@/components/cards/SwitchCardItem.vue";
 import ViewSettingDialog from "./ViewSettingDialog.vue";
 import { IMenuItem } from "@/components/MenuDots.vue";
 
-import canbus, { API_VARIABLE_CLIMATE_EVENT, API_VARIABLE_CLIMATE_VIEW_EVENT } from "@/api/canbus";
-
 import { IViewConfig } from "@/models/pjcan/view";
-import { API_VARIABLE_CLIMATE_VIEW_EXEC, IClimateValue, IClimateView, TAir } from "@/models/pjcan/variables/climate";
+import {
+	API_VARIABLE_CLIMATE_EVENT,
+	API_VARIABLE_CLIMATE_VIEW_EXEC,
+	API_VARIABLE_CLIMATE_VIEW_EVENT,
+	IClimateValue,
+	IClimateView,
+	TAir
+} from "@/models/pjcan/variables/climate";
+
+import canbus from "@/api/canbus";
 
 export default {
 	name: "ClimateCard",

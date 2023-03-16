@@ -41,12 +41,6 @@
 import { computed, onMounted, onUnmounted, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
-import canbus, {
-	API_VARIABLE_VOLUME_EVENT,
-	API_VARIABLE_VOLUME_CONFIG_EVENT,
-	API_VARIABLE_VOLUME_VIEW_EVENT
-} from "@/api/canbus";
-
 import Card from "@/components/cards/Card.vue";
 import SwitchCardItem from "@/components/cards/SwitchCardItem.vue";
 import SliderCardItem from "@/components/cards/SliderCardItem.vue";
@@ -54,13 +48,18 @@ import ViewSettingDialog from "./ViewSettingDialog.vue";
 
 import { IViewConfig } from "@/models/pjcan/view";
 import {
+	API_VARIABLE_VOLUME_CONFIG_EVENT,
+	API_VARIABLE_VOLUME_EVENT,
 	API_VARIABLE_VOLUME_EXEC,
+	API_VARIABLE_VOLUME_VIEW_EVENT,
 	API_VARIABLE_VOLUME_VIEW_EXEC,
 	IVolumeConfig,
 	IVolumeValue,
 	IVolumeView
 } from "@/models/pjcan/variables/volume";
 import { IMenuItem } from "@/components/MenuDots.vue";
+
+import canbus from "@/api/canbus";
 
 export default {
 	name: "VolumeCard",

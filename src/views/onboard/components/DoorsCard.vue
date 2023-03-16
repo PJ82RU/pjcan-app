@@ -76,10 +76,16 @@ import SwitchCardItem from "@/components/cards/SwitchCardItem.vue";
 import ViewSettingDialog from "./ViewSettingDialog.vue";
 import { IMenuItem } from "@/components/MenuDots.vue";
 
-import canbus, { API_VARIABLE_DOORS_EVENT, API_VARIABLE_DOORS_VIEW_EVENT } from "@/api/canbus";
-
 import { IViewConfig } from "@/models/pjcan/view";
-import { API_VARIABLE_DOORS_VIEW_EXEC, IDoorsValue, IDoorsView } from "@/models/pjcan/variables/doors";
+import {
+	API_VARIABLE_DOORS_EVENT,
+	API_VARIABLE_DOORS_VIEW_EXEC,
+	API_VARIABLE_DOORS_VIEW_EVENT,
+	IDoorsValue,
+	IDoorsView
+} from "@/models/pjcan/variables/doors";
+
+import canbus from "@/api/canbus";
 
 export default {
 	name: "DoorsCard",

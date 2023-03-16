@@ -4,6 +4,7 @@ import { API_VARIABLE_ENGINE_CONFIG_SIZE, StructEngineConfig } from "./StructEng
 import { IEngineConfig } from "./IEngineConfig";
 
 export const API_VARIABLE_ENGINE_CONFIG_EXEC = 141;
+export const API_VARIABLE_ENGINE_CONFIG_EVENT = "VariableEngineConfig";
 
 const struct = new BluetoothStruct(StructEngineConfig);
 

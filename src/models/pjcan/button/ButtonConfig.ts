@@ -10,6 +10,7 @@ import { IButtonsConfig } from "./IButtonsConfig";
 import { IButtonsConfigItem } from "./IButtonsConfigItem";
 
 export const API_BUTTONS_CONFIG_EXEC = 20;
+export const API_BUTTONS_CONFIG_EVENT = "ButtonsConfig";
 
 const struct = new BluetoothStruct(StructButtonsConfig);
 

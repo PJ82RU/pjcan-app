@@ -4,6 +4,7 @@ import { API_TEYES_TEXT_SIZE, StructTeyesText } from "./StructTeyesText";
 import { ITeyesText } from "./ITeyesText";
 
 export const API_TEYES_TEXT_EXEC = 31;
+export const API_TEYES_TEXT_EVENT = "TeyesText";
 
 const struct = new BluetoothStruct(StructTeyesText);
 

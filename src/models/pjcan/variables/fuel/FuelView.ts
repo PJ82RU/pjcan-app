@@ -5,6 +5,7 @@ import { API_VARIABLE_FUEL_VIEW_SIZE, StructFuelView } from "./StructFuelView";
 import { IFuelView } from "./IFuelView";
 
 export const API_VARIABLE_FUEL_VIEW_EXEC = 152;
+export const API_VARIABLE_FUEL_VIEW_EVENT = "VariableFuelView";
 
 const struct = new BluetoothStruct(StructFuelView);
 

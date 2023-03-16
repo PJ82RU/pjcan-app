@@ -12,114 +12,110 @@ import {
 	TConnectedStatus
 } from "@/components/bluetooth";
 import { IBaseModel } from "@/models/pjcan/base";
-import { API_CONFIG_EXEC, Configs, IConfigs } from "@/models/pjcan/configs";
-import { API_VIEW_EXEC, Views, IViews } from "@/models/pjcan/views";
-import { API_VARIABLE_CONFIG_EXEC, IVariableConfigs } from "@/models/pjcan/variables/configs";
-import { API_VARIABLE_VIEW_EXEC, IVariableViews } from "@/models/pjcan/variables/views";
+import { API_CONFIG_EXEC, API_CONFIGS_EVENT, Configs, IConfigs } from "@/models/pjcan/configs";
+import { API_VIEWS_EXEC, API_VIEWS_EVENT, Views, IViews } from "@/models/pjcan/views";
+import {
+	API_VARIABLE_CONFIGS_EXEC,
+	API_VARIABLE_CONFIGS_EVENT,
+	IVariableConfigs
+} from "@/models/pjcan/variables/configs";
+import { API_VARIABLE_VIEWS_EXEC, API_VARIABLE_VIEWS_EVENT, IVariableViews } from "@/models/pjcan/variables/views";
 import {
 	API_DEVICE_CONFIG_EXEC,
+	API_DEVICE_CONFIG_EVENT,
 	API_DEVICE_VALUE_EXEC,
+	API_DEVICE_EVENT,
 	API_INFO_EXEC,
+	API_INFO_EVENT,
 	DeviceInfo,
 	IDeviceInfo
 } from "@/models/pjcan/device";
-import { API_BUTTONS_CONFIG_EXEC, API_BUTTONS_VALUE_EXEC, ButtonValue, IButtonValue } from "@/models/pjcan/button";
+import {
+	API_BUTTONS_CONFIG_EXEC,
+	API_BUTTONS_CONFIG_EVENT,
+	API_BUTTONS_VALUE_EXEC,
+	API_BUTTON_EVENT,
+	ButtonValue,
+	IButtonValue
+} from "@/models/pjcan/button";
 import {
 	API_TEYES_CONFIG_EXEC,
+	API_TEYES_CONFIG_EVENT,
 	API_TEYES_TEXT_EXEC,
+	API_TEYES_TEXT_EVENT,
 	API_TEYES_VIEW_EXEC,
-	ITeyesText,
-	TeyesText
+	API_TEYES_VIEW_EVENT,
+	TeyesText,
+	ITeyesText
 } from "@/models/pjcan/teyes";
-import { API_LCD_VALUE_EXEC } from "@/models/pjcan/lcd";
-import { API_CAR_CONFIG_EXEC, API_CAR_VIEW_EXEC } from "@/models/pjcan/car";
-import { API_UPDATE_EXEC, API_UPDATE_EVENT, Update } from "@/models/pjcan/update";
-import { API_VARIABLE_BOSE_EXEC, API_VARIABLE_BOSE_VIEW_EXEC } from "@/models/pjcan/variables/bose";
-import { API_VARIABLE_CLIMATE_EXEC, API_VARIABLE_CLIMATE_VIEW_EXEC } from "@/models/pjcan/variables/climate";
-import { API_VARIABLE_DOORS_EXEC, API_VARIABLE_DOORS_VIEW_EXEC } from "@/models/pjcan/variables/doors";
+import { API_LCD_VALUE_EXEC, API_LCD_EVENT } from "@/models/pjcan/lcd";
+import { API_CAR_CONFIG_EXEC, API_CAR_CONFIG_EVENT, API_CAR_VIEW_EXEC, API_CAR_VIEW_EVENT } from "@/models/pjcan/car";
+import { API_UPDATE_EXEC, API_UPDATE_EVENT, API_UPDATE_EVENT_ERROR, Update } from "@/models/pjcan/update";
 import {
-	API_VARIABLE_ENGINE_EXEC,
+	API_VARIABLE_BOSE_EXEC,
+	API_VARIABLE_BOSE_EVENT,
+	API_VARIABLE_BOSE_VIEW_EXEC,
+	API_VARIABLE_BOSE_VIEW_EVENT
+} from "@/models/pjcan/variables/bose";
+import {
+	API_VARIABLE_CLIMATE_EXEC,
+	API_VARIABLE_CLIMATE_EVENT,
+	API_VARIABLE_CLIMATE_VIEW_EXEC,
+	API_VARIABLE_CLIMATE_VIEW_EVENT
+} from "@/models/pjcan/variables/climate";
+import {
+	API_VARIABLE_DOORS_EXEC,
+	API_VARIABLE_DOORS_EVENT,
+	API_VARIABLE_DOORS_VIEW_EXEC,
+	API_VARIABLE_DOORS_VIEW_EVENT
+} from "@/models/pjcan/variables/doors";
+import {
 	API_VARIABLE_ENGINE_CONFIG_EXEC,
-	API_VARIABLE_ENGINE_VIEW_EXEC
+	API_VARIABLE_ENGINE_CONFIG_EVENT,
+	API_VARIABLE_ENGINE_EXEC,
+	API_VARIABLE_ENGINE_EVENT,
+	API_VARIABLE_ENGINE_VIEW_EXEC,
+	API_VARIABLE_ENGINE_VIEW_EVENT
 } from "@/models/pjcan/variables/engine";
 import {
-	API_VARIABLE_FUEL_EXEC,
 	API_VARIABLE_FUEL_CONFIG_EXEC,
-	API_VARIABLE_FUEL_VIEW_EXEC
+	API_VARIABLE_FUEL_CONFIG_EVENT,
+	API_VARIABLE_FUEL_EXEC,
+	API_VARIABLE_FUEL_EVENT,
+	API_VARIABLE_FUEL_VIEW_EXEC,
+	API_VARIABLE_FUEL_VIEW_EVENT
 } from "@/models/pjcan/variables/fuel";
-import { API_VARIABLE_MOVEMENT_EXEC, API_VARIABLE_MOVEMENT_VIEW_EXEC } from "@/models/pjcan/variables/movement";
-import { API_VARIABLE_SENSORS_EXEC, API_VARIABLE_SENSORS_VIEW_EXEC } from "@/models/pjcan/variables/sensors";
+import {
+	API_VARIABLE_MOVEMENT_EXEC,
+	API_VARIABLE_MOVEMENT_EVENT,
+	API_VARIABLE_MOVEMENT_VIEW_EXEC,
+	API_VARIABLE_MOVEMENT_VIEW_EVENT
+} from "@/models/pjcan/variables/movement";
+import {
+	API_VARIABLE_SENSORS_EXEC,
+	API_VARIABLE_SENSORS_EVENT,
+	API_VARIABLE_SENSORS_VIEW_EXEC,
+	API_VARIABLE_SENSORS_VIEW_EVENT
+} from "@/models/pjcan/variables/sensors";
 import {
 	API_VARIABLE_TEMPERATURE_EXEC,
-	API_VARIABLE_TEMPERATURE_VIEW_EXEC
+	API_VARIABLE_TEMPERATURE_EVENT,
+	API_VARIABLE_TEMPERATURE_VIEW_EXEC,
+	API_VARIABLE_TEMPERATURE_VIEW_EVENT
 } from "@/models/pjcan/variables/temperature";
 import {
-	API_VARIABLE_VOLUME_EXEC,
 	API_VARIABLE_VOLUME_CONFIG_EXEC,
-	API_VARIABLE_VOLUME_VIEW_EXEC
+	API_VARIABLE_VOLUME_CONFIG_EVENT,
+	API_VARIABLE_VOLUME_EXEC,
+	API_VARIABLE_VOLUME_EVENT,
+	API_VARIABLE_VOLUME_VIEW_EXEC,
+	API_VARIABLE_VOLUME_VIEW_EVENT
 } from "@/models/pjcan/variables/volume";
-import { IValues, Values } from "@/models/pjcan/values";
-import { IVariablesValue } from "@/models/pjcan/variables/values";
-import { API_VALUE_EXEC } from "@/models/pjcan/values/Values";
-import { API_VARIABLE_VALUE_EXEC } from "@/models/pjcan/variables/values/VariablesValue";
+import { API_VALUES_EXEC, API_VALUES_EVENT, IValues, Values } from "@/models/pjcan/values";
+import { API_VARIABLE_VALUES_EXEC, API_VARIABLE_VALUES_EVENT, IVariablesValue } from "@/models/pjcan/variables/values";
 import { IUpdate } from "@/models/pjcan/update/IUpdate";
 import { IVersion, Version } from "@/models/pjcan/version";
 import { ITestValue } from "@/models/pjcan/variables/test";
-
-export const API_CONFIGS_EVENT = "Configs";
-export const API_VIEWS_EVENT = "Views";
-export const API_VALUES_EVENT = "Values";
-
-export const API_VARIABLE_CONFIGS_EVENT = "VariableConfigs";
-export const API_VARIABLE_VIEWS_EVENT = "VariableViews";
-export const API_VARIABLE_VALUES_EVENT = "VariableValues";
-
-export const API_BUTTONS_CONFIG_EVENT = "ButtonsConfig";
-export const API_BUTTON_EVENT = "ButtonsValue";
-
-export const API_CAR_CONFIG_EVENT = "CarConfig";
-export const API_CAR_VIEW_EVENT = "CarView";
-
-export const API_DEVICE_CONFIG_EVENT = "DeviceConfig";
-export const API_DEVICE_EVENT = "DeviceValue";
-export const API_INFO_EVENT = "Info";
-
-export const API_LCD_EVENT = "LCDValue";
-export const API_TEYES_CONFIG_EVENT = "TeyesConfig";
-export const API_TEYES_VIEW_EVENT = "TeyesView";
-export const API_TEYES_TEXT_EVENT = "TeyesText";
-
-export const API_VARIABLE_BOSE_VIEW_EVENT = "VariableBoseView";
-export const API_VARIABLE_BOSE_EVENT = "VariableBoseConfig";
-
-export const API_VARIABLE_CLIMATE_VIEW_EVENT = "VariableClimateView";
-export const API_VARIABLE_CLIMATE_EVENT = "VariableClimateValue";
-
-export const API_VARIABLE_DOORS_VIEW_EVENT = "VariableDoorsView";
-export const API_VARIABLE_DOORS_EVENT = "VariableDoorsValue";
-
-export const API_VARIABLE_ENGINE_CONFIG_EVENT = "VariableEngineConfig";
-export const API_VARIABLE_ENGINE_VIEW_EVENT = "VariableEngineView";
-export const API_VARIABLE_ENGINE_EVENT = "VariableEngineValue";
-
-export const API_VARIABLE_FUEL_CONFIG_EVENT = "VariableFuelConfig";
-export const API_VARIABLE_FUEL_VIEW_EVENT = "VariableFuelView";
-export const API_VARIABLE_FUEL_EVENT = "VariableFuelValue";
-
-export const API_VARIABLE_MOVEMENT_VIEW_EVENT = "VariableMovementView";
-export const API_VARIABLE_MOVEMENT_EVENT = "VariableMovementValue";
-
-export const API_VARIABLE_SENSORS_VIEW_EVENT = "VariableSensorsView";
-export const API_VARIABLE_SENSORS_EVENT = "VariableSensorsValue";
-
-export const API_VARIABLE_TEMPERATURE_VIEW_EVENT = "VariableTemperatureView";
-export const API_VARIABLE_TEMPERATURE_EVENT = "VariableTemperatureValue";
-
-export const API_VARIABLE_VOLUME_CONFIG_EVENT = "VariableVolumeConfig";
-export const API_VARIABLE_VOLUME_VIEW_EVENT = "VariableVolumeView";
-export const API_VARIABLE_VOLUME_EVENT = "VariableVolumeValue";
-
-export const API_UPDATE_EVENT_ERROR = "ErrorUpdate";
 
 export class Canbus extends EventEmitter
 {
@@ -209,7 +205,7 @@ export class Canbus extends EventEmitter
 	{
 		switch (type)
 		{
-			case API_VARIABLE_CONFIG_EXEC:
+			case API_VARIABLE_CONFIGS_EXEC:
 				await this.query(this.configs.variable);
 				break;
 
@@ -259,7 +255,7 @@ export class Canbus extends EventEmitter
 	{
 		switch (type)
 		{
-			case API_VARIABLE_VIEW_EXEC:
+			case API_VARIABLE_VIEWS_EXEC:
 				await this.query(this.views.variable);
 				break;
 
@@ -322,7 +318,7 @@ export class Canbus extends EventEmitter
 
 		switch (type)
 		{
-			case API_VARIABLE_VALUE_EXEC:
+			case API_VARIABLE_VALUES_EXEC:
 				await this.query(this.values.variable);
 				break;
 
@@ -482,7 +478,7 @@ export class Canbus extends EventEmitter
 				this.emitVariableConfigs(this.configs.variable);
 				break;
 
-			case API_VIEW_EXEC: // Все параметры отображения
+			case API_VIEWS_EXEC: // Все параметры отображения
 				this.views.set(data);
 
 				this.emit(API_VIEWS_EVENT, this.views);
@@ -491,7 +487,7 @@ export class Canbus extends EventEmitter
 				this.emitVariableViews(this.views.variable);
 				break;
 
-			case API_VALUE_EXEC: // Все значения
+			case API_VALUES_EXEC: // Все значения
 				this.values.set(data);
 				if (!this.values.device.activation && !this.sha)
 				{
@@ -559,17 +555,17 @@ export class Canbus extends EventEmitter
 				this.emit(API_UPDATE_EVENT, this.update);
 				break;
 
-			case API_VARIABLE_CONFIG_EXEC: // Вся конфигурация переменных
+			case API_VARIABLE_CONFIGS_EXEC: // Вся конфигурация переменных
 				this.configs.variable.set(data);
 				this.emitVariableConfigs(this.configs.variable);
 				break;
 
-			case API_VARIABLE_VIEW_EXEC: // Все параметры отображения переменных
+			case API_VARIABLE_VIEWS_EXEC: // Все параметры отображения переменных
 				this.views.variable.set(data);
 				this.emitVariableViews(this.views.variable);
 				break;
 
-			case API_VARIABLE_VALUE_EXEC: // Все значения переменных
+			case API_VARIABLE_VALUES_EXEC: // Все значения переменных
 				this.values.variable.set(data);
 				this.emitVariableValues(this.values.variable);
 				break;

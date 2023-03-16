@@ -5,6 +5,7 @@ import { API_VARIABLE_BOSE_VIEW_SIZE, StructBoseView } from "./StructBoseView";
 import { IBoseView } from "./IBoseView";
 
 export const API_VARIABLE_BOSE_VIEW_EXEC = 111;
+export const API_VARIABLE_BOSE_VIEW_EVENT = "VariableBoseView";
 
 const struct = new BluetoothStruct(StructBoseView);
 

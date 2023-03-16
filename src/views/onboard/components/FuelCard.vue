@@ -65,10 +65,16 @@ import ViewSettingDialog from "./ViewSettingDialog.vue";
 import FuelConfigDialog from "./FuelConfigDialog.vue";
 import { IMenuItem } from "@/components/MenuDots.vue";
 
-import canbus, { API_VARIABLE_FUEL_EVENT, API_VARIABLE_FUEL_VIEW_EVENT } from "@/api/canbus";
-
 import { IViewConfig } from "@/models/pjcan/view";
-import { API_VARIABLE_FUEL_VIEW_EXEC, IFuelValue, IFuelView } from "@/models/pjcan/variables/fuel";
+import {
+	API_VARIABLE_FUEL_EVENT,
+	API_VARIABLE_FUEL_VIEW_EXEC,
+	API_VARIABLE_FUEL_VIEW_EVENT,
+	IFuelValue,
+	IFuelView
+} from "@/models/pjcan/variables/fuel";
+
+import canbus from "@/api/canbus";
 
 export default {
 	name: "FuelCard",

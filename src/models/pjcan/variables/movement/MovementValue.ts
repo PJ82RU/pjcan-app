@@ -4,6 +4,7 @@ import { API_VARIABLE_MOVEMENT_SIZE, StructMovementValue } from "./StructMovemen
 import { IMovementValue } from "./IMovementValue";
 
 export const API_VARIABLE_MOVEMENT_EXEC = 160;
+export const API_VARIABLE_MOVEMENT_EVENT = "VariableMovementValue";
 
 const struct = new BluetoothStruct(StructMovementValue);
 

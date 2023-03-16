@@ -5,6 +5,7 @@ import { API_CAR_VIEW_SIZE, StructCarView } from "./StructCarView";
 import { ICarView } from "./ICarView";
 
 export const API_CAR_VIEW_EXEC = 51;
+export const API_CAR_VIEW_EVENT = "CarView";
 
 const struct = new BluetoothStruct(StructCarView);
 

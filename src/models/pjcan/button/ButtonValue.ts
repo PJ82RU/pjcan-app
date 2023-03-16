@@ -4,6 +4,7 @@ import { API_BUTTONS_VALUE_SIZE, StructButtonsValue } from "./StructButtonsValue
 import { IButtonValue } from "./IButtonValue";
 
 export const API_BUTTONS_VALUE_EXEC = 21;
+export const API_BUTTON_EVENT = "ButtonsValue";
 
 const struct = new BluetoothStruct(StructButtonsValue);
 

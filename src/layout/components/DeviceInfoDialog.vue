@@ -48,12 +48,12 @@ import store from "@/store";
 
 import DialogTemplate from "@/components/DialogTemplate.vue";
 import DeviceResetDialog from "./DeviceResetDialog.vue";
-
-import canbus, { API_INFO_EVENT } from "@/api/canbus";
-
-import { IDeviceInfo } from "@/models/pjcan/device";
-import { IMessage } from "@/models/interfaces/message/IMessage";
 import Scanner from "@/layout/components/Scanner.vue";
+
+import { API_INFO_EVENT, IDeviceInfo } from "@/models/pjcan/device";
+import { IMessage } from "@/models/interfaces/message/IMessage";
+
+import canbus from "@/api/canbus";
 
 export default {
 	name: "DeviceInfoDialog",

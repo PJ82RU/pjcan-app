@@ -4,6 +4,7 @@ import { API_DEVICE_CONFIG_SIZE, StructDeviceConfig } from "./StructDeviceConfig
 import { IDeviceConfig } from "./IDeviceConfig";
 
 export const API_DEVICE_CONFIG_EXEC = 10;
+export const API_DEVICE_CONFIG_EVENT = "DeviceConfig";
 
 const struct = new BluetoothStruct(StructDeviceConfig);
 

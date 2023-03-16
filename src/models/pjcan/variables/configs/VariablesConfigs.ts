@@ -4,10 +4,11 @@ import { BoseConfig } from "../bose";
 import { EngineConfig } from "../engine";
 import { FuelConfig } from "../fuel";
 import { VolumeConfig } from "../volume";
-import { API_VARIABLE_CONFIG_SIZE, StructVariableConfigs } from "./StructVariableConfigs";
+import { API_VARIABLE_CONFIGS_SIZE, StructVariableConfigs } from "./StructVariableConfigs";
 import { IVariableConfigs } from "./IVariableConfigs";
 
-export const API_VARIABLE_CONFIG_EXEC = 100;
+export const API_VARIABLE_CONFIGS_EXEC = 100;
+export const API_VARIABLE_CONFIGS_EVENT = "VariableConfigs";
 
 const struct = new BluetoothStruct(StructVariableConfigs);
 
@@ -31,7 +32,7 @@ export class VariableConfig extends BaseModel implements IVariableConfigs
 	 */
 	set(buf: DataView): boolean
 	{
-		const result = this._set(this, API_VARIABLE_CONFIG_EXEC, API_VARIABLE_CONFIG_SIZE + 1, struct, buf);
+		const result = this._set(this, API_VARIABLE_CONFIGS_EXEC, API_VARIABLE_CONFIGS_SIZE + 1, struct, buf);
 		if (result)
 		{
 			this.bose.isData = true;
@@ -45,6 +46,6 @@ export class VariableConfig extends BaseModel implements IVariableConfigs
 	/** Чтение данных */
 	get(): DataView | undefined
 	{
-		return this._get(this, API_VARIABLE_CONFIG_EXEC, 1);
+		return this._get(this, API_VARIABLE_CONFIGS_EXEC, 1);
 	}
 }

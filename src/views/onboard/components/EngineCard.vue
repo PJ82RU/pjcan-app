@@ -97,10 +97,16 @@ import ViewSettingDialog from "./ViewSettingDialog.vue";
 import EngineConfigDialog from "./EngineConfigDialog.vue";
 import { IMenuItem } from "@/components/MenuDots.vue";
 
-import canbus, { API_VARIABLE_ENGINE_EVENT, API_VARIABLE_ENGINE_VIEW_EVENT } from "@/api/canbus";
-
 import { IViewConfig } from "@/models/pjcan/view";
-import { API_VARIABLE_ENGINE_VIEW_EXEC, IEngineValue, IEngineView } from "@/models/pjcan/variables/engine";
+import {
+	API_VARIABLE_ENGINE_EVENT,
+	API_VARIABLE_ENGINE_VIEW_EXEC,
+	API_VARIABLE_ENGINE_VIEW_EVENT,
+	IEngineValue,
+	IEngineView
+} from "@/models/pjcan/variables/engine";
+
+import canbus from "@/api/canbus";
 
 export default {
 	name: "EngineCard",

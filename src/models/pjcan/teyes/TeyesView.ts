@@ -5,6 +5,7 @@ import { API_TEYES_VIEW_SIZE, StructTeyesView } from "./StructTeyesView";
 import { ITeyesView } from "./ITeyesView";
 
 export const API_TEYES_VIEW_EXEC = 32;
+export const API_TEYES_VIEW_EVENT = "TeyesView";
 
 const struct = new BluetoothStruct(StructTeyesView);
 

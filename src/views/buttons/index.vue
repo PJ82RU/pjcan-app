@@ -31,14 +31,14 @@ import { computed, onMounted, onUnmounted, provide, ref, watch } from "vue";
 import { useDisplay } from "vuetify";
 import { useI18n } from "vue-i18n";
 
-import canbus, { API_BUTTON_EVENT, API_BUTTONS_CONFIG_EVENT } from "@/api/canbus";
-
 import Flicking from "@egjs/vue3-flicking";
 import SettingsCard from "./components/SettingsCard.vue";
 import ButtonDefinitionDialog from "./components/ButtonDefinitionDialog.vue";
 
 import {
+	API_BUTTON_EVENT,
 	API_BUTTONS_CONFIG_EXEC,
+	API_BUTTONS_CONFIG_EVENT,
 	IButtonsConfig,
 	IButtonValue,
 	TButtonItem,
@@ -46,6 +46,8 @@ import {
 } from "@/models/pjcan/button";
 import { IButtonItem } from "@/models/interfaces/IButtonItem";
 import { IButtonCard } from "@/models/interfaces/IButtonCard";
+
+import canbus from "@/api/canbus";
 
 export default {
 	name: "buttons",
@@ -81,38 +83,41 @@ export default {
 		buttonItemsUpdate();
 
 		/** Список конфигураций кнопок */
-		const list = computed((): IButtonCard[] => [
-			{
-				title: t("buttons.mode"),
-				type: TButtonItem.BUTTON_MODE,
-				icon: "mdi-menu"
-			},
-			{
-				title: t("buttons.seekUp"),
-				type: TButtonItem.BUTTON_SEEK_UP,
-				icon: "mdi-play"
-			},
-			{
-				title: t("buttons.seekDown"),
-				type: TButtonItem.BUTTON_SEEK_DOWN,
-				icon: "mdi-play"
-			},
-			{
-				title: t("buttons.volUp"),
-				type: TButtonItem.BUTTON_VOL_UP,
-				icon: "mdi-volume-plus"
-			},
-			{
-				title: t("buttons.volDown"),
-				type: TButtonItem.BUTTON_VOL_DOWN,
-				icon: "mdi-volume-minus"
-			},
-			{
-				title: t("buttons.volMute"),
-				type: TButtonItem.BUTTON_VOL_MUTE,
-				icon: "mdi-volume-mute"
-			}
-		] as IButtonCard[]);
+		const list = computed(
+			(): IButtonCard[] =>
+				[
+					{
+						title: t("buttons.mode"),
+						type: TButtonItem.BUTTON_MODE,
+						icon: "mdi-menu"
+					},
+					{
+						title: t("buttons.seekUp"),
+						type: TButtonItem.BUTTON_SEEK_UP,
+						icon: "mdi-play"
+					},
+					{
+						title: t("buttons.seekDown"),
+						type: TButtonItem.BUTTON_SEEK_DOWN,
+						icon: "mdi-play"
+					},
+					{
+						title: t("buttons.volUp"),
+						type: TButtonItem.BUTTON_VOL_UP,
+						icon: "mdi-volume-plus"
+					},
+					{
+						title: t("buttons.volDown"),
+						type: TButtonItem.BUTTON_VOL_DOWN,
+						icon: "mdi-volume-minus"
+					},
+					{
+						title: t("buttons.volMute"),
+						type: TButtonItem.BUTTON_VOL_MUTE,
+						icon: "mdi-volume-mute"
+					}
+				] as IButtonCard[]
+		);
 
 		// блокируем отправку значений на время обновления list
 		let receiveConfig = false;

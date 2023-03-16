@@ -5,6 +5,7 @@ import { ISensorsValue } from "./ISensorsValue";
 import { TSensorsSignal } from "./TSensorsSignal";
 
 export const API_VARIABLE_SENSORS_EXEC = 170;
+export const API_VARIABLE_SENSORS_EVENT = "VariableSensorsValue";
 
 const struct = new BluetoothStruct(StructSensorsValue);
 
