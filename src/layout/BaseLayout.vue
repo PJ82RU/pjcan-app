@@ -69,6 +69,9 @@ import IconCustom from "@/components/common/icon-custom/IconCustom.vue";
 import { IMessage } from "@/models/interfaces/message/IMessage";
 import { Timeout } from "@/models/types/Timeout";
 
+import { IScanCan } from "@/models/interfaces/IScanCan";
+import { setScanCan } from "@/api/google";
+
 export default {
 	name: "BaseLayout",
 	components: {
@@ -164,6 +167,17 @@ export default {
 		const toggleFullscreen = () =>
 		{
 			if (ScreenFull.isEnabled) ScreenFull.toggle();
+
+			// ТЕСТИРОВАНИЕ
+			const data: IScanCan = {
+				mac: "a1:76:4e:19:9c:14",
+				rows: [{ id: 1024, data: [0, 1, 2, 3], hexId: "0x400", hexData: "0x00010203" }]
+			};
+			console.log("setScanCan", data);
+			setScanCan(data).then(res =>
+			{
+				console.log("setScanCan", res);
+			});
 		};
 
 		// Вывод сообщений //
