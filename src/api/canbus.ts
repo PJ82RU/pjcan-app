@@ -115,7 +115,8 @@ import { API_VALUES_EXEC, API_VALUES_EVENT, IValues, Values } from "@/models/pjc
 import { API_VARIABLE_VALUES_EXEC, API_VARIABLE_VALUES_EVENT, IVariablesValue } from "@/models/pjcan/variables/values";
 import { IUpdate } from "@/models/pjcan/update/IUpdate";
 import { IVersion, Version } from "@/models/pjcan/version";
-import { ITestValue } from "@/models/pjcan/variables/test";
+import { API_VARIABLE_TEST_EXEC } from "@/models/pjcan/variables/test";
+import { API_SCANNER_CONFIG_EXEC, API_SCANNER_VALUE_EXEC, ScannerConfig, ScannerValue } from "@/models/pjcan/scanner";
 
 export class Canbus extends EventEmitter
 {
@@ -140,6 +141,8 @@ export class Canbus extends EventEmitter
 	buttonValue: IButtonValue = new ButtonValue();
 	/** Текст Teyes */
 	teyesText: ITeyesText = new TeyesText();
+	/** Конфигурация сканера can-шины */
+	scanner = new ScannerConfig();
 
 	/** Запрет на отправку данных */
 	private queryDisabled: boolean = true;
@@ -241,6 +244,10 @@ export class Canbus extends EventEmitter
 				await this.query(this.configs.variable.volume);
 				break;
 
+			case API_SCANNER_CONFIG_EXEC:
+				await this.query(this.scanner);
+				break;
+
 			default:
 				await this.query(this.configs);
 				break;
@@ -311,8 +318,9 @@ export class Canbus extends EventEmitter
 
 	/** Отправить/получить значения
 	 * @param {number} type Тип значения
+	 * @param {IBaseModel|undefined} value Передаваемые значения
 	 */
-	async queryValue(type: number = 0)
+	async queryValue(type: number = 0, value: IBaseModel | undefined = undefined)
 	{
 		if (this.queryDisabled) return;
 
@@ -324,6 +332,10 @@ export class Canbus extends EventEmitter
 
 			case API_DEVICE_VALUE_EXEC:
 				await this.query(this.values.device);
+				break;
+
+			case API_INFO_EXEC:
+				await this.query(this.deviceInfo);
 				break;
 
 			case API_LCD_VALUE_EXEC:
@@ -362,44 +374,32 @@ export class Canbus extends EventEmitter
 				await this.query(this.values.variable.volume);
 				break;
 
+			case API_VARIABLE_TEST_EXEC:
+				if (value) await this.query(value);
+				break;
+
+			case API_SCANNER_VALUE_EXEC:
+				await this.query(value ?? new ScannerValue());
+				break;
+
 			default:
 				await this.query(this.values);
 				break;
 		}
 	}
 
-	/** Получить информацию устройства */
-	async queryDeviceInfo()
-	{
-		if (!this.queryDisabled)
-		{
-			await this.query(this.deviceInfo);
-		}
-	}
-
-	/**
-	 * Отправить тест
-	 * @param {ITestValue} value Значение теста
-	 */
-	async queryTest(value: ITestValue)
-	{
-		if (!this.queryDisabled)
-		{
-			await this.query(value);
-		}
-	}
-
 	/**
 	 * Запустить циклический запрос значений
+	 * @param {number} type Тип значения
 	 * @param {number} timeout Пауза между ответом и запросом
 	 */
-	startFetchValue(timeout: number = 500)
+	startFetchValue(type: number = 0, timeout: number = 500)
 	{
 		this.debounceFetchValue = true;
 		debounce(async () =>
 		{
-			await this.queryValue();
-			if (this.debounceFetchValue) this.startFetchValue(timeout);
+			await this.queryValue(type);
+			if (this.debounceFetchValue) this.startFetchValue(type, timeout);
 		}, timeout);
 	}
 
@@ -491,7 +491,7 @@ export class Canbus extends EventEmitter
 				this.values.set(data);
 				if (!this.values.device.activation && !this.sha)
 				{
-					this.queryDeviceInfo().then();
+					this.queryValue(API_INFO_EXEC).then();
 				}
 
 				this.emit(API_VALUES_EVENT, this.values);

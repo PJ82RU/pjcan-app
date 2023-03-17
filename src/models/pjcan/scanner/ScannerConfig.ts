@@ -11,7 +11,7 @@ export class ScannerConfig extends BaseModel implements IScannerConfig
 {
 	enabled = false;
 	addSend = false;
-	timeout = 0;
+	timeoutOff = 0;
 
 	constructor(data?: DataView)
 	{

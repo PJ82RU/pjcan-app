@@ -4,7 +4,7 @@ import { ViewConfig } from "../../view";
 import { API_VARIABLE_TEST_SIZE, StructTestValue } from "./StructTestValue";
 import { ITestValue } from "./ITestValue";
 
-export const API_EXEC_VARIABLE_TEST = 190;
+export const API_VARIABLE_TEST_EXEC = 190;
 
 const struct = new BluetoothStruct(StructTestValue);
 
@@ -26,12 +26,12 @@ export class TestValue extends BaseModel implements ITestValue
 	 */
 	set(buf: DataView): boolean
 	{
-		return this._set(this, API_EXEC_VARIABLE_TEST, API_VARIABLE_TEST_SIZE + 1, struct, buf);
+		return this._set(this, API_VARIABLE_TEST_EXEC, API_VARIABLE_TEST_SIZE + 1, struct, buf);
 	}
 
 	/** Чтение данных */
 	get(): DataView | undefined
 	{
-		return this._get(this, API_EXEC_VARIABLE_TEST, API_VARIABLE_TEST_SIZE + 1, struct);
+		return this._get(this, API_VARIABLE_TEST_EXEC, API_VARIABLE_TEST_SIZE + 1, struct);
 	}
 }

@@ -50,7 +50,7 @@ import DialogTemplate from "@/layout/components/DialogTemplate.vue";
 import DeviceResetDialog from "./DeviceResetDialog.vue";
 import Scanner from "@/components/Scanner.vue";
 
-import { API_INFO_EVENT, IDeviceInfo } from "@/models/pjcan/device";
+import { API_INFO_EVENT, API_INFO_EXEC, IDeviceInfo } from "@/models/pjcan/device";
 import { IMessage } from "@/models/interfaces/message/IMessage";
 
 import canbus from "@/api/canbus";
@@ -126,7 +126,7 @@ export default {
 
 		watch(modelValue, (val: boolean): void =>
 		{
-			if (val) canbus.queryDeviceInfo();
+			if (val) canbus.queryValue(API_INFO_EXEC);
 		});
 
 		const visibleReset = ref(false);

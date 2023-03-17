@@ -1,5 +1,7 @@
-export interface IScannerConfig {
+import { IBaseModel } from "@/models/pjcan/base";
+
+export interface IScannerConfig extends IBaseModel {
 	enabled: boolean; // Включить сканирование
 	addSend: boolean; // Фиксировать исходящие данные
-	timeout: number; // Таймаут выключения сканирования при бездействии, сек
+	timeoutOff: number; // Таймаут выключения сканирования при бездействии, сек
 }

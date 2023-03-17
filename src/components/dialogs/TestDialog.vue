@@ -67,7 +67,7 @@ import DialogTemplate from "@/layout/components/DialogTemplate.vue";
 import InputCardItem from "@/components/cards/InputCardItem.vue";
 import NumberField from "@/components/common/NumberField.vue";
 import canbus from "@/api/canbus";
-import { TestValue } from "@/models/pjcan/variables/test";
+import { API_VARIABLE_TEST_EXEC, TestValue } from "@/models/pjcan/variables/test";
 
 export default {
 	name: "TestDialog",
@@ -110,7 +110,7 @@ export default {
 			test.view.enabled = true;
 			test.view.type = style.value;
 			test.view.time = time.value;
-			canbus.queryTest(test);
+			canbus.queryValue(API_VARIABLE_TEST_EXEC, test);
 		};
 
 		return {

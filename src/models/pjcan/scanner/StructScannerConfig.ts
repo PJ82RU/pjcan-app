@@ -5,5 +5,5 @@ export const API_SCANNER_CONFIG_SIZE = 2;
 export const StructScannerConfig = {
 	enabled: BluetoothStruct.bit(),
 	addSend: BluetoothStruct.bit(),
-	timeout: BluetoothStruct.uint8()
+	timeoutOff: BluetoothStruct.uint8()
 };
