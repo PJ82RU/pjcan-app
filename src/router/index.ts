@@ -36,7 +36,7 @@ const router = createRouter({
 router.beforeEach(async (to, from, next) =>
 {
 	const title = to.meta?.title as string;
-	document.title = "PJ CAN: " + (title?.length > 0 ? t(title) : "");
+	document.title = "PJCAN: " + (title?.length > 0 ? t(title) : "");
 	next();
 });
 

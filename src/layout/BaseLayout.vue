@@ -88,7 +88,7 @@ export default {
 		const title = computed((): string =>
 		{
 			const result = router.currentRoute.value.meta?.title as string;
-			return "PJ CAN: " + (result?.length > 0 ? t(result) : "");
+			return "PJCAN: " + (result?.length > 0 ? t(result) : "");
 		});
 		const menu = computed((): IMenuItem[] =>
 		{
