@@ -116,7 +116,14 @@ import { API_VARIABLE_VALUES_EXEC, API_VARIABLE_VALUES_EVENT, IVariablesValue } 
 import { IUpdate } from "@/models/pjcan/update/IUpdate";
 import { IVersion, Version } from "@/models/pjcan/version";
 import { API_VARIABLE_TEST_EXEC } from "@/models/pjcan/variables/test";
-import { API_SCANNER_CONFIG_EXEC, API_SCANNER_VALUE_EXEC, ScannerConfig, ScannerValue } from "@/models/pjcan/scanner";
+import {
+	API_SCANNER_CONFIG_EVENT,
+	API_SCANNER_CONFIG_EXEC,
+	API_SCANNER_VALUE_EVENT,
+	API_SCANNER_VALUE_EXEC,
+	ScannerConfig,
+	ScannerValue
+} from "@/models/pjcan/scanner";
 
 export class Canbus extends EventEmitter
 {
@@ -128,6 +135,7 @@ export class Canbus extends EventEmitter
 	views: IViews = new Views();
 	/** Значения */
 	values: IValues = new Values();
+	/** Статус циклического запроса */
 
 	/** Устройство */
 	deviceInfo: IDeviceInfo = new DeviceInfo();
@@ -151,7 +159,13 @@ export class Canbus extends EventEmitter
 	private promises: Promise<void>[] | null = null;
 	private queue: Promise<void>[] = [];
 	/** Таймер */
-	private debounceFetchValue: boolean = false;
+	private debounceFetchValue: number | undefined = undefined;
+
+	/** Статус циклического запроса значений */
+	get startedFetchValue(): number | undefined
+	{
+		return this.debounceFetchValue;
+	}
 
 	constructor()
 	{
@@ -194,7 +208,7 @@ export class Canbus extends EventEmitter
 		await this.queryConfig();
 		await this.queryView();
 		this.queryDisabled = false;
-		if (!this.debounceFetchValue)
+		if (this.debounceFetchValue === undefined)
 		{
 			await this.queryValue();
 		}
@@ -391,22 +405,26 @@ export class Canbus extends EventEmitter
 	/**
 	 * Запустить циклический запрос значений
 	 * @param {number} type Тип значения
+	 * @param {IBaseModel|undefined} value Передаваемые значения
 	 * @param {number} timeout Пауза между ответом и запросом
 	 */
-	startFetchValue(type: number = 0, timeout: number = 500)
+	startFetchValue(type: number = 0, value: IBaseModel | undefined = undefined, timeout: number = 500)
 	{
-		this.debounceFetchValue = true;
+		this.debounceFetchValue = type;
 		debounce(async () =>
 		{
-			await this.queryValue(type);
-			if (this.debounceFetchValue) this.startFetchValue(type, timeout);
+			await this.queryValue(type, value);
+			if (this.debounceFetchValue !== undefined)
+			{
+				this.startFetchValue(type, value, timeout);
+			}
 		}, timeout);
 	}
 
 	/** Остановить циклический запрос значений */
 	stopFetchValue()
 	{
-		this.debounceFetchValue = false;
+		this.debounceFetchValue = undefined;
 		clearDebounce();
 	}
 
@@ -662,6 +680,14 @@ export class Canbus extends EventEmitter
 				this.views.variable.volume.set(data);
 				this.emit(API_VARIABLE_VOLUME_VIEW_EVENT, this.views.variable.volume);
 				break;
+
+			case API_SCANNER_CONFIG_EXEC: // Конфигурация сканирования
+				this.scanner.set(data);
+				this.emit(API_SCANNER_CONFIG_EVENT, this.scanner);
+				break;
+			case API_SCANNER_VALUE_EXEC: // Значения сканирования
+				this.emit(API_SCANNER_VALUE_EVENT, data);
+				break;
 		}
 	}
 
@@ -684,7 +710,7 @@ export class Canbus extends EventEmitter
 			.catch(() => this.emit(API_UPDATE_EVENT_ERROR, t("update.notify.errorDownload")));
 	}
 
-	/** Пишем данные файла прошивки в устройство PJ CAN */
+	/** Пишем данные файла прошивки в устройство PJCAN */
 	async updateUpload()
 	{
 		if (this.bluetooth.connected && this.update.error === 0 && this.update.offset <= this.update.total)

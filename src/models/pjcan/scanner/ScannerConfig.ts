@@ -4,6 +4,7 @@ import { IScannerConfig } from "./IScannerConfig";
 import { API_SCANNER_CONFIG_SIZE, StructScannerConfig } from "./StructScannerConfig";
 
 export const API_SCANNER_CONFIG_EXEC = 60;
+export const API_SCANNER_CONFIG_EVENT = "ScannerConfig";
 
 const struct = new BluetoothStruct(StructScannerConfig);
 
@@ -11,7 +12,7 @@ export class ScannerConfig extends BaseModel implements IScannerConfig
 {
 	enabled = false;
 	addSend = false;
-	timeoutOff = 0;
+	timeoutOff = 5;
 
 	constructor(data?: DataView)
 	{

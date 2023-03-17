@@ -4,6 +4,7 @@ import { IScannerValue } from "./IScannerValue";
 import { API_SCANNER_VALUE_SIZE, StructScannerValue } from "./StructScannerValue";
 
 export const API_SCANNER_VALUE_EXEC = 61;
+export const API_SCANNER_VALUE_EVENT = "ScannerValue";
 
 const struct = new BluetoothStruct(StructScannerValue);
 
