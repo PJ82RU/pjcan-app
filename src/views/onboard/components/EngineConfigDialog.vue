@@ -61,7 +61,7 @@
 <script lang="ts">
 import { computed, onMounted, onUnmounted, ref, toRefs } from "vue";
 
-import DialogTemplate from "@/components/DialogTemplate.vue";
+import DialogTemplate from "@/components/dialogs/DialogTemplate.vue";
 import SwitchCardItem from "@/components/cards/SwitchCardItem.vue";
 import NumberField from "@/components/common/NumberField.vue";
 

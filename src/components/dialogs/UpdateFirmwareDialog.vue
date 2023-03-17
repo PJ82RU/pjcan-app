@@ -42,7 +42,7 @@ import { toast } from "vue3-toastify";
 import { useI18n } from "vue-i18n";
 import router from "@/router";
 
-import DialogTemplate from "@/components/DialogTemplate.vue";
+import DialogTemplate from "@/components/dialogs/DialogTemplate.vue";
 
 import { BLUETOOTH_EVENT_CONNECTED, TConnectedStatus } from "@/components/bluetooth";
 

@@ -47,7 +47,7 @@
 <script lang="ts">
 import { computed, ref, toRefs, watch } from "vue";
 
-import DialogTemplate from "@/components/DialogTemplate.vue";
+import DialogTemplate from "@/components/dialogs/DialogTemplate.vue";
 import NumberField from "@/components/common/NumberField.vue";
 
 import { TButtonItem } from "@/models/pjcan/button";

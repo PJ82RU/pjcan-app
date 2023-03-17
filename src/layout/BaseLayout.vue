@@ -57,13 +57,13 @@ import { useI18n } from "vue-i18n";
 import moment from "moment/moment";
 import ScreenFull from "screenfull";
 
-import BluetoothBtn from "./components/BluetoothBtn.vue";
-import UpdateFirmwareDialog from "./components/UpdateFirmwareDialog.vue";
+import BluetoothBtn from "../components/BluetoothBtn.vue";
+import UpdateFirmwareDialog from "../components/dialogs/UpdateFirmwareDialog.vue";
 import MenuDots, { IMenuItem } from "@/components/MenuDots.vue";
-import AboutDialog from "./components/AboutDialog.vue";
-import OnboardButtonsDialog from "./components/OnboardButtonsDialog.vue";
-import TestDialog from "./components/TestDialog.vue";
-import MessageDialog from "@/layout/components/MessageDialog.vue";
+import AboutDialog from "../components/dialogs/AboutDialog.vue";
+import OnboardButtonsDialog from "../components/dialogs/OnboardButtonsDialog.vue";
+import TestDialog from "../components/dialogs/TestDialog.vue";
+import MessageDialog from "@/components/dialogs/MessageDialog.vue";
 import IconCustom from "@/components/common/icon-custom/IconCustom.vue";
 
 import { IMessage } from "@/models/interfaces/message/IMessage";

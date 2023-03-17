@@ -39,8 +39,8 @@
 <script lang="ts">
 import { computed, onMounted, onUnmounted, ref, toRefs } from "vue";
 
-import DialogTemplate from "@/components/DialogTemplate.vue";
-import DeviceInfoDialog from "@/layout/components/DeviceInfoDialog.vue";
+import DialogTemplate from "@/components/dialogs/DialogTemplate.vue";
+import DeviceInfoDialog from "@/components/dialogs/DeviceInfoDialog.vue";
 
 import { ILooseObject } from "@/models/interfaces/ILooseObject";
 import { API_CONFIGS_EVENT, IConfigs } from "@/models/pjcan/configs";
