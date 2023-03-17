@@ -115,7 +115,13 @@ export default {
 			}
 			else
 			{
-				message.btns?.push({ title: t("scanner.btn.finish") });
+				message.btns?.push({
+					title: t("scanner.btn.finish"),
+					on: () =>
+					{
+						started.value = false;
+					}
+				});
 			}
 
 			store.commit("app/setMessage", message);
