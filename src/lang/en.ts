@@ -35,7 +35,7 @@ export default {
 	},
 
 	update: {
-		title: "Update PJ CAN",
+		title: "Update PJCAN",
 		btn: {
 			update: "Update",
 			later: "Later"
@@ -501,6 +501,65 @@ export default {
 					"Show the text of the Teyes on the information screen at the time of the absence of data display",
 				menu: "LCD: Show the text Teyes"
 			}
+		}
+	},
+
+	scanner: {
+		dialog: {
+			title: "Scanning canbus",
+			text: "Start scanning canbus?\nScanning values will be automatically sent PJ82."
+		},
+		btn: {
+			start: "Begin",
+			next: "Next",
+			finish: "Finish"
+		},
+		step: {
+			0: {
+				title: "Scanning of engine values",
+				text: "Run the car engine and press the \"Next\" button"
+			},
+			1: {
+				title: "Scanning doors",
+				text: "1. Open the driver's door and close it;\n" +
+					"2. Open the passenger door behind the driver and close it;\n" +
+					"3. Open the trunk and close it;\n" +
+					"4. Open the passenger door behind on the right and close it;\n" +
+					"5. Open the passenger door in front on the right and close it.\n" +
+					"\n" +
+					"Return to the salon and click the \"Next\" button"
+			},
+			2: {
+				title: "Scanning of signal values",
+				text: "1. Fasten the driver safety belt;\n" +
+					"2. Fasten the front passenger safety belt;\n" +
+					"3. Fasten the seat belts of the rear passengers;\n" +
+					"4. Turn on the left turn signal, then the right, turn off;\n" +
+					"5. Turn on the emergency stop signal, turn it off.\n" +
+					"\n" +
+					"Click \"Next\""
+			},
+			3: {
+				title: "Scanning of climate values",
+				text: "1. Turn on/off Auto;\n" +
+					"2. Turn on/off the AC;\n" +
+					"3. Change the direction of the air flow;\n" +
+					"4. Change the speed of the air flow.\n" +
+					"\n" +
+					"Click \"Next\""
+			},
+			4: {
+				title: "Scanning of movement values",
+				text: "1. Remove the car from the hand brake;\n" +
+					"2. Turn on the rear gear and hand back a little;\n" +
+					"3. Turn on the automatic transmission mode or switch the PMPP transmission and start moving forward.\n" +
+					"\n" +
+					"After completing the movement of the car, drown out the engine and press the \"finish\" button"
+			}
+		},
+		notify: {
+			errorStart: "Scanning is not running.\n" +
+				"Check the connection to the PJCAN device."
 		}
 	}
 };
