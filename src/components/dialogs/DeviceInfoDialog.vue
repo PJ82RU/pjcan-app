@@ -46,7 +46,7 @@ import { computed, onMounted, onUnmounted, ref, toRefs, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import store from "@/store";
 
-import DialogTemplate from "@/components/dialogs/DialogTemplate.vue";
+import DialogTemplate from "@/layout/components/DialogTemplate.vue";
 import DeviceResetDialog from "./DeviceResetDialog.vue";
 import Scanner from "@/components/Scanner.vue";
 

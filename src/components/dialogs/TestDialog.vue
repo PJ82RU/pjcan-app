@@ -63,7 +63,7 @@
 import { computed, ref, toRefs } from "vue";
 import { useI18n } from "vue-i18n";
 
-import DialogTemplate from "@/components/dialogs/DialogTemplate.vue";
+import DialogTemplate from "@/layout/components/DialogTemplate.vue";
 import InputCardItem from "@/components/cards/InputCardItem.vue";
 import NumberField from "@/components/common/NumberField.vue";
 import canbus from "@/api/canbus";

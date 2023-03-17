@@ -39,7 +39,7 @@
 <script lang="ts">
 import { computed, onMounted, onUnmounted, ref, toRefs } from "vue";
 
-import DialogTemplate from "@/components/dialogs/DialogTemplate.vue";
+import DialogTemplate from "@/layout/components/DialogTemplate.vue";
 import DeviceInfoDialog from "@/components/dialogs/DeviceInfoDialog.vue";
 
 import { ILooseObject } from "@/models/interfaces/ILooseObject";

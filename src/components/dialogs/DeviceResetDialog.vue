@@ -33,7 +33,7 @@
 <script lang="ts">
 import { computed, ref, toRefs } from "vue";
 
-import DialogTemplate from "@/components/dialogs/DialogTemplate.vue";
+import DialogTemplate from "@/layout/components/DialogTemplate.vue";
 
 import canbus from "@/api/canbus";
 

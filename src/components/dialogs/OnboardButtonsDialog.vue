@@ -102,7 +102,7 @@
 import { computed, toRefs } from "vue";
 import canbus from "@/api/canbus";
 
-import DialogTemplate from "@/components/dialogs/DialogTemplate.vue";
+import DialogTemplate from "@/layout/components/DialogTemplate.vue";
 
 import { API_LCD_VALUE_EXEC } from "@/models/pjcan/lcd";
 

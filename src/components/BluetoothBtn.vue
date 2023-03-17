@@ -11,7 +11,7 @@ import { toast } from "vue3-toastify";
 import { useI18n } from "vue-i18n";
 import store from "@/store";
 
-import DialogTemplate from "@/components/dialogs/DialogTemplate.vue";
+import DialogTemplate from "@/layout/components/DialogTemplate.vue";
 import { BLUETOOTH_EVENT_CONNECTED, BLUETOOTH_EVENT_SEND, TConnectedStatus } from "@/components/bluetooth";
 
 import canbus from "@/api/canbus";

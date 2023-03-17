@@ -58,7 +58,7 @@
 import { computed, ref, toRefs, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
-import DialogTemplate from "@/components/dialogs/DialogTemplate.vue";
+import DialogTemplate from "@/layout/components/DialogTemplate.vue";
 import SwitchCardItem from "@/components/cards/SwitchCardItem.vue";
 import NumberField from "@/components/common/NumberField.vue";
 import { IViewConfig } from "@/models/pjcan/view";
