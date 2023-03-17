@@ -507,7 +507,8 @@ export default {
 	scanner: {
 		dialog: {
 			title: "Scanning canbus",
-			text: "Start scanning canbus?\nScanning values will be automatically sent PJ82."
+			text: "Start scanning can-shines?\n" +
+				"Scanning values will be automatically sent PJ82."
 		},
 		btn: {
 			start: "Begin",
