@@ -14793,7 +14793,7 @@ const __exports__ = /*#__PURE__*/(0,exportHelper/* default */.Z)(SwitchCardItemv
 
 /***/ }),
 
-/***/ 3491:
+/***/ 6733:
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 
@@ -14814,7 +14814,7 @@ var VRow = __webpack_require__(6824);
 var VCol = __webpack_require__(8521);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/components/VSelect/VSelect.mjs + 1 modules
 var VSelect = __webpack_require__(240);
-;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/onboard/components/ViewSettingDialog.vue?vue&type=template&id=1cb5e267&scoped=true&ts=true
+;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/onboard/components/ViewSettingDialog.vue?vue&type=template&id=01a1127c&scoped=true&ts=true
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_switch_card_item = (0,runtime_core_esm_bundler/* resolveComponent */.up)("switch-card-item");
@@ -14911,8 +14911,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 var reactivity_esm_bundler = __webpack_require__(4870);
 // EXTERNAL MODULE: ./node_modules/vue-i18n/dist/vue-i18n.esm-bundler.js + 4 modules
 var vue_i18n_esm_bundler = __webpack_require__(5658);
-// EXTERNAL MODULE: ./src/components/DialogTemplate.vue + 6 modules
-var DialogTemplate = __webpack_require__(8334);
+// EXTERNAL MODULE: ./src/layout/components/DialogTemplate.vue + 6 modules
+var DialogTemplate = __webpack_require__(2196);
 // EXTERNAL MODULE: ./src/components/cards/SwitchCardItem.vue + 6 modules
 var SwitchCardItem = __webpack_require__(1070);
 // EXTERNAL MODULE: ./src/components/common/NumberField.vue + 3 modules
@@ -15002,10 +15002,10 @@ var NumberField = __webpack_require__(3066);
 });
 ;// CONCATENATED MODULE: ./src/views/onboard/components/ViewSettingDialog.vue?vue&type=script&lang=ts
  
-;// CONCATENATED MODULE: ./node_modules/mini-css-extract-plugin/dist/loader.js??clonedRuleSet-22.use[0]!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/onboard/components/ViewSettingDialog.vue?vue&type=style&index=0&id=1cb5e267&lang=scss&scoped=true
+;// CONCATENATED MODULE: ./node_modules/mini-css-extract-plugin/dist/loader.js??clonedRuleSet-22.use[0]!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/onboard/components/ViewSettingDialog.vue?vue&type=style&index=0&id=01a1127c&lang=scss&scoped=true
 // extracted by mini-css-extract-plugin
 
-;// CONCATENATED MODULE: ./src/views/onboard/components/ViewSettingDialog.vue?vue&type=style&index=0&id=1cb5e267&lang=scss&scoped=true
+;// CONCATENATED MODULE: ./src/views/onboard/components/ViewSettingDialog.vue?vue&type=style&index=0&id=01a1127c&lang=scss&scoped=true
 
 // EXTERNAL MODULE: ./node_modules/vue-loader/dist/exportHelper.js
 var exportHelper = __webpack_require__(89);
@@ -15017,7 +15017,7 @@ var exportHelper = __webpack_require__(89);
 ;
 
 
-const __exports__ = /*#__PURE__*/(0,exportHelper/* default */.Z)(ViewSettingDialogvue_type_script_lang_ts, [['render',render],['__scopeId',"data-v-1cb5e267"]])
+const __exports__ = /*#__PURE__*/(0,exportHelper/* default */.Z)(ViewSettingDialogvue_type_script_lang_ts, [['render',render],['__scopeId',"data-v-01a1127c"]])
 
 /* harmony default export */ var ViewSettingDialog = (__exports__);
 
@@ -15161,11 +15161,11 @@ var Card = __webpack_require__(242);
 // EXTERNAL MODULE: ./src/components/cards/SwitchCardItem.vue + 6 modules
 var SwitchCardItem = __webpack_require__(1070);
 // EXTERNAL MODULE: ./src/views/onboard/components/ViewSettingDialog.vue + 5 modules
-var ViewSettingDialog = __webpack_require__(3491);
+var ViewSettingDialog = __webpack_require__(6733);
 // EXTERNAL MODULE: ./src/models/pjcan/car/index.ts + 4 modules
 var pjcan_car = __webpack_require__(7530);
-// EXTERNAL MODULE: ./src/api/canbus.ts + 18 modules
-var canbus = __webpack_require__(3956);
+// EXTERNAL MODULE: ./src/api/canbus.ts + 60 modules
+var canbus = __webpack_require__(3730);
 ;// CONCATENATED MODULE: ./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/options/components/LcdCard.vue?vue&type=script&lang=ts
 
 

@@ -1,5 +1,5 @@
 "use strict";
-(self["webpackChunkpjcan"] = self["webpackChunkpjcan"] || []).push([[441],{
+(self["webpackChunkpjcan"] = self["webpackChunkpjcan"] || []).push([[320],{
 
 /***/ 3962:
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
@@ -135,7 +135,7 @@ const __exports__ = /*#__PURE__*/(0,exportHelper/* default */.Z)(Loadingvue_type
 
 /***/ }),
 
-/***/ 6441:
+/***/ 6353:
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 // ESM COMPAT FLAG
@@ -148,7 +148,7 @@ __webpack_require__.d(__webpack_exports__, {
 
 // EXTERNAL MODULE: ./node_modules/@vue/runtime-core/dist/runtime-core.esm-bundler.js
 var runtime_core_esm_bundler = __webpack_require__(3396);
-;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/buttons/Loader.vue?vue&type=template&id=5adafd46&ts=true
+;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/onboard/Loader.vue?vue&type=template&id=873dd192&ts=true
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_Loading = (0,runtime_core_esm_bundler/* resolveComponent */.up)("Loading");
@@ -163,11 +163,11 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 var Loading = __webpack_require__(9551);
 // EXTERNAL MODULE: ./src/components/Denied.vue + 6 modules
 var Denied = __webpack_require__(3962);
-;// CONCATENATED MODULE: ./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/buttons/Loader.vue?vue&type=script&lang=ts
+;// CONCATENATED MODULE: ./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/onboard/Loader.vue?vue&type=script&lang=ts
 
 
 
-const Component = (0,runtime_core_esm_bundler/* defineAsyncComponent */.RC)(() => __webpack_require__.e(/* import() */ 724).then(__webpack_require__.bind(__webpack_require__, 4724)));
+const Component = (0,runtime_core_esm_bundler/* defineAsyncComponent */.RC)(() => __webpack_require__.e(/* import() */ 319).then(__webpack_require__.bind(__webpack_require__, 2319)));
 /* harmony default export */ var Loadervue_type_script_lang_ts = ({
   name: "Loader",
   components: {
@@ -176,11 +176,11 @@ const Component = (0,runtime_core_esm_bundler/* defineAsyncComponent */.RC)(() =
     Component
   }
 });
-;// CONCATENATED MODULE: ./src/views/buttons/Loader.vue?vue&type=script&lang=ts
+;// CONCATENATED MODULE: ./src/views/onboard/Loader.vue?vue&type=script&lang=ts
  
 // EXTERNAL MODULE: ./node_modules/vue-loader/dist/exportHelper.js
 var exportHelper = __webpack_require__(89);
-;// CONCATENATED MODULE: ./src/views/buttons/Loader.vue
+;// CONCATENATED MODULE: ./src/views/onboard/Loader.vue
 
 
 

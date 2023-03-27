@@ -1,6 +1,6 @@
 {
 	"name": "pjcan",
-	"version": "0.3.1",
+	"version": "0.3.2",
 	"private": true,
 	"description": "CanBus project for Mazda 3",
 	"author": "PJ82. Spiridonov Vladislav",

@@ -1,5 +1,5 @@
 "use strict";
-(self["webpackChunkpjcan"] = self["webpackChunkpjcan"] || []).push([[724],{
+(self["webpackChunkpjcan"] = self["webpackChunkpjcan"] || []).push([[518],{
 
 /***/ 7637:
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
@@ -14680,7 +14680,7 @@ const __exports__ = /*#__PURE__*/(0,exportHelper/* default */.Z)(Cardvue_type_sc
 
 /***/ }),
 
-/***/ 4724:
+/***/ 7518:
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 // ESM COMPAT FLAG
@@ -15023,9 +15023,9 @@ const __exports__ = /*#__PURE__*/(0,exportHelper/* default */.Z)(SettingsCardvue
 /* harmony default export */ var SettingsCard = (__exports__);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/components/VBtn/VBtn.mjs + 2 modules
 var VBtn = __webpack_require__(5101);
-;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/buttons/components/ButtonDefinitionDialog.vue?vue&type=template&id=0c5763c9&scoped=true&ts=true
+;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/buttons/components/ButtonDefinitionDialog.vue?vue&type=template&id=a08ebf6c&scoped=true&ts=true
 
-function ButtonDefinitionDialogvue_type_template_id_0c5763c9_scoped_true_ts_true_render(_ctx, _cache, $props, $setup, $data, $options) {
+function ButtonDefinitionDialogvue_type_template_id_a08ebf6c_scoped_true_ts_true_render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_number_field = (0,runtime_core_esm_bundler/* resolveComponent */.up)("number-field");
                                                       
                                                             
@@ -15098,8 +15098,8 @@ function ButtonDefinitionDialogvue_type_template_id_0c5763c9_scoped_true_ts_true
 
 
 
-// EXTERNAL MODULE: ./src/components/DialogTemplate.vue + 6 modules
-var DialogTemplate = __webpack_require__(8334);
+// EXTERNAL MODULE: ./src/layout/components/DialogTemplate.vue + 6 modules
+var DialogTemplate = __webpack_require__(2196);
 ;// CONCATENATED MODULE: ./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/buttons/components/ButtonDefinitionDialog.vue?vue&type=script&lang=ts
 
 
@@ -15157,10 +15157,10 @@ var DialogTemplate = __webpack_require__(8334);
 });
 ;// CONCATENATED MODULE: ./src/views/buttons/components/ButtonDefinitionDialog.vue?vue&type=script&lang=ts
  
-;// CONCATENATED MODULE: ./node_modules/mini-css-extract-plugin/dist/loader.js??clonedRuleSet-22.use[0]!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/buttons/components/ButtonDefinitionDialog.vue?vue&type=style&index=0&id=0c5763c9&lang=scss&scoped=true
+;// CONCATENATED MODULE: ./node_modules/mini-css-extract-plugin/dist/loader.js??clonedRuleSet-22.use[0]!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/buttons/components/ButtonDefinitionDialog.vue?vue&type=style&index=0&id=a08ebf6c&lang=scss&scoped=true
 // extracted by mini-css-extract-plugin
 
-;// CONCATENATED MODULE: ./src/views/buttons/components/ButtonDefinitionDialog.vue?vue&type=style&index=0&id=0c5763c9&lang=scss&scoped=true
+;// CONCATENATED MODULE: ./src/views/buttons/components/ButtonDefinitionDialog.vue?vue&type=style&index=0&id=a08ebf6c&lang=scss&scoped=true
 
 ;// CONCATENATED MODULE: ./src/views/buttons/components/ButtonDefinitionDialog.vue
 
@@ -15170,13 +15170,13 @@ var DialogTemplate = __webpack_require__(8334);
 ;
 
 
-const ButtonDefinitionDialog_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(ButtonDefinitionDialogvue_type_script_lang_ts, [['render',ButtonDefinitionDialogvue_type_template_id_0c5763c9_scoped_true_ts_true_render],['__scopeId',"data-v-0c5763c9"]])
+const ButtonDefinitionDialog_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(ButtonDefinitionDialogvue_type_script_lang_ts, [['render',ButtonDefinitionDialogvue_type_template_id_a08ebf6c_scoped_true_ts_true_render],['__scopeId',"data-v-a08ebf6c"]])
 
 /* harmony default export */ var ButtonDefinitionDialog = (ButtonDefinitionDialog_exports_);
 // EXTERNAL MODULE: ./src/models/pjcan/button/index.ts + 7 modules
 var pjcan_button = __webpack_require__(1483);
-// EXTERNAL MODULE: ./src/api/canbus.ts + 18 modules
-var canbus = __webpack_require__(3956);
+// EXTERNAL MODULE: ./src/api/canbus.ts + 60 modules
+var canbus = __webpack_require__(3730);
 ;// CONCATENATED MODULE: ./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/buttons/index.vue?vue&type=script&lang=ts
 
 

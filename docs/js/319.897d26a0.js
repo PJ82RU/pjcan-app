@@ -1,5 +1,5 @@
 "use strict";
-(self["webpackChunkpjcan"] = self["webpackChunkpjcan"] || []).push([[349],{
+(self["webpackChunkpjcan"] = self["webpackChunkpjcan"] || []).push([[319],{
 
 /***/ 7637:
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
@@ -14793,7 +14793,7 @@ const __exports__ = /*#__PURE__*/(0,exportHelper/* default */.Z)(SwitchCardItemv
 
 /***/ }),
 
-/***/ 3491:
+/***/ 6733:
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 
@@ -14814,7 +14814,7 @@ var VRow = __webpack_require__(6824);
 var VCol = __webpack_require__(8521);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/components/VSelect/VSelect.mjs + 1 modules
 var VSelect = __webpack_require__(240);
-;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/onboard/components/ViewSettingDialog.vue?vue&type=template&id=1cb5e267&scoped=true&ts=true
+;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/onboard/components/ViewSettingDialog.vue?vue&type=template&id=01a1127c&scoped=true&ts=true
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_switch_card_item = (0,runtime_core_esm_bundler/* resolveComponent */.up)("switch-card-item");
@@ -14911,8 +14911,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 var reactivity_esm_bundler = __webpack_require__(4870);
 // EXTERNAL MODULE: ./node_modules/vue-i18n/dist/vue-i18n.esm-bundler.js + 4 modules
 var vue_i18n_esm_bundler = __webpack_require__(5658);
-// EXTERNAL MODULE: ./src/components/DialogTemplate.vue + 6 modules
-var DialogTemplate = __webpack_require__(8334);
+// EXTERNAL MODULE: ./src/layout/components/DialogTemplate.vue + 6 modules
+var DialogTemplate = __webpack_require__(2196);
 // EXTERNAL MODULE: ./src/components/cards/SwitchCardItem.vue + 6 modules
 var SwitchCardItem = __webpack_require__(1070);
 // EXTERNAL MODULE: ./src/components/common/NumberField.vue + 3 modules
@@ -15002,10 +15002,10 @@ var NumberField = __webpack_require__(3066);
 });
 ;// CONCATENATED MODULE: ./src/views/onboard/components/ViewSettingDialog.vue?vue&type=script&lang=ts
  
-;// CONCATENATED MODULE: ./node_modules/mini-css-extract-plugin/dist/loader.js??clonedRuleSet-22.use[0]!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/onboard/components/ViewSettingDialog.vue?vue&type=style&index=0&id=1cb5e267&lang=scss&scoped=true
+;// CONCATENATED MODULE: ./node_modules/mini-css-extract-plugin/dist/loader.js??clonedRuleSet-22.use[0]!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/onboard/components/ViewSettingDialog.vue?vue&type=style&index=0&id=01a1127c&lang=scss&scoped=true
 // extracted by mini-css-extract-plugin
 
-;// CONCATENATED MODULE: ./src/views/onboard/components/ViewSettingDialog.vue?vue&type=style&index=0&id=1cb5e267&lang=scss&scoped=true
+;// CONCATENATED MODULE: ./src/views/onboard/components/ViewSettingDialog.vue?vue&type=style&index=0&id=01a1127c&lang=scss&scoped=true
 
 // EXTERNAL MODULE: ./node_modules/vue-loader/dist/exportHelper.js
 var exportHelper = __webpack_require__(89);
@@ -15017,13 +15017,13 @@ var exportHelper = __webpack_require__(89);
 ;
 
 
-const __exports__ = /*#__PURE__*/(0,exportHelper/* default */.Z)(ViewSettingDialogvue_type_script_lang_ts, [['render',render],['__scopeId',"data-v-1cb5e267"]])
+const __exports__ = /*#__PURE__*/(0,exportHelper/* default */.Z)(ViewSettingDialogvue_type_script_lang_ts, [['render',render],['__scopeId',"data-v-01a1127c"]])
 
 /* harmony default export */ var ViewSettingDialog = (__exports__);
 
 /***/ }),
 
-/***/ 5349:
+/***/ 2319:
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 // ESM COMPAT FLAG
@@ -15361,15 +15361,15 @@ const __exports__ = /*#__PURE__*/(0,exportHelper/* default */.Z)(IconCardItemvue
 
 /* harmony default export */ var IconCardItem = (__exports__);
 // EXTERNAL MODULE: ./src/views/onboard/components/ViewSettingDialog.vue + 5 modules
-var ViewSettingDialog = __webpack_require__(3491);
+var ViewSettingDialog = __webpack_require__(6733);
 // EXTERNAL MODULE: ./src/models/pjcan/variables/sensors/index.ts + 5 modules
 var variables_sensors = __webpack_require__(2775);
 // EXTERNAL MODULE: ./src/models/pjcan/variables/temperature/index.ts + 4 modules
 var variables_temperature = __webpack_require__(1044);
 // EXTERNAL MODULE: ./src/models/pjcan/device/index.ts + 6 modules
 var device = __webpack_require__(1423);
-// EXTERNAL MODULE: ./src/api/canbus.ts + 18 modules
-var canbus = __webpack_require__(3956);
+// EXTERNAL MODULE: ./src/api/canbus.ts + 60 modules
+var canbus = __webpack_require__(3730);
 ;// CONCATENATED MODULE: ./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/onboard/components/InfoCard.vue?vue&type=script&lang=ts
 
 
@@ -15817,9 +15817,9 @@ const ProgressCardItem_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(P
 var VBtn = __webpack_require__(5101);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/components/VIcon/VIcon.mjs + 1 modules
 var VIcon = __webpack_require__(3289);
-;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/onboard/components/EngineConfigDialog.vue?vue&type=template&id=d2ede228&ts=true
+;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/onboard/components/EngineConfigDialog.vue?vue&type=template&id=0339354b&ts=true
 
-const EngineConfigDialogvue_type_template_id_d2ede228_ts_true_hoisted_1 = {
+const EngineConfigDialogvue_type_template_id_0339354b_ts_true_hoisted_1 = {
   key: 1
 };
 const _hoisted_2 = {
@@ -15828,7 +15828,7 @@ const _hoisted_2 = {
 const _hoisted_3 = {
   key: 1
 };
-function EngineConfigDialogvue_type_template_id_d2ede228_ts_true_render(_ctx, _cache, $props, $setup, $data, $options) {
+function EngineConfigDialogvue_type_template_id_0339354b_ts_true_render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_switch_card_item = (0,runtime_core_esm_bundler/* resolveComponent */.up)("switch-card-item");
                                                       
   const _component_number_field = (0,runtime_core_esm_bundler/* resolveComponent */.up)("number-field");
@@ -15899,7 +15899,7 @@ function EngineConfigDialogvue_type_template_id_d2ede228_ts_true_render(_ctx, _c
       }, {
         default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createTextVNode */.Uk)("mdi-restart")]),
         _: 1
-      })) : ((0,runtime_core_esm_bundler/* openBlock */.wg)(), (0,runtime_core_esm_bundler/* createElementBlock */.iD)("span", EngineConfigDialogvue_type_template_id_d2ede228_ts_true_hoisted_1, (0,shared_esm_bundler/* toDisplayString */.zw)(_ctx.$t("btn.reset")), 1))]),
+      })) : ((0,runtime_core_esm_bundler/* openBlock */.wg)(), (0,runtime_core_esm_bundler/* createElementBlock */.iD)("span", EngineConfigDialogvue_type_template_id_0339354b_ts_true_hoisted_1, (0,shared_esm_bundler/* toDisplayString */.zw)(_ctx.$t("btn.reset")), 1))]),
       _: 1
     }, 8, ["onClick"]), (0,runtime_core_esm_bundler/* createVNode */.Wm)(VBtn/* VBtn */.T, {
       color: "primary",
@@ -15934,10 +15934,10 @@ function EngineConfigDialogvue_type_template_id_d2ede228_ts_true_render(_ctx, _c
 
 
 
-;// CONCATENATED MODULE: ./src/views/onboard/components/EngineConfigDialog.vue?vue&type=template&id=d2ede228&ts=true
+;// CONCATENATED MODULE: ./src/views/onboard/components/EngineConfigDialog.vue?vue&type=template&id=0339354b&ts=true
 
-// EXTERNAL MODULE: ./src/components/DialogTemplate.vue + 6 modules
-var DialogTemplate = __webpack_require__(8334);
+// EXTERNAL MODULE: ./src/layout/components/DialogTemplate.vue + 6 modules
+var DialogTemplate = __webpack_require__(2196);
 // EXTERNAL MODULE: ./src/components/common/NumberField.vue + 3 modules
 var NumberField = __webpack_require__(3066);
 // EXTERNAL MODULE: ./src/models/pjcan/variables/engine/index.ts + 6 modules
@@ -16028,7 +16028,7 @@ var variables_engine = __webpack_require__(7925);
 
 
 ;
-const EngineConfigDialog_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(EngineConfigDialogvue_type_script_lang_ts, [['render',EngineConfigDialogvue_type_template_id_d2ede228_ts_true_render]])
+const EngineConfigDialog_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(EngineConfigDialogvue_type_script_lang_ts, [['render',EngineConfigDialogvue_type_template_id_0339354b_ts_true_render]])
 
 /* harmony default export */ var EngineConfigDialog = (EngineConfigDialog_exports_);
 ;// CONCATENATED MODULE: ./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/onboard/components/EngineCard.vue?vue&type=script&lang=ts
@@ -16301,18 +16301,18 @@ function FuelCardvue_type_template_id_0ad2d237_ts_true_render(_ctx, _cache, $pro
 
 
 
-;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/onboard/components/FuelConfigDialog.vue?vue&type=template&id=653e0263&ts=true
+;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/onboard/components/FuelConfigDialog.vue?vue&type=template&id=617319d8&ts=true
 
-const FuelConfigDialogvue_type_template_id_653e0263_ts_true_hoisted_1 = {
+const FuelConfigDialogvue_type_template_id_617319d8_ts_true_hoisted_1 = {
   key: 1
 };
-const FuelConfigDialogvue_type_template_id_653e0263_ts_true_hoisted_2 = {
+const FuelConfigDialogvue_type_template_id_617319d8_ts_true_hoisted_2 = {
   key: 1
 };
-const FuelConfigDialogvue_type_template_id_653e0263_ts_true_hoisted_3 = {
+const FuelConfigDialogvue_type_template_id_617319d8_ts_true_hoisted_3 = {
   key: 1
 };
-function FuelConfigDialogvue_type_template_id_653e0263_ts_true_render(_ctx, _cache, $props, $setup, $data, $options) {
+function FuelConfigDialogvue_type_template_id_617319d8_ts_true_render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_number_field = (0,runtime_core_esm_bundler/* resolveComponent */.up)("number-field");
                                                       
                                                       
@@ -16358,7 +16358,7 @@ function FuelConfigDialogvue_type_template_id_653e0263_ts_true_render(_ctx, _cac
       }, {
         default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createTextVNode */.Uk)("mdi-restart")]),
         _: 1
-      })) : ((0,runtime_core_esm_bundler/* openBlock */.wg)(), (0,runtime_core_esm_bundler/* createElementBlock */.iD)("span", FuelConfigDialogvue_type_template_id_653e0263_ts_true_hoisted_1, (0,shared_esm_bundler/* toDisplayString */.zw)(_ctx.$t("btn.reset")), 1))]),
+      })) : ((0,runtime_core_esm_bundler/* openBlock */.wg)(), (0,runtime_core_esm_bundler/* createElementBlock */.iD)("span", FuelConfigDialogvue_type_template_id_617319d8_ts_true_hoisted_1, (0,shared_esm_bundler/* toDisplayString */.zw)(_ctx.$t("btn.reset")), 1))]),
       _: 1
     }, 8, ["onClick"]), (0,runtime_core_esm_bundler/* createVNode */.Wm)(VBtn/* VBtn */.T, {
       color: "primary",
@@ -16369,7 +16369,7 @@ function FuelConfigDialogvue_type_template_id_653e0263_ts_true_render(_ctx, _cac
       }, {
         default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createTextVNode */.Uk)("mdi-check")]),
         _: 1
-      })) : ((0,runtime_core_esm_bundler/* openBlock */.wg)(), (0,runtime_core_esm_bundler/* createElementBlock */.iD)("span", FuelConfigDialogvue_type_template_id_653e0263_ts_true_hoisted_2, (0,shared_esm_bundler/* toDisplayString */.zw)(_ctx.$t("btn.apply")), 1))]),
+      })) : ((0,runtime_core_esm_bundler/* openBlock */.wg)(), (0,runtime_core_esm_bundler/* createElementBlock */.iD)("span", FuelConfigDialogvue_type_template_id_617319d8_ts_true_hoisted_2, (0,shared_esm_bundler/* toDisplayString */.zw)(_ctx.$t("btn.apply")), 1))]),
       _: 1
     }, 8, ["onClick"]), (0,runtime_core_esm_bundler/* createVNode */.Wm)(VBtn/* VBtn */.T, {
       color: "primary",
@@ -16380,7 +16380,7 @@ function FuelConfigDialogvue_type_template_id_653e0263_ts_true_render(_ctx, _cac
       }, {
         default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createTextVNode */.Uk)("mdi-close")]),
         _: 1
-      })) : ((0,runtime_core_esm_bundler/* openBlock */.wg)(), (0,runtime_core_esm_bundler/* createElementBlock */.iD)("span", FuelConfigDialogvue_type_template_id_653e0263_ts_true_hoisted_3, (0,shared_esm_bundler/* toDisplayString */.zw)(_ctx.$t("btn.cancel")), 1))]),
+      })) : ((0,runtime_core_esm_bundler/* openBlock */.wg)(), (0,runtime_core_esm_bundler/* createElementBlock */.iD)("span", FuelConfigDialogvue_type_template_id_617319d8_ts_true_hoisted_3, (0,shared_esm_bundler/* toDisplayString */.zw)(_ctx.$t("btn.cancel")), 1))]),
       _: 1
     })]),
     _: 1
@@ -16393,7 +16393,7 @@ function FuelConfigDialogvue_type_template_id_653e0263_ts_true_render(_ctx, _cac
 
 
 
-;// CONCATENATED MODULE: ./src/views/onboard/components/FuelConfigDialog.vue?vue&type=template&id=653e0263&ts=true
+;// CONCATENATED MODULE: ./src/views/onboard/components/FuelConfigDialog.vue?vue&type=template&id=617319d8&ts=true
 
 // EXTERNAL MODULE: ./src/models/pjcan/variables/fuel/index.ts + 6 modules
 var variables_fuel = __webpack_require__(4873);
@@ -16467,7 +16467,7 @@ var variables_fuel = __webpack_require__(4873);
 
 
 ;
-const FuelConfigDialog_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(FuelConfigDialogvue_type_script_lang_ts, [['render',FuelConfigDialogvue_type_template_id_653e0263_ts_true_render]])
+const FuelConfigDialog_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(FuelConfigDialogvue_type_script_lang_ts, [['render',FuelConfigDialogvue_type_template_id_617319d8_ts_true_render]])
 
 /* harmony default export */ var FuelConfigDialog = (FuelConfigDialog_exports_);
 ;// CONCATENATED MODULE: ./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/onboard/components/FuelCard.vue?vue&type=script&lang=ts
