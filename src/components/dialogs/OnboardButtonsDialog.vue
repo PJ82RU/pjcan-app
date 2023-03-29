@@ -44,12 +44,12 @@
 						<v-btn
 							color="secondary"
 							size="x-large"
-							@mousedown="onTouchPress('btnClockM')"
-							@mouseup="onTouchRelease('btnClockM')"
-							@mouseleave="onTouchRelease('btnClockM')"
-							@touchstart="onTouchPress('btnClockM')"
-							@touchend="onTouchRelease('btnClockM')"
-							@touchcancel="onTouchRelease('btnClockM')"
+							@mousedown="onTouchPress('btnClockH')"
+							@mouseup="onTouchRelease('btnClockH')"
+							@mouseleave="onTouchRelease('btnClockH')"
+							@touchstart="onTouchPress('btnClockH')"
+							@touchend="onTouchRelease('btnClockH')"
+							@touchcancel="onTouchRelease('btnClockH')"
 						>
 							H
 						</v-btn>
