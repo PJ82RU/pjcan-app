@@ -8241,7 +8241,7 @@ const t = i18n.global.t;
 
 /***/ }),
 
-/***/ 1757:
+/***/ 7025:
 /***/ (function(__unused_webpack_module, __unused_webpack___webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -13639,9 +13639,9 @@ const AboutDialog_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(AboutD
 /* harmony default export */ var AboutDialog = (AboutDialog_exports_);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/components/VBtnGroup/VBtnGroup.mjs + 1 modules
 var VBtnGroup = __webpack_require__(401);
-;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/dialogs/OnboardButtonsDialog.vue?vue&type=template&id=5724fe42&scoped=true&ts=true
+;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/dialogs/OnboardButtonsDialog.vue?vue&type=template&id=2154f4e2&scoped=true&ts=true
 
-function OnboardButtonsDialogvue_type_template_id_5724fe42_scoped_true_ts_true_render(_ctx, _cache, $props, $setup, $data, $options) {
+function OnboardButtonsDialogvue_type_template_id_2154f4e2_scoped_true_ts_true_render(_ctx, _cache, $props, $setup, $data, $options) {
                                                       
                                                                   
                                                       
@@ -13706,12 +13706,12 @@ function OnboardButtonsDialogvue_type_template_id_5724fe42_scoped_true_ts_true_r
           default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VBtn/* VBtn */.T, {
             color: "secondary",
             size: "x-large",
-            onMousedown: _cache[12] || (_cache[12] = $event => $setup.onTouchPress('btnClockM')),
-            onMouseup: _cache[13] || (_cache[13] = $event => $setup.onTouchRelease('btnClockM')),
-            onMouseleave: _cache[14] || (_cache[14] = $event => $setup.onTouchRelease('btnClockM')),
-            onTouchstart: _cache[15] || (_cache[15] = $event => $setup.onTouchPress('btnClockM')),
-            onTouchend: _cache[16] || (_cache[16] = $event => $setup.onTouchRelease('btnClockM')),
-            onTouchcancel: _cache[17] || (_cache[17] = $event => $setup.onTouchRelease('btnClockM'))
+            onMousedown: _cache[12] || (_cache[12] = $event => $setup.onTouchPress('btnClockH')),
+            onMouseup: _cache[13] || (_cache[13] = $event => $setup.onTouchRelease('btnClockH')),
+            onMouseleave: _cache[14] || (_cache[14] = $event => $setup.onTouchRelease('btnClockH')),
+            onTouchstart: _cache[15] || (_cache[15] = $event => $setup.onTouchPress('btnClockH')),
+            onTouchend: _cache[16] || (_cache[16] = $event => $setup.onTouchRelease('btnClockH')),
+            onTouchcancel: _cache[17] || (_cache[17] = $event => $setup.onTouchRelease('btnClockH'))
           }, {
             default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createTextVNode */.Uk)(" H ")]),
             _: 1
@@ -13840,10 +13840,10 @@ var lcd = __webpack_require__(7689);
 });
 ;// CONCATENATED MODULE: ./src/components/dialogs/OnboardButtonsDialog.vue?vue&type=script&lang=ts
  
-;// CONCATENATED MODULE: ./node_modules/mini-css-extract-plugin/dist/loader.js??clonedRuleSet-22.use[0]!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/dialogs/OnboardButtonsDialog.vue?vue&type=style&index=0&id=5724fe42&lang=scss&scoped=true
+;// CONCATENATED MODULE: ./node_modules/mini-css-extract-plugin/dist/loader.js??clonedRuleSet-22.use[0]!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/dialogs/OnboardButtonsDialog.vue?vue&type=style&index=0&id=2154f4e2&lang=scss&scoped=true
 // extracted by mini-css-extract-plugin
 
-;// CONCATENATED MODULE: ./src/components/dialogs/OnboardButtonsDialog.vue?vue&type=style&index=0&id=5724fe42&lang=scss&scoped=true
+;// CONCATENATED MODULE: ./src/components/dialogs/OnboardButtonsDialog.vue?vue&type=style&index=0&id=2154f4e2&lang=scss&scoped=true
 
 ;// CONCATENATED MODULE: ./src/components/dialogs/OnboardButtonsDialog.vue
 
@@ -13853,7 +13853,7 @@ var lcd = __webpack_require__(7689);
 ;
 
 
-const OnboardButtonsDialog_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(OnboardButtonsDialogvue_type_script_lang_ts, [['render',OnboardButtonsDialogvue_type_template_id_5724fe42_scoped_true_ts_true_render],['__scopeId',"data-v-5724fe42"]])
+const OnboardButtonsDialog_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(OnboardButtonsDialogvue_type_script_lang_ts, [['render',OnboardButtonsDialogvue_type_template_id_2154f4e2_scoped_true_ts_true_render],['__scopeId',"data-v-2154f4e2"]])
 
 /* harmony default export */ var OnboardButtonsDialog = (OnboardButtonsDialog_exports_);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/components/VSelect/VSelect.mjs + 1 modules
@@ -79147,6 +79147,6 @@ module.exports = JSON.parse('{"name":"pjcan","version":"0.3.3","private":true,"d
 },
 /******/ function(__webpack_require__) { // webpackRuntimeModules
 /******/ var __webpack_exec__ = function(moduleId) { return __webpack_require__(__webpack_require__.s = moduleId); }
-/******/ var __webpack_exports__ = (__webpack_exec__(1757));
+/******/ var __webpack_exports__ = (__webpack_exec__(7025));
 /******/ }
 ]);
