@@ -124,8 +124,8 @@ export default {
 		const timeouts = {
 			btnInfo: 0,
 			btnClock: 0,
-			btnClockM: 0,
 			btnClockH: 0,
+			btnClockM: 0,
 			btnClockRM: 0
 		} as any;
 

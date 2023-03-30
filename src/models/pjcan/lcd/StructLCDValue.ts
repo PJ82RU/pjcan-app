@@ -22,8 +22,8 @@ export const StructLCDValue = {
 	btnChange: BluetoothStruct.bit(),
 	btnInfo: BluetoothStruct.bit(),
 	btnClock: BluetoothStruct.bit(),
-	btnClockM: BluetoothStruct.bit(),
 	btnClockH: BluetoothStruct.bit(),
+	btnClockM: BluetoothStruct.bit(),
 	btnClockRM: BluetoothStruct.bit(),
 	flgClock24: BluetoothStruct.bit(),
 	buffer: BluetoothStruct.char(12)
