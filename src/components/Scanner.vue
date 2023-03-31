@@ -1,19 +1,47 @@
-<template />
+<template>
+	<dialog-template
+		v-model="visibleUploading"
+		icon="mdi-cloud-upload-outline"
+		:title="$t('scanner.upload.title')"
+		text
+	>
+		<template #body>
+			<div>{{ $t("scanner.upload.text") }}</div>
+			<div class="mb-2">{{ $t("scanner.upload.leftToLoad", { n: leftUploading }) }}</div>
+
+			<v-progress-linear color="primary" height="10" indeterminate stream rounded />
+		</template>
+	</dialog-template>
+</template>
 
 <script lang="ts">
-import { computed, toRefs, watch } from "vue";
+import { computed, ref, toRefs, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { toast } from "vue3-toastify";
 import store from "@/store";
 
-import { IMessage } from "@/models/interfaces/message/IMessage";
-
-import { API_SCANNER_CONFIG_EXEC, API_SCANNER_VALUE_EXEC, IScannerValue, ScannerValue } from "@/models/pjcan/scanner";
-
 import canbus from "@/api/canbus";
+
+import { IMessage } from "@/models/interfaces/message/IMessage";
+import { IScannerFrame } from "@/models/pjcan/scanner/IScannerFrame";
+import { IScanCanRow } from "@/models/interfaces/IScanCanRow";
+
+import {
+	API_SCANNER_CONFIG_EXEC,
+	API_SCANNER_VALUE_EVENT,
+	API_SCANNER_VALUE_EXEC,
+	IScannerValue,
+	ScannerValue
+} from "@/models/pjcan/scanner";
+
+import { setScanCan } from "@/api/google";
+
+import { toHex, toMac } from "@/utils/conversion";
+import DialogTemplate from "@/layout/components/DialogTemplate.vue";
 
 export default {
 	name: "Scanner",
+	components: { DialogTemplate },
 	props: {
 		modelValue: Boolean
 	},
@@ -25,7 +53,13 @@ export default {
 
 		let startedFetchValue: number | undefined;
 		let scannerValue: IScannerValue | undefined;
+		const scannerBuffer: IScanCanRow[] = [];
+		let efuseMac: string = "";
+		let scanUploading = false;
+		let scanClose = false;
 
+		const visibleUploading = ref(false);
+		const leftUploading = ref(0);
 		const started = computed({
 			get: (): boolean => modelValue.value,
 			set: (val: boolean): void => emit("update:modelValue", val)
@@ -49,9 +83,13 @@ export default {
 				canbus.scanner.enabled = true;
 				canbus.queryConfig(API_SCANNER_CONFIG_EXEC).then(() =>
 				{
+					efuseMac = toMac(canbus.deviceInfo.efuseMac);
+					scanClose = false;
+
 					// запускаем циклический запрос значений сканирования
 					scannerValue = new ScannerValue();
 					canbus.startFetchValue(API_SCANNER_VALUE_EXEC, scannerValue);
+					canbus.addListener(API_SCANNER_VALUE_EVENT, onReceiveValue);
 					// запускаем диалог
 					steps();
 				});
@@ -63,6 +101,7 @@ export default {
 				if (scannerValue)
 				{
 					// останавливаем циклический запрос значений сканирования
+					canbus.removeListener(API_SCANNER_VALUE_EVENT, onReceiveValue);
 					canbus.stopFetchValue();
 					scannerValue = undefined;
 					// выключаем сканирование
@@ -110,6 +149,7 @@ export default {
 					on: () =>
 					{
 						started.value = false;
+						scanClose = true;
 					}
 				});
 			}
@@ -120,6 +160,7 @@ export default {
 					on: () =>
 					{
 						started.value = false;
+						setTimeout(() => (visibleUploading.value = true), 400);
 					}
 				});
 			}
@@ -127,8 +168,55 @@ export default {
 			store.commit("app/setMessage", message);
 		};
 
+		/** Входящие значения сканирования */
+		const onReceiveValue = (res: IScannerValue): void =>
+		{
+			if (res.isData && res.count > 0)
+			{
+				scannerBuffer.push(
+					...res.frames.slice(0, res.count).map(
+						(x: IScannerFrame) =>
+							({
+								timestamp: Number(x.timestamp),
+								hexId: "0x" + toHex(x.id),
+								hexData: "0x" + x.data.map((x) => toHex(x)).join(":")
+							} as IScanCanRow)
+					)
+				);
+				sendScannerBuffer();
+			}
+		};
+
+		/** Отправка буфера */
+		const sendScannerBuffer = (): void =>
+		{
+			if (scanUploading) return;
+			if (!scannerBuffer.length)
+			{
+				if (started.value) toast.warning(t("scanner.notify.warningSend"));
+				visibleUploading.value = false;
+				return;
+			}
+
+			scanUploading = true;
+			leftUploading.value = scannerBuffer.length;
+			setScanCan({ mac: efuseMac, rows: scannerBuffer.splice(0, 32) })
+				.then((res: any) =>
+				{
+					if (res?.success && !scanClose) setTimeout(() => sendScannerBuffer(), 100);
+					else if (res?.error) toast.error(res?.message);
+				})
+				.catch(() => toast.error(t("scanner.notify.errorSend")))
+				.finally(() =>
+				{
+					scanUploading = false;
+				});
+		};
+
 		return {
-			started
+			visibleUploading,
+			started,
+			leftUploading
 		};
 	}
 };

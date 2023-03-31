@@ -50,6 +50,8 @@ import DialogTemplate from "@/layout/components/DialogTemplate.vue";
 import DeviceResetDialog from "./DeviceResetDialog.vue";
 import Scanner from "@/components/Scanner.vue";
 
+import { toMac } from "@/utils/conversion";
+
 import { API_INFO_EVENT, API_INFO_EXEC, IDeviceInfo } from "@/models/pjcan/device";
 import { IMessage } from "@/models/interfaces/message/IMessage";
 
@@ -98,10 +100,7 @@ export default {
 				// value.chipCores = canbus.deviceInfo.chipCores.toString();
 				// value.chipRevision = canbus.deviceInfo.chipRevision.toString();
 				value.cpuFreqMHz = canbus.deviceInfo.cpuFreqMHz.toString();
-				let mac: string = canbus.deviceInfo.efuseMac.toString(16);
-				mac = mac.length % 2 > 0 ? "0" + mac : mac;
-				value.efuseMac = "";
-				for (let i = mac.length - 2; i >= 0; i -= 2) value.efuseMac += mac[i] + mac[i + 1] + (i > 0 ? ":" : "");
+				value.efuseMac = toMac(canbus.deviceInfo.efuseMac);
 				// value.flashChipMode = canbus.deviceInfo.flashChipMode.toString();
 				// value.flashChipSize = canbus.deviceInfo.flashChipSize.toString();
 				// value.flashChipSpeed = canbus.deviceInfo.flashChipSpeed.toString();

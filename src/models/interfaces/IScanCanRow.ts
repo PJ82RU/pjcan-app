@@ -1,6 +1,5 @@
 export interface IScanCanRow {
-	id: number;
-	data: number[];
+	timestamp: number;
 	hexId: string;
 	hexData: string;
 }

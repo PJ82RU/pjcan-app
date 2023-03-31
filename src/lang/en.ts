@@ -565,7 +565,14 @@ export default {
 		},
 		notify: {
 			errorStart: "Scanning is not running.\n" +
-				"Check the connection to the PJCAN device."
+				"Check the connection to the PJCAN device.",
+			errorSend: "Error sending scan data packet.",
+			warningSend: "There is no scan data to send."
+		},
+		upload: {
+			title: "Uploading to the server",
+			text: "Uploading scanned values to the server.",
+			leftToLoad: "No packages to download | Left to download {n} package | Left to download {n} package | There are {n} packages left to download"
 		}
 	}
 };

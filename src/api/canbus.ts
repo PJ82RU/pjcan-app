@@ -686,7 +686,7 @@ export class Canbus extends EventEmitter
 				this.emit(API_SCANNER_CONFIG_EVENT, this.scanner);
 				break;
 			case API_SCANNER_VALUE_EXEC: // Значения сканирования
-				this.emit(API_SCANNER_VALUE_EVENT, data);
+				this.emit(API_SCANNER_VALUE_EVENT, new ScannerValue(data));
 				break;
 		}
 	}
