@@ -10,6 +10,7 @@
 				v-model:press-triple="item.pressTriple"
 				v-model:press-hold="item.pressHold"
 				v-model:release="item.release"
+				v-model:delay-exec="item.delayExec"
 				:is-loaded-config="isLoadedConfig"
 				:icon="list[i].icon"
 				@change="onButtonConfigChange"
@@ -78,6 +79,7 @@ export default {
 				res.pressTriple = x.exec[TButtonPress.PRESS_TRIPLE];
 				res.pressHold = x.exec[TButtonPress.PRESS_HOLD];
 				res.release = x.exec[TButtonPress.RELEASE];
+				res.delayExec = x.delayExec;
 			});
 		};
 		buttonItemsUpdate();
@@ -203,6 +205,7 @@ export default {
 				res.exec[TButtonPress.PRESS_TRIPLE] = x.pressTriple;
 				res.exec[TButtonPress.PRESS_HOLD] = x.pressHold;
 				res.exec[TButtonPress.RELEASE] = x.release;
+				res.delayExec = x.delayExec;
 			});
 			canbus.queryConfig(API_BUTTONS_CONFIG_EXEC);
 		};

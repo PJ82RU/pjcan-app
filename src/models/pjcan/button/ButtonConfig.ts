@@ -29,7 +29,7 @@ export class ButtonsConfig extends BaseModel implements IButtonsConfig
 		super();
 		for (let i = 0; i < BUTTON_NUMBER; i++)
 		{
-			const item: IButtonsConfigItem = { hold: 0, inR: 0, outR: 0, exec: [] } as IButtonsConfigItem;
+			const item: IButtonsConfigItem = { delayExec: false, hold: 0, inR: 0, outR: 0, exec: [] } as IButtonsConfigItem;
 			for (let j = 0; j < BUTTON_PRESS_TYPE_NUMBER; j++) item.exec.push(0);
 			this.items.push(item);
 		}

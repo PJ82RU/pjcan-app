@@ -78,6 +78,15 @@
 				<!--		:disabled="!isLoadedConfig"-->
 				<!--	/>-->
 				<!--</v-col>-->
+                <v-col cols="12" class="pt-0">
+                    <switch-card-item
+                            v-model="modelDelayExec"
+                            :title="$t('buttons.delayExec.title')"
+                            :description="$t('buttons.delayExec.description')"
+                            color="primary"
+                            :disabled="!isLoadedConfig"
+                    />
+                </v-col>
 			</v-row>
 		</template>
 	</card>
@@ -89,10 +98,11 @@ import { useI18n } from "vue-i18n";
 
 import Card from "@/components/cards/Card.vue";
 import NumberField from "@/components/common/NumberField.vue";
+import SwitchCardItem from "@/components/cards/SwitchCardItem.vue";
 
 export default {
 	name: "SettingsCard",
-	components: { Card, NumberField },
+	components: { SwitchCardItem, Card, NumberField },
 	props: {
 		title: {
 			type: String,
@@ -104,6 +114,7 @@ export default {
 		pressTriple: Number,
 		pressHold: Number,
 		release: Number,
+		delayExec: Boolean,
 		isLoadedConfig: Boolean,
 		icon: String
 	},
@@ -114,11 +125,12 @@ export default {
 		"update:pressDual",
 		"update:pressTriple",
 		"update:pressHold",
-		"update:release"
+		"update:release",
+		"update:delayExec"
 	],
 	setup(props: any, { emit }: { emit: any })
 	{
-		const { inR, pressSingle, pressDual, pressTriple, pressHold } = toRefs(props);
+		const { inR, pressSingle, pressDual, pressTriple, pressHold, delayExec } = toRefs(props);
 		const { tm } = useI18n();
 
 		/** Список функций */
@@ -222,14 +234,26 @@ export default {
 		// 	}
 		// });
 
+		/** Отложенное нажатие кнопки */
+		const modelDelayExec = computed({
+			get: (): number => delayExec.value ?? 0,
+			set: (val: number): void =>
+			{
+				emit("update:delayExec", val);
+				setRelease(val, true);
+				emit("change");
+			}
+		});
+
 		return {
 			functionsList,
 			modelResistance,
 			modelPressSingle,
 			modelPressDual,
 			modelPressTriple,
-			modelPressHold
+			modelPressHold,
 			// modelRelease
+			modelDelayExec
 		};
 	}
 };

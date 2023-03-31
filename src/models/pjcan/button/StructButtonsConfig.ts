@@ -1,6 +1,6 @@
 import { BluetoothStruct } from "@/components/bluetooth";
 
-export const API_BUTTONS_CONFIG_SIZE = 63;
+export const API_BUTTONS_CONFIG_SIZE = 69;
 export const BUTTON_NUMBER = 6; // количество кнопок
 export const BUTTON_PRESS_TYPE_NUMBER = 5; // количество типов кнопок
 
@@ -13,6 +13,7 @@ export const StructButtonsConfig = {
 	range: BluetoothStruct.uint16(),
 	items: BluetoothStruct.struct(
 		{
+			delayExec: BluetoothStruct.bit(),
 			hold: BluetoothStruct.uint8(),
 			inR: BluetoothStruct.uint16(),
 			outR: BluetoothStruct.uint16(),

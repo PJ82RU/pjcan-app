@@ -390,11 +390,16 @@ export default {
 		},
 		pressHold: {
 			title: "Button hold",
-			description: "A function that is executed when the button 3 is pressed and held for more than a second."
+			description: "A function that is performed when the button is pressed and held for 3 or more seconds."
 		},
 		release: {
 			title: "Button released",
 			description: "Function that is executed when the button is released"
+		},
+		delayExec: {
+			title: "Delayed button pressing",
+			description: "Allows you to perform only one function.\n" +
+				"For example: If it is turned off, then when the button is pressed 3 times, the functions for 1, 2 and 3 clicks are performed sequentially. If enabled, then when the button is pressed 3 times, only one function of 3 clicks will be performed."
 		},
 
 		functions: {
