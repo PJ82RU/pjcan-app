@@ -103,7 +103,7 @@ import {
 	API_VARIABLE_ENGINE_VIEW_EXEC,
 	API_VARIABLE_ENGINE_VIEW_EVENT,
 	IEngineValue,
-	IEngineView
+	IEngineView, IEngineConfig, API_VARIABLE_ENGINE_CONFIG_EVENT
 } from "@/models/pjcan/variables/engine";
 
 import canbus from "@/api/canbus";
@@ -115,6 +115,7 @@ export default {
 	{
 		const { t } = useI18n();
 
+		const isLoadedConfig = ref(false);
 		const isLoadedValue = ref(false);
 		const isLoadedView = ref(false);
 
@@ -126,6 +127,17 @@ export default {
 		const throttle = ref(0);
 		const coolant = ref(0);
 
+		/** Входящая конфигурация ДВС */
+		const onReceiveConfig = (res: IEngineConfig): void =>
+		{
+			isLoadedConfig.value = res.isData;
+			if (res.isData)
+			{
+				countRPM.value = (res.totalCountRPM / 1000).toFixed();
+				motors.value = res.totalSeconds;
+			}
+		};
+
 		/** Входящие значения ДВС */
 		const onReceiveValue = (res: IEngineValue): void =>
 		{
@@ -134,9 +146,7 @@ export default {
 			{
 				enabled.value = res.enabled;
 				rpm.value = res.rpm.toFixed();
-				countRPM.value = (res.totalCountRPM / 1000).toFixed();
 				load.value = res.load / 1000;
-				motors.value = res.totalSeconds;
 				throttle.value = res.throttle / 100;
 				coolant.value = res.coolant;
 			}
@@ -151,14 +161,17 @@ export default {
 		// регистрируем события
 		onMounted(() =>
 		{
+			canbus.addListener(API_VARIABLE_ENGINE_CONFIG_EVENT, onReceiveConfig);
 			canbus.addListener(API_VARIABLE_ENGINE_EVENT, onReceiveValue);
 			canbus.addListener(API_VARIABLE_ENGINE_VIEW_EVENT, onReceiveView);
+			onReceiveConfig(canbus.configs.variable.engine);
 			onReceiveValue(canbus.values.variable.engine);
 			onReceiveView(canbus.views.variable.engine);
 		});
 		// удаляем события
 		onUnmounted(() =>
 		{
+			canbus.removeListener(API_VARIABLE_ENGINE_CONFIG_EVENT, onReceiveConfig);
 			canbus.removeListener(API_VARIABLE_ENGINE_EVENT, onReceiveValue);
 			canbus.removeListener(API_VARIABLE_ENGINE_VIEW_EVENT, onReceiveView);
 		});
