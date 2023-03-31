@@ -1,5 +1,5 @@
 "use strict";
-(self["webpackChunkpjcan"] = self["webpackChunkpjcan"] || []).push([[518],{
+(self["webpackChunkpjcan"] = self["webpackChunkpjcan"] || []).push([[454],{
 
 /***/ 7637:
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
@@ -14680,7 +14680,120 @@ const __exports__ = /*#__PURE__*/(0,exportHelper/* default */.Z)(Cardvue_type_sc
 
 /***/ }),
 
-/***/ 7518:
+/***/ 1070:
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+
+// EXPORTS
+__webpack_require__.d(__webpack_exports__, {
+  "Z": function() { return /* binding */ SwitchCardItem; }
+});
+
+// EXTERNAL MODULE: ./node_modules/@vue/runtime-core/dist/runtime-core.esm-bundler.js
+var runtime_core_esm_bundler = __webpack_require__(3396);
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/components/VSwitch/VSwitch.mjs + 1 modules
+var VSwitch = __webpack_require__(3104);
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/components/VTextField/VTextField.mjs
+var VTextField = __webpack_require__(165);
+;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/cards/SwitchCardItem.vue?vue&type=template&id=689ec14a&scoped=true&ts=true
+
+const _withScopeId = n => (_pushScopeId("data-v-689ec14a"), n = n(), _popScopeId(), n);
+const _hoisted_1 = {
+  class: "switch-card-item"
+};
+function render(_ctx, _cache, $props, $setup, $data, $options) {
+                                                                    
+                                                            
+  return (0,runtime_core_esm_bundler/* openBlock */.wg)(), (0,runtime_core_esm_bundler/* createElementBlock */.iD)("div", _hoisted_1, [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VTextField/* VTextField */.hw, {
+    "model-value": $props.title,
+    hint: $props.description,
+    variant: "underlined",
+    density: "compact",
+    "persistent-hint": "",
+    readonly: "",
+    dense: "",
+    disabled: $props.disabled
+  }, null, 8, ["model-value", "hint", "disabled"]), (0,runtime_core_esm_bundler/* createVNode */.Wm)(VSwitch/* VSwitch */.G, {
+    modelValue: $setup.modelSwitch,
+    "onUpdate:modelValue": _cache[0] || (_cache[0] = $event => $setup.modelSwitch = $event),
+    class: "switch-card-item__switch",
+    density: "compact",
+    color: $props.color,
+    "hide-details": "",
+    disabled: $props.nodata || $props.disabled
+  }, null, 8, ["modelValue", "color", "disabled"])]);
+}
+
+/* Vuetify */
+
+
+
+
+;// CONCATENATED MODULE: ./src/components/cards/SwitchCardItem.vue?vue&type=template&id=689ec14a&scoped=true&ts=true
+
+// EXTERNAL MODULE: ./node_modules/@vue/reactivity/dist/reactivity.esm-bundler.js
+var reactivity_esm_bundler = __webpack_require__(4870);
+;// CONCATENATED MODULE: ./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/cards/SwitchCardItem.vue?vue&type=script&lang=ts
+
+/* harmony default export */ var SwitchCardItemvue_type_script_lang_ts = ({
+  name: "SwitchCardItem",
+  props: {
+    /** Значение switch */
+    modelValue: Boolean,
+    /** Заголовок */
+    title: String,
+    /** Описание */
+    description: String,
+    /** Цвет switch */
+    color: {
+      type: String,
+      default: "success"
+    },
+    /** Нет данных */
+    nodata: Boolean,
+    /** Выкл. */
+    disabled: Boolean
+  },
+  emits: ["update:modelValue"],
+  setup(props, {
+    emit
+  }) {
+    const {
+      modelValue
+    } = (0,reactivity_esm_bundler/* toRefs */.BK)(props);
+    const modelSwitch = (0,runtime_core_esm_bundler/* computed */.Fl)({
+      get: () => modelValue.value,
+      set: val => emit("update:modelValue", val)
+    });
+    return {
+      modelSwitch
+    };
+  }
+});
+;// CONCATENATED MODULE: ./src/components/cards/SwitchCardItem.vue?vue&type=script&lang=ts
+ 
+;// CONCATENATED MODULE: ./node_modules/mini-css-extract-plugin/dist/loader.js??clonedRuleSet-22.use[0]!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/cards/SwitchCardItem.vue?vue&type=style&index=0&id=689ec14a&lang=scss&scoped=true
+// extracted by mini-css-extract-plugin
+
+;// CONCATENATED MODULE: ./src/components/cards/SwitchCardItem.vue?vue&type=style&index=0&id=689ec14a&lang=scss&scoped=true
+
+// EXTERNAL MODULE: ./node_modules/vue-loader/dist/exportHelper.js
+var exportHelper = __webpack_require__(89);
+;// CONCATENATED MODULE: ./src/components/cards/SwitchCardItem.vue
+
+
+
+
+;
+
+
+const __exports__ = /*#__PURE__*/(0,exportHelper/* default */.Z)(SwitchCardItemvue_type_script_lang_ts, [['render',render],['__scopeId',"data-v-689ec14a"]])
+
+/* harmony default export */ var SwitchCardItem = (__exports__);
+
+/***/ }),
+
+/***/ 8454:
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 // ESM COMPAT FLAG
@@ -14695,7 +14808,7 @@ __webpack_require__.d(__webpack_exports__, {
 var runtime_core_esm_bundler = __webpack_require__(3396);
 // EXTERNAL MODULE: ./node_modules/@vue/shared/dist/shared.esm-bundler.js
 var shared_esm_bundler = __webpack_require__(7139);
-;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/buttons/index.vue?vue&type=template&id=11d0497a&scoped=true&ts=true
+;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/buttons/index.vue?vue&type=template&id=00033972&scoped=true&ts=true
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_settings_card = (0,runtime_core_esm_bundler/* resolveComponent */.up)("settings-card");
@@ -14728,10 +14841,12 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         "onUpdate:press-hold": $event => item.pressHold = $event,
         release: item.release,
         "onUpdate:release": $event => item.release = $event,
+        "delay-exec": item.delayExec,
+        "onUpdate:delay-exec": $event => item.delayExec = $event,
         "is-loaded-config": $setup.isLoadedConfig,
         icon: $setup.list[i].icon,
         onChange: $setup.onButtonConfigChange
-      }, null, 8, ["class", "title", "in-r", "onUpdate:in-r", "press-single", "onUpdate:press-single", "press-dual", "onUpdate:press-dual", "press-triple", "onUpdate:press-triple", "press-hold", "onUpdate:press-hold", "release", "onUpdate:release", "is-loaded-config", "icon", "onChange"])], 2);
+      }, null, 8, ["class", "title", "in-r", "onUpdate:in-r", "press-single", "onUpdate:press-single", "press-dual", "onUpdate:press-dual", "press-triple", "onUpdate:press-triple", "press-hold", "onUpdate:press-hold", "release", "onUpdate:release", "delay-exec", "onUpdate:delay-exec", "is-loaded-config", "icon", "onChange"])], 2);
     }), 128))]),
     _: 1
   }, 512), (0,runtime_core_esm_bundler/* createVNode */.Wm)(_component_button_definition_dialog, {
@@ -14759,12 +14874,13 @@ var VRow = __webpack_require__(6824);
 var VCol = __webpack_require__(8521);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/components/VSelect/VSelect.mjs + 1 modules
 var VSelect = __webpack_require__(240);
-;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/buttons/components/SettingsCard.vue?vue&type=template&id=12a9a37b&ts=true
+;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/buttons/components/SettingsCard.vue?vue&type=template&id=7e49d7f3&ts=true
 
-function SettingsCardvue_type_template_id_12a9a37b_ts_true_render(_ctx, _cache, $props, $setup, $data, $options) {
+function SettingsCardvue_type_template_id_7e49d7f3_ts_true_render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_number_field = (0,runtime_core_esm_bundler/* resolveComponent */.up)("number-field");
                                                       
                                                             
+  const _component_switch_card_item = (0,runtime_core_esm_bundler/* resolveComponent */.up)("switch-card-item");
                                                       
   const _component_card = (0,runtime_core_esm_bundler/* resolveComponent */.up)("card");
   return (0,runtime_core_esm_bundler/* openBlock */.wg)(), (0,runtime_core_esm_bundler/* createBlock */.j4)(_component_card, {
@@ -14855,6 +14971,19 @@ function SettingsCardvue_type_template_id_12a9a37b_ts_true_render(_ctx, _cache, 
           disabled: !$props.isLoadedConfig
         }, null, 8, ["modelValue", "label", "items", "hint", "disabled"])]),
         _: 1
+      }), (0,runtime_core_esm_bundler/* createVNode */.Wm)(VCol/* VCol */.D, {
+        cols: "12",
+        class: "pt-0"
+      }, {
+        default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(_component_switch_card_item, {
+          modelValue: $setup.modelDelayExec,
+          "onUpdate:modelValue": _cache[6] || (_cache[6] = $event => $setup.modelDelayExec = $event),
+          title: _ctx.$t('buttons.delayExec.title'),
+          description: _ctx.$t('buttons.delayExec.description'),
+          color: "primary",
+          disabled: !$props.isLoadedConfig
+        }, null, 8, ["modelValue", "title", "description", "disabled"])]),
+        _: 1
       })]),
       _: 1
     })]),
@@ -14871,7 +15000,10 @@ function SettingsCardvue_type_template_id_12a9a37b_ts_true_render(_ctx, _cache, 
 var Card = __webpack_require__(242);
 // EXTERNAL MODULE: ./src/components/common/NumberField.vue + 3 modules
 var NumberField = __webpack_require__(3066);
+// EXTERNAL MODULE: ./src/components/cards/SwitchCardItem.vue + 6 modules
+var SwitchCardItem = __webpack_require__(1070);
 ;// CONCATENATED MODULE: ./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/buttons/components/SettingsCard.vue?vue&type=script&lang=ts
+
 
 
 
@@ -14880,6 +15012,7 @@ var NumberField = __webpack_require__(3066);
 /* harmony default export */ var SettingsCardvue_type_script_lang_ts = ({
   name: "SettingsCard",
   components: {
+    SwitchCardItem: SwitchCardItem/* default */.Z,
     Card: Card/* default */.Z,
     NumberField: NumberField/* default */.Z
   },
@@ -14894,10 +15027,11 @@ var NumberField = __webpack_require__(3066);
     pressTriple: Number,
     pressHold: Number,
     release: Number,
+    delayExec: Boolean,
     isLoadedConfig: Boolean,
     icon: String
   },
-  emits: ["change", "update:inR", "update:pressSingle", "update:pressDual", "update:pressTriple", "update:pressHold", "update:release"],
+  emits: ["change", "update:inR", "update:pressSingle", "update:pressDual", "update:pressTriple", "update:pressHold", "update:release", "update:delayExec"],
   setup(props, {
     emit
   }) {
@@ -14906,7 +15040,8 @@ var NumberField = __webpack_require__(3066);
       pressSingle,
       pressDual,
       pressTriple,
-      pressHold
+      pressHold,
+      delayExec
     } = (0,reactivity_esm_bundler/* toRefs */.BK)(props);
     const {
       tm
@@ -14997,14 +15132,24 @@ var NumberField = __webpack_require__(3066);
     // 		emit("change");
     // 	}
     // });
+    /** Отложенное нажатие кнопки */
+    const modelDelayExec = (0,runtime_core_esm_bundler/* computed */.Fl)({
+      get: () => delayExec.value ?? 0,
+      set: val => {
+        emit("update:delayExec", val);
+        setRelease(val, true);
+        emit("change");
+      }
+    });
     return {
       functionsList,
       modelResistance,
       modelPressSingle,
       modelPressDual,
       modelPressTriple,
-      modelPressHold
+      modelPressHold,
       // modelRelease
+      modelDelayExec
     };
   }
 });
@@ -15018,7 +15163,7 @@ var exportHelper = __webpack_require__(89);
 
 
 ;
-const __exports__ = /*#__PURE__*/(0,exportHelper/* default */.Z)(SettingsCardvue_type_script_lang_ts, [['render',SettingsCardvue_type_template_id_12a9a37b_ts_true_render]])
+const __exports__ = /*#__PURE__*/(0,exportHelper/* default */.Z)(SettingsCardvue_type_script_lang_ts, [['render',SettingsCardvue_type_template_id_7e49d7f3_ts_true_render]])
 
 /* harmony default export */ var SettingsCard = (__exports__);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/components/VBtn/VBtn.mjs + 2 modules
@@ -15219,6 +15364,7 @@ var canbus = __webpack_require__(3730);
         res.pressTriple = x.exec[pjcan_button/* TButtonPress.PRESS_TRIPLE */.AV.PRESS_TRIPLE];
         res.pressHold = x.exec[pjcan_button/* TButtonPress.PRESS_HOLD */.AV.PRESS_HOLD];
         res.release = x.exec[pjcan_button/* TButtonPress.RELEASE */.AV.RELEASE];
+        res.delayExec = x.delayExec;
       });
     };
     buttonItemsUpdate();
@@ -15315,6 +15461,7 @@ var canbus = __webpack_require__(3730);
         res.exec[pjcan_button/* TButtonPress.PRESS_TRIPLE */.AV.PRESS_TRIPLE] = x.pressTriple;
         res.exec[pjcan_button/* TButtonPress.PRESS_HOLD */.AV.PRESS_HOLD] = x.pressHold;
         res.exec[pjcan_button/* TButtonPress.RELEASE */.AV.RELEASE] = x.release;
+        res.delayExec = x.delayExec;
       });
       canbus/* default.queryConfig */.Z.queryConfig(pjcan_button/* API_BUTTONS_CONFIG_EXEC */.XY);
     };
@@ -15343,10 +15490,10 @@ var canbus = __webpack_require__(3730);
 });
 ;// CONCATENATED MODULE: ./src/views/buttons/index.vue?vue&type=script&lang=ts
  
-;// CONCATENATED MODULE: ./node_modules/mini-css-extract-plugin/dist/loader.js??clonedRuleSet-22.use[0]!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/buttons/index.vue?vue&type=style&index=0&id=11d0497a&lang=scss&scoped=true
+;// CONCATENATED MODULE: ./node_modules/mini-css-extract-plugin/dist/loader.js??clonedRuleSet-22.use[0]!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/buttons/index.vue?vue&type=style&index=0&id=00033972&lang=scss&scoped=true
 // extracted by mini-css-extract-plugin
 
-;// CONCATENATED MODULE: ./src/views/buttons/index.vue?vue&type=style&index=0&id=11d0497a&lang=scss&scoped=true
+;// CONCATENATED MODULE: ./src/views/buttons/index.vue?vue&type=style&index=0&id=00033972&lang=scss&scoped=true
 
 ;// CONCATENATED MODULE: ./src/views/buttons/index.vue
 
@@ -15356,7 +15503,7 @@ var canbus = __webpack_require__(3730);
 ;
 
 
-const buttons_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(buttonsvue_type_script_lang_ts, [['render',render],['__scopeId',"data-v-11d0497a"]])
+const buttons_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(buttonsvue_type_script_lang_ts, [['render',render],['__scopeId',"data-v-00033972"]])
 
 /* harmony default export */ var buttons = (buttons_exports_);
 

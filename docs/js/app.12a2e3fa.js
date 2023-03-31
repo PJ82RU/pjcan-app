@@ -7544,11 +7544,15 @@ var vue_i18n_esm_bundler = __webpack_require__(5658);
     },
     pressHold: {
       title: "Удержание кнопки",
-      description: "Функция, которая выполняется при нажатии и удержании кнопки 3 более секунд."
+      description: "Функция, которая выполняется при нажатии и удержании кнопки 3 и более секунд."
     },
     release: {
       title: "Кнопка отпущена",
       description: "Функция, которая выполняется если кнопка отпущена"
+    },
+    delayExec: {
+      title: "Отложенное нажатие кнопки",
+      description: "Позволяет выполнить только одну функцию.\n" + "Например: Если выключено, то при нажатии кнопки 3 раза, выполняться последовательно функции для 1, 2 и 3 нажатий. Если включено, то при нажатии кнопки 3 раза, выполнится только одна функция 3-х нажатий."
     },
     functions: {
       0: "Нет действия",
@@ -8051,11 +8055,15 @@ var vue_i18n_esm_bundler = __webpack_require__(5658);
     },
     pressHold: {
       title: "Button hold",
-      description: "A function that is executed when the button 3 is pressed and held for more than a second."
+      description: "A function that is performed when the button is pressed and held for 3 or more seconds."
     },
     release: {
       title: "Button released",
       description: "Function that is executed when the button is released"
+    },
+    delayExec: {
+      title: "Delayed button pressing",
+      description: "Allows you to perform only one function.\n" + "For example: If it is turned off, then when the button is pressed 3 times, the functions for 1, 2 and 3 clicks are performed sequentially. If enabled, then when the button is pressed 3 times, only one function of 3 clicks will be performed."
     },
     functions: {
       0: "No action",
@@ -8241,7 +8249,7 @@ const t = i18n.global.t;
 
 /***/ }),
 
-/***/ 7025:
+/***/ 8419:
 /***/ (function(__unused_webpack_module, __unused_webpack___webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -13639,9 +13647,9 @@ const AboutDialog_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(AboutD
 /* harmony default export */ var AboutDialog = (AboutDialog_exports_);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/components/VBtnGroup/VBtnGroup.mjs + 1 modules
 var VBtnGroup = __webpack_require__(401);
-;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/dialogs/OnboardButtonsDialog.vue?vue&type=template&id=2154f4e2&scoped=true&ts=true
+;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/dialogs/OnboardButtonsDialog.vue?vue&type=template&id=202e5ccc&scoped=true&ts=true
 
-function OnboardButtonsDialogvue_type_template_id_2154f4e2_scoped_true_ts_true_render(_ctx, _cache, $props, $setup, $data, $options) {
+function OnboardButtonsDialogvue_type_template_id_202e5ccc_scoped_true_ts_true_render(_ctx, _cache, $props, $setup, $data, $options) {
                                                       
                                                                   
                                                       
@@ -13801,8 +13809,8 @@ var lcd = __webpack_require__(7689);
     const timeouts = {
       btnInfo: 0,
       btnClock: 0,
-      btnClockM: 0,
       btnClockH: 0,
+      btnClockM: 0,
       btnClockRM: 0
     };
     /**
@@ -13840,10 +13848,10 @@ var lcd = __webpack_require__(7689);
 });
 ;// CONCATENATED MODULE: ./src/components/dialogs/OnboardButtonsDialog.vue?vue&type=script&lang=ts
  
-;// CONCATENATED MODULE: ./node_modules/mini-css-extract-plugin/dist/loader.js??clonedRuleSet-22.use[0]!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/dialogs/OnboardButtonsDialog.vue?vue&type=style&index=0&id=2154f4e2&lang=scss&scoped=true
+;// CONCATENATED MODULE: ./node_modules/mini-css-extract-plugin/dist/loader.js??clonedRuleSet-22.use[0]!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/dialogs/OnboardButtonsDialog.vue?vue&type=style&index=0&id=202e5ccc&lang=scss&scoped=true
 // extracted by mini-css-extract-plugin
 
-;// CONCATENATED MODULE: ./src/components/dialogs/OnboardButtonsDialog.vue?vue&type=style&index=0&id=2154f4e2&lang=scss&scoped=true
+;// CONCATENATED MODULE: ./src/components/dialogs/OnboardButtonsDialog.vue?vue&type=style&index=0&id=202e5ccc&lang=scss&scoped=true
 
 ;// CONCATENATED MODULE: ./src/components/dialogs/OnboardButtonsDialog.vue
 
@@ -13853,7 +13861,7 @@ var lcd = __webpack_require__(7689);
 ;
 
 
-const OnboardButtonsDialog_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(OnboardButtonsDialogvue_type_script_lang_ts, [['render',OnboardButtonsDialogvue_type_template_id_2154f4e2_scoped_true_ts_true_render],['__scopeId',"data-v-2154f4e2"]])
+const OnboardButtonsDialog_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(OnboardButtonsDialogvue_type_script_lang_ts, [['render',OnboardButtonsDialogvue_type_template_id_202e5ccc_scoped_true_ts_true_render],['__scopeId',"data-v-202e5ccc"]])
 
 /* harmony default export */ var OnboardButtonsDialog = (OnboardButtonsDialog_exports_);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/components/VSelect/VSelect.mjs + 1 modules
@@ -22614,7 +22622,7 @@ var bluetooth = __webpack_require__(9014);
 var BaseModel = __webpack_require__(9036);
 ;// CONCATENATED MODULE: ./src/models/pjcan/button/StructButtonsConfig.ts
 
-const API_BUTTONS_CONFIG_SIZE = 63;
+const API_BUTTONS_CONFIG_SIZE = 69;
 const BUTTON_NUMBER = 6; // количество кнопок
 const BUTTON_PRESS_TYPE_NUMBER = 5; // количество типов кнопок
 /** Структура данных */
@@ -22625,6 +22633,7 @@ const StructButtonsConfig = {
   sendValue: bluetooth/* BluetoothStruct.bit */.GD.bit(),
   range: bluetooth/* BluetoothStruct.uint16 */.GD.uint16(),
   items: bluetooth/* BluetoothStruct.struct */.GD.struct({
+    delayExec: bluetooth/* BluetoothStruct.bit */.GD.bit(),
     hold: bluetooth/* BluetoothStruct.uint8 */.GD.uint8(),
     inR: bluetooth/* BluetoothStruct.uint16 */.GD.uint16(),
     outR: bluetooth/* BluetoothStruct.uint16 */.GD.uint16(),
@@ -22652,6 +22661,7 @@ class ButtonsConfig extends BaseModel/* BaseModel */.g {
     (0,defineProperty/* default */.Z)(this, "items", []);
     for (let i = 0; i < BUTTON_NUMBER; i++) {
       const item = {
+        delayExec: false,
         hold: 0,
         inR: 0,
         outR: 0,
@@ -23238,8 +23248,8 @@ const StructLCDValue = {
   btnChange: bluetooth/* BluetoothStruct.bit */.GD.bit(),
   btnInfo: bluetooth/* BluetoothStruct.bit */.GD.bit(),
   btnClock: bluetooth/* BluetoothStruct.bit */.GD.bit(),
-  btnClockM: bluetooth/* BluetoothStruct.bit */.GD.bit(),
   btnClockH: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+  btnClockM: bluetooth/* BluetoothStruct.bit */.GD.bit(),
   btnClockRM: bluetooth/* BluetoothStruct.bit */.GD.bit(),
   flgClock24: bluetooth/* BluetoothStruct.bit */.GD.bit(),
   buffer: bluetooth/* BluetoothStruct.char */.GD.char(12)
@@ -79147,6 +79157,6 @@ module.exports = JSON.parse('{"name":"pjcan","version":"0.3.3","private":true,"d
 },
 /******/ function(__webpack_require__) { // webpackRuntimeModules
 /******/ var __webpack_exec__ = function(moduleId) { return __webpack_require__(__webpack_require__.s = moduleId); }
-/******/ var __webpack_exports__ = (__webpack_exec__(7025));
+/******/ var __webpack_exports__ = (__webpack_exec__(8419));
 /******/ }
 ]);
