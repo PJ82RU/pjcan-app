@@ -411,17 +411,13 @@ export default {
 			5: "Teyes VOL DOWN button",
 			6: "Teyes VOL MUTE button",
 			7: "Clock button on LCD",
-			8: "Clock button on LCD released",
-			9: "Clock H button on LCD",
-			10: "Clock H button on LCD released",
-			11: "Clock M button on LCD",
-			12: "Clock M button on LCD released",
-			13: "Info button on LCD",
-			14: "Info button on LCD released",
-			15: "Show engine values button",
-			16: "Show consumption values button",
-			17: "Show motion values button",
-			18: "Button to show temperature values"
+			8: "Clock H button on LCD",
+			9: "Clock M button on LCD",
+			10: "Info button on LCD",
+			11: "Show engine values button",
+			12: "Show consumption values button",
+			13: "Show motion values button",
+			14: "Button to show temperature values"
 		},
 
 		definition: {

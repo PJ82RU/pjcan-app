@@ -4,6 +4,5 @@ export interface IButtonItem {
 	pressDual: number;
 	pressTriple: number;
 	pressHold: number;
-	release: number;
 	delayExec: boolean;
 }

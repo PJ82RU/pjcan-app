@@ -65,19 +65,6 @@
 						:disabled="!isLoadedConfig"
 					/>
 				</v-col>
-				<!--<v-col cols="12" class="pt-0">-->
-				<!--	<v-select-->
-				<!--		v-model="modelRelease"-->
-				<!--		:label="$t('buttons.release.title')"-->
-				<!--		:items="functionsList"-->
-				<!--		:hint="$t('buttons.release.description')"-->
-				<!--		variant="underlined"-->
-				<!--		item-title="label"-->
-				<!--		item-value="value"-->
-				<!--		persistent-hint-->
-				<!--		:disabled="!isLoadedConfig"-->
-				<!--	/>-->
-				<!--</v-col>-->
                 <v-col cols="12" class="pt-0">
                     <switch-card-item
                             v-model="modelDelayExec"
@@ -113,7 +100,6 @@ export default {
 		pressDual: Number,
 		pressTriple: Number,
 		pressHold: Number,
-		release: Number,
 		delayExec: Boolean,
 		isLoadedConfig: Boolean,
 		icon: String
@@ -125,7 +111,6 @@ export default {
 		"update:pressDual",
 		"update:pressTriple",
 		"update:pressHold",
-		"update:release",
 		"update:delayExec"
 	],
 	setup(props: any, { emit }: { emit: any })
@@ -136,11 +121,9 @@ export default {
 		/** Список функций */
 		const functionsList = computed((): object[] =>
 		{
-			const result: object[] = [];
 			const list: any = tm("buttons.functions");
-			[0, 1, 2, 3, 4, 5, 6, 7, 9, 11, 13, 15, 16, 17, 18].forEach((x) =>
-				result.push({ label: list[x], value: x })
-			);
+			const result = [];
+			for (const key in list) result.push({ label: list[key], value: Number(key) });
 			return result;
 		});
 
@@ -153,40 +136,12 @@ export default {
 			}
 		});
 
-		/**
-		 * Записать значение кнопки отпущена
-		 * @param {number} key Выбранная функция кнопки
-		 * @param {boolean} checkPressSingle Проверить кнопку нажата один раз
-		 */
-		const setRelease = (key: number, checkPressSingle: boolean): void =>
-		{
-			if (checkPressSingle && modelPressSingle.value > 0) return;
-			switch (key)
-			{
-				case 7:
-					emit("update:release", 8);
-					break;
-				case 9:
-					emit("update:release", 10);
-					break;
-				case 11:
-					emit("update:release", 12);
-					break;
-				case 13:
-					emit("update:release", 14);
-					break;
-				default:
-					emit("update:release", 0);
-			}
-		};
-
 		/** Кнопка нажата один раз */
 		const modelPressSingle = computed({
 			get: (): number => pressSingle.value ?? 0,
 			set: (val: number): void =>
 			{
 				emit("update:pressSingle", val);
-				setRelease(val, false);
 				emit("change");
 			}
 		});
@@ -197,7 +152,6 @@ export default {
 			set: (val: number): void =>
 			{
 				emit("update:pressDual", val);
-				setRelease(val, true);
 				emit("change");
 			}
 		});
@@ -208,7 +162,6 @@ export default {
 			set: (val: number): void =>
 			{
 				emit("update:pressTriple", val);
-				setRelease(val, true);
 				emit("change");
 			}
 		});
@@ -219,20 +172,9 @@ export default {
 			set: (val: number): void =>
 			{
 				emit("update:pressHold", val);
-				setRelease(val, true);
 				emit("change");
 			}
 		});
-
-		// /** Кнопка отпущена */
-		// const modelRelease = computed({
-		// 	get: (): number => release.value ?? 0,
-		// 	set: (val: number): void =>
-		// 	{
-		// 		emit("update:release", val);
-		// 		emit("change");
-		// 	}
-		// });
 
 		/** Отложенное нажатие кнопки */
 		const modelDelayExec = computed({
@@ -240,7 +182,6 @@ export default {
 			set: (val: number): void =>
 			{
 				emit("update:delayExec", val);
-				setRelease(val, true);
 				emit("change");
 			}
 		});
@@ -252,7 +193,6 @@ export default {
 			modelPressDual,
 			modelPressTriple,
 			modelPressHold,
-			// modelRelease
 			modelDelayExec
 		};
 	}
