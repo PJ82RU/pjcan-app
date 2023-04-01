@@ -1,5 +1,5 @@
 "use strict";
-(self["webpackChunkpjcan"] = self["webpackChunkpjcan"] || []).push([[419],{
+(self["webpackChunkpjcan"] = self["webpackChunkpjcan"] || []).push([[319],{
 
 /***/ 7637:
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
@@ -15023,7 +15023,7 @@ const __exports__ = /*#__PURE__*/(0,exportHelper/* default */.Z)(ViewSettingDial
 
 /***/ }),
 
-/***/ 5419:
+/***/ 2319:
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 // ESM COMPAT FLAG
@@ -15368,8 +15368,8 @@ var variables_sensors = __webpack_require__(2775);
 var variables_temperature = __webpack_require__(1044);
 // EXTERNAL MODULE: ./src/models/pjcan/device/index.ts + 6 modules
 var device = __webpack_require__(1423);
-// EXTERNAL MODULE: ./src/api/canbus.ts + 60 modules
-var canbus = __webpack_require__(3730);
+// EXTERNAL MODULE: ./src/api/canbus.ts + 18 modules
+var canbus = __webpack_require__(3956);
 ;// CONCATENATED MODULE: ./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/onboard/components/InfoCard.vue?vue&type=script&lang=ts
 
 
@@ -15597,9 +15597,9 @@ var canbus = __webpack_require__(3730);
 const InfoCard_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(InfoCardvue_type_script_lang_ts, [['render',InfoCardvue_type_template_id_7cb8bc98_ts_true_render]])
 
 /* harmony default export */ var InfoCard = (InfoCard_exports_);
-;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/onboard/components/EngineCard.vue?vue&type=template&id=c2953cb4&ts=true
+;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/onboard/components/EngineCard.vue?vue&type=template&id=151e36b4&ts=true
 
-function EngineCardvue_type_template_id_c2953cb4_ts_true_render(_ctx, _cache, $props, $setup, $data, $options) {
+function EngineCardvue_type_template_id_151e36b4_ts_true_render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_icon_card_item = (0,runtime_core_esm_bundler/* resolveComponent */.up)("icon-card-item");
                                                       
   const _component_input_card_item = (0,runtime_core_esm_bundler/* resolveComponent */.up)("input-card-item");
@@ -16056,7 +16056,6 @@ const EngineConfigDialog_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)
     const {
       t
     } = (0,vue_i18n_esm_bundler/* useI18n */.QT)();
-    const isLoadedConfig = (0,reactivity_esm_bundler/* ref */.iH)(false);
     const isLoadedValue = (0,reactivity_esm_bundler/* ref */.iH)(false);
     const isLoadedView = (0,reactivity_esm_bundler/* ref */.iH)(false);
     const enabled = (0,reactivity_esm_bundler/* ref */.iH)(false);
@@ -16066,21 +16065,15 @@ const EngineConfigDialog_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)
     const motors = (0,reactivity_esm_bundler/* ref */.iH)(0);
     const throttle = (0,reactivity_esm_bundler/* ref */.iH)(0);
     const coolant = (0,reactivity_esm_bundler/* ref */.iH)(0);
-    /** Входящая конфигурация ДВС */
-    const onReceiveConfig = res => {
-      isLoadedConfig.value = res.isData;
-      if (res.isData) {
-        countRPM.value = (res.totalCountRPM / 1000).toFixed();
-        motors.value = res.totalSeconds;
-      }
-    };
     /** Входящие значения ДВС */
     const onReceiveValue = res => {
       isLoadedValue.value = res.isData;
       if (res.isData) {
         enabled.value = res.enabled;
         rpm.value = res.rpm.toFixed();
+        countRPM.value = (res.totalCountRPM / 1000).toFixed();
         load.value = res.load / 1000;
+        motors.value = res.totalSeconds;
         throttle.value = res.throttle / 100;
         coolant.value = res.coolant;
       }
@@ -16091,16 +16084,13 @@ const EngineConfigDialog_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)
     };
     // регистрируем события
     (0,runtime_core_esm_bundler/* onMounted */.bv)(() => {
-      canbus/* default.addListener */.Z.addListener(variables_engine/* API_VARIABLE_ENGINE_CONFIG_EVENT */.f2, onReceiveConfig);
       canbus/* default.addListener */.Z.addListener(variables_engine/* API_VARIABLE_ENGINE_EVENT */.tk, onReceiveValue);
       canbus/* default.addListener */.Z.addListener(variables_engine/* API_VARIABLE_ENGINE_VIEW_EVENT */.P8, onReceiveView);
-      onReceiveConfig(canbus/* default.configs.variable.engine */.Z.configs.variable.engine);
       onReceiveValue(canbus/* default.values.variable.engine */.Z.values.variable.engine);
       onReceiveView(canbus/* default.views.variable.engine */.Z.views.variable.engine);
     });
     // удаляем события
     (0,runtime_core_esm_bundler/* onUnmounted */.Ah)(() => {
-      canbus/* default.removeListener */.Z.removeListener(variables_engine/* API_VARIABLE_ENGINE_CONFIG_EVENT */.f2, onReceiveConfig);
       canbus/* default.removeListener */.Z.removeListener(variables_engine/* API_VARIABLE_ENGINE_EVENT */.tk, onReceiveValue);
       canbus/* default.removeListener */.Z.removeListener(variables_engine/* API_VARIABLE_ENGINE_VIEW_EVENT */.P8, onReceiveView);
     });
@@ -16233,7 +16223,7 @@ const EngineConfigDialog_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)
 
 
 ;
-const EngineCard_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(EngineCardvue_type_script_lang_ts, [['render',EngineCardvue_type_template_id_c2953cb4_ts_true_render]])
+const EngineCard_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(EngineCardvue_type_script_lang_ts, [['render',EngineCardvue_type_template_id_151e36b4_ts_true_render]])
 
 /* harmony default export */ var EngineCard = (EngineCard_exports_);
 ;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/onboard/components/FuelCard.vue?vue&type=template&id=0ad2d237&ts=true

@@ -1,5 +1,5 @@
 "use strict";
-(self["webpackChunkpjcan"] = self["webpackChunkpjcan"] || []).push([[120],{
+(self["webpackChunkpjcan"] = self["webpackChunkpjcan"] || []).push([[379],{
 
 /***/ 7637:
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
@@ -14793,59 +14793,370 @@ const __exports__ = /*#__PURE__*/(0,exportHelper/* default */.Z)(SwitchCardItemv
 
 /***/ }),
 
-/***/ 6733:
+/***/ 379:
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
+// ESM COMPAT FLAG
+__webpack_require__.r(__webpack_exports__);
 
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, {
-  "Z": function() { return /* binding */ ViewSettingDialog; }
+  "default": function() { return /* binding */ buttons; }
 });
 
 // EXTERNAL MODULE: ./node_modules/@vue/runtime-core/dist/runtime-core.esm-bundler.js
 var runtime_core_esm_bundler = __webpack_require__(3396);
 // EXTERNAL MODULE: ./node_modules/@vue/shared/dist/shared.esm-bundler.js
 var shared_esm_bundler = __webpack_require__(7139);
-// EXTERNAL MODULE: ./node_modules/vuetify/lib/components/VBtn/VBtn.mjs + 2 modules
-var VBtn = __webpack_require__(5101);
+;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/buttons/index.vue?vue&type=template&id=6f4e1de0&scoped=true&ts=true
+
+function render(_ctx, _cache, $props, $setup, $data, $options) {
+  const _component_settings_card = (0,runtime_core_esm_bundler/* resolveComponent */.up)("settings-card");
+  const _component_flicking = (0,runtime_core_esm_bundler/* resolveComponent */.up)("flicking");
+  const _component_button_definition_dialog = (0,runtime_core_esm_bundler/* resolveComponent */.up)("button-definition-dialog");
+  return (0,runtime_core_esm_bundler/* openBlock */.wg)(), (0,runtime_core_esm_bundler/* createElementBlock */.iD)(runtime_core_esm_bundler/* Fragment */.HY, null, [(0,runtime_core_esm_bundler/* createVNode */.Wm)(_component_flicking, {
+    ref: "flicking",
+    class: "buttons",
+    options: {
+      bound: true,
+      align: 'prev'
+    }
+  }, {
+    default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [((0,runtime_core_esm_bundler/* openBlock */.wg)(true), (0,runtime_core_esm_bundler/* createElementBlock */.iD)(runtime_core_esm_bundler/* Fragment */.HY, null, (0,runtime_core_esm_bundler/* renderList */.Ko)($setup.buttons, (item, i) => {
+      return (0,runtime_core_esm_bundler/* openBlock */.wg)(), (0,runtime_core_esm_bundler/* createElementBlock */.iD)("div", {
+        key: `buttons-${i}`,
+        class: (0,shared_esm_bundler/* normalizeClass */.C_)(["mr-4", `flicking-${$setup.display}`])
+      }, [(0,runtime_core_esm_bundler/* createVNode */.Wm)(_component_settings_card, {
+        class: (0,shared_esm_bundler/* normalizeClass */.C_)(`settings-card-${i}`),
+        title: $setup.list[i].title,
+        "in-r": item.inR,
+        "onUpdate:in-r": $event => item.inR = $event,
+        "press-single": item.pressSingle,
+        "onUpdate:press-single": $event => item.pressSingle = $event,
+        "press-dual": item.pressDual,
+        "onUpdate:press-dual": $event => item.pressDual = $event,
+        "press-triple": item.pressTriple,
+        "onUpdate:press-triple": $event => item.pressTriple = $event,
+        "press-hold": item.pressHold,
+        "onUpdate:press-hold": $event => item.pressHold = $event,
+        "delay-exec": item.delayExec,
+        "onUpdate:delay-exec": $event => item.delayExec = $event,
+        "is-loaded-config": $setup.isLoadedConfig,
+        icon: $setup.list[i].icon,
+        onChange: $setup.onButtonConfigChange
+      }, null, 8, ["class", "title", "in-r", "onUpdate:in-r", "press-single", "onUpdate:press-single", "press-dual", "onUpdate:press-dual", "press-triple", "onUpdate:press-triple", "press-hold", "onUpdate:press-hold", "delay-exec", "onUpdate:delay-exec", "is-loaded-config", "icon", "onChange"])], 2);
+    }), 128))]),
+    _: 1
+  }, 512), (0,runtime_core_esm_bundler/* createVNode */.Wm)(_component_button_definition_dialog, {
+    modelValue: $setup.visibleButtonDefinitionDialog,
+    "onUpdate:modelValue": _cache[0] || (_cache[0] = $event => $setup.visibleButtonDefinitionDialog = $event),
+    list: $setup.list,
+    resistance: $setup.resistanceButtonDefinition,
+    type: $setup.typeButtonDefinition,
+    "onClick:apply": $setup.onButtonDefinitionApply
+  }, null, 8, ["modelValue", "list", "resistance", "type", "onClick:apply"])], 64);
+}
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.push.js
+var es_array_push = __webpack_require__(7658);
+// EXTERNAL MODULE: ./node_modules/@vue/reactivity/dist/reactivity.esm-bundler.js
+var reactivity_esm_bundler = __webpack_require__(4870);
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/display.mjs
+var composables_display = __webpack_require__(8157);
+// EXTERNAL MODULE: ./node_modules/vue-i18n/dist/vue-i18n.esm-bundler.js + 4 modules
+var vue_i18n_esm_bundler = __webpack_require__(5658);
+// EXTERNAL MODULE: ./node_modules/@egjs/vue3-flicking/dist/flicking.esm.js + 7 modules
+var flicking_esm = __webpack_require__(7637);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/components/VGrid/VRow.mjs
 var VRow = __webpack_require__(6824);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/components/VGrid/VCol.mjs
 var VCol = __webpack_require__(8521);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/components/VSelect/VSelect.mjs + 1 modules
 var VSelect = __webpack_require__(240);
-;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/onboard/components/ViewSettingDialog.vue?vue&type=template&id=01a1127c&scoped=true&ts=true
+;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/buttons/components/SettingsCard.vue?vue&type=template&id=cea179e0&ts=true
 
-function render(_ctx, _cache, $props, $setup, $data, $options) {
-  const _component_switch_card_item = (0,runtime_core_esm_bundler/* resolveComponent */.up)("switch-card-item");
+function SettingsCardvue_type_template_id_cea179e0_ts_true_render(_ctx, _cache, $props, $setup, $data, $options) {
+  const _component_number_field = (0,runtime_core_esm_bundler/* resolveComponent */.up)("number-field");
                                                       
                                                             
+  const _component_switch_card_item = (0,runtime_core_esm_bundler/* resolveComponent */.up)("switch-card-item");
+                                                      
+  const _component_card = (0,runtime_core_esm_bundler/* resolveComponent */.up)("card");
+  return (0,runtime_core_esm_bundler/* openBlock */.wg)(), (0,runtime_core_esm_bundler/* createBlock */.j4)(_component_card, {
+    class: "settings-card",
+    title: $props.title,
+    custom: $props.icon
+  }, {
+    body: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VRow/* VRow */.o, null, {
+      default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VCol/* VCol */.D, {
+        cols: "12"
+      }, {
+        default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(_component_number_field, {
+          modelValue: $setup.modelResistance,
+          "onUpdate:modelValue": _cache[0] || (_cache[0] = $event => $setup.modelResistance = $event),
+          label: _ctx.$t('buttons.resistance.title'),
+          hint: _ctx.$t('buttons.resistance.description'),
+          min: 1,
+          max: 3999,
+          disabled: !$props.isLoadedConfig,
+          onChange: _cache[1] || (_cache[1] = $event => _ctx.$emit('change'))
+        }, null, 8, ["modelValue", "label", "hint", "disabled"])]),
+        _: 1
+      }), (0,runtime_core_esm_bundler/* createVNode */.Wm)(VCol/* VCol */.D, {
+        cols: "12",
+        class: "pt-0"
+      }, {
+        default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VSelect/* VSelect */.r, {
+          modelValue: $setup.modelPressSingle,
+          "onUpdate:modelValue": _cache[2] || (_cache[2] = $event => $setup.modelPressSingle = $event),
+          label: _ctx.$t('buttons.pressSingle.title'),
+          items: $setup.functionsList,
+          hint: _ctx.$t('buttons.pressSingle.description'),
+          variant: "underlined",
+          "item-title": "label",
+          "item-value": "value",
+          "persistent-hint": "",
+          disabled: !$props.isLoadedConfig
+        }, null, 8, ["modelValue", "label", "items", "hint", "disabled"])]),
+        _: 1
+      }), (0,runtime_core_esm_bundler/* createVNode */.Wm)(VCol/* VCol */.D, {
+        cols: "12",
+        class: "pt-0"
+      }, {
+        default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VSelect/* VSelect */.r, {
+          modelValue: $setup.modelPressDual,
+          "onUpdate:modelValue": _cache[3] || (_cache[3] = $event => $setup.modelPressDual = $event),
+          label: _ctx.$t('buttons.pressDual.title'),
+          items: $setup.functionsList,
+          hint: _ctx.$t('buttons.pressDual.description'),
+          variant: "underlined",
+          "item-title": "label",
+          "item-value": "value",
+          "persistent-hint": "",
+          disabled: !$props.isLoadedConfig
+        }, null, 8, ["modelValue", "label", "items", "hint", "disabled"])]),
+        _: 1
+      }), (0,runtime_core_esm_bundler/* createVNode */.Wm)(VCol/* VCol */.D, {
+        cols: "12",
+        class: "pt-0"
+      }, {
+        default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VSelect/* VSelect */.r, {
+          modelValue: $setup.modelPressTriple,
+          "onUpdate:modelValue": _cache[4] || (_cache[4] = $event => $setup.modelPressTriple = $event),
+          label: _ctx.$t('buttons.pressTriple.title'),
+          items: $setup.functionsList,
+          hint: _ctx.$t('buttons.pressTriple.description'),
+          variant: "underlined",
+          "item-title": "label",
+          "item-value": "value",
+          "persistent-hint": "",
+          disabled: !$props.isLoadedConfig
+        }, null, 8, ["modelValue", "label", "items", "hint", "disabled"])]),
+        _: 1
+      }), (0,runtime_core_esm_bundler/* createVNode */.Wm)(VCol/* VCol */.D, {
+        cols: "12",
+        class: "pt-0"
+      }, {
+        default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VSelect/* VSelect */.r, {
+          modelValue: $setup.modelPressHold,
+          "onUpdate:modelValue": _cache[5] || (_cache[5] = $event => $setup.modelPressHold = $event),
+          label: _ctx.$t('buttons.pressHold.title'),
+          items: $setup.functionsList,
+          hint: _ctx.$t('buttons.pressHold.description'),
+          variant: "underlined",
+          "item-title": "label",
+          "item-value": "value",
+          "persistent-hint": "",
+          disabled: !$props.isLoadedConfig
+        }, null, 8, ["modelValue", "label", "items", "hint", "disabled"])]),
+        _: 1
+      }), (0,runtime_core_esm_bundler/* createVNode */.Wm)(VCol/* VCol */.D, {
+        cols: "12",
+        class: "pt-0"
+      }, {
+        default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(_component_switch_card_item, {
+          modelValue: $setup.modelDelayExec,
+          "onUpdate:modelValue": _cache[6] || (_cache[6] = $event => $setup.modelDelayExec = $event),
+          title: _ctx.$t('buttons.delayExec.title'),
+          description: _ctx.$t('buttons.delayExec.description'),
+          color: "primary",
+          disabled: !$props.isLoadedConfig
+        }, null, 8, ["modelValue", "title", "description", "disabled"])]),
+        _: 1
+      })]),
+      _: 1
+    })]),
+    _: 1
+  }, 8, ["title", "custom"]);
+}
+
+/* Vuetify */
+
+
+
+
+// EXTERNAL MODULE: ./src/components/cards/Card.vue + 6 modules
+var Card = __webpack_require__(242);
+// EXTERNAL MODULE: ./src/components/common/NumberField.vue + 3 modules
+var NumberField = __webpack_require__(3066);
+// EXTERNAL MODULE: ./src/components/cards/SwitchCardItem.vue + 6 modules
+var SwitchCardItem = __webpack_require__(1070);
+;// CONCATENATED MODULE: ./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/buttons/components/SettingsCard.vue?vue&type=script&lang=ts
+
+
+
+
+
+
+/* harmony default export */ var SettingsCardvue_type_script_lang_ts = ({
+  name: "SettingsCard",
+  components: {
+    SwitchCardItem: SwitchCardItem/* default */.Z,
+    Card: Card/* default */.Z,
+    NumberField: NumberField/* default */.Z
+  },
+  props: {
+    title: {
+      type: String,
+      required: true
+    },
+    inR: Number,
+    pressSingle: Number,
+    pressDual: Number,
+    pressTriple: Number,
+    pressHold: Number,
+    delayExec: Boolean,
+    isLoadedConfig: Boolean,
+    icon: String
+  },
+  emits: ["change", "update:inR", "update:pressSingle", "update:pressDual", "update:pressTriple", "update:pressHold", "update:delayExec"],
+  setup(props, {
+    emit
+  }) {
+    const {
+      inR,
+      pressSingle,
+      pressDual,
+      pressTriple,
+      pressHold,
+      delayExec
+    } = (0,reactivity_esm_bundler/* toRefs */.BK)(props);
+    const {
+      tm
+    } = (0,vue_i18n_esm_bundler/* useI18n */.QT)();
+    /** Список функций */
+    const functionsList = (0,runtime_core_esm_bundler/* computed */.Fl)(() => {
+      const list = tm("buttons.functions");
+      const result = [];
+      for (const key in list) result.push({
+        label: list[key],
+        value: Number(key)
+      });
+      return result;
+    });
+    /** Сопротивление кнопки */
+    const modelResistance = (0,runtime_core_esm_bundler/* computed */.Fl)({
+      get: () => inR.value ?? 0,
+      set: val => {
+        emit("update:inR", val);
+      }
+    });
+    /** Кнопка нажата один раз */
+    const modelPressSingle = (0,runtime_core_esm_bundler/* computed */.Fl)({
+      get: () => pressSingle.value ?? 0,
+      set: val => {
+        emit("update:pressSingle", val);
+        emit("change");
+      }
+    });
+    /** Кнопка нажата два раза */
+    const modelPressDual = (0,runtime_core_esm_bundler/* computed */.Fl)({
+      get: () => pressDual.value ?? 0,
+      set: val => {
+        emit("update:pressDual", val);
+        emit("change");
+      }
+    });
+    /** Кнопка нажата три раза */
+    const modelPressTriple = (0,runtime_core_esm_bundler/* computed */.Fl)({
+      get: () => pressTriple.value ?? 0,
+      set: val => {
+        emit("update:pressTriple", val);
+        emit("change");
+      }
+    });
+    /** Удержание кнопки */
+    const modelPressHold = (0,runtime_core_esm_bundler/* computed */.Fl)({
+      get: () => pressHold.value ?? 0,
+      set: val => {
+        emit("update:pressHold", val);
+        emit("change");
+      }
+    });
+    /** Отложенное нажатие кнопки */
+    const modelDelayExec = (0,runtime_core_esm_bundler/* computed */.Fl)({
+      get: () => delayExec.value ?? 0,
+      set: val => {
+        emit("update:delayExec", val);
+        emit("change");
+      }
+    });
+    return {
+      functionsList,
+      modelResistance,
+      modelPressSingle,
+      modelPressDual,
+      modelPressTriple,
+      modelPressHold,
+      modelDelayExec
+    };
+  }
+});
+;// CONCATENATED MODULE: ./src/views/buttons/components/SettingsCard.vue?vue&type=script&lang=ts
+ 
+// EXTERNAL MODULE: ./node_modules/vue-loader/dist/exportHelper.js
+var exportHelper = __webpack_require__(89);
+;// CONCATENATED MODULE: ./src/views/buttons/components/SettingsCard.vue
+
+
+
+
+;
+const __exports__ = /*#__PURE__*/(0,exportHelper/* default */.Z)(SettingsCardvue_type_script_lang_ts, [['render',SettingsCardvue_type_template_id_cea179e0_ts_true_render]])
+
+/* harmony default export */ var SettingsCard = (__exports__);
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/components/VBtn/VBtn.mjs + 2 modules
+var VBtn = __webpack_require__(5101);
+;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/buttons/components/ButtonDefinitionDialog.vue?vue&type=template&id=a08ebf6c&scoped=true&ts=true
+
+function ButtonDefinitionDialogvue_type_template_id_a08ebf6c_scoped_true_ts_true_render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_number_field = (0,runtime_core_esm_bundler/* resolveComponent */.up)("number-field");
+                                                      
+                                                            
                                                       
                                                       
   const _component_dialog_template = (0,runtime_core_esm_bundler/* resolveComponent */.up)("dialog-template");
   return (0,runtime_core_esm_bundler/* openBlock */.wg)(), (0,runtime_core_esm_bundler/* createBlock */.j4)(_component_dialog_template, {
     modelValue: $setup.visible,
-    "onUpdate:modelValue": _cache[4] || (_cache[4] = $event => $setup.visible = $event),
-    "content-class": "view-setting-dialog",
-    icon: "lcd",
-    title: $props.title,
+    "onUpdate:modelValue": _cache[3] || (_cache[3] = $event => $setup.visible = $event),
+    "content-class": "button-definition-dialog",
+    icon: "mdi-gesture-tap-button",
+    title: _ctx.$t('buttons.definition.title'),
     width: "550px",
     text: "",
     actions: ""
   }, {
     body: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VRow/* VRow */.o, null, {
       default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VCol/* VCol */.D, {
-        cols: "12",
-        class: "pt-0"
+        cols: "12"
       }, {
-        default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(_component_switch_card_item, {
-          modelValue: $setup.modelEnabled,
-          "onUpdate:modelValue": _cache[0] || (_cache[0] = $event => $setup.modelEnabled = $event),
-          title: _ctx.$t('onboard.viewSetting.enabled.title'),
-          description: _ctx.$t('onboard.viewSetting.enabled.description'),
-          disabled: $props.disabled
-        }, null, 8, ["modelValue", "title", "description", "disabled"])]),
+        default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(_component_number_field, {
+          modelValue: $props.resistance,
+          "onUpdate:modelValue": _cache[0] || (_cache[0] = $event => $props.resistance = $event),
+          label: _ctx.$t('buttons.resistance.title'),
+          hint: _ctx.$t('buttons.resistance.description'),
+          min: 1,
+          max: 3999
+        }, null, 8, ["modelValue", "label", "hint"])]),
         _: 1
       }), (0,runtime_core_esm_bundler/* createVNode */.Wm)(VCol/* VCol */.D, {
         cols: "12",
@@ -14854,47 +15165,30 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VSelect/* VSelect */.r, {
           modelValue: $setup.modelType,
           "onUpdate:modelValue": _cache[1] || (_cache[1] = $event => $setup.modelType = $event),
-          label: _ctx.$t('onboard.viewSetting.type.title'),
-          items: $setup.typeItems,
-          hint: _ctx.$t('onboard.viewSetting.type.description'),
+          label: _ctx.$t('buttons.definition.type.title'),
+          items: $props.list,
+          hint: _ctx.$t('buttons.definition.type.description'),
           variant: "underlined",
-          "item-title": "label",
-          "item-value": "value",
-          "persistent-hint": "",
-          disabled: $props.disabled
-        }, null, 8, ["modelValue", "label", "items", "hint", "disabled"])]),
-        _: 1
-      }), (0,runtime_core_esm_bundler/* createVNode */.Wm)(VCol/* VCol */.D, {
-        cols: "12",
-        class: "pt-0"
-      }, {
-        default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(_component_number_field, {
-          modelValue: $setup.modelTime,
-          "onUpdate:modelValue": _cache[2] || (_cache[2] = $event => $setup.modelTime = $event),
-          label: _ctx.$t('onboard.viewSetting.time.title'),
-          hint: _ctx.$t('onboard.viewSetting.time.description'),
-          disabled: $props.disabled,
-          min: 1,
-          max: 300
-        }, null, 8, ["modelValue", "label", "hint", "disabled"])]),
+          "item-title": "title",
+          "item-value": "type",
+          "persistent-hint": ""
+        }, null, 8, ["modelValue", "label", "items", "hint"])]),
         _: 1
       })]),
       _: 1
     })]),
     btns: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VBtn/* VBtn */.T, {
       color: "primary",
-      "prepend-icon": "mdi-check",
       onClick: $setup.onApplyClick,
-      disabled: $props.disabled
+      disabled: $setup.disabled
     }, {
       default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createTextVNode */.Uk)((0,shared_esm_bundler/* toDisplayString */.zw)(_ctx.$t("btn.apply")), 1)]),
       _: 1
     }, 8, ["onClick", "disabled"]), (0,runtime_core_esm_bundler/* createVNode */.Wm)(VBtn/* VBtn */.T, {
       color: "primary",
-      "prepend-icon": "mdi-close",
-      onClick: _cache[3] || (_cache[3] = $event => $setup.visible = false)
+      onClick: _cache[2] || (_cache[2] = $event => $setup.visible = false)
     }, {
-      default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createTextVNode */.Uk)((0,shared_esm_bundler/* toDisplayString */.zw)(_ctx.$t("btn.close")), 1)]),
+      default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createTextVNode */.Uk)((0,shared_esm_bundler/* toDisplayString */.zw)(_ctx.$t("btn.cancel")), 1)]),
       _: 1
     })]),
     _: 1
@@ -14907,27 +15201,16 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 
 
 
-// EXTERNAL MODULE: ./node_modules/@vue/reactivity/dist/reactivity.esm-bundler.js
-var reactivity_esm_bundler = __webpack_require__(4870);
-// EXTERNAL MODULE: ./node_modules/vue-i18n/dist/vue-i18n.esm-bundler.js + 4 modules
-var vue_i18n_esm_bundler = __webpack_require__(5658);
 // EXTERNAL MODULE: ./src/layout/components/DialogTemplate.vue + 6 modules
 var DialogTemplate = __webpack_require__(2196);
-// EXTERNAL MODULE: ./src/components/cards/SwitchCardItem.vue + 6 modules
-var SwitchCardItem = __webpack_require__(1070);
-// EXTERNAL MODULE: ./src/components/common/NumberField.vue + 3 modules
-var NumberField = __webpack_require__(3066);
-;// CONCATENATED MODULE: ./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/onboard/components/ViewSettingDialog.vue?vue&type=script&lang=ts
+;// CONCATENATED MODULE: ./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/buttons/components/ButtonDefinitionDialog.vue?vue&type=script&lang=ts
 
 
 
-
-
-/* harmony default export */ var ViewSettingDialogvue_type_script_lang_ts = ({
-  name: "ViewSettingDialog",
+/* harmony default export */ var ButtonDefinitionDialogvue_type_script_lang_ts = ({
+  name: "ButtonDefinitionDialog",
   components: {
     DialogTemplate: DialogTemplate/* default */.Z,
-    SwitchCardItem: SwitchCardItem/* default */.Z,
     NumberField: NumberField/* default */.Z
   },
   props: {
@@ -14936,19 +15219,14 @@ var NumberField = __webpack_require__(3066);
       type: Boolean,
       default: false
     },
-    /** Заголовок */
-    title: {
-      type: String,
-      require: true
+    /** Список типов кнопок */
+    list: {
+      type: Array,
+      required: true
     },
-    /** Вкл/выкл. отображения на LCD */
-    enabled: Boolean,
-    /** Тип вывода текста на LCD */
-    type: Number,
-    /** Время отображения текста на LCD, сек */
-    time: Number,
-    /** Выкл. */
-    disabled: Boolean
+    /** Сопротивление кнопки */
+    resistance: Number,
+    type: Number
   },
   emits: ["update:modelValue", "click:apply"],
   setup(props, {
@@ -14956,60 +15234,38 @@ var NumberField = __webpack_require__(3066);
   }) {
     const {
       modelValue,
-      enabled,
-      type,
-      time
+      type
     } = (0,reactivity_esm_bundler/* toRefs */.BK)(props);
-    const {
-      tm
-    } = (0,vue_i18n_esm_bundler/* useI18n */.QT)();
     const visible = (0,runtime_core_esm_bundler/* computed */.Fl)({
       get: () => modelValue.value,
       set: val => emit("update:modelValue", val)
     });
-    const modelEnabled = (0,reactivity_esm_bundler/* ref */.iH)(false);
-    const modelType = (0,reactivity_esm_bundler/* ref */.iH)(0);
-    const typeItems = (0,runtime_core_esm_bundler/* computed */.Fl)(() => tm("onboard.viewSetting.type.items")?.map((x, i) => ({
-      label: x,
-      value: i
-    })));
-    const modelTime = (0,reactivity_esm_bundler/* ref */.iH)(3);
+    const modelType = (0,reactivity_esm_bundler/* ref */.iH)(undefined);
+    const disabled = (0,runtime_core_esm_bundler/* computed */.Fl)(() => modelType.value === undefined);
     (0,runtime_core_esm_bundler/* watch */.YP)(visible, val => {
-      if (val) {
-        modelEnabled.value = enabled.value ?? false;
-        modelType.value = type.value ?? 0;
-        modelTime.value = time.value ?? 3;
-      }
+      if (val) modelType.value = type.value >= 0 ? type.value : undefined;
     });
-    /** Применить изменения и закрыть диалог */
+    /** Применить */
     const onApplyClick = () => {
       visible.value = false;
-      emit("click:apply", {
-        enabled: modelEnabled.value,
-        type: modelType.value,
-        time: modelTime.value
-      });
+      emit("click:apply", modelType.value);
     };
     return {
       visible,
-      modelEnabled,
       modelType,
-      typeItems,
-      modelTime,
+      disabled,
       onApplyClick
     };
   }
 });
-;// CONCATENATED MODULE: ./src/views/onboard/components/ViewSettingDialog.vue?vue&type=script&lang=ts
+;// CONCATENATED MODULE: ./src/views/buttons/components/ButtonDefinitionDialog.vue?vue&type=script&lang=ts
  
-;// CONCATENATED MODULE: ./node_modules/mini-css-extract-plugin/dist/loader.js??clonedRuleSet-22.use[0]!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/onboard/components/ViewSettingDialog.vue?vue&type=style&index=0&id=01a1127c&lang=scss&scoped=true
+;// CONCATENATED MODULE: ./node_modules/mini-css-extract-plugin/dist/loader.js??clonedRuleSet-22.use[0]!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/buttons/components/ButtonDefinitionDialog.vue?vue&type=style&index=0&id=a08ebf6c&lang=scss&scoped=true
 // extracted by mini-css-extract-plugin
 
-;// CONCATENATED MODULE: ./src/views/onboard/components/ViewSettingDialog.vue?vue&type=style&index=0&id=01a1127c&lang=scss&scoped=true
+;// CONCATENATED MODULE: ./src/views/buttons/components/ButtonDefinitionDialog.vue?vue&type=style&index=0&id=a08ebf6c&lang=scss&scoped=true
 
-// EXTERNAL MODULE: ./node_modules/vue-loader/dist/exportHelper.js
-var exportHelper = __webpack_require__(89);
-;// CONCATENATED MODULE: ./src/views/onboard/components/ViewSettingDialog.vue
+;// CONCATENATED MODULE: ./src/views/buttons/components/ButtonDefinitionDialog.vue
 
 
 
@@ -15017,156 +15273,14 @@ var exportHelper = __webpack_require__(89);
 ;
 
 
-const __exports__ = /*#__PURE__*/(0,exportHelper/* default */.Z)(ViewSettingDialogvue_type_script_lang_ts, [['render',render],['__scopeId',"data-v-01a1127c"]])
+const ButtonDefinitionDialog_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(ButtonDefinitionDialogvue_type_script_lang_ts, [['render',ButtonDefinitionDialogvue_type_template_id_a08ebf6c_scoped_true_ts_true_render],['__scopeId',"data-v-a08ebf6c"]])
 
-/* harmony default export */ var ViewSettingDialog = (__exports__);
-
-/***/ }),
-
-/***/ 2120:
-/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
-
-// ESM COMPAT FLAG
-__webpack_require__.r(__webpack_exports__);
-
-// EXPORTS
-__webpack_require__.d(__webpack_exports__, {
-  "default": function() { return /* binding */ options; }
-});
-
-// EXTERNAL MODULE: ./node_modules/@vue/runtime-core/dist/runtime-core.esm-bundler.js
-var runtime_core_esm_bundler = __webpack_require__(3396);
-// EXTERNAL MODULE: ./node_modules/@vue/shared/dist/shared.esm-bundler.js
-var shared_esm_bundler = __webpack_require__(7139);
-;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/options/index.vue?vue&type=template&id=d43f7346&scoped=true&ts=true
-
-function render(_ctx, _cache, $props, $setup, $data, $options) {
-  const _component_flicking = (0,runtime_core_esm_bundler/* resolveComponent */.up)("flicking");
-  return (0,runtime_core_esm_bundler/* openBlock */.wg)(), (0,runtime_core_esm_bundler/* createBlock */.j4)(_component_flicking, {
-    ref: "flicking",
-    class: "setting",
-    options: {
-      bound: true,
-      align: 'prev'
-    }
-  }, {
-    default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [((0,runtime_core_esm_bundler/* openBlock */.wg)(true), (0,runtime_core_esm_bundler/* createElementBlock */.iD)(runtime_core_esm_bundler/* Fragment */.HY, null, (0,runtime_core_esm_bundler/* renderList */.Ko)($setup.cards, name => {
-      return (0,runtime_core_esm_bundler/* openBlock */.wg)(), (0,runtime_core_esm_bundler/* createElementBlock */.iD)("div", {
-        key: name,
-        class: (0,shared_esm_bundler/* normalizeClass */.C_)(["mr-4", `flicking-${$setup.display}`])
-      }, [((0,runtime_core_esm_bundler/* openBlock */.wg)(), (0,runtime_core_esm_bundler/* createBlock */.j4)((0,runtime_core_esm_bundler/* resolveDynamicComponent */.LL)(`${name}-card`)))], 2);
-    }), 128))]),
-    _: 1
-  }, 512);
-}
-// EXTERNAL MODULE: ./node_modules/@vue/reactivity/dist/reactivity.esm-bundler.js
-var reactivity_esm_bundler = __webpack_require__(4870);
-// EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/display.mjs
-var composables_display = __webpack_require__(8157);
-// EXTERNAL MODULE: ./node_modules/@egjs/vue3-flicking/dist/flicking.esm.js + 7 modules
-var flicking_esm = __webpack_require__(7637);
-// EXTERNAL MODULE: ./node_modules/vuetify/lib/components/VGrid/VRow.mjs
-var VRow = __webpack_require__(6824);
-// EXTERNAL MODULE: ./node_modules/vuetify/lib/components/VGrid/VCol.mjs
-var VCol = __webpack_require__(8521);
-// EXTERNAL MODULE: ./node_modules/vuetify/lib/components/VTextField/VTextField.mjs
-var VTextField = __webpack_require__(165);
-;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/options/components/LcdCard.vue?vue&type=template&id=04a30762&ts=true
-
-function LcdCardvue_type_template_id_04a30762_ts_true_render(_ctx, _cache, $props, $setup, $data, $options) {
-  const _component_switch_card_item = (0,runtime_core_esm_bundler/* resolveComponent */.up)("switch-card-item");
-                                                      
-                                                                    
-                                                      
-  const _component_card = (0,runtime_core_esm_bundler/* resolveComponent */.up)("card");
-  const _component_view_setting_dialog = (0,runtime_core_esm_bundler/* resolveComponent */.up)("view-setting-dialog");
-  return (0,runtime_core_esm_bundler/* openBlock */.wg)(), (0,runtime_core_esm_bundler/* createElementBlock */.iD)(runtime_core_esm_bundler/* Fragment */.HY, null, [(0,runtime_core_esm_bundler/* createVNode */.Wm)(_component_card, {
-    class: "lcd-card",
-    title: _ctx.$t('options.lcd.title'),
-    menu: $setup.menu,
-    "onClick:menu": $setup.onMenuClick
-  }, {
-    body: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VRow/* VRow */.o, null, {
-      default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VCol/* VCol */.D, {
-        cols: "12",
-        class: "pt-0 pb-0"
-      }, {
-        default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(_component_switch_card_item, {
-          modelValue: $setup.enabled,
-          "onUpdate:modelValue": _cache[0] || (_cache[0] = $event => $setup.enabled = $event),
-          title: _ctx.$t('options.lcd.enabled.title'),
-          description: _ctx.$t('options.lcd.enabled.description'),
-          color: "success",
-          nodata: !$setup.loadedCarConfig,
-          disabled: !$setup.loadedCarConfig
-        }, null, 8, ["modelValue", "title", "description", "nodata", "disabled"])]),
-        _: 1
-      }), (0,runtime_core_esm_bundler/* createVNode */.Wm)(VCol/* VCol */.D, {
-        cols: "12",
-        class: "pb-0"
-      }, {
-        default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VTextField/* VTextField */.hw, {
-          modelValue: $setup.logo,
-          "onUpdate:modelValue": _cache[1] || (_cache[1] = $event => $setup.logo = $event),
-          label: _ctx.$t('options.lcd.logo.title'),
-          hint: _ctx.$t('options.lcd.logo.description'),
-          variant: "underlined",
-          disabled: !$setup.loadedCarConfig,
-          "persistent-hint": "",
-          dense: "",
-          onBlur: $setup.onApplyCarConfig
-        }, null, 8, ["modelValue", "label", "hint", "disabled", "onBlur"])]),
-        _: 1
-      }), (0,runtime_core_esm_bundler/* createVNode */.Wm)(VCol/* VCol */.D, {
-        cols: "12",
-        class: "pb-0"
-      }, {
-        default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VTextField/* VTextField */.hw, {
-          modelValue: $setup.hello,
-          "onUpdate:modelValue": _cache[2] || (_cache[2] = $event => $setup.hello = $event),
-          label: _ctx.$t('options.lcd.hello.title'),
-          hint: _ctx.$t('options.lcd.hello.description'),
-          variant: "underlined",
-          disabled: !$setup.loadedCarConfig,
-          "persistent-hint": "",
-          dense: "",
-          onBlur: $setup.onApplyCarConfig
-        }, null, 8, ["modelValue", "label", "hint", "disabled", "onBlur"])]),
-        _: 1
-      })]),
-      _: 1
-    })]),
-    _: 1
-  }, 8, ["title", "menu", "onClick:menu"]), (0,runtime_core_esm_bundler/* createVNode */.Wm)(_component_view_setting_dialog, {
-    modelValue: $setup.menuVisible,
-    "onUpdate:modelValue": _cache[3] || (_cache[3] = $event => $setup.menuVisible = $event),
-    title: $setup.menuSelected.title,
-    enabled: $setup.menuViewConfig.enabled,
-    type: $setup.menuViewConfig.type,
-    time: $setup.menuViewConfig.time,
-    disabled: !$setup.loadedCarView,
-    "onClick:apply": $setup.onViewSettingApply
-  }, null, 8, ["modelValue", "title", "enabled", "type", "time", "disabled", "onClick:apply"])], 64);
-}
-
-/* Vuetify */
-
-
-
-
-// EXTERNAL MODULE: ./node_modules/vue-i18n/dist/vue-i18n.esm-bundler.js + 4 modules
-var vue_i18n_esm_bundler = __webpack_require__(5658);
-// EXTERNAL MODULE: ./src/components/cards/Card.vue + 6 modules
-var Card = __webpack_require__(242);
-// EXTERNAL MODULE: ./src/components/cards/SwitchCardItem.vue + 6 modules
-var SwitchCardItem = __webpack_require__(1070);
-// EXTERNAL MODULE: ./src/views/onboard/components/ViewSettingDialog.vue + 5 modules
-var ViewSettingDialog = __webpack_require__(6733);
-// EXTERNAL MODULE: ./src/models/pjcan/car/index.ts + 4 modules
-var pjcan_car = __webpack_require__(7530);
-// EXTERNAL MODULE: ./src/api/canbus.ts + 60 modules
-var canbus = __webpack_require__(3730);
-;// CONCATENATED MODULE: ./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/options/components/LcdCard.vue?vue&type=script&lang=ts
+/* harmony default export */ var ButtonDefinitionDialog = (ButtonDefinitionDialog_exports_);
+// EXTERNAL MODULE: ./src/models/pjcan/button/index.ts + 7 modules
+var pjcan_button = __webpack_require__(1483);
+// EXTERNAL MODULE: ./src/api/canbus.ts + 18 modules
+var canbus = __webpack_require__(3956);
+;// CONCATENATED MODULE: ./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/buttons/index.vue?vue&type=script&lang=ts
 
 
 
@@ -15174,476 +15288,171 @@ var canbus = __webpack_require__(3730);
 
 
 
-/* harmony default export */ var LcdCardvue_type_script_lang_ts = ({
-  name: "LcdCard",
-  components: {
-    Card: Card/* default */.Z,
-    SwitchCardItem: SwitchCardItem/* default */.Z,
-    ViewSettingDialog: ViewSettingDialog/* default */.Z
-  },
-  setup() {
-    const {
-      t
-    } = (0,vue_i18n_esm_bundler/* useI18n */.QT)();
-    const loadedCarConfig = (0,reactivity_esm_bundler/* ref */.iH)(false);
-    const loadedCarView = (0,reactivity_esm_bundler/* ref */.iH)(false);
-    const enabled = (0,reactivity_esm_bundler/* ref */.iH)(false);
-    const logo = (0,reactivity_esm_bundler/* ref */.iH)("");
-    const hello = (0,reactivity_esm_bundler/* ref */.iH)("");
-    const menuVisible = (0,reactivity_esm_bundler/* ref */.iH)(false);
-    const menuSelected = (0,reactivity_esm_bundler/* ref */.iH)({});
-    const menuViewConfig = (0,reactivity_esm_bundler/* ref */.iH)({});
-    /**
-     * Проверка ввода
-     * @param {Ref<string>} input Объект ввода
-     * @param {number} max Максимальное количество символов
-     */
-    const onInput = (input, max) => {
-      const {
-        value
-      } = input;
-      const length = value.length;
-      if (length > max) input.value = value.substring(0, max);else if (!/^[^а-яА-я]*$/.test(value)) input.value = value.substring(0, length - 1);
-    };
-    (0,runtime_core_esm_bundler/* watch */.YP)(enabled, () => {
-      (0,runtime_core_esm_bundler/* nextTick */.Y3)(() => onApplyCarConfig());
-    });
-    (0,runtime_core_esm_bundler/* watch */.YP)(logo, () => {
-      (0,runtime_core_esm_bundler/* nextTick */.Y3)(() => onInput(logo, 12));
-    });
-    (0,runtime_core_esm_bundler/* watch */.YP)(hello, () => {
-      (0,runtime_core_esm_bundler/* nextTick */.Y3)(() => onInput(hello, 32));
-    });
-    /**
-     * Входящие настройки автомобиля
-     * @param {ICarConfig} res
-     */
-    const onReceiveCarConfig = res => {
-      loadedCarConfig.value = res.isData;
-      if (res.isData) {
-        enabled.value = res.lcd;
-        logo.value = res.logo;
-        hello.value = res.hello;
-      }
-    };
-    /** Применить новые значения конфигурации автомобиля */
-    const onApplyCarConfig = () => {
-      const {
-        car
-      } = canbus/* default.configs */.Z.configs;
-      car.lcd = enabled.value;
-      car.logo = logo.value;
-      car.hello = hello.value;
-      canbus/* default.queryConfig */.Z.queryConfig(pjcan_car/* API_CAR_CONFIG_EXEC */.j6);
-    };
-    /**
-     * Входящие значения отображения
-     * @param {ICarView} res
-     */
-    const onReceiveCarView = res => {
-      loadedCarView.value = res.isData;
-    };
-    // регистрируем события
-    (0,runtime_core_esm_bundler/* onMounted */.bv)(() => {
-      canbus/* default.addListener */.Z.addListener(pjcan_car/* API_CAR_CONFIG_EVENT */.Gd, onReceiveCarConfig);
-      canbus/* default.addListener */.Z.addListener(pjcan_car/* API_CAR_VIEW_EVENT */.Or, onReceiveCarView);
-      onReceiveCarConfig(canbus/* default.configs.car */.Z.configs.car);
-      onReceiveCarView(canbus/* default.views.car */.Z.views.car);
-    });
-    // удаляем события
-    (0,runtime_core_esm_bundler/* onUnmounted */.Ah)(() => {
-      canbus/* default.removeListener */.Z.removeListener(pjcan_car/* API_CAR_CONFIG_EVENT */.Gd, onReceiveCarConfig);
-      canbus/* default.removeListener */.Z.removeListener(pjcan_car/* API_CAR_VIEW_EVENT */.Or, onReceiveCarView);
-    });
-    // МЕНЮ ОТОБРАЖЕНИЯ
-    const menu = (0,runtime_core_esm_bundler/* computed */.Fl)(() => [{
-      id: 0,
-      title: t("options.lcd.logo.menu")
-    }, {
-      id: 1,
-      title: t("options.lcd.hello.menu")
-    }]);
-    /**
-     * Выбор пункта меню отображения на информационном экране
-     * @param {IMenuItem} item Элемент меню
-     */
-    const onMenuClick = item => {
-      menuVisible.value = true;
-      menuSelected.value = item;
-      const {
-        car
-      } = canbus/* default.views */.Z.views;
-      switch (item.id) {
-        case 0:
-          menuViewConfig.value = car.logo;
-          return;
-        case 1:
-          menuViewConfig.value = car.hello;
-          break;
-      }
-    };
-    /**
-     * Применить параметры отображения на информационном экране
-     * @param {IViewConfig} data Новые параметры отображения
-     */
-    const onViewSettingApply = data => {
-      const {
-        car
-      } = canbus/* default.views */.Z.views;
-      switch (menuSelected.value.id) {
-        case 0:
-          car.logo = data;
-          break;
-        case 1:
-          car.hello = data;
-          break;
-      }
-      canbus/* default.queryView */.Z.queryView(pjcan_car/* API_CAR_VIEW_EXEC */.kn);
-    };
-    return {
-      loadedCarConfig,
-      loadedCarView,
-      enabled,
-      logo,
-      hello,
-      menu,
-      menuVisible,
-      menuSelected,
-      menuViewConfig,
-      onInput,
-      onApplyCarConfig,
-      onMenuClick,
-      onViewSettingApply
-    };
-  }
-});
-;// CONCATENATED MODULE: ./src/views/options/components/LcdCard.vue?vue&type=script&lang=ts
- 
-// EXTERNAL MODULE: ./node_modules/vue-loader/dist/exportHelper.js
-var exportHelper = __webpack_require__(89);
-;// CONCATENATED MODULE: ./src/views/options/components/LcdCard.vue
 
 
-
-
-;
-const __exports__ = /*#__PURE__*/(0,exportHelper/* default */.Z)(LcdCardvue_type_script_lang_ts, [['render',LcdCardvue_type_template_id_04a30762_ts_true_render]])
-
-/* harmony default export */ var LcdCard = (__exports__);
-;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/options/components/TeyesCard.vue?vue&type=template&id=4a7ff319&ts=true
-
-function TeyesCardvue_type_template_id_4a7ff319_ts_true_render(_ctx, _cache, $props, $setup, $data, $options) {
-  const _component_switch_card_item = (0,runtime_core_esm_bundler/* resolveComponent */.up)("switch-card-item");
-                                                      
-                                                      
-  const _component_card = (0,runtime_core_esm_bundler/* resolveComponent */.up)("card");
-  const _component_view_setting_dialog = (0,runtime_core_esm_bundler/* resolveComponent */.up)("view-setting-dialog");
-  return (0,runtime_core_esm_bundler/* openBlock */.wg)(), (0,runtime_core_esm_bundler/* createElementBlock */.iD)(runtime_core_esm_bundler/* Fragment */.HY, null, [(0,runtime_core_esm_bundler/* createVNode */.Wm)(_component_card, {
-    class: "teyes-card",
-    title: _ctx.$t('options.teyes.title'),
-    menu: $setup.menu,
-    "onClick:menu": $setup.onMenuClick
-  }, {
-    body: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VRow/* VRow */.o, null, {
-      default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VCol/* VCol */.D, {
-        cols: "12",
-        class: "pt-0 pb-0"
-      }, {
-        default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(_component_switch_card_item, {
-          modelValue: $setup.lcdShow,
-          "onUpdate:modelValue": _cache[0] || (_cache[0] = $event => $setup.lcdShow = $event),
-          title: _ctx.$t('options.teyes.lcdShow.title'),
-          description: _ctx.$t('options.teyes.lcdShow.description'),
-          color: "success",
-          nodata: !$setup.loadedTeyesConfig,
-          disabled: !$setup.loadedTeyesConfig,
-          onChange: $setup.onApplyTeyesConfig
-        }, null, 8, ["modelValue", "title", "description", "nodata", "disabled", "onChange"])]),
-        _: 1
-      }), (0,runtime_core_esm_bundler/* createVNode */.Wm)(VCol/* VCol */.D, {
-        cols: "12",
-        class: "pt-0 pb-0"
-      }, {
-        default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(_component_switch_card_item, {
-          modelValue: $setup.sendButton,
-          "onUpdate:modelValue": _cache[1] || (_cache[1] = $event => $setup.sendButton = $event),
-          title: _ctx.$t('options.teyes.sendButton.title'),
-          description: _ctx.$t('options.teyes.sendButton.description'),
-          color: "success",
-          nodata: !$setup.loadedTeyesConfig,
-          disabled: !$setup.loadedTeyesConfig,
-          onChange: $setup.onApplyTeyesConfig
-        }, null, 8, ["modelValue", "title", "description", "nodata", "disabled", "onChange"])]),
-        _: 1
-      }), (0,runtime_core_esm_bundler/* createVNode */.Wm)(VCol/* VCol */.D, {
-        cols: "12",
-        class: "pt-0 pb-0"
-      }, {
-        default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(_component_switch_card_item, {
-          modelValue: $setup.sendClimate,
-          "onUpdate:modelValue": _cache[2] || (_cache[2] = $event => $setup.sendClimate = $event),
-          title: _ctx.$t('options.teyes.sendClimate.title'),
-          description: _ctx.$t('options.teyes.sendClimate.description'),
-          color: "success",
-          nodata: !$setup.loadedTeyesConfig,
-          disabled: !$setup.loadedTeyesConfig,
-          onChange: $setup.onApplyTeyesConfig
-        }, null, 8, ["modelValue", "title", "description", "nodata", "disabled", "onChange"])]),
-        _: 1
-      }), (0,runtime_core_esm_bundler/* createVNode */.Wm)(VCol/* VCol */.D, {
-        cols: "12",
-        class: "pt-0 pb-0"
-      }, {
-        default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(_component_switch_card_item, {
-          modelValue: $setup.sendDoors,
-          "onUpdate:modelValue": _cache[3] || (_cache[3] = $event => $setup.sendDoors = $event),
-          title: _ctx.$t('options.teyes.sendDoors.title'),
-          description: _ctx.$t('options.teyes.sendDoors.description'),
-          color: "success",
-          nodata: !$setup.loadedTeyesConfig,
-          disabled: !$setup.loadedTeyesConfig,
-          onChange: $setup.onApplyTeyesConfig
-        }, null, 8, ["modelValue", "title", "description", "nodata", "disabled", "onChange"])]),
-        _: 1
-      }), (0,runtime_core_esm_bundler/* createVNode */.Wm)(VCol/* VCol */.D, {
-        cols: "12",
-        class: "pt-0 pb-0"
-      }, {
-        default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(_component_switch_card_item, {
-          modelValue: $setup.parseVolume,
-          "onUpdate:modelValue": _cache[4] || (_cache[4] = $event => $setup.parseVolume = $event),
-          title: _ctx.$t('options.teyes.parseVolume.title'),
-          description: _ctx.$t('options.teyes.parseVolume.description'),
-          color: "success",
-          nodata: !$setup.loadedTeyesConfig,
-          disabled: !$setup.loadedTeyesConfig,
-          onChange: $setup.onApplyTeyesConfig
-        }, null, 8, ["modelValue", "title", "description", "nodata", "disabled", "onChange"])]),
-        _: 1
-      }), (0,runtime_core_esm_bundler/* createVNode */.Wm)(VCol/* VCol */.D, {
-        cols: "12",
-        class: "pt-0 pb-0"
-      }, {
-        default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(_component_switch_card_item, {
-          modelValue: $setup.receiveText,
-          "onUpdate:modelValue": _cache[5] || (_cache[5] = $event => $setup.receiveText = $event),
-          title: _ctx.$t('options.teyes.receiveText.title'),
-          description: _ctx.$t('options.teyes.receiveText.description'),
-          color: "success",
-          nodata: !$setup.loadedTeyesConfig,
-          disabled: !$setup.loadedTeyesConfig,
-          onChange: $setup.onApplyTeyesConfig
-        }, null, 8, ["modelValue", "title", "description", "nodata", "disabled", "onChange"])]),
-        _: 1
-      }), (0,runtime_core_esm_bundler/* createVNode */.Wm)(VCol/* VCol */.D, {
-        cols: "12",
-        class: "pt-0 pb-0"
-      }, {
-        default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(_component_switch_card_item, {
-          modelValue: $setup.receiveButtons,
-          "onUpdate:modelValue": _cache[6] || (_cache[6] = $event => $setup.receiveButtons = $event),
-          title: _ctx.$t('options.teyes.receiveButtons.title'),
-          description: _ctx.$t('options.teyes.receiveButtons.description'),
-          color: "success",
-          nodata: !$setup.loadedTeyesConfig,
-          disabled: !$setup.loadedTeyesConfig,
-          onChange: $setup.onApplyTeyesConfig
-        }, null, 8, ["modelValue", "title", "description", "nodata", "disabled", "onChange"])]),
-        _: 1
-      })]),
-      _: 1
-    })]),
-    _: 1
-  }, 8, ["title", "menu", "onClick:menu"]), (0,runtime_core_esm_bundler/* createVNode */.Wm)(_component_view_setting_dialog, {
-    modelValue: $setup.menuVisible,
-    "onUpdate:modelValue": _cache[7] || (_cache[7] = $event => $setup.menuVisible = $event),
-    title: $setup.menuSelected.title,
-    enabled: $setup.menuViewConfig.enabled,
-    type: $setup.menuViewConfig.type,
-    time: $setup.menuViewConfig.time,
-    disabled: !$setup.loadedTeyesView,
-    "onClick:apply": $setup.onViewSettingApply
-  }, null, 8, ["modelValue", "title", "enabled", "type", "time", "disabled", "onClick:apply"])], 64);
-}
-
-/* Vuetify */
-
-
-
-// EXTERNAL MODULE: ./src/models/pjcan/teyes/index.ts + 6 modules
-var pjcan_teyes = __webpack_require__(8674);
-;// CONCATENATED MODULE: ./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/options/components/TeyesCard.vue?vue&type=script&lang=ts
-
-
-
-
-
-
-
-/* harmony default export */ var TeyesCardvue_type_script_lang_ts = ({
-  name: "TeyesCard",
-  components: {
-    Card: Card/* default */.Z,
-    SwitchCardItem: SwitchCardItem/* default */.Z,
-    ViewSettingDialog: ViewSettingDialog/* default */.Z
-  },
-  setup() {
-    const {
-      t
-    } = (0,vue_i18n_esm_bundler/* useI18n */.QT)();
-    const loadedTeyesConfig = (0,reactivity_esm_bundler/* ref */.iH)(false);
-    const loadedTeyesView = (0,reactivity_esm_bundler/* ref */.iH)(false);
-    const receiveClock = (0,reactivity_esm_bundler/* ref */.iH)(false);
-    const receiveButtons = (0,reactivity_esm_bundler/* ref */.iH)(false);
-    const receiveText = (0,reactivity_esm_bundler/* ref */.iH)(false);
-    const sendButton = (0,reactivity_esm_bundler/* ref */.iH)(false);
-    const sendClimate = (0,reactivity_esm_bundler/* ref */.iH)(false);
-    const sendDoors = (0,reactivity_esm_bundler/* ref */.iH)(false);
-    const parseVolume = (0,reactivity_esm_bundler/* ref */.iH)(false);
-    const lcdShow = (0,reactivity_esm_bundler/* ref */.iH)(false);
-    const menuVisible = (0,reactivity_esm_bundler/* ref */.iH)(false);
-    const menuSelected = (0,reactivity_esm_bundler/* ref */.iH)({});
-    const menuViewConfig = (0,reactivity_esm_bundler/* ref */.iH)({});
-    /**
-     * Входящая конфигурация Teyes
-     * @param {ITeyesConfig} res
-     */
-    const onReceiveTeyesConfig = res => {
-      loadedTeyesConfig.value = res.isData;
-      if (res.isData) {
-        receiveClock.value = res.receiveClock;
-        receiveButtons.value = res.receiveButtons;
-        receiveText.value = res.receiveText;
-        sendButton.value = res.sendButton;
-        sendClimate.value = res.sendClimate;
-        sendDoors.value = res.sendDoors;
-        parseVolume.value = res.parseVolume;
-        lcdShow.value = res.lcdShow;
-      }
-    };
-    /** Применить новые значения конфигурации Teyes */
-    const onApplyTeyesConfig = () => {
-      const {
-        teyes
-      } = canbus/* default.configs */.Z.configs;
-      teyes.receiveClock = receiveClock.value;
-      teyes.receiveButtons = receiveButtons.value;
-      teyes.receiveText = receiveText.value;
-      teyes.sendButton = sendButton.value;
-      teyes.sendClimate = sendClimate.value;
-      teyes.sendDoors = sendDoors.value;
-      teyes.parseVolume = parseVolume.value;
-      teyes.lcdShow = lcdShow.value;
-      canbus/* default.queryConfig */.Z.queryConfig(pjcan_teyes/* API_TEYES_CONFIG_EXEC */.jc);
-    };
-    /**
-     * Входящие значения отображения
-     * @param {ITeyesView} res
-     */
-    const onReceiveTeyesView = res => {
-      loadedTeyesView.value = res.isData;
-    };
-    // регистрируем события
-    (0,runtime_core_esm_bundler/* onMounted */.bv)(() => {
-      canbus/* default.addListener */.Z.addListener(pjcan_teyes/* API_TEYES_CONFIG_EVENT */.IE, onReceiveTeyesConfig);
-      canbus/* default.addListener */.Z.addListener(pjcan_teyes/* API_TEYES_VIEW_EVENT */.mj, onReceiveTeyesView);
-      onReceiveTeyesConfig(canbus/* default.configs.teyes */.Z.configs.teyes);
-      onReceiveTeyesView(canbus/* default.views.teyes */.Z.views.teyes);
-    });
-    // удаляем события
-    (0,runtime_core_esm_bundler/* onUnmounted */.Ah)(() => {
-      canbus/* default.removeListener */.Z.removeListener(pjcan_teyes/* API_TEYES_CONFIG_EVENT */.IE, onReceiveTeyesConfig);
-      canbus/* default.removeListener */.Z.removeListener(pjcan_teyes/* API_TEYES_VIEW_EVENT */.mj, onReceiveTeyesView);
-    });
-    // МЕНЮ ОТОБРАЖЕНИЯ
-    const menu = (0,runtime_core_esm_bundler/* computed */.Fl)(() => [{
-      id: 0,
-      title: t("options.teyes.lcdShow.menu")
-    }]);
-    /**
-     * Выбор пункта меню отображения на информационном экране
-     * @param {IMenuItem} item Элемент меню
-     */
-    const onMenuClick = item => {
-      menuVisible.value = true;
-      menuSelected.value = item;
-      menuViewConfig.value = canbus/* default.views.teyes.view */.Z.views.teyes.view;
-    };
-    /**
-     * Применить параметры отображения на информационном экране
-     * @param {IViewConfig} data Новые параметры отображения
-     */
-    const onViewSettingApply = data => {
-      canbus/* default.views.teyes.view */.Z.views.teyes.view = data;
-      canbus/* default.queryView */.Z.queryView(pjcan_teyes/* API_TEYES_VIEW_EXEC */.nY);
-    };
-    return {
-      loadedTeyesConfig,
-      loadedTeyesView,
-      receiveClock,
-      receiveButtons,
-      receiveText,
-      sendButton,
-      sendClimate,
-      sendDoors,
-      parseVolume,
-      lcdShow,
-      menu,
-      menuVisible,
-      menuSelected,
-      menuViewConfig,
-      onApplyTeyesConfig,
-      onMenuClick,
-      onViewSettingApply
-    };
-  }
-});
-;// CONCATENATED MODULE: ./src/views/options/components/TeyesCard.vue?vue&type=script&lang=ts
- 
-;// CONCATENATED MODULE: ./src/views/options/components/TeyesCard.vue
-
-
-
-
-;
-const TeyesCard_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(TeyesCardvue_type_script_lang_ts, [['render',TeyesCardvue_type_template_id_4a7ff319_ts_true_render]])
-
-/* harmony default export */ var TeyesCard = (TeyesCard_exports_);
-;// CONCATENATED MODULE: ./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/options/index.vue?vue&type=script&lang=ts
-
-
-
-
-
-/* harmony default export */ var optionsvue_type_script_lang_ts = ({
-  name: "setting",
+/* harmony default export */ var buttonsvue_type_script_lang_ts = ({
+  name: "buttons",
   components: {
     Flicking: flicking_esm/* default */.Co,
-    LcdCard: LcdCard,
-    TeyesCard: TeyesCard
+    SettingsCard: SettingsCard,
+    ButtonDefinitionDialog: ButtonDefinitionDialog
   },
   setup() {
     const {
       name: display
     } = (0,composables_display/* useDisplay */.AW)();
+    const {
+      t
+    } = (0,vue_i18n_esm_bundler/* useI18n */.QT)();
     const flicking = (0,reactivity_esm_bundler/* ref */.iH)(null);
     (0,runtime_core_esm_bundler/* provide */.JJ)("flicking", flicking);
-    const cards = (0,runtime_core_esm_bundler/* computed */.Fl)(() => ["lcd", "teyes"]);
+    const isLoadedConfig = (0,reactivity_esm_bundler/* ref */.iH)(false);
+    const visibleButtonDefinitionDialog = (0,reactivity_esm_bundler/* ref */.iH)(false);
+    const typeButtonDefinition = (0,reactivity_esm_bundler/* ref */.iH)(-1);
+    const resistanceButtonDefinition = (0,reactivity_esm_bundler/* ref */.iH)(0);
+    const buttons = (0,reactivity_esm_bundler/* ref */.iH)([]);
+    /** Обновление списка конфигураций кнопок */
+    const buttonItemsUpdate = () => {
+      canbus/* default.configs.buttons.items */.Z.configs.buttons.items?.forEach((x, i) => {
+        if (!buttons.value?.[i]) buttons.value.push({});
+        const res = buttons.value[i];
+        res.inR = x.inR;
+        res.pressSingle = x.exec[pjcan_button/* TButtonPress.PRESS_SINGLE */.AV.PRESS_SINGLE];
+        res.pressDual = x.exec[pjcan_button/* TButtonPress.PRESS_DUAL */.AV.PRESS_DUAL];
+        res.pressTriple = x.exec[pjcan_button/* TButtonPress.PRESS_TRIPLE */.AV.PRESS_TRIPLE];
+        res.pressHold = x.exec[pjcan_button/* TButtonPress.PRESS_HOLD */.AV.PRESS_HOLD];
+        res.delayExec = x.delayExec;
+      });
+    };
+    buttonItemsUpdate();
+    /** Список конфигураций кнопок */
+    const list = (0,runtime_core_esm_bundler/* computed */.Fl)(() => [{
+      title: t("buttons.mode"),
+      type: pjcan_button/* TButtonItem.BUTTON_MODE */.SM.BUTTON_MODE,
+      icon: "mdi-menu"
+    }, {
+      title: t("buttons.seekUp"),
+      type: pjcan_button/* TButtonItem.BUTTON_SEEK_UP */.SM.BUTTON_SEEK_UP,
+      icon: "mdi-play"
+    }, {
+      title: t("buttons.seekDown"),
+      type: pjcan_button/* TButtonItem.BUTTON_SEEK_DOWN */.SM.BUTTON_SEEK_DOWN,
+      icon: "mdi-play"
+    }, {
+      title: t("buttons.volUp"),
+      type: pjcan_button/* TButtonItem.BUTTON_VOL_UP */.SM.BUTTON_VOL_UP,
+      icon: "mdi-volume-plus"
+    }, {
+      title: t("buttons.volDown"),
+      type: pjcan_button/* TButtonItem.BUTTON_VOL_DOWN */.SM.BUTTON_VOL_DOWN,
+      icon: "mdi-volume-minus"
+    }, {
+      title: t("buttons.volMute"),
+      type: pjcan_button/* TButtonItem.BUTTON_VOL_MUTE */.SM.BUTTON_VOL_MUTE,
+      icon: "mdi-volume-mute"
+    }]);
+    // блокируем отправку значений на время обновления list
+    let receiveConfig = false;
+    (0,runtime_core_esm_bundler/* watch */.YP)(list, () => {
+      receiveConfig = true;
+      setTimeout(() => receiveConfig = false, 500);
+    });
+    /**
+     * Отправлять значение нажатой кнопки
+     * @param {boolean} enabled Вкл/выкл
+     */
+    const enabledSendValue = enabled => {
+      if (enabled !== canbus/* default.configs.buttons.sendValue */.Z.configs.buttons.sendValue) {
+        canbus/* default.configs.buttons.sendValue */.Z.configs.buttons.sendValue = enabled;
+        canbus/* default.queryConfig */.Z.queryConfig(pjcan_button/* API_BUTTONS_CONFIG_EXEC */.XY);
+      }
+    };
+    /**
+     * Входящие значения конфигурации кнопок
+     * @param {IButtonsConfig} res
+     */
+    const onReceiveConfig = res => {
+      isLoadedConfig.value = res.isData;
+      if (res.isData) {
+        buttonItemsUpdate();
+        // Включаем определение нажатой кнопки.
+        // Выключится автоматически, при запросе значений или ручками в onUnmounted
+        enabledSendValue(true);
+      }
+    };
+    /**
+     * Входящие значения кнопки
+     * @param {IButtonValue} res
+     */
+    const onReceiveValue = res => {
+      if (res.isData && !visibleButtonDefinitionDialog.value) {
+        typeButtonDefinition.value = res.index;
+        resistanceButtonDefinition.value = res.r;
+        visibleButtonDefinitionDialog.value = true;
+      }
+    };
+    // регистрируем события
+    (0,runtime_core_esm_bundler/* onMounted */.bv)(() => {
+      canbus/* default.addListener */.Z.addListener(pjcan_button/* API_BUTTONS_CONFIG_EVENT */.MM, onReceiveConfig);
+      canbus/* default.addListener */.Z.addListener(pjcan_button/* API_BUTTON_EVENT */.Ai, onReceiveValue);
+      onReceiveConfig(canbus/* default.configs.buttons */.Z.configs.buttons);
+      // onReceiveValue(canbus.buttonValue);
+    });
+    // удаляем события
+    (0,runtime_core_esm_bundler/* onUnmounted */.Ah)(() => {
+      canbus/* default.removeListener */.Z.removeListener(pjcan_button/* API_BUTTONS_CONFIG_EVENT */.MM, onReceiveConfig);
+      canbus/* default.removeListener */.Z.removeListener(pjcan_button/* API_BUTTON_EVENT */.Ai, onReceiveValue);
+      enabledSendValue(false);
+    });
+    /** Изменение значений конфигурации кнопок */
+    const onButtonConfigChange = () => {
+      if (receiveConfig) return;
+      const {
+        items
+      } = canbus/* default.configs.buttons */.Z.configs.buttons;
+      buttons.value.forEach((x, i) => {
+        const res = items[i];
+        res.inR = x.inR;
+        res.exec[pjcan_button/* TButtonPress.PRESS_SINGLE */.AV.PRESS_SINGLE] = x.pressSingle;
+        res.exec[pjcan_button/* TButtonPress.PRESS_DUAL */.AV.PRESS_DUAL] = x.pressDual;
+        res.exec[pjcan_button/* TButtonPress.PRESS_TRIPLE */.AV.PRESS_TRIPLE] = x.pressTriple;
+        res.exec[pjcan_button/* TButtonPress.PRESS_HOLD */.AV.PRESS_HOLD] = x.pressHold;
+        res.exec[pjcan_button/* TButtonPress.RELEASE */.AV.RELEASE] = 0;
+        res.delayExec = x.delayExec;
+      });
+      canbus/* default.queryConfig */.Z.queryConfig(pjcan_button/* API_BUTTONS_CONFIG_EXEC */.XY);
+    };
+    /**
+     * Применить новый тип не определенной кнопки
+     * @param {number} type Тип кнопки
+     */
+    const onButtonDefinitionApply = type => {
+      canbus/* default.configs.buttons.items */.Z.configs.buttons.items[type].inR = resistanceButtonDefinition.value;
+      canbus/* default.queryConfig */.Z.queryConfig(pjcan_button/* API_BUTTONS_CONFIG_EXEC */.XY);
+      onReceiveConfig(canbus/* default.configs.buttons */.Z.configs.buttons);
+    };
     return {
       flicking,
-      cards,
-      display
+      display,
+      isLoadedConfig,
+      buttons,
+      list,
+      visibleButtonDefinitionDialog,
+      resistanceButtonDefinition,
+      typeButtonDefinition,
+      onButtonConfigChange,
+      onButtonDefinitionApply
     };
   }
 });
-;// CONCATENATED MODULE: ./src/views/options/index.vue?vue&type=script&lang=ts
+;// CONCATENATED MODULE: ./src/views/buttons/index.vue?vue&type=script&lang=ts
  
-;// CONCATENATED MODULE: ./node_modules/mini-css-extract-plugin/dist/loader.js??clonedRuleSet-22.use[0]!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/options/index.vue?vue&type=style&index=0&id=d43f7346&lang=scss&scoped=true
+;// CONCATENATED MODULE: ./node_modules/mini-css-extract-plugin/dist/loader.js??clonedRuleSet-22.use[0]!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/buttons/index.vue?vue&type=style&index=0&id=6f4e1de0&lang=scss&scoped=true
 // extracted by mini-css-extract-plugin
 
-;// CONCATENATED MODULE: ./src/views/options/index.vue?vue&type=style&index=0&id=d43f7346&lang=scss&scoped=true
+;// CONCATENATED MODULE: ./src/views/buttons/index.vue?vue&type=style&index=0&id=6f4e1de0&lang=scss&scoped=true
 
-;// CONCATENATED MODULE: ./src/views/options/index.vue
+;// CONCATENATED MODULE: ./src/views/buttons/index.vue
 
 
 
@@ -15651,9 +15460,9 @@ const TeyesCard_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(TeyesCar
 ;
 
 
-const options_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(optionsvue_type_script_lang_ts, [['render',render],['__scopeId',"data-v-d43f7346"]])
+const buttons_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(buttonsvue_type_script_lang_ts, [['render',render],['__scopeId',"data-v-6f4e1de0"]])
 
-/* harmony default export */ var options = (options_exports_);
+/* harmony default export */ var buttons = (buttons_exports_);
 
 /***/ })
 
