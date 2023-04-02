@@ -134,7 +134,7 @@ export default {
 			{
 				enabled.value = res.enabled;
 				rpm.value = res.rpm.toFixed();
-				countRPM.value = (res.totalCountRPM / 1000).toFixed();
+				countRPM.value = (res.totalCountRPM / 1000).toFixed(2);
 				load.value = res.load / 1000;
 				motors.value = res.totalSeconds;
 				throttle.value = res.throttle / 100;
