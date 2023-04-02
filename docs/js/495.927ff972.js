@@ -1,5 +1,5 @@
 "use strict";
-(self["webpackChunkpjcan"] = self["webpackChunkpjcan"] || []).push([[319],{
+(self["webpackChunkpjcan"] = self["webpackChunkpjcan"] || []).push([[495],{
 
 /***/ 7637:
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
@@ -15023,7 +15023,7 @@ const __exports__ = /*#__PURE__*/(0,exportHelper/* default */.Z)(ViewSettingDial
 
 /***/ }),
 
-/***/ 2319:
+/***/ 2495:
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 // ESM COMPAT FLAG
@@ -15597,9 +15597,9 @@ var canbus = __webpack_require__(3956);
 const InfoCard_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(InfoCardvue_type_script_lang_ts, [['render',InfoCardvue_type_template_id_7cb8bc98_ts_true_render]])
 
 /* harmony default export */ var InfoCard = (InfoCard_exports_);
-;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/onboard/components/EngineCard.vue?vue&type=template&id=151e36b4&ts=true
+;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/onboard/components/EngineCard.vue?vue&type=template&id=072f92ee&ts=true
 
-function EngineCardvue_type_template_id_151e36b4_ts_true_render(_ctx, _cache, $props, $setup, $data, $options) {
+function EngineCardvue_type_template_id_072f92ee_ts_true_render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_icon_card_item = (0,runtime_core_esm_bundler/* resolveComponent */.up)("icon-card-item");
                                                       
   const _component_input_card_item = (0,runtime_core_esm_bundler/* resolveComponent */.up)("input-card-item");
@@ -16071,7 +16071,7 @@ const EngineConfigDialog_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)
       if (res.isData) {
         enabled.value = res.enabled;
         rpm.value = res.rpm.toFixed();
-        countRPM.value = (res.totalCountRPM / 1000).toFixed();
+        countRPM.value = (res.totalCountRPM / 1000).toFixed(2);
         load.value = res.load / 1000;
         motors.value = res.totalSeconds;
         throttle.value = res.throttle / 100;
@@ -16223,7 +16223,7 @@ const EngineConfigDialog_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)
 
 
 ;
-const EngineCard_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(EngineCardvue_type_script_lang_ts, [['render',EngineCardvue_type_template_id_151e36b4_ts_true_render]])
+const EngineCard_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(EngineCardvue_type_script_lang_ts, [['render',EngineCardvue_type_template_id_072f92ee_ts_true_render]])
 
 /* harmony default export */ var EngineCard = (EngineCard_exports_);
 ;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/onboard/components/FuelCard.vue?vue&type=template&id=0ad2d237&ts=true
