@@ -67,7 +67,7 @@ import IconCustom from "@/components/common/icon-custom/IconCustom.vue";
 
 import { IMessage } from "@/models/interfaces/message/IMessage";
 import { Timeout } from "@/models/types/Timeout";
-import { API_CONFIGS_EVENT } from "@/models/pjcan/configs";
+import { API_VERSION_EVENT } from "@/models/pjcan/version";
 
 import canbus from "@/api/canbus";
 
@@ -165,12 +165,12 @@ export default {
 		{
 			window.addEventListener("resize", windowSize);
 			windowSize();
-			canbus.addListener(API_CONFIGS_EVENT, onCheckVersion);
+			canbus.addListener(API_VERSION_EVENT, onCheckVersion);
 		});
 		onUnmounted(() =>
 		{
 			window.removeEventListener("resize", windowSize);
-			canbus.removeListener(API_CONFIGS_EVENT, onCheckVersion);
+			canbus.removeListener(API_VERSION_EVENT, onCheckVersion);
 		});
 
 		/** Переключение полноэкранного режима */
@@ -210,7 +210,7 @@ export default {
 				canbus.checkVersion().then((newVersion) =>
 				{
 					newVersionFirmware.value = newVersion.toString;
-					if (newVersion.major === 0)
+					if (!newVersion.is)
 					{
 						store.commit("app/setMessage", {
 							title: t("update.warning"),
