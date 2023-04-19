@@ -36,7 +36,8 @@ export default {
 				btns: [
 					{ title: t(!connected.value ? "BLE.btn.connect" : "BLE.btn.disconnect"), on: onDialogClick },
 					{ title: t("btn.close"), icon: "mdi-close" }
-				]
+				],
+				width: 700
 			} as IMessage);
 		};
 

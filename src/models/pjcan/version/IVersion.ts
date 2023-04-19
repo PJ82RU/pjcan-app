@@ -7,6 +7,6 @@ export interface IVersion {
 	is: boolean;
 	toString: string;
 
-	compare: (ver: IVersion) => number;
+	compare: (ver: IVersion, len: number) => number;
 	clear: () => void;
 }

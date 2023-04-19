@@ -761,7 +761,7 @@ export class Canbus extends EventEmitter
 						newVersion.build = ver[2];
 						newVersion.revision = ver[3];
 
-						if (this.configs.version.compare(newVersion) > 0) resolve(newVersion);
+						if (this.configs.version.compare(newVersion, 4) > 0) resolve(newVersion);
 						else reject("Current version");
 					}
 					else reject("No data");

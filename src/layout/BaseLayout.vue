@@ -2,8 +2,6 @@
 <template>
 	<v-app class="base-layout">
 		<v-app-bar flat class="base-layout__toolbar" color="primary" :height="50">
-			<!--<v-app-bar-nav-icon />-->
-
 			<v-toolbar-title>
 				<span class="text-h4">
 					{{ title }}
@@ -23,7 +21,7 @@
 			<v-btn icon="mdi-fit-to-screen-outline" @click="toggleFullscreen" />
 
 			<bluetooth-btn />
-			<update-firmware-dialog />
+			<update-firmware-dialog v-model="visibleUpdate" :new-version="newVersionFirmware" />
 
 			<menu-dots :menu="menu" @click:item="onMenuClick" />
 			<about-dialog v-model="visibleAbout" />
@@ -54,6 +52,7 @@ import { computed, onMounted, onUnmounted, ref, watch } from "vue";
 import router from "@/router";
 import store from "@/store";
 import { useI18n } from "vue-i18n";
+import { toast } from "vue3-toastify";
 import moment from "moment/moment";
 import ScreenFull from "screenfull";
 
@@ -68,6 +67,9 @@ import IconCustom from "@/components/common/icon-custom/IconCustom.vue";
 
 import { IMessage } from "@/models/interfaces/message/IMessage";
 import { Timeout } from "@/models/types/Timeout";
+import { API_CONFIGS_EVENT } from "@/models/pjcan/configs";
+
+import canbus from "@/api/canbus";
 
 export default {
 	name: "BaseLayout",
@@ -90,6 +92,7 @@ export default {
 			const result = router.currentRoute.value.meta?.title as string;
 			return "PJCAN: " + (result?.length > 0 ? t(result) : "");
 		});
+		const newVersionFirmware = ref(false as string | boolean);
 		const menu = computed((): IMenuItem[] =>
 		{
 			const result = [] as IMenuItem[];
@@ -102,15 +105,20 @@ export default {
 				{ id: 4, title: t("menu.onboardButtons") },
 				{ id: 5, title: t("menu.test") },
 				{} as IMenuItem,
-				{ id: 2, title: t("menu.language." + (locale.value !== "ru" ? "russian" : "english")) },
-				{ id: 3, title: t("menu.about") }
+				{ id: 2, title: t("menu.language." + (locale.value !== "ru" ? "russian" : "english")) }
 			);
+			if (typeof newVersionFirmware.value === "string")
+			{
+				result.push({ id: 7, title: t("menu.update", { version: newVersionFirmware.value }) });
+			}
+			result.push({ id: 3, title: t("menu.about") });
 
 			return result;
 		});
 		const visibleAbout = ref(false);
 		const visibleOnboardButtons = ref(false);
 		const visibleTest = ref(false);
+		const visibleUpdate = ref(false);
 
 		/** Событие выбора пункта меню */
 		const onMenuClick = (data: any) =>
@@ -139,6 +147,9 @@ export default {
 				case 6:
 					router.push({ name: "Options" });
 					break;
+				case 7:
+					visibleUpdate.value = true;
+					break;
 			}
 		};
 
@@ -154,10 +165,12 @@ export default {
 		{
 			window.addEventListener("resize", windowSize);
 			windowSize();
+			canbus.addListener(API_CONFIGS_EVENT, onCheckVersion);
 		});
 		onUnmounted(() =>
 		{
 			window.removeEventListener("resize", windowSize);
+			canbus.removeListener(API_CONFIGS_EVENT, onCheckVersion);
 		});
 
 		/** Переключение полноэкранного режима */
@@ -188,12 +201,44 @@ export default {
 			}
 		});
 
+		/** Проверка версии прошивки */
+		const onCheckVersion = (): void =>
+		{
+			if (!newVersionFirmware.value)
+			{
+				newVersionFirmware.value = true;
+				canbus.checkVersion().then((newVersion) =>
+				{
+					newVersionFirmware.value = newVersion.toString;
+					if (newVersion.major === 0)
+					{
+						store.commit("app/setMessage", {
+							title: t("update.warning"),
+							icon: "mdi-alert-outline",
+							text: t("update.dialog.browserOutdated"),
+							btns: [{ title: t("btn.ok") }],
+							width: 700
+						} as IMessage);
+					}
+					else
+					{
+						setTimeout(() =>
+						{
+							toast.warning(t("update.notify.newVersion", { version: newVersionFirmware.value }));
+						}, 5000);
+					}
+				});
+			}
+		};
+
 		return {
 			title,
 			menu,
+			newVersionFirmware,
 			visibleAbout,
 			visibleOnboardButtons,
 			visibleTest,
+			visibleUpdate,
 			pageWidth,
 			pageHeight,
 			visibleMessage,
