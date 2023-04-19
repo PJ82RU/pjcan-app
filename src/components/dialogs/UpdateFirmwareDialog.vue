@@ -1,7 +1,7 @@
 <template>
-	<dialog-template v-model="visibleUpdate" icon="mdi-update" :title="$t('update.title')" text actions>
+	<dialog-template v-model="visibleUpdate" icon="mdi-update" :title="$t('update.title')" width="700" text actions>
 		<template #body>
-			<span>{{ $t("update.dialog.new", { n: version }) }}</span>
+			<span>{{ $t("update.dialog.updateTo", { version: newVersion }) }}</span>
 		</template>
 		<template #btns>
 			<v-btn color="primary" @click="onUpdateStart">
@@ -37,105 +37,73 @@
 </template>
 
 <script lang="ts">
-import { onMounted, onUnmounted, ref } from "vue";
+import { computed, onMounted, onUnmounted, ref, toRefs } from "vue";
 import { toast } from "vue3-toastify";
 import { useI18n } from "vue-i18n";
 import router from "@/router";
 
 import DialogTemplate from "@/layout/components/DialogTemplate.vue";
 
-import { BLUETOOTH_EVENT_CONNECTED, TConnectedStatus } from "@/components/bluetooth";
-
-import { Timeout } from "@/models/types/Timeout";
 import { API_UPDATE_EVENT, API_UPDATE_EVENT_ERROR } from "@/models/pjcan/update";
+import { API_CONFIGS_EVENT } from "@/models/pjcan/configs";
 
 import { getFormatTime } from "@/utils/time";
 
 import canbus from "@/api/canbus";
 
-// таймаут проверки обновления 5 мин.
-const DELAY_CHECK_VERSION = 300000;
-
 export default {
 	name: "UpdateFirmwareDialog",
 	components: { DialogTemplate },
-	setup()
+	props: {
+		/** Показать диалог */
+		modelValue: {
+			type: Boolean,
+			default: false
+		},
+		newVersion: [String, Boolean]
+	},
+	setup(props: any, { emit }: { emit: any })
 	{
+		const { modelValue } = toRefs(props);
 		const { t } = useI18n();
 
-		const visibleUpdate = ref(false);
+		const visibleUpdate = computed({
+			get: (): boolean => modelValue.value,
+			set: (val: boolean): void => emit("update:modelValue", val)
+		});
 		const visibleProcess = ref(false);
 		const version = ref("");
 		const message = ref("");
 		const progress = ref(0);
 		const uploading = ref("");
 		const timeLeft = ref("");
-		let timerCheckVersion: Timeout;
-
-		/**
-		 * Проверка версии прошивки
-		 * @param delay Пауза проверки обновления
-		 */
-		const onCheckVersion = (delay: number): void =>
-		{
-			timerCheckVersion = setTimeout(() =>
-			{
-				if (canbus.bluetooth.connected)
-				{
-					canbus
-						.checkVersion()
-						.then((newVersion) =>
-						{
-							version.value = newVersion.toString;
-							visibleUpdate.value = true;
-						})
-						.catch(() => onCheckVersion(DELAY_CHECK_VERSION));
-				}
-				else onCheckVersion(DELAY_CHECK_VERSION);
-			}, delay);
-		};
 
 		/** Отменить обновление */
 		const onCancel = (): void =>
 		{
 			visibleUpdate.value = false;
 			visibleProcess.value = false;
-			if (timerCheckVersion) clearTimeout(timerCheckVersion);
 
 			canbus.removeListener(API_UPDATE_EVENT_ERROR, onErrorUpdate);
 			canbus.update.clear();
 		};
 
-		/**
-		 * Событие подключения к Bluetooth
-		 * @param {TConnectedStatus} status Статус подключения Bluetooth
-		 */
-		const onConnected = (status: TConnectedStatus) =>
+		/** Завершение прошивки */
+		const onCompletingFirmware = () =>
 		{
 			if (canbus.update.total > 0)
 			{
-				if (status !== TConnectedStatus.CONNECT) return;
-
-				// завершение прошивки
-				setTimeout(() =>
+				if (canbus.configs.version.is)
 				{
-					if (canbus.configs.version.is)
-					{
-						canbus
-							.checkVersion()
-							.then(() => toast.error(t("update.notify.warning")))
-							.catch(() => toast.success(t("update.notify.completed")));
+					canbus
+						.checkVersion()
+						.then(() => toast.error(t("update.notify.warning")))
+						.catch(() => toast.success(t("update.notify.completed")));
 
-						setTimeout(() => router.go(0), 5000);
-						onCancel();
-					}
-					else canbus.bluetooth.disconnect();
-				}, 1000);
-			}
-			else
-			{
-				if (status === TConnectedStatus.CONNECT) onCheckVersion(5000);
-				else if (timerCheckVersion) clearTimeout(timerCheckVersion);
+					setTimeout(() => router.go(0), 5000);
+					onCancel();
+				}
+				else canbus.bluetooth.disconnect();
 			}
 		};
 
@@ -219,13 +187,13 @@ export default {
 
 		onMounted(() =>
 		{
-			canbus.bluetooth.addListener(BLUETOOTH_EVENT_CONNECTED, onConnected);
+			canbus.addListener(API_CONFIGS_EVENT, onCompletingFirmware);
 			canbus.update.addListener(API_UPDATE_EVENT, onUpdate);
 		});
 
 		onUnmounted(() =>
 		{
-			canbus.bluetooth.removeListener(BLUETOOTH_EVENT_CONNECTED, onConnected);
+			canbus.removeListener(API_CONFIGS_EVENT, onCompletingFirmware);
 			canbus.update.removeListener(API_UPDATE_EVENT, onUpdate);
 			canbus.removeListener(API_UPDATE_EVENT_ERROR, onErrorUpdate);
 		});

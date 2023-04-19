@@ -36,12 +36,15 @@ export default {
 
 	update: {
 		title: "Update PJCAN",
+		warning: "Attention!",
 		btn: {
 			update: "Update",
 			later: "Later"
 		},
 		dialog: {
-			new: "A new firmware version of the PJCAN device is available. Upgrade to version {n} ?"
+			updateTo: "Update PJCAN firmware to version {version} ?",
+			browserOutdated: "Your browser version is outdated.\n" +
+				"Update it and open the web application again."
 		},
 		process: {
 			preparation: "Preparing to upload...",
@@ -50,6 +53,7 @@ export default {
 			timeLeft: "Time left"
 		},
 		notify: {
+			newVersion: "Update available {version}",
 			completed: "Firmware completed successfully",
 			warning: "The firmware was not completed successfully. Turn your device off and on and try updating again",
 			error: "Firmware update error",
@@ -81,6 +85,7 @@ export default {
 			buttons: "Steering wheel button settings",
 			options: "Options"
 		},
+		update: "Upgrade to {version}",
 		about: "About"
 	},
 
@@ -122,7 +127,8 @@ export default {
 		close: "Close",
 		deviceInfo: "About device",
 		deviceReset: "Reset configuration",
-		reset: "Reset"
+		reset: "Reset",
+		ok: "OK"
 	},
 
 	onboard: {

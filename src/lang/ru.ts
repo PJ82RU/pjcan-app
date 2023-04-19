@@ -36,12 +36,15 @@ export default {
 
 	update: {
 		title: "Обновление PJCAN",
+		warning: "Внимание!",
 		btn: {
 			update: "Обновить",
 			later: "Позже"
 		},
 		dialog: {
-			new: "Доступна новая версия прошивки устройства PJCAN. Обновить до версии {n} ?"
+			updateTo: "Обновить прошивку PJCAN до версии {version} ?",
+			browserOutdated: "Версия вашего браузера устарела.\n" +
+				"Обновите его и откройте web-приложение заново."
 		},
 		process: {
 			preparation: "Подготовка к загрузке ...",
@@ -50,6 +53,7 @@ export default {
 			timeLeft: "Оставшееся время"
 		},
 		notify: {
+			newVersion: "Доступно обновление {version}",
 			completed: "Прошивка успешно завершена",
 			warning: "Прошивка завершена не удачно. Выключите и включите устройство, и попробуйте обновить еще раз",
 			error: "Ошибка обновления прошивки",
@@ -82,6 +86,7 @@ export default {
 			buttons: "Настройка кнопок руля",
 			options: "Параметры"
 		},
+		update: "Обновить до {version}",
 		about: "О программе"
 	},
 
@@ -138,7 +143,8 @@ export default {
 		close: "Закрыть",
 		deviceInfo: "Об устройстве",
 		deviceReset: "Сбросить конфигурацию",
-		reset: "Сбросить"
+		reset: "Сбросить",
+		ok: "OK"
 	},
 
 	onboard: {
