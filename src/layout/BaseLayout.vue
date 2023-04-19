@@ -207,27 +207,30 @@ export default {
 			if (!newVersionFirmware.value)
 			{
 				newVersionFirmware.value = true;
-				canbus.checkVersion().then((newVersion) =>
-				{
-					newVersionFirmware.value = newVersion.toString;
-					if (!newVersion.is)
+				canbus
+					.checkVersion()
+					.then((newVersion) =>
 					{
-						store.commit("app/setMessage", {
-							title: t("update.warning"),
-							icon: "mdi-alert-outline",
-							text: t("update.dialog.browserOutdated"),
-							btns: [{ title: t("btn.ok") }],
-							width: 700
-						} as IMessage);
-					}
-					else
-					{
-						setTimeout(() =>
+						newVersionFirmware.value = newVersion.toString;
+						if (!newVersion.is)
 						{
-							toast.warning(t("update.notify.newVersion", { version: newVersionFirmware.value }));
-						}, 5000);
-					}
-				});
+							store.commit("app/setMessage", {
+								title: t("update.warning"),
+								icon: "mdi-alert-outline",
+								text: t("update.dialog.browserOutdated"),
+								btns: [{ title: t("btn.ok") }],
+								width: 700
+							} as IMessage);
+						}
+						else
+						{
+							setTimeout(() =>
+							{
+								toast.warning(t("update.notify.newVersion", { version: newVersionFirmware.value }));
+							}, 5000);
+						}
+					})
+					.catch(() => {});
 			}
 		};
 
