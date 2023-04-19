@@ -1,5 +1,7 @@
+import { IBaseModel } from "../base";
+
 /** Интерфейс версии */
-export interface IVersion {
+export interface IVersion extends IBaseModel {
 	major: number;
 	minor: number;
 	build: number;

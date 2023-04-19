@@ -114,7 +114,7 @@ import {
 import { API_VALUES_EXEC, API_VALUES_EVENT, IValues, Values } from "@/models/pjcan/values";
 import { API_VARIABLE_VALUES_EXEC, API_VARIABLE_VALUES_EVENT, IVariablesValue } from "@/models/pjcan/variables/values";
 import { IUpdate } from "@/models/pjcan/update/IUpdate";
-import { IVersion, Version } from "@/models/pjcan/version";
+import { API_VERSION_EVENT, API_VERSION_EXEC, IVersion, Version } from "@/models/pjcan/version";
 import { API_VARIABLE_TEST_EXEC } from "@/models/pjcan/variables/test";
 import {
 	API_SCANNER_CONFIG_EVENT,
@@ -129,6 +129,8 @@ export class Canbus extends EventEmitter
 {
 	/** Bluetooth */
 	bluetooth: Bluetooth = new Bluetooth();
+	/** Версия прошивки PJCAN */
+	version: IVersion = new Version();
 	/** Конфигурация устройства */
 	configs: IConfigs = new Configs();
 	/** Конфигурация отображения значений */
@@ -172,6 +174,7 @@ export class Canbus extends EventEmitter
 		super();
 		this.bluetooth.addListener(BLUETOOTH_EVENT_CONNECTED, (ev: any) => this.onConnected(ev));
 		this.bluetooth.addListener(BLUETOOTH_EVENT_RECEIVE, (ev: any) => this.onReceive(ev));
+		this.addListener(API_VERSION_EVENT, () => this.begin());
 	}
 
 	/**
@@ -197,13 +200,22 @@ export class Canbus extends EventEmitter
 	 * Событие подключения Bluetooth
 	 * @param {TConnectedStatus} status Статус подключения
 	 */
-	async onConnected(status: TConnectedStatus)
+	onConnected(status: TConnectedStatus)
 	{
 		if (status !== TConnectedStatus.CONNECT)
 		{
 			this.queryDisabled = true;
 			return;
 		}
+
+		// с начало получаем версию прошивки
+		this.queryConfig(API_VERSION_EXEC).then();
+	}
+
+	/** Запуск опросов PJCAN */
+	async begin()
+	{
+		if (!this.version.is) return;
 
 		await this.queryConfig();
 		await this.queryView();
@@ -222,6 +234,10 @@ export class Canbus extends EventEmitter
 	{
 		switch (type)
 		{
+			case API_VERSION_EXEC:
+				await this.query(this.version);
+				break;
+
 			case API_VARIABLE_CONFIGS_EXEC:
 				await this.query(this.configs.variable);
 				break;
@@ -484,9 +500,14 @@ export class Canbus extends EventEmitter
 	{
 		switch (data.getUint8(0))
 		{
+			case API_VERSION_EXEC: // Версия прошивки
+				this.version.set(data);
+				this.emit(API_VERSION_EVENT, this.version);
+				this.logVersion();
+				break;
+
 			case API_CONFIG_EXEC: // Вся конфигурация
 				this.configs.set(data);
-				this.logVersion();
 
 				this.emit(API_CONFIGS_EVENT, this.configs);
 				this.emit(API_DEVICE_CONFIG_EVENT, this.configs.device);
@@ -736,7 +757,7 @@ export class Canbus extends EventEmitter
 	/** Лог версии прошивки */
 	private logVersion()
 	{
-		const { major, minor, build, revision } = this.configs.version;
+		const { major, minor, build, revision } = this.version;
 		console.log(t("BLE.server.versionProtocol", { mj: major, mn: minor, bl: build, rv: revision }));
 	}
 
@@ -761,7 +782,7 @@ export class Canbus extends EventEmitter
 						newVersion.build = ver[2];
 						newVersion.revision = ver[3];
 
-						if (this.configs.version.compare(newVersion) > 0) resolve(newVersion);
+						if (this.version.compare(newVersion) > 0) resolve(newVersion);
 						else reject("Current version");
 					}
 					else reject("No data");

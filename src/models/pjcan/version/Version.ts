@@ -1,7 +1,15 @@
+import { BluetoothStruct } from "@/components/bluetooth";
+import { BaseModel } from "../base";
 import { IVersion } from "./IVersion";
+import { API_VERSION_SIZE, StructVersion } from "./StructVersion";
+
+export const API_VERSION_EXEC = 6;
+export const API_VERSION_EVENT = "Version";
+
+const struct = new BluetoothStruct(StructVersion);
 
 /** Модель версии */
-export class Version implements IVersion
+export class Version extends BaseModel implements IVersion
 {
 	major = 0;
 	minor = 0;
@@ -18,6 +26,12 @@ export class Version implements IVersion
 	get toString(): string
 	{
 		return `${this.major}.${this.minor}.${this.build}.${this.revision}`;
+	}
+
+	constructor(data?: DataView)
+	{
+		super();
+		if (data) this.set(data);
 	}
 
 	/**
@@ -44,5 +58,20 @@ export class Version implements IVersion
 		this.minor = 0;
 		this.build = 0;
 		this.revision = 0;
+	}
+
+	/**
+	 * Запись данных
+	 * @param {DataView} buf Буффер данных
+	 */
+	set(buf: DataView): boolean
+	{
+		return this._set(this, API_VERSION_EXEC, API_VERSION_SIZE + 1, struct, buf);
+	}
+
+	/** Чтение данных */
+	get(): DataView | undefined
+	{
+		return this._get(this, API_VERSION_EXEC, 1);
 	}
 }
