@@ -12,6 +12,7 @@
 			else if (this.min && Number(this.value) < Number(this.min)) { this.value = ''; }
 		"
 		:disabled="disabled"
+		:readonly="readonly"
 		persistent-hint
 		dense
 		@blur="onBlur"
@@ -44,6 +45,8 @@ export default {
 			type: Number,
 			default: 3
 		},
+		/** Только чтение */
+		readonly: Boolean,
 		/** Выкл. */
 		disabled: Boolean
 	},

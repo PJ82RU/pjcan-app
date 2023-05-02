@@ -89,7 +89,7 @@ var classof = __webpack_require__(648);
 var tryToString = __webpack_require__(6330);
 var createNonEnumerableProperty = __webpack_require__(8880);
 var defineBuiltIn = __webpack_require__(8052);
-var defineProperty = (__webpack_require__(3070).f);
+var defineBuiltInAccessor = __webpack_require__(7045);
 var isPrototypeOf = __webpack_require__(7976);
 var getPrototypeOf = __webpack_require__(9518);
 var setPrototypeOf = __webpack_require__(7674);
@@ -247,9 +247,12 @@ if (NATIVE_ARRAY_BUFFER_VIEWS && getPrototypeOf(Uint8ClampedArrayPrototype) !== 
 
 if (DESCRIPTORS && !hasOwn(TypedArrayPrototype, TO_STRING_TAG)) {
   TYPED_ARRAY_TAG_REQUIRED = true;
-  defineProperty(TypedArrayPrototype, TO_STRING_TAG, { get: function () {
-    return isObject(this) ? this[TYPED_ARRAY_TAG] : undefined;
-  } });
+  defineBuiltInAccessor(TypedArrayPrototype, TO_STRING_TAG, {
+    configurable: true,
+    get: function () {
+      return isObject(this) ? this[TYPED_ARRAY_TAG] : undefined;
+    }
+  });
   for (NAME in TypedArrayConstructorsList) if (global[NAME]) {
     createNonEnumerableProperty(global[NAME], TYPED_ARRAY_TAG, NAME);
   }
@@ -267,6 +270,22 @@ module.exports = {
   isTypedArray: isTypedArray,
   TypedArray: TypedArray,
   TypedArrayPrototype: TypedArrayPrototype
+};
+
+
+/***/ }),
+
+/***/ 7745:
+/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+
+var lengthOfArrayLike = __webpack_require__(6244);
+
+module.exports = function (Constructor, list) {
+  var index = 0;
+  var length = lengthOfArrayLike(list);
+  var result = new Constructor(length);
+  while (length > index) result[index] = list[index++];
+  return result;
 };
 
 
@@ -311,47 +330,6 @@ module.exports = {
 
 /***/ }),
 
-/***/ 9671:
-/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
-
-var bind = __webpack_require__(9974);
-var IndexedObject = __webpack_require__(8361);
-var toObject = __webpack_require__(7908);
-var lengthOfArrayLike = __webpack_require__(6244);
-
-// `Array.prototype.{ findLast, findLastIndex }` methods implementation
-var createMethod = function (TYPE) {
-  var IS_FIND_LAST_INDEX = TYPE == 1;
-  return function ($this, callbackfn, that) {
-    var O = toObject($this);
-    var self = IndexedObject(O);
-    var boundFunction = bind(callbackfn, that);
-    var index = lengthOfArrayLike(self);
-    var value, result;
-    while (index-- > 0) {
-      value = self[index];
-      result = boundFunction(value, index, O);
-      if (result) switch (TYPE) {
-        case 0: return value; // findLast
-        case 1: return index; // findLastIndex
-      }
-    }
-    return IS_FIND_LAST_INDEX ? -1 : undefined;
-  };
-};
-
-module.exports = {
-  // `Array.prototype.findLast` method
-  // https://github.com/tc39/proposal-array-find-from-last
-  findLast: createMethod(0),
-  // `Array.prototype.findLastIndex` method
-  // https://github.com/tc39/proposal-array-find-from-last
-  findLastIndex: createMethod(1)
-};
-
-
-/***/ }),
-
 /***/ 3658:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
@@ -387,13 +365,55 @@ module.exports = SILENT_ON_NON_WRITABLE_LENGTH_SET ? function (O, length) {
 
 /***/ }),
 
+/***/ 1843:
+/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+
+var lengthOfArrayLike = __webpack_require__(6244);
+
+// https://tc39.es/proposal-change-array-by-copy/#sec-array.prototype.toReversed
+// https://tc39.es/proposal-change-array-by-copy/#sec-%typedarray%.prototype.toReversed
+module.exports = function (O, C) {
+  var len = lengthOfArrayLike(O);
+  var A = new C(len);
+  var k = 0;
+  for (; k < len; k++) A[k] = O[len - k - 1];
+  return A;
+};
+
+
+/***/ }),
+
+/***/ 1572:
+/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+
+var lengthOfArrayLike = __webpack_require__(6244);
+var toIntegerOrInfinity = __webpack_require__(9303);
+
+var $RangeError = RangeError;
+
+// https://tc39.es/proposal-change-array-by-copy/#sec-array.prototype.with
+// https://tc39.es/proposal-change-array-by-copy/#sec-%typedarray%.prototype.with
+module.exports = function (O, C, index, value) {
+  var len = lengthOfArrayLike(O);
+  var relativeIndex = toIntegerOrInfinity(index);
+  var actualIndex = relativeIndex < 0 ? len + relativeIndex : relativeIndex;
+  if (actualIndex >= len || actualIndex < 0) throw $RangeError('Incorrect index');
+  var A = new C(len);
+  var k = 0;
+  for (; k < len; k++) A[k] = k === actualIndex ? value : O[k];
+  return A;
+};
+
+
+/***/ }),
+
 /***/ 4326:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
-var uncurryThisRaw = __webpack_require__(84);
+var uncurryThis = __webpack_require__(1702);
 
-var toString = uncurryThisRaw({}.toString);
-var stringSlice = uncurryThisRaw(''.slice);
+var toString = uncurryThis({}.toString);
+var stringSlice = uncurryThis(''.slice);
 
 module.exports = function (it) {
   return stringSlice(toString(it), 8, -1);
@@ -508,6 +528,21 @@ module.exports = function (bitmap, value) {
 
 /***/ }),
 
+/***/ 7045:
+/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+
+var makeBuiltIn = __webpack_require__(6339);
+var defineProperty = __webpack_require__(3070);
+
+module.exports = function (target, name, descriptor) {
+  if (descriptor.get) makeBuiltIn(descriptor.get, name, { getter: true });
+  if (descriptor.set) makeBuiltIn(descriptor.set, name, { setter: true });
+  return defineProperty.f(target, name, descriptor);
+};
+
+
+/***/ }),
+
 /***/ 8052:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
@@ -597,6 +632,7 @@ module.exports = !fails(function () {
 var documentAll = typeof document == 'object' && document.all;
 
 // https://tc39.es/ecma262/#sec-IsHTMLDDA-internal-slot
+// eslint-disable-next-line unicorn/no-typeof-undefined -- required for testing
 var IS_HTMLDDA = typeof documentAll == 'undefined' && documentAll !== undefined;
 
 module.exports = {
@@ -673,11 +709,9 @@ module.exports = {
 /***/ }),
 
 /***/ 8113:
-/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+/***/ (function(module) {
 
-var getBuiltIn = __webpack_require__(5005);
-
-module.exports = getBuiltIn('navigator', 'userAgent') || '';
+module.exports = typeof navigator != 'undefined' && String(navigator.userAgent) || '';
 
 
 /***/ }),
@@ -742,6 +776,7 @@ var $Error = Error;
 var replace = uncurryThis(''.replace);
 
 var TEST = (function (arg) { return String($Error(arg).stack); })('zxcasd');
+// eslint-disable-next-line redos/no-vulnerable -- safe
 var V8_OR_CHAKRA_STACK_ENTRY = /\n\s*at [^:]*:[^\n]*/;
 var IS_V8_OR_CHAKRA_STACK = V8_OR_CHAKRA_STACK_ENTRY.test(TEST);
 
@@ -829,26 +864,6 @@ module.exports = function (exec) {
 
 /***/ }),
 
-/***/ 9974:
-/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
-
-var uncurryThis = __webpack_require__(1702);
-var aCallable = __webpack_require__(9662);
-var NATIVE_BIND = __webpack_require__(4374);
-
-var bind = uncurryThis(uncurryThis.bind);
-
-// optional / simple context binding
-module.exports = function (fn, that) {
-  aCallable(fn);
-  return that === undefined ? fn : NATIVE_BIND ? bind(fn, that) : function (/* ...args */) {
-    return fn.apply(that, arguments);
-  };
-};
-
-
-/***/ }),
-
 /***/ 4374:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
@@ -902,7 +917,23 @@ module.exports = {
 
 /***/ }),
 
-/***/ 84:
+/***/ 5668:
+/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+
+var uncurryThis = __webpack_require__(1702);
+var aCallable = __webpack_require__(9662);
+
+module.exports = function (object, key, method) {
+  try {
+    // eslint-disable-next-line es/no-object-getownpropertydescriptor -- safe
+    return uncurryThis(aCallable(Object.getOwnPropertyDescriptor(object, key)[method]));
+  } catch (error) { /* empty */ }
+};
+
+
+/***/ }),
+
+/***/ 1702:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 var NATIVE_BIND = __webpack_require__(4374);
@@ -915,22 +946,6 @@ module.exports = NATIVE_BIND ? uncurryThisWithBind : function (fn) {
   return function () {
     return call.apply(fn, arguments);
   };
-};
-
-
-/***/ }),
-
-/***/ 1702:
-/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
-
-var classofRaw = __webpack_require__(4326);
-var uncurryThisRaw = __webpack_require__(84);
-
-module.exports = function (fn) {
-  // Nashorn bug:
-  //   https://github.com/zloirock/core-js/issues/1128
-  //   https://github.com/zloirock/core-js/issues/1130
-  if (classofRaw(fn) === 'Function') return uncurryThisRaw(fn);
 };
 
 
@@ -1194,6 +1209,19 @@ module.exports = Array.isArray || function isArray(argument) {
 
 /***/ }),
 
+/***/ 4067:
+/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+
+var classof = __webpack_require__(648);
+
+module.exports = function (it) {
+  var klass = classof(it);
+  return klass == 'BigInt64Array' || klass == 'BigUint64Array';
+};
+
+
+/***/ }),
+
 /***/ 614:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
@@ -1315,6 +1343,7 @@ module.exports = function (obj) {
 /***/ 6339:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
+var uncurryThis = __webpack_require__(1702);
 var fails = __webpack_require__(7293);
 var isCallable = __webpack_require__(614);
 var hasOwn = __webpack_require__(2597);
@@ -1325,8 +1354,12 @@ var InternalStateModule = __webpack_require__(9909);
 
 var enforceInternalState = InternalStateModule.enforce;
 var getInternalState = InternalStateModule.get;
+var $String = String;
 // eslint-disable-next-line es/no-object-defineproperty -- safe
 var defineProperty = Object.defineProperty;
+var stringSlice = uncurryThis(''.slice);
+var replace = uncurryThis(''.replace);
+var join = uncurryThis([].join);
 
 var CONFIGURABLE_LENGTH = DESCRIPTORS && !fails(function () {
   return defineProperty(function () { /* empty */ }, 'length', { value: 8 }).length !== 8;
@@ -1335,8 +1368,8 @@ var CONFIGURABLE_LENGTH = DESCRIPTORS && !fails(function () {
 var TEMPLATE = String(String).split('String');
 
 var makeBuiltIn = module.exports = function (value, name, options) {
-  if (String(name).slice(0, 7) === 'Symbol(') {
-    name = '[' + String(name).replace(/^Symbol\(([^)]*)\)/, '$1') + ']';
+  if (stringSlice($String(name), 0, 7) === 'Symbol(') {
+    name = '[' + replace($String(name), /^Symbol\(([^)]*)\)/, '$1') + ']';
   }
   if (options && options.getter) name = 'get ' + name;
   if (options && options.setter) name = 'set ' + name;
@@ -1355,7 +1388,7 @@ var makeBuiltIn = module.exports = function (value, name, options) {
   } catch (error) { /* empty */ }
   var state = enforceInternalState(value);
   if (!hasOwn(state, 'source')) {
-    state.source = TEMPLATE.join(typeof name == 'string' ? name : '');
+    state.source = join(TEMPLATE, typeof name == 'string' ? name : '');
   } return value;
 };
 
@@ -1594,7 +1627,7 @@ exports.f = NASHORN_BUG ? function propertyIsEnumerable(V) {
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 /* eslint-disable no-proto -- safe */
-var uncurryThis = __webpack_require__(1702);
+var uncurryThisAccessor = __webpack_require__(5668);
 var anObject = __webpack_require__(9670);
 var aPossiblePrototype = __webpack_require__(6077);
 
@@ -1607,8 +1640,7 @@ module.exports = Object.setPrototypeOf || ('__proto__' in {} ? function () {
   var test = {};
   var setter;
   try {
-    // eslint-disable-next-line es/no-object-getownpropertydescriptor -- safe
-    setter = uncurryThis(Object.getOwnPropertyDescriptor(Object.prototype, '__proto__').set);
+    setter = uncurryThisAccessor(Object.prototype, '__proto__', 'set');
     setter(test, []);
     CORRECT_SETTER = test instanceof Array;
   } catch (error) { /* empty */ }
@@ -1722,10 +1754,10 @@ var store = __webpack_require__(5465);
 (module.exports = function (key, value) {
   return store[key] || (store[key] = value !== undefined ? value : {});
 })('versions', []).push({
-  version: '3.26.0',
+  version: '3.30.1',
   mode: IS_PURE ? 'pure' : 'global',
-  copyright: '© 2014-2022 Denis Pushkarev (zloirock.ru)',
-  license: 'https://github.com/zloirock/core-js/blob/v3.26.0/LICENSE',
+  copyright: '© 2014-2023 Denis Pushkarev (zloirock.ru)',
+  license: 'https://github.com/zloirock/core-js/blob/v3.30.1/LICENSE',
   source: 'https://github.com/zloirock/core-js'
 });
 
@@ -1766,6 +1798,25 @@ var min = Math.min;
 module.exports = function (index, length) {
   var integer = toIntegerOrInfinity(index);
   return integer < 0 ? max(integer + length, 0) : min(integer, length);
+};
+
+
+/***/ }),
+
+/***/ 4599:
+/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+
+var toPrimitive = __webpack_require__(7593);
+
+var $TypeError = TypeError;
+
+// `ToBigInt` abstract operation
+// https://tc39.es/ecma262/#sec-tobigint
+module.exports = function (argument) {
+  var prim = toPrimitive(argument, 'number');
+  if (typeof prim == 'number') throw $TypeError("Can't convert number to bigint");
+  // eslint-disable-next-line es/no-bigint -- safe
+  return BigInt(prim);
 };
 
 
@@ -1998,21 +2049,15 @@ var uid = __webpack_require__(9711);
 var NATIVE_SYMBOL = __webpack_require__(6293);
 var USE_SYMBOL_AS_UID = __webpack_require__(3307);
 
-var WellKnownSymbolsStore = shared('wks');
 var Symbol = global.Symbol;
-var symbolFor = Symbol && Symbol['for'];
-var createWellKnownSymbol = USE_SYMBOL_AS_UID ? Symbol : Symbol && Symbol.withoutSetter || uid;
+var WellKnownSymbolsStore = shared('wks');
+var createWellKnownSymbol = USE_SYMBOL_AS_UID ? Symbol['for'] || Symbol : Symbol && Symbol.withoutSetter || uid;
 
 module.exports = function (name) {
-  if (!hasOwn(WellKnownSymbolsStore, name) || !(NATIVE_SYMBOL || typeof WellKnownSymbolsStore[name] == 'string')) {
-    var description = 'Symbol.' + name;
-    if (NATIVE_SYMBOL && hasOwn(Symbol, name)) {
-      WellKnownSymbolsStore[name] = Symbol[name];
-    } else if (USE_SYMBOL_AS_UID && symbolFor) {
-      WellKnownSymbolsStore[name] = symbolFor(description);
-    } else {
-      WellKnownSymbolsStore[name] = createWellKnownSymbol(description);
-    }
+  if (!hasOwn(WellKnownSymbolsStore, name)) {
+    WellKnownSymbolsStore[name] = NATIVE_SYMBOL && hasOwn(Symbol, name)
+      ? Symbol[name]
+      : createWellKnownSymbol('Symbol.' + name);
   } return WellKnownSymbolsStore[name];
 };
 
@@ -2037,18 +2082,20 @@ var INCORRECT_TO_LENGTH = fails(function () {
 
 // V8 and Safari <= 15.4, FF < 23 throws InternalError
 // https://bugs.chromium.org/p/v8/issues/detail?id=12681
-var SILENT_ON_NON_WRITABLE_LENGTH = !function () {
+var properErrorOnNonWritableLength = function () {
   try {
     // eslint-disable-next-line es/no-object-defineproperty -- safe
     Object.defineProperty([], 'length', { writable: false }).push();
   } catch (error) {
     return error instanceof TypeError;
   }
-}();
+};
+
+var FORCED = INCORRECT_TO_LENGTH || !properErrorOnNonWritableLength();
 
 // `Array.prototype.push` method
 // https://tc39.es/ecma262/#sec-array.prototype.push
-$({ target: 'Array', proto: true, arity: 1, forced: INCORRECT_TO_LENGTH || SILENT_ON_NON_WRITABLE_LENGTH }, {
+$({ target: 'Array', proto: true, arity: 1, forced: FORCED }, {
   // eslint-disable-next-line no-unused-vars -- required for `.length`
   push: function push(item) {
     var O = toObject(this);
@@ -2083,18 +2130,20 @@ var doesNotExceedSafeInteger = __webpack_require__(7207);
 var INCORRECT_RESULT = [].unshift(0) !== 1;
 
 // V8 ~ Chrome < 71 and Safari <= 15.4, FF < 23 throws InternalError
-var SILENT_ON_NON_WRITABLE_LENGTH = !function () {
+var properErrorOnNonWritableLength = function () {
   try {
     // eslint-disable-next-line es/no-object-defineproperty -- safe
     Object.defineProperty([], 'length', { writable: false }).unshift();
   } catch (error) {
     return error instanceof TypeError;
   }
-}();
+};
+
+var FORCED = INCORRECT_RESULT || !properErrorOnNonWritableLength();
 
 // `Array.prototype.unshift` method
 // https://tc39.es/ecma262/#sec-array.prototype.unshift
-$({ target: 'Array', proto: true, arity: 1, forced: INCORRECT_RESULT || SILENT_ON_NON_WRITABLE_LENGTH }, {
+$({ target: 'Array', proto: true, arity: 1, forced: FORCED }, {
   // eslint-disable-next-line no-unused-vars -- required for `.length`
   unshift: function unshift(item) {
     var O = toObject(this);
@@ -2118,42 +2167,115 @@ $({ target: 'Array', proto: true, arity: 1, forced: INCORRECT_RESULT || SILENT_O
 
 /***/ }),
 
-/***/ 4590:
+/***/ 1439:
 /***/ (function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
 
 "use strict";
 
+var arrayToReversed = __webpack_require__(1843);
 var ArrayBufferViewCore = __webpack_require__(260);
-var $findLastIndex = (__webpack_require__(9671).findLastIndex);
 
 var aTypedArray = ArrayBufferViewCore.aTypedArray;
 var exportTypedArrayMethod = ArrayBufferViewCore.exportTypedArrayMethod;
+var getTypedArrayConstructor = ArrayBufferViewCore.getTypedArrayConstructor;
 
-// `%TypedArray%.prototype.findLastIndex` method
-// https://github.com/tc39/proposal-array-find-from-last
-exportTypedArrayMethod('findLastIndex', function findLastIndex(predicate /* , thisArg */) {
-  return $findLastIndex(aTypedArray(this), predicate, arguments.length > 1 ? arguments[1] : undefined);
+// `%TypedArray%.prototype.toReversed` method
+// https://tc39.es/proposal-change-array-by-copy/#sec-%typedarray%.prototype.toReversed
+exportTypedArrayMethod('toReversed', function toReversed() {
+  return arrayToReversed(aTypedArray(this), getTypedArrayConstructor(this));
 });
 
 
 /***/ }),
 
-/***/ 3408:
+/***/ 7585:
 /***/ (function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
 
 "use strict";
 
 var ArrayBufferViewCore = __webpack_require__(260);
-var $findLast = (__webpack_require__(9671).findLast);
+var uncurryThis = __webpack_require__(1702);
+var aCallable = __webpack_require__(9662);
+var arrayFromConstructorAndList = __webpack_require__(7745);
 
 var aTypedArray = ArrayBufferViewCore.aTypedArray;
+var getTypedArrayConstructor = ArrayBufferViewCore.getTypedArrayConstructor;
+var exportTypedArrayMethod = ArrayBufferViewCore.exportTypedArrayMethod;
+var sort = uncurryThis(ArrayBufferViewCore.TypedArrayPrototype.sort);
+
+// `%TypedArray%.prototype.toSorted` method
+// https://tc39.es/proposal-change-array-by-copy/#sec-%typedarray%.prototype.toSorted
+exportTypedArrayMethod('toSorted', function toSorted(compareFn) {
+  if (compareFn !== undefined) aCallable(compareFn);
+  var O = aTypedArray(this);
+  var A = arrayFromConstructorAndList(getTypedArrayConstructor(O), O);
+  return sort(A, compareFn);
+});
+
+
+/***/ }),
+
+/***/ 5315:
+/***/ (function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
+
+"use strict";
+
+var arrayWith = __webpack_require__(1572);
+var ArrayBufferViewCore = __webpack_require__(260);
+var isBigIntArray = __webpack_require__(4067);
+var toIntegerOrInfinity = __webpack_require__(9303);
+var toBigInt = __webpack_require__(4599);
+
+var aTypedArray = ArrayBufferViewCore.aTypedArray;
+var getTypedArrayConstructor = ArrayBufferViewCore.getTypedArrayConstructor;
 var exportTypedArrayMethod = ArrayBufferViewCore.exportTypedArrayMethod;
 
-// `%TypedArray%.prototype.findLast` method
-// https://github.com/tc39/proposal-array-find-from-last
-exportTypedArrayMethod('findLast', function findLast(predicate /* , thisArg */) {
-  return $findLast(aTypedArray(this), predicate, arguments.length > 1 ? arguments[1] : undefined);
-});
+var PROPER_ORDER = !!function () {
+  try {
+    // eslint-disable-next-line no-throw-literal, es/no-typed-arrays, es/no-array-prototype-with -- required for testing
+    new Int8Array(1)['with'](2, { valueOf: function () { throw 8; } });
+  } catch (error) {
+    // some early implementations, like WebKit, does not follow the final semantic
+    // https://github.com/tc39/proposal-change-array-by-copy/pull/86
+    return error === 8;
+  }
+}();
+
+// `%TypedArray%.prototype.with` method
+// https://tc39.es/proposal-change-array-by-copy/#sec-%typedarray%.prototype.with
+exportTypedArrayMethod('with', { 'with': function (index, value) {
+  var O = aTypedArray(this);
+  var relativeIndex = toIntegerOrInfinity(index);
+  var actualValue = isBigIntArray(O) ? toBigInt(value) : +value;
+  return arrayWith(O, getTypedArrayConstructor(O), relativeIndex, actualValue);
+} }['with'], !PROPER_ORDER);
+
+
+/***/ }),
+
+/***/ 3767:
+/***/ (function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
+
+// TODO: Remove from `core-js@4`
+__webpack_require__(1439);
+
+
+/***/ }),
+
+/***/ 8585:
+/***/ (function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
+
+// TODO: Remove from `core-js@4`
+__webpack_require__(7585);
+
+
+/***/ }),
+
+/***/ 8696:
+/***/ (function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
+
+// TODO: Remove from `core-js@4`
+__webpack_require__(5315);
 
 
 /***/ }),
@@ -2566,19 +2688,21 @@ webpackContext.id = 6700;
 
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, {
-  "Z": function() { return /* binding */ api_canbus; }
+  "default": function() { return /* binding */ api_canbus; }
 });
 
 // UNUSED EXPORTS: Canbus
 
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/defineProperty.js
-var defineProperty = __webpack_require__(2482);
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/defineProperty.js + 3 modules
+var defineProperty = __webpack_require__(7327);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.push.js
 var es_array_push = __webpack_require__(7658);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.typed-array.find-last.js
-var es_typed_array_find_last = __webpack_require__(3408);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.typed-array.find-last-index.js
-var es_typed_array_find_last_index = __webpack_require__(4590);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/esnext.typed-array.to-reversed.js
+var esnext_typed_array_to_reversed = __webpack_require__(3767);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/esnext.typed-array.to-sorted.js
+var esnext_typed_array_to_sorted = __webpack_require__(8585);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/esnext.typed-array.with.js
+var esnext_typed_array_with = __webpack_require__(8696);
 // EXTERNAL MODULE: ./node_modules/eventemitter3/index.js
 var eventemitter3 = __webpack_require__(6856);
 var eventemitter3_default = /*#__PURE__*/__webpack_require__.n(eventemitter3);
@@ -2587,7 +2711,7 @@ var esm = __webpack_require__(672);
 // EXTERNAL MODULE: ./src/lang/index.ts + 2 modules
 var lang = __webpack_require__(3780);
 // EXTERNAL MODULE: ./src/utils/request.ts + 41 modules
-var request = __webpack_require__(4745);
+var request = __webpack_require__(1312);
 ;// CONCATENATED MODULE: ./src/api/firmware.ts
 
 const getFirmwareVersion = () => {
@@ -3027,53 +3151,41 @@ var scanner = __webpack_require__(510);
 
 
 
+
 class Canbus extends (eventemitter3_default()) {
-  /** Bluetooth */
-
-  /** Конфигурация устройства */
-
-  /** Конфигурация отображения значений */
-
-  /** Значения */
-
-  /** Статус циклического запроса */
-  /** Устройство */
-
-  /** SHA */
-
-  /** Обновление прошивки */
-
-  /** Значения кнопки */
-
-  /** Текст Teyes */
-
-  /** Конфигурация сканера can-шины */
-
-  /** Запрет на отправку данных */
-
-  /** Последний promise */
-
-  /** Таймер */
-
   /** Статус циклического запроса значений */
   get startedFetchValue() {
     return this.debounceFetchValue;
   }
   constructor() {
     super();
+    /** Bluetooth */
     (0,defineProperty/* default */.Z)(this, "bluetooth", new bluetooth/* Bluetooth */.$4());
+    /** Конфигурация устройства */
     (0,defineProperty/* default */.Z)(this, "configs", new configs/* Configs */.zo());
+    /** Конфигурация отображения значений */
     (0,defineProperty/* default */.Z)(this, "views", new Views());
+    /** Значения */
     (0,defineProperty/* default */.Z)(this, "values", new Values());
+    /** Статус циклического запроса */
+    /** Устройство */
     (0,defineProperty/* default */.Z)(this, "deviceInfo", new device/* DeviceInfo */.TG());
+    /** SHA */
     (0,defineProperty/* default */.Z)(this, "sha", void 0);
+    /** Обновление прошивки */
     (0,defineProperty/* default */.Z)(this, "update", new update/* Update */.BN());
+    /** Значения кнопки */
     (0,defineProperty/* default */.Z)(this, "buttonValue", new pjcan_button/* ButtonValue */.js());
+    /** Текст Teyes */
     (0,defineProperty/* default */.Z)(this, "teyesText", new teyes/* TeyesText */.VA());
+    /** Конфигурация сканера can-шины */
     (0,defineProperty/* default */.Z)(this, "scanner", new scanner/* ScannerConfig */.re());
+    /** Запрет на отправку данных */
     (0,defineProperty/* default */.Z)(this, "queryDisabled", true);
+    /** Последний promise */
     (0,defineProperty/* default */.Z)(this, "promises", null);
     (0,defineProperty/* default */.Z)(this, "queue", []);
+    /** Таймер */
     (0,defineProperty/* default */.Z)(this, "debounceFetchValue", undefined);
     this.bluetooth.addListener(bluetooth/* BLUETOOTH_EVENT_CONNECTED */.Dx, ev => this.onConnected(ev));
     this.bluetooth.addListener(bluetooth/* BLUETOOTH_EVENT_RECEIVE */.j9, ev => this.onReceive(ev));
@@ -3662,8 +3774,8 @@ __webpack_require__.d(__webpack_exports__, {
 
 // UNUSED EXPORTS: BLUETOOTH_CHARACTERISTIC_UUID, BLUETOOTH_SERVICE_UUID, BLUETOOTH_SIZE_MAX, TTypeValue
 
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/defineProperty.js
-var defineProperty = __webpack_require__(2482);
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/defineProperty.js + 3 modules
+var defineProperty = __webpack_require__(7327);
 // EXTERNAL MODULE: ./node_modules/eventemitter3/index.js
 var eventemitter3 = __webpack_require__(6856);
 var eventemitter3_default = /*#__PURE__*/__webpack_require__.n(eventemitter3);
@@ -3694,13 +3806,11 @@ const BLUETOOTH_EVENT_SEND = "Send"; // Событие исходящих дан
 const dev = "production" === "development";
 /** Bluetooth */
 class Bluetooth extends (eventemitter3_default()) {
-  /** Объект устройства */
-
-  /** Характеристика устройства */
-
   constructor() {
     super();
+    /** Объект устройства */
     (0,defineProperty/* default */.Z)(this, "_device", void 0);
+    /** Характеристика устройства */
     (0,defineProperty/* default */.Z)(this, "_characteristic", void 0);
     this.clear();
   }
@@ -3898,18 +4008,6 @@ var TTypeValue;
 
 /** Парсинг структуры данных С++ */
 class BluetoothStruct {
-  /** Прямой порядок байтов */
-
-  /** Смещение */
-
-  /** Буфер данных */
-
-  /** Смещение бит */
-
-  /** Буфер бит данных */
-
-  /** Структура данных */
-
   static bit() {
     return [TTypeValue.TYPE_BIT];
   }
@@ -3950,11 +4048,17 @@ class BluetoothStruct {
     return [TTypeValue.TYPE_STRUCT, data, length];
   }
   constructor(data) {
+    /** Прямой порядок байтов */
     (0,defineProperty/* default */.Z)(this, "littleEndian", true);
+    /** Смещение */
     (0,defineProperty/* default */.Z)(this, "offset", 0);
+    /** Буфер данных */
     (0,defineProperty/* default */.Z)(this, "buffer", null);
+    /** Смещение бит */
     (0,defineProperty/* default */.Z)(this, "bit_offset", 0);
+    /** Буфер бит данных */
     (0,defineProperty/* default */.Z)(this, "bit_buffer", null);
+    /** Структура данных */
     (0,defineProperty/* default */.Z)(this, "structData", void 0);
     this.structData = data;
   }
@@ -4701,7 +4805,7 @@ var vue_i18n_esm_bundler = __webpack_require__(5658);
     volMute: "Кнопка VOL MUTE",
     resistance: {
       title: "Сопротивление кнопки",
-      description: "Сопротивление кнопки в условных единицах"
+      description: "Сопротивление кнопки в у.е. Допускается погрешность ±300 у.е."
     },
     pressSingle: {
       title: "Кнопка нажата 1 раз",
@@ -5215,7 +5319,7 @@ var vue_i18n_esm_bundler = __webpack_require__(5658);
     volMute: "VOL MUTE button",
     resistance: {
       title: "Button resistance",
-      description: "Button resistance in conventional units"
+      description: "The resistance of the button in units is allowed an error of ± 300 units."
     },
     pressSingle: {
       title: "Button pressed 1 time",
@@ -5428,7 +5532,7 @@ const t = i18n.global.t;
 
 /***/ }),
 
-/***/ 4723:
+/***/ 441:
 /***/ (function(__unused_webpack_module, __unused_webpack___webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -5454,7 +5558,7 @@ __webpack_require__.d(components_namespaceObject, {
   "VBreadcrumbsDivider": function() { return VBreadcrumbsDivider; },
   "VBreadcrumbsItem": function() { return VBreadcrumbsItem; },
   "VBtn": function() { return VBtn/* VBtn */.T; },
-  "VBtnGroup": function() { return VBtnGroup/* VBtnGroup */.Yz; },
+  "VBtnGroup": function() { return VBtnGroup/* VBtnGroup */.Y; },
   "VBtnToggle": function() { return VBtnToggle/* VBtnToggle */.f; },
   "VCard": function() { return VCard/* VCard */._; },
   "VCardActions": function() { return VCardActions/* VCardActions */.h; },
@@ -5465,7 +5569,7 @@ __webpack_require__.d(components_namespaceObject, {
   "VCarousel": function() { return VCarousel; },
   "VCarouselItem": function() { return VCarouselItem; },
   "VCheckbox": function() { return VCheckbox; },
-  "VCheckboxBtn": function() { return VCheckboxBtn/* VCheckboxBtn */.pM; },
+  "VCheckboxBtn": function() { return VCheckboxBtn/* VCheckboxBtn */.p; },
   "VChip": function() { return VChip/* VChip */.v; },
   "VChipGroup": function() { return VChipGroup/* VChipGroup */.N; },
   "VClassIcon": function() { return composables_icons/* VClassIcon */.$0; },
@@ -5498,7 +5602,7 @@ __webpack_require__.d(components_namespaceObject, {
   "VHover": function() { return VHover; },
   "VIcon": function() { return VIcon/* VIcon */.t; },
   "VImg": function() { return VImg/* VImg */.f; },
-  "VInput": function() { return VInput/* VInput */.q8; },
+  "VInput": function() { return VInput/* VInput */.q; },
   "VItem": function() { return VItem; },
   "VItemGroup": function() { return VItemGroup; },
   "VKbd": function() { return VKbd; },
@@ -5508,7 +5612,7 @@ __webpack_require__.d(components_namespaceObject, {
   "VLazy": function() { return VLazy; },
   "VLigatureIcon": function() { return composables_icons/* VLigatureIcon */.w8; },
   "VList": function() { return VList/* VList */.i; },
-  "VListGroup": function() { return VListGroup/* VListGroup */.NU; },
+  "VListGroup": function() { return VListGroup/* VListGroup */.N; },
   "VListImg": function() { return VListImg; },
   "VListItem": function() { return VListItem/* VListItem */.l; },
   "VListItemAction": function() { return VListItemAction; },
@@ -5522,7 +5626,7 @@ __webpack_require__.d(components_namespaceObject, {
   "VMessages": function() { return VMessages/* VMessages */.u; },
   "VNavigationDrawer": function() { return VNavigationDrawer; },
   "VNoSsr": function() { return VNoSsr; },
-  "VOverlay": function() { return VOverlay/* VOverlay */.yc; },
+  "VOverlay": function() { return VOverlay/* VOverlay */.y; },
   "VPagination": function() { return VPagination; },
   "VParallax": function() { return VParallax; },
   "VProgressCircular": function() { return VProgressCircular/* VProgressCircular */.L; },
@@ -5557,7 +5661,7 @@ __webpack_require__.d(components_namespaceObject, {
   "VTab": function() { return VTab; },
   "VTable": function() { return VTable; },
   "VTabs": function() { return VTabs; },
-  "VTextField": function() { return VTextField/* VTextField */.hw; },
+  "VTextField": function() { return VTextField/* VTextField */.h; },
   "VTextarea": function() { return VTextarea; },
   "VThemeProvider": function() { return VThemeProvider; },
   "VTimeline": function() { return VTimeline; },
@@ -5567,6 +5671,7 @@ __webpack_require__.d(components_namespaceObject, {
   "VToolbarTitle": function() { return VToolbarTitle; },
   "VTooltip": function() { return VTooltip; },
   "VValidation": function() { return VValidation; },
+  "VVirtualScroll": function() { return VVirtualScroll; },
   "VWindow": function() { return VWindow; },
   "VWindowItem": function() { return VWindowItem; }
 });
@@ -5884,12 +5989,14 @@ function createLayout(props) {
     layoutRef: resizeRef
   };
 }
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/component.mjs
+var component = __webpack_require__(9166);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/theme.mjs + 1 modules
 var composables_theme = __webpack_require__(7041);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/locale.mjs + 3 modules
 var composables_locale = __webpack_require__(1629);
-// EXTERNAL MODULE: ./node_modules/vuetify/lib/util/defineComponent.mjs + 1 modules
-var defineComponent = __webpack_require__(320);
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/util/defineComponent.mjs
+var defineComponent = __webpack_require__(1107);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/util/useRender.mjs
 var useRender = __webpack_require__(9888);
 ;// CONCATENATED MODULE: ./node_modules/vuetify/lib/components/VApp/VApp.mjs
@@ -5900,11 +6007,13 @@ var useRender = __webpack_require__(9888);
 // Composables
 
 
+
  // Utilities
 
 const VApp = (0,defineComponent/* genericComponent */.ev)()({
   name: 'VApp',
   props: {
+    ...(0,component/* makeComponentProps */.l)(),
     ...makeLayoutProps({
       fullHeight: true
     }),
@@ -5927,8 +6036,8 @@ const VApp = (0,defineComponent/* genericComponent */.ev)()({
     } = (0,composables_locale/* useRtl */.Vw)();
     (0,useRender/* useRender */.L)(() => (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
       "ref": layoutRef,
-      "class": ['v-application', theme.themeClasses.value, layoutClasses.value, rtlClasses.value],
-      "style": layoutStyles.value
+      "class": ['v-application', theme.themeClasses.value, layoutClasses.value, rtlClasses.value, props.class],
+      "style": [layoutStyles.value, props.style]
     }, [(0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
       "class": "v-application__wrap"
     }, [slots.default?.()])]));
@@ -5956,10 +6065,12 @@ var tag = __webpack_require__(1138);
 ;// CONCATENATED MODULE: ./node_modules/vuetify/lib/components/VToolbar/VToolbarTitle.mjs
 
 // Composables
+
  // Utilities
- // Types
+
 const makeVToolbarTitleProps = (0,propsFactory/* propsFactory */.U)({
   text: String,
+  ...(0,component/* makeComponentProps */.l)(),
   ...(0,tag/* makeTagProps */.Q)()
 }, 'v-toolbar-title');
 const VToolbarTitle = (0,defineComponent/* genericComponent */.ev)()({
@@ -5972,7 +6083,8 @@ const VToolbarTitle = (0,defineComponent/* genericComponent */.ev)()({
     (0,useRender/* useRender */.L)(() => {
       const hasText = !!(slots.default || slots.text || props.text);
       return (0,runtime_core_esm_bundler/* createVNode */.Wm)(props.tag, {
-        "class": "v-toolbar-title"
+        "class": ['v-toolbar-title', props.class],
+        "style": props.style
       }, {
         default: () => [hasText && (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
           "class": "v-toolbar-title__placeholder"
@@ -5988,8 +6100,8 @@ var border = __webpack_require__(2718);
 var elevation = __webpack_require__(2465);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/rounded.mjs
 var rounded = __webpack_require__(4231);
-// EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/defaults.mjs
-var composables_defaults = __webpack_require__(8434);
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/defaults.mjs + 1 modules
+var composables_defaults = __webpack_require__(6107);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/color.mjs
 var composables_color = __webpack_require__(2370);
 ;// CONCATENATED MODULE: ./node_modules/vuetify/lib/components/VToolbar/VToolbar.mjs
@@ -6002,6 +6114,7 @@ var composables_color = __webpack_require__(2370);
 
 
  // Composables
+
 
 
 
@@ -6035,6 +6148,7 @@ const makeVToolbarProps = (0,propsFactory/* propsFactory */.U)({
   image: String,
   title: String,
   ...(0,border/* makeBorderProps */.m)(),
+  ...(0,component/* makeComponentProps */.l)(),
   ...(0,elevation/* makeElevationProps */.c)(),
   ...(0,rounded/* makeRoundedProps */.I)(),
   ...(0,tag/* makeTagProps */.Q)({
@@ -6085,22 +6199,26 @@ const VToolbar = (0,defineComponent/* genericComponent */.ev)()({
           'v-toolbar--flat': props.flat,
           'v-toolbar--floating': props.floating,
           [`v-toolbar--density-${props.density}`]: true
-        }, backgroundColorClasses.value, borderClasses.value, elevationClasses.value, roundedClasses.value, themeClasses.value],
-        "style": [backgroundColorStyles.value]
+        }, backgroundColorClasses.value, borderClasses.value, elevationClasses.value, roundedClasses.value, themeClasses.value, props.class],
+        "style": [backgroundColorStyles.value, props.style]
       }, {
         default: () => [hasImage && (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
           "key": "image",
           "class": "v-toolbar__image"
-        }, [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VDefaultsProvider/* VDefaultsProvider */.z, {
+        }, [!slots.image ? (0,runtime_core_esm_bundler/* createVNode */.Wm)(VImg/* VImg */.f, {
+          "key": "image-img",
+          "cover": true,
+          "src": props.image
+        }, null) : (0,runtime_core_esm_bundler/* createVNode */.Wm)(VDefaultsProvider/* VDefaultsProvider */.z, {
+          "key": "image-defaults",
+          "disabled": !props.image,
           "defaults": {
             VImg: {
               cover: true,
               src: props.image
             }
           }
-        }, {
-          default: () => [slots.image ? slots.image?.() : (0,runtime_core_esm_bundler/* createVNode */.Wm)(VImg/* VImg */.f, null, null)]
-        })]), (0,runtime_core_esm_bundler/* createVNode */.Wm)(VDefaultsProvider/* VDefaultsProvider */.z, {
+        }, slots.image)]), (0,runtime_core_esm_bundler/* createVNode */.Wm)(VDefaultsProvider/* VDefaultsProvider */.z, {
           "defaults": {
             VTabs: {
               height: (0,helpers/* convertToUnit */.kb)(contentHeight.value)
@@ -6146,31 +6264,103 @@ const VToolbar = (0,defineComponent/* genericComponent */.ev)()({
     };
   }
 });
-function filterToolbarProps(props) {
-  return (0,helpers/* pick */.ei)(props, Object.keys(VToolbar?.props ?? {}));
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/util/console.mjs
+var util_console = __webpack_require__(6033);
+;// CONCATENATED MODULE: ./node_modules/vuetify/lib/composables/scroll.mjs
+// Utilities
+
+ // Types
+// Composables
+const makeScrollProps = (0,propsFactory/* propsFactory */.U)({
+  scrollTarget: {
+    type: String
+  },
+  scrollThreshold: {
+    type: [String, Number]
+  }
+}, 'scroll');
+function useScroll(props) {
+  let args = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+  const {
+    thresholdMetCallback,
+    scrollThreshold,
+    canScroll
+  } = args;
+  let previousScroll = 0;
+  const target = (0,reactivity_esm_bundler/* ref */.iH)(null);
+  const currentScroll = (0,reactivity_esm_bundler/* ref */.iH)(0);
+  const savedScroll = (0,reactivity_esm_bundler/* ref */.iH)(0);
+  const currentThreshold = (0,reactivity_esm_bundler/* ref */.iH)(0);
+  const isScrollActive = (0,reactivity_esm_bundler/* ref */.iH)(false);
+  const isScrollingUp = (0,reactivity_esm_bundler/* ref */.iH)(false);
+  const computedScrollThreshold = (0,runtime_core_esm_bundler/* computed */.Fl)(() => {
+    return Number(props.scrollThreshold ?? scrollThreshold ?? 300);
+  });
+  const onScroll = () => {
+    const targetEl = target.value;
+    if (!targetEl || canScroll && !canScroll.value) return;
+    previousScroll = currentScroll.value;
+    currentScroll.value = 'window' in targetEl ? targetEl.pageYOffset : targetEl.scrollTop;
+    isScrollingUp.value = currentScroll.value < previousScroll;
+    currentThreshold.value = Math.abs(currentScroll.value - computedScrollThreshold.value);
+  };
+  (0,runtime_core_esm_bundler/* watch */.YP)(isScrollingUp, () => {
+    savedScroll.value = savedScroll.value || currentScroll.value;
+  });
+  (0,runtime_core_esm_bundler/* watch */.YP)(isScrollActive, () => {
+    savedScroll.value = 0;
+  });
+  (0,runtime_core_esm_bundler/* onMounted */.bv)(() => {
+    (0,runtime_core_esm_bundler/* watch */.YP)(() => props.scrollTarget, scrollTarget => {
+      const newTarget = scrollTarget ? document.querySelector(scrollTarget) : window;
+      if (!newTarget) {
+        (0,util_console/* consoleWarn */.Kd)(`Unable to locate element with identifier ${scrollTarget}`, (0,runtime_core_esm_bundler/* getCurrentInstance */.FN)());
+        return;
+      }
+      if (newTarget === target.value) return;
+      target.value?.removeEventListener('scroll', onScroll);
+      target.value = newTarget;
+      target.value.addEventListener('scroll', onScroll, {
+        passive: true
+      });
+    }, {
+      immediate: true
+    });
+  });
+  (0,runtime_core_esm_bundler/* onBeforeUnmount */.Jd)(() => {
+    target.value?.removeEventListener('scroll', onScroll);
+  });
+  thresholdMetCallback && (0,runtime_core_esm_bundler/* watch */.YP)(() => Math.abs(currentScroll.value - savedScroll.value) > computedScrollThreshold.value, thresholdMet => {
+    thresholdMet && thresholdMetCallback({
+      currentThreshold: currentThreshold.value,
+      isScrollingUp: isScrollingUp.value,
+      savedScroll
+    });
+  }, {
+    immediate: true
+  });
+
+  // Do we need this? If yes - seems that
+  // there's no need to expose onScroll
+  canScroll && (0,runtime_core_esm_bundler/* watch */.YP)(canScroll, onScroll, {
+    immediate: true
+  });
+  return {
+    computedScrollThreshold,
+    currentScroll,
+    currentThreshold,
+    isScrollActive,
+    // required only for testing
+    // probably can be removed
+    // later (2 chars chlng)
+    isScrollingUp,
+    savedScroll
+  };
 }
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/proxiedModel.mjs
 var proxiedModel = __webpack_require__(8717);
-;// CONCATENATED MODULE: ./node_modules/vuetify/lib/composables/ssrBoot.mjs
-// Utilities
-
-
-// Composables
-function useSsrBoot() {
-  const isBooted = (0,reactivity_esm_bundler/* ref */.iH)(false);
-  (0,runtime_core_esm_bundler/* onMounted */.bv)(() => {
-    window.requestAnimationFrame(() => {
-      isBooted.value = true;
-    });
-  });
-  const ssrBootStyles = (0,runtime_core_esm_bundler/* computed */.Fl)(() => !isBooted.value ? {
-    transition: 'none !important'
-  } : undefined);
-  return {
-    ssrBootStyles,
-    isBooted: (0,reactivity_esm_bundler/* readonly */.OT)(isBooted)
-  };
-}
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/ssrBoot.mjs
+var ssrBoot = __webpack_require__(1372);
 ;// CONCATENATED MODULE: ./node_modules/vuetify/lib/components/VAppBar/VAppBar.mjs
 
 // Styles
@@ -6180,19 +6370,14 @@ function useSsrBoot() {
  // Composables
 
 
+
  // Utilities
 
  // Types
 const VAppBar = (0,defineComponent/* genericComponent */.ev)()({
   name: 'VAppBar',
   props: {
-    // TODO: Implement scrolling techniques
-    // hideOnScroll: Boolean
-    // invertedScroll: Boolean
-    // collapseOnScroll: Boolean
-    // elevateOnScroll: Boolean
-    // shrinkOnScroll: Boolean
-    // fadeImageOnScroll: Boolean
+    scrollBehavior: String,
     modelValue: {
       type: Boolean,
       default: true
@@ -6204,6 +6389,7 @@ const VAppBar = (0,defineComponent/* genericComponent */.ev)()({
     },
     ...makeVToolbarProps(),
     ...makeLayoutItemProps(),
+    ...makeScrollProps(),
     height: {
       type: [Number, String],
       default: 64
@@ -6218,14 +6404,66 @@ const VAppBar = (0,defineComponent/* genericComponent */.ev)()({
     } = _ref;
     const vToolbarRef = (0,reactivity_esm_bundler/* ref */.iH)();
     const isActive = (0,proxiedModel/* useProxiedModel */.z)(props, 'modelValue');
+    const scrollBehavior = (0,runtime_core_esm_bundler/* computed */.Fl)(() => {
+      const behavior = new Set(props.scrollBehavior?.split(' ') ?? []);
+      return {
+        hide: behavior.has('hide'),
+        // fullyHide: behavior.has('fully-hide'),
+        inverted: behavior.has('inverted'),
+        collapse: behavior.has('collapse'),
+        elevate: behavior.has('elevate'),
+        fadeImage: behavior.has('fade-image')
+        // shrink: behavior.has('shrink'),
+      };
+    });
+
+    const canScroll = (0,runtime_core_esm_bundler/* computed */.Fl)(() => {
+      const behavior = scrollBehavior.value;
+      return behavior.hide ||
+      // behavior.fullyHide ||
+      behavior.inverted || behavior.collapse || behavior.elevate || behavior.fadeImage ||
+      // behavior.shrink ||
+      !isActive.value;
+    });
+    const {
+      currentScroll,
+      currentThreshold,
+      computedScrollThreshold,
+      isScrollingUp
+    } = useScroll(props, {
+      canScroll
+    });
+    const isCollapsed = (0,runtime_core_esm_bundler/* computed */.Fl)(() => props.collapse || scrollBehavior.value.collapse && (scrollBehavior.value.inverted ? currentScroll.value < 1 : currentScroll.value > 0));
+    const isFlat = (0,runtime_core_esm_bundler/* computed */.Fl)(() => props.flat || scrollBehavior.value.elevate && currentScroll.value === (scrollBehavior.value.inverted ? 1 : 0));
+    const scrollRatio = (0,runtime_core_esm_bundler/* computed */.Fl)(() => Math.min((currentThreshold.value - currentScroll.value) / currentThreshold.value || 1, 1));
+    const opacity = (0,runtime_core_esm_bundler/* computed */.Fl)(() => scrollBehavior.value.fadeImage ? scrollBehavior.value.inverted ? 1 - scrollRatio.value : scrollRatio.value : undefined);
     const height = (0,runtime_core_esm_bundler/* computed */.Fl)(() => {
+      if (scrollBehavior.value.hide && scrollBehavior.value.inverted) return 0;
       const height = vToolbarRef.value?.contentHeight ?? 0;
       const extensionHeight = vToolbarRef.value?.extensionHeight ?? 0;
       return height + extensionHeight;
     });
+    function setActive() {
+      const val = currentScroll.value;
+      if (scrollBehavior.value.hide) {
+        if (scrollBehavior.value.inverted) {
+          isActive.value = val > computedScrollThreshold.value;
+        } else {
+          isActive.value = isScrollingUp.value || val < computedScrollThreshold.value;
+        }
+      } else if (scrollBehavior.value.inverted) {
+        isActive.value = currentScroll.value === 0;
+      } else {
+        isActive.value = true;
+      }
+    }
+    (0,runtime_core_esm_bundler/* watch */.YP)(currentScroll, setActive, {
+      immediate: true
+    });
+    (0,runtime_core_esm_bundler/* watch */.YP)(scrollBehavior, setActive);
     const {
       ssrBootStyles
-    } = useSsrBoot();
+    } = (0,ssrBoot/* useSsrBoot */.u)();
     const {
       layoutItemStyles
     } = useLayoutItem({
@@ -6233,23 +6471,27 @@ const VAppBar = (0,defineComponent/* genericComponent */.ev)()({
       order: (0,runtime_core_esm_bundler/* computed */.Fl)(() => parseInt(props.order, 10)),
       position: (0,reactivity_esm_bundler/* toRef */.Vh)(props, 'location'),
       layoutSize: height,
-      elementSize: height,
+      elementSize: (0,reactivity_esm_bundler/* ref */.iH)(undefined),
       active: isActive,
       absolute: (0,reactivity_esm_bundler/* toRef */.Vh)(props, 'absolute')
     });
     (0,useRender/* useRender */.L)(() => {
-      const [toolbarProps] = filterToolbarProps(props);
+      const [toolbarProps] = VToolbar.filterProps(props);
       return (0,runtime_core_esm_bundler/* createVNode */.Wm)(VToolbar, (0,runtime_core_esm_bundler/* mergeProps */.dG)({
         "ref": vToolbarRef,
         "class": ['v-app-bar', {
           'v-app-bar--bottom': props.location === 'bottom'
-        }],
-        "style": {
+        }, props.class],
+        "style": [{
           ...layoutItemStyles.value,
+          '--v-toolbar-image-opacity': opacity.value,
           height: undefined,
           ...ssrBootStyles.value
-        }
-      }, toolbarProps), slots);
+        }, props.style]
+      }, toolbarProps, {
+        "collapse": isCollapsed.value,
+        "flat": isFlat.value
+      }), slots);
     });
     return {};
   }
@@ -6269,12 +6511,14 @@ var VSpacer = __webpack_require__(9234);
 // Composables
 
 
+
  // Utilities
 
 const VMain = (0,defineComponent/* genericComponent */.ev)()({
   name: 'VMain',
   props: {
     scrollable: Boolean,
+    ...(0,component/* makeComponentProps */.l)(),
     ...(0,tag/* makeTagProps */.Q)({
       tag: 'main'
     })
@@ -6288,12 +6532,12 @@ const VMain = (0,defineComponent/* genericComponent */.ev)()({
     } = useLayout();
     const {
       ssrBootStyles
-    } = useSsrBoot();
+    } = (0,ssrBoot/* useSsrBoot */.u)();
     (0,useRender/* useRender */.L)(() => (0,runtime_core_esm_bundler/* createVNode */.Wm)(props.tag, {
       "class": ['v-main', {
         'v-main--scrollable': props.scrollable
-      }],
-      "style": [mainStyles.value, ssrBootStyles.value]
+      }, props.class],
+      "style": [mainStyles.value, ssrBootStyles.value, props.style]
     }, {
       default: () => [props.scrollable ? (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
         "class": "v-main__scroller"
@@ -9609,7 +9853,7 @@ var lang = __webpack_require__(3780);
 const routes = [{
   path: "/",
   name: "Onboard",
-  component: () => __webpack_require__.e(/* import() */ 320).then(__webpack_require__.bind(__webpack_require__, 6353)),
+  component: () => __webpack_require__.e(/* import() */ 320).then(__webpack_require__.bind(__webpack_require__, 320)),
   meta: {
     title: "onboard.title"
   }
@@ -9826,13 +10070,13 @@ var canbus = __webpack_require__(3956);
     };
     /** Событие кнопки подключения/отключения Bluetooth */
     const onDialogClick = () => {
-      if (canbus/* default.bluetooth.connected */.Z.bluetooth.connected) canbus/* default.bluetooth.disconnect */.Z.bluetooth.disconnect();else canbus/* default.bluetooth.connect */.Z.bluetooth.connect();
+      if (canbus["default"].bluetooth.connected) canbus["default"].bluetooth.disconnect();else canbus["default"].bluetooth.connect();
     };
     /** Событие подключения Bluetooth */
     const onConnected = status => {
       connected.value = status === bluetooth/* TConnectedStatus.CONNECT */.xz.CONNECT;
       // Не выводим сообщения об отключении/подключении Bluetooth в момент прошивки устройства
-      if (canbus/* default.update.total */.Z.update.total > 0) {
+      if (canbus["default"].update.total > 0) {
         // Если устройство отключилось, значит возникли проблемы с восстановлением соединения.
         // Просим подключить устройство
         if (status === bluetooth/* TConnectedStatus.DISCONNECT */.xz.DISCONNECT) showMessage();
@@ -9856,13 +10100,13 @@ var canbus = __webpack_require__(3956);
     /** Событие отправки данных */
     const onSend = () => esm/* toast.error */.Am.error(t("BLE.notify.noData"));
     (0,runtime_core_esm_bundler/* onMounted */.bv)(() => {
-      canbus/* default.bluetooth.addListener */.Z.bluetooth.addListener(bluetooth/* BLUETOOTH_EVENT_CONNECTED */.Dx, onConnected);
-      canbus/* default.bluetooth.addListener */.Z.bluetooth.addListener(bluetooth/* BLUETOOTH_EVENT_SEND */.wQ, onSend);
+      canbus["default"].bluetooth.addListener(bluetooth/* BLUETOOTH_EVENT_CONNECTED */.Dx, onConnected);
+      canbus["default"].bluetooth.addListener(bluetooth/* BLUETOOTH_EVENT_SEND */.wQ, onSend);
       showMessage();
     });
     (0,runtime_core_esm_bundler/* onUnmounted */.Ah)(() => {
-      canbus/* default.bluetooth.removeListener */.Z.bluetooth.removeListener(bluetooth/* BLUETOOTH_EVENT_CONNECTED */.Dx, onConnected);
-      canbus/* default.bluetooth.removeListener */.Z.bluetooth.removeListener(bluetooth/* BLUETOOTH_EVENT_SEND */.wQ, onSend);
+      canbus["default"].bluetooth.removeListener(bluetooth/* BLUETOOTH_EVENT_CONNECTED */.Dx, onConnected);
+      canbus["default"].bluetooth.removeListener(bluetooth/* BLUETOOTH_EVENT_SEND */.wQ, onSend);
     });
     return {
       connected,
@@ -9997,8 +10241,8 @@ const DELAY_CHECK_VERSION = 300000;
      */
     const onCheckVersion = delay => {
       timerCheckVersion = setTimeout(() => {
-        if (canbus/* default.bluetooth.connected */.Z.bluetooth.connected) {
-          canbus/* default.checkVersion */.Z.checkVersion().then(newVersion => {
+        if (canbus["default"].bluetooth.connected) {
+          canbus["default"].checkVersion().then(newVersion => {
             version.value = newVersion.toString;
             visibleUpdate.value = true;
           }).catch(() => onCheckVersion(DELAY_CHECK_VERSION));
@@ -10010,23 +10254,23 @@ const DELAY_CHECK_VERSION = 300000;
       visibleUpdate.value = false;
       visibleProcess.value = false;
       if (timerCheckVersion) clearTimeout(timerCheckVersion);
-      canbus/* default.removeListener */.Z.removeListener(update/* API_UPDATE_EVENT_ERROR */.rX, onErrorUpdate);
-      canbus/* default.update.clear */.Z.update.clear();
+      canbus["default"].removeListener(update/* API_UPDATE_EVENT_ERROR */.rX, onErrorUpdate);
+      canbus["default"].update.clear();
     };
     /**
      * Событие подключения к Bluetooth
      * @param {TConnectedStatus} status Статус подключения Bluetooth
      */
     const onConnected = status => {
-      if (canbus/* default.update.total */.Z.update.total > 0) {
+      if (canbus["default"].update.total > 0) {
         if (status !== bluetooth/* TConnectedStatus.CONNECT */.xz.CONNECT) return;
         // завершение прошивки
         setTimeout(() => {
-          if (canbus/* default.configs.version.is */.Z.configs.version.is) {
-            canbus/* default.checkVersion */.Z.checkVersion().then(() => esm/* toast.error */.Am.error(t("update.notify.warning"))).catch(() => esm/* toast.success */.Am.success(t("update.notify.completed")));
+          if (canbus["default"].configs.version.is) {
+            canbus["default"].checkVersion().then(() => esm/* toast.error */.Am.error(t("update.notify.warning"))).catch(() => esm/* toast.success */.Am.success(t("update.notify.completed")));
             setTimeout(() => src_router.go(0), 5000);
             onCancel();
-          } else canbus/* default.bluetooth.disconnect */.Z.bluetooth.disconnect();
+          } else canbus["default"].bluetooth.disconnect();
         }, 1000);
       } else {
         if (status === bluetooth/* TConnectedStatus.CONNECT */.xz.CONNECT) onCheckVersion(5000);else if (timerCheckVersion) clearTimeout(timerCheckVersion);
@@ -10039,8 +10283,8 @@ const DELAY_CHECK_VERSION = 300000;
       progress.value = 0;
       visibleUpdate.value = false;
       visibleProcess.value = true;
-      canbus/* default.addListener */.Z.addListener(update/* API_UPDATE_EVENT_ERROR */.rX, onErrorUpdate);
-      canbus/* default.updateStart */.Z.updateStart();
+      canbus["default"].addListener(update/* API_UPDATE_EVENT_ERROR */.rX, onErrorUpdate);
+      canbus["default"].updateStart();
     };
     const last = {
       value: 0,
@@ -10053,20 +10297,20 @@ const DELAY_CHECK_VERSION = 300000;
      */
     const onUpdate = error => {
       if (error === 0) {
-        if (canbus/* default.update.offset */.Z.update.offset < canbus/* default.update.total */.Z.update.total) {
+        if (canbus["default"].update.offset < canbus["default"].update.total) {
           message.value = t("update.process.upload");
-          progress.value = canbus/* default.update.uploading */.Z.update.uploading * 100;
+          progress.value = canbus["default"].update.uploading * 100;
           uploading.value = progress.value.toFixed(2) + "%";
-          canbus/* default.updateUpload */.Z.updateUpload();
+          canbus["default"].updateUpload();
           // подсчет оставшегося времени
           if (!last.now) {
             last.value = 0;
-            last.offset = canbus/* default.update.offset */.Z.update.offset;
+            last.offset = canbus["default"].update.offset;
             last.now = Date.now();
           } else {
-            const value = Math.floor((canbus/* default.update.total */.Z.update.total - canbus/* default.update.offset */.Z.update.offset) / (canbus/* default.update.offset */.Z.update.offset - last.offset) * (Date.now() - last.now));
+            const value = Math.floor((canbus["default"].update.total - canbus["default"].update.offset) / (canbus["default"].update.offset - last.offset) * (Date.now() - last.now));
             last.value = Math.floor((last.value + value) / 2);
-            last.offset = canbus/* default.update.offset */.Z.update.offset;
+            last.offset = canbus["default"].update.offset;
             last.now = Date.now();
             timeLeft.value = (0,time/* getFormatTime */.g)(last.value);
           }
@@ -10076,7 +10320,7 @@ const DELAY_CHECK_VERSION = 300000;
           uploading.value = "";
           last.now = 0;
           timeLeft.value = "";
-          canbus/* default.configs.version.clear */.Z.configs.version.clear();
+          canbus["default"].configs.version.clear();
         }
       } else {
         onErrorUpdate(t("update.notify.error"));
@@ -10088,13 +10332,13 @@ const DELAY_CHECK_VERSION = 300000;
       onCancel();
     };
     (0,runtime_core_esm_bundler/* onMounted */.bv)(() => {
-      canbus/* default.bluetooth.addListener */.Z.bluetooth.addListener(bluetooth/* BLUETOOTH_EVENT_CONNECTED */.Dx, onConnected);
-      canbus/* default.update.addListener */.Z.update.addListener(update/* API_UPDATE_EVENT */.an, onUpdate);
+      canbus["default"].bluetooth.addListener(bluetooth/* BLUETOOTH_EVENT_CONNECTED */.Dx, onConnected);
+      canbus["default"].update.addListener(update/* API_UPDATE_EVENT */.an, onUpdate);
     });
     (0,runtime_core_esm_bundler/* onUnmounted */.Ah)(() => {
-      canbus/* default.bluetooth.removeListener */.Z.bluetooth.removeListener(bluetooth/* BLUETOOTH_EVENT_CONNECTED */.Dx, onConnected);
-      canbus/* default.update.removeListener */.Z.update.removeListener(update/* API_UPDATE_EVENT */.an, onUpdate);
-      canbus/* default.removeListener */.Z.removeListener(update/* API_UPDATE_EVENT_ERROR */.rX, onErrorUpdate);
+      canbus["default"].bluetooth.removeListener(bluetooth/* BLUETOOTH_EVENT_CONNECTED */.Dx, onConnected);
+      canbus["default"].update.removeListener(update/* API_UPDATE_EVENT */.an, onUpdate);
+      canbus["default"].removeListener(update/* API_UPDATE_EVENT_ERROR */.rX, onErrorUpdate);
     });
     return {
       visibleUpdate,
@@ -10156,7 +10400,7 @@ function AboutDialogvue_type_template_id_4a3032e0_ts_true_render(_ctx, _cache, $
           cols: "12",
           class: "height-48 mb-4"
         }, {
-          default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VTextField/* VTextField */.hw, {
+          default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VTextField/* VTextField */.h, {
             "model-value": item,
             label: _ctx.$t('about.' + key),
             variant: "underlined",
@@ -10225,7 +10469,7 @@ function DeviceInfoDialogvue_type_template_id_c86c42d4_ts_true_render(_ctx, _cac
           cols: "12",
           class: "height-48 mb-2"
         }, {
-          default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VTextField/* VTextField */.hw, {
+          default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VTextField/* VTextField */.h, {
             "model-value": item,
             label: _ctx.$t('deviceInfo.' + key),
             variant: "underlined",
@@ -10296,8 +10540,8 @@ const VCheckbox = (0,defineComponent/* genericComponent */.ev)()({
   name: 'VCheckbox',
   inheritAttrs: false,
   props: {
-    ...(0,VInput/* makeVInputProps */.co)(),
-    ...(0,VCheckboxBtn/* makeVCheckboxBtnProps */.w4)()
+    ...(0,VInput/* makeVInputProps */.c)(),
+    ...(0,helpers/* omit */.CE)((0,VCheckboxBtn/* makeVCheckboxBtnProps */.w)(), ['inline'])
   },
   emits: {
     'update:focused': focused => true
@@ -10316,13 +10560,14 @@ const VCheckbox = (0,defineComponent/* genericComponent */.ev)()({
     const id = (0,runtime_core_esm_bundler/* computed */.Fl)(() => props.id || `checkbox-${uid}`);
     (0,useRender/* useRender */.L)(() => {
       const [inputAttrs, controlAttrs] = (0,helpers/* filterInputAttrs */.An)(attrs);
-      const [inputProps, _1] = (0,VInput/* filterInputProps */.PE)(props);
-      const [checkboxProps, _2] = (0,VCheckboxBtn/* filterCheckboxBtnProps */.CI)(props);
-      return (0,runtime_core_esm_bundler/* createVNode */.Wm)(VInput/* VInput */.q8, (0,runtime_core_esm_bundler/* mergeProps */.dG)({
-        "class": "v-checkbox"
+      const [inputProps, _1] = VInput/* VInput.filterProps */.q.filterProps(props);
+      const [checkboxProps, _2] = VCheckboxBtn/* VCheckboxBtn.filterProps */.p.filterProps(props);
+      return (0,runtime_core_esm_bundler/* createVNode */.Wm)(VInput/* VInput */.q, (0,runtime_core_esm_bundler/* mergeProps */.dG)({
+        "class": ['v-checkbox', props.class]
       }, inputAttrs, inputProps, {
         "id": id.value,
-        "focused": isFocused.value
+        "focused": isFocused.value,
+        "style": props.style
       }), {
         ...slots,
         default: _ref2 => {
@@ -10332,7 +10577,7 @@ const VCheckbox = (0,defineComponent/* genericComponent */.ev)()({
             isDisabled,
             isReadonly
           } = _ref2;
-          return (0,runtime_core_esm_bundler/* createVNode */.Wm)(VCheckboxBtn/* VCheckboxBtn */.pM, (0,runtime_core_esm_bundler/* mergeProps */.dG)(checkboxProps, {
+          return (0,runtime_core_esm_bundler/* createVNode */.Wm)(VCheckboxBtn/* VCheckboxBtn */.p, (0,runtime_core_esm_bundler/* mergeProps */.dG)(checkboxProps, {
             "id": id.value,
             "aria-describedby": messagesId.value,
             "disabled": isDisabled.value,
@@ -10441,7 +10686,7 @@ function DeviceResetDialogvue_type_template_id_a9e57686_ts_true_render(_ctx, _ca
     const resetView = (0,reactivity_esm_bundler/* ref */.iH)(false);
     /** Применить */
     const onApply = () => {
-      canbus/* default.resetDevice */.Z.resetDevice(resetConfig.value, resetView.value);
+      canbus["default"].resetDevice(resetConfig.value, resetView.value);
       visible.value = false;
       setTimeout(() => {
         resetConfig.value = false;
@@ -10504,7 +10749,7 @@ function Scannervue_type_template_id_49a605e7_ts_true_render(_ctx, _cache, $prop
 // EXTERNAL MODULE: ./src/models/pjcan/scanner/index.ts + 5 modules
 var scanner = __webpack_require__(510);
 // EXTERNAL MODULE: ./src/utils/request.ts + 41 modules
-var request = __webpack_require__(4745);
+var request = __webpack_require__(1312);
 ;// CONCATENATED MODULE: ./src/api/google.ts
 
 const setScanCan = data => {
@@ -10580,22 +10825,22 @@ const toMac = value => {
     });
     (0,runtime_core_esm_bundler/* watch */.YP)(started, val => {
       if (val) {
-        if (!canbus/* default.bluetooth.connected */.Z.bluetooth.connected) {
+        if (!canbus["default"].bluetooth.connected) {
           esm/* toast.error */.Am.error(t("scanner.notify.errorStart"));
           return;
         }
         // запоминаем состояние FetchValue
-        startedFetchValue = canbus/* default.startedFetchValue */.Z.startedFetchValue;
-        canbus/* default.stopFetchValue */.Z.stopFetchValue();
+        startedFetchValue = canbus["default"].startedFetchValue;
+        canbus["default"].stopFetchValue();
         // включаем сканирование
-        canbus/* default.scanner.enabled */.Z.scanner.enabled = true;
-        canbus/* default.queryConfig */.Z.queryConfig(scanner/* API_SCANNER_CONFIG_EXEC */.X8).then(() => {
-          efuseMac = toMac(canbus/* default.deviceInfo.efuseMac */.Z.deviceInfo.efuseMac);
+        canbus["default"].scanner.enabled = true;
+        canbus["default"].queryConfig(scanner/* API_SCANNER_CONFIG_EXEC */.X8).then(() => {
+          efuseMac = toMac(canbus["default"].deviceInfo.efuseMac);
           scanClose = false;
           // запускаем циклический запрос значений сканирования
           scannerValue = new scanner/* ScannerValue */.dL();
-          canbus/* default.startFetchValue */.Z.startFetchValue(scanner/* API_SCANNER_VALUE_EXEC */.v3, scannerValue);
-          canbus/* default.addListener */.Z.addListener(scanner/* API_SCANNER_VALUE_EVENT */.sn, onReceiveValue);
+          canbus["default"].startFetchValue(scanner/* API_SCANNER_VALUE_EXEC */.v3, scannerValue);
+          canbus["default"].addListener(scanner/* API_SCANNER_VALUE_EVENT */.sn, onReceiveValue);
           // запускаем диалог
           steps();
         });
@@ -10603,16 +10848,16 @@ const toMac = value => {
       } else {
         if (scannerValue) {
           // останавливаем циклический запрос значений сканирования
-          canbus/* default.removeListener */.Z.removeListener(scanner/* API_SCANNER_VALUE_EVENT */.sn, onReceiveValue);
-          canbus/* default.stopFetchValue */.Z.stopFetchValue();
+          canbus["default"].removeListener(scanner/* API_SCANNER_VALUE_EVENT */.sn, onReceiveValue);
+          canbus["default"].stopFetchValue();
           scannerValue = undefined;
           // выключаем сканирование
-          canbus/* default.scanner.enabled */.Z.scanner.enabled = false;
-          canbus/* default.queryConfig */.Z.queryConfig(scanner/* API_SCANNER_CONFIG_EXEC */.X8);
+          canbus["default"].scanner.enabled = false;
+          canbus["default"].queryConfig(scanner/* API_SCANNER_CONFIG_EXEC */.X8);
         }
         if (startedFetchValue !== undefined) {
           // восстанавливаем состояние FetchValue
-          canbus/* default.startFetchValue */.Z.startFetchValue(startedFetchValue);
+          canbus["default"].startFetchValue(startedFetchValue);
           startedFetchValue = undefined;
         }
       }
@@ -10764,28 +11009,28 @@ var device = __webpack_require__(1423);
         } = modelDeviceInfo;
         // value.chipCores = canbus.deviceInfo.chipCores.toString();
         // value.chipRevision = canbus.deviceInfo.chipRevision.toString();
-        value.cpuFreqMHz = canbus/* default.deviceInfo.cpuFreqMHz.toString */.Z.deviceInfo.cpuFreqMHz.toString();
-        value.efuseMac = toMac(canbus/* default.deviceInfo.efuseMac */.Z.deviceInfo.efuseMac);
+        value.cpuFreqMHz = canbus["default"].deviceInfo.cpuFreqMHz.toString();
+        value.efuseMac = toMac(canbus["default"].deviceInfo.efuseMac);
         // value.flashChipMode = canbus.deviceInfo.flashChipMode.toString();
         // value.flashChipSize = canbus.deviceInfo.flashChipSize.toString();
         // value.flashChipSpeed = canbus.deviceInfo.flashChipSpeed.toString();
-        value.freeSketchSpace = canbus/* default.deviceInfo.freeSketchSpace.toString */.Z.deviceInfo.freeSketchSpace.toString();
-        value.sdkVersion = canbus/* default.deviceInfo.sdkVersion */.Z.deviceInfo.sdkVersion;
-        value.sketchMD5 = canbus/* default.deviceInfo.sketchMD5 */.Z.deviceInfo.sketchMD5;
-        value.sketchSize = canbus/* default.deviceInfo.sketchSize.toString */.Z.deviceInfo.sketchSize.toString();
-        value.temperatureChip = (canbus/* default.deviceInfo.temperatureChip */.Z.deviceInfo.temperatureChip / 100).toFixed(2) + "°C";
-        value.sha = canbus/* default.sha */.Z.sha ?? "";
+        value.freeSketchSpace = canbus["default"].deviceInfo.freeSketchSpace.toString();
+        value.sdkVersion = canbus["default"].deviceInfo.sdkVersion;
+        value.sketchMD5 = canbus["default"].deviceInfo.sketchMD5;
+        value.sketchSize = canbus["default"].deviceInfo.sketchSize.toString();
+        value.temperatureChip = (canbus["default"].deviceInfo.temperatureChip / 100).toFixed(2) + "°C";
+        value.sha = canbus["default"].sha ?? "";
       }
     };
     (0,runtime_core_esm_bundler/* onMounted */.bv)(() => {
-      canbus/* default.addListener */.Z.addListener(device/* API_INFO_EVENT */.a_, onReceiveInfo);
-      onReceiveInfo(canbus/* default.deviceInfo */.Z.deviceInfo);
+      canbus["default"].addListener(device/* API_INFO_EVENT */.a_, onReceiveInfo);
+      onReceiveInfo(canbus["default"].deviceInfo);
     });
     (0,runtime_core_esm_bundler/* onUnmounted */.Ah)(() => {
-      canbus/* default.removeListener */.Z.removeListener(device/* API_INFO_EVENT */.a_, onReceiveInfo);
+      canbus["default"].removeListener(device/* API_INFO_EVENT */.a_, onReceiveInfo);
     });
     (0,runtime_core_esm_bundler/* watch */.YP)(modelValue, val => {
-      if (val) canbus/* default.queryValue */.Z.queryValue(device/* API_INFO_EXEC */.PR);
+      if (val) canbus["default"].queryValue(device/* API_INFO_EXEC */.PR);
     });
     const visibleReset = (0,reactivity_esm_bundler/* ref */.iH)(false);
     /** Показать диалог сброса настроек */
@@ -10910,13 +11155,13 @@ const pkg = __webpack_require__(4147);
       visibleDeviceInfo.value = true;
     };
     (0,runtime_core_esm_bundler/* onMounted */.bv)(() => {
-      canbus/* default.addListener */.Z.addListener(configs/* API_CONFIGS_EVENT */.cF, onReceiveConfigs);
-      canbus/* default.addListener */.Z.addListener(car/* API_CAR_CONFIG_EVENT */.Gd, onReceiveCarConfig);
-      onReceiveCarConfig(canbus/* default.configs.car */.Z.configs.car);
+      canbus["default"].addListener(configs/* API_CONFIGS_EVENT */.cF, onReceiveConfigs);
+      canbus["default"].addListener(car/* API_CAR_CONFIG_EVENT */.Gd, onReceiveCarConfig);
+      onReceiveCarConfig(canbus["default"].configs.car);
     });
     (0,runtime_core_esm_bundler/* onUnmounted */.Ah)(() => {
-      canbus/* default.removeListener */.Z.removeListener(configs/* API_CONFIGS_EVENT */.cF, onReceiveConfigs);
-      canbus/* default.removeListener */.Z.removeListener(car/* API_CAR_CONFIG_EVENT */.Gd, onReceiveCarConfig);
+      canbus["default"].removeListener(configs/* API_CONFIGS_EVENT */.cF, onReceiveConfigs);
+      canbus["default"].removeListener(car/* API_CAR_CONFIG_EVENT */.Gd, onReceiveCarConfig);
     });
     return {
       visible,
@@ -10965,7 +11210,7 @@ function OnboardButtonsDialogvue_type_template_id_202e5ccc_scoped_true_ts_true_r
         cols: "12",
         class: "pb-0 d-flex justify-center"
       }, {
-        default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VBtnGroup/* VBtnGroup */.Yz, {
+        default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VBtnGroup/* VBtnGroup */.Y, {
           class: "onboard-buttons__btns-main"
         }, {
           default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VBtn/* VBtn */.T, {
@@ -11000,7 +11245,7 @@ function OnboardButtonsDialogvue_type_template_id_202e5ccc_scoped_true_ts_true_r
         cols: "12",
         class: "d-flex justify-center"
       }, {
-        default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VBtnGroup/* VBtnGroup */.Yz, {
+        default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VBtnGroup/* VBtnGroup */.Y, {
           class: "onboard-buttons__btns-added"
         }, {
           default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VBtn/* VBtn */.T, {
@@ -11111,8 +11356,8 @@ var lcd = __webpack_require__(7689);
      * @param {boolean} toggle Переключатель
      */
     const onTouchPress = (name, toggle = false) => {
-      canbus/* default.values.lcd */.Z.values.lcd[name] = !toggle ? true : !canbus/* default.values.lcd */.Z.values.lcd[name];
-      canbus/* default.queryValue */.Z.queryValue(lcd/* API_LCD_VALUE_EXEC */.Q0);
+      canbus["default"].values.lcd[name] = !toggle ? true : !canbus["default"].values.lcd[name];
+      canbus["default"].queryValue(lcd/* API_LCD_VALUE_EXEC */.Q0);
       navigator.vibrate(30);
       if (timeouts?.[name]) {
         clearTimeout(timeouts[name]);
@@ -11124,9 +11369,9 @@ var lcd = __webpack_require__(7689);
      * @param {string} name Имя кнопки
      */
     const onTouchRelease = name => {
-      if (canbus/* default.values.lcd */.Z.values.lcd[name]) {
-        canbus/* default.values.lcd */.Z.values.lcd[name] = false;
-        canbus/* default.queryValue */.Z.queryValue(lcd/* API_LCD_VALUE_EXEC */.Q0);
+      if (canbus["default"].values.lcd[name]) {
+        canbus["default"].values.lcd[name] = false;
+        canbus["default"].queryValue(lcd/* API_LCD_VALUE_EXEC */.Q0);
         navigator.vibrate(20);
       }
       if (timeouts?.[name]) clearTimeout(timeouts[name]);
@@ -11186,7 +11431,7 @@ function TestDialogvue_type_template_id_204996a0_scoped_true_ts_true_render(_ctx
         cols: "12",
         class: "pb-1"
       }, {
-        default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VTextField/* VTextField */.hw, {
+        default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VTextField/* VTextField */.h, {
           class: "test__text",
           modelValue: $setup.text,
           "onUpdate:modelValue": _cache[0] || (_cache[0] = $event => $setup.text = $event),
@@ -11258,7 +11503,7 @@ function TestDialogvue_type_template_id_204996a0_scoped_true_ts_true_render(_ctx
 // EXTERNAL MODULE: ./src/components/cards/InputCardItem.vue + 6 modules
 var InputCardItem = __webpack_require__(5943);
 // EXTERNAL MODULE: ./src/components/common/NumberField.vue + 3 modules
-var NumberField = __webpack_require__(3066);
+var NumberField = __webpack_require__(5412);
 // EXTERNAL MODULE: ./src/models/pjcan/variables/test/index.ts + 2 modules
 var variables_test = __webpack_require__(6045);
 ;// CONCATENATED MODULE: ./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/dialogs/TestDialog.vue?vue&type=script&lang=ts
@@ -11316,7 +11561,7 @@ var variables_test = __webpack_require__(6045);
       test.view.enabled = true;
       test.view.type = style.value;
       test.view.time = time.value;
-      canbus/* default.queryValue */.Z.queryValue(variables_test/* API_VARIABLE_TEST_EXEC */.Ez, test);
+      canbus["default"].queryValue(variables_test/* API_VARIABLE_TEST_EXEC */.Ez, test);
     };
     return {
       visible,
@@ -11633,6 +11878,445 @@ const App_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(Appvue_type_sc
 ;// CONCATENATED MODULE: ./node_modules/vuetify/lib/styles/main.css
 // extracted by mini-css-extract-plugin
 
+;// CONCATENATED MODULE: ./node_modules/vuetify/lib/labs/date/adapters/vuetify.mjs
+
+// Utilities
+ // Types
+function getWeekArray(date) {
+  let currentWeek = [];
+  const weeks = [];
+  const firstDayOfMonth = startOfMonth(date);
+  const lastDayOfMonth = endOfMonth(date);
+  for (let i = 0; i < firstDayOfMonth.getDay(); i++) {
+    currentWeek.push(null);
+  }
+  for (let i = 1; i <= lastDayOfMonth.getDate(); i++) {
+    const day = new Date(date.getFullYear(), date.getMonth(), i);
+
+    // Add the day to the current week
+    currentWeek.push(day);
+
+    // If the current week has 7 days, add it to the weeks array and start a new week
+    if (currentWeek.length === 7) {
+      weeks.push(currentWeek);
+      currentWeek = [];
+    }
+  }
+  for (let i = currentWeek.length; i < 7; i++) {
+    currentWeek.push(null);
+  }
+  weeks.push(currentWeek);
+  return weeks;
+}
+function startOfMonth(date) {
+  return new Date(date.getFullYear(), date.getMonth(), 1);
+}
+function endOfMonth(date) {
+  return new Date(date.getFullYear(), date.getMonth() + 1, 0);
+}
+function date(value) {
+  if (value == null) return null;
+  if (value instanceof Date) return value;
+  if (typeof value === 'string') {
+    const parsed = Date.parse(value);
+    if (!isNaN(parsed)) return new Date(parsed);
+  }
+  return null;
+}
+const firstDay = {
+  '001': 1,
+  AD: 1,
+  AE: 6,
+  AF: 6,
+  AG: 0,
+  AI: 1,
+  AL: 1,
+  AM: 1,
+  AN: 1,
+  AR: 1,
+  AS: 0,
+  AT: 1,
+  AU: 0,
+  AX: 1,
+  AZ: 1,
+  BA: 1,
+  BD: 0,
+  BE: 1,
+  BG: 1,
+  BH: 6,
+  BM: 1,
+  BN: 1,
+  BR: 0,
+  BS: 0,
+  BT: 0,
+  BW: 0,
+  BY: 1,
+  BZ: 0,
+  CA: 0,
+  CH: 1,
+  CL: 1,
+  CM: 1,
+  CN: 0,
+  CO: 0,
+  CR: 1,
+  CY: 1,
+  CZ: 1,
+  DE: 1,
+  DJ: 6,
+  DK: 1,
+  DM: 0,
+  DO: 0,
+  DZ: 6,
+  EC: 1,
+  EE: 1,
+  EG: 6,
+  ES: 1,
+  ET: 0,
+  FI: 1,
+  FJ: 1,
+  FO: 1,
+  FR: 1,
+  GB: 1,
+  'GB-alt-variant': 0,
+  GE: 1,
+  GF: 1,
+  GP: 1,
+  GR: 1,
+  GT: 0,
+  GU: 0,
+  HK: 0,
+  HN: 0,
+  HR: 1,
+  HU: 1,
+  ID: 0,
+  IE: 1,
+  IL: 0,
+  IN: 0,
+  IQ: 6,
+  IR: 6,
+  IS: 1,
+  IT: 1,
+  JM: 0,
+  JO: 6,
+  JP: 0,
+  KE: 0,
+  KG: 1,
+  KH: 0,
+  KR: 0,
+  KW: 6,
+  KZ: 1,
+  LA: 0,
+  LB: 1,
+  LI: 1,
+  LK: 1,
+  LT: 1,
+  LU: 1,
+  LV: 1,
+  LY: 6,
+  MC: 1,
+  MD: 1,
+  ME: 1,
+  MH: 0,
+  MK: 1,
+  MM: 0,
+  MN: 1,
+  MO: 0,
+  MQ: 1,
+  MT: 0,
+  MV: 5,
+  MX: 0,
+  MY: 1,
+  MZ: 0,
+  NI: 0,
+  NL: 1,
+  NO: 1,
+  NP: 0,
+  NZ: 1,
+  OM: 6,
+  PA: 0,
+  PE: 0,
+  PH: 0,
+  PK: 0,
+  PL: 1,
+  PR: 0,
+  PT: 0,
+  PY: 0,
+  QA: 6,
+  RE: 1,
+  RO: 1,
+  RS: 1,
+  RU: 1,
+  SA: 0,
+  SD: 6,
+  SE: 1,
+  SG: 0,
+  SI: 1,
+  SK: 1,
+  SM: 1,
+  SV: 0,
+  SY: 6,
+  TH: 0,
+  TJ: 1,
+  TM: 1,
+  TR: 1,
+  TT: 0,
+  TW: 0,
+  UA: 1,
+  UM: 0,
+  US: 0,
+  UY: 1,
+  UZ: 1,
+  VA: 1,
+  VE: 0,
+  VI: 0,
+  VN: 1,
+  WS: 0,
+  XK: 1,
+  YE: 0,
+  ZA: 0,
+  ZW: 0
+};
+const sundayJanuarySecond2000 = new Date(2000, 0, 2);
+function getWeekdays(locale) {
+  const daysFromSunday = firstDay[locale.slice(-2).toUpperCase()];
+  return (0,helpers/* createRange */.MT)(7).map(i => {
+    const weekday = new Date(sundayJanuarySecond2000);
+    weekday.setDate(sundayJanuarySecond2000.getDate() + daysFromSunday + i);
+    return new Intl.DateTimeFormat(locale, {
+      weekday: 'long'
+    }).format(weekday);
+  });
+}
+function format(value, formatString, locale) {
+  const date = new Date(value);
+  let options = {};
+  switch (formatString) {
+    case 'fullDateWithWeekday':
+      options = {
+        weekday: 'long',
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric'
+      };
+      break;
+    case 'normalDateWithWeekday':
+      options = {
+        weekday: 'short',
+        day: 'numeric',
+        month: 'short',
+        year: 'numeric'
+      };
+      break;
+    case 'keyboardDate':
+      options = {};
+      break;
+    case 'monthAndDate':
+      options = {
+        month: 'long',
+        day: 'numeric'
+      };
+      break;
+    case 'monthAndYear':
+      options = {
+        month: 'long',
+        year: 'numeric'
+      };
+      break;
+    default:
+      options = {
+        timeZone: 'UTC',
+        timeZoneName: 'short'
+      };
+  }
+  return new Intl.DateTimeFormat(locale, options).format(date);
+}
+function addDays(date, amount) {
+  const d = new Date(date);
+  d.setDate(d.getDate() + amount);
+  return d;
+}
+function addMonths(date, amount) {
+  const d = new Date(date);
+  d.setMonth(d.getMonth() + amount);
+  return d;
+}
+function getYear(date) {
+  return date.getFullYear();
+}
+function getMonth(date) {
+  return date.getMonth();
+}
+function startOfYear(date) {
+  return new Date(date.getFullYear(), 0, 1);
+}
+function endOfYear(date) {
+  return new Date(date.getFullYear(), 11, 31);
+}
+function getMondayOfFirstWeekOfYear(year) {
+  return new Date(year, 0, 1);
+}
+
+// https://stackoverflow.com/questions/274861/how-do-i-calculate-the-week-number-given-a-date/275024#275024
+function getWeek(date) {
+  let year = date.getFullYear();
+  let d1w1 = getMondayOfFirstWeekOfYear(year);
+  if (date < d1w1) {
+    year = year - 1;
+    d1w1 = getMondayOfFirstWeekOfYear(year);
+  } else {
+    const tv = getMondayOfFirstWeekOfYear(year + 1);
+    if (date >= tv) {
+      year = year + 1;
+      d1w1 = tv;
+    }
+  }
+  const diffTime = Math.abs(date.getTime() - d1w1.getTime());
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  return Math.floor(diffDays / 7) + 1;
+}
+function isWithinRange(date, range) {
+  return isAfter(date, range[0]) && isBefore(date, range[1]);
+}
+function isValid(date) {
+  const d = new Date(date);
+  return d instanceof Date && !isNaN(d.getTime());
+}
+function isAfter(date, comparing) {
+  return date.getTime() > comparing.getTime();
+}
+function isBefore(date, comparing) {
+  return date.getTime() < comparing.getTime();
+}
+function isEqual(date, comparing) {
+  return date.getTime() === comparing.getTime();
+}
+function isSameDay(date, comparing) {
+  return date.getDate() === comparing.getDate() && date.getMonth() === comparing.getMonth() && date.getFullYear() === comparing.getFullYear();
+}
+function isSameMonth(date, comparing) {
+  return date.getMonth() === comparing.getMonth() && date.getFullYear() === comparing.getFullYear();
+}
+function getDiff(date, comparing, unit) {
+  const d = new Date(date);
+  const c = new Date(comparing);
+  if (unit === 'month') {
+    return d.getMonth() - c.getMonth() + (d.getFullYear() - c.getFullYear()) * 12;
+  }
+  return Math.floor((d.getTime() - c.getTime()) / (1000 * 60 * 60 * 24));
+}
+function setYear(date, year) {
+  const d = new Date(date);
+  d.setFullYear(year);
+  return d;
+}
+class VuetifyDateAdapter {
+  constructor() {
+    let locale = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'en';
+    this.locale = locale;
+  }
+  date(value) {
+    return date(value);
+  }
+  addDays(date, amount) {
+    return addDays(date, amount);
+  }
+  addMonths(date, amount) {
+    return addMonths(date, amount);
+  }
+  getWeekArray(date) {
+    return getWeekArray(date);
+  }
+  startOfMonth(date) {
+    return startOfMonth(date);
+  }
+  endOfMonth(date) {
+    return endOfMonth(date);
+  }
+  format(date, formatString) {
+    return format(date, formatString, this.locale);
+  }
+  isEqual(date, comparing) {
+    return isEqual(date, comparing);
+  }
+  isValid(date) {
+    return isValid(date);
+  }
+  isWithinRange(date, range) {
+    return isWithinRange(date, range);
+  }
+  isAfter(date, comparing) {
+    return isAfter(date, comparing);
+  }
+  isSameDay(date, comparing) {
+    return isSameDay(date, comparing);
+  }
+  isSameMonth(date, comparing) {
+    return isSameMonth(date, comparing);
+  }
+  setYear(date, year) {
+    return setYear(date, year);
+  }
+  getDiff(date, comparing, unit) {
+    return getDiff(date, comparing, unit);
+  }
+  getWeek(date) {
+    return getWeek(date);
+  }
+  getWeekdays() {
+    return getWeekdays(this.locale);
+  }
+  getYear(date) {
+    return getYear(date);
+  }
+  getMonth(date) {
+    return getMonth(date);
+  }
+  startOfYear(date) {
+    return startOfYear(date);
+  }
+  endOfYear(date) {
+    return endOfYear(date);
+  }
+}
+;// CONCATENATED MODULE: ./node_modules/vuetify/lib/labs/date/date.mjs
+// Composables
+ // Utilities
+
+ // Adapters
+ // Types
+const DateAdapterSymbol = Symbol.for('vuetify:date-adapter');
+function createDate(options) {
+  return options ?? {
+    adapter: VuetifyDateAdapter
+  };
+}
+
+// TODO: revisit this after it starts being implemented
+const makeDateProps = (0,propsFactory/* propsFactory */.U)({
+  displayDate: {
+    type: Object,
+    default: new Date()
+  },
+  hideAdjacentMonths: Boolean,
+  modelValue: {
+    type: null,
+    default: () => []
+  }
+}, 'date');
+function useDate(props) {
+  const date = inject(DateAdapterSymbol);
+  const locale = useLocale();
+  if (!date) throw new Error('[Vuetify] Could not find injected date');
+
+  // eslint-disable-next-line new-cap
+  const instance = new date.adapter(locale.current.value);
+  watch(locale.current, val => {
+    instance.locale = val;
+  }, {
+    immediate: true
+  });
+  return instance;
+}
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/display.mjs
 var composables_display = __webpack_require__(8157);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/icons.mjs + 1 modules
@@ -11641,6 +12325,7 @@ var composables_icons = __webpack_require__(4960);
 var globals = __webpack_require__(2385);
 ;// CONCATENATED MODULE: ./node_modules/vuetify/lib/framework.mjs
 // Composables
+
 
 
 
@@ -11668,6 +12353,7 @@ function createVuetify() {
   const theme = (0,composables_theme/* createTheme */.jG)(options.theme);
   const icons = (0,composables_icons/* createIcons */._i)(options.icons);
   const locale = (0,composables_locale/* createLocale */.$2)(options.locale);
+  const date = createDate(options.date);
   const install = app => {
     for (const key in directives) {
       app.directive(key, directives[key]);
@@ -11688,6 +12374,7 @@ function createVuetify() {
     app.provide(composables_theme/* ThemeSymbol */.bo, theme);
     app.provide(composables_icons/* IconSymbol */.YK, icons);
     app.provide(composables_locale/* LocaleSymbol */.O, locale);
+    app.provide(DateAdapterSymbol, date);
     if (globals/* IN_BROWSER */.BR && options.ssr) {
       if (app.$nuxt) {
         app.$nuxt.hook('app:suspense:resolve', () => {
@@ -11715,7 +12402,8 @@ function createVuetify() {
               display: framework_inject.call(this, composables_display/* DisplaySymbol */.x6),
               theme: framework_inject.call(this, composables_theme/* ThemeSymbol */.bo),
               icons: framework_inject.call(this, composables_icons/* IconSymbol */.YK),
-              locale: framework_inject.call(this, composables_locale/* LocaleSymbol */.O)
+              locale: framework_inject.call(this, composables_locale/* LocaleSymbol */.O),
+              date: framework_inject.call(this, DateAdapterSymbol)
             });
           }
         }
@@ -11728,10 +12416,11 @@ function createVuetify() {
     display,
     theme,
     icons,
-    locale
+    locale,
+    date
   };
 }
-const version = "3.1.5";
+const version = "3.2.1";
 createVuetify.version = version;
 
 // Vue's inject() can only be used in setup
@@ -11748,6 +12437,7 @@ function framework_inject(key) {
 
 // Components
  // Composables
+
  // Utilities
  // Types
 const VAppBarNavIcon = (0,defineComponent/* genericComponent */.ev)()({
@@ -11756,15 +12446,17 @@ const VAppBarNavIcon = (0,defineComponent/* genericComponent */.ev)()({
     icon: {
       type: composables_icons/* IconValue */.lE,
       default: '$menu'
-    }
+    },
+    ...(0,component/* makeComponentProps */.l)()
   },
   setup(props, _ref) {
     let {
       slots
     } = _ref;
     (0,useRender/* useRender */.L)(() => (0,runtime_core_esm_bundler/* createVNode */.Wm)(VBtn/* VBtn */.T, {
-      "class": "v-app-bar-nav-icon",
-      "icon": props.icon
+      "class": ['v-app-bar-nav-icon', props.class],
+      "icon": props.icon,
+      "style": props.style
     }, slots));
     return {};
   }
@@ -11833,6 +12525,7 @@ var position = __webpack_require__(489);
 
 
 
+
  // Utilities
 
  // Types
@@ -11871,6 +12564,7 @@ const VAlert = (0,defineComponent/* genericComponent */.ev)()({
       type: String,
       validator: val => allowedTypes.includes(val)
     },
+    ...(0,component/* makeComponentProps */.l)(),
     ...(0,composables_density/* makeDensityProps */.f)(),
     ...(0,dimensions/* makeDimensionProps */.x)(),
     ...(0,elevation/* makeElevationProps */.c)(),
@@ -11884,10 +12578,12 @@ const VAlert = (0,defineComponent/* genericComponent */.ev)()({
     })
   },
   emits: {
+    'click:close': e => true,
     'update:modelValue': value => true
   },
   setup(props, _ref) {
     let {
+      emit,
       slots
     } = _ref;
     const isActive = (0,proxiedModel/* useProxiedModel */.z)(props, 'modelValue');
@@ -11937,6 +12633,7 @@ const VAlert = (0,defineComponent/* genericComponent */.ev)()({
       'aria-label': t(props.closeLabel),
       onClick(e) {
         isActive.value = false;
+        emit('click:close', e);
       }
     }));
     return () => {
@@ -11950,16 +12647,25 @@ const VAlert = (0,defineComponent/* genericComponent */.ev)()({
           [`v-alert--border-${props.border === true ? 'start' : props.border}`]: true
         }, {
           'v-alert--prominent': props.prominent
-        }, themeClasses.value, colorClasses.value, densityClasses.value, elevationClasses.value, positionClasses.value, roundedClasses.value, variantClasses.value],
-        "style": [colorStyles.value, dimensionStyles.value, locationStyles.value],
+        }, themeClasses.value, colorClasses.value, densityClasses.value, elevationClasses.value, positionClasses.value, roundedClasses.value, variantClasses.value, props.class],
+        "style": [colorStyles.value, dimensionStyles.value, locationStyles.value, props.style],
         "role": "alert"
       }, {
         default: () => [(0,variant/* genOverlays */.Ux)(false, 'v-alert'), props.border && (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
           "key": "border",
           "class": ['v-alert__border', textColorClasses.value],
           "style": textColorStyles.value
-        }, null), hasPrepend && (0,runtime_core_esm_bundler/* createVNode */.Wm)(VDefaultsProvider/* VDefaultsProvider */.z, {
+        }, null), hasPrepend && (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
           "key": "prepend",
+          "class": "v-alert__prepend"
+        }, [!slots.prepend ? (0,runtime_core_esm_bundler/* createVNode */.Wm)(VIcon/* VIcon */.t, {
+          "key": "prepend-icon",
+          "density": props.density,
+          "icon": icon.value,
+          "size": props.prominent ? 44 : 28
+        }, null) : (0,runtime_core_esm_bundler/* createVNode */.Wm)(VDefaultsProvider/* VDefaultsProvider */.z, {
+          "key": "prepend-defaults",
+          "disabled": !icon.value,
           "defaults": {
             VIcon: {
               density: props.density,
@@ -11967,21 +12673,25 @@ const VAlert = (0,defineComponent/* genericComponent */.ev)()({
               size: props.prominent ? 44 : 28
             }
           }
-        }, {
-          default: () => [(0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
-            "class": "v-alert__prepend"
-          }, [slots.prepend ? slots.prepend() : icon.value && (0,runtime_core_esm_bundler/* createVNode */.Wm)(VIcon/* VIcon */.t, null, null)])]
-        }), (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
+        }, slots.prepend)]), (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
           "class": "v-alert__content"
         }, [hasTitle && (0,runtime_core_esm_bundler/* createVNode */.Wm)(VAlertTitle, {
           "key": "title"
         }, {
-          default: () => [slots.title ? slots.title() : props.title]
-        }), hasText && (slots.text ? slots.text() : props.text), slots.default?.()]), slots.append && (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
+          default: () => [slots.title?.() ?? props.title]
+        }), hasText && (slots.text?.() ?? props.text), slots.default?.()]), slots.append && (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
           "key": "append",
           "class": "v-alert__append"
-        }, [slots.append()]), hasClose && (0,runtime_core_esm_bundler/* createVNode */.Wm)(VDefaultsProvider/* VDefaultsProvider */.z, {
+        }, [slots.append()]), hasClose && (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
           "key": "close",
+          "class": "v-alert__close"
+        }, [!slots.close ? (0,runtime_core_esm_bundler/* createVNode */.Wm)(VBtn/* VBtn */.T, (0,runtime_core_esm_bundler/* mergeProps */.dG)({
+          "key": "close-btn",
+          "icon": props.closeIcon,
+          "size": "x-small",
+          "variant": "text"
+        }, closeProps.value), null) : (0,runtime_core_esm_bundler/* createVNode */.Wm)(VDefaultsProvider/* VDefaultsProvider */.z, {
+          "key": "close-defaults",
           "defaults": {
             VBtn: {
               icon: props.closeIcon,
@@ -11990,12 +12700,10 @@ const VAlert = (0,defineComponent/* genericComponent */.ev)()({
             }
           }
         }, {
-          default: () => [(0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
-            "class": "v-alert__close"
-          }, [slots.close?.({
+          default: () => [slots.close?.({
             props: closeProps.value
-          }) ?? (0,runtime_core_esm_bundler/* createVNode */.Wm)(VBtn/* VBtn */.T, closeProps.value, null)])]
-        })]
+          })]
+        })])]
       });
     };
   }
@@ -12147,6 +12855,7 @@ var composables_items = __webpack_require__(6185);
 
 
 
+
  // Utility
 
 
@@ -12172,7 +12881,7 @@ const VAutocomplete = (0,defineComponent/* genericComponent */.ev)()({
       filterKeys: ['title']
     }),
     ...(0,VSelect/* makeSelectProps */.f)(),
-    ...(0,helpers/* omit */.CE)((0,VTextField/* makeVTextFieldProps */.wG)({
+    ...(0,helpers/* omit */.CE)((0,VTextField/* makeVTextFieldProps */.w)({
       modelValue: null
     }), ['validationValue', 'dirty', 'appendInnerIcon']),
     ...(0,composables_transition/* makeTransitionProps */.X)({
@@ -12180,6 +12889,7 @@ const VAutocomplete = (0,defineComponent/* genericComponent */.ev)()({
     })
   },
   emits: {
+    'update:focused': focused => true,
     'update:search': val => true,
     'update:modelValue': val => true,
     'update:menu': val => true
@@ -12203,11 +12913,17 @@ const VAutocomplete = (0,defineComponent/* genericComponent */.ev)()({
         _menu.value = v;
       }
     });
+    const selectionIndex = (0,reactivity_esm_bundler/* ref */.iH)(-1);
+    const color = (0,runtime_core_esm_bundler/* computed */.Fl)(() => vTextFieldRef.value?.color);
     const {
       items,
       transformIn,
       transformOut
     } = (0,composables_items/* useItems */.Ce)(props);
+    const {
+      textColorClasses,
+      textColorStyles
+    } = (0,composables_color/* useTextColor */.rY)(color);
     const search = (0,proxiedModel/* useProxiedModel */.z)(props, 'search', '');
     const model = (0,proxiedModel/* useProxiedModel */.z)(props, 'modelValue', [], v => transformIn((0,helpers/* wrapInArray */.FT)(v)), v => {
       const transformed = transformOut(v);
@@ -12230,6 +12946,7 @@ const VAutocomplete = (0,defineComponent/* genericComponent */.ev)()({
       return filteredItems.value;
     });
     const selected = (0,runtime_core_esm_bundler/* computed */.Fl)(() => selections.value.map(selection => selection.props.value));
+    const selection = (0,runtime_core_esm_bundler/* computed */.Fl)(() => selections.value[selectionIndex.value]);
     const listRef = (0,reactivity_esm_bundler/* ref */.iH)();
     function onClear(e) {
       if (props.openOnClear) {
@@ -12243,7 +12960,9 @@ const VAutocomplete = (0,defineComponent/* genericComponent */.ev)()({
     }
     function onKeydown(e) {
       if (props.readonly || form?.isReadonly.value) return;
-      if (['Enter', 'ArrowDown', 'ArrowUp'].includes(e.key)) {
+      const selectionStart = vTextFieldRef.value.selectionStart;
+      const length = selected.value.length;
+      if (selectionIndex.value > -1 || ['Enter', 'ArrowDown', 'ArrowUp'].includes(e.key)) {
         e.preventDefault();
       }
       if (['Enter', 'ArrowDown'].includes(e.key)) {
@@ -12259,6 +12978,38 @@ const VAutocomplete = (0,defineComponent/* genericComponent */.ev)()({
         listRef.value?.focus('next');
       } else if (e.key === 'ArrowUp') {
         listRef.value?.focus('prev');
+      }
+      if (!props.multiple) return;
+      if (['Backspace', 'Delete'].includes(e.key)) {
+        if (selectionIndex.value < 0) {
+          if (e.key === 'Backspace' && !search.value) {
+            selectionIndex.value = length - 1;
+          }
+          return;
+        }
+        const originalSelectionIndex = selectionIndex.value;
+        if (selection.value) select(selection.value);
+        selectionIndex.value = originalSelectionIndex >= length - 1 ? length - 2 : originalSelectionIndex;
+      }
+      if (e.key === 'ArrowLeft') {
+        if (selectionIndex.value < 0 && selectionStart > 0) return;
+        const prev = selectionIndex.value > -1 ? selectionIndex.value - 1 : length - 1;
+        if (selections.value[prev]) {
+          selectionIndex.value = prev;
+        } else {
+          selectionIndex.value = -1;
+          vTextFieldRef.value.setSelectionRange(search.value?.length, search.value?.length);
+        }
+      }
+      if (e.key === 'ArrowRight') {
+        if (selectionIndex.value < 0) return;
+        const next = selectionIndex.value + 1;
+        if (selections.value[next]) {
+          selectionIndex.value = next;
+        } else {
+          selectionIndex.value = -1;
+          vTextFieldRef.value.setSelectionRange(0, 0);
+        }
       }
     }
     function onInput(e) {
@@ -12281,7 +13032,6 @@ const VAutocomplete = (0,defineComponent/* genericComponent */.ev)()({
         const index = selected.value.findIndex(selection => props.valueComparator(selection, item.value));
         if (index === -1) {
           model.value = [...model.value, item];
-          search.value = '';
         } else {
           const value = [...model.value];
           value.splice(index, 1);
@@ -12317,29 +13067,33 @@ const VAutocomplete = (0,defineComponent/* genericComponent */.ev)()({
     (0,useRender/* useRender */.L)(() => {
       const hasChips = !!(props.chips || slots.chip);
       const hasList = !!(!props.hideNoData || displayItems.value.length || slots.prepend || slots.append || slots['no-data']);
-      const [textFieldProps] = (0,VTextField/* filterVTextFieldProps */.a)(props);
-      return (0,runtime_core_esm_bundler/* createVNode */.Wm)(VTextField/* VTextField */.hw, (0,runtime_core_esm_bundler/* mergeProps */.dG)({
+      const isDirty = model.value.length > 0;
+      const [textFieldProps] = VTextField/* VTextField.filterProps */.h.filterProps(props);
+      return (0,runtime_core_esm_bundler/* createVNode */.Wm)(VTextField/* VTextField */.h, (0,runtime_core_esm_bundler/* mergeProps */.dG)({
         "ref": vTextFieldRef
       }, textFieldProps, {
         "modelValue": search.value,
         "onUpdate:modelValue": v => {
           if (v == null) model.value = [];
         },
+        "focused": isFocused.value,
+        "onUpdate:focused": $event => isFocused.value = $event,
         "validationValue": model.externalValue,
-        "dirty": model.value.length > 0,
+        "dirty": isDirty,
         "onInput": onInput,
         "class": ['v-autocomplete', {
           'v-autocomplete--active-menu': menu.value,
           'v-autocomplete--chips': !!props.chips,
+          'v-autocomplete--selecting-index': selectionIndex.value > -1,
           [`v-autocomplete--${props.multiple ? 'multiple' : 'single'}`]: true,
           'v-autocomplete--selection-slot': !!slots.selection
-        }],
+        }, props.class],
+        "style": props.style,
         "appendInnerIcon": props.menuIcon,
         "readonly": props.readonly,
+        "placeholder": isDirty ? undefined : props.placeholder,
         "onClick:clear": onClear,
         "onMousedown:control": onMousedownControl,
-        "onFocus": () => isFocused.value = true,
-        "onBlur": () => isFocused.value = false,
         "onKeydown": onKeydown
       }), {
         ...slots,
@@ -12366,14 +13120,13 @@ const VAutocomplete = (0,defineComponent/* genericComponent */.ev)()({
           }, {
             default: () => [!displayItems.value.length && !props.hideNoData && (slots['no-data']?.() ?? (0,runtime_core_esm_bundler/* createVNode */.Wm)(VListItem/* VListItem */.l, {
               "title": t(props.noDataText)
-            }, null)), slots['prepend-item']?.(), displayItems.value.map((item, index) => slots.item?.({
+            }, null)), slots['prepend-item']?.(), displayItems.value.map(item => slots.item?.({
               item,
-              index,
               props: (0,runtime_core_esm_bundler/* mergeProps */.dG)(item.props, {
                 onClick: () => select(item)
               })
             }) ?? (0,runtime_core_esm_bundler/* createVNode */.Wm)(VListItem/* VListItem */.l, (0,runtime_core_esm_bundler/* mergeProps */.dG)({
-              "key": index
+              "key": item.value
             }, item.props, {
               "onClick": () => select(item)
             }), {
@@ -12381,9 +13134,10 @@ const VAutocomplete = (0,defineComponent/* genericComponent */.ev)()({
                 let {
                   isSelected
                 } = _ref2;
-                return props.multiple && !props.hideSelected ? (0,runtime_core_esm_bundler/* createVNode */.Wm)(VCheckboxBtn/* VCheckboxBtn */.pM, {
+                return props.multiple && !props.hideSelected ? (0,runtime_core_esm_bundler/* createVNode */.Wm)(VCheckboxBtn/* VCheckboxBtn */.p, {
                   "modelValue": isSelected,
-                  "ripple": false
+                  "ripple": false,
+                  "tabindex": "-1"
                 }, null) : undefined;
               },
               title: () => {
@@ -12404,8 +13158,15 @@ const VAutocomplete = (0,defineComponent/* genericComponent */.ev)()({
           };
           return (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
             "key": item.value,
-            "class": "v-autocomplete__selection"
-          }, [hasChips ? (0,runtime_core_esm_bundler/* createVNode */.Wm)(VDefaultsProvider/* VDefaultsProvider */.z, {
+            "class": ['v-autocomplete__selection', index === selectionIndex.value && ['v-autocomplete__selection--selected', textColorClasses.value]],
+            "style": index === selectionIndex.value ? textColorStyles.value : {}
+          }, [hasChips ? !slots.chip ? (0,runtime_core_esm_bundler/* createVNode */.Wm)(VChip/* VChip */.v, (0,runtime_core_esm_bundler/* mergeProps */.dG)({
+            "key": "chip",
+            "closable": props.closableChips,
+            "size": "small",
+            "text": item.title
+          }, slotProps), null) : (0,runtime_core_esm_bundler/* createVNode */.Wm)(VDefaultsProvider/* VDefaultsProvider */.z, {
+            "key": "chip-defaults",
             "defaults": {
               VChip: {
                 closable: props.closableChips,
@@ -12414,15 +13175,15 @@ const VAutocomplete = (0,defineComponent/* genericComponent */.ev)()({
               }
             }
           }, {
-            default: () => [slots.chip ? slots.chip({
+            default: () => [slots.chip?.({
               item,
               index,
               props: slotProps
-            }) : (0,runtime_core_esm_bundler/* createVNode */.Wm)(VChip/* VChip */.v, slotProps, null)]
-          }) : slots.selection ? slots.selection({
+            })]
+          }) : slots.selection?.({
             item,
             index
-          }) : (0,runtime_core_esm_bundler/* createVNode */.Wm)("span", {
+          }) ?? (0,runtime_core_esm_bundler/* createVNode */.Wm)("span", {
             "class": "v-autocomplete__selection-text"
           }, [item.title, props.multiple && index < selections.value.length - 1 && (0,runtime_core_esm_bundler/* createVNode */.Wm)("span", {
             "class": "v-autocomplete__selection-comma"
@@ -12463,11 +13224,9 @@ var VAvatar = __webpack_require__(652);
 
 
 
+
  // Utilities
 
-
-
-// Types
 
 const VBadge = (0,defineComponent/* genericComponent */.ev)()({
   name: 'VBadge',
@@ -12492,6 +13251,7 @@ const VBadge = (0,defineComponent/* genericComponent */.ev)()({
     offsetX: [Number, String],
     offsetY: [Number, String],
     textColor: String,
+    ...(0,component/* makeComponentProps */.l)(),
     ...(0,composables_location/* makeLocationProps */.y)({
       location: 'top end'
     }),
@@ -12528,7 +13288,7 @@ const VBadge = (0,defineComponent/* genericComponent */.ev)()({
     });
     (0,useRender/* useRender */.L)(() => {
       const value = Number(props.content);
-      const content = !props.max || isNaN(value) ? props.content : value <= props.max ? value : `${props.max}+`;
+      const content = !props.max || isNaN(value) ? props.content : value <= +props.max ? value : `${props.max}+`;
       const [badgeAttrs, attrs] = (0,helpers/* pick */.ei)(ctx.attrs, ['aria-atomic', 'aria-label', 'aria-live', 'role', 'title']);
       return (0,runtime_core_esm_bundler/* createVNode */.Wm)(props.tag, (0,runtime_core_esm_bundler/* mergeProps */.dG)({
         "class": ['v-badge', {
@@ -12536,8 +13296,10 @@ const VBadge = (0,defineComponent/* genericComponent */.ev)()({
           'v-badge--dot': props.dot,
           'v-badge--floating': props.floating,
           'v-badge--inline': props.inline
-        }]
-      }, attrs), {
+        }, props.class]
+      }, attrs, {
+        "style": props.style
+      }), {
         default: () => [(0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
           "class": "v-badge__wrapper"
         }, [ctx.slots.default?.(), (0,runtime_core_esm_bundler/* createVNode */.Wm)(composables_transition/* MaybeTransition */.J, {
@@ -12567,13 +13329,15 @@ const VBadge = (0,defineComponent/* genericComponent */.ev)()({
 ;// CONCATENATED MODULE: ./node_modules/vuetify/lib/components/VBanner/VBannerActions.mjs
 
 // Composables
+
  // Utility
 
 const VBannerActions = (0,defineComponent/* genericComponent */.ev)()({
   name: 'VBannerActions',
   props: {
     color: String,
-    density: String
+    density: String,
+    ...(0,component/* makeComponentProps */.l)()
   },
   setup(props, _ref) {
     let {
@@ -12587,7 +13351,8 @@ const VBannerActions = (0,defineComponent/* genericComponent */.ev)()({
       }
     });
     (0,useRender/* useRender */.L)(() => (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
-      "class": "v-banner-actions"
+      "class": ['v-banner-actions', props.class],
+      "style": props.style
     }, [slots.default?.()]));
     return {};
   }
@@ -12616,6 +13381,7 @@ const VBannerText = (0,createSimpleFunctional/* createSimpleFunctional */.J)('v-
 
 
 
+
  // Utilities
 
 
@@ -12633,6 +13399,7 @@ const VBanner = (0,defineComponent/* genericComponent */.ev)()({
     sticky: Boolean,
     text: String,
     ...(0,border/* makeBorderProps */.m)(),
+    ...(0,component/* makeComponentProps */.l)(),
     ...(0,composables_density/* makeDensityProps */.f)(),
     ...(0,dimensions/* makeDimensionProps */.x)(),
     ...(0,elevation/* makeElevationProps */.c)(),
@@ -12683,18 +13450,29 @@ const VBanner = (0,defineComponent/* genericComponent */.ev)()({
     });
     (0,useRender/* useRender */.L)(() => {
       const hasText = !!(props.text || slots.text);
-      const hasPrepend = !!(slots.prepend || props.avatar || props.icon);
+      const hasPrependMedia = !!(props.avatar || props.icon);
+      const hasPrepend = !!(hasPrependMedia || slots.prepend);
       return (0,runtime_core_esm_bundler/* createVNode */.Wm)(props.tag, {
         "class": ['v-banner', {
           'v-banner--stacked': props.stacked || mobile.value,
           'v-banner--sticky': props.sticky,
           [`v-banner--${props.lines}-line`]: !!props.lines
-        }, borderClasses.value, densityClasses.value, elevationClasses.value, positionClasses.value, roundedClasses.value, themeClasses.value],
-        "style": [dimensionStyles.value, locationStyles.value],
+        }, borderClasses.value, densityClasses.value, elevationClasses.value, positionClasses.value, roundedClasses.value, themeClasses.value, props.class],
+        "style": [dimensionStyles.value, locationStyles.value, props.style],
         "role": "banner"
       }, {
-        default: () => [hasPrepend && (0,runtime_core_esm_bundler/* createVNode */.Wm)(VDefaultsProvider/* VDefaultsProvider */.z, {
+        default: () => [hasPrepend && (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
           "key": "prepend",
+          "class": "v-banner__prepend"
+        }, [!slots.prepend ? (0,runtime_core_esm_bundler/* createVNode */.Wm)(VAvatar/* VAvatar */.V, {
+          "key": "prepend-avatar",
+          "color": color.value,
+          "density": density.value,
+          "icon": props.icon,
+          "image": props.avatar
+        }, null) : (0,runtime_core_esm_bundler/* createVNode */.Wm)(VDefaultsProvider/* VDefaultsProvider */.z, {
+          "key": "prepend-defaults",
+          "disabled": !hasPrependMedia,
           "defaults": {
             VAvatar: {
               color: color.value,
@@ -12703,19 +13481,15 @@ const VBanner = (0,defineComponent/* genericComponent */.ev)()({
               image: props.avatar
             }
           }
-        }, {
-          default: () => [(0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
-            "class": "v-banner__prepend"
-          }, [slots.prepend ? slots.prepend() : (props.avatar || props.icon) && (0,runtime_core_esm_bundler/* createVNode */.Wm)(VAvatar/* VAvatar */.V, null, null)])]
-        }), (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
+        }, slots.prepend)]), (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
           "class": "v-banner__content"
         }, [hasText && (0,runtime_core_esm_bundler/* createVNode */.Wm)(VBannerText, {
           "key": "text"
         }, {
-          default: () => [slots.text ? slots.text() : props.text]
-        }), slots.default?.()]), slots.actions && (0,runtime_core_esm_bundler/* createVNode */.Wm)(VBannerActions, null, {
-          default: () => [slots.actions()]
-        })]
+          default: () => [slots.text?.() ?? props.text]
+        }), slots.default?.()]), slots.actions && (0,runtime_core_esm_bundler/* createVNode */.Wm)(VBannerActions, {
+          "key": "actions"
+        }, slots.actions)]
       });
     });
   }
@@ -12737,6 +13511,7 @@ var VBtnToggle = __webpack_require__(3748);
 
 
 // Composables
+
 
 
 
@@ -12770,6 +13545,7 @@ const VBottomNavigation = (0,defineComponent/* genericComponent */.ev)()({
       default: true
     },
     ...(0,border/* makeBorderProps */.m)(),
+    ...(0,component/* makeComponentProps */.l)(),
     ...(0,composables_density/* makeDensityProps */.f)(),
     ...(0,elevation/* makeElevationProps */.c)(),
     ...(0,rounded/* makeRoundedProps */.I)(),
@@ -12813,7 +13589,7 @@ const VBottomNavigation = (0,defineComponent/* genericComponent */.ev)()({
     } = (0,rounded/* useRounded */.b)(props);
     const {
       ssrBootStyles
-    } = useSsrBoot();
+    } = (0,ssrBoot/* useSsrBoot */.u)();
     const height = (0,runtime_core_esm_bundler/* computed */.Fl)(() => Number(props.height) - (props.density === 'comfortable' ? 8 : 0) - (props.density === 'compact' ? 16 : 0));
     const isActive = (0,reactivity_esm_bundler/* toRef */.Vh)(props, 'active');
     const {
@@ -12844,11 +13620,11 @@ const VBottomNavigation = (0,defineComponent/* genericComponent */.ev)()({
           'v-bottom-navigation--active': isActive.value,
           'v-bottom-navigation--grow': props.grow,
           'v-bottom-navigation--shift': props.mode === 'shift'
-        }, themeClasses.value, backgroundColorClasses.value, borderClasses.value, densityClasses.value, elevationClasses.value, roundedClasses.value],
+        }, themeClasses.value, backgroundColorClasses.value, borderClasses.value, densityClasses.value, elevationClasses.value, roundedClasses.value, props.class],
         "style": [backgroundColorStyles.value, layoutItemStyles.value, {
           height: (0,helpers/* convertToUnit */.kb)(height.value),
           transform: `translateY(${(0,helpers/* convertToUnit */.kb)(!isActive.value ? 100 : 0, '%')})`
-        }, ssrBootStyles.value]
+        }, ssrBootStyles.value, props.style]
       }, {
         default: () => [slots.default && (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
           "class": "v-bottom-navigation__content"
@@ -12865,19 +13641,22 @@ const VBottomNavigation = (0,defineComponent/* genericComponent */.ev)()({
 
 ;// CONCATENATED MODULE: ./node_modules/vuetify/lib/components/VBreadcrumbs/VBreadcrumbsDivider.mjs
 
-// Utility
+// Composables
+ // Utility
 
 const VBreadcrumbsDivider = (0,defineComponent/* genericComponent */.ev)()({
   name: 'VBreadcrumbsDivider',
   props: {
-    divider: [Number, String]
+    divider: [Number, String],
+    ...(0,component/* makeComponentProps */.l)()
   },
   setup(props, _ref) {
     let {
       slots
     } = _ref;
     (0,useRender/* useRender */.L)(() => (0,runtime_core_esm_bundler/* createVNode */.Wm)("li", {
-      "class": "v-breadcrumbs-divider"
+      "class": ['v-breadcrumbs-divider', props.class],
+      "style": props.style
     }, [slots?.default?.() ?? props.divider]));
     return {};
   }
@@ -12887,6 +13666,7 @@ var composables_router = __webpack_require__(6183);
 ;// CONCATENATED MODULE: ./node_modules/vuetify/lib/components/VBreadcrumbs/VBreadcrumbsItem.mjs
 
 // Composables
+
 
 
  // Utilities
@@ -12901,6 +13681,7 @@ const VBreadcrumbsItem = (0,defineComponent/* genericComponent */.ev)()({
     color: String,
     disabled: Boolean,
     title: String,
+    ...(0,component/* makeComponentProps */.l)(),
     ...(0,composables_router/* makeRouterProps */.GN)(),
     ...(0,tag/* makeTagProps */.Q)({
       tag: 'li'
@@ -12926,8 +13707,8 @@ const VBreadcrumbsItem = (0,defineComponent/* genericComponent */.ev)()({
           'v-breadcrumbs-item--disabled': props.disabled,
           'v-breadcrumbs-item--link': link.isLink.value,
           [`${props.activeClass}`]: isActive.value && props.activeClass
-        }, textColorClasses.value],
-        "style": [textColorStyles.value],
+        }, textColorClasses.value, props.class],
+        "style": [textColorStyles.value, props.style],
         "href": link.href.value,
         "aria-current": isActive.value ? 'page' : undefined,
         "onClick": link.navigate
@@ -12948,6 +13729,7 @@ const VBreadcrumbsItem = (0,defineComponent/* genericComponent */.ev)()({
 
 
  // Composables
+
 
 
 
@@ -12976,6 +13758,7 @@ const VBreadcrumbs = (0,defineComponent/* genericComponent */.ev)()({
       type: Array,
       default: () => []
     },
+    ...(0,component/* makeComponentProps */.l)(),
     ...(0,composables_density/* makeDensityProps */.f)(),
     ...(0,rounded/* makeRoundedProps */.I)(),
     ...(0,tag/* makeTagProps */.Q)({
@@ -13007,40 +13790,59 @@ const VBreadcrumbs = (0,defineComponent/* genericComponent */.ev)()({
         disabled: (0,reactivity_esm_bundler/* toRef */.Vh)(props, 'disabled')
       }
     });
+    const items = (0,runtime_core_esm_bundler/* computed */.Fl)(() => props.items.map(item => {
+      return typeof item === 'string' ? {
+        item: {
+          title: item
+        },
+        raw: item
+      } : {
+        item,
+        raw: item
+      };
+    }));
     (0,useRender/* useRender */.L)(() => {
       const hasPrepend = !!(slots.prepend || props.icon);
       return (0,runtime_core_esm_bundler/* createVNode */.Wm)(props.tag, {
-        "class": ['v-breadcrumbs', backgroundColorClasses.value, densityClasses.value, roundedClasses.value],
-        "style": backgroundColorStyles.value
+        "class": ['v-breadcrumbs', backgroundColorClasses.value, densityClasses.value, roundedClasses.value, props.class],
+        "style": [backgroundColorStyles.value, props.style]
       }, {
-        default: () => [hasPrepend && (0,runtime_core_esm_bundler/* createVNode */.Wm)(VDefaultsProvider/* VDefaultsProvider */.z, {
+        default: () => [hasPrepend && (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
           "key": "prepend",
+          "class": "v-breadcrumbs__prepend"
+        }, [!slots.prepend ? (0,runtime_core_esm_bundler/* createVNode */.Wm)(VIcon/* VIcon */.t, {
+          "key": "prepend-icon",
+          "start": true,
+          "icon": props.icon
+        }, null) : (0,runtime_core_esm_bundler/* createVNode */.Wm)(VDefaultsProvider/* VDefaultsProvider */.z, {
+          "key": "prepend-defaults",
+          "disabled": !props.icon,
           "defaults": {
             VIcon: {
               icon: props.icon,
               start: true
             }
           }
-        }, {
-          default: () => [(0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
-            "class": "v-breadcrumbs__prepend"
-          }, [slots.prepend ? slots.prepend() : props.icon && (0,runtime_core_esm_bundler/* createVNode */.Wm)(VIcon/* VIcon */.t, null, null)])]
-        }), props.items.map((item, index, array) => (0,runtime_core_esm_bundler/* createVNode */.Wm)(runtime_core_esm_bundler/* Fragment */.HY, null, [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VBreadcrumbsItem, (0,runtime_core_esm_bundler/* mergeProps */.dG)({
-          "key": index,
-          "disabled": index >= array.length - 1
-        }, typeof item === 'string' ? {
-          title: item
-        } : item), {
-          default: slots.title ? () => slots.title?.({
+        }, slots.prepend)]), items.value.map((_ref2, index, array) => {
+          let {
             item,
-            index
-          }) : undefined
-        }), index < array.length - 1 && (0,runtime_core_esm_bundler/* createVNode */.Wm)(VBreadcrumbsDivider, null, {
-          default: slots.divider ? () => slots.divider?.({
-            item,
-            index
-          }) : undefined
-        })])), slots.default?.()]
+            raw
+          } = _ref2;
+          return (0,runtime_core_esm_bundler/* createVNode */.Wm)(runtime_core_esm_bundler/* Fragment */.HY, null, [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VBreadcrumbsItem, (0,runtime_core_esm_bundler/* mergeProps */.dG)({
+            "key": item.title,
+            "disabled": index >= array.length - 1
+          }, item), {
+            default: slots.title ? () => slots.title?.({
+              item: raw,
+              index
+            }) : undefined
+          }), index < array.length - 1 && (0,runtime_core_esm_bundler/* createVNode */.Wm)(VBreadcrumbsDivider, null, {
+            default: slots.divider ? () => slots.divider?.({
+              item: raw,
+              index
+            }) : undefined
+          })]);
+        }), slots.default?.()]
       });
     });
     return {};
@@ -13201,52 +14003,55 @@ const Touch = {
 
 
 
+
  // Utilities
 
  // Types
 const VWindowSymbol = Symbol.for('vuetify:v-window');
 const VWindowGroupSymbol = Symbol.for('vuetify:v-window-group');
+const makeVWindowProps = (0,propsFactory/* propsFactory */.U)({
+  continuous: Boolean,
+  nextIcon: {
+    type: [Boolean, String, Function, Object],
+    default: '$next'
+  },
+  prevIcon: {
+    type: [Boolean, String, Function, Object],
+    default: '$prev'
+  },
+  reverse: Boolean,
+  showArrows: {
+    type: [Boolean, String],
+    validator: v => typeof v === 'boolean' || v === 'hover'
+  },
+  touch: {
+    type: [Object, Boolean],
+    default: undefined
+  },
+  direction: {
+    type: String,
+    default: 'horizontal'
+  },
+  modelValue: null,
+  disabled: Boolean,
+  selectedClass: {
+    type: String,
+    default: 'v-window-item--active'
+  },
+  // TODO: mandatory should probably not be exposed but do this for now
+  mandatory: {
+    default: 'force'
+  },
+  ...(0,component/* makeComponentProps */.l)(),
+  ...(0,tag/* makeTagProps */.Q)(),
+  ...(0,composables_theme/* makeThemeProps */.x$)()
+}, 'v-window');
 const VWindow = (0,defineComponent/* genericComponent */.ev)()({
   name: 'VWindow',
   directives: {
     Touch: Touch
   },
-  props: {
-    continuous: Boolean,
-    nextIcon: {
-      type: [Boolean, String, Function, Object],
-      default: '$next'
-    },
-    prevIcon: {
-      type: [Boolean, String, Function, Object],
-      default: '$prev'
-    },
-    reverse: Boolean,
-    showArrows: {
-      type: [Boolean, String],
-      validator: v => typeof v === 'boolean' || v === 'hover'
-    },
-    touch: {
-      type: [Object, Boolean],
-      default: undefined
-    },
-    direction: {
-      type: String,
-      default: 'horizontal'
-    },
-    modelValue: null,
-    disabled: Boolean,
-    selectedClass: {
-      type: String,
-      default: 'v-window-item--active'
-    },
-    // TODO: mandatory should probably not be exposed but do this for now
-    mandatory: {
-      default: 'force'
-    },
-    ...(0,tag/* makeTagProps */.Q)(),
-    ...(0,composables_theme/* makeThemeProps */.x$)()
-  },
+  props: makeVWindowProps(),
   emits: {
     'update:modelValue': v => true
   },
@@ -13353,7 +14158,8 @@ const VWindow = (0,defineComponent/* genericComponent */.ev)()({
       "ref": rootRef,
       "class": ['v-window', {
         'v-window--show-arrows-on-hover': props.showArrows === 'hover'
-      }, themeClasses.value]
+      }, themeClasses.value, props.class],
+      "style": props.style
     }, {
       default: () => [(0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
         "class": "v-window__container",
@@ -13409,16 +14215,15 @@ const VCarousel = (0,defineComponent/* genericComponent */.ev)()({
     interval: {
       type: [Number, String],
       default: 6000,
-      validator: value => value > 0
+      validator: value => Number(value) > 0
     },
-    modelValue: null,
     progress: [Boolean, String],
-    showArrows: {
-      type: [Boolean, String],
-      default: true,
-      validator: v => typeof v === 'boolean' || v === 'hover'
-    },
-    verticalDelimiters: [Boolean, String]
+    verticalDelimiters: [Boolean, String],
+    ...makeVWindowProps({
+      continuous: true,
+      mandatory: 'force',
+      showArrows: true
+    })
   },
   emits: {
     'update:modelValue': val => true
@@ -13454,10 +14259,10 @@ const VCarousel = (0,defineComponent/* genericComponent */.ev)()({
       "class": ['v-carousel', {
         'v-carousel--hide-delimiter-background': props.hideDelimiterBackground,
         'v-carousel--vertical-delimiters': props.verticalDelimiters
-      }],
-      "style": {
+      }, props.class],
+      "style": [{
         height: (0,helpers/* convertToUnit */.kb)(props.height)
-      },
+      }, props.style],
       "continuous": true,
       "mandatory": "force",
       "showArrows": props.showArrows
@@ -13486,6 +14291,7 @@ const VCarousel = (0,defineComponent/* genericComponent */.ev)()({
         }, {
           default: () => [group.items.value.map((item, index) => {
             const props = {
+              id: `carousel-item-${item.id}`,
               'aria-label': t('$vuetify.carousel.ariaLabel.delimiter', index + 1, group.items.value.length),
               class: [group.isSelected(item.id) && 'v-btn--active'],
               onClick: () => group.select(item.id, true)
@@ -13516,6 +14322,7 @@ var lazy = __webpack_require__(1136);
 
 
 
+
  // Utilities
 
  // Types
@@ -13534,6 +14341,7 @@ const VWindowItem = (0,defineComponent/* genericComponent */.ev)()({
       type: [Boolean, String],
       default: undefined
     },
+    ...(0,component/* makeComponentProps */.l)(),
     ...(0,composables_group/* makeGroupItemProps */.YQ)(),
     ...(0,lazy/* makeLazyProps */.H)()
   },
@@ -13548,7 +14356,7 @@ const VWindowItem = (0,defineComponent/* genericComponent */.ev)()({
     const groupItem = (0,composables_group/* useGroupItem */.Yt)(props, VWindowGroupSymbol);
     const {
       isBooted
-    } = useSsrBoot();
+    } = (0,ssrBoot/* useSsrBoot */.u)();
     if (!window || !groupItem) throw new Error('[Vuetify] VWindowItem must be used inside VWindow');
     const isTransitioning = (0,reactivity_esm_bundler/* ref */.iH)(false);
     const hasTransition = (0,runtime_core_esm_bundler/* computed */.Fl)(() => window.isReversed.value ? props.reverseTransition !== false : props.transition !== false);
@@ -13616,10 +14424,12 @@ const VWindowItem = (0,defineComponent/* genericComponent */.ev)()({
       hasContent
     } = (0,lazy/* useLazy */.l)(props, groupItem.isSelected);
     (0,useRender/* useRender */.L)(() => (0,runtime_core_esm_bundler/* createVNode */.Wm)(composables_transition/* MaybeTransition */.J, {
-      "transition": isBooted.value && transition.value
+      "transition": transition.value,
+      "disabled": !isBooted.value
     }, {
       default: () => [(0,runtime_core_esm_bundler/* withDirectives */.wy)((0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
-        "class": ['v-window-item', groupItem.selectedClass.value]
+        "class": ['v-window-item', groupItem.selectedClass.value, props.class],
+        "style": props.style
       }, [hasContent.value && slots.default?.()]), [[runtime_dom_esm_bundler/* vShow */.F8, groupItem.isSelected.value]])]
     }));
     return {};
@@ -13629,13 +14439,15 @@ const VWindowItem = (0,defineComponent/* genericComponent */.ev)()({
 
 // Components
 
+ // Composables
  // Utilities
  // Types
 const VCarouselItem = (0,defineComponent/* genericComponent */.ev)()({
   name: 'VCarouselItem',
   inheritAttrs: false,
   props: {
-    value: null
+    value: null,
+    ...(0,component/* makeComponentProps */.l)()
   },
   setup(props, _ref) {
     let {
@@ -13643,7 +14455,8 @@ const VCarouselItem = (0,defineComponent/* genericComponent */.ev)()({
       attrs
     } = _ref;
     (0,useRender/* useRender */.L)(() => (0,runtime_core_esm_bundler/* createVNode */.Wm)(VWindowItem, {
-      "class": "v-carousel-item",
+      "class": ['v-carousel-item', props.class],
+      "style": props.style,
       "value": props.value
     }, {
       default: () => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VImg/* VImg */.f, attrs, slots)]
@@ -13672,6 +14485,80 @@ const VCode = (0,createSimpleFunctional/* createSimpleFunctional */.J)('v-code')
 ;// CONCATENATED MODULE: ./node_modules/vuetify/lib/components/VColorPicker/VColorPicker.css
 // extracted by mini-css-extract-plugin
 
+;// CONCATENATED MODULE: ./node_modules/vuetify/lib/components/VSheet/VSheet.css
+// extracted by mini-css-extract-plugin
+
+;// CONCATENATED MODULE: ./node_modules/vuetify/lib/components/VSheet/VSheet.mjs
+
+// Styles
+
+
+// Composables
+
+
+
+
+
+
+
+
+
+ // Utilities
+
+
+const makeVSheetProps = (0,propsFactory/* propsFactory */.U)({
+  color: String,
+  ...(0,border/* makeBorderProps */.m)(),
+  ...(0,component/* makeComponentProps */.l)(),
+  ...(0,dimensions/* makeDimensionProps */.x)(),
+  ...(0,elevation/* makeElevationProps */.c)(),
+  ...(0,composables_location/* makeLocationProps */.y)(),
+  ...(0,position/* makePositionProps */.F)(),
+  ...(0,rounded/* makeRoundedProps */.I)(),
+  ...(0,tag/* makeTagProps */.Q)(),
+  ...(0,composables_theme/* makeThemeProps */.x$)()
+}, 'v-sheet');
+const VSheet = (0,defineComponent/* genericComponent */.ev)()({
+  name: 'VSheet',
+  props: {
+    ...makeVSheetProps()
+  },
+  setup(props, _ref) {
+    let {
+      slots
+    } = _ref;
+    const {
+      themeClasses
+    } = (0,composables_theme/* provideTheme */.ER)(props);
+    const {
+      backgroundColorClasses,
+      backgroundColorStyles
+    } = (0,composables_color/* useBackgroundColor */.Y5)((0,reactivity_esm_bundler/* toRef */.Vh)(props, 'color'));
+    const {
+      borderClasses
+    } = (0,border/* useBorder */.P)(props);
+    const {
+      dimensionStyles
+    } = (0,dimensions/* useDimension */.$)(props);
+    const {
+      elevationClasses
+    } = (0,elevation/* useElevation */.Y)(props);
+    const {
+      locationStyles
+    } = (0,composables_location/* useLocation */.T)(props);
+    const {
+      positionClasses
+    } = (0,position/* usePosition */.K)(props);
+    const {
+      roundedClasses
+    } = (0,rounded/* useRounded */.b)(props);
+    (0,useRender/* useRender */.L)(() => (0,runtime_core_esm_bundler/* createVNode */.Wm)(props.tag, {
+      "class": ['v-sheet', themeClasses.value, backgroundColorClasses.value, borderClasses.value, elevationClasses.value, positionClasses.value, roundedClasses.value, props.class],
+      "style": [backgroundColorStyles.value, dimensionStyles.value, locationStyles.value, props.style]
+    }, slots));
+    return {};
+  }
+});
 ;// CONCATENATED MODULE: ./node_modules/vuetify/lib/components/VColorPicker/VColorPickerCanvas.css
 // extracted by mini-css-extract-plugin
 
@@ -13680,7 +14567,9 @@ const VCode = (0,createSimpleFunctional/* createSimpleFunctional */.J)('v-code')
 // Styles
 
 
-// Utilities
+// Composables
+
+ // Utilities
 
 
 
@@ -13704,7 +14593,8 @@ const VColorPickerCanvas = (0,defineComponent/* defineComponent */.aZ)({
     width: {
       type: [Number, String],
       default: 300
-    }
+    },
+    ...(0,component/* makeComponentProps */.l)()
   },
   emits: {
     'update:color': color => true,
@@ -13733,6 +14623,19 @@ const VColorPickerCanvas = (0,defineComponent/* defineComponent */.aZ)({
       };
     });
     const canvasRef = (0,reactivity_esm_bundler/* ref */.iH)();
+    const canvasWidth = (0,reactivity_esm_bundler/* ref */.iH)(parseFloat(props.width));
+    const canvasHeight = (0,reactivity_esm_bundler/* ref */.iH)(parseFloat(props.height));
+    const {
+      resizeRef
+    } = (0,resizeObserver/* useResizeObserver */.y)(entries => {
+      if (!resizeRef.value?.offsetParent) return;
+      const {
+        width,
+        height
+      } = entries[0].contentRect;
+      canvasWidth.value = width;
+      canvasHeight.value = height;
+    });
     function updateDotPosition(x, y, rect) {
       const {
         left,
@@ -13778,17 +14681,13 @@ const VColorPickerCanvas = (0,defineComponent/* defineComponent */.aZ)({
       }
       if (!canvasRef.value) return;
       const {
-        width,
-        height
-      } = canvasRef.value.getBoundingClientRect();
-      const {
         x,
         y
       } = dotPosition.value;
       emit('update:color', {
         h: props.color?.h ?? 0,
-        s: (0,helpers/* clamp */.uZ)(x, 0, width) / width,
-        v: 1 - (0,helpers/* clamp */.uZ)(y, 0, height) / height,
+        s: (0,helpers/* clamp */.uZ)(x, 0, canvasWidth.value) / canvasWidth.value,
+        v: 1 - (0,helpers/* clamp */.uZ)(y, 0, canvasHeight.value) / canvasHeight.value,
         a: props.color?.a ?? 1
       });
     });
@@ -13811,16 +14710,27 @@ const VColorPickerCanvas = (0,defineComponent/* defineComponent */.aZ)({
     (0,runtime_core_esm_bundler/* watch */.YP)(() => props.color?.h, updateCanvas, {
       immediate: true
     });
+    (0,runtime_core_esm_bundler/* watch */.YP)(() => [canvasWidth.value, canvasHeight.value], (newVal, oldVal) => {
+      updateCanvas();
+      dotPosition.value = {
+        x: dotPosition.value.x * newVal[0] / oldVal[0],
+        y: dotPosition.value.y * newVal[1] / oldVal[1]
+      };
+    }, {
+      flush: 'post'
+    });
     (0,runtime_core_esm_bundler/* watch */.YP)(() => props.color, () => {
       if (isInteracting.value) {
         isInteracting.value = false;
         return;
       }
-      if (!props.color) return;
       isOutsideUpdate.value = true;
-      dotPosition.value = {
-        x: props.color.s * parseInt(props.width, 10),
-        y: (1 - props.color.v) * parseInt(props.height, 10)
+      dotPosition.value = props.color ? {
+        x: props.color.s * canvasWidth.value,
+        y: (1 - props.color.v) * canvasHeight.value
+      } : {
+        x: 0,
+        y: 0
       };
     }, {
       deep: true,
@@ -13828,19 +14738,17 @@ const VColorPickerCanvas = (0,defineComponent/* defineComponent */.aZ)({
     });
     (0,runtime_core_esm_bundler/* onMounted */.bv)(() => updateCanvas());
     (0,useRender/* useRender */.L)(() => (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
-      "class": "v-color-picker-canvas",
-      "style": {
-        width: (0,helpers/* convertToUnit */.kb)(props.width),
-        height: (0,helpers/* convertToUnit */.kb)(props.height)
-      },
+      "ref": resizeRef,
+      "class": ['v-color-picker-canvas', props.class],
+      "style": props.style,
       "onClick": handleClick,
       "onMousedown": handleMouseDown,
       "onTouchstart": handleMouseDown
     }, [(0,runtime_core_esm_bundler/* createVNode */.Wm)("canvas", {
       "ref": canvasRef,
-      "width": props.width,
-      "height": props.height
-    }, null), (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
+      "width": canvasWidth.value,
+      "height": canvasHeight.value
+    }, null), props.color && (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
       "class": ['v-color-picker-canvas__dot', {
         'v-color-picker-canvas__dot--disabled': props.disabled
       }],
@@ -13876,10 +14784,7 @@ function parseColor(color) {
       hsva = color;
     }
   }
-  return hsva != null ? {
-    ...hsva,
-    a: hsva.a ?? 1
-  } : null;
+  return hsva;
 }
 function stripAlpha(color, stripAlpha) {
   if (stripAlpha) {
@@ -13899,7 +14804,7 @@ function extractColor(color, input) {
   if (typeof input === 'object') {
     let converted;
     if (has(input, ['r', 'g', 'b'])) converted = (0,colorUtils/* HSVtoRGB */.Bi)(color);else if (has(input, ['h', 's', 'l'])) converted = (0,colorUtils/* HSVtoHSL */.Gl)(color);else if (has(input, ['h', 's', 'v'])) converted = color;
-    return stripAlpha(converted, !has(input, ['a']));
+    return stripAlpha(converted, !has(input, ['a']) && color.a === 1);
   }
   return color;
 }
@@ -14061,6 +14966,7 @@ const modes = {
 
 
 // Components
+ // Composables
  // Utilities
 
 
@@ -14088,7 +14994,8 @@ const VColorPickerEdit = (0,defineComponent/* defineComponent */.aZ)({
       type: Array,
       default: () => Object.keys(modes),
       validator: v => Array.isArray(v) && v.every(m => Object.keys(modes).includes(m))
-    }
+    },
+    ...(0,component/* makeComponentProps */.l)()
   },
   emits: {
     'update:color': color => true,
@@ -14107,7 +15014,7 @@ const VColorPickerEdit = (0,defineComponent/* defineComponent */.aZ)({
     const inputs = (0,runtime_core_esm_bundler/* computed */.Fl)(() => {
       const mode = enabledModes.value.find(m => m.name === props.mode);
       if (!mode) return [];
-      const color = props.color ? mode.to(props.color) : {};
+      const color = props.color ? mode.to(props.color) : null;
       return mode.inputs?.map(_ref3 => {
         let {
           getValue,
@@ -14118,17 +15025,18 @@ const VColorPickerEdit = (0,defineComponent/* defineComponent */.aZ)({
           ...mode.inputProps,
           ...inputProps,
           disabled: props.disabled,
-          value: getValue(color),
+          value: color && getValue(color),
           onChange: e => {
             const target = e.target;
             if (!target) return;
-            emit('update:color', mode.from(getColor(color, target.value)));
+            emit('update:color', mode.from(getColor(color ?? nullColor, target.value)));
           }
         };
       });
     });
     (0,useRender/* useRender */.L)(() => (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
-      "class": "v-color-picker-edit"
+      "class": ['v-color-picker-edit', props.class],
+      "style": props.style
     }, [inputs.value?.map(props => (0,runtime_core_esm_bundler/* createVNode */.Wm)(VColorPickerInput, props, null)), enabledModes.value.length > 1 && (0,runtime_core_esm_bundler/* createVNode */.Wm)(VBtn/* VBtn */.T, {
       "icon": "$unfold",
       "size": "x-small",
@@ -14152,6 +15060,7 @@ var VSlider = __webpack_require__(5999);
 
 
 // Components
+ // Composables
  // Utilities
 
  // Types
@@ -14162,7 +15071,8 @@ const VColorPickerPreview = (0,defineComponent/* defineComponent */.aZ)({
       type: Object
     },
     disabled: Boolean,
-    hideAlpha: Boolean
+    hideAlpha: Boolean,
+    ...(0,component/* makeComponentProps */.l)()
   },
   emits: {
     'update:color': color => true
@@ -14174,7 +15084,8 @@ const VColorPickerPreview = (0,defineComponent/* defineComponent */.aZ)({
     (0,useRender/* useRender */.L)(() => (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
       "class": ['v-color-picker-preview', {
         'v-color-picker-preview--hide-alpha': props.hideAlpha
-      }]
+      }, props.class],
+      "style": props.style
     }, [(0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
       "class": "v-color-picker-preview__dot"
     }, [(0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
@@ -14200,12 +15111,12 @@ const VColorPickerPreview = (0,defineComponent/* defineComponent */.aZ)({
       "hideDetails": true
     }, null), !props.hideAlpha && (0,runtime_core_esm_bundler/* createVNode */.Wm)(VSlider/* VSlider */.R, {
       "class": "v-color-picker-preview__track v-color-picker-preview__alpha",
-      "modelValue": props.color?.a,
+      "modelValue": props.color?.a ?? 1,
       "onUpdate:modelValue": a => emit('update:color', {
         ...(props.color ?? nullColor),
         a
       }),
-      "step": 0,
+      "step": 1 / 256,
       "min": 0,
       "max": 1,
       "disabled": props.disabled,
@@ -14546,6 +15457,7 @@ const shades = Object.freeze({
 
 
 // Components
+ // Composables
  // Utilities
 
 
@@ -14565,7 +15477,8 @@ const VColorPickerSwatches = (0,defineComponent/* defineComponent */.aZ)({
     },
     disabled: Boolean,
     color: Object,
-    maxHeight: [Number, String]
+    maxHeight: [Number, String],
+    ...(0,component/* makeComponentProps */.l)()
   },
   emits: {
     'update:color': color => true
@@ -14575,10 +15488,10 @@ const VColorPickerSwatches = (0,defineComponent/* defineComponent */.aZ)({
       emit
     } = _ref;
     (0,useRender/* useRender */.L)(() => (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
-      "class": "v-color-picker-swatches",
-      "style": {
+      "class": ['v-color-picker-swatches', props.class],
+      "style": [{
         maxHeight: (0,helpers/* convertToUnit */.kb)(props.maxHeight)
-      }
+      }, props.style]
     }, [(0,runtime_core_esm_bundler/* createVNode */.Wm)("div", null, [props.swatches.map(swatch => (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
       "class": "v-color-picker-swatches__swatch"
     }, [swatch.map(color => {
@@ -14599,74 +15512,6 @@ const VColorPickerSwatches = (0,defineComponent/* defineComponent */.aZ)({
     return {};
   }
 });
-;// CONCATENATED MODULE: ./node_modules/vuetify/lib/components/VSheet/VSheet.css
-// extracted by mini-css-extract-plugin
-
-;// CONCATENATED MODULE: ./node_modules/vuetify/lib/components/VSheet/VSheet.mjs
-
-// Styles
-
-
-// Composables
-
-
-
-
-
-
-
-
- // Utilities
-
-
-const VSheet = (0,defineComponent/* genericComponent */.ev)()({
-  name: 'VSheet',
-  props: {
-    color: String,
-    ...(0,border/* makeBorderProps */.m)(),
-    ...(0,dimensions/* makeDimensionProps */.x)(),
-    ...(0,elevation/* makeElevationProps */.c)(),
-    ...(0,composables_location/* makeLocationProps */.y)(),
-    ...(0,position/* makePositionProps */.F)(),
-    ...(0,rounded/* makeRoundedProps */.I)(),
-    ...(0,tag/* makeTagProps */.Q)(),
-    ...(0,composables_theme/* makeThemeProps */.x$)()
-  },
-  setup(props, _ref) {
-    let {
-      slots
-    } = _ref;
-    const {
-      themeClasses
-    } = (0,composables_theme/* provideTheme */.ER)(props);
-    const {
-      backgroundColorClasses,
-      backgroundColorStyles
-    } = (0,composables_color/* useBackgroundColor */.Y5)((0,reactivity_esm_bundler/* toRef */.Vh)(props, 'color'));
-    const {
-      borderClasses
-    } = (0,border/* useBorder */.P)(props);
-    const {
-      dimensionStyles
-    } = (0,dimensions/* useDimension */.$)(props);
-    const {
-      elevationClasses
-    } = (0,elevation/* useElevation */.Y)(props);
-    const {
-      locationStyles
-    } = (0,composables_location/* useLocation */.T)(props);
-    const {
-      positionClasses
-    } = (0,position/* usePosition */.K)(props);
-    const {
-      roundedClasses
-    } = (0,rounded/* useRounded */.b)(props);
-    return () => (0,runtime_core_esm_bundler/* createVNode */.Wm)(props.tag, {
-      "class": ['v-sheet', themeClasses.value, backgroundColorClasses.value, borderClasses.value, elevationClasses.value, positionClasses.value, roundedClasses.value],
-      "style": [backgroundColorStyles.value, dimensionStyles.value, locationStyles.value]
-    }, slots);
-  }
-});
 ;// CONCATENATED MODULE: ./node_modules/vuetify/lib/components/VColorPicker/VColorPicker.mjs
 
 // Styles
@@ -14678,8 +15523,6 @@ const VSheet = (0,defineComponent/* genericComponent */.ev)()({
 
 
  // Composables
-
-
 
  // Utilities
 
@@ -14722,13 +15565,9 @@ const VColorPicker = (0,defineComponent/* defineComponent */.aZ)({
     modelValue: {
       type: [Object, String]
     },
-    width: {
-      type: [Number, String],
-      default: 300
-    },
-    ...(0,elevation/* makeElevationProps */.c)(),
-    ...(0,rounded/* makeRoundedProps */.I)(),
-    ...(0,composables_theme/* makeThemeProps */.x$)()
+    ...(0,helpers/* omit */.CE)(makeVSheetProps({
+      width: 300
+    }), ['height', 'location', 'minHeight', 'maxHeight', 'minWidth', 'maxWidth'])
   },
   emits: {
     'update:modelValue': color => true,
@@ -14759,53 +15598,64 @@ const VColorPicker = (0,defineComponent/* defineComponent */.aZ)({
     (0,runtime_core_esm_bundler/* onMounted */.bv)(() => {
       if (!props.modes.includes(mode.value)) mode.value = props.modes[0];
     });
-    (0,useRender/* useRender */.L)(() => (0,runtime_core_esm_bundler/* createVNode */.Wm)(VSheet, {
-      "rounded": props.rounded,
-      "elevation": props.elevation,
-      "theme": props.theme,
-      "class": ['v-color-picker'],
-      "style": {
-        '--v-color-picker-color-hsv': (0,colorUtils/* HSVtoCSS */.wQ)({
-          ...(currentColor.value ?? nullColor),
-          a: 1
-        })
-      },
-      "maxWidth": props.width
-    }, {
-      default: () => [!props.hideCanvas && (0,runtime_core_esm_bundler/* createVNode */.Wm)(VColorPickerCanvas, {
-        "key": "canvas",
-        "color": currentColor.value,
-        "onUpdate:color": updateColor,
-        "disabled": props.disabled,
-        "dotSize": props.dotSize,
-        "width": props.width,
-        "height": props.canvasHeight
-      }, null), (!props.hideSliders || !props.hideInputs) && (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
-        "key": "controls",
-        "class": "v-color-picker__controls"
-      }, [!props.hideSliders && (0,runtime_core_esm_bundler/* createVNode */.Wm)(VColorPickerPreview, {
-        "key": "preview",
-        "color": currentColor.value,
-        "onUpdate:color": updateColor,
-        "hideAlpha": !mode.value.endsWith('a'),
-        "disabled": props.disabled
-      }, null), !props.hideInputs && (0,runtime_core_esm_bundler/* createVNode */.Wm)(VColorPickerEdit, {
-        "key": "edit",
-        "modes": props.modes,
-        "mode": mode.value,
-        "onUpdate:mode": m => mode.value = m,
-        "color": currentColor.value,
-        "onUpdate:color": updateColor,
-        "disabled": props.disabled
-      }, null)]), props.showSwatches && (0,runtime_core_esm_bundler/* createVNode */.Wm)(VColorPickerSwatches, {
-        "key": "swatches",
-        "color": currentColor.value,
-        "onUpdate:color": updateColor,
-        "maxHeight": props.swatchesMaxHeight,
-        "swatches": props.swatches,
-        "disabled": props.disabled
-      }, null)]
-    }));
+    (0,composables_defaults/* provideDefaults */.AF)({
+      VSlider: {
+        color: undefined,
+        trackColor: undefined,
+        trackFillColor: undefined
+      }
+    });
+    (0,useRender/* useRender */.L)(() => {
+      const [sheetProps] = VSheet.filterProps(props);
+      return (0,runtime_core_esm_bundler/* createVNode */.Wm)(VSheet, (0,runtime_core_esm_bundler/* mergeProps */.dG)({
+        "rounded": props.rounded,
+        "elevation": props.elevation,
+        "theme": props.theme,
+        "class": ['v-color-picker', props.class],
+        "style": [{
+          '--v-color-picker-color-hsv': (0,colorUtils/* HSVtoCSS */.wQ)({
+            ...(currentColor.value ?? nullColor),
+            a: 1
+          })
+        }, props.style]
+      }, sheetProps, {
+        "maxWidth": props.width
+      }), {
+        default: () => [!props.hideCanvas && (0,runtime_core_esm_bundler/* createVNode */.Wm)(VColorPickerCanvas, {
+          "key": "canvas",
+          "color": currentColor.value,
+          "onUpdate:color": updateColor,
+          "disabled": props.disabled,
+          "dotSize": props.dotSize,
+          "width": props.width,
+          "height": props.canvasHeight
+        }, null), (!props.hideSliders || !props.hideInputs) && (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
+          "key": "controls",
+          "class": "v-color-picker__controls"
+        }, [!props.hideSliders && (0,runtime_core_esm_bundler/* createVNode */.Wm)(VColorPickerPreview, {
+          "key": "preview",
+          "color": currentColor.value,
+          "onUpdate:color": updateColor,
+          "hideAlpha": !mode.value.endsWith('a'),
+          "disabled": props.disabled
+        }, null), !props.hideInputs && (0,runtime_core_esm_bundler/* createVNode */.Wm)(VColorPickerEdit, {
+          "key": "edit",
+          "modes": props.modes,
+          "mode": mode.value,
+          "onUpdate:mode": m => mode.value = m,
+          "color": currentColor.value,
+          "onUpdate:color": updateColor,
+          "disabled": props.disabled
+        }, null)]), props.showSwatches && (0,runtime_core_esm_bundler/* createVNode */.Wm)(VColorPickerSwatches, {
+          "key": "swatches",
+          "color": currentColor.value,
+          "onUpdate:color": updateColor,
+          "maxHeight": props.swatchesMaxHeight,
+          "swatches": props.swatches,
+          "disabled": props.disabled
+        }, null)]
+      });
+    });
     return {};
   }
 });
@@ -14862,7 +15712,7 @@ const VCombobox = (0,defineComponent/* genericComponent */.ev)()({
       hideNoData: true,
       returnObject: true
     }),
-    ...(0,helpers/* omit */.CE)((0,VTextField/* makeVTextFieldProps */.wG)({
+    ...(0,helpers/* omit */.CE)((0,VTextField/* makeVTextFieldProps */.w)({
       modelValue: null
     }), ['validationValue', 'dirty', 'appendInnerIcon']),
     ...(0,composables_transition/* makeTransitionProps */.X)({
@@ -14870,6 +15720,7 @@ const VCombobox = (0,defineComponent/* genericComponent */.ev)()({
     })
   },
   emits: {
+    'update:focused': focused => true,
     'update:modelValue': val => true,
     'update:search': val => true,
     'update:menu': val => true
@@ -14895,6 +15746,7 @@ const VCombobox = (0,defineComponent/* genericComponent */.ev)()({
       }
     });
     const selectionIndex = (0,reactivity_esm_bundler/* ref */.iH)(-1);
+    let cleared = false;
     const color = (0,runtime_core_esm_bundler/* computed */.Fl)(() => vTextFieldRef.value?.color);
     const {
       items,
@@ -14905,7 +15757,7 @@ const VCombobox = (0,defineComponent/* genericComponent */.ev)()({
       textColorClasses,
       textColorStyles
     } = (0,composables_color/* useTextColor */.rY)(color);
-    const model = (0,proxiedModel/* useProxiedModel */.z)(props, 'modelValue', [], v => transformIn((0,helpers/* wrapInArray */.FT)(v || [])), v => {
+    const model = (0,proxiedModel/* useProxiedModel */.z)(props, 'modelValue', [], v => transformIn((0,helpers/* wrapInArray */.FT)(v)), v => {
       const transformed = transformOut(v);
       return props.multiple ? transformed : transformed[0] ?? null;
     });
@@ -14931,11 +15783,17 @@ const VCombobox = (0,defineComponent/* genericComponent */.ev)()({
           }
         }
         if (!val) selectionIndex.value = -1;
-        if (isFocused.value) menu.value = true;
         isPristine.value = !val;
       }
     });
     (0,runtime_core_esm_bundler/* watch */.YP)(_search, value => {
+      if (cleared) {
+        // wait for clear to finish, VTextField sets _search to null
+        // then search computed triggers and updates _search to ''
+        (0,runtime_core_esm_bundler/* nextTick */.Y3)(() => cleared = false);
+      } else if (isFocused.value && !menu.value) {
+        menu.value = true;
+      }
       emit('update:search', value);
     });
     (0,runtime_core_esm_bundler/* watch */.YP)(model, value => {
@@ -14962,6 +15820,7 @@ const VCombobox = (0,defineComponent/* genericComponent */.ev)()({
     const selection = (0,runtime_core_esm_bundler/* computed */.Fl)(() => selections.value[selectionIndex.value]);
     const listRef = (0,reactivity_esm_bundler/* ref */.iH)();
     function onClear(e) {
+      cleared = true;
       if (props.openOnClear) {
         menu.value = true;
       }
@@ -14999,8 +15858,9 @@ const VCombobox = (0,defineComponent/* genericComponent */.ev)()({
           }
           return;
         }
-        select(selection.value);
-        (0,runtime_core_esm_bundler/* nextTick */.Y3)(() => !selection.value && (selectionIndex.value = length - 2));
+        const originalSelectionIndex = selectionIndex.value;
+        if (selection.value) select(selection.value);
+        selectionIndex.value = originalSelectionIndex >= length - 1 ? length - 2 : originalSelectionIndex;
       }
       if (e.key === 'ArrowLeft') {
         if (selectionIndex.value < 0 && selectionStart > 0) return;
@@ -15076,28 +15936,31 @@ const VCombobox = (0,defineComponent/* genericComponent */.ev)()({
     (0,useRender/* useRender */.L)(() => {
       const hasChips = !!(props.chips || slots.chip);
       const hasList = !!(!props.hideNoData || displayItems.value.length || slots.prepend || slots.append || slots['no-data']);
-      const [textFieldProps] = (0,VTextField/* filterVTextFieldProps */.a)(props);
-      return (0,runtime_core_esm_bundler/* createVNode */.Wm)(VTextField/* VTextField */.hw, (0,runtime_core_esm_bundler/* mergeProps */.dG)({
+      const isDirty = model.value.length > 0;
+      const [textFieldProps] = VTextField/* VTextField.filterProps */.h.filterProps(props);
+      return (0,runtime_core_esm_bundler/* createVNode */.Wm)(VTextField/* VTextField */.h, (0,runtime_core_esm_bundler/* mergeProps */.dG)({
         "ref": vTextFieldRef
       }, textFieldProps, {
         "modelValue": search.value,
         "onUpdate:modelValue": [$event => search.value = $event, v => {
           if (v == null) model.value = [];
         }],
+        "focused": isFocused.value,
+        "onUpdate:focused": $event => isFocused.value = $event,
         "validationValue": model.externalValue,
-        "dirty": model.value.length > 0,
+        "dirty": isDirty,
         "class": ['v-combobox', {
           'v-combobox--active-menu': menu.value,
           'v-combobox--chips': !!props.chips,
           'v-combobox--selecting-index': selectionIndex.value > -1,
           [`v-combobox--${props.multiple ? 'multiple' : 'single'}`]: true
-        }],
+        }, props.class],
+        "style": props.style,
         "appendInnerIcon": props.items.length ? props.menuIcon : undefined,
         "readonly": props.readonly,
+        "placeholder": isDirty ? undefined : props.placeholder,
         "onClick:clear": onClear,
         "onMousedown:control": onMousedownControl,
-        "onFocus": () => isFocused.value = true,
-        "onBlur": () => isFocused.value = false,
         "onKeydown": onKeydown
       }), {
         ...slots,
@@ -15124,14 +15987,13 @@ const VCombobox = (0,defineComponent/* genericComponent */.ev)()({
           }, {
             default: () => [!displayItems.value.length && !props.hideNoData && (slots['no-data']?.() ?? (0,runtime_core_esm_bundler/* createVNode */.Wm)(VListItem/* VListItem */.l, {
               "title": t(props.noDataText)
-            }, null)), slots['prepend-item']?.(), displayItems.value.map((item, index) => slots.item?.({
+            }, null)), slots['prepend-item']?.(), displayItems.value.map(item => slots.item?.({
               item,
-              index,
               props: (0,runtime_core_esm_bundler/* mergeProps */.dG)(item.props, {
                 onClick: () => select(item)
               })
             }) ?? (0,runtime_core_esm_bundler/* createVNode */.Wm)(VListItem/* VListItem */.l, (0,runtime_core_esm_bundler/* mergeProps */.dG)({
-              "key": index
+              "key": item.value
             }, item.props, {
               "onClick": () => select(item)
             }), {
@@ -15139,9 +16001,10 @@ const VCombobox = (0,defineComponent/* genericComponent */.ev)()({
                 let {
                   isSelected
                 } = _ref2;
-                return props.multiple && !props.hideSelected ? (0,runtime_core_esm_bundler/* createVNode */.Wm)(VCheckboxBtn/* VCheckboxBtn */.pM, {
+                return props.multiple && !props.hideSelected ? (0,runtime_core_esm_bundler/* createVNode */.Wm)(VCheckboxBtn/* VCheckboxBtn */.p, {
                   "modelValue": isSelected,
-                  "ripple": false
+                  "ripple": false,
+                  "tabindex": "-1"
                 }, null) : undefined;
               },
               title: () => {
@@ -15164,7 +16027,13 @@ const VCombobox = (0,defineComponent/* genericComponent */.ev)()({
             "key": item.value,
             "class": ['v-combobox__selection', index === selectionIndex.value && ['v-combobox__selection--selected', textColorClasses.value]],
             "style": index === selectionIndex.value ? textColorStyles.value : {}
-          }, [hasChips ? (0,runtime_core_esm_bundler/* createVNode */.Wm)(VDefaultsProvider/* VDefaultsProvider */.z, {
+          }, [hasChips ? !slots.chip ? (0,runtime_core_esm_bundler/* createVNode */.Wm)(VChip/* VChip */.v, (0,runtime_core_esm_bundler/* mergeProps */.dG)({
+            "key": "chip",
+            "closable": props.closableChips,
+            "size": "small",
+            "text": item.title
+          }, slotProps), null) : (0,runtime_core_esm_bundler/* createVNode */.Wm)(VDefaultsProvider/* VDefaultsProvider */.z, {
+            "key": "chip-defaults",
             "defaults": {
               VChip: {
                 closable: props.closableChips,
@@ -15173,15 +16042,15 @@ const VCombobox = (0,defineComponent/* genericComponent */.ev)()({
               }
             }
           }, {
-            default: () => [slots.chip ? slots.chip({
+            default: () => [slots.chip?.({
               item,
               index,
               props: slotProps
-            }) : (0,runtime_core_esm_bundler/* createVNode */.Wm)(VChip/* VChip */.v, slotProps, null)]
-          }) : slots.selection ? slots.selection({
+            })]
+          }) : slots.selection?.({
             item,
             index
-          }) : (0,runtime_core_esm_bundler/* createVNode */.Wm)("span", {
+          }) ?? (0,runtime_core_esm_bundler/* createVNode */.Wm)("span", {
             "class": "v-combobox__selection-text"
           }, [item.title, props.multiple && index < selections.value.length - 1 && (0,runtime_core_esm_bundler/* createVNode */.Wm)("span", {
             "class": "v-combobox__selection-comma"
@@ -15228,6 +16097,7 @@ var VDivider = __webpack_require__(4075);
 
 
 
+
  // Utilities
 
  // Types
@@ -15243,6 +16113,7 @@ const VExpansionPanels = (0,defineComponent/* genericComponent */.ev)()({
       validator: v => allowedVariants.includes(v)
     },
     readonly: Boolean,
+    ...(0,component/* makeComponentProps */.l)(),
     ...(0,composables_group/* makeGroupProps */.k4)(),
     ...(0,tag/* makeTagProps */.Q)(),
     ...(0,composables_theme/* makeThemeProps */.x$)()
@@ -15268,7 +16139,8 @@ const VExpansionPanels = (0,defineComponent/* genericComponent */.ev)()({
       }
     });
     (0,useRender/* useRender */.L)(() => (0,runtime_core_esm_bundler/* createVNode */.Wm)(props.tag, {
-      "class": ['v-expansion-panels', themeClasses.value, variantClass.value]
+      "class": ['v-expansion-panels', themeClasses.value, variantClass.value, props.class],
+      "style": props.style
     }, slots));
     return {};
   }
@@ -15281,6 +16153,7 @@ var ripple = __webpack_require__(3824);
 
  // Directives
  // Composables
+
 
  // Utilities
 
@@ -15308,6 +16181,7 @@ const VExpansionPanelTitle = (0,defineComponent/* genericComponent */.ev)()({
     Ripple: ripple/* Ripple */.H
   },
   props: {
+    ...(0,component/* makeComponentProps */.l)(),
     ...makeVExpansionPanelTitleProps()
   },
   setup(props, _ref) {
@@ -15330,8 +16204,8 @@ const VExpansionPanelTitle = (0,defineComponent/* genericComponent */.ev)()({
     (0,useRender/* useRender */.L)(() => (0,runtime_core_esm_bundler/* withDirectives */.wy)((0,runtime_core_esm_bundler/* createVNode */.Wm)("button", {
       "class": ['v-expansion-panel-title', {
         'v-expansion-panel-title--active': expansionPanel.isSelected.value
-      }, backgroundColorClasses.value],
-      "style": backgroundColorStyles.value,
+      }, backgroundColorClasses.value, props.class],
+      "style": [backgroundColorStyles.value, props.style],
       "type": "button",
       "tabindex": expansionPanel.disabled.value ? -1 : undefined,
       "disabled": expansionPanel.disabled.value,
@@ -15352,12 +16226,14 @@ const VExpansionPanelTitle = (0,defineComponent/* genericComponent */.ev)()({
 // Components
 
  // Composables
+
  // Utilities
 
 
 const VExpansionPanelText = (0,defineComponent/* genericComponent */.ev)()({
   name: 'VExpansionPanelText',
   props: {
+    ...(0,component/* makeComponentProps */.l)(),
     ...(0,lazy/* makeLazyProps */.H)()
   },
   setup(props, _ref) {
@@ -15374,7 +16250,8 @@ const VExpansionPanelText = (0,defineComponent/* genericComponent */.ev)()({
       "onAfterLeave": onAfterLeave
     }, {
       default: () => [(0,runtime_core_esm_bundler/* withDirectives */.wy)((0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
-        "class": "v-expansion-panel-text"
+        "class": ['v-expansion-panel-text', props.class],
+        "style": props.style
       }, [slots.default && hasContent.value && (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
         "class": "v-expansion-panel-text__wrapper"
       }, [slots.default?.()])]), [[runtime_dom_esm_bundler/* vShow */.F8, expansionPanel.isSelected.value]])]
@@ -15394,6 +16271,7 @@ const VExpansionPanelText = (0,defineComponent/* genericComponent */.ev)()({
 
 
 
+
  // Utilities
 
 
@@ -15403,6 +16281,7 @@ const VExpansionPanel = (0,defineComponent/* genericComponent */.ev)()({
     title: String,
     text: String,
     bgColor: String,
+    ...(0,component/* makeComponentProps */.l)(),
     ...(0,elevation/* makeElevationProps */.c)(),
     ...(0,composables_group/* makeGroupItemProps */.YQ)(),
     ...(0,lazy/* makeLazyProps */.H)(),
@@ -15451,8 +16330,8 @@ const VExpansionPanel = (0,defineComponent/* genericComponent */.ev)()({
           'v-expansion-panel--before-active': isBeforeSelected.value,
           'v-expansion-panel--after-active': isAfterSelected.value,
           'v-expansion-panel--disabled': isDisabled.value
-        }, roundedClasses.value, backgroundColorClasses.value],
-        "style": backgroundColorStyles.value,
+        }, roundedClasses.value, backgroundColorClasses.value, props.class],
+        "style": [backgroundColorStyles.value, props.style],
         "aria-expanded": groupItem.isSelected.value
       }, {
         default: () => [(0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
@@ -15505,6 +16384,7 @@ var VFieldLabel = __webpack_require__(2691);
  // Composables
 
 
+
  // Utilities
 
  // Types
@@ -15523,9 +16403,6 @@ const VFileInput = (0,defineComponent/* genericComponent */.ev)()({
       default: '$vuetify.fileInput.counter'
     },
     multiple: Boolean,
-    hint: String,
-    persistentHint: Boolean,
-    placeholder: String,
     showSize: {
       type: [Boolean, Number],
       default: false,
@@ -15533,7 +16410,7 @@ const VFileInput = (0,defineComponent/* genericComponent */.ev)()({
         return typeof v === 'boolean' || [1000, 1024].includes(v);
       }
     },
-    ...(0,VInput/* makeVInputProps */.co)({
+    ...(0,VInput/* makeVInputProps */.c)({
       prependIcon: '$file'
     }),
     modelValue: {
@@ -15550,6 +16427,7 @@ const VFileInput = (0,defineComponent/* genericComponent */.ev)()({
   emits: {
     'click:control': e => true,
     'mousedown:control': e => true,
+    'update:focused': focused => true,
     'update:modelValue': files => true
   },
   setup(props, _ref) {
@@ -15562,6 +16440,11 @@ const VFileInput = (0,defineComponent/* genericComponent */.ev)()({
       t
     } = (0,composables_locale/* useLocale */.bU)();
     const model = (0,proxiedModel/* useProxiedModel */.z)(props, 'modelValue');
+    const {
+      isFocused,
+      focus,
+      blur
+    } = (0,composables_focus/* useFocus */.K)(props);
     const base = (0,runtime_core_esm_bundler/* computed */.Fl)(() => typeof props.showSize !== 'boolean' ? props.showSize : undefined);
     const totalBytes = (0,runtime_core_esm_bundler/* computed */.Fl)(() => (model.value ?? []).reduce((bytes, _ref2) => {
       let {
@@ -15583,21 +16466,14 @@ const VFileInput = (0,defineComponent/* genericComponent */.ev)()({
     });
     const vInputRef = (0,reactivity_esm_bundler/* ref */.iH)();
     const vFieldRef = (0,reactivity_esm_bundler/* ref */.iH)();
-    const isFocused = (0,reactivity_esm_bundler/* ref */.iH)(false);
     const inputRef = (0,reactivity_esm_bundler/* ref */.iH)();
-    const messages = (0,runtime_core_esm_bundler/* computed */.Fl)(() => {
-      return props.messages.length ? props.messages : props.persistentHint ? props.hint : '';
-    });
     function onFocus() {
       if (inputRef.value !== document.activeElement) {
         inputRef.value?.focus();
       }
-      if (!isFocused.value) {
-        isFocused.value = true;
-      }
+      if (!isFocused.value) focus();
     }
     function onClickPrepend(e) {
-      (0,helpers/* callEvent */.dr)(props['onClick:prepend'], e);
       onControlClick(e);
     }
     function onControlMousedown(e) {
@@ -15628,18 +16504,17 @@ const VFileInput = (0,defineComponent/* genericComponent */.ev)()({
       const [{
         modelValue: _,
         ...inputProps
-      }] = (0,VInput/* filterInputProps */.PE)(props);
+      }] = VInput/* VInput.filterProps */.q.filterProps(props);
       const [fieldProps] = (0,VField/* filterFieldProps */.g8)(props);
-      return (0,runtime_core_esm_bundler/* createVNode */.Wm)(VInput/* VInput */.q8, (0,runtime_core_esm_bundler/* mergeProps */.dG)({
+      return (0,runtime_core_esm_bundler/* createVNode */.Wm)(VInput/* VInput */.q, (0,runtime_core_esm_bundler/* mergeProps */.dG)({
         "ref": vInputRef,
         "modelValue": model.value,
         "onUpdate:modelValue": $event => model.value = $event,
-        "class": "v-file-input",
-        "onClick:prepend": onClickPrepend,
-        "onClick:append": props['onClick:append']
+        "class": ['v-file-input', props.class],
+        "style": props.style,
+        "onClick:prepend": onClickPrepend
       }, rootAttrs, inputProps, {
-        "focused": isFocused.value,
-        "messages": messages.value
+        "focused": isFocused.value
       }), {
         ...slots,
         default: _ref3 => {
@@ -15662,6 +16537,7 @@ const VFileInput = (0,defineComponent/* genericComponent */.ev)()({
             "id": id.value,
             "active": isDirty.value || isFocused.value,
             "dirty": isDirty.value,
+            "disabled": isDisabled.value,
             "focused": isFocused.value,
             "error": isValid.value === false
           }), {
@@ -15690,7 +16566,7 @@ const VFileInput = (0,defineComponent/* genericComponent */.ev)()({
                   model.value = [...(target.files ?? [])];
                 },
                 "onFocus": onFocus,
-                "onBlur": () => isFocused.value = false
+                "onBlur": blur
               }, slotProps, inputAttrs), null), (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
                 "class": fieldClass
               }, [!!model.value?.length && (slots.selection ? slots.selection({
@@ -15734,6 +16610,7 @@ const VFileInput = (0,defineComponent/* genericComponent */.ev)()({
 
 
 
+
  // Utilities
 
 
@@ -15747,6 +16624,7 @@ const VFooter = (0,defineComponent/* genericComponent */.ev)()({
       default: 'auto'
     },
     ...(0,border/* makeBorderProps */.m)(),
+    ...(0,component/* makeComponentProps */.l)(),
     ...(0,elevation/* makeElevationProps */.c)(),
     ...makeLayoutItemProps(),
     ...(0,rounded/* makeRoundedProps */.I)(),
@@ -15796,8 +16674,8 @@ const VFooter = (0,defineComponent/* genericComponent */.ev)()({
     });
     (0,useRender/* useRender */.L)(() => (0,runtime_core_esm_bundler/* createVNode */.Wm)(props.tag, {
       "ref": resizeRef,
-      "class": ['v-footer', themeClasses.value, backgroundColorClasses.value, borderClasses.value, elevationClasses.value, roundedClasses.value],
-      "style": [backgroundColorStyles.value, props.app ? layoutItemStyles.value : undefined]
+      "class": ['v-footer', themeClasses.value, backgroundColorClasses.value, borderClasses.value, elevationClasses.value, roundedClasses.value, props.class],
+      "style": [backgroundColorStyles.value, props.app ? layoutItemStyles.value : undefined, props.style]
     }, slots));
     return {};
   }
@@ -15808,12 +16686,14 @@ const VFooter = (0,defineComponent/* genericComponent */.ev)()({
 
 // Composables
 
+
  // Utilities
 
  // Types
 const VForm = (0,defineComponent/* genericComponent */.ev)()({
   name: 'VForm',
   props: {
+    ...(0,component/* makeComponentProps */.l)(),
     ...(0,composables_form/* makeFormProps */.vC)()
   },
   emits: {
@@ -15852,7 +16732,8 @@ const VForm = (0,defineComponent/* genericComponent */.ev)()({
     }
     (0,useRender/* useRender */.L)(() => (0,runtime_core_esm_bundler/* createVNode */.Wm)("form", {
       "ref": formRef,
-      "class": "v-form",
+      "class": ['v-form', props.class],
+      "style": props.style,
       "novalidate": true,
       "onReset": onReset,
       "onSubmit": onSubmit
@@ -15927,12 +16808,14 @@ const VHover = (0,defineComponent/* genericComponent */.ev)()({
 // Composables
 
 
+
  // Utilities
 
 const VItemGroupSymbol = Symbol.for('vuetify:v-item-group');
 const VItemGroup = (0,defineComponent/* genericComponent */.ev)()({
   name: 'VItemGroup',
   props: {
+    ...(0,component/* makeComponentProps */.l)(),
     ...(0,composables_group/* makeGroupProps */.k4)({
       selectedClass: 'v-item--selected'
     }),
@@ -15957,7 +16840,8 @@ const VItemGroup = (0,defineComponent/* genericComponent */.ev)()({
       selected
     } = (0,composables_group/* useGroup */._v)(props, VItemGroupSymbol);
     return () => (0,runtime_core_esm_bundler/* createVNode */.Wm)(props.tag, {
-      "class": ['v-item-group', themeClasses.value]
+      "class": ['v-item-group', themeClasses.value, props.class],
+      "style": props.style
     }, {
       default: () => [slots.default?.({
         isSelected,
@@ -16025,11 +16909,15 @@ var VLabel = __webpack_require__(7302);
 
 
 // Composables
+
  // Utilities
 
 const VLayout = (0,defineComponent/* genericComponent */.ev)()({
   name: 'VLayout',
-  props: makeLayoutProps(),
+  props: {
+    ...(0,component/* makeComponentProps */.l)(),
+    ...makeLayoutProps()
+  },
   setup(props, _ref) {
     let {
       slots
@@ -16043,8 +16931,8 @@ const VLayout = (0,defineComponent/* genericComponent */.ev)()({
     } = createLayout(props);
     (0,useRender/* useRender */.L)(() => (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
       "ref": layoutRef,
-      "class": layoutClasses.value,
-      "style": layoutStyles.value
+      "class": [layoutClasses.value, props.class],
+      "style": [layoutStyles.value, props.style]
     }, [slots.default?.()]));
     return {
       getLayoutItem,
@@ -16061,6 +16949,7 @@ const VLayout = (0,defineComponent/* genericComponent */.ev)()({
 
 
 // Composables
+
  // Utilities
 
  // Types
@@ -16076,6 +16965,7 @@ const VLayoutItem = (0,defineComponent/* genericComponent */.ev)()({
       default: 300
     },
     modelValue: Boolean,
+    ...(0,component/* makeComponentProps */.l)(),
     ...makeLayoutItemProps()
   },
   setup(props, _ref) {
@@ -16094,8 +16984,8 @@ const VLayoutItem = (0,defineComponent/* genericComponent */.ev)()({
       absolute: (0,reactivity_esm_bundler/* toRef */.Vh)(props, 'absolute')
     });
     return () => (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
-      "class": ['v-layout-item'],
-      "style": layoutItemStyles.value
+      "class": ['v-layout-item', props.class],
+      "style": [layoutItemStyles.value, props.style]
     }, [slots.default?.()]);
   }
 });
@@ -16107,6 +16997,7 @@ var intersect = __webpack_require__(7052);
 ;// CONCATENATED MODULE: ./node_modules/vuetify/lib/components/VLazy/VLazy.mjs
 
 // Composables
+
 
 
 
@@ -16130,6 +17021,7 @@ const VLazy = (0,defineComponent/* genericComponent */.ev)()({
         threshold: undefined
       })
     },
+    ...(0,component/* makeComponentProps */.l)(),
     ...(0,dimensions/* makeDimensionProps */.x)(),
     ...(0,tag/* makeTagProps */.Q)(),
     ...(0,composables_transition/* makeTransitionProps */.X)({
@@ -16152,8 +17044,8 @@ const VLazy = (0,defineComponent/* genericComponent */.ev)()({
       isActive.value = isIntersecting;
     }
     (0,useRender/* useRender */.L)(() => (0,runtime_core_esm_bundler/* withDirectives */.wy)((0,runtime_core_esm_bundler/* createVNode */.Wm)(props.tag, {
-      "class": "v-lazy",
-      "style": dimensionStyles.value
+      "class": ['v-lazy', props.class],
+      "style": [dimensionStyles.value, props.style]
     }, {
       default: () => [isActive.value && (0,runtime_core_esm_bundler/* createVNode */.Wm)(composables_transition/* MaybeTransition */.J, {
         "transition": props.transition,
@@ -16161,7 +17053,10 @@ const VLazy = (0,defineComponent/* genericComponent */.ev)()({
       }, {
         default: () => [slots.default?.()]
       })]
-    }), [[(0,runtime_core_esm_bundler/* resolveDirective */.Q2)("intersect"), onIntersect, props.options]]));
+    }), [[(0,runtime_core_esm_bundler/* resolveDirective */.Q2)("intersect"), {
+      handler: onIntersect,
+      options: props.options
+    }, null]]));
     return {};
   }
 });
@@ -16175,6 +17070,7 @@ const VListImg = (0,createSimpleFunctional/* createSimpleFunctional */.J)('v-lis
 ;// CONCATENATED MODULE: ./node_modules/vuetify/lib/components/VList/VListItemAction.mjs
 
 // Composables
+
  // Utilities
 
 const VListItemAction = (0,defineComponent/* genericComponent */.ev)()({
@@ -16182,6 +17078,7 @@ const VListItemAction = (0,defineComponent/* genericComponent */.ev)()({
   props: {
     start: Boolean,
     end: Boolean,
+    ...(0,component/* makeComponentProps */.l)(),
     ...(0,tag/* makeTagProps */.Q)()
   },
   setup(props, _ref) {
@@ -16192,7 +17089,8 @@ const VListItemAction = (0,defineComponent/* genericComponent */.ev)()({
       "class": ['v-list-item-action', {
         'v-list-item-action--start': props.start,
         'v-list-item-action--end': props.end
-      }]
+      }, props.class],
+      "style": props.style
     }, slots));
     return {};
   }
@@ -16200,6 +17098,7 @@ const VListItemAction = (0,defineComponent/* genericComponent */.ev)()({
 ;// CONCATENATED MODULE: ./node_modules/vuetify/lib/components/VList/VListItemMedia.mjs
 
 // Composables
+
  // Utilities
 
 const VListItemMedia = (0,defineComponent/* genericComponent */.ev)()({
@@ -16207,6 +17106,7 @@ const VListItemMedia = (0,defineComponent/* genericComponent */.ev)()({
   props: {
     start: Boolean,
     end: Boolean,
+    ...(0,component/* makeComponentProps */.l)(),
     ...(0,tag/* makeTagProps */.Q)()
   },
   setup(props, _ref) {
@@ -16218,7 +17118,8 @@ const VListItemMedia = (0,defineComponent/* genericComponent */.ev)()({
         "class": ['v-list-item-media', {
           'v-list-item-media--start': props.start,
           'v-list-item-media--end': props.end
-        }]
+        }, props.class],
+        "style": props.style
       }, slots);
     });
     return {};
@@ -16249,6 +17150,7 @@ var VListSubheader = __webpack_require__(7754);
 
 
 // Composables
+
  // Utilities
 
 const VLocaleProvider = (0,defineComponent/* genericComponent */.ev)()({
@@ -16260,7 +17162,8 @@ const VLocaleProvider = (0,defineComponent/* genericComponent */.ev)()({
     rtl: {
       type: Boolean,
       default: undefined
-    }
+    },
+    ...(0,component/* makeComponentProps */.l)()
   },
   setup(props, _ref) {
     let {
@@ -16270,7 +17173,8 @@ const VLocaleProvider = (0,defineComponent/* genericComponent */.ev)()({
       rtlClasses
     } = (0,composables_locale/* provideLocale */.O4)(props);
     (0,useRender/* useRender */.L)(() => (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
-      "class": ['v-locale-provider', rtlClasses.value]
+      "class": ['v-locale-provider', rtlClasses.value, props.class],
+      "style": props.style
     }, [slots.default?.()]));
     return {};
   }
@@ -16610,6 +17514,7 @@ var util_anchor = __webpack_require__(2879);
 
 
 
+
  // Utilities
 
  // Types
@@ -16653,6 +17558,7 @@ const VNavigationDrawer = (0,defineComponent/* genericComponent */.ev)()({
     },
     sticky: Boolean,
     ...(0,border/* makeBorderProps */.m)(),
+    ...(0,component/* makeComponentProps */.l)(),
     ...(0,elevation/* makeElevationProps */.c)(),
     ...makeLayoutItemProps(),
     ...(0,rounded/* makeRoundedProps */.I)(),
@@ -16697,7 +17603,7 @@ const VNavigationDrawer = (0,defineComponent/* genericComponent */.ev)()({
     const isActive = (0,proxiedModel/* useProxiedModel */.z)(props, 'modelValue', null, v => !!v);
     const {
       ssrBootStyles
-    } = useSsrBoot();
+    } = (0,ssrBoot/* useSsrBoot */.u)();
     const rootEl = (0,reactivity_esm_bundler/* ref */.iH)();
     const isHovering = (0,reactivity_esm_bundler/* ref */.iH)(false);
     const width = (0,runtime_core_esm_bundler/* computed */.Fl)(() => {
@@ -16784,12 +17690,18 @@ const VNavigationDrawer = (0,defineComponent/* genericComponent */.ev)()({
         bgColor: 'transparent'
       }
     });
+    function onMouseenter() {
+      isHovering.value = true;
+    }
+    function onMouseleave() {
+      isHovering.value = false;
+    }
     (0,useRender/* useRender */.L)(() => {
       const hasImage = slots.image || props.image;
       return (0,runtime_core_esm_bundler/* createVNode */.Wm)(runtime_core_esm_bundler/* Fragment */.HY, null, [(0,runtime_core_esm_bundler/* createVNode */.Wm)(props.tag, (0,runtime_core_esm_bundler/* mergeProps */.dG)({
         "ref": rootEl,
-        "onMouseenter": () => isHovering.value = true,
-        "onMouseleave": () => isHovering.value = false,
+        "onMouseenter": onMouseenter,
+        "onMouseleave": onMouseleave,
         "class": ['v-navigation-drawer', `v-navigation-drawer--${location.value}`, {
           'v-navigation-drawer--expand-on-hover': props.expandOnHover,
           'v-navigation-drawer--floating': props.floating,
@@ -16798,8 +17710,8 @@ const VNavigationDrawer = (0,defineComponent/* genericComponent */.ev)()({
           'v-navigation-drawer--temporary': isTemporary.value,
           'v-navigation-drawer--active': isActive.value,
           'v-navigation-drawer--sticky': isSticky.value
-        }, themeClasses.value, backgroundColorClasses.value, borderClasses.value, elevationClasses.value, roundedClasses.value],
-        "style": [backgroundColorStyles.value, layoutItemStyles.value, dragStyles.value, ssrBootStyles.value, stickyStyles.value]
+        }, themeClasses.value, backgroundColorClasses.value, borderClasses.value, elevationClasses.value, roundedClasses.value, props.class],
+        "style": [backgroundColorStyles.value, layoutItemStyles.value, dragStyles.value, ssrBootStyles.value, stickyStyles.value, props.style]
       }, attrs), {
         default: () => [hasImage && (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
           "key": "image",
@@ -16895,6 +17807,7 @@ function useRefs() {
 
 
 
+
  // Utilities
 
  // Types
@@ -16967,6 +17880,7 @@ const VPagination = (0,defineComponent/* genericComponent */.ev)()({
     },
     showFirstLastPage: Boolean,
     ...(0,border/* makeBorderProps */.m)(),
+    ...(0,component/* makeComponentProps */.l)(),
     ...(0,composables_density/* makeDensityProps */.f)(),
     ...(0,elevation/* makeElevationProps */.c)(),
     ...(0,rounded/* makeRoundedProps */.I)(),
@@ -17104,7 +18018,7 @@ const VPagination = (0,defineComponent/* genericComponent */.ev)()({
               ref,
               ellipsis: false,
               icon: true,
-              disabled: !!props.disabled || props.length < 2,
+              disabled: !!props.disabled || +props.length < 2,
               color: isActive ? props.activeColor : props.color,
               ariaCurrent: isActive,
               ariaLabel: t(isActive ? props.currentPageAriaLabel : props.pageAriaLabel, item),
@@ -17153,17 +18067,18 @@ const VPagination = (0,defineComponent/* genericComponent */.ev)()({
       refs.value[currentIndex]?.$el.focus();
     }
     function onKeydown(e) {
-      if (e.key === helpers/* keyValues.left */.ff.left && !props.disabled && page.value > props.start) {
+      if (e.key === helpers.keyValues.left && !props.disabled && page.value > +props.start) {
         page.value = page.value - 1;
         (0,runtime_core_esm_bundler/* nextTick */.Y3)(updateFocus);
-      } else if (e.key === helpers/* keyValues.right */.ff.right && !props.disabled && page.value < start.value + length.value - 1) {
+      } else if (e.key === helpers.keyValues.right && !props.disabled && page.value < start.value + length.value - 1) {
         page.value = page.value + 1;
         (0,runtime_core_esm_bundler/* nextTick */.Y3)(updateFocus);
       }
     }
     (0,useRender/* useRender */.L)(() => (0,runtime_core_esm_bundler/* createVNode */.Wm)(props.tag, {
       "ref": resizeRef,
-      "class": ['v-pagination', themeClasses.value],
+      "class": ['v-pagination', themeClasses.value, props.class],
+      "style": props.style,
       "role": "navigation",
       "aria-label": t(props.ariaLabel),
       "onKeydown": onKeydown,
@@ -17228,6 +18143,7 @@ var getScrollParent = __webpack_require__(8582);
  // Composables
 
 
+
  // Utilities
 
 
@@ -17243,7 +18159,8 @@ const VParallax = (0,defineComponent/* genericComponent */.ev)()({
     scale: {
       type: [Number, String],
       default: 0.5
-    }
+    },
+    ...(0,component/* makeComponentProps */.l)()
   },
   setup(props, _ref) {
     let {
@@ -17292,9 +18209,9 @@ const VParallax = (0,defineComponent/* genericComponent */.ev)()({
       frame = requestAnimationFrame(() => {
         const el = (root.value?.$el).querySelector('.v-img__img');
         if (!el) return;
-        const scrollHeight = scrollParent.clientHeight ?? document.documentElement.clientHeight;
-        const scrollPos = scrollParent.scrollTop ?? window.scrollY;
-        const top = intersectionRef.value.offsetTop;
+        const scrollHeight = scrollParent instanceof Document ? document.documentElement.clientHeight : scrollParent.clientHeight;
+        const scrollPos = scrollParent instanceof Document ? window.scrollY : scrollParent.scrollTop;
+        const top = intersectionRef.value.getBoundingClientRect().top + scrollPos;
         const height = contentRect.value.height;
         const center = top + (height - scrollHeight) / 2;
         const translate = floor((scrollPos - center) * scale.value);
@@ -17305,7 +18222,8 @@ const VParallax = (0,defineComponent/* genericComponent */.ev)()({
     (0,useRender/* useRender */.L)(() => (0,runtime_core_esm_bundler/* createVNode */.Wm)(VImg/* VImg */.f, {
       "class": ['v-parallax', {
         'v-parallax--active': isIntersecting.value
-      }],
+      }, props.class],
+      "style": props.style,
       "ref": root,
       "cover": true,
       "onLoadstart": onScroll,
@@ -17342,7 +18260,8 @@ const VRadio = (0,defineComponent/* genericComponent */.ev)()({
       slots
     } = _ref;
     (0,useRender/* useRender */.L)(() => (0,runtime_core_esm_bundler/* createVNode */.Wm)(VSelectionControl/* VSelectionControl */.g5, (0,runtime_core_esm_bundler/* mergeProps */.dG)(props, {
-      "class": "v-radio",
+      "class": ['v-radio', props.class],
+      "style": props.style,
       "type": "radio"
     }), slots));
     return {};
@@ -17377,7 +18296,7 @@ const VRadioGroup = (0,defineComponent/* genericComponent */.ev)()({
       type: [Number, String],
       default: 'auto'
     },
-    ...(0,VInput/* makeVInputProps */.co)(),
+    ...(0,VInput/* makeVInputProps */.c)(),
     ...(0,helpers/* omit */.CE)((0,VSelectionControlGroup/* makeSelectionControlGroupProps */.Z1)(), ['multiple']),
     trueIcon: {
       type: composables_icons/* IconValue */.lE,
@@ -17405,19 +18324,17 @@ const VRadioGroup = (0,defineComponent/* genericComponent */.ev)()({
     const model = (0,proxiedModel/* useProxiedModel */.z)(props, 'modelValue');
     (0,useRender/* useRender */.L)(() => {
       const [inputAttrs, controlAttrs] = (0,helpers/* filterInputAttrs */.An)(attrs);
-      const [inputProps, _1] = (0,VInput/* filterInputProps */.PE)(props);
-      const [controlProps, _2] = (0,VSelectionControl/* filterControlProps */.fU)({
-        ...props,
-        multiple: false
-      });
+      const [inputProps, _1] = VInput/* VInput.filterProps */.q.filterProps(props);
+      const [controlProps, _2] = VSelectionControl/* VSelectionControl.filterProps */.g5.filterProps(props);
       const label = slots.label ? slots.label({
         label: props.label,
         props: {
           for: id.value
         }
       }) : props.label;
-      return (0,runtime_core_esm_bundler/* createVNode */.Wm)(VInput/* VInput */.q8, (0,runtime_core_esm_bundler/* mergeProps */.dG)({
-        "class": "v-radio-group"
+      return (0,runtime_core_esm_bundler/* createVNode */.Wm)(VInput/* VInput */.q, (0,runtime_core_esm_bundler/* mergeProps */.dG)({
+        "class": ['v-radio-group', props.class],
+        "style": props.style
       }, inputAttrs, inputProps, {
         "modelValue": model.value,
         "onUpdate:modelValue": $event => model.value = $event,
@@ -17444,7 +18361,8 @@ const VRadioGroup = (0,defineComponent/* genericComponent */.ev)()({
             "type": props.type,
             "disabled": isDisabled.value,
             "readonly": isReadonly.value,
-            "aria-labelledby": label ? id.value : undefined
+            "aria-labelledby": label ? id.value : undefined,
+            "multiple": false
           }, controlAttrs, {
             "modelValue": model.value,
             "onUpdate:modelValue": $event => model.value = $event
@@ -17484,7 +18402,7 @@ const VRangeSlider = (0,defineComponent/* genericComponent */.ev)()({
   name: 'VRangeSlider',
   props: {
     ...(0,composables_focus/* makeFocusProps */.B)(),
-    ...(0,VInput/* makeVInputProps */.co)(),
+    ...(0,VInput/* makeVInputProps */.c)(),
     ...(0,slider/* makeSliderProps */.gS)(),
     strict: Boolean,
     modelValue: {
@@ -17494,11 +18412,14 @@ const VRangeSlider = (0,defineComponent/* genericComponent */.ev)()({
   },
   emits: {
     'update:focused': value => true,
-    'update:modelValue': value => true
+    'update:modelValue': value => true,
+    end: value => true,
+    start: value => true
   },
   setup(props, _ref) {
     let {
-      slots
+      slots,
+      emit
     } = _ref;
     const startThumbRef = (0,reactivity_esm_bundler/* ref */.iH)();
     const stopThumbRef = (0,reactivity_esm_bundler/* ref */.iH)();
@@ -17511,6 +18432,11 @@ const VRangeSlider = (0,defineComponent/* genericComponent */.ev)()({
       const b = Math.abs(stopOffset);
       return a < b || a === b && startOffset < 0 ? startThumbRef.value.$el : stopThumbRef.value.$el;
     }
+    const steps = (0,slider/* useSteps */.h4)(props);
+    const model = (0,proxiedModel/* useProxiedModel */.z)(props, 'modelValue', undefined, arr => {
+      if (!arr?.length) return [0, 0];
+      return arr.map(value => steps.roundValue(value));
+    });
     const {
       activeThumbRef,
       hasLabels,
@@ -17520,34 +18446,37 @@ const VRangeSlider = (0,defineComponent/* genericComponent */.ev)()({
       onSliderMousedown,
       onSliderTouchstart,
       position,
-      roundValue,
       trackContainerRef
     } = (0,slider/* useSlider */.oN)({
-      /* eslint-disable @typescript-eslint/no-use-before-define */
       props,
-      handleSliderMouseUp: newValue => {
-        model.value = activeThumbRef.value === startThumbRef.value?.$el ? [newValue, model.value[1]] : [model.value[0], newValue];
+      steps,
+      onSliderStart: () => {
+        emit('start', model.value);
       },
-      handleMouseMove: newValue => {
+      onSliderEnd: _ref2 => {
+        let {
+          value
+        } = _ref2;
+        const newValue = activeThumbRef.value === startThumbRef.value?.$el ? [value, model.value[1]] : [model.value[0], value];
+        model.value = newValue;
+        emit('end', newValue);
+      },
+      onSliderMove: _ref3 => {
+        let {
+          value
+        } = _ref3;
         const [start, stop] = model.value;
         if (!props.strict && start === stop && start !== min.value) {
-          activeThumbRef.value = newValue > start ? stopThumbRef.value?.$el : startThumbRef.value?.$el;
+          activeThumbRef.value = value > start ? stopThumbRef.value?.$el : startThumbRef.value?.$el;
           activeThumbRef.value?.focus();
         }
         if (activeThumbRef.value === startThumbRef.value?.$el) {
-          model.value = [Math.min(newValue, stop), stop];
+          model.value = [Math.min(value, stop), stop];
         } else {
-          model.value = [start, Math.max(start, newValue)];
+          model.value = [start, Math.max(start, value)];
         }
       },
       getActiveThumb
-      /* eslint-enable @typescript-eslint/no-use-before-define */
-    });
-
-    const model = (0,proxiedModel/* useProxiedModel */.z)(props, 'modelValue', undefined, arr => {
-      // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
-      if (!arr || !arr.length) return [0, 0];
-      return arr.map(value => roundValue(value));
     });
     const {
       isFocused,
@@ -17557,15 +18486,16 @@ const VRangeSlider = (0,defineComponent/* genericComponent */.ev)()({
     const trackStart = (0,runtime_core_esm_bundler/* computed */.Fl)(() => position(model.value[0]));
     const trackStop = (0,runtime_core_esm_bundler/* computed */.Fl)(() => position(model.value[1]));
     (0,useRender/* useRender */.L)(() => {
-      const [inputProps, _] = (0,VInput/* filterInputProps */.PE)(props);
+      const [inputProps, _] = VInput/* VInput.filterProps */.q.filterProps(props);
       const hasPrepend = !!(props.label || slots.label || slots.prepend);
-      return (0,runtime_core_esm_bundler/* createVNode */.Wm)(VInput/* VInput */.q8, (0,runtime_core_esm_bundler/* mergeProps */.dG)({
+      return (0,runtime_core_esm_bundler/* createVNode */.Wm)(VInput/* VInput */.q, (0,runtime_core_esm_bundler/* mergeProps */.dG)({
         "class": ['v-slider', 'v-range-slider', {
           'v-slider--has-labels': !!slots['tick-label'] || hasLabels.value,
           'v-slider--focused': isFocused.value,
           'v-slider--pressed': mousePressed.value,
           'v-slider--disabled': props.disabled
-        }],
+        }, props.class],
+        "style": props.style,
         "ref": inputRef
       }, inputProps, {
         "focused": isFocused.value
@@ -17575,11 +18505,11 @@ const VRangeSlider = (0,defineComponent/* genericComponent */.ev)()({
           "class": "v-slider__label",
           "text": props.label
         }, null) : undefined, slots.prepend?.(slotProps)]) : undefined,
-        default: _ref2 => {
+        default: _ref4 => {
           let {
             id,
             messagesId
-          } = _ref2;
+          } = _ref4;
           return (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
             "class": "v-slider__container",
             "onMousedown": onSliderMousedown,
@@ -17685,6 +18615,7 @@ const VRangeSlider = (0,defineComponent/* genericComponent */.ev)()({
 
 
 
+
  // Utilities
 
  // Types
@@ -17726,6 +18657,7 @@ const VRating = (0,defineComponent/* genericComponent */.ev)()({
       validator: v => ['top', 'bottom'].includes(v)
     },
     ripple: Boolean,
+    ...(0,component/* makeComponentProps */.l)(),
     ...(0,composables_density/* makeDensityProps */.f)(),
     ...(0,size/* makeSizeProps */.Z)(),
     ...(0,tag/* makeTagProps */.Q)(),
@@ -17749,9 +18681,6 @@ const VRating = (0,defineComponent/* genericComponent */.ev)()({
     const range = (0,runtime_core_esm_bundler/* computed */.Fl)(() => (0,helpers/* createRange */.MT)(Number(props.length), 1));
     const increments = (0,runtime_core_esm_bundler/* computed */.Fl)(() => range.value.flatMap(v => props.halfIncrements ? [v - 0.5, v] : [v]));
     const hoverIndex = (0,reactivity_esm_bundler/* ref */.iH)(-1);
-    const focusIndex = (0,reactivity_esm_bundler/* ref */.iH)(-1);
-    const firstRef = (0,reactivity_esm_bundler/* ref */.iH)();
-    let isClicking = false;
     const itemState = (0,runtime_core_esm_bundler/* computed */.Fl)(() => increments.value.map(value => {
       const isHovering = props.hover && hoverIndex.value > -1;
       const isFilled = normalizedValue.value >= value;
@@ -17774,16 +18703,6 @@ const VRating = (0,defineComponent/* genericComponent */.ev)()({
       function onMouseleave() {
         hoverIndex.value = -1;
       }
-      function onFocus() {
-        if (value === 0 && normalizedValue.value === 0) {
-          firstRef.value?.focus();
-        } else {
-          focusIndex.value = value;
-        }
-      }
-      function onBlur() {
-        if (!isClicking) focusIndex.value = -1;
-      }
       function onClick() {
         if (props.disabled || props.readonly) return;
         rating.value = normalizedValue.value === value && props.clearable ? 0 : value;
@@ -17791,17 +18710,9 @@ const VRating = (0,defineComponent/* genericComponent */.ev)()({
       return {
         onMouseenter: props.hover ? onMouseenter : undefined,
         onMouseleave: props.hover ? onMouseleave : undefined,
-        onFocus,
-        onBlur,
         onClick
       };
     }));
-    function onMousedown() {
-      isClicking = true;
-    }
-    function onMouseup() {
-      isClicking = false;
-    }
     const name = (0,runtime_core_esm_bundler/* computed */.Fl)(() => props.name ?? `v-rating-${(0,util_getCurrentInstance/* getUid */.sq)()}`);
     function VRatingItem(_ref2) {
       let {
@@ -17812,8 +18723,6 @@ const VRating = (0,defineComponent/* genericComponent */.ev)()({
       const {
         onMouseenter,
         onMouseleave,
-        onFocus,
-        onBlur,
         onClick
       } = eventState.value[index + 1];
       const id = `${name.value}-${String(value).replace('.', '-')}`;
@@ -17824,7 +18733,6 @@ const VRating = (0,defineComponent/* genericComponent */.ev)()({
         icon: itemState.value[index]?.icon,
         ripple: props.ripple,
         size: props.size,
-        tag: 'span',
         variant: 'plain'
       };
       return (0,runtime_core_esm_bundler/* createVNode */.Wm)(runtime_core_esm_bundler/* Fragment */.HY, null, [(0,runtime_core_esm_bundler/* createVNode */.Wm)("label", {
@@ -17833,17 +18741,17 @@ const VRating = (0,defineComponent/* genericComponent */.ev)()({
           'v-rating__item--half': props.halfIncrements && value % 1 > 0,
           'v-rating__item--full': props.halfIncrements && value % 1 === 0
         },
-        "onMousedown": onMousedown,
-        "onMouseup": onMouseup,
         "onMouseenter": onMouseenter,
-        "onMouseleave": onMouseleave
+        "onMouseleave": onMouseleave,
+        "onClick": onClick
       }, [(0,runtime_core_esm_bundler/* createVNode */.Wm)("span", {
         "class": "v-rating__hidden"
       }, [t(props.itemAriaLabel, value, props.length)]), !showStar ? undefined : slots.item ? slots.item({
         ...itemState.value[index],
         props: btnProps,
         value,
-        index
+        index,
+        rating: normalizedValue.value
       }) : (0,runtime_core_esm_bundler/* createVNode */.Wm)(VBtn/* VBtn */.T, btnProps, null)]), (0,runtime_core_esm_bundler/* createVNode */.Wm)("input", {
         "class": "v-rating__hidden",
         "name": name.value,
@@ -17851,10 +18759,7 @@ const VRating = (0,defineComponent/* genericComponent */.ev)()({
         "type": "radio",
         "value": value,
         "checked": normalizedValue.value === value,
-        "onClick": onClick,
-        "onFocus": onFocus,
-        "onBlur": onBlur,
-        "ref": index === 0 ? firstRef : undefined,
+        "tabindex": -1,
         "readonly": props.readonly,
         "disabled": props.disabled
       }, null)]);
@@ -17870,7 +18775,8 @@ const VRating = (0,defineComponent/* genericComponent */.ev)()({
         "class": ['v-rating', {
           'v-rating--hover': props.hover,
           'v-rating--readonly': props.readonly
-        }, themeClasses.value]
+        }, themeClasses.value, props.class],
+        "style": props.style
       }, {
         default: () => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VRatingItem, {
           "value": 0,
@@ -17883,9 +18789,7 @@ const VRating = (0,defineComponent/* genericComponent */.ev)()({
           index: i,
           label: props.itemLabels?.[i]
         }) : undefined, (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
-          "class": ['v-rating__item', {
-            'v-rating__item--focused': Math.ceil(focusIndex.value) === value
-          }]
+          "class": "v-rating__item"
         }, [props.halfIncrements ? (0,runtime_core_esm_bundler/* createVNode */.Wm)(runtime_core_esm_bundler/* Fragment */.HY, null, [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VRatingItem, {
           "value": value - 0.5,
           "index": i * 2
@@ -17976,40 +18880,43 @@ function calculateCenteredOffset(_ref2) {
 
 
 
+
  // Utilities
 
 
  // Types
 const VSlideGroupSymbol = Symbol.for('vuetify:v-slide-group');
+const makeVSlideGroupProps = (0,propsFactory/* propsFactory */.U)({
+  centerActive: Boolean,
+  direction: {
+    type: String,
+    default: 'horizontal'
+  },
+  symbol: {
+    type: null,
+    default: VSlideGroupSymbol
+  },
+  nextIcon: {
+    type: composables_icons/* IconValue */.lE,
+    default: '$next'
+  },
+  prevIcon: {
+    type: composables_icons/* IconValue */.lE,
+    default: '$prev'
+  },
+  showArrows: {
+    type: [Boolean, String],
+    validator: v => typeof v === 'boolean' || ['always', 'desktop', 'mobile'].includes(v)
+  },
+  ...(0,component/* makeComponentProps */.l)(),
+  ...(0,tag/* makeTagProps */.Q)(),
+  ...(0,composables_group/* makeGroupProps */.k4)({
+    selectedClass: 'v-slide-group-item--active'
+  })
+}, 'v-slide-group');
 const VSlideGroup = (0,defineComponent/* genericComponent */.ev)()({
   name: 'VSlideGroup',
-  props: {
-    centerActive: Boolean,
-    direction: {
-      type: String,
-      default: 'horizontal'
-    },
-    symbol: {
-      type: null,
-      default: VSlideGroupSymbol
-    },
-    nextIcon: {
-      type: composables_icons/* IconValue */.lE,
-      default: '$next'
-    },
-    prevIcon: {
-      type: composables_icons/* IconValue */.lE,
-      default: '$prev'
-    },
-    showArrows: {
-      type: [Boolean, String],
-      validator: v => typeof v === 'boolean' || ['always', 'desktop', 'mobile'].includes(v)
-    },
-    ...(0,tag/* makeTagProps */.Q)(),
-    ...(0,composables_group/* makeGroupProps */.k4)({
-      selectedClass: 'v-slide-group-item--active'
-    })
-  },
+  props: makeVSlideGroupProps(),
   emits: {
     'update:modelValue': value => true
   },
@@ -18165,7 +19072,7 @@ const VSlideGroup = (0,defineComponent/* genericComponent */.ev)()({
     function focus(location) {
       if (!contentRef.value) return;
       if (!location) {
-        const focusable = [...contentRef.value.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])')].filter(el => !el.hasAttribute('disabled'));
+        const focusable = (0,helpers/* focusableChildren */.ef)(contentRef.value);
         focusable[0]?.focus();
       } else if (location === 'next') {
         const el = contentRef.value.querySelector(':focus')?.nextElementSibling;
@@ -18242,7 +19149,8 @@ const VSlideGroup = (0,defineComponent/* genericComponent */.ev)()({
         'v-slide-group--vertical': !isHorizontal.value,
         'v-slide-group--has-affixes': hasAffixes.value,
         'v-slide-group--is-overflowing': isOverflowing.value
-      }],
+      }, props.class],
+      "style": props.style,
       "tabindex": isFocused.value || group.selected.value.length ? -1 : 0,
       "onFocus": onFocus
     }, {
@@ -18362,7 +19270,7 @@ const VSnackbar = (0,defineComponent/* genericComponent */.ev)()({
     ...(0,rounded/* makeRoundedProps */.I)(),
     ...(0,variant/* makeVariantProps */.bk)(),
     ...(0,composables_theme/* makeThemeProps */.x$)(),
-    ...(0,helpers/* omit */.CE)((0,VOverlay/* makeVOverlayProps */.BU)({
+    ...(0,helpers/* omit */.CE)((0,VOverlay/* makeVOverlayProps */.B)({
       transition: 'v-snackbar-transition'
     }), ['persistent', 'noClickAnimation', 'scrim', 'scrollStrategy'])
   },
@@ -18413,31 +19321,31 @@ const VSnackbar = (0,defineComponent/* genericComponent */.ev)()({
       window.clearTimeout(activeTimeout);
     }
     (0,useRender/* useRender */.L)(() => {
-      const [overlayProps] = (0,VOverlay/* filterVOverlayProps */.Fe)(props);
-      return (0,runtime_core_esm_bundler/* createVNode */.Wm)(VOverlay/* VOverlay */.yc, (0,runtime_core_esm_bundler/* mergeProps */.dG)({
+      const [overlayProps] = VOverlay/* VOverlay.filterProps */.y.filterProps(props);
+      return (0,runtime_core_esm_bundler/* createVNode */.Wm)(VOverlay/* VOverlay */.y, (0,runtime_core_esm_bundler/* mergeProps */.dG)({
         "ref": overlay,
         "class": ['v-snackbar', {
           'v-snackbar--active': isActive.value,
           'v-snackbar--multi-line': props.multiLine && !props.vertical,
           'v-snackbar--vertical': props.vertical
-        }, positionClasses.value]
+        }, positionClasses.value, props.class],
+        "style": props.style
       }, overlayProps, {
         "modelValue": isActive.value,
         "onUpdate:modelValue": $event => isActive.value = $event,
         "contentProps": (0,runtime_core_esm_bundler/* mergeProps */.dG)({
-          style: locationStyles.value
+          class: ['v-snackbar__wrapper', themeClasses.value, colorClasses.value, roundedClasses.value, variantClasses.value],
+          style: [locationStyles.value, colorStyles.value],
+          onPointerenter,
+          onPointerleave: startTimeout
         }, overlayProps.contentProps),
         "persistent": true,
         "noClickAnimation": true,
         "scrim": false,
-        "scrollStrategy": "none"
+        "scrollStrategy": "none",
+        "_disableGlobalStack": true
       }, scopeId), {
-        default: () => [(0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
-          "class": ['v-snackbar__wrapper', themeClasses.value, colorClasses.value, roundedClasses.value, variantClasses.value],
-          "style": [colorStyles.value],
-          "onPointerenter": onPointerenter,
-          "onPointerleave": startTimeout
-        }, [(0,variant/* genOverlays */.Ux)(false, 'v-snackbar'), slots.default && (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
+        default: () => [(0,variant/* genOverlays */.Ux)(false, 'v-snackbar'), slots.default && (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
           "class": "v-snackbar__content",
           "role": "status",
           "aria-live": "polite"
@@ -18452,7 +19360,7 @@ const VSnackbar = (0,defineComponent/* genericComponent */.ev)()({
           default: () => [(0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
             "class": "v-snackbar__actions"
           }, [slots.actions()])]
-        })])],
+        })],
         activator: slots.activator
       });
     });
@@ -18480,6 +19388,7 @@ var VSwitch = __webpack_require__(3104);
 
 
 
+
  // Utilities
 
 
@@ -18489,6 +19398,7 @@ const VSystemBar = (0,defineComponent/* genericComponent */.ev)()({
     color: String,
     height: [Number, String],
     window: Boolean,
+    ...(0,component/* makeComponentProps */.l)(),
     ...(0,elevation/* makeElevationProps */.c)(),
     ...makeLayoutItemProps(),
     ...(0,rounded/* makeRoundedProps */.I)(),
@@ -18514,7 +19424,7 @@ const VSystemBar = (0,defineComponent/* genericComponent */.ev)()({
     } = (0,rounded/* useRounded */.b)(props);
     const {
       ssrBootStyles
-    } = useSsrBoot();
+    } = (0,ssrBoot/* useSsrBoot */.u)();
     const height = (0,runtime_core_esm_bundler/* computed */.Fl)(() => props.height ?? (props.window ? 32 : 24));
     const {
       layoutItemStyles
@@ -18530,8 +19440,8 @@ const VSystemBar = (0,defineComponent/* genericComponent */.ev)()({
     (0,useRender/* useRender */.L)(() => (0,runtime_core_esm_bundler/* createVNode */.Wm)(props.tag, {
       "class": ['v-system-bar', {
         'v-system-bar--window': props.window
-      }, themeClasses.value, backgroundColorClasses.value, elevationClasses.value, roundedClasses.value],
-      "style": [backgroundColorStyles.value, layoutItemStyles.value, ssrBootStyles.value]
+      }, themeClasses.value, backgroundColorClasses.value, elevationClasses.value, roundedClasses.value, props.class],
+      "style": [backgroundColorStyles.value, layoutItemStyles.value, ssrBootStyles.value, props.style]
     }, slots));
     return {};
   }
@@ -18557,12 +19467,8 @@ const VTabsSymbol = Symbol.for('vuetify:v-tabs');
 
 // Components
  // Composables
-
-
-
-
-
  // Utilities
+
 
  // Types
 
@@ -18570,28 +19476,16 @@ const VTab = (0,defineComponent/* genericComponent */.ev)()({
   name: 'VTab',
   props: {
     fixed: Boolean,
-    icon: [Boolean, String, Function, Object],
-    prependIcon: composables_icons/* IconValue */.lE,
-    appendIcon: composables_icons/* IconValue */.lE,
-    stacked: Boolean,
-    title: String,
-    ripple: {
-      type: Boolean,
-      default: true
-    },
-    color: String,
     sliderColor: String,
     hideSlider: Boolean,
     direction: {
       type: String,
       default: 'horizontal'
     },
-    ...(0,tag/* makeTagProps */.Q)(),
-    ...(0,composables_router/* makeRouterProps */.GN)(),
-    ...(0,composables_group/* makeGroupItemProps */.YQ)({
-      selectedClass: 'v-tab--selected'
-    }),
-    ...(0,composables_theme/* makeThemeProps */.x$)()
+    ...(0,helpers/* omit */.CE)((0,VBtn/* makeVBtnProps */.L)({
+      selectedClass: 'v-tab--selected',
+      variant: 'text'
+    }), ['active', 'block', 'flat', 'location', 'position', 'symbol'])
   },
   setup(props, _ref) {
     let {
@@ -18641,24 +19535,23 @@ const VTab = (0,defineComponent/* genericComponent */.ev)()({
       }
     }
     (0,useRender/* useRender */.L)(() => {
-      const [btnProps] = (0,helpers/* pick */.ei)(props, ['href', 'to', 'replace', 'icon', 'stacked', 'prependIcon', 'appendIcon', 'ripple', 'theme', 'disabled', 'selectedClass', 'value', 'color']);
+      const [btnProps] = VBtn/* VBtn.filterProps */.T.filterProps(props);
       return (0,runtime_core_esm_bundler/* createVNode */.Wm)(VBtn/* VBtn */.T, (0,runtime_core_esm_bundler/* mergeProps */.dG)({
-        "_as": "VTab",
         "symbol": VTabsSymbol,
         "ref": rootEl,
-        "class": ['v-tab'],
+        "class": ['v-tab', props.class],
+        "style": props.style,
         "tabindex": isSelected.value ? 0 : -1,
         "role": "tab",
         "aria-selected": String(isSelected.value),
         "active": false,
         "block": props.fixed,
         "maxWidth": props.fixed ? 300 : undefined,
-        "variant": "text",
         "rounded": 0
       }, btnProps, attrs, {
         "onGroup:selected": updateSlider
       }), {
-        default: () => [slots.default ? slots.default() : props.title, !props.hideSlider && (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
+        default: () => [slots.default?.() ?? props.text, !props.hideSlider && (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
           "ref": sliderEl,
           "class": ['v-tab__slider', sliderColorClasses.value],
           "style": sliderColorStyles.value
@@ -18702,10 +19595,6 @@ const VTabs = (0,defineComponent/* genericComponent */.ev)()({
       default: 'start'
     },
     color: String,
-    direction: {
-      type: String,
-      default: 'horizontal'
-    },
     fixedTabs: Boolean,
     items: {
       type: Array,
@@ -18720,11 +19609,9 @@ const VTabs = (0,defineComponent/* genericComponent */.ev)()({
     },
     hideSlider: Boolean,
     sliderColor: String,
-    modelValue: null,
-    mandatory: {
-      type: [Boolean, String],
-      default: 'force'
-    },
+    ...makeVSlideGroupProps({
+      mandatory: 'force'
+    }),
     ...(0,composables_density/* makeDensityProps */.f)(),
     ...(0,tag/* makeTagProps */.Q)()
   },
@@ -18754,26 +19641,27 @@ const VTabs = (0,defineComponent/* genericComponent */.ev)()({
         hideSlider: (0,reactivity_esm_bundler/* toRef */.Vh)(props, 'hideSlider')
       }
     });
-    (0,useRender/* useRender */.L)(() => (0,runtime_core_esm_bundler/* createVNode */.Wm)(VSlideGroup, {
-      "modelValue": model.value,
-      "onUpdate:modelValue": $event => model.value = $event,
-      "class": ['v-tabs', `v-tabs--${props.direction}`, `v-tabs--align-tabs-${props.alignTabs}`, {
-        'v-tabs--fixed-tabs': props.fixedTabs,
-        'v-tabs--grow': props.grow,
-        'v-tabs--stacked': props.stacked
-      }, densityClasses.value, backgroundColorClasses.value],
-      "style": [{
-        '--v-tabs-height': (0,helpers/* convertToUnit */.kb)(props.height)
-      }, backgroundColorStyles.value],
-      "role": "tablist",
-      "symbol": VTabsSymbol,
-      "mandatory": props.mandatory,
-      "direction": props.direction
-    }, {
-      default: () => [slots.default ? slots.default() : parsedItems.value.map(item => (0,runtime_core_esm_bundler/* createVNode */.Wm)(VTab, (0,runtime_core_esm_bundler/* mergeProps */.dG)(item, {
-        "key": item.title
-      }), null))]
-    }));
+    (0,useRender/* useRender */.L)(() => {
+      const [slideGroupProps] = VSlideGroup.filterProps(props);
+      return (0,runtime_core_esm_bundler/* createVNode */.Wm)(VSlideGroup, (0,runtime_core_esm_bundler/* mergeProps */.dG)(slideGroupProps, {
+        "modelValue": model.value,
+        "onUpdate:modelValue": $event => model.value = $event,
+        "class": ['v-tabs', `v-tabs--${props.direction}`, `v-tabs--align-tabs-${props.alignTabs}`, {
+          'v-tabs--fixed-tabs': props.fixedTabs,
+          'v-tabs--grow': props.grow,
+          'v-tabs--stacked': props.stacked
+        }, densityClasses.value, backgroundColorClasses.value, props.class],
+        "style": [{
+          '--v-tabs-height': (0,helpers/* convertToUnit */.kb)(props.height)
+        }, backgroundColorStyles.value, props.style],
+        "role": "tablist",
+        "symbol": VTabsSymbol
+      }), {
+        default: () => [slots.default ? slots.default() : parsedItems.value.map(item => (0,runtime_core_esm_bundler/* createVNode */.Wm)(VTab, (0,runtime_core_esm_bundler/* mergeProps */.dG)(item, {
+          "key": item.title
+        }), null))]
+      });
+    });
     return {};
   }
 });
@@ -18791,6 +19679,7 @@ const VTabs = (0,defineComponent/* genericComponent */.ev)()({
 // Composables
 
 
+
  // Utilities
 
 const VTable = (0,defineComponent/* genericComponent */.ev)()({
@@ -18800,6 +19689,7 @@ const VTable = (0,defineComponent/* genericComponent */.ev)()({
     fixedFooter: Boolean,
     height: [Number, String],
     hover: Boolean,
+    ...(0,component/* makeComponentProps */.l)(),
     ...(0,composables_density/* makeDensityProps */.f)(),
     ...(0,tag/* makeTagProps */.Q)(),
     ...(0,composables_theme/* makeThemeProps */.x$)()
@@ -18822,7 +19712,8 @@ const VTable = (0,defineComponent/* genericComponent */.ev)()({
         'v-table--has-top': !!slots.top,
         'v-table--has-bottom': !!slots.bottom,
         'v-table--hover': props.hover
-      }, themeClasses.value, densityClasses.value]
+      }, themeClasses.value, densityClasses.value, props.class],
+      "style": props.style
     }, {
       default: () => [slots.top?.(), slots.default ? (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
         "class": "v-table__wrapper",
@@ -18869,8 +19760,6 @@ const VTextarea = (0,defineComponent/* genericComponent */.ev)()({
     autofocus: Boolean,
     counter: [Boolean, Number, String],
     counterValue: Function,
-    hint: String,
-    persistentHint: Boolean,
     prefix: String,
     placeholder: String,
     persistentPlaceholder: Boolean,
@@ -18886,7 +19775,8 @@ const VTextarea = (0,defineComponent/* genericComponent */.ev)()({
       validator: v => !isNaN(parseFloat(v))
     },
     suffix: String,
-    ...(0,VInput/* makeVInputProps */.co)(),
+    modelModifiers: Object,
+    ...(0,VInput/* makeVInputProps */.c)(),
     ...(0,VField/* makeVFieldProps */.hy)()
   },
   emits: {
@@ -18924,9 +19814,6 @@ const VTextarea = (0,defineComponent/* genericComponent */.ev)()({
     const controlHeight = (0,reactivity_esm_bundler/* ref */.iH)('');
     const textareaRef = (0,reactivity_esm_bundler/* ref */.iH)();
     const isActive = (0,runtime_core_esm_bundler/* computed */.Fl)(() => isFocused.value || props.persistentPlaceholder);
-    const messages = (0,runtime_core_esm_bundler/* computed */.Fl)(() => {
-      return props.messages.length ? props.messages : isActive.value || props.persistentHint ? props.hint : '';
-    });
     function onFocus() {
       if (textareaRef.value !== document.activeElement) {
         textareaRef.value?.focus();
@@ -18949,7 +19836,15 @@ const VTextarea = (0,defineComponent/* genericComponent */.ev)()({
       });
     }
     function onInput(e) {
-      model.value = e.target.value;
+      const el = e.target;
+      model.value = el.value;
+      if (props.modelModifiers?.trim) {
+        const caretPosition = [el.selectionStart, el.selectionEnd];
+        (0,runtime_core_esm_bundler/* nextTick */.Y3)(() => {
+          el.selectionStart = caretPosition[0];
+          el.selectionEnd = caretPosition[1];
+        });
+      }
     }
     const sizerRef = (0,reactivity_esm_bundler/* ref */.iH)();
     function calculateInputHeight() {
@@ -18990,9 +19885,9 @@ const VTextarea = (0,defineComponent/* genericComponent */.ev)()({
       const [{
         modelValue: _,
         ...inputProps
-      }] = (0,VInput/* filterInputProps */.PE)(props);
+      }] = VInput/* VInput.filterProps */.q.filterProps(props);
       const [fieldProps] = (0,VField/* filterFieldProps */.g8)(props);
-      return (0,runtime_core_esm_bundler/* createVNode */.Wm)(VInput/* VInput */.q8, (0,runtime_core_esm_bundler/* mergeProps */.dG)({
+      return (0,runtime_core_esm_bundler/* createVNode */.Wm)(VInput/* VInput */.q, (0,runtime_core_esm_bundler/* mergeProps */.dG)({
         "ref": vInputRef,
         "modelValue": model.value,
         "onUpdate:modelValue": $event => model.value = $event,
@@ -19004,12 +19899,10 @@ const VTextarea = (0,defineComponent/* genericComponent */.ev)()({
           'v-textarea--auto-grow': props.autoGrow,
           'v-textarea--no-resize': props.noResize || props.autoGrow,
           'v-text-field--flush-details': ['plain', 'underlined'].includes(props.variant)
-        }],
-        "onClick:prepend": props['onClick:prepend'],
-        "onClick:append": props['onClick:append']
+        }, props.class],
+        "style": props.style
       }, rootAttrs, inputProps, {
-        "focused": isFocused.value,
-        "messages": messages.value
+        "focused": isFocused.value
       }), {
         ...slots,
         default: _ref2 => {
@@ -19033,6 +19926,7 @@ const VTextarea = (0,defineComponent/* genericComponent */.ev)()({
           }, fieldProps, {
             "active": isActive.value || isDirty.value,
             "dirty": isDirty.value || props.dirty,
+            "disabled": isDisabled.value,
             "focused": isFocused.value,
             "error": isValid.value === false
           }), {
@@ -19099,12 +19993,14 @@ const VTextarea = (0,defineComponent/* genericComponent */.ev)()({
 
 // Composables
 
+
  // Utilities
 
 const VThemeProvider = (0,defineComponent/* genericComponent */.ev)()({
   name: 'VThemeProvider',
   props: {
     withBackground: Boolean,
+    ...(0,component/* makeComponentProps */.l)(),
     ...(0,composables_theme/* makeThemeProps */.x$)(),
     ...(0,tag/* makeTagProps */.Q)()
   },
@@ -19118,7 +20014,8 @@ const VThemeProvider = (0,defineComponent/* genericComponent */.ev)()({
     return () => {
       if (!props.withBackground) return slots.default?.();
       return (0,runtime_core_esm_bundler/* createVNode */.Wm)(props.tag, {
-        "class": ['v-theme-provider', themeClasses.value]
+        "class": ['v-theme-provider', themeClasses.value, props.class],
+        "style": props.style
       }, {
         default: () => [slots.default?.()]
       });
@@ -19136,6 +20033,7 @@ const VThemeProvider = (0,defineComponent/* genericComponent */.ev)()({
 
 
 // Composables
+
 
 
 
@@ -19177,6 +20075,7 @@ const VTimeline = (0,defineComponent/* genericComponent */.ev)()({
       type: String,
       validator: v => ['start', 'end', 'both'].includes(v)
     },
+    ...(0,component/* makeComponentProps */.l)(),
     ...(0,composables_density/* makeDensityProps */.f)(),
     ...(0,tag/* makeTagProps */.Q)(),
     ...(0,composables_theme/* makeThemeProps */.x$)()
@@ -19220,10 +20119,10 @@ const VTimeline = (0,defineComponent/* genericComponent */.ev)()({
     (0,useRender/* useRender */.L)(() => (0,runtime_core_esm_bundler/* createVNode */.Wm)(props.tag, {
       "class": ['v-timeline', `v-timeline--${props.direction}`, `v-timeline--align-${props.align}`, `v-timeline--justify-${props.justify}`, truncateClasses.value, {
         'v-timeline--inset-line': !!props.lineInset
-      }, themeClasses.value, densityClasses.value, sideClasses.value],
-      "style": {
+      }, themeClasses.value, densityClasses.value, sideClasses.value, props.class],
+      "style": [{
         '--v-timeline-line-thickness': (0,helpers/* convertToUnit */.kb)(props.lineThickness)
-      }
+      }, props.style]
     }, slots));
     return {};
   }
@@ -19231,6 +20130,7 @@ const VTimeline = (0,defineComponent/* genericComponent */.ev)()({
 ;// CONCATENATED MODULE: ./node_modules/vuetify/lib/components/VTimeline/VTimelineDivider.mjs
 
 // Components
+
  // Composables
 
 
@@ -19249,6 +20149,7 @@ const VTimelineDivider = (0,defineComponent/* genericComponent */.ev)()({
     icon: composables_icons/* IconValue */.lE,
     iconColor: String,
     lineColor: String,
+    ...(0,component/* makeComponentProps */.l)(),
     ...(0,rounded/* makeRoundedProps */.I)(),
     ...(0,size/* makeSizeProps */.Z)(),
     ...(0,elevation/* makeElevationProps */.c)()
@@ -19275,17 +20176,11 @@ const VTimelineDivider = (0,defineComponent/* genericComponent */.ev)()({
       backgroundColorClasses: lineColorClasses,
       backgroundColorStyles: lineColorStyles
     } = (0,composables_color/* useBackgroundColor */.Y5)((0,reactivity_esm_bundler/* toRef */.Vh)(props, 'lineColor'));
-    (0,composables_defaults/* provideDefaults */.AF)({
-      VIcon: {
-        color: (0,reactivity_esm_bundler/* toRef */.Vh)(props, 'iconColor'),
-        icon: (0,reactivity_esm_bundler/* toRef */.Vh)(props, 'icon'),
-        size: (0,reactivity_esm_bundler/* toRef */.Vh)(props, 'size')
-      }
-    });
     (0,useRender/* useRender */.L)(() => (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
       "class": ['v-timeline-divider', {
         'v-timeline-divider--fill-dot': props.fillDot
-      }]
+      }, props.class],
+      "style": props.style
     }, [(0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
       "class": ['v-timeline-divider__before', lineColorClasses.value],
       "style": lineColorStyles.value
@@ -19296,7 +20191,22 @@ const VTimelineDivider = (0,defineComponent/* genericComponent */.ev)()({
     }, [(0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
       "class": ['v-timeline-divider__inner-dot', backgroundColorClasses.value, roundedClasses.value],
       "style": backgroundColorStyles.value
-    }, [slots.default?.() ?? (props.icon ? (0,runtime_core_esm_bundler/* createVNode */.Wm)(VIcon/* VIcon */.t, null, null) : undefined)])]), (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
+    }, [!slots.default ? (0,runtime_core_esm_bundler/* createVNode */.Wm)(VIcon/* VIcon */.t, {
+      "key": "icon",
+      "color": props.iconColor,
+      "icon": props.icon,
+      "size": props.size
+    }, null) : (0,runtime_core_esm_bundler/* createVNode */.Wm)(VDefaultsProvider/* VDefaultsProvider */.z, {
+      "key": "icon-defaults",
+      "disabled": !props.icon,
+      "defaults": {
+        VIcon: {
+          color: props.iconColor,
+          icon: props.icon,
+          size: props.size
+        }
+      }
+    }, slots.default)])]), (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
       "class": ['v-timeline-divider__after', lineColorClasses.value],
       "style": lineColorStyles.value
     }, null)]));
@@ -19307,6 +20217,7 @@ const VTimelineDivider = (0,defineComponent/* genericComponent */.ev)()({
 
 // Components
  // Composables
+
 
 
 
@@ -19332,11 +20243,12 @@ const VTimelineItem = (0,defineComponent/* genericComponent */.ev)()({
     icon: composables_icons/* IconValue */.lE,
     iconColor: String,
     lineInset: [Number, String],
-    ...(0,rounded/* makeRoundedProps */.I)(),
+    ...(0,component/* makeComponentProps */.l)(),
+    ...(0,dimensions/* makeDimensionProps */.x)(),
     ...(0,elevation/* makeElevationProps */.c)(),
+    ...(0,rounded/* makeRoundedProps */.I)(),
     ...(0,size/* makeSizeProps */.Z)(),
-    ...(0,tag/* makeTagProps */.Q)(),
-    ...(0,dimensions/* makeDimensionProps */.x)()
+    ...(0,tag/* makeTagProps */.Q)()
   },
   setup(props, _ref) {
     let {
@@ -19356,11 +20268,11 @@ const VTimelineItem = (0,defineComponent/* genericComponent */.ev)()({
     (0,useRender/* useRender */.L)(() => (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
       "class": ['v-timeline-item', {
         'v-timeline-item--fill-dot': props.fillDot
-      }],
-      "style": {
+      }, props.class],
+      "style": [{
         '--v-timeline-dot-size': (0,helpers/* convertToUnit */.kb)(dotSize.value),
         '--v-timeline-line-inset': props.lineInset ? `calc(var(--v-timeline-dot-size) / 2 + ${(0,helpers/* convertToUnit */.kb)(props.lineInset)})` : (0,helpers/* convertToUnit */.kb)(0)
-      }
+      }, props.style]
     }, [(0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
       "class": "v-timeline-item__body",
       "style": dimensionStyles.value
@@ -19389,14 +20301,18 @@ const VTimelineItem = (0,defineComponent/* genericComponent */.ev)()({
 
 // Composables
 
+
  // Utilities
 
 
 const VToolbarItems = (0,defineComponent/* genericComponent */.ev)()({
   name: 'VToolbarItems',
-  props: (0,variant/* makeVariantProps */.bk)({
-    variant: 'text'
-  }),
+  props: {
+    ...(0,component/* makeComponentProps */.l)(),
+    ...(0,variant/* makeVariantProps */.bk)({
+      variant: 'text'
+    })
+  },
   setup(props, _ref) {
     let {
       slots
@@ -19409,7 +20325,8 @@ const VToolbarItems = (0,defineComponent/* genericComponent */.ev)()({
       }
     });
     (0,useRender/* useRender */.L)(() => (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
-      "class": "v-toolbar-items"
+      "class": ['v-toolbar-items', props.class],
+      "style": props.style
     }, [slots.default?.()]));
     return {};
   }
@@ -19439,10 +20356,11 @@ const VTooltip = (0,defineComponent/* genericComponent */.ev)()({
   props: {
     id: String,
     text: String,
-    ...(0,helpers/* omit */.CE)((0,VOverlay/* makeVOverlayProps */.BU)({
+    ...(0,helpers/* omit */.CE)((0,VOverlay/* makeVOverlayProps */.B)({
       closeOnBack: false,
       location: 'end',
       locationStrategy: 'connected',
+      eager: true,
       minWidth: 0,
       offset: 10,
       openOnClick: false,
@@ -19451,7 +20369,7 @@ const VTooltip = (0,defineComponent/* genericComponent */.ev)()({
       scrim: false,
       scrollStrategy: 'reposition',
       transition: false
-    }), ['absolute', 'persistent', 'eager'])
+    }), ['absolute', 'persistent'])
   },
   emits: {
     'update:modelValue': value => true
@@ -19481,10 +20399,11 @@ const VTooltip = (0,defineComponent/* genericComponent */.ev)()({
       'aria-describedby': id.value
     }, props.activatorProps));
     (0,useRender/* useRender */.L)(() => {
-      const [overlayProps] = (0,VOverlay/* filterVOverlayProps */.Fe)(props);
-      return (0,runtime_core_esm_bundler/* createVNode */.Wm)(VOverlay/* VOverlay */.yc, (0,runtime_core_esm_bundler/* mergeProps */.dG)({
+      const [overlayProps] = VOverlay/* VOverlay.filterProps */.y.filterProps(props);
+      return (0,runtime_core_esm_bundler/* createVNode */.Wm)(VOverlay/* VOverlay */.y, (0,runtime_core_esm_bundler/* mergeProps */.dG)({
         "ref": overlay,
-        "class": ['v-tooltip'],
+        "class": ['v-tooltip', props.class],
+        "style": props.style,
         "id": id.value
       }, overlayProps, {
         "modelValue": isActive.value,
@@ -19495,7 +20414,6 @@ const VTooltip = (0,defineComponent/* genericComponent */.ev)()({
         "origin": origin.value,
         "persistent": true,
         "role": "tooltip",
-        "eager": true,
         "activatorProps": activatorProps.value,
         "_disableGlobalStack": true
       }, scopeId), {
@@ -19536,6 +20454,200 @@ const VValidation = (0,defineComponent/* genericComponent */.ev)()({
   }
 });
 ;// CONCATENATED MODULE: ./node_modules/vuetify/lib/components/VValidation/index.mjs
+
+;// CONCATENATED MODULE: ./node_modules/vuetify/lib/components/VVirtualScroll/VVirtualScroll.css
+// extracted by mini-css-extract-plugin
+
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/toggleScope.mjs
+var toggleScope = __webpack_require__(4770);
+;// CONCATENATED MODULE: ./node_modules/vuetify/lib/components/VVirtualScroll/VVirtualScrollItem.mjs
+
+// Composables
+
+
+ // Utilities
+
+
+const VVirtualScrollItem = (0,defineComponent/* genericComponent */.ev)()({
+  name: 'VVirtualScrollItem',
+  props: {
+    dynamicHeight: Boolean,
+    ...(0,component/* makeComponentProps */.l)()
+  },
+  emits: {
+    'update:height': height => true
+  },
+  setup(props, _ref) {
+    let {
+      emit,
+      slots
+    } = _ref;
+    const {
+      resizeRef,
+      contentRect
+    } = (0,resizeObserver/* useResizeObserver */.y)();
+    (0,toggleScope/* useToggleScope */.U)(() => props.dynamicHeight, () => {
+      (0,runtime_core_esm_bundler/* watch */.YP)(() => contentRect.value?.height, height => {
+        if (height != null) emit('update:height', height);
+      });
+    });
+    function updateHeight() {
+      if (props.dynamicHeight && contentRect.value) {
+        emit('update:height', contentRect.value.height);
+      }
+    }
+    (0,runtime_core_esm_bundler/* onUpdated */.ic)(updateHeight);
+    (0,useRender/* useRender */.L)(() => (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
+      "ref": props.dynamicHeight ? resizeRef : undefined,
+      "class": ['v-virtual-scroll__item', props.class],
+      "style": props.style
+    }, [slots.default?.()]));
+  }
+});
+;// CONCATENATED MODULE: ./node_modules/vuetify/lib/components/VVirtualScroll/VVirtualScroll.mjs
+
+// Styles
+
+
+// Components
+ // Composables
+
+
+
+ // Utilities
+
+ // Types
+const UP = -1;
+const DOWN = 1;
+const VVirtualScroll = (0,defineComponent/* genericComponent */.ev)()({
+  name: 'VVirtualScroll',
+  props: {
+    items: {
+      type: Array,
+      default: () => []
+    },
+    itemHeight: [Number, String],
+    ...(0,component/* makeComponentProps */.l)(),
+    ...(0,dimensions/* makeDimensionProps */.x)()
+  },
+  setup(props, _ref) {
+    let {
+      slots
+    } = _ref;
+    const first = (0,reactivity_esm_bundler/* ref */.iH)(0);
+    const baseItemHeight = (0,reactivity_esm_bundler/* ref */.iH)(props.itemHeight);
+    const itemHeight = (0,runtime_core_esm_bundler/* computed */.Fl)({
+      get: () => parseInt(baseItemHeight.value ?? 0, 10),
+      set(val) {
+        baseItemHeight.value = val;
+      }
+    });
+    const rootEl = (0,reactivity_esm_bundler/* ref */.iH)();
+    const {
+      resizeRef,
+      contentRect
+    } = (0,resizeObserver/* useResizeObserver */.y)();
+    (0,runtime_core_esm_bundler/* watchEffect */.m0)(() => {
+      resizeRef.value = rootEl.value;
+    });
+    const display = (0,composables_display/* useDisplay */.AW)();
+    const sizeMap = new Map();
+    let sizes = (0,helpers/* createRange */.MT)(props.items.length).map(() => itemHeight.value);
+    const visibleItems = (0,runtime_core_esm_bundler/* computed */.Fl)(() => {
+      return Math.max(12, Math.ceil((contentRect.value?.height ?? display.height.value) / itemHeight.value * 1.7 + 1));
+    });
+    function handleItemResize(index, height) {
+      itemHeight.value = Math.max(itemHeight.value, height);
+      sizes[index] = height;
+      sizeMap.set(props.items[index], height);
+    }
+    function calculateOffset(index) {
+      return sizes.slice(0, index).reduce((curr, value) => curr + (value || itemHeight.value), 0);
+    }
+    function calculateMidPointIndex(scrollTop) {
+      const end = props.items.length;
+      let middle = 0;
+      let middleOffset = 0;
+      while (middleOffset < scrollTop && middle < end) {
+        middleOffset += sizes[middle++] || itemHeight.value;
+      }
+      return middle - 1;
+    }
+    let lastScrollTop = 0;
+    function handleScroll() {
+      if (!rootEl.value || !contentRect.value) return;
+      const height = contentRect.value.height;
+      const scrollTop = rootEl.value.scrollTop;
+      const direction = scrollTop < lastScrollTop ? UP : DOWN;
+      const midPointIndex = calculateMidPointIndex(scrollTop + height / 2);
+      const buffer = Math.round(visibleItems.value / 3);
+      if (direction === UP && midPointIndex <= first.value + buffer * 2 - 1) {
+        first.value = (0,helpers/* clamp */.uZ)(midPointIndex - buffer, 0, props.items.length);
+      } else if (direction === DOWN && midPointIndex >= first.value + buffer * 2 - 1) {
+        first.value = (0,helpers/* clamp */.uZ)(midPointIndex - buffer, 0, props.items.length - visibleItems.value);
+      }
+      lastScrollTop = rootEl.value.scrollTop;
+    }
+    function scrollToIndex(index) {
+      if (!rootEl.value) return;
+      const offset = calculateOffset(index);
+      rootEl.value.scrollTop = offset;
+    }
+    const items = (0,runtime_core_esm_bundler/* computed */.Fl)(() => props.items.map((item, index) => ({
+      raw: item,
+      index
+    })));
+    const last = (0,runtime_core_esm_bundler/* computed */.Fl)(() => Math.min(props.items.length, first.value + visibleItems.value));
+    const computedItems = (0,runtime_core_esm_bundler/* computed */.Fl)(() => items.value.slice(first.value, last.value));
+    const paddingTop = (0,runtime_core_esm_bundler/* computed */.Fl)(() => calculateOffset(first.value));
+    const paddingBottom = (0,runtime_core_esm_bundler/* computed */.Fl)(() => calculateOffset(props.items.length) - calculateOffset(last.value));
+    const {
+      dimensionStyles
+    } = (0,dimensions/* useDimension */.$)(props);
+    (0,runtime_core_esm_bundler/* onMounted */.bv)(() => {
+      if (!itemHeight.value) {
+        // If itemHeight prop is not set, then calculate an estimated height from the average of inital items
+        itemHeight.value = sizes.slice(first.value, last.value).reduce((curr, height) => curr + height, 0) / visibleItems.value;
+      }
+    });
+    (0,runtime_core_esm_bundler/* watch */.YP)(() => props.items.length, () => {
+      sizes = (0,helpers/* createRange */.MT)(props.items.length).map(() => itemHeight.value);
+      sizeMap.forEach((height, item) => {
+        const index = props.items.indexOf(item);
+        if (index === -1) {
+          sizeMap.delete(item);
+        } else {
+          sizes[index] = height;
+        }
+      });
+    });
+    (0,useRender/* useRender */.L)(() => (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
+      "ref": rootEl,
+      "class": ['v-virtual-scroll', props.class],
+      "onScroll": handleScroll,
+      "style": [dimensionStyles.value, props.style]
+    }, [(0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
+      "class": "v-virtual-scroll__container",
+      "style": {
+        paddingTop: (0,helpers/* convertToUnit */.kb)(paddingTop.value),
+        paddingBottom: (0,helpers/* convertToUnit */.kb)(paddingBottom.value)
+      }
+    }, [computedItems.value.map(item => (0,runtime_core_esm_bundler/* createVNode */.Wm)(VVirtualScrollItem, {
+      "key": item.index,
+      "dynamicHeight": !props.itemHeight,
+      "onUpdate:height": height => handleItemResize(item.index, height)
+    }, {
+      default: () => [slots.default?.({
+        item: item.raw,
+        index: item.index
+      })]
+    }))])]));
+    return {
+      scrollToIndex
+    };
+  }
+});
+;// CONCATENATED MODULE: ./node_modules/vuetify/lib/components/VVirtualScroll/index.mjs
 
 ;// CONCATENATED MODULE: ./node_modules/vuetify/lib/components/VWindow/index.mjs
 
@@ -19620,7 +20732,8 @@ const VValidation = (0,defineComponent/* genericComponent */.ev)()({
  // export * from './VTimePicker'
 
  // export * from './VTreeview'
- // export * from './VVirtualScroll'
+
+
 
 
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/directives/click-outside/index.mjs + 1 modules
@@ -19824,7 +20937,7 @@ const Vue3ToasityOptions = {
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "g": function() { return /* binding */ BaseModel; }
 /* harmony export */ });
-/* harmony import */ var C_Projects_PJ82_PJCAN_pjcan_app_node_modules_babel_runtime_helpers_esm_defineProperty_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2482);
+/* harmony import */ var C_Projects_PJ82_PJCAN_pjcan_app_node_modules_babel_runtime_helpers_esm_defineProperty_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(7327);
 
 /** Базовая модель */
 class BaseModel {
@@ -19904,8 +21017,8 @@ __webpack_require__.d(__webpack_exports__, {
 
 // UNUSED EXPORTS: API_BUTTONS_VALUE_SIZE, BUTTON_NUMBER, BUTTON_PRESS_TYPE_NUMBER, StructButtonsValue, TButtonExec
 
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/defineProperty.js
-var defineProperty = __webpack_require__(2482);
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/defineProperty.js + 3 modules
+var defineProperty = __webpack_require__(7327);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.push.js
 var es_array_push = __webpack_require__(7658);
 // EXTERNAL MODULE: ./src/components/bluetooth/index.ts + 4 modules
@@ -20093,8 +21206,8 @@ __webpack_require__.d(__webpack_exports__, {
   "MN": function() { return /* reexport */ StructCarView; }
 });
 
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/defineProperty.js
-var defineProperty = __webpack_require__(2482);
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/defineProperty.js + 3 modules
+var defineProperty = __webpack_require__(7327);
 // EXTERNAL MODULE: ./src/components/bluetooth/index.ts + 4 modules
 var bluetooth = __webpack_require__(9014);
 // EXTERNAL MODULE: ./src/models/pjcan/base/BaseModel.ts
@@ -20202,8 +21315,8 @@ __webpack_require__.d(__webpack_exports__, {
 
 // UNUSED EXPORTS: API_CONFIG_SIZE, StructConfigs
 
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/defineProperty.js
-var defineProperty = __webpack_require__(2482);
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/defineProperty.js + 3 modules
+var defineProperty = __webpack_require__(7327);
 // EXTERNAL MODULE: ./src/components/bluetooth/index.ts + 4 modules
 var bluetooth = __webpack_require__(9014);
 // EXTERNAL MODULE: ./src/models/pjcan/base/BaseModel.ts
@@ -20316,8 +21429,8 @@ __webpack_require__.d(__webpack_exports__, {
 
 // UNUSED EXPORTS: API_INFO_SIZE, StructDeviceInfo
 
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/defineProperty.js
-var defineProperty = __webpack_require__(2482);
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/defineProperty.js + 3 modules
+var defineProperty = __webpack_require__(7327);
 // EXTERNAL MODULE: ./src/components/bluetooth/index.ts + 4 modules
 var bluetooth = __webpack_require__(9014);
 // EXTERNAL MODULE: ./src/models/pjcan/base/BaseModel.ts
@@ -20507,8 +21620,8 @@ __webpack_require__.d(__webpack_exports__, {
   "O": function() { return /* reexport */ StructLCDValue; }
 });
 
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/defineProperty.js
-var defineProperty = __webpack_require__(2482);
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/defineProperty.js + 3 modules
+var defineProperty = __webpack_require__(7327);
 // EXTERNAL MODULE: ./src/components/bluetooth/index.ts + 4 modules
 var bluetooth = __webpack_require__(9014);
 // EXTERNAL MODULE: ./src/models/pjcan/base/BaseModel.ts
@@ -20615,8 +21728,8 @@ __webpack_require__.d(__webpack_exports__, {
 
 // UNUSED EXPORTS: API_SCANNER_CONFIG_SIZE, API_SCANNER_VALUE_SIZE, StructScannerConfig, StructScannerValue
 
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/defineProperty.js
-var defineProperty = __webpack_require__(2482);
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/defineProperty.js + 3 modules
+var defineProperty = __webpack_require__(7327);
 // EXTERNAL MODULE: ./src/components/bluetooth/index.ts + 4 modules
 var bluetooth = __webpack_require__(9014);
 // EXTERNAL MODULE: ./src/models/pjcan/base/BaseModel.ts
@@ -20753,8 +21866,8 @@ __webpack_require__.d(__webpack_exports__, {
 
 // UNUSED EXPORTS: API_TEYES_TEXT_SIZE, StructTeyesText
 
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/defineProperty.js
-var defineProperty = __webpack_require__(2482);
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/defineProperty.js + 3 modules
+var defineProperty = __webpack_require__(7327);
 // EXTERNAL MODULE: ./src/components/bluetooth/index.ts + 4 modules
 var bluetooth = __webpack_require__(9014);
 // EXTERNAL MODULE: ./src/models/pjcan/base/BaseModel.ts
@@ -20905,12 +22018,14 @@ __webpack_require__.d(__webpack_exports__, {
 
 // UNUSED EXPORTS: API_UPDATE_SIZE, StructUpdate
 
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/defineProperty.js
-var defineProperty = __webpack_require__(2482);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.typed-array.find-last.js
-var es_typed_array_find_last = __webpack_require__(3408);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.typed-array.find-last-index.js
-var es_typed_array_find_last_index = __webpack_require__(4590);
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/defineProperty.js + 3 modules
+var defineProperty = __webpack_require__(7327);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/esnext.typed-array.to-reversed.js
+var esnext_typed_array_to_reversed = __webpack_require__(3767);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/esnext.typed-array.to-sorted.js
+var esnext_typed_array_to_sorted = __webpack_require__(8585);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/esnext.typed-array.with.js
+var esnext_typed_array_with = __webpack_require__(8696);
 // EXTERNAL MODULE: ./node_modules/eventemitter3/index.js
 var eventemitter3 = __webpack_require__(6856);
 var eventemitter3_default = /*#__PURE__*/__webpack_require__.n(eventemitter3);
@@ -20931,6 +22046,7 @@ const StructUpdate = {
   size: bluetooth/* BluetoothStruct.uint16 */.GD.uint16()
 };
 ;// CONCATENATED MODULE: ./src/models/pjcan/update/Update.ts
+
 
 
 
@@ -21055,8 +22171,8 @@ __webpack_require__.d(__webpack_exports__, {
 
 // UNUSED EXPORTS: TCenterPoint
 
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/defineProperty.js
-var defineProperty = __webpack_require__(2482);
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/defineProperty.js + 3 modules
+var defineProperty = __webpack_require__(7327);
 // EXTERNAL MODULE: ./src/components/bluetooth/index.ts + 4 modules
 var bluetooth = __webpack_require__(9014);
 // EXTERNAL MODULE: ./src/models/pjcan/base/BaseModel.ts
@@ -21191,8 +22307,8 @@ __webpack_require__.d(__webpack_exports__, {
   "T1": function() { return /* reexport */ TAir; }
 });
 
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/defineProperty.js
-var defineProperty = __webpack_require__(2482);
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/defineProperty.js + 3 modules
+var defineProperty = __webpack_require__(7327);
 // EXTERNAL MODULE: ./src/components/bluetooth/index.ts + 4 modules
 var bluetooth = __webpack_require__(9014);
 // EXTERNAL MODULE: ./src/models/pjcan/base/BaseModel.ts
@@ -21323,8 +22439,8 @@ __webpack_require__.d(__webpack_exports__, {
   "Pk": function() { return /* reexport */ VariableConfig; }
 });
 
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/defineProperty.js
-var defineProperty = __webpack_require__(2482);
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/defineProperty.js + 3 modules
+var defineProperty = __webpack_require__(7327);
 // EXTERNAL MODULE: ./src/components/bluetooth/index.ts + 4 modules
 var bluetooth = __webpack_require__(9014);
 // EXTERNAL MODULE: ./src/models/pjcan/base/BaseModel.ts
@@ -21418,8 +22534,8 @@ __webpack_require__.d(__webpack_exports__, {
   "mG": function() { return /* reexport */ StructDoorsView; }
 });
 
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/defineProperty.js
-var defineProperty = __webpack_require__(2482);
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/defineProperty.js + 3 modules
+var defineProperty = __webpack_require__(7327);
 // EXTERNAL MODULE: ./src/components/bluetooth/index.ts + 4 modules
 var bluetooth = __webpack_require__(9014);
 // EXTERNAL MODULE: ./src/models/pjcan/base/BaseModel.ts
@@ -21537,8 +22653,8 @@ __webpack_require__.d(__webpack_exports__, {
   "gR": function() { return /* reexport */ StructEngineView; }
 });
 
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/defineProperty.js
-var defineProperty = __webpack_require__(2482);
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/defineProperty.js + 3 modules
+var defineProperty = __webpack_require__(7327);
 // EXTERNAL MODULE: ./src/components/bluetooth/index.ts + 4 modules
 var bluetooth = __webpack_require__(9014);
 // EXTERNAL MODULE: ./src/models/pjcan/base/BaseModel.ts
@@ -21716,8 +22832,8 @@ __webpack_require__.d(__webpack_exports__, {
   "ij": function() { return /* reexport */ StructFuelView; }
 });
 
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/defineProperty.js
-var defineProperty = __webpack_require__(2482);
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/defineProperty.js + 3 modules
+var defineProperty = __webpack_require__(7327);
 // EXTERNAL MODULE: ./src/components/bluetooth/index.ts + 4 modules
 var bluetooth = __webpack_require__(9014);
 // EXTERNAL MODULE: ./src/models/pjcan/base/BaseModel.ts
@@ -21869,8 +22985,8 @@ __webpack_require__.d(__webpack_exports__, {
   "QT": function() { return /* reexport */ StructMovementView; }
 });
 
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/defineProperty.js
-var defineProperty = __webpack_require__(2482);
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/defineProperty.js + 3 modules
+var defineProperty = __webpack_require__(7327);
 // EXTERNAL MODULE: ./src/components/bluetooth/index.ts + 4 modules
 var bluetooth = __webpack_require__(9014);
 // EXTERNAL MODULE: ./src/models/pjcan/base/BaseModel.ts
@@ -21984,8 +23100,8 @@ __webpack_require__.d(__webpack_exports__, {
   "Mq": function() { return /* reexport */ TSensorsSignal; }
 });
 
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/defineProperty.js
-var defineProperty = __webpack_require__(2482);
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/defineProperty.js + 3 modules
+var defineProperty = __webpack_require__(7327);
 // EXTERNAL MODULE: ./src/components/bluetooth/index.ts + 4 modules
 var bluetooth = __webpack_require__(9014);
 // EXTERNAL MODULE: ./src/models/pjcan/base/BaseModel.ts
@@ -22117,8 +23233,8 @@ __webpack_require__.d(__webpack_exports__, {
   "v7": function() { return /* reexport */ TemperatureView; }
 });
 
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/defineProperty.js
-var defineProperty = __webpack_require__(2482);
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/defineProperty.js + 3 modules
+var defineProperty = __webpack_require__(7327);
 // EXTERNAL MODULE: ./src/components/bluetooth/index.ts + 4 modules
 var bluetooth = __webpack_require__(9014);
 // EXTERNAL MODULE: ./src/models/pjcan/base/BaseModel.ts
@@ -22219,8 +23335,8 @@ __webpack_require__.d(__webpack_exports__, {
 
 // UNUSED EXPORTS: API_VARIABLE_TEST_SIZE, StructTestValue
 
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/defineProperty.js
-var defineProperty = __webpack_require__(2482);
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/defineProperty.js + 3 modules
+var defineProperty = __webpack_require__(7327);
 // EXTERNAL MODULE: ./src/components/bluetooth/index.ts + 4 modules
 var bluetooth = __webpack_require__(9014);
 // EXTERNAL MODULE: ./src/models/pjcan/base/BaseModel.ts
@@ -22295,8 +23411,8 @@ __webpack_require__.d(__webpack_exports__, {
   "Cw": function() { return /* reexport */ VolumeView; }
 });
 
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/defineProperty.js
-var defineProperty = __webpack_require__(2482);
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/defineProperty.js + 3 modules
+var defineProperty = __webpack_require__(7327);
 // EXTERNAL MODULE: ./src/components/bluetooth/index.ts + 4 modules
 var bluetooth = __webpack_require__(9014);
 // EXTERNAL MODULE: ./src/models/pjcan/base/BaseModel.ts
@@ -22436,8 +23552,8 @@ __webpack_require__.d(__webpack_exports__, {
   "Gf": function() { return /* reexport */ Version; }
 });
 
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/defineProperty.js
-var defineProperty = __webpack_require__(2482);
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/defineProperty.js + 3 modules
+var defineProperty = __webpack_require__(7327);
 ;// CONCATENATED MODULE: ./src/models/pjcan/version/Version.ts
 
 /** Модель версии */
@@ -22509,8 +23625,8 @@ __webpack_require__.d(__webpack_exports__, {
 
 // UNUSED EXPORTS: TViewType
 
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/defineProperty.js
-var defineProperty = __webpack_require__(2482);
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/defineProperty.js + 3 modules
+var defineProperty = __webpack_require__(7327);
 ;// CONCATENATED MODULE: ./src/models/pjcan/view/TViewType.ts
 /* eslint-disable */
 /** Тип отображения текста */
@@ -24165,7 +25281,7 @@ const store = createStore({
 
 /***/ }),
 
-/***/ 4745:
+/***/ 1312:
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -24175,10 +25291,12 @@ __webpack_require__.d(__webpack_exports__, {
   "Z": function() { return /* binding */ request; }
 });
 
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.typed-array.find-last.js
-var es_typed_array_find_last = __webpack_require__(3408);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.typed-array.find-last-index.js
-var es_typed_array_find_last_index = __webpack_require__(4590);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/esnext.typed-array.to-reversed.js
+var esnext_typed_array_to_reversed = __webpack_require__(3767);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/esnext.typed-array.to-sorted.js
+var esnext_typed_array_to_sorted = __webpack_require__(8585);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/esnext.typed-array.with.js
+var esnext_typed_array_with = __webpack_require__(8696);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.push.js
 var es_array_push = __webpack_require__(7658);
 ;// CONCATENATED MODULE: ./node_modules/axios/lib/helpers/bind.js
@@ -24190,6 +25308,7 @@ function bind(fn, thisArg) {
   };
 }
 ;// CONCATENATED MODULE: ./node_modules/axios/lib/utils.js
+
 
 
 
@@ -24383,8 +25502,10 @@ const isStream = val => isObject(val) && isFunction(val.pipe);
  * @returns {boolean} True if value is an FormData, otherwise false
  */
 const isFormData = thing => {
-  const pattern = '[object FormData]';
-  return thing && (typeof FormData === 'function' && thing instanceof FormData || utils_toString.call(thing) === pattern || isFunction(thing.toString) && thing.toString() === pattern);
+  let kind;
+  return thing && (typeof FormData === 'function' && thing instanceof FormData || isFunction(thing.append) && ((kind = kindOf(thing)) === 'formdata' ||
+  // detect form-data instance
+  kind === 'object' && isFunction(thing.toString) && thing.toString() === '[object FormData]'));
 };
 
 /**
@@ -24418,7 +25539,7 @@ const trim = str => str.trim ? str.trim() : str.replace(/^[\s\uFEFF\xA0]+|[\s\uF
  * @param {Function} fn The callback to invoke for each item
  *
  * @param {Boolean} [allOwnKeys = false]
- * @returns {void}
+ * @returns {any}
  */
 function forEach(obj, fn, {
   allOwnKeys = false
@@ -24451,6 +25572,25 @@ function forEach(obj, fn, {
     }
   }
 }
+function findKey(obj, key) {
+  key = key.toLowerCase();
+  const keys = Object.keys(obj);
+  let i = keys.length;
+  let _key;
+  while (i-- > 0) {
+    _key = keys[i];
+    if (key === _key.toLowerCase()) {
+      return _key;
+    }
+  }
+  return null;
+}
+const _global = (() => {
+  /*eslint no-undef:0*/
+  if (typeof globalThis !== "undefined") return globalThis;
+  return typeof self !== "undefined" ? self : typeof window !== 'undefined' ? window : global;
+})();
+const isContextDefined = context => !isUndefined(context) && context !== _global;
 
 /**
  * Accepts varargs expecting each argument to be an object, then
@@ -24472,16 +25612,20 @@ function forEach(obj, fn, {
  */
 function merge( /* obj1, obj2, obj3, ... */
 ) {
+  const {
+    caseless
+  } = isContextDefined(this) && this || {};
   const result = {};
   const assignValue = (val, key) => {
-    if (isPlainObject(result[key]) && isPlainObject(val)) {
-      result[key] = merge(result[key], val);
+    const targetKey = caseless && findKey(result, key) || key;
+    if (isPlainObject(result[targetKey]) && isPlainObject(val)) {
+      result[targetKey] = merge(result[targetKey], val);
     } else if (isPlainObject(val)) {
-      result[key] = merge({}, val);
+      result[targetKey] = merge({}, val);
     } else if (isArray(val)) {
-      result[key] = val.slice();
+      result[targetKey] = val.slice();
     } else {
-      result[key] = val;
+      result[targetKey] = val;
     }
   };
   for (let i = 0, l = arguments.length; i < l; i++) {
@@ -24671,7 +25815,7 @@ const matchAll = (regExp, str) => {
 /* Checking if the kindOfTest function returns true when passed an HTMLFormElement. */
 const isHTMLForm = kindOfTest('HTMLFormElement');
 const toCamelCase = str => {
-  return str.toLowerCase().replace(/[_-\s]([a-z\d])(\w*)/g, function replacer(m, p1, p2) {
+  return str.toLowerCase().replace(/[-_\s]([a-z\d])(\w*)/g, function replacer(m, p1, p2) {
     return p1.toUpperCase() + p2;
   });
 };
@@ -24707,6 +25851,10 @@ const reduceDescriptors = (obj, reducer) => {
 
 const freezeMethods = obj => {
   reduceDescriptors(obj, (descriptor, name) => {
+    // skip restricted props in strict mode
+    if (isFunction(obj) && ['arguments', 'caller', 'callee'].indexOf(name) !== -1) {
+      return false;
+    }
     const value = obj[name];
     if (!isFunction(value)) return;
     descriptor.enumerable = false;
@@ -24716,7 +25864,7 @@ const freezeMethods = obj => {
     }
     if (!descriptor.set) {
       descriptor.set = () => {
-        throw Error('Can not read-only method \'' + name + '\'');
+        throw Error('Can not rewrite read-only method \'' + name + '\'');
       };
     }
   });
@@ -24736,6 +25884,58 @@ const toFiniteNumber = (value, defaultValue) => {
   value = +value;
   return Number.isFinite(value) ? value : defaultValue;
 };
+const ALPHA = 'abcdefghijklmnopqrstuvwxyz';
+const DIGIT = '0123456789';
+const ALPHABET = {
+  DIGIT,
+  ALPHA,
+  ALPHA_DIGIT: ALPHA + ALPHA.toUpperCase() + DIGIT
+};
+const generateString = (size = 16, alphabet = ALPHABET.ALPHA_DIGIT) => {
+  let str = '';
+  const {
+    length
+  } = alphabet;
+  while (size--) {
+    str += alphabet[Math.random() * length | 0];
+  }
+  return str;
+};
+
+/**
+ * If the thing is a FormData object, return true, otherwise return false.
+ *
+ * @param {unknown} thing - The thing to check.
+ *
+ * @returns {boolean}
+ */
+function isSpecCompliantForm(thing) {
+  return !!(thing && isFunction(thing.append) && thing[Symbol.toStringTag] === 'FormData' && thing[Symbol.iterator]);
+}
+const toJSONObject = obj => {
+  const stack = new Array(10);
+  const visit = (source, i) => {
+    if (isObject(source)) {
+      if (stack.indexOf(source) >= 0) {
+        return;
+      }
+      if (!('toJSON' in source)) {
+        stack[i] = source;
+        const target = isArray(source) ? [] : {};
+        forEach(source, (value, key) => {
+          const reducedValue = visit(value, i + 1);
+          !isUndefined(reducedValue) && (target[key] = reducedValue);
+        });
+        stack[i] = undefined;
+        return target;
+      }
+    }
+    return source;
+  };
+  return visit(obj, 0);
+};
+const isAsyncFn = kindOfTest('AsyncFunction');
+const isThenable = thing => thing && (isObject(thing) || isFunction(thing)) && isFunction(thing.then) && isFunction(thing.catch);
 /* harmony default export */ var utils = ({
   isArray,
   isArrayBuffer,
@@ -24779,7 +25979,16 @@ const toFiniteNumber = (value, defaultValue) => {
   toObjectSet,
   toCamelCase,
   noop,
-  toFiniteNumber
+  toFiniteNumber,
+  findKey,
+  global: _global,
+  isContextDefined,
+  ALPHABET,
+  generateString,
+  isSpecCompliantForm,
+  toJSONObject,
+  isAsyncFn,
+  isThenable
 });
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.unshift.js
 var es_array_unshift = __webpack_require__(541);
@@ -24828,7 +26037,7 @@ utils.inherits(AxiosError, Error, {
       columnNumber: this.columnNumber,
       stack: this.stack,
       // Axios
-      config: this.config,
+      config: utils.toJSONObject(this.config),
       code: this.code,
       status: this.response && this.response.status ? this.response.status : null
     };
@@ -24863,17 +26072,16 @@ AxiosError.from = (error, code, config, request, response, customProps) => {
   return axiosError;
 };
 /* harmony default export */ var core_AxiosError = (AxiosError);
-// EXTERNAL MODULE: ./node_modules/form-data/lib/browser.js
-var browser = __webpack_require__(6237);
-;// CONCATENATED MODULE: ./node_modules/axios/lib/env/classes/FormData.js
-
-/* harmony default export */ var classes_FormData = (browser);
+;// CONCATENATED MODULE: ./node_modules/axios/lib/helpers/null.js
+// eslint-disable-next-line strict
+/* harmony default export */ var helpers_null = (null);
 ;// CONCATENATED MODULE: ./node_modules/axios/lib/helpers/toFormData.js
 
 
 
 
 
+// temporary hotfix to avoid circular references until AxiosURLSearchParams is refactored
 
 
 /**
@@ -24931,17 +26139,6 @@ const predicates = utils.toFlatObject(utils, {}, null, function filter(prop) {
 });
 
 /**
- * If the thing is a FormData object, return true, otherwise return false.
- *
- * @param {unknown} thing - The thing to check.
- *
- * @returns {boolean}
- */
-function isSpecCompliant(thing) {
-  return thing && utils.isFunction(thing.append) && thing[Symbol.toStringTag] === 'FormData' && thing[Symbol.iterator];
-}
-
-/**
  * Convert a data object to FormData
  *
  * @param {Object} obj
@@ -24970,7 +26167,7 @@ function toFormData(obj, formData, options) {
   }
 
   // eslint-disable-next-line no-param-reassign
-  formData = formData || new (classes_FormData || FormData)();
+  formData = formData || new (helpers_null || FormData)();
 
   // eslint-disable-next-line no-param-reassign
   options = utils.toFlatObject(options, {
@@ -24987,7 +26184,7 @@ function toFormData(obj, formData, options) {
   const dots = options.dots;
   const indexes = options.indexes;
   const _Blob = options.Blob || typeof Blob !== 'undefined' && Blob;
-  const useBlob = _Blob && isSpecCompliant(formData);
+  const useBlob = _Blob && utils.isSpecCompliantForm(formData);
   if (!utils.isFunction(visitor)) {
     throw new TypeError('visitor must be a function');
   }
@@ -25023,7 +26220,7 @@ function toFormData(obj, formData, options) {
         key = metaTokens ? key : key.slice(0, -2);
         // eslint-disable-next-line no-param-reassign
         value = JSON.stringify(value);
-      } else if (utils.isArray(value) && isFlatArray(value) || utils.isFileList(value) || utils.endsWith(key, '[]') && (arr = utils.toArray(value))) {
+      } else if (utils.isArray(value) && isFlatArray(value) || (utils.isFileList(value) || utils.endsWith(key, '[]')) && (arr = utils.toArray(value))) {
         // eslint-disable-next-line no-param-reassign
         key = removeBrackets(key);
         arr.forEach(function each(el, index) {
@@ -25257,8 +26454,13 @@ class InterceptorManager {
 ;// CONCATENATED MODULE: ./node_modules/axios/lib/platform/browser/classes/FormData.js
 
 
-/* harmony default export */ var browser_classes_FormData = (FormData);
+/* harmony default export */ var classes_FormData = (typeof FormData !== 'undefined' ? FormData : null);
+;// CONCATENATED MODULE: ./node_modules/axios/lib/platform/browser/classes/Blob.js
+
+
+/* harmony default export */ var classes_Blob = (typeof Blob !== 'undefined' ? Blob : null);
 ;// CONCATENATED MODULE: ./node_modules/axios/lib/platform/browser/index.js
+
 
 
 
@@ -25286,19 +26488,32 @@ const isStandardBrowserEnv = (() => {
   }
   return typeof window !== 'undefined' && typeof document !== 'undefined';
 })();
-/* harmony default export */ var platform_browser = ({
+
+/**
+ * Determine if we're running in a standard browser webWorker environment
+ *
+ * Although the `isStandardBrowserEnv` method indicates that
+ * `allows axios to run in a web worker`, the WebWorker will still be
+ * filtered out due to its judgment standard
+ * `typeof window !== 'undefined' && typeof document !== 'undefined'`.
+ * This leads to a problem when axios post `FormData` in webWorker
+ */
+const isStandardBrowserWebWorkerEnv = (() => {
+  return typeof WorkerGlobalScope !== 'undefined' &&
+  // eslint-disable-next-line no-undef
+  self instanceof WorkerGlobalScope && typeof self.importScripts === 'function';
+})();
+/* harmony default export */ var browser = ({
   isBrowser: true,
   classes: {
     URLSearchParams: classes_URLSearchParams,
-    FormData: browser_classes_FormData,
-    Blob
+    FormData: classes_FormData,
+    Blob: classes_Blob
   },
   isStandardBrowserEnv,
+  isStandardBrowserWebWorkerEnv,
   protocols: ['http', 'https', 'file', 'blob', 'url', 'data']
 });
-;// CONCATENATED MODULE: ./node_modules/axios/lib/platform/index.js
-
-
 ;// CONCATENATED MODULE: ./node_modules/axios/lib/helpers/toURLEncodedForm.js
 
 
@@ -25306,9 +26521,9 @@ const isStandardBrowserEnv = (() => {
 
 
 function toURLEncodedForm(data, options) {
-  return helpers_toFormData(data, new platform_browser.classes.URLSearchParams(), Object.assign({
+  return helpers_toFormData(data, new browser.classes.URLSearchParams(), Object.assign({
     visitor: function (value, key, path, helpers) {
-      if (platform_browser.isNode && utils.isBuffer(value)) {
+      if (browser.isNode && utils.isBuffer(value)) {
         this.append(key, value.toString('base64'));
         return false;
       }
@@ -25398,6 +26613,453 @@ function formDataToJSON(formData) {
   return null;
 }
 /* harmony default export */ var helpers_formDataToJSON = (formDataToJSON);
+;// CONCATENATED MODULE: ./node_modules/axios/lib/defaults/index.js
+
+
+
+
+
+
+
+
+
+const DEFAULT_CONTENT_TYPE = {
+  'Content-Type': undefined
+};
+
+/**
+ * It takes a string, tries to parse it, and if it fails, it returns the stringified version
+ * of the input
+ *
+ * @param {any} rawValue - The value to be stringified.
+ * @param {Function} parser - A function that parses a string into a JavaScript object.
+ * @param {Function} encoder - A function that takes a value and returns a string.
+ *
+ * @returns {string} A stringified version of the rawValue.
+ */
+function stringifySafely(rawValue, parser, encoder) {
+  if (utils.isString(rawValue)) {
+    try {
+      (parser || JSON.parse)(rawValue);
+      return utils.trim(rawValue);
+    } catch (e) {
+      if (e.name !== 'SyntaxError') {
+        throw e;
+      }
+    }
+  }
+  return (encoder || JSON.stringify)(rawValue);
+}
+const defaults = {
+  transitional: defaults_transitional,
+  adapter: ['xhr', 'http'],
+  transformRequest: [function transformRequest(data, headers) {
+    const contentType = headers.getContentType() || '';
+    const hasJSONContentType = contentType.indexOf('application/json') > -1;
+    const isObjectPayload = utils.isObject(data);
+    if (isObjectPayload && utils.isHTMLForm(data)) {
+      data = new FormData(data);
+    }
+    const isFormData = utils.isFormData(data);
+    if (isFormData) {
+      if (!hasJSONContentType) {
+        return data;
+      }
+      return hasJSONContentType ? JSON.stringify(helpers_formDataToJSON(data)) : data;
+    }
+    if (utils.isArrayBuffer(data) || utils.isBuffer(data) || utils.isStream(data) || utils.isFile(data) || utils.isBlob(data)) {
+      return data;
+    }
+    if (utils.isArrayBufferView(data)) {
+      return data.buffer;
+    }
+    if (utils.isURLSearchParams(data)) {
+      headers.setContentType('application/x-www-form-urlencoded;charset=utf-8', false);
+      return data.toString();
+    }
+    let isFileList;
+    if (isObjectPayload) {
+      if (contentType.indexOf('application/x-www-form-urlencoded') > -1) {
+        return toURLEncodedForm(data, this.formSerializer).toString();
+      }
+      if ((isFileList = utils.isFileList(data)) || contentType.indexOf('multipart/form-data') > -1) {
+        const _FormData = this.env && this.env.FormData;
+        return helpers_toFormData(isFileList ? {
+          'files[]': data
+        } : data, _FormData && new _FormData(), this.formSerializer);
+      }
+    }
+    if (isObjectPayload || hasJSONContentType) {
+      headers.setContentType('application/json', false);
+      return stringifySafely(data);
+    }
+    return data;
+  }],
+  transformResponse: [function transformResponse(data) {
+    const transitional = this.transitional || defaults.transitional;
+    const forcedJSONParsing = transitional && transitional.forcedJSONParsing;
+    const JSONRequested = this.responseType === 'json';
+    if (data && utils.isString(data) && (forcedJSONParsing && !this.responseType || JSONRequested)) {
+      const silentJSONParsing = transitional && transitional.silentJSONParsing;
+      const strictJSONParsing = !silentJSONParsing && JSONRequested;
+      try {
+        return JSON.parse(data);
+      } catch (e) {
+        if (strictJSONParsing) {
+          if (e.name === 'SyntaxError') {
+            throw core_AxiosError.from(e, core_AxiosError.ERR_BAD_RESPONSE, this, null, this.response);
+          }
+          throw e;
+        }
+      }
+    }
+    return data;
+  }],
+  /**
+   * A timeout in milliseconds to abort a request. If set to 0 (default) a
+   * timeout is not created.
+   */
+  timeout: 0,
+  xsrfCookieName: 'XSRF-TOKEN',
+  xsrfHeaderName: 'X-XSRF-TOKEN',
+  maxContentLength: -1,
+  maxBodyLength: -1,
+  env: {
+    FormData: browser.classes.FormData,
+    Blob: browser.classes.Blob
+  },
+  validateStatus: function validateStatus(status) {
+    return status >= 200 && status < 300;
+  },
+  headers: {
+    common: {
+      'Accept': 'application/json, text/plain, */*'
+    }
+  }
+};
+utils.forEach(['delete', 'get', 'head'], function forEachMethodNoData(method) {
+  defaults.headers[method] = {};
+});
+utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
+  defaults.headers[method] = utils.merge(DEFAULT_CONTENT_TYPE);
+});
+/* harmony default export */ var lib_defaults = (defaults);
+;// CONCATENATED MODULE: ./node_modules/axios/lib/helpers/parseHeaders.js
+
+
+
+
+
+// RawAxiosHeaders whose duplicates are ignored by node
+// c.f. https://nodejs.org/api/http.html#http_message_headers
+const ignoreDuplicateOf = utils.toObjectSet(['age', 'authorization', 'content-length', 'content-type', 'etag', 'expires', 'from', 'host', 'if-modified-since', 'if-unmodified-since', 'last-modified', 'location', 'max-forwards', 'proxy-authorization', 'referer', 'retry-after', 'user-agent']);
+
+/**
+ * Parse headers into an object
+ *
+ * ```
+ * Date: Wed, 27 Aug 2014 08:58:49 GMT
+ * Content-Type: application/json
+ * Connection: keep-alive
+ * Transfer-Encoding: chunked
+ * ```
+ *
+ * @param {String} rawHeaders Headers needing to be parsed
+ *
+ * @returns {Object} Headers parsed into an object
+ */
+/* harmony default export */ var parseHeaders = (rawHeaders => {
+  const parsed = {};
+  let key;
+  let val;
+  let i;
+  rawHeaders && rawHeaders.split('\n').forEach(function parser(line) {
+    i = line.indexOf(':');
+    key = line.substring(0, i).trim().toLowerCase();
+    val = line.substring(i + 1).trim();
+    if (!key || parsed[key] && ignoreDuplicateOf[key]) {
+      return;
+    }
+    if (key === 'set-cookie') {
+      if (parsed[key]) {
+        parsed[key].push(val);
+      } else {
+        parsed[key] = [val];
+      }
+    } else {
+      parsed[key] = parsed[key] ? parsed[key] + ', ' + val : val;
+    }
+  });
+  return parsed;
+});
+;// CONCATENATED MODULE: ./node_modules/axios/lib/core/AxiosHeaders.js
+
+
+
+
+const $internals = Symbol('internals');
+function normalizeHeader(header) {
+  return header && String(header).trim().toLowerCase();
+}
+function normalizeValue(value) {
+  if (value === false || value == null) {
+    return value;
+  }
+  return utils.isArray(value) ? value.map(normalizeValue) : String(value);
+}
+function parseTokens(str) {
+  const tokens = Object.create(null);
+  const tokensRE = /([^\s,;=]+)\s*(?:=\s*([^,;]+))?/g;
+  let match;
+  while (match = tokensRE.exec(str)) {
+    tokens[match[1]] = match[2];
+  }
+  return tokens;
+}
+const isValidHeaderName = str => /^[-_a-zA-Z0-9^`|~,!#$%&'*+.]+$/.test(str.trim());
+function matchHeaderValue(context, value, header, filter, isHeaderNameFilter) {
+  if (utils.isFunction(filter)) {
+    return filter.call(this, value, header);
+  }
+  if (isHeaderNameFilter) {
+    value = header;
+  }
+  if (!utils.isString(value)) return;
+  if (utils.isString(filter)) {
+    return value.indexOf(filter) !== -1;
+  }
+  if (utils.isRegExp(filter)) {
+    return filter.test(value);
+  }
+}
+function formatHeader(header) {
+  return header.trim().toLowerCase().replace(/([a-z\d])(\w*)/g, (w, char, str) => {
+    return char.toUpperCase() + str;
+  });
+}
+function buildAccessors(obj, header) {
+  const accessorName = utils.toCamelCase(' ' + header);
+  ['get', 'set', 'has'].forEach(methodName => {
+    Object.defineProperty(obj, methodName + accessorName, {
+      value: function (arg1, arg2, arg3) {
+        return this[methodName].call(this, header, arg1, arg2, arg3);
+      },
+      configurable: true
+    });
+  });
+}
+class AxiosHeaders {
+  constructor(headers) {
+    headers && this.set(headers);
+  }
+  set(header, valueOrRewrite, rewrite) {
+    const self = this;
+    function setHeader(_value, _header, _rewrite) {
+      const lHeader = normalizeHeader(_header);
+      if (!lHeader) {
+        throw new Error('header name must be a non-empty string');
+      }
+      const key = utils.findKey(self, lHeader);
+      if (!key || self[key] === undefined || _rewrite === true || _rewrite === undefined && self[key] !== false) {
+        self[key || _header] = normalizeValue(_value);
+      }
+    }
+    const setHeaders = (headers, _rewrite) => utils.forEach(headers, (_value, _header) => setHeader(_value, _header, _rewrite));
+    if (utils.isPlainObject(header) || header instanceof this.constructor) {
+      setHeaders(header, valueOrRewrite);
+    } else if (utils.isString(header) && (header = header.trim()) && !isValidHeaderName(header)) {
+      setHeaders(parseHeaders(header), valueOrRewrite);
+    } else {
+      header != null && setHeader(valueOrRewrite, header, rewrite);
+    }
+    return this;
+  }
+  get(header, parser) {
+    header = normalizeHeader(header);
+    if (header) {
+      const key = utils.findKey(this, header);
+      if (key) {
+        const value = this[key];
+        if (!parser) {
+          return value;
+        }
+        if (parser === true) {
+          return parseTokens(value);
+        }
+        if (utils.isFunction(parser)) {
+          return parser.call(this, value, key);
+        }
+        if (utils.isRegExp(parser)) {
+          return parser.exec(value);
+        }
+        throw new TypeError('parser must be boolean|regexp|function');
+      }
+    }
+  }
+  has(header, matcher) {
+    header = normalizeHeader(header);
+    if (header) {
+      const key = utils.findKey(this, header);
+      return !!(key && this[key] !== undefined && (!matcher || matchHeaderValue(this, this[key], key, matcher)));
+    }
+    return false;
+  }
+  delete(header, matcher) {
+    const self = this;
+    let deleted = false;
+    function deleteHeader(_header) {
+      _header = normalizeHeader(_header);
+      if (_header) {
+        const key = utils.findKey(self, _header);
+        if (key && (!matcher || matchHeaderValue(self, self[key], key, matcher))) {
+          delete self[key];
+          deleted = true;
+        }
+      }
+    }
+    if (utils.isArray(header)) {
+      header.forEach(deleteHeader);
+    } else {
+      deleteHeader(header);
+    }
+    return deleted;
+  }
+  clear(matcher) {
+    const keys = Object.keys(this);
+    let i = keys.length;
+    let deleted = false;
+    while (i--) {
+      const key = keys[i];
+      if (!matcher || matchHeaderValue(this, this[key], key, matcher, true)) {
+        delete this[key];
+        deleted = true;
+      }
+    }
+    return deleted;
+  }
+  normalize(format) {
+    const self = this;
+    const headers = {};
+    utils.forEach(this, (value, header) => {
+      const key = utils.findKey(headers, header);
+      if (key) {
+        self[key] = normalizeValue(value);
+        delete self[header];
+        return;
+      }
+      const normalized = format ? formatHeader(header) : String(header).trim();
+      if (normalized !== header) {
+        delete self[header];
+      }
+      self[normalized] = normalizeValue(value);
+      headers[normalized] = true;
+    });
+    return this;
+  }
+  concat(...targets) {
+    return this.constructor.concat(this, ...targets);
+  }
+  toJSON(asStrings) {
+    const obj = Object.create(null);
+    utils.forEach(this, (value, header) => {
+      value != null && value !== false && (obj[header] = asStrings && utils.isArray(value) ? value.join(', ') : value);
+    });
+    return obj;
+  }
+  [Symbol.iterator]() {
+    return Object.entries(this.toJSON())[Symbol.iterator]();
+  }
+  toString() {
+    return Object.entries(this.toJSON()).map(([header, value]) => header + ': ' + value).join('\n');
+  }
+  get [Symbol.toStringTag]() {
+    return 'AxiosHeaders';
+  }
+  static from(thing) {
+    return thing instanceof this ? thing : new this(thing);
+  }
+  static concat(first, ...targets) {
+    const computed = new this(first);
+    targets.forEach(target => computed.set(target));
+    return computed;
+  }
+  static accessor(header) {
+    const internals = this[$internals] = this[$internals] = {
+      accessors: {}
+    };
+    const accessors = internals.accessors;
+    const prototype = this.prototype;
+    function defineAccessor(_header) {
+      const lHeader = normalizeHeader(_header);
+      if (!accessors[lHeader]) {
+        buildAccessors(prototype, _header);
+        accessors[lHeader] = true;
+      }
+    }
+    utils.isArray(header) ? header.forEach(defineAccessor) : defineAccessor(header);
+    return this;
+  }
+}
+AxiosHeaders.accessor(['Content-Type', 'Content-Length', 'Accept', 'Accept-Encoding', 'User-Agent', 'Authorization']);
+utils.freezeMethods(AxiosHeaders.prototype);
+utils.freezeMethods(AxiosHeaders);
+/* harmony default export */ var core_AxiosHeaders = (AxiosHeaders);
+;// CONCATENATED MODULE: ./node_modules/axios/lib/core/transformData.js
+
+
+
+
+
+
+/**
+ * Transform the data for a request or a response
+ *
+ * @param {Array|Function} fns A single function or Array of functions
+ * @param {?Object} response The response object
+ *
+ * @returns {*} The resulting transformed data
+ */
+function transformData(fns, response) {
+  const config = this || lib_defaults;
+  const context = response || config;
+  const headers = core_AxiosHeaders.from(context.headers);
+  let data = context.data;
+  utils.forEach(fns, function transform(fn) {
+    data = fn.call(config, data, headers.normalize(), response ? response.status : undefined);
+  });
+  headers.normalize();
+  return data;
+}
+;// CONCATENATED MODULE: ./node_modules/axios/lib/cancel/isCancel.js
+
+
+function isCancel(value) {
+  return !!(value && value.__CANCEL__);
+}
+;// CONCATENATED MODULE: ./node_modules/axios/lib/cancel/CanceledError.js
+
+
+
+
+
+/**
+ * A `CanceledError` is an object that is thrown when an operation is canceled.
+ *
+ * @param {string=} message The message.
+ * @param {Object=} config The config.
+ * @param {Object=} request The request.
+ *
+ * @returns {CanceledError} The created error.
+ */
+function CanceledError(message, config, request) {
+  // eslint-disable-next-line no-eq-null,eqeqeq
+  core_AxiosError.call(this, message == null ? 'canceled' : message, core_AxiosError.ERR_CANCELED, config, request);
+  this.name = 'CanceledError';
+}
+utils.inherits(CanceledError, core_AxiosError, {
+  __CANCEL__: true
+});
+/* harmony default export */ var cancel_CanceledError = (CanceledError);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/web.dom-exception.stack.js
 var web_dom_exception_stack = __webpack_require__(2801);
 ;// CONCATENATED MODULE: ./node_modules/axios/lib/core/settle.js
@@ -25428,7 +27090,7 @@ function settle(resolve, reject, response) {
 
 
 
-/* harmony default export */ var cookies = (platform_browser.isStandardBrowserEnv ?
+/* harmony default export */ var cookies = (browser.isStandardBrowserEnv ?
 // Standard browser envs support document.cookie
 function standardBrowserEnv() {
   return {
@@ -25525,7 +27187,7 @@ function buildFullPath(baseURL, requestedURL) {
 
 
 
-/* harmony default export */ var isURLSameOrigin = (platform_browser.isStandardBrowserEnv ?
+/* harmony default export */ var isURLSameOrigin = (browser.isStandardBrowserEnv ?
 // Standard browser envs have full support of the APIs needed to test
 // whether the request URL is of the same origin as current location.
 function standardBrowserEnv() {
@@ -25579,30 +27241,6 @@ function nonStandardBrowserEnv() {
     return true;
   };
 }());
-;// CONCATENATED MODULE: ./node_modules/axios/lib/cancel/CanceledError.js
-
-
-
-
-
-/**
- * A `CanceledError` is an object that is thrown when an operation is canceled.
- *
- * @param {string=} message The message.
- * @param {Object=} config The config.
- * @param {Object=} request The request.
- *
- * @returns {CanceledError} The created error.
- */
-function CanceledError(message, config, request) {
-  // eslint-disable-next-line no-eq-null,eqeqeq
-  core_AxiosError.call(this, message == null ? 'canceled' : message, core_AxiosError.ERR_CANCELED, config, request);
-  this.name = 'CanceledError';
-}
-utils.inherits(CanceledError, core_AxiosError, {
-  __CANCEL__: true
-});
-/* harmony default export */ var cancel_CanceledError = (CanceledError);
 ;// CONCATENATED MODULE: ./node_modules/axios/lib/helpers/parseProtocol.js
 
 
@@ -25610,255 +27248,6 @@ function parseProtocol(url) {
   const match = /^([-+\w]{1,25})(:?\/\/|:)/.exec(url);
   return match && match[1] || '';
 }
-;// CONCATENATED MODULE: ./node_modules/axios/lib/helpers/parseHeaders.js
-
-
-
-
-
-// RawAxiosHeaders whose duplicates are ignored by node
-// c.f. https://nodejs.org/api/http.html#http_message_headers
-const ignoreDuplicateOf = utils.toObjectSet(['age', 'authorization', 'content-length', 'content-type', 'etag', 'expires', 'from', 'host', 'if-modified-since', 'if-unmodified-since', 'last-modified', 'location', 'max-forwards', 'proxy-authorization', 'referer', 'retry-after', 'user-agent']);
-
-/**
- * Parse headers into an object
- *
- * ```
- * Date: Wed, 27 Aug 2014 08:58:49 GMT
- * Content-Type: application/json
- * Connection: keep-alive
- * Transfer-Encoding: chunked
- * ```
- *
- * @param {String} rawHeaders Headers needing to be parsed
- *
- * @returns {Object} Headers parsed into an object
- */
-/* harmony default export */ var parseHeaders = (rawHeaders => {
-  const parsed = {};
-  let key;
-  let val;
-  let i;
-  rawHeaders && rawHeaders.split('\n').forEach(function parser(line) {
-    i = line.indexOf(':');
-    key = line.substring(0, i).trim().toLowerCase();
-    val = line.substring(i + 1).trim();
-    if (!key || parsed[key] && ignoreDuplicateOf[key]) {
-      return;
-    }
-    if (key === 'set-cookie') {
-      if (parsed[key]) {
-        parsed[key].push(val);
-      } else {
-        parsed[key] = [val];
-      }
-    } else {
-      parsed[key] = parsed[key] ? parsed[key] + ', ' + val : val;
-    }
-  });
-  return parsed;
-});
-;// CONCATENATED MODULE: ./node_modules/axios/lib/core/AxiosHeaders.js
-
-
-
-
-const $internals = Symbol('internals');
-const $defaults = Symbol('defaults');
-function normalizeHeader(header) {
-  return header && String(header).trim().toLowerCase();
-}
-function normalizeValue(value) {
-  if (value === false || value == null) {
-    return value;
-  }
-  return utils.isArray(value) ? value.map(normalizeValue) : String(value);
-}
-function parseTokens(str) {
-  const tokens = Object.create(null);
-  const tokensRE = /([^\s,;=]+)\s*(?:=\s*([^,;]+))?/g;
-  let match;
-  while (match = tokensRE.exec(str)) {
-    tokens[match[1]] = match[2];
-  }
-  return tokens;
-}
-function matchHeaderValue(context, value, header, filter) {
-  if (utils.isFunction(filter)) {
-    return filter.call(this, value, header);
-  }
-  if (!utils.isString(value)) return;
-  if (utils.isString(filter)) {
-    return value.indexOf(filter) !== -1;
-  }
-  if (utils.isRegExp(filter)) {
-    return filter.test(value);
-  }
-}
-function formatHeader(header) {
-  return header.trim().toLowerCase().replace(/([a-z\d])(\w*)/g, (w, char, str) => {
-    return char.toUpperCase() + str;
-  });
-}
-function buildAccessors(obj, header) {
-  const accessorName = utils.toCamelCase(' ' + header);
-  ['get', 'set', 'has'].forEach(methodName => {
-    Object.defineProperty(obj, methodName + accessorName, {
-      value: function (arg1, arg2, arg3) {
-        return this[methodName].call(this, header, arg1, arg2, arg3);
-      },
-      configurable: true
-    });
-  });
-}
-function findKey(obj, key) {
-  key = key.toLowerCase();
-  const keys = Object.keys(obj);
-  let i = keys.length;
-  let _key;
-  while (i-- > 0) {
-    _key = keys[i];
-    if (key === _key.toLowerCase()) {
-      return _key;
-    }
-  }
-  return null;
-}
-function AxiosHeaders(headers, defaults) {
-  headers && this.set(headers);
-  this[$defaults] = defaults || null;
-}
-Object.assign(AxiosHeaders.prototype, {
-  set: function (header, valueOrRewrite, rewrite) {
-    const self = this;
-    function setHeader(_value, _header, _rewrite) {
-      const lHeader = normalizeHeader(_header);
-      if (!lHeader) {
-        throw new Error('header name must be a non-empty string');
-      }
-      const key = findKey(self, lHeader);
-      if (key && _rewrite !== true && (self[key] === false || _rewrite === false)) {
-        return;
-      }
-      self[key || _header] = normalizeValue(_value);
-    }
-    if (utils.isPlainObject(header)) {
-      utils.forEach(header, (_value, _header) => {
-        setHeader(_value, _header, valueOrRewrite);
-      });
-    } else {
-      setHeader(valueOrRewrite, header, rewrite);
-    }
-    return this;
-  },
-  get: function (header, parser) {
-    header = normalizeHeader(header);
-    if (!header) return undefined;
-    const key = findKey(this, header);
-    if (key) {
-      const value = this[key];
-      if (!parser) {
-        return value;
-      }
-      if (parser === true) {
-        return parseTokens(value);
-      }
-      if (utils.isFunction(parser)) {
-        return parser.call(this, value, key);
-      }
-      if (utils.isRegExp(parser)) {
-        return parser.exec(value);
-      }
-      throw new TypeError('parser must be boolean|regexp|function');
-    }
-  },
-  has: function (header, matcher) {
-    header = normalizeHeader(header);
-    if (header) {
-      const key = findKey(this, header);
-      return !!(key && (!matcher || matchHeaderValue(this, this[key], key, matcher)));
-    }
-    return false;
-  },
-  delete: function (header, matcher) {
-    const self = this;
-    let deleted = false;
-    function deleteHeader(_header) {
-      _header = normalizeHeader(_header);
-      if (_header) {
-        const key = findKey(self, _header);
-        if (key && (!matcher || matchHeaderValue(self, self[key], key, matcher))) {
-          delete self[key];
-          deleted = true;
-        }
-      }
-    }
-    if (utils.isArray(header)) {
-      header.forEach(deleteHeader);
-    } else {
-      deleteHeader(header);
-    }
-    return deleted;
-  },
-  clear: function () {
-    return Object.keys(this).forEach(this.delete.bind(this));
-  },
-  normalize: function (format) {
-    const self = this;
-    const headers = {};
-    utils.forEach(this, (value, header) => {
-      const key = findKey(headers, header);
-      if (key) {
-        self[key] = normalizeValue(value);
-        delete self[header];
-        return;
-      }
-      const normalized = format ? formatHeader(header) : String(header).trim();
-      if (normalized !== header) {
-        delete self[header];
-      }
-      self[normalized] = normalizeValue(value);
-      headers[normalized] = true;
-    });
-    return this;
-  },
-  toJSON: function (asStrings) {
-    const obj = Object.create(null);
-    utils.forEach(Object.assign({}, this[$defaults] || null, this), (value, header) => {
-      if (value == null || value === false) return;
-      obj[header] = asStrings && utils.isArray(value) ? value.join(', ') : value;
-    });
-    return obj;
-  }
-});
-Object.assign(AxiosHeaders, {
-  from: function (thing) {
-    if (utils.isString(thing)) {
-      return new this(parseHeaders(thing));
-    }
-    return thing instanceof this ? thing : new this(thing);
-  },
-  accessor: function (header) {
-    const internals = this[$internals] = this[$internals] = {
-      accessors: {}
-    };
-    const accessors = internals.accessors;
-    const prototype = this.prototype;
-    function defineAccessor(_header) {
-      const lHeader = normalizeHeader(_header);
-      if (!accessors[lHeader]) {
-        buildAccessors(prototype, _header);
-        accessors[lHeader] = true;
-      }
-    }
-    utils.isArray(header) ? header.forEach(defineAccessor) : defineAccessor(header);
-    return this;
-  }
-});
-AxiosHeaders.accessor(['Content-Type', 'Content-Length', 'Accept', 'Accept-Encoding', 'User-Agent']);
-utils.freezeMethods(AxiosHeaders.prototype);
-utils.freezeMethods(AxiosHeaders);
-/* harmony default export */ var core_AxiosHeaders = (AxiosHeaders);
 ;// CONCATENATED MODULE: ./node_modules/axios/lib/helpers/speedometer.js
 
 
@@ -25935,13 +27324,15 @@ function progressEventReducer(listener, isDownloadStream) {
       progress: total ? loaded / total : undefined,
       bytes: progressBytes,
       rate: rate ? rate : undefined,
-      estimated: rate && total && inRange ? (total - loaded) / rate : undefined
+      estimated: rate && total && inRange ? (total - loaded) / rate : undefined,
+      event: e
     };
     data[isDownloadStream ? 'download' : 'upload'] = true;
     listener(data);
   };
 }
-function xhrAdapter(config) {
+const isXHRAdapterSupported = typeof XMLHttpRequest !== 'undefined';
+/* harmony default export */ var xhr = (isXHRAdapterSupported && function (config) {
   return new Promise(function dispatchXhrRequest(resolve, reject) {
     let requestData = config.data;
     const requestHeaders = core_AxiosHeaders.from(config.headers).normalize();
@@ -25955,8 +27346,12 @@ function xhrAdapter(config) {
         config.signal.removeEventListener('abort', onCanceled);
       }
     }
-    if (utils.isFormData(requestData) && platform_browser.isStandardBrowserEnv) {
-      requestHeaders.setContentType(false); // Let the browser set it
+    if (utils.isFormData(requestData)) {
+      if (browser.isStandardBrowserEnv || browser.isStandardBrowserWebWorkerEnv) {
+        requestHeaders.setContentType(false); // Let the browser set it
+      } else {
+        requestHeaders.setContentType('multipart/form-data;', false); // mobile/desktop app frameworks
+      }
     }
 
     let request = new XMLHttpRequest();
@@ -26058,7 +27453,7 @@ function xhrAdapter(config) {
     // Add xsrf header
     // This is only done if running in a standard browser environment.
     // Specifically not if we're in a web worker, or react-native.
-    if (platform_browser.isStandardBrowserEnv) {
+    if (browser.isStandardBrowserEnv) {
       // Add xsrf header
       const xsrfValue = (config.withCredentials || isURLSameOrigin(fullPath)) && config.xsrfCookieName && cookies.read(config.xsrfCookieName);
       if (xsrfValue) {
@@ -26112,7 +27507,7 @@ function xhrAdapter(config) {
       }
     }
     const protocol = parseProtocol(fullPath);
-    if (protocol && platform_browser.protocols.indexOf(protocol) === -1) {
+    if (protocol && browser.protocols.indexOf(protocol) === -1) {
       reject(new core_AxiosError('Unsupported protocol ' + protocol + ':', core_AxiosError.ERR_BAD_REQUEST, config));
       return;
     }
@@ -26120,214 +27515,59 @@ function xhrAdapter(config) {
     // Send the request
     request.send(requestData || null);
   });
-}
-;// CONCATENATED MODULE: ./node_modules/axios/lib/adapters/index.js
+});
+;// CONCATENATED MODULE: ./node_modules/axios/lib/adapters/adapters.js
 
 
 
-const adapters = {
-  http: xhrAdapter,
-  xhr: xhrAdapter
+
+const knownAdapters = {
+  http: helpers_null,
+  xhr: xhr
 };
-/* harmony default export */ var lib_adapters = ({
-  getAdapter: nameOrAdapter => {
-    if (utils.isString(nameOrAdapter)) {
-      const adapter = adapters[nameOrAdapter];
-      if (!nameOrAdapter) {
-        throw Error(utils.hasOwnProp(nameOrAdapter) ? `Adapter '${nameOrAdapter}' is not available in the build` : `Can not resolve adapter '${nameOrAdapter}'`);
-      }
-      return adapter;
+utils.forEach(knownAdapters, (fn, value) => {
+  if (fn) {
+    try {
+      Object.defineProperty(fn, 'name', {
+        value
+      });
+    } catch (e) {
+      // eslint-disable-next-line no-empty
     }
-    if (!utils.isFunction(nameOrAdapter)) {
+    Object.defineProperty(fn, 'adapterName', {
+      value
+    });
+  }
+});
+/* harmony default export */ var adapters = ({
+  getAdapter: adapters => {
+    adapters = utils.isArray(adapters) ? adapters : [adapters];
+    const {
+      length
+    } = adapters;
+    let nameOrAdapter;
+    let adapter;
+    for (let i = 0; i < length; i++) {
+      nameOrAdapter = adapters[i];
+      if (adapter = utils.isString(nameOrAdapter) ? knownAdapters[nameOrAdapter.toLowerCase()] : nameOrAdapter) {
+        break;
+      }
+    }
+    if (!adapter) {
+      if (adapter === false) {
+        throw new core_AxiosError(`Adapter ${nameOrAdapter} is not supported by the environment`, 'ERR_NOT_SUPPORT');
+      }
+      throw new Error(utils.hasOwnProp(knownAdapters, nameOrAdapter) ? `Adapter '${nameOrAdapter}' is not available in the build` : `Unknown adapter '${nameOrAdapter}'`);
+    }
+    if (!utils.isFunction(adapter)) {
       throw new TypeError('adapter is not a function');
     }
-    return nameOrAdapter;
+    return adapter;
   },
-  adapters
+  adapters: knownAdapters
 });
-;// CONCATENATED MODULE: ./node_modules/axios/lib/defaults/index.js
-
-
-
-
-
-
-
-
-
-
-const DEFAULT_CONTENT_TYPE = {
-  'Content-Type': 'application/x-www-form-urlencoded'
-};
-
-/**
- * If the browser has an XMLHttpRequest object, use the XHR adapter, otherwise use the HTTP
- * adapter
- *
- * @returns {Function}
- */
-function getDefaultAdapter() {
-  let adapter;
-  if (typeof XMLHttpRequest !== 'undefined') {
-    // For browsers use XHR adapter
-    adapter = lib_adapters.getAdapter('xhr');
-  } else if (typeof process !== 'undefined' && utils.kindOf(process) === 'process') {
-    // For node use HTTP adapter
-    adapter = lib_adapters.getAdapter('http');
-  }
-  return adapter;
-}
-
-/**
- * It takes a string, tries to parse it, and if it fails, it returns the stringified version
- * of the input
- *
- * @param {any} rawValue - The value to be stringified.
- * @param {Function} parser - A function that parses a string into a JavaScript object.
- * @param {Function} encoder - A function that takes a value and returns a string.
- *
- * @returns {string} A stringified version of the rawValue.
- */
-function stringifySafely(rawValue, parser, encoder) {
-  if (utils.isString(rawValue)) {
-    try {
-      (parser || JSON.parse)(rawValue);
-      return utils.trim(rawValue);
-    } catch (e) {
-      if (e.name !== 'SyntaxError') {
-        throw e;
-      }
-    }
-  }
-  return (encoder || JSON.stringify)(rawValue);
-}
-const defaults = {
-  transitional: defaults_transitional,
-  adapter: getDefaultAdapter(),
-  transformRequest: [function transformRequest(data, headers) {
-    const contentType = headers.getContentType() || '';
-    const hasJSONContentType = contentType.indexOf('application/json') > -1;
-    const isObjectPayload = utils.isObject(data);
-    if (isObjectPayload && utils.isHTMLForm(data)) {
-      data = new FormData(data);
-    }
-    const isFormData = utils.isFormData(data);
-    if (isFormData) {
-      if (!hasJSONContentType) {
-        return data;
-      }
-      return hasJSONContentType ? JSON.stringify(helpers_formDataToJSON(data)) : data;
-    }
-    if (utils.isArrayBuffer(data) || utils.isBuffer(data) || utils.isStream(data) || utils.isFile(data) || utils.isBlob(data)) {
-      return data;
-    }
-    if (utils.isArrayBufferView(data)) {
-      return data.buffer;
-    }
-    if (utils.isURLSearchParams(data)) {
-      headers.setContentType('application/x-www-form-urlencoded;charset=utf-8', false);
-      return data.toString();
-    }
-    let isFileList;
-    if (isObjectPayload) {
-      if (contentType.indexOf('application/x-www-form-urlencoded') > -1) {
-        return toURLEncodedForm(data, this.formSerializer).toString();
-      }
-      if ((isFileList = utils.isFileList(data)) || contentType.indexOf('multipart/form-data') > -1) {
-        const _FormData = this.env && this.env.FormData;
-        return helpers_toFormData(isFileList ? {
-          'files[]': data
-        } : data, _FormData && new _FormData(), this.formSerializer);
-      }
-    }
-    if (isObjectPayload || hasJSONContentType) {
-      headers.setContentType('application/json', false);
-      return stringifySafely(data);
-    }
-    return data;
-  }],
-  transformResponse: [function transformResponse(data) {
-    const transitional = this.transitional || defaults.transitional;
-    const forcedJSONParsing = transitional && transitional.forcedJSONParsing;
-    const JSONRequested = this.responseType === 'json';
-    if (data && utils.isString(data) && (forcedJSONParsing && !this.responseType || JSONRequested)) {
-      const silentJSONParsing = transitional && transitional.silentJSONParsing;
-      const strictJSONParsing = !silentJSONParsing && JSONRequested;
-      try {
-        return JSON.parse(data);
-      } catch (e) {
-        if (strictJSONParsing) {
-          if (e.name === 'SyntaxError') {
-            throw core_AxiosError.from(e, core_AxiosError.ERR_BAD_RESPONSE, this, null, this.response);
-          }
-          throw e;
-        }
-      }
-    }
-    return data;
-  }],
-  /**
-   * A timeout in milliseconds to abort a request. If set to 0 (default) a
-   * timeout is not created.
-   */
-  timeout: 0,
-  xsrfCookieName: 'XSRF-TOKEN',
-  xsrfHeaderName: 'X-XSRF-TOKEN',
-  maxContentLength: -1,
-  maxBodyLength: -1,
-  env: {
-    FormData: platform_browser.classes.FormData,
-    Blob: platform_browser.classes.Blob
-  },
-  validateStatus: function validateStatus(status) {
-    return status >= 200 && status < 300;
-  },
-  headers: {
-    common: {
-      'Accept': 'application/json, text/plain, */*'
-    }
-  }
-};
-utils.forEach(['delete', 'get', 'head'], function forEachMethodNoData(method) {
-  defaults.headers[method] = {};
-});
-utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
-  defaults.headers[method] = utils.merge(DEFAULT_CONTENT_TYPE);
-});
-/* harmony default export */ var lib_defaults = (defaults);
-;// CONCATENATED MODULE: ./node_modules/axios/lib/core/transformData.js
-
-
-
-
-
-
-/**
- * Transform the data for a request or a response
- *
- * @param {Array|Function} fns A single function or Array of functions
- * @param {?Object} response The response object
- *
- * @returns {*} The resulting transformed data
- */
-function transformData(fns, response) {
-  const config = this || lib_defaults;
-  const context = response || config;
-  const headers = core_AxiosHeaders.from(context.headers);
-  let data = context.data;
-  utils.forEach(fns, function transform(fn) {
-    data = fn.call(config, data, headers.normalize(), response ? response.status : undefined);
-  });
-  headers.normalize();
-  return data;
-}
-;// CONCATENATED MODULE: ./node_modules/axios/lib/cancel/isCancel.js
-
-
-function isCancel(value) {
-  return !!(value && value.__CANCEL__);
-}
 ;// CONCATENATED MODULE: ./node_modules/axios/lib/core/dispatchRequest.js
+
 
 
 
@@ -26348,7 +27588,7 @@ function throwIfCancellationRequested(config) {
     config.cancelToken.throwIfRequested();
   }
   if (config.signal && config.signal.aborted) {
-    throw new cancel_CanceledError();
+    throw new cancel_CanceledError(null, config);
   }
 }
 
@@ -26365,7 +27605,10 @@ function dispatchRequest(config) {
 
   // Transform request data
   config.data = transformData.call(config, config.transformRequest);
-  const adapter = config.adapter || lib_defaults.adapter;
+  if (['post', 'put', 'patch'].indexOf(config.method) !== -1) {
+    config.headers.setContentType('application/x-www-form-urlencoded', false);
+  }
+  const adapter = adapters.getAdapter(config.adapter || lib_defaults.adapter);
   return adapter(config).then(function onAdapterResolution(response) {
     throwIfCancellationRequested(config);
 
@@ -26391,6 +27634,8 @@ function dispatchRequest(config) {
 
 
 
+const headersToObject = thing => thing instanceof core_AxiosHeaders ? thing.toJSON() : thing;
+
 /**
  * Config-specific merge-function which creates a new config-object
  * by merging two configuration objects together.
@@ -26404,9 +27649,11 @@ function mergeConfig(config1, config2) {
   // eslint-disable-next-line no-param-reassign
   config2 = config2 || {};
   const config = {};
-  function getMergedValue(target, source) {
+  function getMergedValue(target, source, caseless) {
     if (utils.isPlainObject(target) && utils.isPlainObject(source)) {
-      return utils.merge(target, source);
+      return utils.merge.call({
+        caseless
+      }, target, source);
     } else if (utils.isPlainObject(source)) {
       return utils.merge({}, source);
     } else if (utils.isArray(source)) {
@@ -26416,76 +27663,77 @@ function mergeConfig(config1, config2) {
   }
 
   // eslint-disable-next-line consistent-return
-  function mergeDeepProperties(prop) {
-    if (!utils.isUndefined(config2[prop])) {
-      return getMergedValue(config1[prop], config2[prop]);
-    } else if (!utils.isUndefined(config1[prop])) {
-      return getMergedValue(undefined, config1[prop]);
+  function mergeDeepProperties(a, b, caseless) {
+    if (!utils.isUndefined(b)) {
+      return getMergedValue(a, b, caseless);
+    } else if (!utils.isUndefined(a)) {
+      return getMergedValue(undefined, a, caseless);
     }
   }
 
   // eslint-disable-next-line consistent-return
-  function valueFromConfig2(prop) {
-    if (!utils.isUndefined(config2[prop])) {
-      return getMergedValue(undefined, config2[prop]);
+  function valueFromConfig2(a, b) {
+    if (!utils.isUndefined(b)) {
+      return getMergedValue(undefined, b);
     }
   }
 
   // eslint-disable-next-line consistent-return
-  function defaultToConfig2(prop) {
-    if (!utils.isUndefined(config2[prop])) {
-      return getMergedValue(undefined, config2[prop]);
-    } else if (!utils.isUndefined(config1[prop])) {
-      return getMergedValue(undefined, config1[prop]);
+  function defaultToConfig2(a, b) {
+    if (!utils.isUndefined(b)) {
+      return getMergedValue(undefined, b);
+    } else if (!utils.isUndefined(a)) {
+      return getMergedValue(undefined, a);
     }
   }
 
   // eslint-disable-next-line consistent-return
-  function mergeDirectKeys(prop) {
+  function mergeDirectKeys(a, b, prop) {
     if (prop in config2) {
-      return getMergedValue(config1[prop], config2[prop]);
+      return getMergedValue(a, b);
     } else if (prop in config1) {
-      return getMergedValue(undefined, config1[prop]);
+      return getMergedValue(undefined, a);
     }
   }
   const mergeMap = {
-    'url': valueFromConfig2,
-    'method': valueFromConfig2,
-    'data': valueFromConfig2,
-    'baseURL': defaultToConfig2,
-    'transformRequest': defaultToConfig2,
-    'transformResponse': defaultToConfig2,
-    'paramsSerializer': defaultToConfig2,
-    'timeout': defaultToConfig2,
-    'timeoutMessage': defaultToConfig2,
-    'withCredentials': defaultToConfig2,
-    'adapter': defaultToConfig2,
-    'responseType': defaultToConfig2,
-    'xsrfCookieName': defaultToConfig2,
-    'xsrfHeaderName': defaultToConfig2,
-    'onUploadProgress': defaultToConfig2,
-    'onDownloadProgress': defaultToConfig2,
-    'decompress': defaultToConfig2,
-    'maxContentLength': defaultToConfig2,
-    'maxBodyLength': defaultToConfig2,
-    'beforeRedirect': defaultToConfig2,
-    'transport': defaultToConfig2,
-    'httpAgent': defaultToConfig2,
-    'httpsAgent': defaultToConfig2,
-    'cancelToken': defaultToConfig2,
-    'socketPath': defaultToConfig2,
-    'responseEncoding': defaultToConfig2,
-    'validateStatus': mergeDirectKeys
+    url: valueFromConfig2,
+    method: valueFromConfig2,
+    data: valueFromConfig2,
+    baseURL: defaultToConfig2,
+    transformRequest: defaultToConfig2,
+    transformResponse: defaultToConfig2,
+    paramsSerializer: defaultToConfig2,
+    timeout: defaultToConfig2,
+    timeoutMessage: defaultToConfig2,
+    withCredentials: defaultToConfig2,
+    adapter: defaultToConfig2,
+    responseType: defaultToConfig2,
+    xsrfCookieName: defaultToConfig2,
+    xsrfHeaderName: defaultToConfig2,
+    onUploadProgress: defaultToConfig2,
+    onDownloadProgress: defaultToConfig2,
+    decompress: defaultToConfig2,
+    maxContentLength: defaultToConfig2,
+    maxBodyLength: defaultToConfig2,
+    beforeRedirect: defaultToConfig2,
+    transport: defaultToConfig2,
+    httpAgent: defaultToConfig2,
+    httpsAgent: defaultToConfig2,
+    cancelToken: defaultToConfig2,
+    socketPath: defaultToConfig2,
+    responseEncoding: defaultToConfig2,
+    validateStatus: mergeDirectKeys,
+    headers: (a, b) => mergeDeepProperties(headersToObject(a), headersToObject(b), true)
   };
-  utils.forEach(Object.keys(config1).concat(Object.keys(config2)), function computeConfigValue(prop) {
+  utils.forEach(Object.keys(Object.assign({}, config1, config2)), function computeConfigValue(prop) {
     const merge = mergeMap[prop] || mergeDeepProperties;
-    const configValue = merge(prop);
+    const configValue = merge(config1[prop], config2[prop], prop);
     utils.isUndefined(configValue) && merge !== mergeDirectKeys || (config[prop] = configValue);
   });
   return config;
 }
 ;// CONCATENATED MODULE: ./node_modules/axios/lib/env/data.js
-const VERSION = "1.1.3";
+const VERSION = "1.4.0";
 ;// CONCATENATED MODULE: ./node_modules/axios/lib/helpers/validator.js
 
 
@@ -26616,7 +27864,8 @@ class Axios {
     config = mergeConfig(this.defaults, config);
     const {
       transitional,
-      paramsSerializer
+      paramsSerializer,
+      headers
     } = config;
     if (transitional !== undefined) {
       validator.assertOptions(transitional, {
@@ -26625,22 +27874,29 @@ class Axios {
         clarifyTimeoutError: Axios_validators.transitional(Axios_validators.boolean)
       }, false);
     }
-    if (paramsSerializer !== undefined) {
-      validator.assertOptions(paramsSerializer, {
-        encode: Axios_validators.function,
-        serialize: Axios_validators.function
-      }, true);
+    if (paramsSerializer != null) {
+      if (utils.isFunction(paramsSerializer)) {
+        config.paramsSerializer = {
+          serialize: paramsSerializer
+        };
+      } else {
+        validator.assertOptions(paramsSerializer, {
+          encode: Axios_validators.function,
+          serialize: Axios_validators.function
+        }, true);
+      }
     }
 
     // Set config.method
     config.method = (config.method || this.defaults.method || 'get').toLowerCase();
+    let contextHeaders;
 
     // Flatten headers
-    const defaultHeaders = config.headers && utils.merge(config.headers.common, config.headers[config.method]);
-    defaultHeaders && utils.forEach(['delete', 'get', 'head', 'post', 'put', 'patch', 'common'], function cleanHeaderConfig(method) {
-      delete config.headers[method];
+    contextHeaders = headers && utils.merge(headers.common, headers[config.method]);
+    contextHeaders && utils.forEach(['delete', 'get', 'head', 'post', 'put', 'patch', 'common'], method => {
+      delete headers[method];
     });
-    config.headers = new core_AxiosHeaders(config.headers, defaultHeaders);
+    config.headers = core_AxiosHeaders.concat(contextHeaders, headers);
 
     // filter out skipped interceptors
     const requestInterceptorChain = [];
@@ -26888,7 +28144,79 @@ function spread(callback) {
 function isAxiosError(payload) {
   return utils.isObject(payload) && payload.isAxiosError === true;
 }
+;// CONCATENATED MODULE: ./node_modules/axios/lib/helpers/HttpStatusCode.js
+const HttpStatusCode = {
+  Continue: 100,
+  SwitchingProtocols: 101,
+  Processing: 102,
+  EarlyHints: 103,
+  Ok: 200,
+  Created: 201,
+  Accepted: 202,
+  NonAuthoritativeInformation: 203,
+  NoContent: 204,
+  ResetContent: 205,
+  PartialContent: 206,
+  MultiStatus: 207,
+  AlreadyReported: 208,
+  ImUsed: 226,
+  MultipleChoices: 300,
+  MovedPermanently: 301,
+  Found: 302,
+  SeeOther: 303,
+  NotModified: 304,
+  UseProxy: 305,
+  Unused: 306,
+  TemporaryRedirect: 307,
+  PermanentRedirect: 308,
+  BadRequest: 400,
+  Unauthorized: 401,
+  PaymentRequired: 402,
+  Forbidden: 403,
+  NotFound: 404,
+  MethodNotAllowed: 405,
+  NotAcceptable: 406,
+  ProxyAuthenticationRequired: 407,
+  RequestTimeout: 408,
+  Conflict: 409,
+  Gone: 410,
+  LengthRequired: 411,
+  PreconditionFailed: 412,
+  PayloadTooLarge: 413,
+  UriTooLong: 414,
+  UnsupportedMediaType: 415,
+  RangeNotSatisfiable: 416,
+  ExpectationFailed: 417,
+  ImATeapot: 418,
+  MisdirectedRequest: 421,
+  UnprocessableEntity: 422,
+  Locked: 423,
+  FailedDependency: 424,
+  TooEarly: 425,
+  UpgradeRequired: 426,
+  PreconditionRequired: 428,
+  TooManyRequests: 429,
+  RequestHeaderFieldsTooLarge: 431,
+  UnavailableForLegalReasons: 451,
+  InternalServerError: 500,
+  NotImplemented: 501,
+  BadGateway: 502,
+  ServiceUnavailable: 503,
+  GatewayTimeout: 504,
+  HttpVersionNotSupported: 505,
+  VariantAlsoNegotiates: 506,
+  InsufficientStorage: 507,
+  LoopDetected: 508,
+  NotExtended: 510,
+  NetworkAuthenticationRequired: 511
+};
+Object.entries(HttpStatusCode).forEach(([key, value]) => {
+  HttpStatusCode[value] = key;
+});
+/* harmony default export */ var helpers_HttpStatusCode = (HttpStatusCode);
 ;// CONCATENATED MODULE: ./node_modules/axios/lib/axios.js
+
+
 
 
 
@@ -26961,34 +28289,20 @@ axios.spread = spread;
 
 // Expose isAxiosError
 axios.isAxiosError = isAxiosError;
-axios.formToJSON = thing => {
-  return helpers_formDataToJSON(utils.isHTMLForm(thing) ? new FormData(thing) : thing);
-};
+
+// Expose mergeConfig
+axios.mergeConfig = mergeConfig;
+axios.AxiosHeaders = core_AxiosHeaders;
+axios.formToJSON = thing => helpers_formDataToJSON(utils.isHTMLForm(thing) ? new FormData(thing) : thing);
+axios.HttpStatusCode = helpers_HttpStatusCode;
+axios.default = axios;
+
+// this module should only have a default export
 /* harmony default export */ var lib_axios = (axios);
-;// CONCATENATED MODULE: ./node_modules/axios/index.js
-
-
-// Keep top-level export same with static properties
-// so that it can keep same with es module or cjs
-const {
-  Axios: axios_Axios,
-  AxiosError: axios_AxiosError,
-  CanceledError: axios_CanceledError,
-  isCancel: axios_isCancel,
-  CancelToken: axios_CancelToken,
-  VERSION: axios_VERSION,
-  all: axios_all,
-  Cancel,
-  isAxiosError: axios_isAxiosError,
-  spread: axios_spread,
-  toFormData: axios_toFormData
-} = lib_axios;
-/* harmony default export */ var node_modules_axios = (lib_axios);
-
 ;// CONCATENATED MODULE: ./src/utils/request.ts
 
 // create an axios instance
-const service = node_modules_axios.create({
+const service = lib_axios.create({
   baseURL: "/pjcan-app/",
   timeout: 30000
 });
@@ -27066,11 +28380,12 @@ const getFormatTime = (value, msec = true) => {
 /* harmony export */   "iH": function() { return /* binding */ ref; },
 /* harmony export */   "j": function() { return /* binding */ track; },
 /* harmony export */   "lk": function() { return /* binding */ resetTracking; },
+/* harmony export */   "nZ": function() { return /* binding */ getCurrentScope; },
 /* harmony export */   "qj": function() { return /* binding */ reactive; },
 /* harmony export */   "qq": function() { return /* binding */ ReactiveEffect; },
 /* harmony export */   "yT": function() { return /* binding */ isShallow; }
 /* harmony export */ });
-/* unused harmony exports ITERATE_KEY, customRef, deferredComputed, effect, enableTracking, getCurrentScope, isReadonly, shallowReadonly, stop, triggerRef */
+/* unused harmony exports ITERATE_KEY, customRef, deferredComputed, effect, enableTracking, isReadonly, shallowReadonly, stop, triggerRef */
 /* harmony import */ var core_js_modules_es_array_push_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(7658);
 /* harmony import */ var core_js_modules_es_array_push_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_push_js__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _vue_shared__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(7139);
@@ -27086,7 +28401,7 @@ class EffectScope {
     /**
      * @internal
      */
-    this.active = true;
+    this._active = true;
     /**
      * @internal
      */
@@ -27100,8 +28415,11 @@ class EffectScope {
       this.index = (activeEffectScope.scopes || (activeEffectScope.scopes = [])).push(this) - 1;
     }
   }
+  get active() {
+    return this._active;
+  }
   run(fn) {
-    if (this.active) {
+    if (this._active) {
       const currentEffectScope = activeEffectScope;
       try {
         activeEffectScope = this;
@@ -27126,7 +28444,7 @@ class EffectScope {
     activeEffectScope = this.parent;
   }
   stop(fromParent) {
-    if (this.active) {
+    if (this._active) {
       let i, l;
       for (i = 0, l = this.effects.length; i < l; i++) {
         this.effects[i].stop();
@@ -27149,7 +28467,7 @@ class EffectScope {
         }
       }
       this.parent = undefined;
-      this.active = false;
+      this._active = false;
     }
   }
 }
@@ -27365,8 +28683,9 @@ function trigger(target, type, key, newValue, oldValue, oldTarget) {
     // trigger all effects for target
     deps = [...depsMap.values()];
   } else if (key === 'length' && (0,_vue_shared__WEBPACK_IMPORTED_MODULE_1__/* .isArray */ .kJ)(target)) {
+    const newLength = Number(newValue);
     depsMap.forEach((dep, key) => {
-      if (key === 'length' || key >= newValue) {
+      if (key === 'length' || key >= newLength) {
         deps.push(dep);
       }
     });
@@ -27446,6 +28765,10 @@ function triggerEffect(effect, debuggerEventExtraInfo) {
     }
   }
 }
+function getDepFromReactive(object, key) {
+  var _a;
+  return (_a = targetMap.get(object)) === null || _a === void 0 ? void 0 : _a.get(key);
+}
 const isNonTrackableKeys = /*#__PURE__*/(0,_vue_shared__WEBPACK_IMPORTED_MODULE_1__/* .makeMap */ .fY)(`__proto__,__v_isRef,__isVue`);
 const builtInSymbols = new Set( /*#__PURE__*/
 Object.getOwnPropertyNames(Symbol)
@@ -27453,7 +28776,7 @@ Object.getOwnPropertyNames(Symbol)
 // but accessing them on Symbol leads to TypeError because Symbol is a strict mode
 // function
 .filter(key => key !== 'arguments' && key !== 'caller').map(key => Symbol[key]).filter(_vue_shared__WEBPACK_IMPORTED_MODULE_1__/* .isSymbol */ .yk));
-const get = /*#__PURE__*/createGetter();
+const get$1 = /*#__PURE__*/createGetter();
 const shallowGet = /*#__PURE__*/createGetter(false, true);
 const readonlyGet = /*#__PURE__*/createGetter(true);
 const shallowReadonlyGet = /*#__PURE__*/createGetter(true, true);
@@ -27486,6 +28809,11 @@ function createArrayInstrumentations() {
   });
   return instrumentations;
 }
+function hasOwnProperty(key) {
+  const obj = toRaw(this);
+  track(obj, "has" /* TrackOpTypes.HAS */, key);
+  return obj.hasOwnProperty(key);
+}
 function createGetter(isReadonly = false, shallow = false) {
   return function get(target, key, receiver) {
     if (key === "__v_isReactive" /* ReactiveFlags.IS_REACTIVE */) {
@@ -27498,8 +28826,13 @@ function createGetter(isReadonly = false, shallow = false) {
       return target;
     }
     const targetIsArray = (0,_vue_shared__WEBPACK_IMPORTED_MODULE_1__/* .isArray */ .kJ)(target);
-    if (!isReadonly && targetIsArray && (0,_vue_shared__WEBPACK_IMPORTED_MODULE_1__/* .hasOwn */ .RI)(arrayInstrumentations, key)) {
-      return Reflect.get(arrayInstrumentations, key, receiver);
+    if (!isReadonly) {
+      if (targetIsArray && (0,_vue_shared__WEBPACK_IMPORTED_MODULE_1__/* .hasOwn */ .RI)(arrayInstrumentations, key)) {
+        return Reflect.get(arrayInstrumentations, key, receiver);
+      }
+      if (key === 'hasOwnProperty') {
+        return hasOwnProperty;
+      }
     }
     const res = Reflect.get(target, key, receiver);
     if ((0,_vue_shared__WEBPACK_IMPORTED_MODULE_1__/* .isSymbol */ .yk)(key) ? builtInSymbols.has(key) : isNonTrackableKeys(key)) {
@@ -27524,7 +28857,7 @@ function createGetter(isReadonly = false, shallow = false) {
     return res;
   };
 }
-const set = /*#__PURE__*/createSetter();
+const set$1 = /*#__PURE__*/createSetter();
 const shallowSet = /*#__PURE__*/createSetter(true);
 function createSetter(shallow = false) {
   return function set(target, key, value, receiver) {
@@ -27564,7 +28897,7 @@ function deleteProperty(target, key) {
   }
   return result;
 }
-function has(target, key) {
+function has$1(target, key) {
   const result = Reflect.has(target, key);
   if (!(0,_vue_shared__WEBPACK_IMPORTED_MODULE_1__/* .isSymbol */ .yk)(key) || !builtInSymbols.has(key)) {
     track(target, "has" /* TrackOpTypes.HAS */, key);
@@ -27576,10 +28909,10 @@ function ownKeys(target) {
   return Reflect.ownKeys(target);
 }
 const mutableHandlers = {
-  get,
-  set,
+  get: get$1,
+  set: set$1,
   deleteProperty,
-  has,
+  has: has$1,
   ownKeys
 };
 const readonlyHandlers = {
@@ -27605,7 +28938,7 @@ const shallowReadonlyHandlers = /*#__PURE__*/(0,_vue_shared__WEBPACK_IMPORTED_MO
 });
 const toShallow = value => value;
 const getProto = v => Reflect.getPrototypeOf(v);
-function get$1(target, key, isReadonly = false, isShallow = false) {
+function get(target, key, isReadonly = false, isShallow = false) {
   // #1772: readonly(reactive(Map)) should return readonly + reactive version
   // of the value
   target = target["__v_raw" /* ReactiveFlags.RAW */];
@@ -27631,7 +28964,7 @@ function get$1(target, key, isReadonly = false, isShallow = false) {
     target.get(key);
   }
 }
-function has$1(key, isReadonly = false) {
+function has(key, isReadonly = false) {
   const target = this["__v_raw" /* ReactiveFlags.RAW */];
   const rawTarget = toRaw(target);
   const rawKey = toRaw(key);
@@ -27659,7 +28992,7 @@ function add(value) {
   }
   return this;
 }
-function set$1(key, value) {
+function set(key, value) {
   value = toRaw(value);
   const target = toRaw(this);
   const {
@@ -27768,41 +29101,41 @@ function createReadonlyMethod(type) {
 function createInstrumentations() {
   const mutableInstrumentations = {
     get(key) {
-      return get$1(this, key);
+      return get(this, key);
     },
     get size() {
       return size(this);
     },
-    has: has$1,
+    has,
     add,
-    set: set$1,
+    set,
     delete: deleteEntry,
     clear,
     forEach: createForEach(false, false)
   };
   const shallowInstrumentations = {
     get(key) {
-      return get$1(this, key, false, true);
+      return get(this, key, false, true);
     },
     get size() {
       return size(this);
     },
-    has: has$1,
+    has,
     add,
-    set: set$1,
+    set,
     delete: deleteEntry,
     clear,
     forEach: createForEach(false, true)
   };
   const readonlyInstrumentations = {
     get(key) {
-      return get$1(this, key, true);
+      return get(this, key, true);
     },
     get size() {
       return size(this, true);
     },
     has(key) {
-      return has$1.call(this, key, true);
+      return has.call(this, key, true);
     },
     add: createReadonlyMethod("add" /* TriggerOpTypes.ADD */),
     set: createReadonlyMethod("set" /* TriggerOpTypes.SET */),
@@ -27812,13 +29145,13 @@ function createInstrumentations() {
   };
   const shallowReadonlyInstrumentations = {
     get(key) {
-      return get$1(this, key, true, true);
+      return get(this, key, true, true);
     },
     get size() {
       return size(this, true);
     },
     has(key) {
-      return has$1.call(this, key, true);
+      return has.call(this, key, true);
     },
     add: createReadonlyMethod("add" /* TriggerOpTypes.ADD */),
     set: createReadonlyMethod("set" /* TriggerOpTypes.SET */),
@@ -27984,9 +29317,10 @@ function trackRefValue(ref) {
 }
 function triggerRefValue(ref, newVal) {
   ref = toRaw(ref);
-  if (ref.dep) {
+  const dep = ref.dep;
+  if (dep) {
     if (false) {} else {
-      triggerEffects(ref.dep);
+      triggerEffects(dep);
     }
   }
 }
@@ -28091,18 +29425,21 @@ class ObjectRefImpl {
   set value(newVal) {
     this._object[this._key] = newVal;
   }
+  get dep() {
+    return getDepFromReactive(toRaw(this._object), this._key);
+  }
 }
 function toRef(object, key, defaultValue) {
   const val = object[key];
   return isRef(val) ? val : new ObjectRefImpl(object, key, defaultValue);
 }
-var _a;
+var _a$1;
 class ComputedRefImpl {
   constructor(getter, _setter, isReadonly, isSSR) {
     this._setter = _setter;
     this.dep = undefined;
     this.__v_isRef = true;
-    this[_a] = false;
+    this[_a$1] = false;
     this._dirty = true;
     this.effect = new ReactiveEffect(getter, () => {
       if (!this._dirty) {
@@ -28128,7 +29465,7 @@ class ComputedRefImpl {
     this._setter(newValue);
   }
 }
-_a = "__v_isReadonly" /* ReactiveFlags.IS_READONLY */;
+_a$1 = "__v_isReadonly" /* ReactiveFlags.IS_READONLY */;
 function computed(getterOrOptions, debugOptions, isSSR = false) {
   let getter;
   let setter;
@@ -28144,7 +29481,7 @@ function computed(getterOrOptions, debugOptions, isSSR = false) {
   if (false) {}
   return cRef;
 }
-var _a$1;
+var _a;
 const tick = /*#__PURE__*/(/* unused pure expression or super */ null && (Promise.resolve()));
 const queue = (/* unused pure expression or super */ null && ([]));
 let queued = false;
@@ -28167,7 +29504,7 @@ class DeferredComputedRefImpl {
     this.dep = undefined;
     this._dirty = true;
     this.__v_isRef = true;
-    this[_a$1] = true;
+    this[_a] = true;
     let compareTarget;
     let hasCompareTarget = false;
     let scheduled = false;
@@ -28214,7 +29551,7 @@ class DeferredComputedRefImpl {
     return toRaw(this)._get();
   }
 }
-_a$1 = "__v_isReadonly" /* ReactiveFlags.IS_READONLY */;
+_a = "__v_isReadonly" /* ReactiveFlags.IS_READONLY */;
 function deferredComputed(getter) {
   return new DeferredComputedRefImpl(getter);
 }
@@ -28279,7 +29616,7 @@ function deferredComputed(getter) {
 /* harmony export */   "wy": function() { return /* binding */ withDirectives; },
 /* harmony export */   "xv": function() { return /* binding */ Text; }
 /* harmony export */ });
-/* unused harmony exports KeepAlive, Static, callWithErrorHandling, compatUtils, createHydrationRenderer, createPropsRestProxy, createSlots, createStaticVNode, defineEmits, defineExpose, defineProps, devtools, guardReactiveProps, handleError, initCustomFormatter, isMemoSame, isRuntimeOnly, mergeDefaults, onErrorCaptured, onRenderTracked, onRenderTriggered, onServerPrefetch, queuePostFlushCb, registerRuntimeCompiler, resolveFilter, setBlockTracking, setDevtoolsHook, ssrContextKey, ssrUtils, transformVNodeArgs, useAttrs, useSSRContext, useSlots, version, watchPostEffect, watchSyncEffect, withAsyncContext, withDefaults, withMemo, withScopeId */
+/* unused harmony exports KeepAlive, Static, assertNumber, callWithErrorHandling, compatUtils, createHydrationRenderer, createPropsRestProxy, createSlots, createStaticVNode, defineEmits, defineExpose, defineProps, devtools, guardReactiveProps, handleError, initCustomFormatter, isMemoSame, isRuntimeOnly, mergeDefaults, onErrorCaptured, onRenderTracked, onRenderTriggered, onServerPrefetch, queuePostFlushCb, registerRuntimeCompiler, resolveFilter, setBlockTracking, setDevtoolsHook, ssrContextKey, ssrUtils, transformVNodeArgs, useAttrs, useSSRContext, useSlots, version, watchPostEffect, watchSyncEffect, withAsyncContext, withDefaults, withMemo, withScopeId */
 /* harmony import */ var core_js_modules_es_array_push_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(7658);
 /* harmony import */ var core_js_modules_es_array_push_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_push_js__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var core_js_modules_es_array_unshift_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(541);
@@ -28300,6 +29637,7 @@ function popWarningContext() {
   stack.pop();
 }
 function warn(msg, ...args) {
+  if (true) return;
   // avoid props formatting or warn handler tracking deps that might be mutated
   // during patch, leading to infinite recursion.
   (0,_vue_reactivity__WEBPACK_IMPORTED_MODULE_2__/* .pauseTracking */ .Jd)();
@@ -28391,6 +29729,19 @@ function formatProp(key, value, raw) {
   } else {
     value = (0,_vue_reactivity__WEBPACK_IMPORTED_MODULE_2__/* .toRaw */ .IU)(value);
     return raw ? value : [`${key}=`, value];
+  }
+}
+/**
+ * @internal
+ */
+function assertNumber(val, type) {
+  if (true) return;
+  if (val === undefined) {
+    return;
+  } else if (typeof val !== 'number') {
+    warn(`${type} is not a valid number - ` + `got ${JSON.stringify(val)}.`);
+  } else if (isNaN(val)) {
+    warn(`${type} is NaN - ` + 'the duration expression might be incorrect.');
   }
 }
 const ErrorTypeStrings = {
@@ -28738,11 +30089,6 @@ function reload(id, newComp) {
       // components to be unmounted and re-mounted. Queue the update so that we
       // don't end up forcing the same parent to re-render multiple times.
       queueJob(instance.parent.update);
-      // instance is the inner component of an async custom element
-      // invoke to reset styles
-      if (instance.parent.type.__asyncLoader && instance.parent.ceReload) {
-        instance.parent.ceReload(newComp.styles);
-      }
     } else if (instance.appContext.reload) {
       // root instance mounted via createApp() has a reload method
       instance.appContext.reload();
@@ -28781,7 +30127,7 @@ function tryWrap(fn) {
 let devtools;
 let buffer = (/* unused pure expression or super */ null && ([]));
 let devtoolsNotInstalled = false;
-function emit(event, ...args) {
+function emit$1(event, ...args) {
   if (devtools) {
     devtools.emit(event, ...args);
   } else if (!devtoolsNotInstalled) {
@@ -28830,7 +30176,7 @@ function setDevtoolsHook(hook, target) {
   }
 }
 function devtoolsInitApp(app, version) {
-  emit("app:init" /* DevtoolsHooks.APP_INIT */, app, version, {
+  emit$1("app:init" /* DevtoolsHooks.APP_INIT */, app, version, {
     Fragment,
     Text,
     Comment,
@@ -28838,7 +30184,7 @@ function devtoolsInitApp(app, version) {
   });
 }
 function devtoolsUnmountApp(app) {
-  emit("app:unmount" /* DevtoolsHooks.APP_UNMOUNT */, app);
+  emit$1("app:unmount" /* DevtoolsHooks.APP_UNMOUNT */, app);
 }
 const devtoolsComponentAdded = /*#__PURE__*/(/* unused pure expression or super */ null && (createDevtoolsComponentHook("component:added" /* DevtoolsHooks.COMPONENT_ADDED */)));
 const devtoolsComponentUpdated = /*#__PURE__*/(/* unused pure expression or super */ null && (createDevtoolsComponentHook("component:updated" /* DevtoolsHooks.COMPONENT_UPDATED */)));
@@ -28852,20 +30198,20 @@ const devtoolsComponentRemoved = component => {
 };
 function createDevtoolsComponentHook(hook) {
   return component => {
-    emit(hook, component.appContext.app, component.uid, component.parent ? component.parent.uid : undefined, component);
+    emit$1(hook, component.appContext.app, component.uid, component.parent ? component.parent.uid : undefined, component);
   };
 }
 const devtoolsPerfStart = /*#__PURE__*/(/* unused pure expression or super */ null && (createDevtoolsPerformanceHook("perf:start" /* DevtoolsHooks.PERFORMANCE_START */)));
 const devtoolsPerfEnd = /*#__PURE__*/(/* unused pure expression or super */ null && (createDevtoolsPerformanceHook("perf:end" /* DevtoolsHooks.PERFORMANCE_END */)));
 function createDevtoolsPerformanceHook(hook) {
   return (component, type, time) => {
-    emit(hook, component.appContext.app, component.uid, component, type, time);
+    emit$1(hook, component.appContext.app, component.uid, component, type, time);
   };
 }
 function devtoolsComponentEmit(component, event, params) {
-  emit("component:emit" /* DevtoolsHooks.COMPONENT_EMIT */, component.appContext.app, component, event, params);
+  emit$1("component:emit" /* DevtoolsHooks.COMPONENT_EMIT */, component.appContext.app, component, event, params);
 }
-function emit$1(instance, event, ...rawArgs) {
+function emit(instance, event, ...rawArgs) {
   if (instance.isUnmounted) return;
   const props = instance.vnode.props || _vue_shared__WEBPACK_IMPORTED_MODULE_3__/* .EMPTY_OBJ */ .kT;
   if (false) {}
@@ -28880,10 +30226,10 @@ function emit$1(instance, event, ...rawArgs) {
       trim
     } = props[modifiersKey] || _vue_shared__WEBPACK_IMPORTED_MODULE_3__/* .EMPTY_OBJ */ .kT;
     if (trim) {
-      args = rawArgs.map(a => a.trim());
+      args = rawArgs.map(a => (0,_vue_shared__WEBPACK_IMPORTED_MODULE_3__/* .isString */ .HD)(a) ? a.trim() : a);
     }
     if (number) {
-      args = rawArgs.map(_vue_shared__WEBPACK_IMPORTED_MODULE_3__/* .toNumber */ .He);
+      args = rawArgs.map(_vue_shared__WEBPACK_IMPORTED_MODULE_3__/* .looseToNumber */ .h5);
     }
   }
   if (false) {}
@@ -29485,7 +30831,8 @@ function createSuspenseBoundary(vnode, parent, parentComponent, container, hidde
       remove
     }
   } = rendererInternals;
-  const timeout = (0,_vue_shared__WEBPACK_IMPORTED_MODULE_3__/* .toNumber */ .He)(vnode.props && vnode.props.timeout);
+  const timeout = vnode.props ? (0,_vue_shared__WEBPACK_IMPORTED_MODULE_3__/* .toNumber */ .He)(vnode.props.timeout) : undefined;
+  if (false) {}
   const suspense = {
     vnode,
     parent,
@@ -29819,7 +31166,8 @@ function doWatch(source, cb, {
   const warnInvalidSource = s => {
     warn(`Invalid watch source: `, s, `A watch source can only be a getter/effect function, a ref, ` + `a reactive object, or an array of these types.`);
   };
-  const instance = currentInstance;
+  const instance = (0,_vue_reactivity__WEBPACK_IMPORTED_MODULE_2__/* .getCurrentScope */ .nZ)() === (currentInstance === null || currentInstance === void 0 ? void 0 : currentInstance.scope) ? currentInstance : null;
+  // const instance = currentInstance
   let getter;
   let forceTrigger = false;
   let isMultiSource = false;
@@ -29874,7 +31222,8 @@ function doWatch(source, cb, {
     };
   };
   // in SSR there is no need to setup an actual effect, and it should be noop
-  // unless it's eager
+  // unless it's eager or sync flush
+  let ssrCleanup;
   if (isInSSRComponentSetup) {
     // we will also not call the invalidate callback (+ runner is not set up)
     onCleanup = _vue_shared__WEBPACK_IMPORTED_MODULE_3__/* .NOOP */ .dG;
@@ -29883,9 +31232,14 @@ function doWatch(source, cb, {
     } else if (immediate) {
       callWithAsyncErrorHandling(cb, instance, 3 /* ErrorCodes.WATCH_CALLBACK */, [getter(), isMultiSource ? [] : undefined, onCleanup]);
     }
-    return _vue_shared__WEBPACK_IMPORTED_MODULE_3__/* .NOOP */ .dG;
+    if (flush === 'sync') {
+      const ctx = useSSRContext();
+      ssrCleanup = ctx.__watcherHandles || (ctx.__watcherHandles = []);
+    } else {
+      return _vue_shared__WEBPACK_IMPORTED_MODULE_3__/* .NOOP */ .dG;
+    }
   }
-  let oldValue = isMultiSource ? [] : INITIAL_WATCHER_VALUE;
+  let oldValue = isMultiSource ? new Array(source.length).fill(INITIAL_WATCHER_VALUE) : INITIAL_WATCHER_VALUE;
   const job = () => {
     if (!effect.active) {
       return;
@@ -29900,7 +31254,7 @@ function doWatch(source, cb, {
         }
         callWithAsyncErrorHandling(cb, instance, 3 /* ErrorCodes.WATCH_CALLBACK */, [newValue,
         // pass undefined as the old value when it's changed for the first time
-        oldValue === INITIAL_WATCHER_VALUE ? undefined : oldValue, onCleanup]);
+        oldValue === INITIAL_WATCHER_VALUE ? undefined : isMultiSource && oldValue[0] === INITIAL_WATCHER_VALUE ? [] : oldValue, onCleanup]);
         oldValue = newValue;
       }
     } else {
@@ -29936,12 +31290,14 @@ function doWatch(source, cb, {
   } else {
     effect.run();
   }
-  return () => {
+  const unwatch = () => {
     effect.stop();
     if (instance && instance.scope) {
       (0,_vue_shared__WEBPACK_IMPORTED_MODULE_3__/* .remove */ .Od)(instance.scope.effects, effect);
     }
   };
+  if (ssrCleanup) ssrCleanup.push(unwatch);
+  return unwatch;
 }
 // this.$watch
 function instanceWatch(source, value, options) {
@@ -30107,7 +31463,11 @@ const BaseTransitionImpl = {
           // return placeholder node and queue update when leave finishes
           leavingHooks.afterLeave = () => {
             state.isLeaving = false;
-            instance.update();
+            // #6835
+            // it also needs to be updated when active is undefined
+            if (instance.update.active !== false) {
+              instance.update();
+            }
           };
           return emptyPlaceholder(child);
         } else if (mode === 'in-out' && innerChild.type !== Comment) {
@@ -30455,18 +31815,20 @@ function defineAsyncComponent(source) {
     }
   });
 }
-function createInnerComp(comp, {
-  vnode: {
+function createInnerComp(comp, parent) {
+  const {
     ref,
     props,
     children,
-    shapeFlag
-  },
-  parent
-}) {
+    ce
+  } = parent.vnode;
   const vnode = createVNode(comp, props, children);
   // ensure inner component inherits the async wrapper's ref owner
   vnode.ref = ref;
+  // pass the custom element callback on to the inner comp
+  // and remove it from the async wrapper
+  vnode.ce = ce;
+  delete parent.vnode.ce;
   return vnode;
 }
 const isKeepAlive = vnode => vnode.type.__isKeepAlive;
@@ -30562,7 +31924,7 @@ const KeepAliveImpl = {
     }
     function pruneCacheEntry(key) {
       const cached = cache.get(key);
-      if (!current || cached.type !== current.type) {
+      if (!current || !isSameVNodeType(cached, current)) {
         unmount(cached);
       } else if (current) {
         // current active instance should no longer be kept-alive.
@@ -30599,7 +31961,7 @@ const KeepAliveImpl = {
           suspense
         } = instance;
         const vnode = getInnerChild(subTree);
-        if (cached.type === vnode.type) {
+        if (cached.type === vnode.type && cached.key === vnode.key) {
           // current instance will be unmounted as part of keep-alive's unmount
           resetShapeFlag(vnode);
           // but invoke its deactivated hook here
@@ -30689,7 +32051,7 @@ function matches(pattern, name) {
     return pattern.some(p => matches(p, name));
   } else if ((0,_vue_shared__WEBPACK_IMPORTED_MODULE_3__/* .isString */ .HD)(pattern)) {
     return pattern.split(',').includes(name);
-  } else if (pattern.test) {
+  } else if ((0,_vue_shared__WEBPACK_IMPORTED_MODULE_3__/* .isRegExp */ .Kj)(pattern)) {
     return pattern.test(name);
   }
   /* istanbul ignore next */
@@ -30741,17 +32103,11 @@ function injectToKeepAliveRoot(hook, type, target, keepAliveRoot) {
   }, target);
 }
 function resetShapeFlag(vnode) {
-  let shapeFlag = vnode.shapeFlag;
-  if (shapeFlag & 256 /* ShapeFlags.COMPONENT_SHOULD_KEEP_ALIVE */) {
-    shapeFlag -= 256 /* ShapeFlags.COMPONENT_SHOULD_KEEP_ALIVE */;
-  }
-
-  if (shapeFlag & 512 /* ShapeFlags.COMPONENT_KEPT_ALIVE */) {
-    shapeFlag -= 512 /* ShapeFlags.COMPONENT_KEPT_ALIVE */;
-  }
-
-  vnode.shapeFlag = shapeFlag;
+  // bitwise operations to remove keep alive flags
+  vnode.shapeFlag &= ~256 /* ShapeFlags.COMPONENT_SHOULD_KEEP_ALIVE */;
+  vnode.shapeFlag &= ~512 /* ShapeFlags.COMPONENT_KEPT_ALIVE */;
 }
+
 function getInnerChild(vnode) {
   return vnode.shapeFlag & 128 /* ShapeFlags.SUSPENSE */ ? vnode.ssContent : vnode;
 }
@@ -30831,23 +32187,25 @@ function withDirectives(vnode, directives) {
   const bindings = vnode.dirs || (vnode.dirs = []);
   for (let i = 0; i < directives.length; i++) {
     let [dir, value, arg, modifiers = _vue_shared__WEBPACK_IMPORTED_MODULE_3__/* .EMPTY_OBJ */ .kT] = directives[i];
-    if ((0,_vue_shared__WEBPACK_IMPORTED_MODULE_3__/* .isFunction */ .mf)(dir)) {
-      dir = {
-        mounted: dir,
-        updated: dir
-      };
+    if (dir) {
+      if ((0,_vue_shared__WEBPACK_IMPORTED_MODULE_3__/* .isFunction */ .mf)(dir)) {
+        dir = {
+          mounted: dir,
+          updated: dir
+        };
+      }
+      if (dir.deep) {
+        traverse(value);
+      }
+      bindings.push({
+        dir,
+        instance,
+        value,
+        oldValue: void 0,
+        arg,
+        modifiers
+      });
     }
-    if (dir.deep) {
-      traverse(value);
-    }
-    bindings.push({
-      dir,
-      instance,
-      value,
-      oldValue: void 0,
-      arg,
-      modifiers
-    });
   }
   return vnode;
 }
@@ -30997,9 +32355,8 @@ function renderSlot(slots, name, props = {},
 // the compiler and guaranteed to be a function returning an array
 fallback, noSlotted) {
   if (currentRenderingInstance.isCE || currentRenderingInstance.parent && isAsyncWrapper(currentRenderingInstance.parent) && currentRenderingInstance.parent.isCE) {
-    return createVNode('slot', name === 'default' ? null : {
-      name
-    }, fallback && fallback());
+    if (name !== 'default') props.name = name;
+    return createVNode('slot', props, fallback && fallback());
   }
   let slot = slots[name];
   if (false) {}
@@ -31079,6 +32436,7 @@ const publicPropertiesMap =
   $watch: i =>  true ? instanceWatch.bind(i) : 0
 });
 const isReservedPrefix = key => key === '_' || key === '$';
+const hasSetupBinding = (state, key) => state !== _vue_shared__WEBPACK_IMPORTED_MODULE_3__/* .EMPTY_OBJ */ .kT && !state.__isScriptSetup && (0,_vue_shared__WEBPACK_IMPORTED_MODULE_3__/* .hasOwn */ .RI)(state, key);
 const PublicInstanceProxyHandlers = {
   get({
     _: instance
@@ -31093,11 +32451,6 @@ const PublicInstanceProxyHandlers = {
       appContext
     } = instance;
     // for internal formatters to know that this is a Vue instance
-    if (false) {}
-    // prioritize <script setup> bindings during dev.
-    // this allows even properties that start with _ or $ to be used - so that
-    // it aligns with the production behavior where the render fn is inlined and
-    // indeed has access to all declared variables.
     if (false) {}
     // data / props / ctx
     // This getter gets called for every property access on the render context
@@ -31120,7 +32473,7 @@ const PublicInstanceProxyHandlers = {
             return props[key];
           // default: just fallthrough
         }
-      } else if (setupState !== _vue_shared__WEBPACK_IMPORTED_MODULE_3__/* .EMPTY_OBJ */ .kT && (0,_vue_shared__WEBPACK_IMPORTED_MODULE_3__/* .hasOwn */ .RI)(setupState, key)) {
+      } else if (hasSetupBinding(setupState, key)) {
         accessCache[key] = 1 /* AccessTypes.SETUP */;
         return setupState[key];
       } else if (data !== _vue_shared__WEBPACK_IMPORTED_MODULE_3__/* .EMPTY_OBJ */ .kT && (0,_vue_shared__WEBPACK_IMPORTED_MODULE_3__/* .hasOwn */ .RI)(data, key)) {
@@ -31173,10 +32526,10 @@ const PublicInstanceProxyHandlers = {
       setupState,
       ctx
     } = instance;
-    if (setupState !== _vue_shared__WEBPACK_IMPORTED_MODULE_3__/* .EMPTY_OBJ */ .kT && (0,_vue_shared__WEBPACK_IMPORTED_MODULE_3__/* .hasOwn */ .RI)(setupState, key)) {
+    if (hasSetupBinding(setupState, key)) {
       setupState[key] = value;
       return true;
-    } else if (data !== _vue_shared__WEBPACK_IMPORTED_MODULE_3__/* .EMPTY_OBJ */ .kT && (0,_vue_shared__WEBPACK_IMPORTED_MODULE_3__/* .hasOwn */ .RI)(data, key)) {
+    } else if (false) {} else if (data !== _vue_shared__WEBPACK_IMPORTED_MODULE_3__/* .EMPTY_OBJ */ .kT && (0,_vue_shared__WEBPACK_IMPORTED_MODULE_3__/* .hasOwn */ .RI)(data, key)) {
       data[key] = value;
       return true;
     } else if ((0,_vue_shared__WEBPACK_IMPORTED_MODULE_3__/* .hasOwn */ .RI)(instance.props, key)) {
@@ -31204,7 +32557,7 @@ const PublicInstanceProxyHandlers = {
     }
   }, key) {
     let normalizedProps;
-    return !!accessCache[key] || data !== _vue_shared__WEBPACK_IMPORTED_MODULE_3__/* .EMPTY_OBJ */ .kT && (0,_vue_shared__WEBPACK_IMPORTED_MODULE_3__/* .hasOwn */ .RI)(data, key) || setupState !== _vue_shared__WEBPACK_IMPORTED_MODULE_3__/* .EMPTY_OBJ */ .kT && (0,_vue_shared__WEBPACK_IMPORTED_MODULE_3__/* .hasOwn */ .RI)(setupState, key) || (normalizedProps = propsOptions[0]) && (0,_vue_shared__WEBPACK_IMPORTED_MODULE_3__/* .hasOwn */ .RI)(normalizedProps, key) || (0,_vue_shared__WEBPACK_IMPORTED_MODULE_3__/* .hasOwn */ .RI)(ctx, key) || (0,_vue_shared__WEBPACK_IMPORTED_MODULE_3__/* .hasOwn */ .RI)(publicPropertiesMap, key) || (0,_vue_shared__WEBPACK_IMPORTED_MODULE_3__/* .hasOwn */ .RI)(appContext.config.globalProperties, key);
+    return !!accessCache[key] || data !== _vue_shared__WEBPACK_IMPORTED_MODULE_3__/* .EMPTY_OBJ */ .kT && (0,_vue_shared__WEBPACK_IMPORTED_MODULE_3__/* .hasOwn */ .RI)(data, key) || hasSetupBinding(setupState, key) || (normalizedProps = propsOptions[0]) && (0,_vue_shared__WEBPACK_IMPORTED_MODULE_3__/* .hasOwn */ .RI)(normalizedProps, key) || (0,_vue_shared__WEBPACK_IMPORTED_MODULE_3__/* .hasOwn */ .RI)(ctx, key) || (0,_vue_shared__WEBPACK_IMPORTED_MODULE_3__/* .hasOwn */ .RI)(publicPropertiesMap, key) || (0,_vue_shared__WEBPACK_IMPORTED_MODULE_3__/* .hasOwn */ .RI)(appContext.config.globalProperties, key);
   },
   defineProperty(target, key, descriptor) {
     if (descriptor.get != null) {
@@ -31904,7 +33257,7 @@ function normalizePropsOptions(comp, appContext, asMixin = false) {
         const opt = raw[key];
         const prop = normalized[normalizedKey] = (0,_vue_shared__WEBPACK_IMPORTED_MODULE_3__/* .isArray */ .kJ)(opt) || (0,_vue_shared__WEBPACK_IMPORTED_MODULE_3__/* .isFunction */ .mf)(opt) ? {
           type: opt
-        } : opt;
+        } : Object.assign({}, opt);
         if (prop) {
           const booleanIndex = getTypeIndex(Boolean, prop.type);
           const stringIndex = getTypeIndex(String, prop.type);
@@ -31933,8 +33286,8 @@ function validatePropName(key) {
 // use function string name to check type constructors
 // so that it works across vms / iframes.
 function getType(ctor) {
-  const match = ctor && ctor.toString().match(/^\s*function (\w+)/);
-  return match ? match[1] : ctor === null ? 'null' : '';
+  const match = ctor && ctor.toString().match(/^\s*(function|class) (\w+)/);
+  return match ? match[2] : ctor === null ? 'null' : '';
 }
 function isSameType(a, b) {
   return getType(a) === getType(b);
@@ -32196,7 +33549,7 @@ function createAppContext() {
     emitsCache: new WeakMap()
   };
 }
-let uid = 0;
+let uid$1 = 0;
 function createAppAPI(render, hydrate) {
   return function createApp(rootComponent, rootProps = null) {
     if (!(0,_vue_shared__WEBPACK_IMPORTED_MODULE_3__/* .isFunction */ .mf)(rootComponent)) {
@@ -32210,7 +33563,7 @@ function createAppAPI(render, hydrate) {
     const installedPlugins = new Set();
     let isMounted = false;
     const app = context.app = {
-      _uid: uid++,
+      _uid: uid$1++,
       _component: rootComponent,
       _props: rootProps,
       _container: null,
@@ -32931,6 +34284,8 @@ function baseCreateRenderer(options, createHydrationFns) {
     if (dirs) {
       invokeDirectiveHook(vnode, null, parentComponent, 'created');
     }
+    // scopeId
+    setScopeId(el, vnode, vnode.scopeId, slotScopeIds, parentComponent);
     // props
     if (props) {
       for (const key in props) {
@@ -32954,8 +34309,6 @@ function baseCreateRenderer(options, createHydrationFns) {
         invokeVNodeHook(vnodeHook, parentComponent, vnode);
       }
     }
-    // scopeId
-    setScopeId(el, vnode, vnode.scopeId, slotScopeIds, parentComponent);
     if (false) {}
     if (dirs) {
       invokeDirectiveHook(vnode, null, parentComponent, 'beforeMount');
@@ -33920,6 +35273,10 @@ function traverseStaticChildren(n1, n2, shallow = false) {
         }
         if (!shallow) traverseStaticChildren(c1, c2);
       }
+      // #6852 also inherit for text nodes
+      if (c2.type === Text) {
+        c2.el = c1.el;
+      }
       // also inherit for comment nodes, but not placeholders (e.g. v-if which
       // would have received .el during block patch)
       if (false) {}
@@ -34076,8 +35433,9 @@ const TeleportImpl = {
         }
       }
     }
-  },
 
+    updateCssVars(n2);
+  },
   remove(vnode, parentComponent, parentSuspense, optimized, {
     um: unmount,
     o: {
@@ -34180,11 +35538,25 @@ function hydrateTeleport(node, vnode, parentComponent, parentSuspense, slotScope
         hydrateChildren(targetNode, vnode, target, parentComponent, parentSuspense, slotScopeIds, optimized);
       }
     }
+    updateCssVars(vnode);
   }
   return vnode.anchor && nextSibling(vnode.anchor);
 }
 // Force-casted public typing for h and TSX props inference
 const Teleport = TeleportImpl;
+function updateCssVars(vnode) {
+  // presence of .ut method indicates owner component uses css vars.
+  // code path here can assume browser environment.
+  const ctx = vnode.ctx;
+  if (ctx && ctx.ut) {
+    let node = vnode.children[0].el;
+    while (node !== vnode.targetAnchor) {
+      if (node.nodeType === 1) node.setAttribute('data-v-owner', ctx.uid);
+      node = node.nextSibling;
+    }
+    ctx.ut();
+  }
+}
 const Fragment = Symbol( false ? 0 : undefined);
 const Text = Symbol( false ? 0 : undefined);
 const Comment = Symbol( false ? 0 : undefined);
@@ -34334,7 +35706,8 @@ function createBaseVNode(type, props = null, children = null, patchFlag = 0, dyn
     patchFlag,
     dynamicProps,
     dynamicChildren: null,
-    appContext: null
+    appContext: null,
+    ctx: currentRenderingInstance
   };
   if (needFullChildrenNormalization) {
     normalizeChildren(vnode, children);
@@ -34472,7 +35845,9 @@ function cloneVNode(vnode, extraProps, mergeRef = false) {
     ssContent: vnode.ssContent && cloneVNode(vnode.ssContent),
     ssFallback: vnode.ssFallback && cloneVNode(vnode.ssFallback),
     el: vnode.el,
-    anchor: vnode.anchor
+    anchor: vnode.anchor,
+    ctx: vnode.ctx,
+    ce: vnode.ce
   };
   return cloned;
 }
@@ -34618,13 +35993,13 @@ function invokeVNodeHook(hook, instance, vnode, prevVNode = null) {
   callWithAsyncErrorHandling(hook, instance, 7 /* ErrorCodes.VNODE_HOOK */, [vnode, prevVNode]);
 }
 const emptyAppContext = createAppContext();
-let uid$1 = 0;
+let uid = 0;
 function createComponentInstance(vnode, parent, suspense) {
   const type = vnode.type;
   // inherit parent app context - or - if root, adopt from root vnode
   const appContext = (parent ? parent.appContext : vnode.appContext) || emptyAppContext;
   const instance = {
-    uid: uid$1++,
+    uid: uid++,
     vnode,
     type,
     parent,
@@ -34696,7 +36071,7 @@ function createComponentInstance(vnode, parent, suspense) {
     };
   }
   instance.root = parent ? parent.root : instance;
-  instance.emit = emit$1.bind(null, instance);
+  instance.emit = emit.bind(null, instance);
   // apply custom element special handling
   if (vnode.ce) {
     vnode.ce(instance);
@@ -34898,6 +36273,9 @@ function getExposeProxy(instance) {
         } else if (key in publicPropertiesMap) {
           return publicPropertiesMap[key](instance);
         }
+      },
+      has(target, key) {
+        return key in target || key in publicPropertiesMap;
       }
     }));
   }
@@ -35101,7 +36479,7 @@ const useSSRContext = () => {
   {
     const ctx = inject(ssrContextKey);
     if (!ctx) {
-      warn(`Server rendering context not provided. Make sure to only call ` + `useSSRContext() conditionally in the server build.`);
+       false && 0;
     }
     return ctx;
   }
@@ -35279,7 +36657,7 @@ function isMemoSame(cached, memo) {
 }
 
 // Core API ------------------------------------------------------------------
-const version = "3.2.41";
+const version = "3.2.47";
 const _ssrUtils = {
   createComponentInstance,
   setupComponent,
@@ -35422,15 +36800,15 @@ function patchStyle(el, prev, next) {
   const style = el.style;
   const isCssString = (0,_vue_shared__WEBPACK_IMPORTED_MODULE_1__/* .isString */ .HD)(next);
   if (next && !isCssString) {
-    for (const key in next) {
-      setStyle(style, key, next[key]);
-    }
     if (prev && !(0,_vue_shared__WEBPACK_IMPORTED_MODULE_1__/* .isString */ .HD)(prev)) {
       for (const key in prev) {
         if (next[key] == null) {
           setStyle(style, key, '');
         }
       }
+    }
+    for (const key in next) {
+      setStyle(style, key, next[key]);
     }
   } else {
     const currentDisplay = style.display;
@@ -35449,12 +36827,14 @@ function patchStyle(el, prev, next) {
     }
   }
 }
+const semicolonRE = /[^\\];\s*$/;
 const importantRE = /\s*!important$/;
 function setStyle(style, name, val) {
   if ((0,_vue_shared__WEBPACK_IMPORTED_MODULE_1__/* .isArray */ .kJ)(val)) {
     val.forEach(v => setStyle(style, name, v));
   } else {
     if (val == null) val = '';
+    if (false) {}
     if (name.startsWith('--')) {
       // custom property definition
       style.setProperty(name, val);
@@ -35752,12 +37132,20 @@ class VueElement extends (/* unused pure expression or super */ null && (BaseCla
       this.attachShadow({
         mode: 'open'
       });
+      if (!this._def.__asyncLoader) {
+        // for sync component defs we can immediately resolve props
+        this._resolveProps(this._def);
+      }
     }
   }
   connectedCallback() {
     this._connected = true;
     if (!this._instance) {
-      this._resolveDef();
+      if (this._resolved) {
+        this._update();
+      } else {
+        this._resolveDef();
+      }
     }
   }
   disconnectedCallback() {
@@ -35773,9 +37161,6 @@ class VueElement extends (/* unused pure expression or super */ null && (BaseCla
    * resolve inner component definition (handle possible async component)
    */
   _resolveDef() {
-    if (this._resolved) {
-      return;
-    }
     this._resolved = true;
     // set initial attrs
     for (let i = 0; i < this.attributes.length; i++) {
@@ -35789,41 +37174,29 @@ class VueElement extends (/* unused pure expression or super */ null && (BaseCla
     }).observe(this, {
       attributes: true
     });
-    const resolve = def => {
+    const resolve = (def, isAsync = false) => {
       const {
         props,
         styles
       } = def;
-      const hasOptions = !isArray(props);
-      const rawKeys = props ? hasOptions ? Object.keys(props) : props : [];
       // cast Number-type props set before resolve
       let numberProps;
-      if (hasOptions) {
-        for (const key in this._props) {
+      if (props && !isArray(props)) {
+        for (const key in props) {
           const opt = props[key];
           if (opt === Number || opt && opt.type === Number) {
-            this._props[key] = toNumber(this._props[key]);
-            (numberProps || (numberProps = Object.create(null)))[key] = true;
+            if (key in this._props) {
+              this._props[key] = toNumber(this._props[key]);
+            }
+            (numberProps || (numberProps = Object.create(null)))[camelize$1(key)] = true;
           }
         }
       }
       this._numberProps = numberProps;
-      // check if there are props set pre-upgrade or connect
-      for (const key of Object.keys(this)) {
-        if (key[0] !== '_') {
-          this._setProp(key, this[key], true, false);
-        }
-      }
-      // defining getter/setters on prototype
-      for (const key of rawKeys.map(camelize$1)) {
-        Object.defineProperty(this, key, {
-          get() {
-            return this._getProp(key);
-          },
-          set(val) {
-            this._setProp(key, val);
-          }
-        });
+      if (isAsync) {
+        // defining getter/setters on prototype
+        // for sync defs, this already happened in the constructor
+        this._resolveProps(def);
       }
       // apply CSS
       this._applyStyles(styles);
@@ -35832,17 +37205,41 @@ class VueElement extends (/* unused pure expression or super */ null && (BaseCla
     };
     const asyncDef = this._def.__asyncLoader;
     if (asyncDef) {
-      asyncDef().then(resolve);
+      asyncDef().then(def => resolve(def, true));
     } else {
       resolve(this._def);
     }
   }
+  _resolveProps(def) {
+    const {
+      props
+    } = def;
+    const declaredPropKeys = isArray(props) ? props : Object.keys(props || {});
+    // check if there are props set pre-upgrade or connect
+    for (const key of Object.keys(this)) {
+      if (key[0] !== '_' && declaredPropKeys.includes(key)) {
+        this._setProp(key, this[key], true, false);
+      }
+    }
+    // defining getter/setters on prototype
+    for (const key of declaredPropKeys.map(camelize$1)) {
+      Object.defineProperty(this, key, {
+        get() {
+          return this._getProp(key);
+        },
+        set(val) {
+          this._setProp(key, val);
+        }
+      });
+    }
+  }
   _setAttr(key) {
     let value = this.getAttribute(key);
-    if (this._numberProps && this._numberProps[key]) {
+    const camelKey = camelize$1(key);
+    if (this._numberProps && this._numberProps[camelKey]) {
       value = toNumber(value);
     }
-    this._setProp(camelize$1(key), value, false);
+    this._setProp(camelKey, value, false);
   }
   /**
    * @internal
@@ -35882,17 +37279,26 @@ class VueElement extends (/* unused pure expression or super */ null && (BaseCla
         instance.isCE = true;
         // HMR
         if (false) {}
-        // intercept emit
-        instance.emit = (event, ...args) => {
+        const dispatch = (event, args) => {
           this.dispatchEvent(new CustomEvent(event, {
             detail: args
           }));
+        };
+        // intercept emit
+        instance.emit = (event, ...args) => {
+          // dispatch both the raw and hyphenated versions of an event
+          // to match Vue behavior
+          dispatch(event, args);
+          if (hyphenate(event) !== event) {
+            dispatch(hyphenate(event), args);
+          }
         };
         // locate nearest Vue custom element parent for provide/inject
         let parent = this;
         while (parent = parent && (parent.parentNode || parent.host)) {
           if (parent instanceof VueElement) {
             instance.parent = parent._instance;
+            instance.provides = parent._instance.provides;
             break;
           }
         }
@@ -35945,7 +37351,14 @@ function useCssVars(getter) {
      false && 0;
     return;
   }
-  const setVars = () => setVarsOnVNode(instance.subTree, getter(instance.proxy));
+  const updateTeleports = instance.ut = (vars = getter(instance.proxy)) => {
+    Array.from(document.querySelectorAll(`[data-v-owner="${instance.uid}"]`)).forEach(node => setVarsOnNode(node, vars));
+  };
+  const setVars = () => {
+    const vars = getter(instance.proxy);
+    setVarsOnVNode(instance.subTree, vars);
+    updateTeleports(vars);
+  };
   watchPostEffect(setVars);
   onMounted(() => {
     const ob = new MutationObserver(setVars);
@@ -36163,13 +37576,6 @@ function NumberOf(val) {
   if (false) {}
   return res;
 }
-function validateDuration(val) {
-  if (typeof val !== 'number') {
-    warn(`<transition> explicit duration is not a valid number - ` + `got ${JSON.stringify(val)}.`);
-  } else if (isNaN(val)) {
-    warn(`<transition> explicit duration is NaN - ` + 'the duration expression might be incorrect.');
-  }
-}
 function addTransitionClass(el, cls) {
   cls.split(/\s+/).forEach(c => c && el.classList.add(c));
   (el._vtc || (el._vtc = new Set())).add(cls);
@@ -36232,11 +37638,11 @@ function getTransitionInfo(el, expectedType) {
   const styles = window.getComputedStyle(el);
   // JSDOM may return undefined for transition properties
   const getStyleProperties = key => (styles[key] || '').split(', ');
-  const transitionDelays = getStyleProperties(TRANSITION + 'Delay');
-  const transitionDurations = getStyleProperties(TRANSITION + 'Duration');
+  const transitionDelays = getStyleProperties(`${TRANSITION}Delay`);
+  const transitionDurations = getStyleProperties(`${TRANSITION}Duration`);
   const transitionTimeout = getTimeout(transitionDelays, transitionDurations);
-  const animationDelays = getStyleProperties(ANIMATION + 'Delay');
-  const animationDurations = getStyleProperties(ANIMATION + 'Duration');
+  const animationDelays = getStyleProperties(`${ANIMATION}Delay`);
+  const animationDurations = getStyleProperties(`${ANIMATION}Duration`);
   const animationTimeout = getTimeout(animationDelays, animationDurations);
   let type = null;
   let timeout = 0;
@@ -36259,7 +37665,7 @@ function getTransitionInfo(el, expectedType) {
     type = timeout > 0 ? transitionTimeout > animationTimeout ? TRANSITION : ANIMATION : null;
     propCount = type ? type === TRANSITION ? transitionDurations.length : animationDurations.length : 0;
   }
-  const hasTransform = type === TRANSITION && /\b(transform|all)(,|$)/.test(styles[TRANSITION + 'Property']);
+  const hasTransform = type === TRANSITION && /\b(transform|all)(,|$)/.test(getStyleProperties(`${TRANSITION}Property`).toString());
   return {
     type,
     timeout,
@@ -36356,6 +37762,15 @@ const TransitionGroupImpl = {
     };
   }
 };
+/**
+ * TransitionGroup does not support "mode" so we need to remove it from the
+ * props declarations, but direct delete operation is considered a side effect
+ * and will make the entire transition feature non-tree-shakeable, so we do it
+ * in a function and mark the function's invocation as pure.
+ */
+const removeMode = props => delete props.mode;
+/*#__PURE__*/
+removeMode(TransitionGroupImpl.props);
 const TransitionGroup = TransitionGroupImpl;
 function callPendingCbs(c) {
   const el = c.el;
@@ -36436,7 +37851,7 @@ const vModelText = {
         domValue = domValue.trim();
       }
       if (castToNumber) {
-        domValue = (0,_vue_shared__WEBPACK_IMPORTED_MODULE_1__/* .toNumber */ .He)(domValue);
+        domValue = (0,_vue_shared__WEBPACK_IMPORTED_MODULE_1__/* .looseToNumber */ .h5)(domValue);
       }
       el._assign(domValue);
     });
@@ -36479,7 +37894,7 @@ const vModelText = {
       if (trim && el.value.trim() === value) {
         return;
       }
-      if ((number || el.type === 'number') && (0,_vue_shared__WEBPACK_IMPORTED_MODULE_1__/* .toNumber */ .He)(el.value) === value) {
+      if ((number || el.type === 'number') && (0,_vue_shared__WEBPACK_IMPORTED_MODULE_1__/* .looseToNumber */ .h5)(el.value) === value) {
         return;
       }
     }
@@ -36573,7 +37988,7 @@ const vModelSelect = {
   }, vnode) {
     const isSetModel = (0,_vue_shared__WEBPACK_IMPORTED_MODULE_1__/* .isSet */ .DM)(value);
     addEventListener(el, 'change', () => {
-      const selectedVal = Array.prototype.filter.call(el.options, o => o.selected).map(o => number ? (0,_vue_shared__WEBPACK_IMPORTED_MODULE_1__/* .toNumber */ .He)(getValue(o)) : getValue(o));
+      const selectedVal = Array.prototype.filter.call(el.options, o => o.selected).map(o => number ? (0,_vue_shared__WEBPACK_IMPORTED_MODULE_1__/* .looseToNumber */ .h5)(getValue(o)) : getValue(o));
       el._assign(el.multiple ? isSetModel ? new Set(selectedVal) : selectedVal : selectedVal[0]);
     });
     el._assign = getModelAssigner(vnode);
@@ -36966,6 +38381,7 @@ const initDirectivesForSSR = () => {
 /* harmony export */   "Gg": function() { return /* binding */ isReservedProp; },
 /* harmony export */   "HD": function() { return /* binding */ isString; },
 /* harmony export */   "He": function() { return /* binding */ toNumber; },
+/* harmony export */   "Kj": function() { return /* binding */ isRegExp; },
 /* harmony export */   "Kn": function() { return /* binding */ isObject; },
 /* harmony export */   "NO": function() { return /* binding */ NO; },
 /* harmony export */   "Nj": function() { return /* binding */ def; },
@@ -36983,6 +38399,7 @@ const initDirectivesForSSR = () => {
 /* harmony export */   "dG": function() { return /* binding */ NOOP; },
 /* harmony export */   "e1": function() { return /* binding */ isGloballyWhitelisted; },
 /* harmony export */   "fY": function() { return /* binding */ makeMap; },
+/* harmony export */   "h5": function() { return /* binding */ looseToNumber; },
 /* harmony export */   "hR": function() { return /* binding */ toHandlerKey; },
 /* harmony export */   "hq": function() { return /* binding */ looseIndexOf; },
 /* harmony export */   "ir": function() { return /* binding */ invokeArrayFns; },
@@ -36999,7 +38416,7 @@ const initDirectivesForSSR = () => {
 /* harmony export */   "yk": function() { return /* binding */ isSymbol; },
 /* harmony export */   "zw": function() { return /* binding */ toDisplayString; }
 /* harmony export */ });
-/* unused harmony exports PatchFlagNames, escapeHtml, escapeHtmlComment, genPropsAccessExp, generateCodeFrame, isBooleanAttr, isBuiltInDirective, isDate, isHTMLTag, isKnownHtmlAttr, isKnownSvgAttr, isNoUnitNumericStyleProp, isSSRSafeAttrName, isSVGTag, isVoidTag, normalizeProps, objectToString, parseStringStyle, propsToAttrMap, slotFlagsText, stringifyStyle, toTypeString */
+/* unused harmony exports PatchFlagNames, escapeHtml, escapeHtmlComment, genPropsAccessExp, generateCodeFrame, isBooleanAttr, isBuiltInDirective, isDate, isHTMLTag, isKnownHtmlAttr, isKnownSvgAttr, isSSRSafeAttrName, isSVGTag, isVoidTag, normalizeProps, objectToString, parseStringStyle, propsToAttrMap, slotFlagsText, stringifyStyle, toTypeString */
 /* harmony import */ var core_js_modules_es_array_push_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(7658);
 /* harmony import */ var core_js_modules_es_array_push_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_push_js__WEBPACK_IMPORTED_MODULE_0__);
 
@@ -37088,6 +38505,109 @@ function generateCodeFrame(source, start = 0, end = source.length) {
   }
   return res.join('\n');
 }
+function normalizeStyle(value) {
+  if (isArray(value)) {
+    const res = {};
+    for (let i = 0; i < value.length; i++) {
+      const item = value[i];
+      const normalized = isString(item) ? parseStringStyle(item) : normalizeStyle(item);
+      if (normalized) {
+        for (const key in normalized) {
+          res[key] = normalized[key];
+        }
+      }
+    }
+    return res;
+  } else if (isString(value)) {
+    return value;
+  } else if (isObject(value)) {
+    return value;
+  }
+}
+const listDelimiterRE = /;(?![^(]*\))/g;
+const propertyDelimiterRE = /:([^]+)/;
+const styleCommentRE = /\/\*.*?\*\//gs;
+function parseStringStyle(cssText) {
+  const ret = {};
+  cssText.replace(styleCommentRE, '').split(listDelimiterRE).forEach(item => {
+    if (item) {
+      const tmp = item.split(propertyDelimiterRE);
+      tmp.length > 1 && (ret[tmp[0].trim()] = tmp[1].trim());
+    }
+  });
+  return ret;
+}
+function stringifyStyle(styles) {
+  let ret = '';
+  if (!styles || isString(styles)) {
+    return ret;
+  }
+  for (const key in styles) {
+    const value = styles[key];
+    const normalizedKey = key.startsWith(`--`) ? key : hyphenate(key);
+    if (isString(value) || typeof value === 'number') {
+      // only render valid values
+      ret += `${normalizedKey}:${value};`;
+    }
+  }
+  return ret;
+}
+function normalizeClass(value) {
+  let res = '';
+  if (isString(value)) {
+    res = value;
+  } else if (isArray(value)) {
+    for (let i = 0; i < value.length; i++) {
+      const normalized = normalizeClass(value[i]);
+      if (normalized) {
+        res += normalized + ' ';
+      }
+    }
+  } else if (isObject(value)) {
+    for (const name in value) {
+      if (value[name]) {
+        res += name + ' ';
+      }
+    }
+  }
+  return res.trim();
+}
+function normalizeProps(props) {
+  if (!props) return null;
+  let {
+    class: klass,
+    style
+  } = props;
+  if (klass && !isString(klass)) {
+    props.class = normalizeClass(klass);
+  }
+  if (style) {
+    props.style = normalizeStyle(style);
+  }
+  return props;
+}
+
+// These tag configs are shared between compiler-dom and runtime-dom, so they
+// https://developer.mozilla.org/en-US/docs/Web/HTML/Element
+const HTML_TAGS = (/* unused pure expression or super */ null && ('html,body,base,head,link,meta,style,title,address,article,aside,footer,' + 'header,hgroup,h1,h2,h3,h4,h5,h6,nav,section,div,dd,dl,dt,figcaption,' + 'figure,picture,hr,img,li,main,ol,p,pre,ul,a,b,abbr,bdi,bdo,br,cite,code,' + 'data,dfn,em,i,kbd,mark,q,rp,rt,ruby,s,samp,small,span,strong,sub,sup,' + 'time,u,var,wbr,area,audio,map,track,video,embed,object,param,source,' + 'canvas,script,noscript,del,ins,caption,col,colgroup,table,thead,tbody,td,' + 'th,tr,button,datalist,fieldset,form,input,label,legend,meter,optgroup,' + 'option,output,progress,select,textarea,details,dialog,menu,' + 'summary,template,blockquote,iframe,tfoot'));
+// https://developer.mozilla.org/en-US/docs/Web/SVG/Element
+const SVG_TAGS = (/* unused pure expression or super */ null && ('svg,animate,animateMotion,animateTransform,circle,clipPath,color-profile,' + 'defs,desc,discard,ellipse,feBlend,feColorMatrix,feComponentTransfer,' + 'feComposite,feConvolveMatrix,feDiffuseLighting,feDisplacementMap,' + 'feDistantLight,feDropShadow,feFlood,feFuncA,feFuncB,feFuncG,feFuncR,' + 'feGaussianBlur,feImage,feMerge,feMergeNode,feMorphology,feOffset,' + 'fePointLight,feSpecularLighting,feSpotLight,feTile,feTurbulence,filter,' + 'foreignObject,g,hatch,hatchpath,image,line,linearGradient,marker,mask,' + 'mesh,meshgradient,meshpatch,meshrow,metadata,mpath,path,pattern,' + 'polygon,polyline,radialGradient,rect,set,solidcolor,stop,switch,symbol,' + 'text,textPath,title,tspan,unknown,use,view'));
+const VOID_TAGS = 'area,base,br,col,embed,hr,img,input,link,meta,param,source,track,wbr';
+/**
+ * Compiler only.
+ * Do NOT use in runtime code paths unless behind `(process.env.NODE_ENV !== 'production')` flag.
+ */
+const isHTMLTag = /*#__PURE__*/(/* unused pure expression or super */ null && (makeMap(HTML_TAGS)));
+/**
+ * Compiler only.
+ * Do NOT use in runtime code paths unless behind `(process.env.NODE_ENV !== 'production')` flag.
+ */
+const isSVGTag = /*#__PURE__*/(/* unused pure expression or super */ null && (makeMap(SVG_TAGS)));
+/**
+ * Compiler only.
+ * Do NOT use in runtime code paths unless behind `(process.env.NODE_ENV !== 'production')` flag.
+ */
+const isVoidTag = /*#__PURE__*/(/* unused pure expression or super */ null && (makeMap(VOID_TAGS)));
 
 /**
  * On the client we only need to offer special cases for boolean attributes that
@@ -37132,12 +38652,6 @@ const propsToAttrMap = {
   httpEquiv: 'http-equiv'
 };
 /**
- * CSS properties that accept plain numbers
- */
-const isNoUnitNumericStyleProp = /*#__PURE__*/(/* unused pure expression or super */ null && (makeMap(`animation-iteration-count,border-image-outset,border-image-slice,` + `border-image-width,box-flex,box-flex-group,box-ordinal-group,column-count,` + `columns,flex,flex-grow,flex-positive,flex-shrink,flex-negative,flex-order,` + `grid-row,grid-row-end,grid-row-span,grid-row-start,grid-column,` + `grid-column-end,grid-column-span,grid-column-start,font-weight,line-clamp,` + `line-height,opacity,order,orphans,tab-size,widows,z-index,zoom,` +
-// SVG
-`fill-opacity,flood-opacity,stop-opacity,stroke-dasharray,stroke-dashoffset,` + `stroke-miterlimit,stroke-opacity,stroke-width`)));
-/**
  * Known attributes, this is used for stringification of runtime static nodes
  * so that we don't stringify bindings that cannot be set from HTML.
  * Don't also forget to allow `data-*` and `aria-*`!
@@ -37148,108 +38662,6 @@ const isKnownHtmlAttr = /*#__PURE__*/(/* unused pure expression or super */ null
  * Generated from https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute
  */
 const isKnownSvgAttr = /*#__PURE__*/(/* unused pure expression or super */ null && (makeMap(`xmlns,accent-height,accumulate,additive,alignment-baseline,alphabetic,amplitude,` + `arabic-form,ascent,attributeName,attributeType,azimuth,baseFrequency,` + `baseline-shift,baseProfile,bbox,begin,bias,by,calcMode,cap-height,class,` + `clip,clipPathUnits,clip-path,clip-rule,color,color-interpolation,` + `color-interpolation-filters,color-profile,color-rendering,` + `contentScriptType,contentStyleType,crossorigin,cursor,cx,cy,d,decelerate,` + `descent,diffuseConstant,direction,display,divisor,dominant-baseline,dur,dx,` + `dy,edgeMode,elevation,enable-background,end,exponent,fill,fill-opacity,` + `fill-rule,filter,filterRes,filterUnits,flood-color,flood-opacity,` + `font-family,font-size,font-size-adjust,font-stretch,font-style,` + `font-variant,font-weight,format,from,fr,fx,fy,g1,g2,glyph-name,` + `glyph-orientation-horizontal,glyph-orientation-vertical,glyphRef,` + `gradientTransform,gradientUnits,hanging,height,href,hreflang,horiz-adv-x,` + `horiz-origin-x,id,ideographic,image-rendering,in,in2,intercept,k,k1,k2,k3,` + `k4,kernelMatrix,kernelUnitLength,kerning,keyPoints,keySplines,keyTimes,` + `lang,lengthAdjust,letter-spacing,lighting-color,limitingConeAngle,local,` + `marker-end,marker-mid,marker-start,markerHeight,markerUnits,markerWidth,` + `mask,maskContentUnits,maskUnits,mathematical,max,media,method,min,mode,` + `name,numOctaves,offset,opacity,operator,order,orient,orientation,origin,` + `overflow,overline-position,overline-thickness,panose-1,paint-order,path,` + `pathLength,patternContentUnits,patternTransform,patternUnits,ping,` + `pointer-events,points,pointsAtX,pointsAtY,pointsAtZ,preserveAlpha,` + `preserveAspectRatio,primitiveUnits,r,radius,referrerPolicy,refX,refY,rel,` + `rendering-intent,repeatCount,repeatDur,requiredExtensions,requiredFeatures,` + `restart,result,rotate,rx,ry,scale,seed,shape-rendering,slope,spacing,` + `specularConstant,specularExponent,speed,spreadMethod,startOffset,` + `stdDeviation,stemh,stemv,stitchTiles,stop-color,stop-opacity,` + `strikethrough-position,strikethrough-thickness,string,stroke,` + `stroke-dasharray,stroke-dashoffset,stroke-linecap,stroke-linejoin,` + `stroke-miterlimit,stroke-opacity,stroke-width,style,surfaceScale,` + `systemLanguage,tabindex,tableValues,target,targetX,targetY,text-anchor,` + `text-decoration,text-rendering,textLength,to,transform,transform-origin,` + `type,u1,u2,underline-position,underline-thickness,unicode,unicode-bidi,` + `unicode-range,units-per-em,v-alphabetic,v-hanging,v-ideographic,` + `v-mathematical,values,vector-effect,version,vert-adv-y,vert-origin-x,` + `vert-origin-y,viewBox,viewTarget,visibility,width,widths,word-spacing,` + `writing-mode,x,x-height,x1,x2,xChannelSelector,xlink:actuate,xlink:arcrole,` + `xlink:href,xlink:role,xlink:show,xlink:title,xlink:type,xml:base,xml:lang,` + `xml:space,y,y1,y2,yChannelSelector,z,zoomAndPan`)));
-function normalizeStyle(value) {
-  if (isArray(value)) {
-    const res = {};
-    for (let i = 0; i < value.length; i++) {
-      const item = value[i];
-      const normalized = isString(item) ? parseStringStyle(item) : normalizeStyle(item);
-      if (normalized) {
-        for (const key in normalized) {
-          res[key] = normalized[key];
-        }
-      }
-    }
-    return res;
-  } else if (isString(value)) {
-    return value;
-  } else if (isObject(value)) {
-    return value;
-  }
-}
-const listDelimiterRE = /;(?![^(]*\))/g;
-const propertyDelimiterRE = /:(.+)/;
-function parseStringStyle(cssText) {
-  const ret = {};
-  cssText.split(listDelimiterRE).forEach(item => {
-    if (item) {
-      const tmp = item.split(propertyDelimiterRE);
-      tmp.length > 1 && (ret[tmp[0].trim()] = tmp[1].trim());
-    }
-  });
-  return ret;
-}
-function stringifyStyle(styles) {
-  let ret = '';
-  if (!styles || isString(styles)) {
-    return ret;
-  }
-  for (const key in styles) {
-    const value = styles[key];
-    const normalizedKey = key.startsWith(`--`) ? key : hyphenate(key);
-    if (isString(value) || typeof value === 'number' && isNoUnitNumericStyleProp(normalizedKey)) {
-      // only render valid values
-      ret += `${normalizedKey}:${value};`;
-    }
-  }
-  return ret;
-}
-function normalizeClass(value) {
-  let res = '';
-  if (isString(value)) {
-    res = value;
-  } else if (isArray(value)) {
-    for (let i = 0; i < value.length; i++) {
-      const normalized = normalizeClass(value[i]);
-      if (normalized) {
-        res += normalized + ' ';
-      }
-    }
-  } else if (isObject(value)) {
-    for (const name in value) {
-      if (value[name]) {
-        res += name + ' ';
-      }
-    }
-  }
-  return res.trim();
-}
-function normalizeProps(props) {
-  if (!props) return null;
-  let {
-    class: klass,
-    style
-  } = props;
-  if (klass && !isString(klass)) {
-    props.class = normalizeClass(klass);
-  }
-  if (style) {
-    props.style = normalizeStyle(style);
-  }
-  return props;
-}
-
-// These tag configs are shared between compiler-dom and runtime-dom, so they
-// https://developer.mozilla.org/en-US/docs/Web/HTML/Element
-const HTML_TAGS = (/* unused pure expression or super */ null && ('html,body,base,head,link,meta,style,title,address,article,aside,footer,' + 'header,h1,h2,h3,h4,h5,h6,nav,section,div,dd,dl,dt,figcaption,' + 'figure,picture,hr,img,li,main,ol,p,pre,ul,a,b,abbr,bdi,bdo,br,cite,code,' + 'data,dfn,em,i,kbd,mark,q,rp,rt,ruby,s,samp,small,span,strong,sub,sup,' + 'time,u,var,wbr,area,audio,map,track,video,embed,object,param,source,' + 'canvas,script,noscript,del,ins,caption,col,colgroup,table,thead,tbody,td,' + 'th,tr,button,datalist,fieldset,form,input,label,legend,meter,optgroup,' + 'option,output,progress,select,textarea,details,dialog,menu,' + 'summary,template,blockquote,iframe,tfoot'));
-// https://developer.mozilla.org/en-US/docs/Web/SVG/Element
-const SVG_TAGS = (/* unused pure expression or super */ null && ('svg,animate,animateMotion,animateTransform,circle,clipPath,color-profile,' + 'defs,desc,discard,ellipse,feBlend,feColorMatrix,feComponentTransfer,' + 'feComposite,feConvolveMatrix,feDiffuseLighting,feDisplacementMap,' + 'feDistanceLight,feDropShadow,feFlood,feFuncA,feFuncB,feFuncG,feFuncR,' + 'feGaussianBlur,feImage,feMerge,feMergeNode,feMorphology,feOffset,' + 'fePointLight,feSpecularLighting,feSpotLight,feTile,feTurbulence,filter,' + 'foreignObject,g,hatch,hatchpath,image,line,linearGradient,marker,mask,' + 'mesh,meshgradient,meshpatch,meshrow,metadata,mpath,path,pattern,' + 'polygon,polyline,radialGradient,rect,set,solidcolor,stop,switch,symbol,' + 'text,textPath,title,tspan,unknown,use,view'));
-const VOID_TAGS = 'area,base,br,col,embed,hr,img,input,link,meta,param,source,track,wbr';
-/**
- * Compiler only.
- * Do NOT use in runtime code paths unless behind `(process.env.NODE_ENV !== 'production')` flag.
- */
-const isHTMLTag = /*#__PURE__*/(/* unused pure expression or super */ null && (makeMap(HTML_TAGS)));
-/**
- * Compiler only.
- * Do NOT use in runtime code paths unless behind `(process.env.NODE_ENV !== 'production')` flag.
- */
-const isSVGTag = /*#__PURE__*/(/* unused pure expression or super */ null && (makeMap(SVG_TAGS)));
-/**
- * Compiler only.
- * Do NOT use in runtime code paths unless behind `(process.env.NODE_ENV !== 'production')` flag.
- */
-const isVoidTag = /*#__PURE__*/(/* unused pure expression or super */ null && (makeMap(VOID_TAGS)));
 const escapeRE = /["'&<>]/;
 function escapeHtml(string) {
   const str = '' + string;
@@ -37400,6 +38812,7 @@ const isArray = Array.isArray;
 const isMap = val => toTypeString(val) === '[object Map]';
 const isSet = val => toTypeString(val) === '[object Set]';
 const isDate = val => toTypeString(val) === '[object Date]';
+const isRegExp = val => toTypeString(val) === '[object RegExp]';
 const isFunction = val => typeof val === 'function';
 const isString = val => typeof val === 'string';
 const isSymbol = val => typeof val === 'symbol';
@@ -37460,8 +38873,20 @@ const def = (obj, key, value) => {
     value
   });
 };
-const toNumber = val => {
+/**
+ * "123-foo" will be parsed to 123
+ * This is used for the .number modifier in v-model
+ */
+const looseToNumber = val => {
   const n = parseFloat(val);
+  return isNaN(n) ? val : n;
+};
+/**
+ * Only conerces number-like strings
+ * "123-foo" will be returned as-is
+ */
+const toNumber = val => {
+  const n = isString(val) ? Number(val) : NaN;
   return isNaN(n) ? val : n;
 };
 let _globalThis;
@@ -37480,8 +38905,9 @@ function genPropsAccessExp(name) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;__webpack_require__(7658);
-__webpack_require__(3408);
-__webpack_require__(4590);
+__webpack_require__(3767);
+__webpack_require__(8585);
+__webpack_require__(8696);
 __webpack_require__(541);
 /**
  * @license BitSet.js v5.1.1 2/1/2020
@@ -38613,14 +40039,6 @@ EventEmitter.EventEmitter = EventEmitter;
 if (true) {
   module.exports = EventEmitter;
 }
-
-/***/ }),
-
-/***/ 6237:
-/***/ (function(module) {
-
-/* eslint-env browser */
-module.exports = typeof self == 'object' ? self.FormData : window.FormData;
 
 /***/ }),
 
@@ -64926,7 +66344,7 @@ const _hoisted_1 = {
 };
 function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                                     
-  return (0,runtime_core_esm_bundler/* openBlock */.wg)(), (0,runtime_core_esm_bundler/* createElementBlock */.iD)("div", _hoisted_1, [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VTextField/* VTextField */.hw, {
+  return (0,runtime_core_esm_bundler/* openBlock */.wg)(), (0,runtime_core_esm_bundler/* createElementBlock */.iD)("div", _hoisted_1, [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VTextField/* VTextField */.h, {
     class: (0,shared_esm_bundler/* normalizeClass */.C_)(["input-card-item__message", {
       nodata: $props.nodata
     }]),
@@ -65054,7 +66472,7 @@ const __exports__ = /*#__PURE__*/(0,exportHelper/* default */.Z)(InputCardItemvu
 
 /***/ }),
 
-/***/ 3066:
+/***/ 5412:
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -65068,11 +66486,11 @@ __webpack_require__.d(__webpack_exports__, {
 var runtime_core_esm_bundler = __webpack_require__(3396);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/components/VTextField/VTextField.mjs
 var VTextField = __webpack_require__(165);
-;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/common/NumberField.vue?vue&type=template&id=1030992a&ts=true
+;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/common/NumberField.vue?vue&type=template&id=55a45ba2&ts=true
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                                     
-  return (0,runtime_core_esm_bundler/* openBlock */.wg)(), (0,runtime_core_esm_bundler/* createBlock */.j4)(VTextField/* VTextField */.hw, {
+  return (0,runtime_core_esm_bundler/* openBlock */.wg)(), (0,runtime_core_esm_bundler/* createBlock */.j4)(VTextField/* VTextField */.h, {
     modelValue: $setup.value,
     "onUpdate:modelValue": _cache[0] || (_cache[0] = $event => $setup.value = $event),
     label: $props.label,
@@ -65083,11 +66501,12 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     max: $props.max,
     oninput: "\r\n\t\t\tif(this.max && Number(this.value) > Number(this.max)) { this.value = this.max; }\r\n\t\t\telse if (this.min && Number(this.value) < Number(this.min)) { this.value = ''; }\r\n\t\t",
     disabled: $props.disabled,
+    readonly: $props.readonly,
     "persistent-hint": "",
     dense: "",
     onBlur: $setup.onBlur,
     onChange: _cache[1] || (_cache[1] = $event => _ctx.$emit('change', $event))
-  }, null, 8, ["modelValue", "label", "hint", "min", "max", "disabled", "onBlur"]);
+  }, null, 8, ["modelValue", "label", "hint", "min", "max", "disabled", "readonly", "onBlur"]);
 }
 
 /* Vuetify */
@@ -65120,6 +66539,8 @@ var reactivity_esm_bundler = __webpack_require__(4870);
       type: Number,
       default: 3
     },
+    /** Только чтение */
+    readonly: Boolean,
     /** Выкл. */
     disabled: Boolean
   },
@@ -65426,7 +66847,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         key: 3,
         class: "justify-end align-end"
       }, {
-        default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VBtnGroup/* VBtnGroup */.Yz, {
+        default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VBtnGroup/* VBtnGroup */.Y, {
           class: "border-dialog-btns dialog__btns"
         }, {
           default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* renderSlot */.WI)(_ctx.$slots, "btns", {}, undefined, true)]),
@@ -65522,14 +66943,49 @@ const __exports__ = /*#__PURE__*/(0,exportHelper/* default */.Z)(DialogTemplatev
 
 /***/ }),
 
-/***/ 2482:
+/***/ 7327:
 /***/ (function(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "Z": function() { return /* binding */ _defineProperty; }
-/* harmony export */ });
+
+// EXPORTS
+__webpack_require__.d(__webpack_exports__, {
+  "Z": function() { return /* binding */ _defineProperty; }
+});
+
+;// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/typeof.js
+function _typeof(obj) {
+  "@babel/helpers - typeof";
+
+  return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) {
+    return typeof obj;
+  } : function (obj) {
+    return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+  }, _typeof(obj);
+}
+;// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/toPrimitive.js
+
+function _toPrimitive(input, hint) {
+  if (_typeof(input) !== "object" || input === null) return input;
+  var prim = input[Symbol.toPrimitive];
+  if (prim !== undefined) {
+    var res = prim.call(input, hint || "default");
+    if (_typeof(res) !== "object") return res;
+    throw new TypeError("@@toPrimitive must return a primitive value.");
+  }
+  return (hint === "string" ? String : Number)(input);
+}
+;// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/toPropertyKey.js
+
+
+function _toPropertyKey(arg) {
+  var key = _toPrimitive(arg, "string");
+  return _typeof(key) === "symbol" ? key : String(key);
+}
+;// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/defineProperty.js
+
 function _defineProperty(obj, key, value) {
+  key = _toPropertyKey(key);
   if (key in obj) {
     Object.defineProperty(obj, key, {
       value: value,
@@ -65570,6 +67026,8 @@ var VImg = __webpack_require__(1285);
 var variant = __webpack_require__(5221);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/icons.mjs + 1 modules
 var icons = __webpack_require__(4960);
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/component.mjs
+var component = __webpack_require__(9166);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/density.mjs
 var density = __webpack_require__(9694);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/rounded.mjs
@@ -65582,8 +67040,8 @@ var tag = __webpack_require__(1138);
 var theme = __webpack_require__(7041);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/util/propsFactory.mjs
 var propsFactory = __webpack_require__(3766);
-// EXTERNAL MODULE: ./node_modules/vuetify/lib/util/defineComponent.mjs + 1 modules
-var defineComponent = __webpack_require__(320);
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/util/defineComponent.mjs
+var defineComponent = __webpack_require__(1107);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/util/useRender.mjs
 var useRender = __webpack_require__(9888);
 ;// CONCATENATED MODULE: ./node_modules/vuetify/lib/components/VAvatar/VAvatar.mjs
@@ -65600,6 +67058,7 @@ var useRender = __webpack_require__(9888);
 
 
 
+
  // Utilities
 
 const makeVAvatarProps = (0,propsFactory/* propsFactory */.U)({
@@ -65607,6 +67066,7 @@ const makeVAvatarProps = (0,propsFactory/* propsFactory */.U)({
   end: Boolean,
   icon: icons/* IconValue */.lE,
   image: String,
+  ...(0,component/* makeComponentProps */.l)(),
   ...(0,density/* makeDensityProps */.f)(),
   ...(0,rounded/* makeRoundedProps */.I)(),
   ...(0,size/* makeSizeProps */.Z)(),
@@ -65645,8 +67105,8 @@ const VAvatar = (0,defineComponent/* genericComponent */.ev)()({
       "class": ['v-avatar', {
         'v-avatar--start': props.start,
         'v-avatar--end': props.end
-      }, themeClasses.value, colorClasses.value, densityClasses.value, roundedClasses.value, sizeClasses.value, variantClasses.value],
-      "style": [colorStyles.value, sizeStyles.value]
+      }, themeClasses.value, colorClasses.value, densityClasses.value, roundedClasses.value, sizeClasses.value, variantClasses.value, props.class],
+      "style": [colorStyles.value, sizeStyles.value, props.style]
     }, {
       default: () => [props.image ? (0,runtime_core_esm_bundler/* createVNode */.Wm)(VImg/* VImg */.f, {
         "key": "image",
@@ -65671,9 +67131,8 @@ const VAvatar = (0,defineComponent/* genericComponent */.ev)()({
 
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, {
-  "Yz": function() { return /* binding */ VBtnGroup; },
-  "jP": function() { return /* binding */ filterVBtnGroupProps; },
-  "Ti": function() { return /* binding */ makeVBtnGroupProps; }
+  "Y": function() { return /* binding */ VBtnGroup; },
+  "T": function() { return /* binding */ makeVBtnGroupProps; }
 });
 
 // EXTERNAL MODULE: ./node_modules/@vue/runtime-core/dist/runtime-core.esm-bundler.js
@@ -65683,6 +67142,8 @@ var runtime_core_esm_bundler = __webpack_require__(3396);
 
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/border.mjs
 var border = __webpack_require__(2718);
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/component.mjs
+var component = __webpack_require__(9166);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/density.mjs
 var density = __webpack_require__(9694);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/elevation.mjs
@@ -65695,16 +67156,14 @@ var tag = __webpack_require__(1138);
 var theme = __webpack_require__(7041);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/variant.mjs
 var variant = __webpack_require__(5221);
-// EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/defaults.mjs
-var defaults = __webpack_require__(8434);
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/defaults.mjs + 1 modules
+var defaults = __webpack_require__(6107);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/util/propsFactory.mjs
 var propsFactory = __webpack_require__(3766);
-// EXTERNAL MODULE: ./node_modules/vuetify/lib/util/defineComponent.mjs + 1 modules
-var defineComponent = __webpack_require__(320);
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/util/defineComponent.mjs
+var defineComponent = __webpack_require__(1107);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/util/useRender.mjs
 var useRender = __webpack_require__(9888);
-// EXTERNAL MODULE: ./node_modules/vuetify/lib/util/helpers.mjs
-var helpers = __webpack_require__(131);
 // EXTERNAL MODULE: ./node_modules/@vue/reactivity/dist/reactivity.esm-bundler.js
 var reactivity_esm_bundler = __webpack_require__(4870);
 ;// CONCATENATED MODULE: ./node_modules/vuetify/lib/components/VBtnGroup/VBtnGroup.mjs
@@ -65720,15 +67179,14 @@ var reactivity_esm_bundler = __webpack_require__(4870);
 
 
 
+
  // Utility
 
-
-
-// Types
 
 const makeVBtnGroupProps = (0,propsFactory/* propsFactory */.U)({
   divided: Boolean,
   ...(0,border/* makeBorderProps */.m)(),
+  ...(0,component/* makeComponentProps */.l)(),
   ...(0,density/* makeDensityProps */.f)(),
   ...(0,elevation/* makeElevationProps */.c)(),
   ...(0,rounded/* makeRoundedProps */.I)(),
@@ -65771,14 +67229,12 @@ const VBtnGroup = (0,defineComponent/* genericComponent */.ev)()({
       return (0,runtime_core_esm_bundler/* createVNode */.Wm)(props.tag, {
         "class": ['v-btn-group', {
           'v-btn-group--divided': props.divided
-        }, themeClasses.value, borderClasses.value, densityClasses.value, elevationClasses.value, roundedClasses.value]
+        }, themeClasses.value, borderClasses.value, densityClasses.value, elevationClasses.value, roundedClasses.value, props.class],
+        "style": props.style
       }, slots);
     });
   }
 });
-function filterVBtnGroupProps(props) {
-  return (0,helpers/* pick */.ei)(props, Object.keys(VBtnGroup.props));
-}
 
 /***/ }),
 
@@ -65802,8 +67258,8 @@ var runtime_core_esm_bundler = __webpack_require__(3396);
 var VBtnGroup = __webpack_require__(401);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/group.mjs
 var group = __webpack_require__(1970);
-// EXTERNAL MODULE: ./node_modules/vuetify/lib/util/defineComponent.mjs + 1 modules
-var defineComponent = __webpack_require__(320);
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/util/defineComponent.mjs
+var defineComponent = __webpack_require__(1107);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/util/useRender.mjs
 var useRender = __webpack_require__(9888);
 ;// CONCATENATED MODULE: ./node_modules/vuetify/lib/components/VBtnToggle/VBtnToggle.mjs
@@ -65819,7 +67275,7 @@ const VBtnToggleSymbol = Symbol.for('vuetify:v-btn-toggle');
 const VBtnToggle = (0,defineComponent/* genericComponent */.ev)()({
   name: 'VBtnToggle',
   props: {
-    ...(0,VBtnGroup/* makeVBtnGroupProps */.Ti)(),
+    ...(0,VBtnGroup/* makeVBtnGroupProps */.T)(),
     ...(0,group/* makeGroupProps */.k4)()
   },
   emits: {
@@ -65837,10 +67293,12 @@ const VBtnToggle = (0,defineComponent/* genericComponent */.ev)()({
       selected
     } = (0,group/* useGroup */._v)(props, VBtnToggleSymbol);
     (0,useRender/* useRender */.L)(() => {
-      const [btnGroupProps] = (0,VBtnGroup/* filterVBtnGroupProps */.jP)(props);
-      return (0,runtime_core_esm_bundler/* createVNode */.Wm)(VBtnGroup/* VBtnGroup */.Yz, (0,runtime_core_esm_bundler/* mergeProps */.dG)({
-        "class": "v-btn-toggle"
-      }, btnGroupProps), {
+      const [btnGroupProps] = VBtnGroup/* VBtnGroup.filterProps */.Y.filterProps(props);
+      return (0,runtime_core_esm_bundler/* createVNode */.Wm)(VBtnGroup/* VBtnGroup */.Y, (0,runtime_core_esm_bundler/* mergeProps */.dG)({
+        "class": ['v-btn-toggle', props.class]
+      }, btnGroupProps, {
+        "style": props.style
+      }), {
         default: () => [slots.default?.({
           isSelected,
           next,
@@ -65867,7 +67325,8 @@ const VBtnToggle = (0,defineComponent/* genericComponent */.ev)()({
 
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, {
-  "T": function() { return /* binding */ VBtn; }
+  "T": function() { return /* binding */ VBtn; },
+  "L": function() { return /* binding */ makeVBtnProps; }
 });
 
 // EXTERNAL MODULE: ./node_modules/@vue/runtime-core/dist/runtime-core.esm-bundler.js
@@ -65891,6 +67350,8 @@ var variant = __webpack_require__(5221);
 var icons = __webpack_require__(4960);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/border.mjs
 var border = __webpack_require__(2718);
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/component.mjs
+var component = __webpack_require__(9166);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/density.mjs
 var density = __webpack_require__(9694);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/dimensions.mjs
@@ -65932,8 +67393,10 @@ function useSelectLink(link, select) {
     immediate: true
   });
 }
-// EXTERNAL MODULE: ./node_modules/vuetify/lib/util/defineComponent.mjs + 1 modules
-var defineComponent = __webpack_require__(320);
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/util/propsFactory.mjs
+var propsFactory = __webpack_require__(3766);
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/util/defineComponent.mjs
+var defineComponent = __webpack_require__(1107);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/util/useRender.mjs
 var useRender = __webpack_require__(9888);
 ;// CONCATENATED MODULE: ./node_modules/vuetify/lib/components/VBtn/VBtn.mjs
@@ -65962,52 +67425,56 @@ var useRender = __webpack_require__(9888);
 
 
 
+
  // Utilities
 
  // Types
+const makeVBtnProps = (0,propsFactory/* propsFactory */.U)({
+  active: {
+    type: Boolean,
+    default: undefined
+  },
+  symbol: {
+    type: null,
+    default: VBtnToggle/* VBtnToggleSymbol */.i
+  },
+  flat: Boolean,
+  icon: [Boolean, String, Function, Object],
+  prependIcon: icons/* IconValue */.lE,
+  appendIcon: icons/* IconValue */.lE,
+  block: Boolean,
+  stacked: Boolean,
+  ripple: {
+    type: Boolean,
+    default: true
+  },
+  text: String,
+  ...(0,border/* makeBorderProps */.m)(),
+  ...(0,component/* makeComponentProps */.l)(),
+  ...(0,density/* makeDensityProps */.f)(),
+  ...(0,dimensions/* makeDimensionProps */.x)(),
+  ...(0,elevation/* makeElevationProps */.c)(),
+  ...(0,composables_group/* makeGroupItemProps */.YQ)(),
+  ...(0,loader/* makeLoaderProps */.fF)(),
+  ...(0,composables_location/* makeLocationProps */.y)(),
+  ...(0,position/* makePositionProps */.F)(),
+  ...(0,rounded/* makeRoundedProps */.I)(),
+  ...(0,router/* makeRouterProps */.GN)(),
+  ...(0,size/* makeSizeProps */.Z)(),
+  ...(0,tag/* makeTagProps */.Q)({
+    tag: 'button'
+  }),
+  ...(0,theme/* makeThemeProps */.x$)(),
+  ...(0,variant/* makeVariantProps */.bk)({
+    variant: 'elevated'
+  })
+}, 'VBtn');
 const VBtn = (0,defineComponent/* genericComponent */.ev)()({
   name: 'VBtn',
   directives: {
     Ripple: ripple/* Ripple */.H
   },
-  props: {
-    active: {
-      type: Boolean,
-      default: undefined
-    },
-    symbol: {
-      type: null,
-      default: VBtnToggle/* VBtnToggleSymbol */.i
-    },
-    flat: Boolean,
-    icon: [Boolean, String, Function, Object],
-    prependIcon: icons/* IconValue */.lE,
-    appendIcon: icons/* IconValue */.lE,
-    block: Boolean,
-    stacked: Boolean,
-    ripple: {
-      type: Boolean,
-      default: true
-    },
-    ...(0,border/* makeBorderProps */.m)(),
-    ...(0,rounded/* makeRoundedProps */.I)(),
-    ...(0,density/* makeDensityProps */.f)(),
-    ...(0,dimensions/* makeDimensionProps */.x)(),
-    ...(0,elevation/* makeElevationProps */.c)(),
-    ...(0,composables_group/* makeGroupItemProps */.YQ)(),
-    ...(0,loader/* makeLoaderProps */.fF)(),
-    ...(0,composables_location/* makeLocationProps */.y)(),
-    ...(0,position/* makePositionProps */.F)(),
-    ...(0,router/* makeRouterProps */.GN)(),
-    ...(0,size/* makeSizeProps */.Z)(),
-    ...(0,tag/* makeTagProps */.Q)({
-      tag: 'button'
-    }),
-    ...(0,theme/* makeThemeProps */.x$)(),
-    ...(0,variant/* makeVariantProps */.bk)({
-      variant: 'elevated'
-    })
-  },
+  props: makeVBtnProps(),
   emits: {
     'group:selected': val => true
   },
@@ -66089,8 +67556,8 @@ const VBtn = (0,defineComponent/* genericComponent */.ev)()({
           'v-btn--icon': !!props.icon,
           'v-btn--loading': props.loading,
           'v-btn--stacked': props.stacked
-        }, themeClasses.value, borderClasses.value, hasColor ? colorClasses.value : undefined, densityClasses.value, elevationClasses.value, loaderClasses.value, positionClasses.value, roundedClasses.value, sizeClasses.value, variantClasses.value],
-        "style": [hasColor ? colorStyles.value : undefined, dimensionStyles.value, locationStyles.value, sizeStyles.value],
+        }, themeClasses.value, borderClasses.value, hasColor ? colorClasses.value : undefined, densityClasses.value, elevationClasses.value, loaderClasses.value, positionClasses.value, roundedClasses.value, sizeClasses.value, variantClasses.value, props.class],
+        "style": [hasColor ? colorStyles.value : undefined, dimensionStyles.value, locationStyles.value, sizeStyles.value, props.style],
         "disabled": isDisabled.value || undefined,
         "href": link.href.value,
         "onClick": e => {
@@ -66100,43 +67567,51 @@ const VBtn = (0,defineComponent/* genericComponent */.ev)()({
         },
         "value": valueAttr.value
       }, {
-        default: () => [(0,variant/* genOverlays */.Ux)(true, 'v-btn'), !props.icon && hasPrepend && (0,runtime_core_esm_bundler/* createVNode */.Wm)(VDefaultsProvider/* VDefaultsProvider */.z, {
+        default: () => [(0,variant/* genOverlays */.Ux)(true, 'v-btn'), !props.icon && hasPrepend && (0,runtime_core_esm_bundler/* createVNode */.Wm)("span", {
           "key": "prepend",
+          "class": "v-btn__prepend"
+        }, [!slots.prepend ? (0,runtime_core_esm_bundler/* createVNode */.Wm)(VIcon/* VIcon */.t, {
+          "key": "prepend-icon",
+          "icon": props.prependIcon
+        }, null) : (0,runtime_core_esm_bundler/* createVNode */.Wm)(VDefaultsProvider/* VDefaultsProvider */.z, {
+          "key": "prepend-defaults",
+          "disabled": !props.prependIcon,
           "defaults": {
             VIcon: {
               icon: props.prependIcon
             }
           }
-        }, {
-          default: () => [(0,runtime_core_esm_bundler/* createVNode */.Wm)("span", {
-            "class": "v-btn__prepend"
-          }, [slots.prepend?.() ?? (0,runtime_core_esm_bundler/* createVNode */.Wm)(VIcon/* VIcon */.t, null, null)])]
-        }), (0,runtime_core_esm_bundler/* createVNode */.Wm)("span", {
+        }, slots.prepend)]), (0,runtime_core_esm_bundler/* createVNode */.Wm)("span", {
           "class": "v-btn__content",
           "data-no-activator": ""
-        }, [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VDefaultsProvider/* VDefaultsProvider */.z, {
-          "key": "content",
+        }, [!slots.default && hasIcon ? (0,runtime_core_esm_bundler/* createVNode */.Wm)(VIcon/* VIcon */.t, {
+          "key": "content-icon",
+          "icon": props.icon
+        }, null) : (0,runtime_core_esm_bundler/* createVNode */.Wm)(VDefaultsProvider/* VDefaultsProvider */.z, {
+          "key": "content-defaults",
+          "disabled": !hasIcon,
           "defaults": {
             VIcon: {
-              icon: hasIcon ? props.icon : undefined
+              icon: props.icon
             }
           }
         }, {
-          default: () => [slots.default?.() ?? (hasIcon && (0,runtime_core_esm_bundler/* createVNode */.Wm)(VIcon/* VIcon */.t, {
-            "key": "icon"
-          }, null))]
-        })]), !props.icon && hasAppend && (0,runtime_core_esm_bundler/* createVNode */.Wm)(VDefaultsProvider/* VDefaultsProvider */.z, {
+          default: () => [slots.default?.() ?? props.text]
+        })]), !props.icon && hasAppend && (0,runtime_core_esm_bundler/* createVNode */.Wm)("span", {
           "key": "append",
+          "class": "v-btn__append"
+        }, [!slots.append ? (0,runtime_core_esm_bundler/* createVNode */.Wm)(VIcon/* VIcon */.t, {
+          "key": "append-icon",
+          "icon": props.appendIcon
+        }, null) : (0,runtime_core_esm_bundler/* createVNode */.Wm)(VDefaultsProvider/* VDefaultsProvider */.z, {
+          "key": "append-defaults",
+          "disabled": !props.appendIcon,
           "defaults": {
             VIcon: {
               icon: props.appendIcon
             }
           }
-        }, {
-          default: () => [(0,runtime_core_esm_bundler/* createVNode */.Wm)("span", {
-            "class": "v-btn__append"
-          }, [slots.append?.() ?? (0,runtime_core_esm_bundler/* createVNode */.Wm)(VIcon/* VIcon */.t, null, null)])]
-        }), !!props.loading && (0,runtime_core_esm_bundler/* createVNode */.Wm)("span", {
+        }, slots.append)]), !!props.loading && (0,runtime_core_esm_bundler/* createVNode */.Wm)("span", {
           "key": "loader",
           "class": "v-btn__loader"
         }, [slots.loader?.() ?? (0,runtime_core_esm_bundler/* createVNode */.Wm)(VProgressCircular/* VProgressCircular */.L, {
@@ -66188,6 +67663,8 @@ var icons = __webpack_require__(4960);
 var loader = __webpack_require__(1710);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/border.mjs
 var border = __webpack_require__(2718);
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/component.mjs
+var component = __webpack_require__(9166);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/density.mjs
 var density = __webpack_require__(9694);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/dimensions.mjs
@@ -66206,8 +67683,8 @@ var router = __webpack_require__(6183);
 var tag = __webpack_require__(1138);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/theme.mjs + 1 modules
 var theme = __webpack_require__(7041);
-// EXTERNAL MODULE: ./node_modules/vuetify/lib/util/defineComponent.mjs + 1 modules
-var defineComponent = __webpack_require__(320);
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/util/defineComponent.mjs
+var defineComponent = __webpack_require__(1107);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/util/useRender.mjs
 var useRender = __webpack_require__(9888);
 ;// CONCATENATED MODULE: ./node_modules/vuetify/lib/components/VCard/VCard.mjs
@@ -66224,6 +67701,7 @@ var useRender = __webpack_require__(9888);
 
  // Directives
  // Composables
+
 
 
 
@@ -66264,8 +67742,8 @@ const VCard = (0,defineComponent/* genericComponent */.ev)()({
     subtitle: String,
     text: String,
     title: String,
-    ...(0,theme/* makeThemeProps */.x$)(),
     ...(0,border/* makeBorderProps */.m)(),
+    ...(0,component/* makeComponentProps */.l)(),
     ...(0,density/* makeDensityProps */.f)(),
     ...(0,dimensions/* makeDimensionProps */.x)(),
     ...(0,elevation/* makeElevationProps */.c)(),
@@ -66275,6 +67753,7 @@ const VCard = (0,defineComponent/* genericComponent */.ev)()({
     ...(0,rounded/* makeRoundedProps */.I)(),
     ...(0,router/* makeRouterProps */.GN)(),
     ...(0,tag/* makeTagProps */.Q)(),
+    ...(0,theme/* makeThemeProps */.x$)(),
     ...(0,variant/* makeVariantProps */.bk)({
       variant: 'elevated'
     })
@@ -66335,25 +67814,29 @@ const VCard = (0,defineComponent/* genericComponent */.ev)()({
           'v-card--flat': props.flat,
           'v-card--hover': props.hover && !(props.disabled || props.flat),
           'v-card--link': isClickable.value
-        }, themeClasses.value, borderClasses.value, colorClasses.value, densityClasses.value, elevationClasses.value, loaderClasses.value, positionClasses.value, roundedClasses.value, variantClasses.value],
-        "style": [colorStyles.value, dimensionStyles.value, locationStyles.value],
+        }, themeClasses.value, borderClasses.value, colorClasses.value, densityClasses.value, elevationClasses.value, loaderClasses.value, positionClasses.value, roundedClasses.value, variantClasses.value, props.class],
+        "style": [colorStyles.value, dimensionStyles.value, locationStyles.value, props.style],
         "href": link.href.value,
         "onClick": isClickable.value && link.navigate,
         "tabindex": props.disabled ? -1 : undefined
       }, {
-        default: () => [hasImage && (0,runtime_core_esm_bundler/* createVNode */.Wm)(VDefaultsProvider/* VDefaultsProvider */.z, {
+        default: () => [hasImage && (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
           "key": "image",
+          "class": "v-card__image"
+        }, [!slots.image ? (0,runtime_core_esm_bundler/* createVNode */.Wm)(VImg/* VImg */.f, {
+          "key": "image-img",
+          "cover": true,
+          "src": props.image
+        }, null) : (0,runtime_core_esm_bundler/* createVNode */.Wm)(VDefaultsProvider/* VDefaultsProvider */.z, {
+          "key": "image-defaults",
+          "disabled": !props.image,
           "defaults": {
             VImg: {
               cover: true,
               src: props.image
             }
           }
-        }, {
-          default: () => [(0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
-            "class": "v-card__image"
-          }, [slots.image?.() ?? (0,runtime_core_esm_bundler/* createVNode */.Wm)(VImg/* VImg */.f, null, null)])]
-        }), (0,runtime_core_esm_bundler/* createVNode */.Wm)(loader/* LoaderSlot */.rD, {
+        }, slots.image)]), (0,runtime_core_esm_bundler/* createVNode */.Wm)(loader/* LoaderSlot */.rD, {
           "name": "v-card",
           "active": !!props.loading,
           "color": typeof props.loading === 'boolean' ? undefined : props.loading
@@ -66395,27 +67878,31 @@ const VCard = (0,defineComponent/* genericComponent */.ev)()({
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "h": function() { return /* binding */ VCardActions; }
 /* harmony export */ });
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(3396);
-/* harmony import */ var _composables_defaults_mjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(8434);
-/* harmony import */ var _util_index_mjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(320);
-/* harmony import */ var _util_index_mjs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(9888);
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(3396);
+/* harmony import */ var _composables_component_mjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(9166);
+/* harmony import */ var _composables_defaults_mjs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(6107);
+/* harmony import */ var _util_index_mjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1107);
+/* harmony import */ var _util_index_mjs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(9888);
 
 // Composables
+
  // Utilities
- // Types
-const VCardActions = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_0__/* .defineComponent */ .aZ)({
+
+const VCardActions = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_0__/* .genericComponent */ .ev)()({
   name: 'VCardActions',
-  setup(_, _ref) {
+  props: (0,_composables_component_mjs__WEBPACK_IMPORTED_MODULE_1__/* .makeComponentProps */ .l)(),
+  setup(props, _ref) {
     let {
       slots
     } = _ref;
-    (0,_composables_defaults_mjs__WEBPACK_IMPORTED_MODULE_1__/* .provideDefaults */ .AF)({
+    (0,_composables_defaults_mjs__WEBPACK_IMPORTED_MODULE_2__/* .provideDefaults */ .AF)({
       VBtn: {
         variant: 'text'
       }
     });
-    (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_2__/* .useRender */ .L)(() => (0,vue__WEBPACK_IMPORTED_MODULE_3__/* .createVNode */ .Wm)("div", {
-      "class": "v-card-actions"
+    (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_3__/* .useRender */ .L)(() => (0,vue__WEBPACK_IMPORTED_MODULE_4__/* .createVNode */ .Wm)("div", {
+      "class": ['v-card-actions', props.class],
+      "style": props.style
     }, [slots.default?.()]));
     return {};
   }
@@ -66430,15 +67917,16 @@ const VCardActions = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_0__/* .defineCo
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "_": function() { return /* binding */ VCardItem; }
 /* harmony export */ });
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(3396);
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(3396);
 /* harmony import */ var _VAvatar_index_mjs__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(652);
-/* harmony import */ var _VCardSubtitle_mjs__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(1332);
-/* harmony import */ var _VCardTitle_mjs__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(6572);
-/* harmony import */ var _VDefaultsProvider_index_mjs__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(836);
+/* harmony import */ var _VCardSubtitle_mjs__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(1332);
+/* harmony import */ var _VCardTitle_mjs__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(6572);
+/* harmony import */ var _VDefaultsProvider_index_mjs__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(836);
 /* harmony import */ var _composables_icons_mjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4960);
-/* harmony import */ var _composables_density_mjs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(9694);
-/* harmony import */ var _util_index_mjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(320);
-/* harmony import */ var _util_index_mjs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(9888);
+/* harmony import */ var _composables_component_mjs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(9166);
+/* harmony import */ var _composables_density_mjs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(9694);
+/* harmony import */ var _util_index_mjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1107);
+/* harmony import */ var _util_index_mjs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(9888);
 
 // Components
 
@@ -66446,8 +67934,9 @@ const VCardActions = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_0__/* .defineCo
 
  // Composables
 
+
  // Utility
- // Types
+
 const VCardItem = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_0__/* .genericComponent */ .ev)()({
   name: 'VCardItem',
   props: {
@@ -66457,64 +67946,70 @@ const VCardItem = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_0__/* .genericComp
     prependIcon: _composables_icons_mjs__WEBPACK_IMPORTED_MODULE_1__/* .IconValue */ .lE,
     subtitle: String,
     title: String,
-    ...(0,_composables_density_mjs__WEBPACK_IMPORTED_MODULE_2__/* .makeDensityProps */ .f)()
+    ...(0,_composables_component_mjs__WEBPACK_IMPORTED_MODULE_2__/* .makeComponentProps */ .l)(),
+    ...(0,_composables_density_mjs__WEBPACK_IMPORTED_MODULE_3__/* .makeDensityProps */ .f)()
   },
   setup(props, _ref) {
     let {
       slots
     } = _ref;
-    (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_3__/* .useRender */ .L)(() => {
-      const hasPrepend = !!(props.prependAvatar || props.prependIcon || slots.prepend);
-      const hasAppend = !!(props.appendAvatar || props.appendIcon || slots.append);
+    (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_4__/* .useRender */ .L)(() => {
+      const hasPrependMedia = !!(props.prependAvatar || props.prependIcon);
+      const hasPrepend = !!(hasPrependMedia || slots.prepend);
+      const hasAppendMedia = !!(props.appendAvatar || props.appendIcon);
+      const hasAppend = !!(hasAppendMedia || slots.append);
       const hasTitle = !!(props.title || slots.title);
       const hasSubtitle = !!(props.subtitle || slots.subtitle);
-      return (0,vue__WEBPACK_IMPORTED_MODULE_4__/* .createVNode */ .Wm)("div", {
-        "class": "v-card-item"
-      }, [hasPrepend && (0,vue__WEBPACK_IMPORTED_MODULE_4__/* .createVNode */ .Wm)(_VDefaultsProvider_index_mjs__WEBPACK_IMPORTED_MODULE_5__/* .VDefaultsProvider */ .z, {
+      return (0,vue__WEBPACK_IMPORTED_MODULE_5__/* .createVNode */ .Wm)("div", {
+        "class": ['v-card-item', props.class],
+        "style": props.style
+      }, [hasPrepend && (0,vue__WEBPACK_IMPORTED_MODULE_5__/* .createVNode */ .Wm)("div", {
         "key": "prepend",
+        "class": "v-card-item__prepend"
+      }, [!slots.prepend ? hasPrependMedia && (0,vue__WEBPACK_IMPORTED_MODULE_5__/* .createVNode */ .Wm)(_VAvatar_index_mjs__WEBPACK_IMPORTED_MODULE_6__/* .VAvatar */ .V, {
+        "key": "prepend-avatar",
+        "density": props.density,
+        "icon": props.prependIcon,
+        "image": props.prependAvatar
+      }, null) : (0,vue__WEBPACK_IMPORTED_MODULE_5__/* .createVNode */ .Wm)(_VDefaultsProvider_index_mjs__WEBPACK_IMPORTED_MODULE_7__/* .VDefaultsProvider */ .z, {
+        "key": "prepend-defaults",
+        "disabled": !hasPrependMedia,
         "defaults": {
           VAvatar: {
             density: props.density,
             icon: props.prependIcon,
             image: props.prependAvatar
-          },
-          VIcon: {
-            density: props.density,
-            icon: props.prependIcon
           }
         }
-      }, {
-        default: () => [(0,vue__WEBPACK_IMPORTED_MODULE_4__/* .createVNode */ .Wm)("div", {
-          "class": "v-card-item__prepend"
-        }, [slots.prepend?.() ?? (0,vue__WEBPACK_IMPORTED_MODULE_4__/* .createVNode */ .Wm)(_VAvatar_index_mjs__WEBPACK_IMPORTED_MODULE_6__/* .VAvatar */ .V, null, null)])]
-      }), (0,vue__WEBPACK_IMPORTED_MODULE_4__/* .createVNode */ .Wm)("div", {
+      }, slots.prepend)]), (0,vue__WEBPACK_IMPORTED_MODULE_5__/* .createVNode */ .Wm)("div", {
         "class": "v-card-item__content"
-      }, [hasTitle && (0,vue__WEBPACK_IMPORTED_MODULE_4__/* .createVNode */ .Wm)(_VCardTitle_mjs__WEBPACK_IMPORTED_MODULE_7__/* .VCardTitle */ .E, {
+      }, [hasTitle && (0,vue__WEBPACK_IMPORTED_MODULE_5__/* .createVNode */ .Wm)(_VCardTitle_mjs__WEBPACK_IMPORTED_MODULE_8__/* .VCardTitle */ .E, {
         "key": "title"
       }, {
         default: () => [slots.title?.() ?? props.title]
-      }), hasSubtitle && (0,vue__WEBPACK_IMPORTED_MODULE_4__/* .createVNode */ .Wm)(_VCardSubtitle_mjs__WEBPACK_IMPORTED_MODULE_8__/* .VCardSubtitle */ .Q, {
+      }), hasSubtitle && (0,vue__WEBPACK_IMPORTED_MODULE_5__/* .createVNode */ .Wm)(_VCardSubtitle_mjs__WEBPACK_IMPORTED_MODULE_9__/* .VCardSubtitle */ .Q, {
         "key": "subtitle"
       }, {
         default: () => [slots.subtitle?.() ?? props.subtitle]
-      }), slots.default?.()]), hasAppend && (0,vue__WEBPACK_IMPORTED_MODULE_4__/* .createVNode */ .Wm)(_VDefaultsProvider_index_mjs__WEBPACK_IMPORTED_MODULE_5__/* .VDefaultsProvider */ .z, {
+      }), slots.default?.()]), hasAppend && (0,vue__WEBPACK_IMPORTED_MODULE_5__/* .createVNode */ .Wm)("div", {
         "key": "append",
+        "class": "v-card-item__append"
+      }, [!slots.append ? hasAppendMedia && (0,vue__WEBPACK_IMPORTED_MODULE_5__/* .createVNode */ .Wm)(_VAvatar_index_mjs__WEBPACK_IMPORTED_MODULE_6__/* .VAvatar */ .V, {
+        "key": "append-avatar",
+        "density": props.density,
+        "icon": props.appendIcon,
+        "image": props.appendAvatar
+      }, null) : (0,vue__WEBPACK_IMPORTED_MODULE_5__/* .createVNode */ .Wm)(_VDefaultsProvider_index_mjs__WEBPACK_IMPORTED_MODULE_7__/* .VDefaultsProvider */ .z, {
+        "key": "append-defaults",
+        "disabled": !hasAppendMedia,
         "defaults": {
           VAvatar: {
             density: props.density,
             icon: props.appendIcon,
             image: props.appendAvatar
-          },
-          VIcon: {
-            density: props.density,
-            icon: props.appendIcon
           }
         }
-      }, {
-        default: () => [(0,vue__WEBPACK_IMPORTED_MODULE_4__/* .createVNode */ .Wm)("div", {
-          "class": "v-card-item__append"
-        }, [slots.append?.() ?? (0,vue__WEBPACK_IMPORTED_MODULE_4__/* .createVNode */ .Wm)(_VAvatar_index_mjs__WEBPACK_IMPORTED_MODULE_6__/* .VAvatar */ .V, null, null)])]
-      })]);
+      }, slots.append)])]);
     });
     return {};
   }
@@ -66566,25 +68061,23 @@ const VCardTitle = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_0__/* .createSimp
 
 "use strict";
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "CI": function() { return /* binding */ filterCheckboxBtnProps; },
-/* harmony export */   "pM": function() { return /* binding */ VCheckboxBtn; },
-/* harmony export */   "w4": function() { return /* binding */ makeVCheckboxBtnProps; }
+/* harmony export */   "p": function() { return /* binding */ VCheckboxBtn; },
+/* harmony export */   "w": function() { return /* binding */ makeVCheckboxBtnProps; }
 /* harmony export */ });
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(3396);
 /* harmony import */ var _VSelectionControl_VSelectionControl_mjs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(6233);
 /* harmony import */ var _composables_icons_mjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4960);
 /* harmony import */ var _composables_proxiedModel_mjs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(8717);
 /* harmony import */ var _util_index_mjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(3766);
-/* harmony import */ var _util_index_mjs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(320);
+/* harmony import */ var _util_index_mjs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(1107);
 /* harmony import */ var _util_index_mjs__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(9888);
-/* harmony import */ var _util_index_mjs__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(131);
 
 // Components
  // Composables
 
  // Utilities
 
- // Types
+
 const makeVCheckboxBtnProps = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_0__/* .propsFactory */ .U)({
   indeterminate: Boolean,
   indeterminateIcon: {
@@ -66623,7 +68116,8 @@ const VCheckboxBtn = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_3__/* .genericC
     (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_6__/* .useRender */ .L)(() => (0,vue__WEBPACK_IMPORTED_MODULE_5__/* .createVNode */ .Wm)(_VSelectionControl_VSelectionControl_mjs__WEBPACK_IMPORTED_MODULE_2__/* .VSelectionControl */ .g5, (0,vue__WEBPACK_IMPORTED_MODULE_5__/* .mergeProps */ .dG)(props, {
       "modelValue": model.value,
       "onUpdate:modelValue": [$event => model.value = $event, onChange],
-      "class": "v-checkbox-btn",
+      "class": ['v-checkbox-btn', props.class],
+      "style": props.style,
       "type": "checkbox",
       "inline": true,
       "falseIcon": falseIcon.value,
@@ -66633,9 +68127,6 @@ const VCheckboxBtn = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_3__/* .genericC
     return {};
   }
 });
-function filterCheckboxBtnProps(props) {
-  return (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_7__/* .pick */ .ei)(props, Object.keys(VCheckboxBtn.props));
-}
 
 /***/ }),
 
@@ -66655,6 +68146,8 @@ var runtime_core_esm_bundler = __webpack_require__(3396);
 ;// CONCATENATED MODULE: ./node_modules/vuetify/lib/components/VChipGroup/VChipGroup.css
 // extracted by mini-css-extract-plugin
 
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/component.mjs
+var component = __webpack_require__(9166);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/group.mjs
 var group = __webpack_require__(1970);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/tag.mjs
@@ -66663,10 +68156,10 @@ var tag = __webpack_require__(1138);
 var theme = __webpack_require__(7041);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/variant.mjs
 var variant = __webpack_require__(5221);
-// EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/defaults.mjs
-var defaults = __webpack_require__(8434);
-// EXTERNAL MODULE: ./node_modules/vuetify/lib/util/defineComponent.mjs + 1 modules
-var defineComponent = __webpack_require__(320);
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/defaults.mjs + 1 modules
+var defaults = __webpack_require__(6107);
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/util/defineComponent.mjs
+var defineComponent = __webpack_require__(1107);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/util/helpers.mjs
 var helpers = __webpack_require__(131);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/util/useRender.mjs
@@ -66679,6 +68172,7 @@ var reactivity_esm_bundler = __webpack_require__(4870);
 
 
 // Composables
+
 
 
 
@@ -66699,6 +68193,7 @@ const VChipGroup = (0,defineComponent/* genericComponent */.ev)()({
       type: Function,
       default: helpers/* deepEqual */.vZ
     },
+    ...(0,component/* makeComponentProps */.l)(),
     ...(0,group/* makeGroupProps */.k4)({
       selectedClass: 'v-chip--selected'
     }),
@@ -66736,7 +68231,8 @@ const VChipGroup = (0,defineComponent/* genericComponent */.ev)()({
     (0,useRender/* useRender */.L)(() => (0,runtime_core_esm_bundler/* createVNode */.Wm)(props.tag, {
       "class": ['v-chip-group', {
         'v-chip-group--column': props.column
-      }, themeClasses.value]
+      }, themeClasses.value, props.class],
+      "style": props.style
     }, {
       default: () => [slots.default?.({
         isSelected,
@@ -66781,8 +68277,12 @@ var transitions = __webpack_require__(8952);
 var VIcon = __webpack_require__(3289);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/variant.mjs
 var variant = __webpack_require__(5221);
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/icons.mjs + 1 modules
+var icons = __webpack_require__(4960);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/border.mjs
 var border = __webpack_require__(2718);
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/component.mjs
+var component = __webpack_require__(9166);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/density.mjs
 var density = __webpack_require__(9694);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/elevation.mjs
@@ -66799,16 +68299,14 @@ var size = __webpack_require__(9374);
 var tag = __webpack_require__(1138);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/theme.mjs + 1 modules
 var theme = __webpack_require__(7041);
-// EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/proxiedModel.mjs
-var proxiedModel = __webpack_require__(8717);
-// EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/icons.mjs + 1 modules
-var icons = __webpack_require__(4960);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/locale.mjs + 3 modules
 var locale = __webpack_require__(1629);
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/proxiedModel.mjs
+var proxiedModel = __webpack_require__(8717);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/directives/ripple/index.mjs + 1 modules
 var ripple = __webpack_require__(3824);
-// EXTERNAL MODULE: ./node_modules/vuetify/lib/util/defineComponent.mjs + 1 modules
-var defineComponent = __webpack_require__(320);
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/util/defineComponent.mjs
+var defineComponent = __webpack_require__(1107);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/util/helpers.mjs
 var helpers = __webpack_require__(131);
 ;// CONCATENATED MODULE: ./node_modules/vuetify/lib/components/VChip/VChip.mjs
@@ -66835,12 +68333,10 @@ var helpers = __webpack_require__(131);
 
 
 
+
  // Directives
  // Utilities
 
-
-
-// Types
 
 const VChip = (0,defineComponent/* genericComponent */.ev)()({
   name: 'VChip',
@@ -66883,9 +68379,10 @@ const VChip = (0,defineComponent/* genericComponent */.ev)()({
       type: Boolean,
       default: true
     },
-    onClick: helpers/* EventProp */.as,
-    onClickOnce: helpers/* EventProp */.as,
+    onClick: (0,helpers/* EventProp */.as)(),
+    onClickOnce: (0,helpers/* EventProp */.as)(),
     ...(0,border/* makeBorderProps */.m)(),
+    ...(0,component/* makeComponentProps */.l)(),
     ...(0,density/* makeDensityProps */.f)(),
     ...(0,elevation/* makeElevationProps */.c)(),
     ...(0,composables_group/* makeGroupItemProps */.YQ)(),
@@ -66943,10 +68440,13 @@ const VChip = (0,defineComponent/* genericComponent */.ev)()({
     const link = (0,router/* useLink */.nB)(props, attrs);
     const isLink = (0,runtime_core_esm_bundler/* computed */.Fl)(() => props.link !== false && link.isLink.value);
     const isClickable = (0,runtime_core_esm_bundler/* computed */.Fl)(() => !props.disabled && props.link !== false && (!!group || props.link || link.isClickable.value));
-    function onCloseClick(e) {
-      isActive.value = false;
-      emit('click:close', e);
-    }
+    const closeProps = (0,runtime_core_esm_bundler/* computed */.Fl)(() => ({
+      'aria-label': t(props.closeLabel),
+      onClick(e) {
+        isActive.value = false;
+        emit('click:close', e);
+      }
+    }));
     function onClick(e) {
       emit('click', e);
       if (!isClickable.value) return;
@@ -66961,10 +68461,12 @@ const VChip = (0,defineComponent/* genericComponent */.ev)()({
     }
     return () => {
       const Tag = link.isLink.value ? 'a' : props.tag;
-      const hasAppend = !!(slots.append || props.appendIcon || props.appendAvatar);
+      const hasAppendMedia = !!(props.appendIcon || props.appendAvatar);
+      const hasAppend = !!(hasAppendMedia || slots.append);
       const hasClose = !!(slots.close || props.closable);
       const hasFilter = !!(slots.filter || props.filter) && group;
-      const hasPrepend = !!(slots.prepend || props.prependIcon || props.prependAvatar);
+      const hasPrependMedia = !!(props.prependIcon || props.prependAvatar);
+      const hasPrepend = !!(hasPrependMedia || slots.prepend);
       const hasColor = !group || group.isSelected.value;
       return isActive.value && (0,runtime_core_esm_bundler/* withDirectives */.wy)((0,runtime_core_esm_bundler/* createVNode */.Wm)(Tag, {
         "class": ['v-chip', {
@@ -66973,8 +68475,8 @@ const VChip = (0,defineComponent/* genericComponent */.ev)()({
           'v-chip--link': isClickable.value,
           'v-chip--filter': hasFilter,
           'v-chip--pill': props.pill
-        }, themeClasses.value, borderClasses.value, hasColor ? colorClasses.value : undefined, densityClasses.value, elevationClasses.value, roundedClasses.value, sizeClasses.value, variantClasses.value, group?.selectedClass.value],
-        "style": [hasColor ? colorStyles.value : undefined],
+        }, themeClasses.value, borderClasses.value, hasColor ? colorClasses.value : undefined, densityClasses.value, elevationClasses.value, roundedClasses.value, sizeClasses.value, variantClasses.value, group?.selectedClass.value, props.class],
+        "style": [hasColor ? colorStyles.value : undefined, props.style],
         "disabled": props.disabled || undefined,
         "draggable": props.draggable,
         "href": link.href.value,
@@ -66982,77 +68484,94 @@ const VChip = (0,defineComponent/* genericComponent */.ev)()({
         "onClick": onClick,
         "onKeydown": isClickable.value && !isLink.value && onKeyDown
       }, {
-        default: () => [(0,variant/* genOverlays */.Ux)(isClickable.value, 'v-chip'), hasFilter && (0,runtime_core_esm_bundler/* createVNode */.Wm)(VDefaultsProvider/* VDefaultsProvider */.z, {
-          "key": "filter",
-          "defaults": {
-            VIcon: {
-              icon: props.filterIcon
-            }
-          }
+        default: () => [(0,variant/* genOverlays */.Ux)(isClickable.value, 'v-chip'), hasFilter && (0,runtime_core_esm_bundler/* createVNode */.Wm)(transitions/* VExpandXTransition */.Zq, {
+          "key": "filter"
         }, {
-          default: () => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(transitions/* VExpandXTransition */.Zq, null, {
-            default: () => [(0,runtime_core_esm_bundler/* withDirectives */.wy)((0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
-              "class": "v-chip__filter"
-            }, [slots.filter ? slots.filter() : (0,runtime_core_esm_bundler/* createVNode */.Wm)(VIcon/* VIcon */.t, null, null)]), [[runtime_dom_esm_bundler/* vShow */.F8, group.isSelected.value]])]
-          })]
-        }), hasPrepend && (0,runtime_core_esm_bundler/* createVNode */.Wm)(VDefaultsProvider/* VDefaultsProvider */.z, {
+          default: () => [(0,runtime_core_esm_bundler/* withDirectives */.wy)((0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
+            "class": "v-chip__filter"
+          }, [!slots.filter ? (0,runtime_core_esm_bundler/* createVNode */.Wm)(VIcon/* VIcon */.t, {
+            "key": "filter-icon",
+            "icon": props.filterIcon
+          }, null) : (0,runtime_core_esm_bundler/* withDirectives */.wy)((0,runtime_core_esm_bundler/* createVNode */.Wm)(VDefaultsProvider/* VDefaultsProvider */.z, {
+            "key": "filter-defaults",
+            "disabled": !props.filterIcon,
+            "defaults": {
+              VIcon: {
+                icon: props.filterIcon
+              }
+            }
+          }, null), [[(0,runtime_core_esm_bundler/* resolveDirective */.Q2)("slot"), slots.filter, "default"]])]), [[runtime_dom_esm_bundler/* vShow */.F8, group.isSelected.value]])]
+        }), hasPrepend && (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
           "key": "prepend",
+          "class": "v-chip__prepend"
+        }, [!slots.prepend ? (0,runtime_core_esm_bundler/* createVNode */.Wm)(runtime_core_esm_bundler/* Fragment */.HY, null, [props.prependIcon && (0,runtime_core_esm_bundler/* createVNode */.Wm)(VIcon/* VIcon */.t, {
+          "key": "prepend-icon",
+          "icon": props.prependIcon,
+          "start": true
+        }, null), props.prependAvatar && (0,runtime_core_esm_bundler/* createVNode */.Wm)(VAvatar/* VAvatar */.V, {
+          "key": "prepend-avatar",
+          "image": props.prependAvatar,
+          "start": true
+        }, null)]) : (0,runtime_core_esm_bundler/* createVNode */.Wm)(VDefaultsProvider/* VDefaultsProvider */.z, {
+          "key": "prepend-defaults",
+          "disabled": !hasPrependMedia,
           "defaults": {
             VAvatar: {
-              image: props.prependAvatar
+              image: props.prependAvatar,
+              start: true
             },
             VIcon: {
-              icon: props.prependIcon
+              icon: props.prependIcon,
+              start: true
             }
           }
-        }, {
-          default: () => [slots.prepend ? (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
-            "class": "v-chip__prepend"
-          }, [slots.prepend()]) : props.prependAvatar ? (0,runtime_core_esm_bundler/* createVNode */.Wm)(VAvatar/* VAvatar */.V, {
-            "start": true
-          }, null) : props.prependIcon ? (0,runtime_core_esm_bundler/* createVNode */.Wm)(VIcon/* VIcon */.t, {
-            "start": true
-          }, null) : undefined]
-        }), slots.default?.({
+        }, slots.prepend)]), slots.default?.({
           isSelected: group?.isSelected.value,
           selectedClass: group?.selectedClass.value,
           select: group?.select,
           toggle: group?.toggle,
           value: group?.value.value,
           disabled: props.disabled
-        }) ?? props.text, hasAppend && (0,runtime_core_esm_bundler/* createVNode */.Wm)(VDefaultsProvider/* VDefaultsProvider */.z, {
+        }) ?? props.text, hasAppend && (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
           "key": "append",
+          "class": "v-chip__append"
+        }, [!slots.append ? (0,runtime_core_esm_bundler/* createVNode */.Wm)(runtime_core_esm_bundler/* Fragment */.HY, null, [props.appendIcon && (0,runtime_core_esm_bundler/* createVNode */.Wm)(VIcon/* VIcon */.t, {
+          "key": "append-icon",
+          "end": true,
+          "icon": props.appendIcon
+        }, null), props.appendAvatar && (0,runtime_core_esm_bundler/* createVNode */.Wm)(VAvatar/* VAvatar */.V, {
+          "key": "append-avatar",
+          "end": true,
+          "image": props.appendAvatar
+        }, null)]) : (0,runtime_core_esm_bundler/* createVNode */.Wm)(VDefaultsProvider/* VDefaultsProvider */.z, {
+          "key": "append-defaults",
+          "disabled": !hasAppendMedia,
           "defaults": {
             VAvatar: {
+              end: true,
               image: props.appendAvatar
             },
             VIcon: {
+              end: true,
               icon: props.appendIcon
             }
           }
-        }, {
-          default: () => [slots.append ? (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
-            "class": "v-chip__append"
-          }, [slots.append()]) : props.appendAvatar ? (0,runtime_core_esm_bundler/* createVNode */.Wm)(VAvatar/* VAvatar */.V, {
-            "end": true
-          }, null) : props.appendIcon ? (0,runtime_core_esm_bundler/* createVNode */.Wm)(VIcon/* VIcon */.t, {
-            "end": true
-          }, null) : undefined]
-        }), hasClose && (0,runtime_core_esm_bundler/* createVNode */.Wm)(VDefaultsProvider/* VDefaultsProvider */.z, {
+        }, slots.append)]), hasClose && (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", (0,runtime_core_esm_bundler/* mergeProps */.dG)({
           "key": "close",
+          "class": "v-chip__close"
+        }, closeProps.value), [!slots.close ? (0,runtime_core_esm_bundler/* createVNode */.Wm)(VIcon/* VIcon */.t, {
+          "key": "close-icon",
+          "icon": props.closeIcon,
+          "size": "x-small"
+        }, null) : (0,runtime_core_esm_bundler/* createVNode */.Wm)(VDefaultsProvider/* VDefaultsProvider */.z, {
+          "key": "close-defaults",
           "defaults": {
             VIcon: {
               icon: props.closeIcon,
               size: 'x-small'
             }
           }
-        }, {
-          default: () => [(0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
-            "class": "v-chip__close",
-            "aria-label": t(props.closeLabel),
-            "onClick": onCloseClick
-          }, [slots.close ? slots.close() : (0,runtime_core_esm_bundler/* createVNode */.Wm)(VIcon/* VIcon */.t, null, null)])]
-        })]
+        }, slots.close)])]
       }), [[(0,runtime_core_esm_bundler/* resolveDirective */.Q2)("ripple"), isClickable.value && props.ripple, null]]);
     };
   }
@@ -67079,10 +68598,12 @@ var runtime_dom_esm_bundler = __webpack_require__(9242);
 
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/components/transitions/index.mjs + 2 modules
 var transitions = __webpack_require__(8952);
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/component.mjs
+var component = __webpack_require__(9166);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/transition.mjs
 var transition = __webpack_require__(4906);
-// EXTERNAL MODULE: ./node_modules/vuetify/lib/util/defineComponent.mjs + 1 modules
-var defineComponent = __webpack_require__(320);
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/util/defineComponent.mjs
+var defineComponent = __webpack_require__(1107);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/util/useRender.mjs
 var useRender = __webpack_require__(9888);
 ;// CONCATENATED MODULE: ./node_modules/vuetify/lib/components/VCounter/VCounter.mjs
@@ -67092,6 +68613,7 @@ var useRender = __webpack_require__(9888);
 
 // Components
  // Composables
+
  // Utilities
 
 
@@ -67105,6 +68627,7 @@ const VCounter = (0,defineComponent/* genericComponent */.ev)()({
       type: [Number, String],
       default: 0
     },
+    ...(0,component/* makeComponentProps */.l)(),
     ...(0,transition/* makeTransitionProps */.X)({
       transition: {
         component: transitions/* VSlideYTransition */.cu
@@ -67122,7 +68645,8 @@ const VCounter = (0,defineComponent/* genericComponent */.ev)()({
       "transition": props.transition
     }, {
       default: () => [(0,runtime_core_esm_bundler/* withDirectives */.wy)((0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
-        "class": "v-counter"
+        "class": ['v-counter', props.class],
+        "style": props.style
       }, [slots.default ? slots.default({
         counter: counter.value,
         max: props.max,
@@ -67142,9 +68666,9 @@ const VCounter = (0,defineComponent/* genericComponent */.ev)()({
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "z": function() { return /* binding */ VDefaultsProvider; }
 /* harmony export */ });
-/* harmony import */ var _composables_defaults_mjs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(8434);
+/* harmony import */ var _composables_defaults_mjs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(6107);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4870);
-/* harmony import */ var _util_index_mjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(320);
+/* harmony import */ var _util_index_mjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1107);
 // Composables
  // Utilities
 
@@ -67153,6 +68677,7 @@ const VDefaultsProvider = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_0__/* .gen
   name: 'VDefaultsProvider',
   props: {
     defaults: Object,
+    disabled: Boolean,
     reset: [Number, String],
     root: Boolean,
     scoped: Boolean
@@ -67163,6 +68688,7 @@ const VDefaultsProvider = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_0__/* .gen
     } = _ref;
     const {
       defaults,
+      disabled,
       reset,
       root,
       scoped
@@ -67170,7 +68696,8 @@ const VDefaultsProvider = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_0__/* .gen
     (0,_composables_defaults_mjs__WEBPACK_IMPORTED_MODULE_2__/* .provideDefaults */ .AF)(defaults, {
       reset,
       root,
-      scoped
+      scoped,
+      disabled
     });
     return () => slots.default?.();
   }
@@ -67207,8 +68734,10 @@ var composables_scopeId = __webpack_require__(5975);
 var forwardRefs = __webpack_require__(3185);
 // EXTERNAL MODULE: ./node_modules/@vue/reactivity/dist/reactivity.esm-bundler.js
 var reactivity_esm_bundler = __webpack_require__(4870);
-// EXTERNAL MODULE: ./node_modules/vuetify/lib/util/defineComponent.mjs + 1 modules
-var defineComponent = __webpack_require__(320);
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/util/defineComponent.mjs
+var defineComponent = __webpack_require__(1107);
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/util/helpers.mjs
+var helpers = __webpack_require__(131);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/util/globals.mjs
 var globals = __webpack_require__(2385);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/util/useRender.mjs
@@ -67237,7 +68766,7 @@ const VDialog = (0,defineComponent/* genericComponent */.ev)()({
       default: true
     },
     scrollable: Boolean,
-    ...(0,VOverlay/* makeVOverlayProps */.BU)({
+    ...(0,VOverlay/* makeVOverlayProps */.B)({
       origin: 'center center',
       scrollStrategy: 'block',
       transition: {
@@ -67268,7 +68797,7 @@ const VDialog = (0,defineComponent/* genericComponent */.ev)()({
       ![document, overlay.value.contentEl].includes(after) &&
       // It isn't inside the dialog body
       !overlay.value.contentEl.contains(after)) {
-        const focusable = [...overlay.value.contentEl.querySelectorAll('button, [href], input:not([type="hidden"]), select, textarea, [tabindex]:not([tabindex="-1"])')].filter(el => !el.hasAttribute('disabled') && !el.matches('[tabindex="-1"]'));
+        const focusable = (0,helpers/* focusableChildren */.ef)(overlay.value.contentEl);
         if (!focusable.length) return;
         const firstElement = focusable[0];
         const lastElement = focusable[focusable.length - 1];
@@ -67303,19 +68832,20 @@ const VDialog = (0,defineComponent/* genericComponent */.ev)()({
       'aria-expanded': String(isActive.value)
     }, props.activatorProps));
     (0,useRender/* useRender */.L)(() => {
-      const [overlayProps] = (0,VOverlay/* filterVOverlayProps */.Fe)(props);
-      return (0,runtime_core_esm_bundler/* createVNode */.Wm)(VOverlay/* VOverlay */.yc, (0,runtime_core_esm_bundler/* mergeProps */.dG)({
+      const [overlayProps] = VOverlay/* VOverlay.filterProps */.y.filterProps(props);
+      return (0,runtime_core_esm_bundler/* createVNode */.Wm)(VOverlay/* VOverlay */.y, (0,runtime_core_esm_bundler/* mergeProps */.dG)({
         "ref": overlay,
         "class": ['v-dialog', {
           'v-dialog--fullscreen': props.fullscreen,
           'v-dialog--scrollable': props.scrollable
-        }]
+        }, props.class],
+        "style": props.style
       }, overlayProps, {
         "modelValue": isActive.value,
         "onUpdate:modelValue": $event => isActive.value = $event,
-        "aria-role": "dialog",
         "aria-modal": "true",
-        "activatorProps": activatorProps.value
+        "activatorProps": activatorProps.value,
+        "role": "dialog"
       }, scopeId), {
         activator: slots.activator,
         default: function () {
@@ -67351,14 +68881,16 @@ var runtime_core_esm_bundler = __webpack_require__(3396);
 ;// CONCATENATED MODULE: ./node_modules/vuetify/lib/components/VDivider/VDivider.css
 // extracted by mini-css-extract-plugin
 
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/component.mjs
+var component = __webpack_require__(9166);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/theme.mjs + 1 modules
 var theme = __webpack_require__(7041);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/color.mjs
 var color = __webpack_require__(2370);
 // EXTERNAL MODULE: ./node_modules/@vue/reactivity/dist/reactivity.esm-bundler.js
 var reactivity_esm_bundler = __webpack_require__(4870);
-// EXTERNAL MODULE: ./node_modules/vuetify/lib/util/defineComponent.mjs + 1 modules
-var defineComponent = __webpack_require__(320);
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/util/defineComponent.mjs
+var defineComponent = __webpack_require__(1107);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/util/helpers.mjs
 var helpers = __webpack_require__(131);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/util/useRender.mjs
@@ -67369,6 +68901,7 @@ var useRender = __webpack_require__(9888);
 
 
 // Composables
+
 
  // Utilities
 
@@ -67381,6 +68914,7 @@ const VDivider = (0,defineComponent/* genericComponent */.ev)()({
     length: [Number, String],
     thickness: [Number, String],
     vertical: Boolean,
+    ...(0,component/* makeComponentProps */.l)(),
     ...(0,theme/* makeThemeProps */.x$)()
   },
   setup(props, _ref) {
@@ -67409,8 +68943,8 @@ const VDivider = (0,defineComponent/* genericComponent */.ev)()({
         'v-divider': true,
         'v-divider--inset': props.inset,
         'v-divider--vertical': props.vertical
-      }, themeClasses.value, textColorClasses.value],
-      "style": [dividerStyles.value, textColorStyles.value],
+      }, themeClasses.value, textColorClasses.value, props.class],
+      "style": [dividerStyles.value, textColorStyles.value, props.style],
       "aria-orientation": !attrs.role || attrs.role === 'separator' ? props.vertical ? 'vertical' : 'horizontal' : undefined,
       "role": `${attrs.role || 'separator'}`
     }, null));
@@ -67449,8 +68983,12 @@ var VFieldLabel = __webpack_require__(2691);
 var icons = __webpack_require__(4960);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/loader.mjs
 var loader = __webpack_require__(1710);
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/component.mjs
+var component = __webpack_require__(9166);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/focus.mjs
 var composables_focus = __webpack_require__(8969);
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/rounded.mjs
+var rounded = __webpack_require__(4231);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/theme.mjs + 1 modules
 var theme = __webpack_require__(7041);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/color.mjs
@@ -67461,8 +68999,8 @@ var reactivity_esm_bundler = __webpack_require__(4870);
 var propsFactory = __webpack_require__(3766);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/util/helpers.mjs
 var helpers = __webpack_require__(131);
-// EXTERNAL MODULE: ./node_modules/vuetify/lib/util/defineComponent.mjs + 1 modules
-var defineComponent = __webpack_require__(320);
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/util/defineComponent.mjs
+var defineComponent = __webpack_require__(1107);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/util/getCurrentInstance.mjs
 var getCurrentInstance = __webpack_require__(7514);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/util/animation.mjs
@@ -67484,10 +69022,12 @@ var useRender = __webpack_require__(9888);
 
 
 
+
+
  // Utilities
 
  // Types
-const allowedVariants = ['underlined', 'outlined', 'filled', 'solo', 'plain'];
+const allowedVariants = ['underlined', 'outlined', 'filled', 'solo', 'solo-inverted', 'solo-filled', 'plain'];
 const makeVFieldProps = (0,propsFactory/* propsFactory */.U)({
   appendInnerIcon: icons/* IconValue */.lE,
   bgColor: String,
@@ -67498,9 +69038,11 @@ const makeVFieldProps = (0,propsFactory/* propsFactory */.U)({
   },
   active: Boolean,
   color: String,
+  baseColor: String,
   dirty: Boolean,
   disabled: Boolean,
   error: Boolean,
+  flat: Boolean,
   label: String,
   persistentClear: Boolean,
   prependInnerIcon: icons/* IconValue */.lE,
@@ -67511,11 +69053,13 @@ const makeVFieldProps = (0,propsFactory/* propsFactory */.U)({
     default: 'filled',
     validator: v => allowedVariants.includes(v)
   },
-  'onClick:clear': helpers/* EventProp */.as,
-  'onClick:appendInner': helpers/* EventProp */.as,
-  'onClick:prependInner': helpers/* EventProp */.as,
-  ...(0,theme/* makeThemeProps */.x$)(),
-  ...(0,loader/* makeLoaderProps */.fF)()
+  'onClick:clear': (0,helpers/* EventProp */.as)(),
+  'onClick:appendInner': (0,helpers/* EventProp */.as)(),
+  'onClick:prependInner': (0,helpers/* EventProp */.as)(),
+  ...(0,component/* makeComponentProps */.l)(),
+  ...(0,loader/* makeLoaderProps */.fF)(),
+  ...(0,rounded/* makeRoundedProps */.I)(),
+  ...(0,theme/* makeThemeProps */.x$)()
 }, 'v-field');
 const VField = (0,defineComponent/* genericComponent */.ev)()({
   name: 'VField',
@@ -67550,6 +69094,9 @@ const VField = (0,defineComponent/* genericComponent */.ev)()({
     const {
       InputIcon
     } = (0,VInput_InputIcon/* useInputIcon */.v)(props);
+    const {
+      roundedClasses
+    } = (0,rounded/* useRounded */.b)(props);
     const isActive = (0,runtime_core_esm_bundler/* computed */.Fl)(() => props.dirty || props.active);
     const hasLabel = (0,runtime_core_esm_bundler/* computed */.Fl)(() => !props.singleLine && !!(props.label || slots.label));
     const uid = (0,getCurrentInstance/* getUid */.sq)();
@@ -67566,7 +69113,7 @@ const VField = (0,defineComponent/* genericComponent */.ev)()({
       textColorClasses,
       textColorStyles
     } = (0,color/* useTextColor */.rY)((0,runtime_core_esm_bundler/* computed */.Fl)(() => {
-      return isActive.value && isFocused.value && !props.error && !props.disabled ? props.color : undefined;
+      return props.error || props.disabled ? undefined : isActive.value && isFocused.value ? props.color : props.baseColor;
     }));
     (0,runtime_core_esm_bundler/* watch */.YP)(isActive, val => {
       if (hasLabel.value) {
@@ -67635,6 +69182,7 @@ const VField = (0,defineComponent/* genericComponent */.ev)()({
           'v-field--disabled': props.disabled,
           'v-field--dirty': props.dirty,
           'v-field--error': props.error,
+          'v-field--flat': props.flat,
           'v-field--has-background': !!props.bgColor,
           'v-field--persistent-clear': props.persistentClear,
           'v-field--prepended': hasPrepend,
@@ -67642,8 +69190,8 @@ const VField = (0,defineComponent/* genericComponent */.ev)()({
           'v-field--single-line': props.singleLine,
           'v-field--no-label': !label,
           [`v-field--variant-${props.variant}`]: true
-        }, themeClasses.value, backgroundColorClasses.value, focusClasses.value, loaderClasses.value],
-        "style": [backgroundColorStyles.value, textColorStyles.value],
+        }, themeClasses.value, backgroundColorClasses.value, focusClasses.value, loaderClasses.value, roundedClasses.value, props.class],
+        "style": [backgroundColorStyles.value, textColorStyles.value, props.style],
         "onClick": onClick
       }, attrs), [(0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
         "class": "v-field__overlay"
@@ -67662,7 +69210,7 @@ const VField = (0,defineComponent/* genericComponent */.ev)()({
       }, null), slots['prepend-inner']?.(slotProps.value)]), (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
         "class": "v-field__field",
         "data-no-activator": ""
-      }, [['solo', 'filled'].includes(props.variant) && hasLabel.value && (0,runtime_core_esm_bundler/* createVNode */.Wm)(VFieldLabel/* VFieldLabel */.z, {
+      }, [['filled', 'solo', 'solo-inverted', 'solo-filled'].includes(props.variant) && hasLabel.value && (0,runtime_core_esm_bundler/* createVNode */.Wm)(VFieldLabel/* VFieldLabel */.z, {
         "key": "floating-label",
         "ref": floatingLabelRef,
         "class": [textColorClasses.value],
@@ -67688,7 +69236,11 @@ const VField = (0,defineComponent/* genericComponent */.ev)()({
         "key": "clear"
       }, {
         default: () => [(0,runtime_core_esm_bundler/* withDirectives */.wy)((0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
-          "class": "v-field__clearable"
+          "class": "v-field__clearable",
+          "onMousedown": e => {
+            e.preventDefault();
+            e.stopPropagation();
+          }
         }, [slots.clear ? slots.clear() : (0,runtime_core_esm_bundler/* createVNode */.Wm)(InputIcon, {
           "name": "clear"
         }, null)]), [[runtime_dom_esm_bundler/* vShow */.F8, props.dirty]])]
@@ -67727,7 +69279,7 @@ const VField = (0,defineComponent/* genericComponent */.ev)()({
 });
 // TODO: this is kinda slow, might be better to implicitly inherit props instead
 function filterFieldProps(attrs) {
-  const keys = Object.keys(VField.props).filter(k => !(0,helpers/* isOn */.F7)(k));
+  const keys = Object.keys(VField.props).filter(k => !(0,helpers/* isOn */.F7)(k) && k !== 'class' && k !== 'style');
   return (0,helpers/* pick */.ei)(attrs, keys);
 }
 
@@ -67740,27 +69292,31 @@ function filterFieldProps(attrs) {
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "z": function() { return /* binding */ VFieldLabel; }
 /* harmony export */ });
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(3396);
-/* harmony import */ var _VLabel_index_mjs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(7302);
-/* harmony import */ var _util_index_mjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(320);
-/* harmony import */ var _util_index_mjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(9888);
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(3396);
+/* harmony import */ var _VLabel_index_mjs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(7302);
+/* harmony import */ var _composables_component_mjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(9166);
+/* harmony import */ var _util_index_mjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1107);
+/* harmony import */ var _util_index_mjs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(9888);
 
 // Components
+ // Composables
  // Utilities
 
 const VFieldLabel = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_0__/* .genericComponent */ .ev)()({
   name: 'VFieldLabel',
   props: {
-    floating: Boolean
+    floating: Boolean,
+    ...(0,_composables_component_mjs__WEBPACK_IMPORTED_MODULE_1__/* .makeComponentProps */ .l)()
   },
   setup(props, _ref) {
     let {
       slots
     } = _ref;
-    (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_1__/* .useRender */ .L)(() => (0,vue__WEBPACK_IMPORTED_MODULE_2__/* .createVNode */ .Wm)(_VLabel_index_mjs__WEBPACK_IMPORTED_MODULE_3__/* .VLabel */ .J, {
+    (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_2__/* .useRender */ .L)(() => (0,vue__WEBPACK_IMPORTED_MODULE_3__/* .createVNode */ .Wm)(_VLabel_index_mjs__WEBPACK_IMPORTED_MODULE_4__/* .VLabel */ .J, {
       "class": ['v-field-label', {
         'v-field-label--floating': props.floating
-      }],
+      }, props.class],
+      "style": props.style,
       "aria-hidden": props.floating || undefined
     }, slots));
     return {};
@@ -67778,22 +69334,24 @@ const VFieldLabel = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_0__/* .genericCo
 /* harmony export */ });
 /* harmony import */ var core_js_modules_es_array_push_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(7658);
 /* harmony import */ var _VGrid_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(8099);
-/* harmony import */ var _composables_tag_mjs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(1138);
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(7139);
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(3396);
-/* harmony import */ var _util_index_mjs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(320);
+/* harmony import */ var _composables_display_mjs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(8157);
+/* harmony import */ var _composables_component_mjs__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(9166);
+/* harmony import */ var _composables_tag_mjs__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(1138);
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(7139);
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(3396);
+/* harmony import */ var _util_index_mjs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(1107);
 
 // Styles
 
 
 // Composables
+
+
  // Utilities
 
  // Types
-const breakpoints = ['sm', 'md', 'lg', 'xl', 'xxl']; // no xs
-
 const breakpointProps = (() => {
-  return breakpoints.reduce((props, val) => {
+  return _composables_display_mjs__WEBPACK_IMPORTED_MODULE_2__/* .breakpoints.reduce */ .AV.reduce((props, val) => {
     props[val] = {
       type: [Boolean, String, Number],
       default: false
@@ -67802,8 +69360,9 @@ const breakpointProps = (() => {
   }, {});
 })();
 const offsetProps = (() => {
-  return breakpoints.reduce((props, val) => {
-    props['offset' + (0,vue__WEBPACK_IMPORTED_MODULE_2__/* .capitalize */ .kC)(val)] = {
+  return _composables_display_mjs__WEBPACK_IMPORTED_MODULE_2__/* .breakpoints.reduce */ .AV.reduce((props, val) => {
+    const offsetKey = 'offset' + (0,vue__WEBPACK_IMPORTED_MODULE_3__/* .capitalize */ .kC)(val);
+    props[offsetKey] = {
       type: [String, Number],
       default: null
     };
@@ -67811,8 +69370,9 @@ const offsetProps = (() => {
   }, {});
 })();
 const orderProps = (() => {
-  return breakpoints.reduce((props, val) => {
-    props['order' + (0,vue__WEBPACK_IMPORTED_MODULE_2__/* .capitalize */ .kC)(val)] = {
+  return _composables_display_mjs__WEBPACK_IMPORTED_MODULE_2__/* .breakpoints.reduce */ .AV.reduce((props, val) => {
+    const orderKey = 'order' + (0,vue__WEBPACK_IMPORTED_MODULE_3__/* .capitalize */ .kC)(val);
+    props[orderKey] = {
       type: [String, Number],
       default: null
     };
@@ -67848,7 +69408,7 @@ function breakpointClass(type, prop, val) {
   return className.toLowerCase();
 }
 const ALIGN_SELF_VALUES = ['auto', 'start', 'end', 'center', 'baseline', 'stretch'];
-const VCol = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_3__/* .genericComponent */ .ev)()({
+const VCol = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_4__/* .genericComponent */ .ev)()({
   name: 'VCol',
   props: {
     cols: {
@@ -67871,13 +69431,14 @@ const VCol = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_3__/* .genericComponent
       default: null,
       validator: str => ALIGN_SELF_VALUES.includes(str)
     },
-    ...(0,_composables_tag_mjs__WEBPACK_IMPORTED_MODULE_4__/* .makeTagProps */ .Q)()
+    ...(0,_composables_component_mjs__WEBPACK_IMPORTED_MODULE_5__/* .makeComponentProps */ .l)(),
+    ...(0,_composables_tag_mjs__WEBPACK_IMPORTED_MODULE_6__/* .makeTagProps */ .Q)()
   },
   setup(props, _ref) {
     let {
       slots
     } = _ref;
-    const classes = (0,vue__WEBPACK_IMPORTED_MODULE_5__/* .computed */ .Fl)(() => {
+    const classes = (0,vue__WEBPACK_IMPORTED_MODULE_7__/* .computed */ .Fl)(() => {
       const classList = [];
 
       // Loop through `col`, `offset`, `order` breakpoint props
@@ -67900,8 +69461,9 @@ const VCol = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_3__/* .genericComponent
       });
       return classList;
     });
-    return () => (0,vue__WEBPACK_IMPORTED_MODULE_5__.h)(props.tag, {
-      class: classes.value
+    return () => (0,vue__WEBPACK_IMPORTED_MODULE_7__.h)(props.tag, {
+      class: [classes.value, props.class],
+      style: props.style
     }, slots.default?.());
   }
 });
@@ -67915,16 +69477,18 @@ const VCol = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_3__/* .genericComponent
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "K": function() { return /* binding */ VContainer; }
 /* harmony export */ });
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(3396);
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(3396);
 /* harmony import */ var _VGrid_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(8099);
-/* harmony import */ var _composables_tag_mjs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(1138);
-/* harmony import */ var _util_index_mjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(320);
-/* harmony import */ var _util_index_mjs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(9888);
+/* harmony import */ var _composables_component_mjs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(9166);
+/* harmony import */ var _composables_tag_mjs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(1138);
+/* harmony import */ var _util_index_mjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(1107);
+/* harmony import */ var _util_index_mjs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(9888);
 
 // Styles
 
 
 // Composables
+
  // Utilities
 
 const VContainer = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_1__/* .genericComponent */ .ev)()({
@@ -67934,16 +69498,18 @@ const VContainer = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_1__/* .genericCom
       type: Boolean,
       default: false
     },
-    ...(0,_composables_tag_mjs__WEBPACK_IMPORTED_MODULE_2__/* .makeTagProps */ .Q)()
+    ...(0,_composables_component_mjs__WEBPACK_IMPORTED_MODULE_2__/* .makeComponentProps */ .l)(),
+    ...(0,_composables_tag_mjs__WEBPACK_IMPORTED_MODULE_3__/* .makeTagProps */ .Q)()
   },
   setup(props, _ref) {
     let {
       slots
     } = _ref;
-    (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_3__/* .useRender */ .L)(() => (0,vue__WEBPACK_IMPORTED_MODULE_4__/* .createVNode */ .Wm)(props.tag, {
+    (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_4__/* .useRender */ .L)(() => (0,vue__WEBPACK_IMPORTED_MODULE_5__/* .createVNode */ .Wm)(props.tag, {
       "class": ['v-container', {
         'v-container--fluid': props.fluid
-      }]
+      }, props.class],
+      "style": props.style
     }, slots));
     return {};
   }
@@ -67960,25 +69526,28 @@ const VContainer = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_1__/* .genericCom
 /* harmony export */ });
 /* harmony import */ var core_js_modules_es_array_push_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(7658);
 /* harmony import */ var _VGrid_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(8099);
-/* harmony import */ var _composables_tag_mjs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(1138);
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(7139);
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(3396);
-/* harmony import */ var _util_index_mjs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(320);
+/* harmony import */ var _composables_display_mjs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(8157);
+/* harmony import */ var _composables_component_mjs__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(9166);
+/* harmony import */ var _composables_tag_mjs__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(1138);
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(7139);
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(3396);
+/* harmony import */ var _util_index_mjs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(1107);
 
 // Styles
 
 
 // Composables
+
+
  // Utilities
 
  // Types
-const breakpoints = ['sm', 'md', 'lg', 'xl', 'xxl']; // no xs
-
 const ALIGNMENT = ['start', 'end', 'center'];
 const SPACE = ['space-between', 'space-around', 'space-evenly'];
 function makeRowProps(prefix, def) {
-  return breakpoints.reduce((props, val) => {
-    props[prefix + (0,vue__WEBPACK_IMPORTED_MODULE_2__/* .capitalize */ .kC)(val)] = def();
+  return _composables_display_mjs__WEBPACK_IMPORTED_MODULE_2__/* .breakpoints.reduce */ .AV.reduce((props, val) => {
+    const prefixKey = prefix + (0,vue__WEBPACK_IMPORTED_MODULE_3__/* .capitalize */ .kC)(val);
+    props[prefixKey] = def();
     return props;
   }, {});
 }
@@ -68027,7 +69596,7 @@ function breakpointClass(type, prop, val) {
   className += `-${val}`;
   return className.toLowerCase();
 }
-const VRow = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_3__/* .genericComponent */ .ev)()({
+const VRow = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_4__/* .genericComponent */ .ev)()({
   name: 'VRow',
   props: {
     dense: Boolean,
@@ -68050,13 +69619,14 @@ const VRow = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_3__/* .genericComponent
       validator: alignContentValidator
     },
     ...alignContentProps,
-    ...(0,_composables_tag_mjs__WEBPACK_IMPORTED_MODULE_4__/* .makeTagProps */ .Q)()
+    ...(0,_composables_component_mjs__WEBPACK_IMPORTED_MODULE_5__/* .makeComponentProps */ .l)(),
+    ...(0,_composables_tag_mjs__WEBPACK_IMPORTED_MODULE_6__/* .makeTagProps */ .Q)()
   },
   setup(props, _ref) {
     let {
       slots
     } = _ref;
-    const classes = (0,vue__WEBPACK_IMPORTED_MODULE_5__/* .computed */ .Fl)(() => {
+    const classes = (0,vue__WEBPACK_IMPORTED_MODULE_7__/* .computed */ .Fl)(() => {
       const classList = [];
 
       // Loop through `align`, `justify`, `alignContent` breakpoint props
@@ -68077,8 +69647,9 @@ const VRow = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_3__/* .genericComponent
       });
       return classList;
     });
-    return () => (0,vue__WEBPACK_IMPORTED_MODULE_5__.h)(props.tag, {
-      class: ['v-row', classes.value]
+    return () => (0,vue__WEBPACK_IMPORTED_MODULE_7__.h)(props.tag, {
+      class: ['v-row', classes.value, props.class],
+      style: props.style
     }, slots.default?.());
   }
 });
@@ -68117,6 +69688,8 @@ var runtime_core_esm_bundler = __webpack_require__(3396);
 
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/icons.mjs + 1 modules
 var icons = __webpack_require__(4960);
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/component.mjs
+var component = __webpack_require__(9166);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/size.mjs
 var size = __webpack_require__(9374);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/tag.mjs
@@ -68129,8 +69702,8 @@ var color = __webpack_require__(2370);
 var reactivity_esm_bundler = __webpack_require__(4870);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/util/propsFactory.mjs
 var propsFactory = __webpack_require__(3766);
-// EXTERNAL MODULE: ./node_modules/vuetify/lib/util/defineComponent.mjs + 1 modules
-var defineComponent = __webpack_require__(320);
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/util/defineComponent.mjs
+var defineComponent = __webpack_require__(1107);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/util/useRender.mjs
 var useRender = __webpack_require__(9888);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/util/helpers.mjs
@@ -68145,6 +69718,7 @@ var helpers = __webpack_require__(131);
 
 
 
+
  // Utilities
 
  // Types
@@ -68153,6 +69727,7 @@ const makeVIconProps = (0,propsFactory/* propsFactory */.U)({
   start: Boolean,
   end: Boolean,
   icon: icons/* IconValue */.lE,
+  ...(0,component/* makeComponentProps */.l)(),
   ...(0,size/* makeSizeProps */.Z)(),
   ...(0,tag/* makeTagProps */.Q)({
     tag: 'i'
@@ -68195,12 +69770,12 @@ const VIcon = (0,defineComponent/* genericComponent */.ev)()({
         'v-icon--clickable': !!attrs.onClick,
         'v-icon--start': props.start,
         'v-icon--end': props.end
-      }],
+      }, props.class],
       "style": [!sizeClasses.value ? {
         fontSize: (0,helpers/* convertToUnit */.kb)(props.size),
         height: (0,helpers/* convertToUnit */.kb)(props.size),
         width: (0,helpers/* convertToUnit */.kb)(props.size)
-      } : undefined, textColorStyles.value],
+      } : undefined, textColorStyles.value, props.style],
       "role": attrs.onClick ? 'button' : undefined,
       "aria-hidden": !attrs.onClick
     }, {
@@ -68231,14 +69806,16 @@ var runtime_core_esm_bundler = __webpack_require__(3396);
 var VResponsive = __webpack_require__(4162);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/directives/intersect/index.mjs
 var intersect = __webpack_require__(7052);
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/component.mjs
+var component = __webpack_require__(9166);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/transition.mjs
 var transition = __webpack_require__(4906);
 // EXTERNAL MODULE: ./node_modules/@vue/reactivity/dist/reactivity.esm-bundler.js
 var reactivity_esm_bundler = __webpack_require__(4870);
 // EXTERNAL MODULE: ./node_modules/@vue/runtime-dom/dist/runtime-dom.esm-bundler.js
 var runtime_dom_esm_bundler = __webpack_require__(9242);
-// EXTERNAL MODULE: ./node_modules/vuetify/lib/util/defineComponent.mjs + 1 modules
-var defineComponent = __webpack_require__(320);
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/util/defineComponent.mjs
+var defineComponent = __webpack_require__(1107);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/util/globals.mjs
 var globals = __webpack_require__(2385);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/util/useRender.mjs
@@ -68252,6 +69829,7 @@ var helpers = __webpack_require__(131);
 // Components
  // Directives
  // Composables
+
  // Utilities
 
  // Types
@@ -68284,12 +69862,13 @@ const VImg = (0,defineComponent/* genericComponent */.ev)()({
     },
     srcset: String,
     width: [String, Number],
+    ...(0,component/* makeComponentProps */.l)(),
     ...(0,transition/* makeTransitionProps */.X)()
   },
   emits: {
-    loadstart: event => true,
-    load: event => true,
-    error: event => true
+    loadstart: value => true,
+    load: value => true,
+    error: value => true
   },
   setup(props, _ref) {
     let {
@@ -68398,7 +69977,7 @@ const VImg = (0,defineComponent/* genericComponent */.ev)()({
         "class": ['v-img__img', containClasses.value],
         "src": normalisedSrc.value.src,
         "srcset": normalisedSrc.value.srcset,
-        "alt": "",
+        "alt": props.alt,
         "sizes": props.sizes,
         "ref": image,
         "onLoad": onLoad,
@@ -68420,7 +69999,7 @@ const VImg = (0,defineComponent/* genericComponent */.ev)()({
       default: () => [normalisedSrc.value.lazySrc && state.value !== 'loaded' && (0,runtime_core_esm_bundler/* createVNode */.Wm)("img", {
         "class": ['v-img__img', 'v-img__img--preload', containClasses.value],
         "src": normalisedSrc.value.lazySrc,
-        "alt": ""
+        "alt": props.alt
       }, null)]
     });
     const __placeholder = () => {
@@ -68471,10 +70050,10 @@ const VImg = (0,defineComponent/* genericComponent */.ev)()({
     (0,useRender/* useRender */.L)(() => (0,runtime_core_esm_bundler/* withDirectives */.wy)((0,runtime_core_esm_bundler/* createVNode */.Wm)(VResponsive/* VResponsive */.t, {
       "class": ['v-img', {
         'v-img--booting': !isBooted.value
-      }],
-      "style": {
+      }, props.class],
+      "style": [{
         width: (0,helpers/* convertToUnit */.kb)(props.width === 'auto' ? naturalWidth.value : props.width)
-      },
+      }, props.style],
       "aspectRatio": aspectRatio.value,
       "aria-label": props.alt,
       "role": props.alt ? 'img' : undefined
@@ -68549,9 +70128,8 @@ function useInputIcon(props) {
 
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, {
-  "q8": function() { return /* binding */ VInput; },
-  "PE": function() { return /* binding */ filterInputProps; },
-  "co": function() { return /* binding */ makeVInputProps; }
+  "q": function() { return /* binding */ VInput; },
+  "c": function() { return /* binding */ makeVInputProps; }
 });
 
 // EXTERNAL MODULE: ./node_modules/@vue/runtime-core/dist/runtime-core.esm-bundler.js
@@ -68563,6 +70141,8 @@ var runtime_core_esm_bundler = __webpack_require__(3396);
 var VMessages = __webpack_require__(1035);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/icons.mjs + 1 modules
 var icons = __webpack_require__(4960);
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/component.mjs
+var component = __webpack_require__(9166);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/density.mjs
 var density = __webpack_require__(9694);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/validation.mjs
@@ -68571,8 +70151,8 @@ var validation = __webpack_require__(9911);
 var propsFactory = __webpack_require__(3766);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/util/helpers.mjs
 var helpers = __webpack_require__(131);
-// EXTERNAL MODULE: ./node_modules/vuetify/lib/util/defineComponent.mjs + 1 modules
-var defineComponent = __webpack_require__(320);
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/util/defineComponent.mjs
+var defineComponent = __webpack_require__(1107);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/util/getCurrentInstance.mjs
 var getCurrentInstance = __webpack_require__(7514);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/util/useRender.mjs
@@ -68588,6 +70168,7 @@ var VInput_InputIcon = __webpack_require__(6308);
  // Composables
 
 
+
  // Utilities
 
  // Types
@@ -68597,6 +70178,8 @@ const makeVInputProps = (0,propsFactory/* propsFactory */.U)({
   appendIcon: icons/* IconValue */.lE,
   prependIcon: icons/* IconValue */.lE,
   hideDetails: [Boolean, String],
+  hint: String,
+  persistentHint: Boolean,
   messages: {
     type: [Array, String],
     default: () => []
@@ -68606,8 +70189,9 @@ const makeVInputProps = (0,propsFactory/* propsFactory */.U)({
     default: 'horizontal',
     validator: v => ['horizontal', 'vertical'].includes(v)
   },
-  'onClick:prepend': helpers/* EventProp */.as,
-  'onClick:append': helpers/* EventProp */.as,
+  'onClick:prepend': (0,helpers/* EventProp */.as)(),
+  'onClick:append': (0,helpers/* EventProp */.as)(),
+  ...(0,component/* makeComponentProps */.l)(),
   ...(0,density/* makeDensityProps */.f)(),
   ...(0,validation/* makeValidationProps */._)()
 }, 'v-input');
@@ -68660,13 +70244,23 @@ const VInput = (0,defineComponent/* genericComponent */.ev)()({
       resetValidation,
       validate
     }));
+    const messages = (0,runtime_core_esm_bundler/* computed */.Fl)(() => {
+      if (errorMessages.value.length > 0) {
+        return errorMessages.value;
+      } else if (props.hint && (props.persistentHint || props.focused)) {
+        return props.hint;
+      } else {
+        return props.messages;
+      }
+    });
     (0,useRender/* useRender */.L)(() => {
       const hasPrepend = !!(slots.prepend || props.prependIcon);
       const hasAppend = !!(slots.append || props.appendIcon);
-      const hasMessages = !!(props.messages?.length || errorMessages.value.length);
+      const hasMessages = messages.value.length > 0;
       const hasDetails = !props.hideDetails || props.hideDetails === 'auto' && (hasMessages || !!slots.details);
       return (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
-        "class": ['v-input', `v-input--${props.direction}`, densityClasses.value, validationClasses.value]
+        "class": ['v-input', `v-input--${props.direction}`, densityClasses.value, validationClasses.value, props.class],
+        "style": props.style
       }, [hasPrepend && (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
         "key": "prepend",
         "class": "v-input__prepend"
@@ -68686,7 +70280,7 @@ const VInput = (0,defineComponent/* genericComponent */.ev)()({
       }, [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VMessages/* VMessages */.u, {
         "id": messagesId.value,
         "active": hasMessages,
-        "messages": errorMessages.value.length > 0 ? errorMessages.value : props.messages
+        "messages": messages.value
       }, {
         message: slots.message
       }), slots.details?.(slotProps.value)])]);
@@ -68698,10 +70292,6 @@ const VInput = (0,defineComponent/* genericComponent */.ev)()({
     };
   }
 });
-function filterInputProps(props) {
-  const keys = Object.keys(VInput.props).filter(k => !(0,helpers/* isOn */.F7)(k));
-  return (0,helpers/* pick */.ei)(props, keys);
-}
 
 /***/ }),
 
@@ -68720,10 +70310,12 @@ var runtime_core_esm_bundler = __webpack_require__(3396);
 ;// CONCATENATED MODULE: ./node_modules/vuetify/lib/components/VLabel/VLabel.css
 // extracted by mini-css-extract-plugin
 
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/component.mjs
+var component = __webpack_require__(9166);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/theme.mjs + 1 modules
 var theme = __webpack_require__(7041);
-// EXTERNAL MODULE: ./node_modules/vuetify/lib/util/defineComponent.mjs + 1 modules
-var defineComponent = __webpack_require__(320);
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/util/defineComponent.mjs
+var defineComponent = __webpack_require__(1107);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/util/useRender.mjs
 var useRender = __webpack_require__(9888);
 ;// CONCATENATED MODULE: ./node_modules/vuetify/lib/components/VLabel/VLabel.mjs
@@ -68732,6 +70324,7 @@ var useRender = __webpack_require__(9888);
 
 
 // Composables
+
  // Utilities
 
 const VLabel = (0,defineComponent/* genericComponent */.ev)()({
@@ -68739,6 +70332,7 @@ const VLabel = (0,defineComponent/* genericComponent */.ev)()({
   props: {
     text: String,
     clickable: Boolean,
+    ...(0,component/* makeComponentProps */.l)(),
     ...(0,theme/* makeThemeProps */.x$)()
   },
   setup(props, _ref) {
@@ -68748,7 +70342,8 @@ const VLabel = (0,defineComponent/* genericComponent */.ev)()({
     (0,useRender/* useRender */.L)(() => (0,runtime_core_esm_bundler/* createVNode */.Wm)("label", {
       "class": ['v-label', {
         'v-label--clickable': props.clickable
-      }]
+      }, props.class],
+      "style": props.style
     }, [props.text, slots.default?.()]));
     return {};
   }
@@ -68783,8 +70378,8 @@ var VListItem = __webpack_require__(3150);
 var VListSubheader = __webpack_require__(7754);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/components/VList/list.mjs
 var list = __webpack_require__(3867);
-// EXTERNAL MODULE: ./node_modules/vuetify/lib/util/defineComponent.mjs + 1 modules
-var defineComponent = __webpack_require__(320);
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/util/defineComponent.mjs
+var defineComponent = __webpack_require__(1107);
 ;// CONCATENATED MODULE: ./node_modules/vuetify/lib/components/VList/VListChildren.mjs
 
 // Components
@@ -68845,8 +70440,8 @@ const VListChildren = (0,defineComponent/* genericComponent */.ev)()({
           item
         }) : undefined
       };
-      const [listGroupProps, _1] = (0,VListGroup/* filterListGroupProps */.vK)(itemProps);
-      return children ? (0,runtime_core_esm_bundler/* createVNode */.Wm)(VListGroup/* VListGroup */.NU, (0,runtime_core_esm_bundler/* mergeProps */.dG)({
+      const [listGroupProps, _1] = VListGroup/* VListGroup.filterProps */.N.filterProps(itemProps);
+      return children ? (0,runtime_core_esm_bundler/* createVNode */.Wm)(VListGroup/* VListGroup */.N, (0,runtime_core_esm_bundler/* mergeProps */.dG)({
         "value": itemProps?.value
       }, listGroupProps), {
         activator: _ref3 => {
@@ -68869,6 +70464,8 @@ const VListChildren = (0,defineComponent/* genericComponent */.ev)()({
 });
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/border.mjs
 var border = __webpack_require__(2718);
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/component.mjs
+var component = __webpack_require__(9166);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/density.mjs
 var density = __webpack_require__(9694);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/dimensions.mjs
@@ -68887,8 +70484,8 @@ var tag = __webpack_require__(1138);
 var theme = __webpack_require__(7041);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/variant.mjs
 var variant = __webpack_require__(5221);
-// EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/defaults.mjs
-var defaults = __webpack_require__(8434);
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/defaults.mjs + 1 modules
+var defaults = __webpack_require__(6107);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/color.mjs
 var composables_color = __webpack_require__(2370);
 // EXTERNAL MODULE: ./node_modules/@vue/reactivity/dist/reactivity.esm-bundler.js
@@ -68905,6 +70502,7 @@ var useRender = __webpack_require__(9888);
 
 // Components
  // Composables
+
 
 
 
@@ -68973,6 +70571,7 @@ const VList = (0,defineComponent/* genericComponent */.ev)()({
       openStrategy: 'list'
     }),
     ...(0,border/* makeBorderProps */.m)(),
+    ...(0,component/* makeComponentProps */.l)(),
     ...(0,density/* makeDensityProps */.f)(),
     ...(0,dimensions/* makeDimensionProps */.x)(),
     ...(0,elevation/* makeElevationProps */.c)(),
@@ -69074,26 +70673,8 @@ const VList = (0,defineComponent/* genericComponent */.ev)()({
       e.preventDefault();
     }
     function focus(location) {
-      if (!contentRef.value) return;
-      const focusable = [...contentRef.value.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])')].filter(el => !el.hasAttribute('disabled'));
-      const idx = focusable.indexOf(document.activeElement);
-      if (!location) {
-        if (!contentRef.value.contains(document.activeElement)) {
-          focusable[0]?.focus();
-        }
-      } else if (location === 'first') {
-        focusable[0]?.focus();
-      } else if (location === 'last') {
-        focusable.at(-1)?.focus();
-      } else {
-        let el;
-        let idxx = idx;
-        const inc = location === 'next' ? 1 : -1;
-        do {
-          idxx += inc;
-          el = focusable[idxx];
-        } while ((!el || el.offsetParent == null) && idxx < focusable.length && idxx >= 0);
-        if (el) el.focus();else focus(location === 'next' ? 'first' : 'last');
+      if (contentRef.value) {
+        return (0,helpers/* focusChild */.L7)(contentRef.value, location);
       }
     }
     (0,useRender/* useRender */.L)(() => {
@@ -69102,8 +70683,8 @@ const VList = (0,defineComponent/* genericComponent */.ev)()({
         "class": ['v-list', {
           'v-list--disabled': props.disabled,
           'v-list--nav': props.nav
-        }, themeClasses.value, backgroundColorClasses.value, borderClasses.value, densityClasses.value, elevationClasses.value, lineClasses.value, roundedClasses.value],
-        "style": [backgroundColorStyles.value, dimensionStyles.value],
+        }, themeClasses.value, backgroundColorClasses.value, borderClasses.value, densityClasses.value, elevationClasses.value, lineClasses.value, roundedClasses.value, props.class],
+        "style": [backgroundColorStyles.value, dimensionStyles.value, props.style],
         "role": "listbox",
         "aria-activedescendant": undefined,
         "onFocusin": onFocusin,
@@ -69131,23 +70712,24 @@ const VList = (0,defineComponent/* genericComponent */.ev)()({
 
 "use strict";
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "NU": function() { return /* binding */ VListGroup; },
-/* harmony export */   "vK": function() { return /* binding */ filterListGroupProps; }
+/* harmony export */   "N": function() { return /* binding */ VListGroup; }
 /* harmony export */ });
 /* unused harmony export makeVListGroupProps */
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(3396);
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(9242);
-/* harmony import */ var _VDefaultsProvider_index_mjs__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(836);
-/* harmony import */ var _transitions_index_mjs__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(8952);
-/* harmony import */ var _list_mjs__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(3867);
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(3396);
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(9242);
+/* harmony import */ var _VDefaultsProvider_index_mjs__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(836);
+/* harmony import */ var _transitions_index_mjs__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(8952);
 /* harmony import */ var _composables_icons_mjs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(4960);
-/* harmony import */ var _composables_tag_mjs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(1138);
+/* harmony import */ var _composables_component_mjs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(9166);
+/* harmony import */ var _composables_tag_mjs__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(1138);
+/* harmony import */ var _composables_transition_mjs__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(4906);
+/* harmony import */ var _list_mjs__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(3867);
 /* harmony import */ var _composables_nested_nested_mjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(6479);
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(4870);
-/* harmony import */ var _util_index_mjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(320);
+/* harmony import */ var _composables_ssrBoot_mjs__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(1372);
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(4870);
+/* harmony import */ var _util_index_mjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1107);
 /* harmony import */ var _util_index_mjs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(3766);
-/* harmony import */ var _util_index_mjs__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(9888);
-/* harmony import */ var _util_index_mjs__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(131);
+/* harmony import */ var _util_index_mjs__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(9888);
 
 // Components
 
@@ -69155,9 +70737,12 @@ const VList = (0,defineComponent/* genericComponent */.ev)()({
 
 
 
+
+
+
  // Utilities
 
- // Types
+
 const VListGroupActivator = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_0__/* .defineComponent */ .aZ)({
   name: 'VListGroupActivator',
   setup(_, _ref) {
@@ -69184,7 +70769,8 @@ const makeVListGroupProps = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_2__/* .p
   fluid: Boolean,
   subgroup: Boolean,
   value: null,
-  ...(0,_composables_tag_mjs__WEBPACK_IMPORTED_MODULE_4__/* .makeTagProps */ .Q)()
+  ...(0,_composables_component_mjs__WEBPACK_IMPORTED_MODULE_4__/* .makeComponentProps */ .l)(),
+  ...(0,_composables_tag_mjs__WEBPACK_IMPORTED_MODULE_5__/* .makeTagProps */ .Q)()
 }, 'v-list-group');
 const VListGroup = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_0__/* .genericComponent */ .ev)()({
   name: 'VListGroup',
@@ -69200,59 +70786,66 @@ const VListGroup = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_0__/* .genericCom
       isOpen,
       open,
       id: _id
-    } = (0,_composables_nested_nested_mjs__WEBPACK_IMPORTED_MODULE_1__/* .useNestedItem */ .Io)((0,vue__WEBPACK_IMPORTED_MODULE_5__/* .toRef */ .Vh)(props, 'value'), true);
-    const id = (0,vue__WEBPACK_IMPORTED_MODULE_6__/* .computed */ .Fl)(() => `v-list-group--id-${String(_id.value)}`);
-    const list = (0,_list_mjs__WEBPACK_IMPORTED_MODULE_7__/* .useList */ .sm)();
+    } = (0,_composables_nested_nested_mjs__WEBPACK_IMPORTED_MODULE_1__/* .useNestedItem */ .Io)((0,vue__WEBPACK_IMPORTED_MODULE_6__/* .toRef */ .Vh)(props, 'value'), true);
+    const id = (0,vue__WEBPACK_IMPORTED_MODULE_7__/* .computed */ .Fl)(() => `v-list-group--id-${String(_id.value)}`);
+    const list = (0,_list_mjs__WEBPACK_IMPORTED_MODULE_8__/* .useList */ .sm)();
+    const {
+      isBooted
+    } = (0,_composables_ssrBoot_mjs__WEBPACK_IMPORTED_MODULE_9__/* .useSsrBoot */ .u)();
     function onClick(e) {
       open(!isOpen.value, e);
     }
-    const activatorProps = (0,vue__WEBPACK_IMPORTED_MODULE_6__/* .computed */ .Fl)(() => ({
+    const activatorProps = (0,vue__WEBPACK_IMPORTED_MODULE_7__/* .computed */ .Fl)(() => ({
       onClick,
       class: 'v-list-group__header',
       id: id.value
     }));
-    const toggleIcon = (0,vue__WEBPACK_IMPORTED_MODULE_6__/* .computed */ .Fl)(() => isOpen.value ? props.collapseIcon : props.expandIcon);
-    (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_8__/* .useRender */ .L)(() => (0,vue__WEBPACK_IMPORTED_MODULE_6__/* .createVNode */ .Wm)(props.tag, {
+    const toggleIcon = (0,vue__WEBPACK_IMPORTED_MODULE_7__/* .computed */ .Fl)(() => isOpen.value ? props.collapseIcon : props.expandIcon);
+    const activatorDefaults = (0,vue__WEBPACK_IMPORTED_MODULE_7__/* .computed */ .Fl)(() => ({
+      VListItem: {
+        active: isOpen.value,
+        activeColor: props.activeColor,
+        color: props.color,
+        prependIcon: props.prependIcon || props.subgroup && toggleIcon.value,
+        appendIcon: props.appendIcon || !props.subgroup && toggleIcon.value,
+        title: props.title,
+        value: props.value
+      }
+    }));
+    (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_10__/* .useRender */ .L)(() => (0,vue__WEBPACK_IMPORTED_MODULE_7__/* .createVNode */ .Wm)(props.tag, {
       "class": ['v-list-group', {
         'v-list-group--prepend': list?.hasPrepend.value,
         'v-list-group--fluid': props.fluid,
         'v-list-group--subgroup': props.subgroup,
         'v-list-group--open': isOpen.value
-      }]
+      }, props.class],
+      "style": props.style
     }, {
-      default: () => [slots.activator && (0,vue__WEBPACK_IMPORTED_MODULE_6__/* .createVNode */ .Wm)(_VDefaultsProvider_index_mjs__WEBPACK_IMPORTED_MODULE_9__/* .VDefaultsProvider */ .z, {
-        "defaults": {
-          VListItem: {
-            active: isOpen.value,
-            activeColor: props.activeColor,
-            color: props.color,
-            prependIcon: props.prependIcon || props.subgroup && toggleIcon.value,
-            appendIcon: props.appendIcon || !props.subgroup && toggleIcon.value,
-            title: props.title,
-            value: props.value
-          }
-        }
+      default: () => [slots.activator && (0,vue__WEBPACK_IMPORTED_MODULE_7__/* .createVNode */ .Wm)(_VDefaultsProvider_index_mjs__WEBPACK_IMPORTED_MODULE_11__/* .VDefaultsProvider */ .z, {
+        "defaults": activatorDefaults.value
       }, {
-        default: () => [(0,vue__WEBPACK_IMPORTED_MODULE_6__/* .createVNode */ .Wm)(VListGroupActivator, null, {
+        default: () => [(0,vue__WEBPACK_IMPORTED_MODULE_7__/* .createVNode */ .Wm)(VListGroupActivator, null, {
           default: () => [slots.activator({
             props: activatorProps.value,
             isOpen: isOpen.value
           })]
         })]
-      }), (0,vue__WEBPACK_IMPORTED_MODULE_6__/* .createVNode */ .Wm)(_transitions_index_mjs__WEBPACK_IMPORTED_MODULE_10__/* .VExpandTransition */ .Fx, null, {
-        default: () => [(0,vue__WEBPACK_IMPORTED_MODULE_6__/* .withDirectives */ .wy)((0,vue__WEBPACK_IMPORTED_MODULE_6__/* .createVNode */ .Wm)("div", {
+      }), (0,vue__WEBPACK_IMPORTED_MODULE_7__/* .createVNode */ .Wm)(_composables_transition_mjs__WEBPACK_IMPORTED_MODULE_12__/* .MaybeTransition */ .J, {
+        "transition": {
+          component: _transitions_index_mjs__WEBPACK_IMPORTED_MODULE_13__/* .VExpandTransition */ .Fx
+        },
+        "disabled": !isBooted.value
+      }, {
+        default: () => [(0,vue__WEBPACK_IMPORTED_MODULE_7__/* .withDirectives */ .wy)((0,vue__WEBPACK_IMPORTED_MODULE_7__/* .createVNode */ .Wm)("div", {
           "class": "v-list-group__items",
           "role": "group",
           "aria-labelledby": id.value
-        }, [slots.default?.()]), [[vue__WEBPACK_IMPORTED_MODULE_11__/* .vShow */ .F8, isOpen.value]])]
+        }, [slots.default?.()]), [[vue__WEBPACK_IMPORTED_MODULE_14__/* .vShow */ .F8, isOpen.value]])]
       })]
     }));
     return {};
   }
 });
-function filterListGroupProps(props) {
-  return (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_12__/* .pick */ .ei)(props, Object.keys(VListGroup.props));
-}
 
 /***/ }),
 
@@ -69289,6 +70882,8 @@ var variant = __webpack_require__(5221);
 var icons = __webpack_require__(4960);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/border.mjs
 var border = __webpack_require__(2718);
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/component.mjs
+var component = __webpack_require__(9166);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/density.mjs
 var density = __webpack_require__(9694);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/dimensions.mjs
@@ -69307,8 +70902,8 @@ var theme = __webpack_require__(7041);
 var VList_list = __webpack_require__(3867);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/nested/nested.mjs + 2 modules
 var nested = __webpack_require__(6479);
-// EXTERNAL MODULE: ./node_modules/vuetify/lib/util/defineComponent.mjs + 1 modules
-var defineComponent = __webpack_require__(320);
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/util/defineComponent.mjs
+var defineComponent = __webpack_require__(1107);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/util/helpers.mjs
 var helpers = __webpack_require__(131);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/util/useRender.mjs
@@ -69325,6 +70920,7 @@ var useRender = __webpack_require__(9888);
 
  // Directives
  // Composables
+
 
 
 
@@ -69369,9 +70965,10 @@ const VListItem = (0,defineComponent/* genericComponent */.ev)()({
     subtitle: [String, Number, Boolean],
     title: [String, Number, Boolean],
     value: null,
-    onClick: helpers/* EventProp */.as,
-    onClickOnce: helpers/* EventProp */.as,
+    onClick: (0,helpers/* EventProp */.as)(),
+    onClickOnce: (0,helpers/* EventProp */.as)(),
     ...(0,border/* makeBorderProps */.m)(),
+    ...(0,component/* makeComponentProps */.l)(),
     ...(0,density/* makeDensityProps */.f)(),
     ...(0,dimensions/* makeDimensionProps */.x)(),
     ...(0,elevation/* makeElevationProps */.c)(),
@@ -69469,8 +71066,10 @@ const VListItem = (0,defineComponent/* genericComponent */.ev)()({
       const hasColor = !list || isSelected.value || isActive.value;
       const hasTitle = slots.title || props.title;
       const hasSubtitle = slots.subtitle || props.subtitle;
-      const hasAppend = !!(slots.append || props.appendAvatar || props.appendIcon);
-      const hasPrepend = !!(slots.prepend || props.prependAvatar || props.prependIcon);
+      const hasAppendMedia = !!(props.appendAvatar || props.appendIcon);
+      const hasAppend = !!(hasAppendMedia || slots.append);
+      const hasPrependMedia = !!(props.prependAvatar || props.prependIcon);
+      const hasPrepend = !!(hasPrependMedia || slots.prepend);
       list?.updateHasPrepend(hasPrepend);
       return (0,runtime_core_esm_bundler/* withDirectives */.wy)((0,runtime_core_esm_bundler/* createVNode */.Wm)(Tag, {
         "class": ['v-list-item', {
@@ -69480,8 +71079,8 @@ const VListItem = (0,defineComponent/* genericComponent */.ev)()({
           'v-list-item--nav': props.nav,
           'v-list-item--prepend': !hasPrepend && list?.hasPrepend.value,
           [`${props.activeClass}`]: props.activeClass && isActive.value
-        }, themeClasses.value, borderClasses.value, hasColor ? colorClasses.value : undefined, densityClasses.value, elevationClasses.value, lineClasses.value, roundedClasses.value, variantClasses.value],
-        "style": [hasColor ? colorStyles.value : undefined, dimensionStyles.value],
+        }, themeClasses.value, borderClasses.value, hasColor ? colorClasses.value : undefined, densityClasses.value, elevationClasses.value, lineClasses.value, roundedClasses.value, variantClasses.value, props.class],
+        "style": [hasColor ? colorStyles.value : undefined, dimensionStyles.value, props.style],
         "href": link.href.value,
         "tabindex": isClickable.value ? 0 : undefined,
         "onClick": onClick,
@@ -69490,7 +71089,7 @@ const VListItem = (0,defineComponent/* genericComponent */.ev)()({
         default: () => [(0,variant/* genOverlays */.Ux)(isClickable.value || isActive.value, 'v-list-item'), hasPrepend && (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
           "key": "prepend",
           "class": "v-list-item__prepend"
-        }, [props.prependAvatar && (0,runtime_core_esm_bundler/* createVNode */.Wm)(VAvatar/* VAvatar */.V, {
+        }, [!slots.prepend ? (0,runtime_core_esm_bundler/* createVNode */.Wm)(runtime_core_esm_bundler/* Fragment */.HY, null, [props.prependAvatar && (0,runtime_core_esm_bundler/* createVNode */.Wm)(VAvatar/* VAvatar */.V, {
           "key": "prepend-avatar",
           "density": props.density,
           "image": props.prependAvatar
@@ -69498,8 +71097,9 @@ const VListItem = (0,defineComponent/* genericComponent */.ev)()({
           "key": "prepend-icon",
           "density": props.density,
           "icon": props.prependIcon
-        }, null), slots.prepend && (0,runtime_core_esm_bundler/* createVNode */.Wm)(VDefaultsProvider/* VDefaultsProvider */.z, {
-          "key": "prepend",
+        }, null)]) : (0,runtime_core_esm_bundler/* createVNode */.Wm)(VDefaultsProvider/* VDefaultsProvider */.z, {
+          "key": "prepend-defaults",
+          "disabled": !hasPrependMedia,
           "defaults": {
             VAvatar: {
               density: props.density,
@@ -69514,7 +71114,7 @@ const VListItem = (0,defineComponent/* genericComponent */.ev)()({
             }
           }
         }, {
-          default: () => [slots.prepend(slotProps.value)]
+          default: () => [slots.prepend?.(slotProps.value)]
         })]), (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
           "class": "v-list-item__content",
           "data-no-activator": ""
@@ -69533,8 +71133,17 @@ const VListItem = (0,defineComponent/* genericComponent */.ev)()({
         }), slots.default?.(slotProps.value)]), hasAppend && (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
           "key": "append",
           "class": "v-list-item__append"
-        }, [slots.append && (0,runtime_core_esm_bundler/* createVNode */.Wm)(VDefaultsProvider/* VDefaultsProvider */.z, {
-          "key": "append",
+        }, [!slots.append ? (0,runtime_core_esm_bundler/* createVNode */.Wm)(runtime_core_esm_bundler/* Fragment */.HY, null, [props.appendIcon && (0,runtime_core_esm_bundler/* createVNode */.Wm)(VIcon/* VIcon */.t, {
+          "key": "append-icon",
+          "density": props.density,
+          "icon": props.appendIcon
+        }, null), props.appendAvatar && (0,runtime_core_esm_bundler/* createVNode */.Wm)(VAvatar/* VAvatar */.V, {
+          "key": "append-avatar",
+          "density": props.density,
+          "image": props.appendAvatar
+        }, null)]) : (0,runtime_core_esm_bundler/* createVNode */.Wm)(VDefaultsProvider/* VDefaultsProvider */.z, {
+          "key": "append-defaults",
+          "disabled": !hasAppendMedia,
           "defaults": {
             VAvatar: {
               density: props.density,
@@ -69549,16 +71158,8 @@ const VListItem = (0,defineComponent/* genericComponent */.ev)()({
             }
           }
         }, {
-          default: () => [slots.append(slotProps.value)]
-        }), props.appendIcon && (0,runtime_core_esm_bundler/* createVNode */.Wm)(VIcon/* VIcon */.t, {
-          "key": "append-icon",
-          "density": props.density,
-          "icon": props.appendIcon
-        }, null), props.appendAvatar && (0,runtime_core_esm_bundler/* createVNode */.Wm)(VAvatar/* VAvatar */.V, {
-          "key": "append-avatar",
-          "density": props.density,
-          "image": props.appendAvatar
-        }, null)])]
+          default: () => [slots.append?.(slotProps.value)]
+        })])]
       }), [[(0,runtime_core_esm_bundler/* resolveDirective */.Q2)("ripple"), isClickable.value && props.ripple]]);
     });
     return {};
@@ -69600,14 +71201,16 @@ const VListItemTitle = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_0__/* .create
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "b": function() { return /* binding */ VListSubheader; }
 /* harmony export */ });
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(3396);
-/* harmony import */ var _composables_tag_mjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(1138);
-/* harmony import */ var _composables_color_mjs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(2370);
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(4870);
-/* harmony import */ var _util_index_mjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(320);
-/* harmony import */ var _util_index_mjs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(9888);
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(3396);
+/* harmony import */ var _composables_component_mjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(9166);
+/* harmony import */ var _composables_tag_mjs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(1138);
+/* harmony import */ var _composables_color_mjs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(2370);
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(4870);
+/* harmony import */ var _util_index_mjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1107);
+/* harmony import */ var _util_index_mjs__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(9888);
 
 // Composables
+
 
  // Utilities
 
@@ -69619,7 +71222,8 @@ const VListSubheader = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_0__/* .generi
     inset: Boolean,
     sticky: Boolean,
     title: String,
-    ...(0,_composables_tag_mjs__WEBPACK_IMPORTED_MODULE_1__/* .makeTagProps */ .Q)()
+    ...(0,_composables_component_mjs__WEBPACK_IMPORTED_MODULE_1__/* .makeComponentProps */ .l)(),
+    ...(0,_composables_tag_mjs__WEBPACK_IMPORTED_MODULE_2__/* .makeTagProps */ .Q)()
   },
   setup(props, _ref) {
     let {
@@ -69628,19 +71232,19 @@ const VListSubheader = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_0__/* .generi
     const {
       textColorClasses,
       textColorStyles
-    } = (0,_composables_color_mjs__WEBPACK_IMPORTED_MODULE_2__/* .useTextColor */ .rY)((0,vue__WEBPACK_IMPORTED_MODULE_3__/* .toRef */ .Vh)(props, 'color'));
-    (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_4__/* .useRender */ .L)(() => {
+    } = (0,_composables_color_mjs__WEBPACK_IMPORTED_MODULE_3__/* .useTextColor */ .rY)((0,vue__WEBPACK_IMPORTED_MODULE_4__/* .toRef */ .Vh)(props, 'color'));
+    (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_5__/* .useRender */ .L)(() => {
       const hasText = !!(slots.default || props.title);
-      return (0,vue__WEBPACK_IMPORTED_MODULE_5__/* .createVNode */ .Wm)(props.tag, {
+      return (0,vue__WEBPACK_IMPORTED_MODULE_6__/* .createVNode */ .Wm)(props.tag, {
         "class": ['v-list-subheader', {
           'v-list-subheader--inset': props.inset,
           'v-list-subheader--sticky': props.sticky
-        }, textColorClasses.value],
-        "style": {
+        }, textColorClasses.value, props.class],
+        "style": [{
           textColorStyles
-        }
+        }, props.style]
       }, {
-        default: () => [hasText && (0,vue__WEBPACK_IMPORTED_MODULE_5__/* .createVNode */ .Wm)("div", {
+        default: () => [hasText && (0,vue__WEBPACK_IMPORTED_MODULE_6__/* .createVNode */ .Wm)("div", {
           "class": "v-list-subheader__text"
         }, [slots.default?.() ?? props.title])]
       });
@@ -69727,8 +71331,8 @@ var proxiedModel = __webpack_require__(8717);
 var composables_scopeId = __webpack_require__(5975);
 // EXTERNAL MODULE: ./node_modules/@vue/reactivity/dist/reactivity.esm-bundler.js
 var reactivity_esm_bundler = __webpack_require__(4870);
-// EXTERNAL MODULE: ./node_modules/vuetify/lib/util/defineComponent.mjs + 1 modules
-var defineComponent = __webpack_require__(320);
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/util/defineComponent.mjs
+var defineComponent = __webpack_require__(1107);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/util/helpers.mjs
 var helpers = __webpack_require__(131);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/util/getCurrentInstance.mjs
@@ -69759,7 +71363,7 @@ const VMenu = (0,defineComponent/* genericComponent */.ev)()({
     // TODO
     // disableKeys: Boolean,
     id: String,
-    ...(0,helpers/* omit */.CE)((0,VOverlay/* makeVOverlayProps */.BU)({
+    ...(0,helpers/* omit */.CE)((0,VOverlay/* makeVOverlayProps */.B)({
       closeDelay: 250,
       closeOnContentClick: true,
       locationStrategy: 'connected',
@@ -69815,10 +71419,11 @@ const VMenu = (0,defineComponent/* genericComponent */.ev)()({
       'aria-owns': id.value
     }, props.activatorProps));
     (0,useRender/* useRender */.L)(() => {
-      const [overlayProps] = (0,VOverlay/* filterVOverlayProps */.Fe)(props);
-      return (0,runtime_core_esm_bundler/* createVNode */.Wm)(VOverlay/* VOverlay */.yc, (0,runtime_core_esm_bundler/* mergeProps */.dG)({
+      const [overlayProps] = VOverlay/* VOverlay.filterProps */.y.filterProps(props);
+      return (0,runtime_core_esm_bundler/* createVNode */.Wm)(VOverlay/* VOverlay */.y, (0,runtime_core_esm_bundler/* mergeProps */.dG)({
         "ref": overlay,
-        "class": ['v-menu']
+        "class": ['v-menu', props.class],
+        "style": props.style
       }, overlayProps, {
         "modelValue": isActive.value,
         "onUpdate:modelValue": $event => isActive.value = $event,
@@ -69876,12 +71481,14 @@ var runtime_core_esm_bundler = __webpack_require__(3396);
 
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/components/transitions/index.mjs + 2 modules
 var transitions = __webpack_require__(8952);
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/component.mjs
+var component = __webpack_require__(9166);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/transition.mjs
 var transition = __webpack_require__(4906);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/color.mjs
 var color = __webpack_require__(2370);
-// EXTERNAL MODULE: ./node_modules/vuetify/lib/util/defineComponent.mjs + 1 modules
-var defineComponent = __webpack_require__(320);
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/util/defineComponent.mjs
+var defineComponent = __webpack_require__(1107);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/util/helpers.mjs
 var helpers = __webpack_require__(131);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/util/useRender.mjs
@@ -69893,6 +71500,7 @@ var useRender = __webpack_require__(9888);
 
 // Components
  // Composables
+
 
  // Utilities
 
@@ -69906,6 +71514,7 @@ const VMessages = (0,defineComponent/* genericComponent */.ev)()({
       type: [Array, String],
       default: () => []
     },
+    ...(0,component/* makeComponentProps */.l)(),
     ...(0,transition/* makeTransitionProps */.X)({
       transition: {
         component: transitions/* VSlideYTransition */.cu,
@@ -69926,8 +71535,8 @@ const VMessages = (0,defineComponent/* genericComponent */.ev)()({
     (0,useRender/* useRender */.L)(() => (0,runtime_core_esm_bundler/* createVNode */.Wm)(transition/* MaybeTransition */.J, {
       "transition": props.transition,
       "tag": "div",
-      "class": ['v-messages', textColorClasses.value],
-      "style": textColorStyles.value,
+      "class": ['v-messages', textColorClasses.value, props.class],
+      "style": [textColorStyles.value, props.style],
       "role": "alert",
       "aria-live": "polite"
     }, {
@@ -69951,9 +71560,8 @@ const VMessages = (0,defineComponent/* genericComponent */.ev)()({
 
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, {
-  "yc": function() { return /* binding */ VOverlay; },
-  "Fe": function() { return /* binding */ filterVOverlayProps; },
-  "BU": function() { return /* binding */ makeVOverlayProps; }
+  "y": function() { return /* binding */ VOverlay; },
+  "B": function() { return /* binding */ makeVOverlayProps; }
 });
 
 // EXTERNAL MODULE: ./node_modules/@vue/runtime-core/dist/runtime-core.esm-bundler.js
@@ -70033,6 +71641,7 @@ function useActivator(props, _ref) {
       isActive.value = !isActive.value;
     },
     mouseenter: e => {
+      if (e.sourceCapabilities?.firesTouchEvents) return;
       isHovered = true;
       activatorEl.value = e.currentTarget || e.target;
       runOpenDelay();
@@ -70226,6 +71835,8 @@ function _useActivator(props, vm, _ref2) {
     return activatorEl.value;
   }
 }
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/component.mjs
+var component = __webpack_require__(9166);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/dimensions.mjs
 var dimensions = __webpack_require__(4544);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/lazy.mjs
@@ -70375,7 +71986,7 @@ function staticLocationStrategy() {
 }
 
 /** Get size of element ignoring max-width/max-height */
-function getIntrinsicSize(el) {
+function getIntrinsicSize(el, isRtl) {
   // const scrollables = new Map<Element, [number, number]>()
   // el.querySelectorAll('*').forEach(el => {
   //   const x = el.scrollLeft
@@ -70392,7 +72003,11 @@ function getIntrinsicSize(el) {
 
   /* eslint-disable-next-line sonarjs/prefer-immediate-return */
   const contentBox = (0,animation/* nullifyTransforms */.G)(el);
-  contentBox.x -= parseFloat(el.style.left || 0);
+  if (isRtl) {
+    contentBox.x += parseFloat(el.style.right || 0);
+  } else {
+    contentBox.x -= parseFloat(el.style.left || 0);
+  }
   contentBox.y -= parseFloat(el.style.top || 0);
 
   // el.style.maxWidth = initialMaxWidth
@@ -70473,7 +72088,7 @@ function connectedLocationStrategy(data, props, contentStyles) {
     });
     if (!data.activatorEl.value || !data.contentEl.value) return;
     const targetBox = data.activatorEl.value.getBoundingClientRect();
-    const contentBox = getIntrinsicSize(data.contentEl.value);
+    const contentBox = getIntrinsicSize(data.contentEl.value, data.isRtl.value);
     const scrollParents = (0,getScrollParent/* getScrollParents */.HA)(data.contentEl.value);
     const viewportMargin = 12;
     if (!scrollParents.length) {
@@ -70649,7 +72264,8 @@ function connectedLocationStrategy(data, props, contentStyles) {
       transformOrigin: `${placement.origin.side} ${placement.origin.align}`,
       // transform: `translate(${pixelRound(x)}px, ${pixelRound(y)}px)`,
       top: (0,helpers/* convertToUnit */.kb)(pixelRound(y)),
-      left: (0,helpers/* convertToUnit */.kb)(pixelRound(x)),
+      left: data.isRtl.value ? undefined : (0,helpers/* convertToUnit */.kb)(pixelRound(x)),
+      right: data.isRtl.value ? (0,helpers/* convertToUnit */.kb)(pixelRound(-x)) : undefined,
       minWidth: (0,helpers/* convertToUnit */.kb)(axis === 'y' ? Math.min(minWidth.value, targetBox.width) : minWidth.value),
       maxWidth: (0,helpers/* convertToUnit */.kb)(pixelCeil((0,helpers/* clamp */.uZ)(available.x, minWidth.value === Infinity ? 0 : minWidth.value, maxWidth.value))),
       maxHeight: (0,helpers/* convertToUnit */.kb)(pixelCeil((0,helpers/* clamp */.uZ)(available.y, minHeight.value === Infinity ? 0 : minHeight.value, maxHeight.value)))
@@ -70824,7 +72440,7 @@ function repositionScrollStrategy(data, props, scope) {
     });
   });
   (0,reactivity_esm_bundler/* onScopeDispose */.EB)(() => {
-    cancelIdleCallback(ric);
+    typeof cancelIdleCallback !== 'undefined' && cancelIdleCallback(ric);
     cancelAnimationFrame(raf);
   });
 }
@@ -70851,10 +72467,10 @@ var transition = __webpack_require__(4906);
 var composables_router = __webpack_require__(6183);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/color.mjs
 var color = __webpack_require__(2370);
-// EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/proxiedModel.mjs
-var proxiedModel = __webpack_require__(8717);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/hydration.mjs
 var hydration = __webpack_require__(1997);
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/proxiedModel.mjs
+var proxiedModel = __webpack_require__(8717);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/locale.mjs + 3 modules
 var locale = __webpack_require__(1629);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/scopeId.mjs
@@ -70933,8 +72549,8 @@ function useTeleport(target) {
 }
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/directives/click-outside/index.mjs + 1 modules
 var click_outside = __webpack_require__(8793);
-// EXTERNAL MODULE: ./node_modules/vuetify/lib/util/defineComponent.mjs + 1 modules
-var defineComponent = __webpack_require__(320);
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/util/defineComponent.mjs
+var defineComponent = __webpack_require__(1107);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/util/easing.mjs
 var easing = __webpack_require__(8587);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/util/useRender.mjs
@@ -70945,6 +72561,7 @@ var useRender = __webpack_require__(9888);
 
 
 // Composables
+
 
 
 
@@ -71006,6 +72623,7 @@ const makeVOverlayProps = (0,propsFactory/* propsFactory */.U)({
     default: 2000
   },
   ...makeActivatorProps(),
+  ...(0,component/* makeComponentProps */.l)(),
   ...(0,dimensions/* makeDimensionProps */.x)(),
   ...(0,lazy/* makeLazyProps */.H)(),
   ...makeLocationStrategyProps(),
@@ -71173,10 +72791,10 @@ const VOverlay = (0,defineComponent/* genericComponent */.ev)()({
           'v-overlay--absolute': props.absolute || props.contained,
           'v-overlay--active': isActive.value,
           'v-overlay--contained': props.contained
-        }, themeClasses.value, rtlClasses.value],
+        }, themeClasses.value, rtlClasses.value, props.class],
         "style": [stackStyles.value, {
           top: (0,helpers/* convertToUnit */.kb)(top.value)
-        }],
+        }, props.style],
         "ref": root
       }, scopeId, attrs), [(0,runtime_core_esm_bundler/* createVNode */.Wm)(Scrim, (0,runtime_core_esm_bundler/* mergeProps */.dG)({
         "color": scrimColor,
@@ -71214,9 +72832,6 @@ const VOverlay = (0,defineComponent/* genericComponent */.ev)()({
     };
   }
 });
-function filterVOverlayProps(props) {
-  return (0,helpers/* pick */.ei)(props, Object.keys(VOverlay.props));
-}
 
 /***/ }),
 
@@ -71235,6 +72850,8 @@ var runtime_core_esm_bundler = __webpack_require__(3396);
 ;// CONCATENATED MODULE: ./node_modules/vuetify/lib/components/VProgressCircular/VProgressCircular.css
 // extracted by mini-css-extract-plugin
 
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/component.mjs
+var component = __webpack_require__(9166);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/size.mjs
 var composables_size = __webpack_require__(9374);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/tag.mjs
@@ -71249,8 +72866,8 @@ var resizeObserver = __webpack_require__(3712);
 var color = __webpack_require__(2370);
 // EXTERNAL MODULE: ./node_modules/@vue/reactivity/dist/reactivity.esm-bundler.js
 var reactivity_esm_bundler = __webpack_require__(4870);
-// EXTERNAL MODULE: ./node_modules/vuetify/lib/util/defineComponent.mjs + 1 modules
-var defineComponent = __webpack_require__(320);
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/util/defineComponent.mjs
+var defineComponent = __webpack_require__(1107);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/util/helpers.mjs
 var helpers = __webpack_require__(131);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/util/useRender.mjs
@@ -71261,6 +72878,7 @@ var useRender = __webpack_require__(9888);
 
 
 // Composables
+
 
 
 
@@ -71287,6 +72905,7 @@ const VProgressCircular = (0,defineComponent/* genericComponent */.ev)()({
       type: [Number, String],
       default: 4
     },
+    ...(0,component/* makeComponentProps */.l)(),
     ...(0,composables_size/* makeSizeProps */.Z)(),
     ...(0,tag/* makeTagProps */.Q)({
       tag: 'div'
@@ -71342,8 +72961,8 @@ const VProgressCircular = (0,defineComponent/* genericComponent */.ev)()({
         'v-progress-circular--indeterminate': !!props.indeterminate,
         'v-progress-circular--visible': isIntersecting.value,
         'v-progress-circular--disable-shrink': props.indeterminate === 'disable-shrink'
-      }, themeClasses.value, sizeClasses.value, textColorClasses.value],
-      "style": [sizeStyles.value, textColorStyles.value],
+      }, themeClasses.value, sizeClasses.value, textColorClasses.value, props.class],
+      "style": [sizeStyles.value, textColorStyles.value, props.style],
       "role": "progressbar",
       "aria-valuemin": "0",
       "aria-valuemax": "100",
@@ -71401,12 +73020,14 @@ var runtime_core_esm_bundler = __webpack_require__(3396);
 ;// CONCATENATED MODULE: ./node_modules/vuetify/lib/components/VProgressLinear/VProgressLinear.css
 // extracted by mini-css-extract-plugin
 
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/component.mjs
+var component = __webpack_require__(9166);
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/location.mjs
+var composables_location = __webpack_require__(5180);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/rounded.mjs
 var rounded = __webpack_require__(4231);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/tag.mjs
 var tag = __webpack_require__(1138);
-// EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/location.mjs
-var composables_location = __webpack_require__(5180);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/theme.mjs + 1 modules
 var theme = __webpack_require__(7041);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/color.mjs
@@ -71419,8 +73040,8 @@ var proxiedModel = __webpack_require__(8717);
 var locale = __webpack_require__(1629);
 // EXTERNAL MODULE: ./node_modules/@vue/runtime-dom/dist/runtime-dom.esm-bundler.js
 var runtime_dom_esm_bundler = __webpack_require__(9242);
-// EXTERNAL MODULE: ./node_modules/vuetify/lib/util/defineComponent.mjs + 1 modules
-var defineComponent = __webpack_require__(320);
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/util/defineComponent.mjs
+var defineComponent = __webpack_require__(1107);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/util/useRender.mjs
 var useRender = __webpack_require__(9888);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/util/helpers.mjs
@@ -71431,6 +73052,7 @@ var helpers = __webpack_require__(131);
 
 
 // Composables
+
 
 
 
@@ -71474,6 +73096,7 @@ const VProgressLinear = (0,defineComponent/* genericComponent */.ev)()({
     stream: Boolean,
     striped: Boolean,
     roundedBar: Boolean,
+    ...(0,component/* makeComponentProps */.l)(),
     ...(0,composables_location/* makeLocationProps */.y)({
       location: 'top'
     }),
@@ -71545,14 +73168,14 @@ const VProgressLinear = (0,defineComponent/* genericComponent */.ev)()({
         'v-progress-linear--rounded': props.rounded,
         'v-progress-linear--rounded-bar': props.roundedBar,
         'v-progress-linear--striped': props.striped
-      }, roundedClasses.value, themeClasses.value],
-      "style": {
+      }, roundedClasses.value, themeClasses.value, props.class],
+      "style": [{
         bottom: props.location === 'bottom' ? 0 : undefined,
         top: props.location === 'top' ? 0 : undefined,
         height: props.active ? (0,helpers/* convertToUnit */.kb)(height.value) : 0,
         '--v-progress-linear-height': (0,helpers/* convertToUnit */.kb)(height.value),
         ...locationStyles.value
-      },
+      }, props.style],
       "role": "progressbar",
       "aria-hidden": props.active ? 'false' : 'true',
       "aria-valuemin": "0",
@@ -71623,10 +73246,12 @@ var runtime_core_esm_bundler = __webpack_require__(3396);
 ;// CONCATENATED MODULE: ./node_modules/vuetify/lib/components/VResponsive/VResponsive.css
 // extracted by mini-css-extract-plugin
 
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/component.mjs
+var component = __webpack_require__(9166);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/dimensions.mjs
 var dimensions = __webpack_require__(4544);
-// EXTERNAL MODULE: ./node_modules/vuetify/lib/util/defineComponent.mjs + 1 modules
-var defineComponent = __webpack_require__(320);
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/util/defineComponent.mjs
+var defineComponent = __webpack_require__(1107);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/util/useRender.mjs
 var useRender = __webpack_require__(9888);
 ;// CONCATENATED MODULE: ./node_modules/vuetify/lib/components/VResponsive/VResponsive.mjs
@@ -71635,6 +73260,7 @@ var useRender = __webpack_require__(9888);
 
 
 // Composables
+
  // Utilities
 
 
@@ -71653,6 +73279,7 @@ const VResponsive = (0,defineComponent/* genericComponent */.ev)()({
   props: {
     aspectRatio: [String, Number],
     contentClass: String,
+    ...(0,component/* makeComponentProps */.l)(),
     ...(0,dimensions/* makeDimensionProps */.x)()
   },
   setup(props, _ref) {
@@ -71666,8 +73293,8 @@ const VResponsive = (0,defineComponent/* genericComponent */.ev)()({
       dimensionStyles
     } = (0,dimensions/* useDimension */.$)(props);
     (0,useRender/* useRender */.L)(() => (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
-      "class": "v-responsive",
-      "style": dimensionStyles.value
+      "class": ['v-responsive', props.class],
+      "style": [dimensionStyles.value, props.style]
     }, [(0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
       "class": "v-responsive__sizer",
       "style": aspectStyles.value
@@ -71732,8 +73359,8 @@ var reactivity_esm_bundler = __webpack_require__(4870);
 var propsFactory = __webpack_require__(3766);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/util/helpers.mjs
 var helpers = __webpack_require__(131);
-// EXTERNAL MODULE: ./node_modules/vuetify/lib/util/defineComponent.mjs + 1 modules
-var defineComponent = __webpack_require__(320);
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/util/defineComponent.mjs
+var defineComponent = __webpack_require__(1107);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/util/useRender.mjs
 var useRender = __webpack_require__(9888);
 ;// CONCATENATED MODULE: ./node_modules/vuetify/lib/components/VSelect/VSelect.mjs
@@ -71791,7 +73418,7 @@ const VSelect = (0,defineComponent/* genericComponent */.ev)()({
   name: 'VSelect',
   props: {
     ...makeSelectProps(),
-    ...(0,helpers/* omit */.CE)((0,VTextField/* makeVTextFieldProps */.wG)({
+    ...(0,helpers/* omit */.CE)((0,VTextField/* makeVTextFieldProps */.w)({
       modelValue: null
     }), ['validationValue', 'dirty', 'appendInnerIcon']),
     ...(0,transition/* makeTransitionProps */.X)({
@@ -71801,6 +73428,7 @@ const VSelect = (0,defineComponent/* genericComponent */.ev)()({
     })
   },
   emits: {
+    'update:focused': focused => true,
     'update:modelValue': val => true,
     'update:menu': val => true
   },
@@ -71837,6 +73465,9 @@ const VSelect = (0,defineComponent/* genericComponent */.ev)()({
       });
     });
     const selected = (0,runtime_core_esm_bundler/* computed */.Fl)(() => selections.value.map(selection => selection.props.value));
+    const isFocused = (0,reactivity_esm_bundler/* ref */.iH)(false);
+    let keyboardLookupPrefix = '';
+    let keyboardLookupLastTime;
     const displayItems = (0,runtime_core_esm_bundler/* computed */.Fl)(() => {
       if (props.hideSelected) {
         return items.value.filter(item => !selections.value.some(s => s === item));
@@ -71873,6 +73504,26 @@ const VSelect = (0,defineComponent/* genericComponent */.ev)()({
       } else if (e.key === 'End') {
         listRef.value?.focus('last');
       }
+
+      // html select hotkeys
+      const KEYBOARD_LOOKUP_THRESHOLD = 1000; // milliseconds
+
+      function checkPrintable(e) {
+        const isPrintableChar = e.key.length === 1;
+        const noModifier = !e.ctrlKey && !e.metaKey && !e.altKey;
+        return isPrintableChar && noModifier;
+      }
+      if (props.multiple || !checkPrintable(e)) return;
+      const now = performance.now();
+      if (now - keyboardLookupLastTime > KEYBOARD_LOOKUP_THRESHOLD) {
+        keyboardLookupPrefix = '';
+      }
+      keyboardLookupPrefix += e.key.toLowerCase();
+      keyboardLookupLastTime = now;
+      const item = items.value.find(item => item.title.toLowerCase().startsWith(keyboardLookupPrefix));
+      if (item !== undefined) {
+        model.value = [item];
+      }
     }
     function select(item) {
       if (props.multiple) {
@@ -71894,6 +73545,9 @@ const VSelect = (0,defineComponent/* genericComponent */.ev)()({
         menu.value = false;
       }
     }
+    function onFocusin(e) {
+      isFocused.value = true;
+    }
     function onFocusout(e) {
       if (e.relatedTarget == null) {
         vTextFieldRef.value?.focus();
@@ -71902,24 +73556,30 @@ const VSelect = (0,defineComponent/* genericComponent */.ev)()({
     (0,useRender/* useRender */.L)(() => {
       const hasChips = !!(props.chips || slots.chip);
       const hasList = !!(!props.hideNoData || displayItems.value.length || slots.prepend || slots.append || slots['no-data']);
-      const [textFieldProps] = (0,VTextField/* filterVTextFieldProps */.a)(props);
-      return (0,runtime_core_esm_bundler/* createVNode */.Wm)(VTextField/* VTextField */.hw, (0,runtime_core_esm_bundler/* mergeProps */.dG)({
+      const isDirty = model.value.length > 0;
+      const [textFieldProps] = VTextField/* VTextField.filterProps */.h.filterProps(props);
+      const placeholder = isDirty || !isFocused.value && props.label && !props.persistentPlaceholder ? undefined : props.placeholder;
+      return (0,runtime_core_esm_bundler/* createVNode */.Wm)(VTextField/* VTextField */.h, (0,runtime_core_esm_bundler/* mergeProps */.dG)({
         "ref": vTextFieldRef
       }, textFieldProps, {
         "modelValue": model.value.map(v => v.props.value).join(', '),
         "onUpdate:modelValue": v => {
           if (v == null) model.value = [];
         },
+        "focused": isFocused.value,
+        "onUpdate:focused": $event => isFocused.value = $event,
         "validationValue": model.externalValue,
-        "dirty": model.value.length > 0,
+        "dirty": isDirty,
         "class": ['v-select', {
           'v-select--active-menu': menu.value,
           'v-select--chips': !!props.chips,
           [`v-select--${props.multiple ? 'multiple' : 'single'}`]: true,
           'v-select--selected': model.value.length
-        }],
+        }, props.class],
+        "style": props.style,
         "appendInnerIcon": props.menuIcon,
         "readonly": true,
+        "placeholder": placeholder,
         "onClick:clear": onClear,
         "onMousedown:control": onMousedownControl,
         "onBlur": onBlur,
@@ -71943,6 +73603,7 @@ const VSelect = (0,defineComponent/* genericComponent */.ev)()({
             "selected": selected.value,
             "selectStrategy": props.multiple ? 'independent' : 'single-independent',
             "onMousedown": e => e.preventDefault(),
+            "onFocusin": onFocusin,
             "onFocusout": onFocusout
           }, {
             default: () => [!displayItems.value.length && !props.hideNoData && (slots['no-data']?.() ?? (0,runtime_core_esm_bundler/* createVNode */.Wm)(VListItem/* VListItem */.l, {
@@ -71966,9 +73627,10 @@ const VSelect = (0,defineComponent/* genericComponent */.ev)()({
                   let {
                     isSelected
                   } = _ref2;
-                  return props.multiple && !props.hideSelected ? (0,runtime_core_esm_bundler/* createVNode */.Wm)(VCheckboxBtn/* VCheckboxBtn */.pM, {
+                  return props.multiple && !props.hideSelected ? (0,runtime_core_esm_bundler/* createVNode */.Wm)(VCheckboxBtn/* VCheckboxBtn */.p, {
                     "modelValue": isSelected,
-                    "ripple": false
+                    "ripple": false,
+                    "tabindex": "-1"
                   }, null) : undefined;
                 }
               });
@@ -71988,7 +73650,13 @@ const VSelect = (0,defineComponent/* genericComponent */.ev)()({
           return (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
             "key": item.value,
             "class": "v-select__selection"
-          }, [hasChips ? (0,runtime_core_esm_bundler/* createVNode */.Wm)(VDefaultsProvider/* VDefaultsProvider */.z, {
+          }, [hasChips ? !slots.chip ? (0,runtime_core_esm_bundler/* createVNode */.Wm)(VChip/* VChip */.v, (0,runtime_core_esm_bundler/* mergeProps */.dG)({
+            "key": "chip",
+            "closable": props.closableChips,
+            "size": "small",
+            "text": item.title
+          }, slotProps), null) : (0,runtime_core_esm_bundler/* createVNode */.Wm)(VDefaultsProvider/* VDefaultsProvider */.z, {
+            "key": "chip-defaults",
             "defaults": {
               VChip: {
                 closable: props.closableChips,
@@ -71997,15 +73665,15 @@ const VSelect = (0,defineComponent/* genericComponent */.ev)()({
               }
             }
           }, {
-            default: () => [slots.chip ? slots.chip({
+            default: () => [slots.chip?.({
               item,
               index,
               props: slotProps
-            }) : (0,runtime_core_esm_bundler/* createVNode */.Wm)(VChip/* VChip */.v, slotProps, null)]
-          }) : slots.selection ? slots.selection({
+            })]
+          }) : slots.selection?.({
             item,
             index
-          }) : (0,runtime_core_esm_bundler/* createVNode */.Wm)("span", {
+          }) ?? (0,runtime_core_esm_bundler/* createVNode */.Wm)("span", {
             "class": "v-select__selection-text"
           }, [item.title, props.multiple && index < selections.value.length - 1 && (0,runtime_core_esm_bundler/* createVNode */.Wm)("span", {
             "class": "v-select__selection-comma"
@@ -72014,6 +73682,7 @@ const VSelect = (0,defineComponent/* genericComponent */.ev)()({
       });
     });
     return (0,forwardRefs/* forwardRefs */.F)({
+      isFocused,
       menu,
       select
     }, vTextFieldRef);
@@ -72041,12 +73710,14 @@ var runtime_core_esm_bundler = __webpack_require__(3396);
 
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/icons.mjs + 1 modules
 var icons = __webpack_require__(4960);
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/component.mjs
+var component = __webpack_require__(9166);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/density.mjs
 var density = __webpack_require__(9694);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/theme.mjs + 1 modules
 var theme = __webpack_require__(7041);
-// EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/defaults.mjs
-var defaults = __webpack_require__(8434);
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/defaults.mjs + 1 modules
+var defaults = __webpack_require__(6107);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/proxiedModel.mjs
 var proxiedModel = __webpack_require__(8717);
 // EXTERNAL MODULE: ./node_modules/@vue/reactivity/dist/reactivity.esm-bundler.js
@@ -72055,8 +73726,8 @@ var reactivity_esm_bundler = __webpack_require__(4870);
 var propsFactory = __webpack_require__(3766);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/util/helpers.mjs
 var helpers = __webpack_require__(131);
-// EXTERNAL MODULE: ./node_modules/vuetify/lib/util/defineComponent.mjs + 1 modules
-var defineComponent = __webpack_require__(320);
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/util/defineComponent.mjs
+var defineComponent = __webpack_require__(1107);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/util/getCurrentInstance.mjs
 var getCurrentInstance = __webpack_require__(7514);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/util/useRender.mjs
@@ -72067,6 +73738,7 @@ var useRender = __webpack_require__(9888);
 
 
 // Composables
+
 
 
 
@@ -72109,6 +73781,7 @@ const VSelectionControlGroup = (0,defineComponent/* genericComponent */.ev)()({
       type: String,
       default: 'VSelectionControl'
     },
+    ...(0,component/* makeComponentProps */.l)(),
     ...makeSelectionControlGroupProps()
   },
   emits: {
@@ -72156,7 +73829,8 @@ const VSelectionControlGroup = (0,defineComponent/* genericComponent */.ev)()({
     (0,useRender/* useRender */.L)(() => (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
       "class": ['v-selection-control-group', {
         'v-selection-control-group--inline': props.inline
-      }],
+      }, props.class],
+      "style": props.style,
       "role": props.type === 'radio' ? 'radiogroup' : undefined
     }, [slots.default?.()]));
     return {};
@@ -72173,7 +73847,6 @@ const VSelectionControlGroup = (0,defineComponent/* genericComponent */.ev)()({
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, {
   "g5": function() { return /* binding */ VSelectionControl; },
-  "fU": function() { return /* binding */ filterControlProps; },
   "$9": function() { return /* binding */ makeSelectionControlProps; }
 });
 
@@ -72188,6 +73861,8 @@ var runtime_core_esm_bundler = __webpack_require__(3396);
 var VIcon = __webpack_require__(3289);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/components/VLabel/VLabel.mjs + 1 modules
 var VLabel = __webpack_require__(7302);
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/component.mjs
+var component = __webpack_require__(9166);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/components/VSelectionControlGroup/VSelectionControlGroup.mjs + 1 modules
 var VSelectionControlGroup = __webpack_require__(835);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/directives/ripple/index.mjs + 1 modules
@@ -72204,8 +73879,8 @@ var reactivity_esm_bundler = __webpack_require__(4870);
 var propsFactory = __webpack_require__(3766);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/util/helpers.mjs
 var helpers = __webpack_require__(131);
-// EXTERNAL MODULE: ./node_modules/vuetify/lib/util/defineComponent.mjs + 1 modules
-var defineComponent = __webpack_require__(320);
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/util/defineComponent.mjs
+var defineComponent = __webpack_require__(1107);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/util/getCurrentInstance.mjs
 var getCurrentInstance = __webpack_require__(7514);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/util/globals.mjs
@@ -72220,6 +73895,7 @@ var useRender = __webpack_require__(9888);
 // Components
 
 
+
  // Directives
  // Composables
 
@@ -72232,6 +73908,7 @@ const makeSelectionControlProps = (0,propsFactory/* propsFactory */.U)({
   trueValue: null,
   falseValue: null,
   value: null,
+  ...(0,component/* makeComponentProps */.l)(),
   ...(0,VSelectionControlGroup/* makeSelectionControlGroupProps */.Z1)()
 }, 'v-selection-control');
 function useSelectionControl(props) {
@@ -72346,8 +74023,10 @@ const VSelectionControl = (0,defineComponent/* genericComponent */.ev)()({
           'v-selection-control--focused': isFocused.value,
           'v-selection-control--focus-visible': isFocusVisible.value,
           'v-selection-control--inline': props.inline
-        }, densityClasses.value]
-      }, rootAttrs), [(0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
+        }, densityClasses.value, props.class]
+      }, rootAttrs, {
+        "style": props.style
+      }), [(0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
         "class": ['v-selection-control__wrapper', textColorClasses.value],
         "style": textColorStyles.value
       }, [slots.default?.(), (0,runtime_core_esm_bundler/* withDirectives */.wy)((0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
@@ -72390,9 +74069,6 @@ const VSelectionControl = (0,defineComponent/* genericComponent */.ev)()({
     };
   }
 });
-function filterControlProps(props) {
-  return (0,helpers/* pick */.ei)(props, Object.keys(VSelectionControl.props));
-}
 
 /***/ }),
 
@@ -72413,7 +74089,7 @@ function filterControlProps(props) {
 /* harmony import */ var _slider_mjs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(3192);
 /* harmony import */ var _composables_proxiedModel_mjs__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(8717);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(4870);
-/* harmony import */ var _util_index_mjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(320);
+/* harmony import */ var _util_index_mjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(1107);
 /* harmony import */ var _util_index_mjs__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(9888);
 
 // Styles
@@ -72434,7 +74110,7 @@ const VSlider = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_1__/* .genericCompon
   props: {
     ...(0,_composables_focus_mjs__WEBPACK_IMPORTED_MODULE_2__/* .makeFocusProps */ .B)(),
     ...(0,_slider_mjs__WEBPACK_IMPORTED_MODULE_3__/* .makeSliderProps */ .gS)(),
-    ...(0,_VInput_VInput_mjs__WEBPACK_IMPORTED_MODULE_4__/* .makeVInputProps */ .co)(),
+    ...(0,_VInput_VInput_mjs__WEBPACK_IMPORTED_MODULE_4__/* .makeVInputProps */ .c)(),
     modelValue: {
       type: [Number, String],
       default: 0
@@ -72442,13 +74118,21 @@ const VSlider = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_1__/* .genericCompon
   },
   emits: {
     'update:focused': value => true,
-    'update:modelValue': v => true
+    'update:modelValue': v => true,
+    start: value => true,
+    end: value => true
   },
   setup(props, _ref) {
     let {
-      slots
+      slots,
+      emit
     } = _ref;
     const thumbContainerRef = (0,vue__WEBPACK_IMPORTED_MODULE_5__/* .ref */ .iH)();
+    const steps = (0,_slider_mjs__WEBPACK_IMPORTED_MODULE_3__/* .useSteps */ .h4)(props);
+    const model = (0,_composables_proxiedModel_mjs__WEBPACK_IMPORTED_MODULE_6__/* .useProxiedModel */ .z)(props, 'modelValue', undefined, v => {
+      const value = typeof v === 'string' ? parseFloat(v) : v == null ? steps.min.value : v;
+      return steps.roundValue(value);
+    });
     const {
       min,
       max,
@@ -72462,15 +74146,25 @@ const VSlider = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_1__/* .genericCompon
       readonly
     } = (0,_slider_mjs__WEBPACK_IMPORTED_MODULE_3__/* .useSlider */ .oN)({
       props,
-      // eslint-disable-next-line @typescript-eslint/no-use-before-define
-      handleSliderMouseUp: newValue => model.value = roundValue(newValue),
-      // eslint-disable-next-line @typescript-eslint/no-use-before-define
-      handleMouseMove: newValue => model.value = roundValue(newValue),
+      steps,
+      onSliderStart: () => {
+        emit('start', model.value);
+      },
+      onSliderEnd: _ref2 => {
+        let {
+          value
+        } = _ref2;
+        const roundedValue = roundValue(value);
+        model.value = roundedValue;
+        emit('end', roundedValue);
+      },
+      onSliderMove: _ref3 => {
+        let {
+          value
+        } = _ref3;
+        return model.value = roundValue(value);
+      },
       getActiveThumb: () => thumbContainerRef.value?.$el
-    });
-    const model = (0,_composables_proxiedModel_mjs__WEBPACK_IMPORTED_MODULE_6__/* .useProxiedModel */ .z)(props, 'modelValue', undefined, v => {
-      const value = typeof v === 'string' ? parseFloat(v) : v == null ? min.value : v;
-      return roundValue(value);
     });
     const {
       isFocused,
@@ -72479,29 +74173,30 @@ const VSlider = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_1__/* .genericCompon
     } = (0,_composables_focus_mjs__WEBPACK_IMPORTED_MODULE_2__/* .useFocus */ .K)(props);
     const trackStop = (0,vue__WEBPACK_IMPORTED_MODULE_7__/* .computed */ .Fl)(() => position(model.value));
     (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_8__/* .useRender */ .L)(() => {
-      const [inputProps, _] = (0,_VInput_VInput_mjs__WEBPACK_IMPORTED_MODULE_4__/* .filterInputProps */ .PE)(props);
+      const [inputProps, _] = _VInput_VInput_mjs__WEBPACK_IMPORTED_MODULE_4__/* .VInput.filterProps */ .q.filterProps(props);
       const hasPrepend = !!(props.label || slots.label || slots.prepend);
-      return (0,vue__WEBPACK_IMPORTED_MODULE_7__/* .createVNode */ .Wm)(_VInput_VInput_mjs__WEBPACK_IMPORTED_MODULE_4__/* .VInput */ .q8, (0,vue__WEBPACK_IMPORTED_MODULE_7__/* .mergeProps */ .dG)({
+      return (0,vue__WEBPACK_IMPORTED_MODULE_7__/* .createVNode */ .Wm)(_VInput_VInput_mjs__WEBPACK_IMPORTED_MODULE_4__/* .VInput */ .q, (0,vue__WEBPACK_IMPORTED_MODULE_7__/* .mergeProps */ .dG)({
         "class": ['v-slider', {
           'v-slider--has-labels': !!slots['tick-label'] || hasLabels.value,
           'v-slider--focused': isFocused.value,
           'v-slider--pressed': mousePressed.value,
           'v-slider--disabled': props.disabled
-        }]
+        }, props.class],
+        "style": props.style
       }, inputProps, {
         "focused": isFocused.value
       }), {
         ...slots,
         prepend: hasPrepend ? slotProps => (0,vue__WEBPACK_IMPORTED_MODULE_7__/* .createVNode */ .Wm)(vue__WEBPACK_IMPORTED_MODULE_7__/* .Fragment */ .HY, null, [slots.label?.(slotProps) ?? props.label ? (0,vue__WEBPACK_IMPORTED_MODULE_7__/* .createVNode */ .Wm)(_VLabel_index_mjs__WEBPACK_IMPORTED_MODULE_9__/* .VLabel */ .J, {
-          "id": slotProps.id,
+          "id": slotProps.id.value,
           "class": "v-slider__label",
           "text": props.label
         }, null) : undefined, slots.prepend?.(slotProps)]) : undefined,
-        default: _ref2 => {
+        default: _ref4 => {
           let {
             id,
             messagesId
-          } = _ref2;
+          } = _ref4;
           return (0,vue__WEBPACK_IMPORTED_MODULE_7__/* .createVNode */ .Wm)("div", {
             "class": "v-slider__container",
             "onMousedown": !readonly.value ? onSliderMousedown : undefined,
@@ -72566,12 +74261,14 @@ var transitions = __webpack_require__(8952);
 var VSlider_slider = __webpack_require__(3192);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/directives/ripple/index.mjs + 1 modules
 var ripple = __webpack_require__(3824);
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/component.mjs
+var component = __webpack_require__(9166);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/elevation.mjs
 var composables_elevation = __webpack_require__(2465);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/color.mjs
 var color = __webpack_require__(2370);
-// EXTERNAL MODULE: ./node_modules/vuetify/lib/util/defineComponent.mjs + 1 modules
-var defineComponent = __webpack_require__(320);
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/util/defineComponent.mjs
+var defineComponent = __webpack_require__(1107);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/util/helpers.mjs
 var helpers = __webpack_require__(131);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/util/useRender.mjs
@@ -72585,6 +74282,7 @@ var useRender = __webpack_require__(9888);
 
  // Directives
  // Composables
+
 
  // Utilities
 
@@ -72615,7 +74313,8 @@ const VSliderThumb = (0,defineComponent/* genericComponent */.ev)()({
     ripple: {
       type: Boolean,
       default: true
-    }
+    },
+    ...(0,component/* makeComponentProps */.l)()
   },
   emits: {
     'update:modelValue': v => true
@@ -72655,7 +74354,7 @@ const VSliderThumb = (0,defineComponent/* genericComponent */.ev)()({
       right,
       down,
       up
-    } = helpers/* keyValues */.ff;
+    } = helpers.keyValues;
     const relevantKeys = [pageup, pagedown, end, home, left, right, down, up];
     const multipliers = (0,runtime_core_esm_bundler/* computed */.Fl)(() => {
       if (step.value) return [1, 2, 3];else return [1, 5, 10];
@@ -72693,11 +74392,11 @@ const VSliderThumb = (0,defineComponent/* genericComponent */.ev)()({
         "class": ['v-slider-thumb', {
           'v-slider-thumb--focused': props.focused,
           'v-slider-thumb--pressed': props.focused && mousePressed.value
-        }],
-        "style": {
+        }, props.class],
+        "style": [{
           '--v-slider-thumb-position': positionPercentage,
           '--v-slider-thumb-size': (0,helpers/* convertToUnit */.kb)(thumbSize.value)
-        },
+        }, props.style],
         "role": "slider",
         "tabindex": disabled.value ? -1 : 0,
         "aria-valuemin": props.min,
@@ -72752,12 +74451,14 @@ var runtime_core_esm_bundler = __webpack_require__(3396);
 
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/components/VSlider/slider.mjs
 var VSlider_slider = __webpack_require__(3192);
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/component.mjs
+var component = __webpack_require__(9166);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/color.mjs
 var composables_color = __webpack_require__(2370);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/rounded.mjs
 var composables_rounded = __webpack_require__(4231);
-// EXTERNAL MODULE: ./node_modules/vuetify/lib/util/defineComponent.mjs + 1 modules
-var defineComponent = __webpack_require__(320);
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/util/defineComponent.mjs
+var defineComponent = __webpack_require__(1107);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/util/helpers.mjs
 var helpers = __webpack_require__(131);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/util/useRender.mjs
@@ -72769,6 +74470,7 @@ var useRender = __webpack_require__(9888);
 
 // Components
  // Composables
+
 
  // Utilities
 
@@ -72783,7 +74485,8 @@ const VSliderTrack = (0,defineComponent/* genericComponent */.ev)()({
     stop: {
       type: Number,
       required: true
-    }
+    },
+    ...(0,component/* makeComponentProps */.l)()
   },
   emits: {},
   setup(props, _ref) {
@@ -72833,6 +74536,7 @@ const VSliderTrack = (0,defineComponent/* genericComponent */.ev)()({
       };
     });
     const computedTicks = (0,runtime_core_esm_bundler/* computed */.Fl)(() => {
+      if (!showTicks.value) return [];
       const ticks = vertical.value ? parsedTicks.value.slice().reverse() : parsedTicks.value;
       return ticks.map((tick, index) => {
         const directionProperty = vertical.value ? 'bottom' : 'margin-inline-start';
@@ -72857,12 +74561,12 @@ const VSliderTrack = (0,defineComponent/* genericComponent */.ev)()({
     });
     (0,useRender/* useRender */.L)(() => {
       return (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
-        "class": ['v-slider-track', roundedClasses.value],
-        "style": {
+        "class": ['v-slider-track', roundedClasses.value, props.class],
+        "style": [{
           '--v-slider-track-size': (0,helpers/* convertToUnit */.kb)(trackSize.value),
           '--v-slider-tick-size': (0,helpers/* convertToUnit */.kb)(tickSize.value),
           direction: !vertical.value ? horizontalDirection.value : undefined
-        }
+        }, props.style]
       }, [(0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
         "class": ['v-slider-track__background', trackColorClasses.value, {
           'v-slider-track__background--opacity': !!color.value || !trackFillColor.value
@@ -72895,17 +74599,18 @@ const VSliderTrack = (0,defineComponent/* genericComponent */.ev)()({
 "use strict";
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "gS": function() { return /* binding */ makeSliderProps; },
+/* harmony export */   "h4": function() { return /* binding */ useSteps; },
 /* harmony export */   "ld": function() { return /* binding */ VSliderSymbol; },
 /* harmony export */   "oN": function() { return /* binding */ useSlider; },
 /* harmony export */   "os": function() { return /* binding */ getOffset; }
 /* harmony export */ });
 /* harmony import */ var _composables_elevation_mjs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(2465);
 /* harmony import */ var _composables_rounded_mjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4231);
-/* harmony import */ var _composables_locale_mjs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(1629);
+/* harmony import */ var _composables_locale_mjs__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(1629);
 /* harmony import */ var _util_index_mjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(3766);
-/* harmony import */ var _util_index_mjs__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(131);
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(4870);
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(3396);
+/* harmony import */ var _util_index_mjs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(131);
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(3396);
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(4870);
 /* eslint-disable max-statements */
 // Composables
 
@@ -72982,51 +74687,66 @@ const makeSliderProps = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_0__/* .props
     elevation: 2
   })
 }, 'slider');
+const useSteps = props => {
+  const min = (0,vue__WEBPACK_IMPORTED_MODULE_3__/* .computed */ .Fl)(() => parseFloat(props.min));
+  const max = (0,vue__WEBPACK_IMPORTED_MODULE_3__/* .computed */ .Fl)(() => parseFloat(props.max));
+  const step = (0,vue__WEBPACK_IMPORTED_MODULE_3__/* .computed */ .Fl)(() => +props.step > 0 ? parseFloat(props.step) : 0);
+  const decimals = (0,vue__WEBPACK_IMPORTED_MODULE_3__/* .computed */ .Fl)(() => Math.max((0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_4__/* .getDecimals */ .pC)(step.value), (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_4__/* .getDecimals */ .pC)(min.value)));
+  function roundValue(value) {
+    if (step.value <= 0) return value;
+    const clamped = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_4__/* .clamp */ .uZ)(value, min.value, max.value);
+    const offset = min.value % step.value;
+    const newValue = Math.round((clamped - offset) / step.value) * step.value + offset;
+    return parseFloat(Math.min(newValue, max.value).toFixed(decimals.value));
+  }
+  return {
+    min,
+    max,
+    step,
+    decimals,
+    roundValue
+  };
+};
 const useSlider = _ref => {
   let {
     props,
-    handleSliderMouseUp,
-    handleMouseMove,
+    steps,
+    onSliderStart,
+    onSliderMove,
+    onSliderEnd,
     getActiveThumb
   } = _ref;
   const {
     isRtl
-  } = (0,_composables_locale_mjs__WEBPACK_IMPORTED_MODULE_3__/* .useRtl */ .Vw)();
-  const isReversed = (0,vue__WEBPACK_IMPORTED_MODULE_4__/* .toRef */ .Vh)(props, 'reverse');
-  const horizontalDirection = (0,vue__WEBPACK_IMPORTED_MODULE_5__/* .computed */ .Fl)(() => {
+  } = (0,_composables_locale_mjs__WEBPACK_IMPORTED_MODULE_5__/* .useRtl */ .Vw)();
+  const isReversed = (0,vue__WEBPACK_IMPORTED_MODULE_6__/* .toRef */ .Vh)(props, 'reverse');
+  const horizontalDirection = (0,vue__WEBPACK_IMPORTED_MODULE_3__/* .computed */ .Fl)(() => {
     let hd = isRtl.value ? 'rtl' : 'ltr';
     if (props.reverse) {
       hd = hd === 'rtl' ? 'ltr' : 'rtl';
     }
     return hd;
   });
-  const min = (0,vue__WEBPACK_IMPORTED_MODULE_5__/* .computed */ .Fl)(() => parseFloat(props.min));
-  const max = (0,vue__WEBPACK_IMPORTED_MODULE_5__/* .computed */ .Fl)(() => parseFloat(props.max));
-  const step = (0,vue__WEBPACK_IMPORTED_MODULE_5__/* .computed */ .Fl)(() => props.step > 0 ? parseFloat(props.step) : 0);
-  const decimals = (0,vue__WEBPACK_IMPORTED_MODULE_5__/* .computed */ .Fl)(() => {
-    const trimmedStep = step.value.toString().trim();
-    return trimmedStep.includes('.') ? trimmedStep.length - trimmedStep.indexOf('.') - 1 : 0;
-  });
-  const thumbSize = (0,vue__WEBPACK_IMPORTED_MODULE_5__/* .computed */ .Fl)(() => parseInt(props.thumbSize, 10));
-  const tickSize = (0,vue__WEBPACK_IMPORTED_MODULE_5__/* .computed */ .Fl)(() => parseInt(props.tickSize, 10));
-  const trackSize = (0,vue__WEBPACK_IMPORTED_MODULE_5__/* .computed */ .Fl)(() => parseInt(props.trackSize, 10));
-  const numTicks = (0,vue__WEBPACK_IMPORTED_MODULE_5__/* .computed */ .Fl)(() => (max.value - min.value) / step.value);
-  const disabled = (0,vue__WEBPACK_IMPORTED_MODULE_4__/* .toRef */ .Vh)(props, 'disabled');
-  const vertical = (0,vue__WEBPACK_IMPORTED_MODULE_5__/* .computed */ .Fl)(() => props.direction === 'vertical');
-  const thumbColor = (0,vue__WEBPACK_IMPORTED_MODULE_5__/* .computed */ .Fl)(() => props.error || props.disabled ? undefined : props.thumbColor ?? props.color);
-  const trackColor = (0,vue__WEBPACK_IMPORTED_MODULE_5__/* .computed */ .Fl)(() => props.error || props.disabled ? undefined : props.trackColor ?? props.color);
-  const trackFillColor = (0,vue__WEBPACK_IMPORTED_MODULE_5__/* .computed */ .Fl)(() => props.error || props.disabled ? undefined : props.trackFillColor ?? props.color);
-  const mousePressed = (0,vue__WEBPACK_IMPORTED_MODULE_4__/* .ref */ .iH)(false);
-  const startOffset = (0,vue__WEBPACK_IMPORTED_MODULE_4__/* .ref */ .iH)(0);
-  const trackContainerRef = (0,vue__WEBPACK_IMPORTED_MODULE_4__/* .ref */ .iH)();
-  const activeThumbRef = (0,vue__WEBPACK_IMPORTED_MODULE_4__/* .ref */ .iH)();
-  function roundValue(value) {
-    if (step.value <= 0) return value;
-    const clamped = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_6__/* .clamp */ .uZ)(value, min.value, max.value);
-    const offset = min.value % step.value;
-    const newValue = Math.round((clamped - offset) / step.value) * step.value + offset;
-    return parseFloat(Math.min(newValue, max.value).toFixed(decimals.value));
-  }
+  const {
+    min,
+    max,
+    step,
+    decimals,
+    roundValue
+  } = steps;
+  const thumbSize = (0,vue__WEBPACK_IMPORTED_MODULE_3__/* .computed */ .Fl)(() => parseInt(props.thumbSize, 10));
+  const tickSize = (0,vue__WEBPACK_IMPORTED_MODULE_3__/* .computed */ .Fl)(() => parseInt(props.tickSize, 10));
+  const trackSize = (0,vue__WEBPACK_IMPORTED_MODULE_3__/* .computed */ .Fl)(() => parseInt(props.trackSize, 10));
+  const numTicks = (0,vue__WEBPACK_IMPORTED_MODULE_3__/* .computed */ .Fl)(() => (max.value - min.value) / step.value);
+  const disabled = (0,vue__WEBPACK_IMPORTED_MODULE_6__/* .toRef */ .Vh)(props, 'disabled');
+  const vertical = (0,vue__WEBPACK_IMPORTED_MODULE_3__/* .computed */ .Fl)(() => props.direction === 'vertical');
+  const thumbColor = (0,vue__WEBPACK_IMPORTED_MODULE_3__/* .computed */ .Fl)(() => props.error || props.disabled ? undefined : props.thumbColor ?? props.color);
+  const trackColor = (0,vue__WEBPACK_IMPORTED_MODULE_3__/* .computed */ .Fl)(() => props.error || props.disabled ? undefined : props.trackColor ?? props.color);
+  const trackFillColor = (0,vue__WEBPACK_IMPORTED_MODULE_3__/* .computed */ .Fl)(() => props.error || props.disabled ? undefined : props.trackFillColor ?? props.color);
+  const mousePressed = (0,vue__WEBPACK_IMPORTED_MODULE_6__/* .ref */ .iH)(false);
+  const startOffset = (0,vue__WEBPACK_IMPORTED_MODULE_6__/* .ref */ .iH)(0);
+  const trackContainerRef = (0,vue__WEBPACK_IMPORTED_MODULE_6__/* .ref */ .iH)();
+  const activeThumbRef = (0,vue__WEBPACK_IMPORTED_MODULE_6__/* .ref */ .iH)();
   function parseMouseMove(e) {
     const vertical = props.direction === 'vertical';
     const start = vertical ? 'top' : 'left';
@@ -73043,14 +74763,11 @@ const useSlider = _ref => {
     if (vertical || horizontalDirection.value === 'rtl') clickPos = 1 - clickPos;
     return roundValue(min.value + clickPos * (max.value - min.value));
   }
-  let thumbMoved = false;
   const handleStop = e => {
-    if (!thumbMoved) {
-      startOffset.value = 0;
-      handleSliderMouseUp(parseMouseMove(e));
-    }
+    onSliderEnd({
+      value: parseMouseMove(e)
+    });
     mousePressed.value = false;
-    thumbMoved = false;
     startOffset.value = 0;
   };
   const handleStart = e => {
@@ -73059,20 +74776,25 @@ const useSlider = _ref => {
     activeThumbRef.value.focus();
     mousePressed.value = true;
     if (activeThumbRef.value.contains(e.target)) {
-      thumbMoved = true;
       startOffset.value = getOffset(e, activeThumbRef.value, props.direction);
     } else {
       startOffset.value = 0;
-      handleMouseMove(parseMouseMove(e));
+      onSliderMove({
+        value: parseMouseMove(e)
+      });
     }
+    onSliderStart({
+      value: parseMouseMove(e)
+    });
   };
   const moveListenerOptions = {
     passive: true,
     capture: true
   };
   function onMouseMove(e) {
-    thumbMoved = true;
-    handleMouseMove(parseMouseMove(e));
+    onSliderMove({
+      value: parseMouseMove(e)
+    });
   }
   function onSliderMouseUp(e) {
     e.stopPropagation();
@@ -73103,11 +74825,13 @@ const useSlider = _ref => {
   }
   const position = val => {
     const percentage = (val - min.value) / (max.value - min.value) * 100;
-    return (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_6__/* .clamp */ .uZ)(isNaN(percentage) ? 0 : percentage, 0, 100);
+    return (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_4__/* .clamp */ .uZ)(isNaN(percentage) ? 0 : percentage, 0, 100);
   };
-  const parsedTicks = (0,vue__WEBPACK_IMPORTED_MODULE_5__/* .computed */ .Fl)(() => {
+  const showTicks = (0,vue__WEBPACK_IMPORTED_MODULE_6__/* .toRef */ .Vh)(props, 'showTicks');
+  const parsedTicks = (0,vue__WEBPACK_IMPORTED_MODULE_3__/* .computed */ .Fl)(() => {
+    if (!showTicks.value) return [];
     if (!props.ticks) {
-      return numTicks.value !== Infinity ? (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_6__/* .createRange */ .MT)(numTicks.value + 1).map(t => {
+      return numTicks.value !== Infinity ? (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_4__/* .createRange */ .MT)(numTicks.value + 1).map(t => {
         const value = min.value + t * step.value;
         return {
           value,
@@ -73126,7 +74850,7 @@ const useSlider = _ref => {
       label: props.ticks[key]
     }));
   });
-  const hasLabels = (0,vue__WEBPACK_IMPORTED_MODULE_5__/* .computed */ .Fl)(() => parsedTicks.value.some(_ref2 => {
+  const hasLabels = (0,vue__WEBPACK_IMPORTED_MODULE_3__/* .computed */ .Fl)(() => parsedTicks.value.some(_ref2 => {
     let {
       label
     } = _ref2;
@@ -73134,11 +74858,11 @@ const useSlider = _ref => {
   }));
   const data = {
     activeThumbRef,
-    color: (0,vue__WEBPACK_IMPORTED_MODULE_4__/* .toRef */ .Vh)(props, 'color'),
+    color: (0,vue__WEBPACK_IMPORTED_MODULE_6__/* .toRef */ .Vh)(props, 'color'),
     decimals,
     disabled,
-    direction: (0,vue__WEBPACK_IMPORTED_MODULE_4__/* .toRef */ .Vh)(props, 'direction'),
-    elevation: (0,vue__WEBPACK_IMPORTED_MODULE_4__/* .toRef */ .Vh)(props, 'elevation'),
+    direction: (0,vue__WEBPACK_IMPORTED_MODULE_6__/* .toRef */ .Vh)(props, 'direction'),
+    elevation: (0,vue__WEBPACK_IMPORTED_MODULE_6__/* .toRef */ .Vh)(props, 'elevation'),
     hasLabels,
     horizontalDirection,
     isReversed,
@@ -73151,16 +74875,16 @@ const useSlider = _ref => {
     parsedTicks,
     parseMouseMove,
     position,
-    readonly: (0,vue__WEBPACK_IMPORTED_MODULE_4__/* .toRef */ .Vh)(props, 'readonly'),
-    rounded: (0,vue__WEBPACK_IMPORTED_MODULE_4__/* .toRef */ .Vh)(props, 'rounded'),
+    readonly: (0,vue__WEBPACK_IMPORTED_MODULE_6__/* .toRef */ .Vh)(props, 'readonly'),
+    rounded: (0,vue__WEBPACK_IMPORTED_MODULE_6__/* .toRef */ .Vh)(props, 'rounded'),
     roundValue,
-    showTicks: (0,vue__WEBPACK_IMPORTED_MODULE_4__/* .toRef */ .Vh)(props, 'showTicks'),
+    showTicks,
     startOffset,
     step,
     thumbSize,
     thumbColor,
-    thumbLabel: (0,vue__WEBPACK_IMPORTED_MODULE_4__/* .toRef */ .Vh)(props, 'thumbLabel'),
-    ticks: (0,vue__WEBPACK_IMPORTED_MODULE_4__/* .toRef */ .Vh)(props, 'ticks'),
+    thumbLabel: (0,vue__WEBPACK_IMPORTED_MODULE_6__/* .toRef */ .Vh)(props, 'thumbLabel'),
+    ticks: (0,vue__WEBPACK_IMPORTED_MODULE_6__/* .toRef */ .Vh)(props, 'ticks'),
     tickSize,
     trackColor,
     trackContainerRef,
@@ -73168,7 +74892,7 @@ const useSlider = _ref => {
     trackSize,
     vertical
   };
-  (0,vue__WEBPACK_IMPORTED_MODULE_5__/* .provide */ .JJ)(VSliderSymbol, data);
+  (0,vue__WEBPACK_IMPORTED_MODULE_3__/* .provide */ .JJ)(VSliderSymbol, data);
   return data;
 };
 
@@ -73203,8 +74927,8 @@ var composables_focus = __webpack_require__(8969);
 var proxiedModel = __webpack_require__(8717);
 // EXTERNAL MODULE: ./node_modules/@vue/reactivity/dist/reactivity.esm-bundler.js
 var reactivity_esm_bundler = __webpack_require__(4870);
-// EXTERNAL MODULE: ./node_modules/vuetify/lib/util/defineComponent.mjs + 1 modules
-var defineComponent = __webpack_require__(320);
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/util/defineComponent.mjs
+var defineComponent = __webpack_require__(1107);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/util/getCurrentInstance.mjs
 var getCurrentInstance = __webpack_require__(7514);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/util/useRender.mjs
@@ -73236,7 +74960,7 @@ const VSwitch = (0,defineComponent/* genericComponent */.ev)()({
       type: [Boolean, String],
       default: false
     },
-    ...(0,VInput/* makeVInputProps */.co)(),
+    ...(0,VInput/* makeVInputProps */.c)(),
     ...(0,VSelectionControl/* makeSelectionControlProps */.$9)()
   },
   emits: {
@@ -73271,18 +74995,21 @@ const VSwitch = (0,defineComponent/* genericComponent */.ev)()({
     }
     (0,useRender/* useRender */.L)(() => {
       const [inputAttrs, controlAttrs] = (0,helpers/* filterInputAttrs */.An)(attrs);
-      const [inputProps, _1] = (0,VInput/* filterInputProps */.PE)(props);
-      const [controlProps, _2] = (0,VSelectionControl/* filterControlProps */.fU)(props);
+      const [inputProps, _1] = VInput/* VInput.filterProps */.q.filterProps(props);
+      const [controlProps, _2] = VSelectionControl/* VSelectionControl.filterProps */.g5.filterProps(props);
       const control = (0,reactivity_esm_bundler/* ref */.iH)();
-      function onClick() {
+      function onClick(e) {
+        e.stopPropagation();
+        e.preventDefault();
         control.value?.input?.click();
       }
-      return (0,runtime_core_esm_bundler/* createVNode */.Wm)(VInput/* VInput */.q8, (0,runtime_core_esm_bundler/* mergeProps */.dG)({
+      return (0,runtime_core_esm_bundler/* createVNode */.Wm)(VInput/* VInput */.q, (0,runtime_core_esm_bundler/* mergeProps */.dG)({
         "class": ['v-switch', {
           'v-switch--inset': props.inset
         }, {
           'v-switch--indeterminate': indeterminate.value
-        }, loaderClasses.value]
+        }, loaderClasses.value, props.class],
+        "style": props.style
       }, inputAttrs, inputProps, {
         "id": id.value,
         "focused": isFocused.value
@@ -73352,9 +75079,8 @@ const VSwitch = (0,defineComponent/* genericComponent */.ev)()({
 
 "use strict";
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "a": function() { return /* binding */ filterVTextFieldProps; },
-/* harmony export */   "hw": function() { return /* binding */ VTextField; },
-/* harmony export */   "wG": function() { return /* binding */ makeVTextFieldProps; }
+/* harmony export */   "h": function() { return /* binding */ VTextField; },
+/* harmony export */   "w": function() { return /* binding */ makeVTextFieldProps; }
 /* harmony export */ });
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(3396);
 /* harmony import */ var _VTextField_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(348);
@@ -73367,7 +75093,7 @@ const VSwitch = (0,defineComponent/* genericComponent */.ev)()({
 /* harmony import */ var _composables_proxiedModel_mjs__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(8717);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(4870);
 /* harmony import */ var _util_index_mjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(3766);
-/* harmony import */ var _util_index_mjs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(320);
+/* harmony import */ var _util_index_mjs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(1107);
 /* harmony import */ var _util_index_mjs__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(131);
 /* harmony import */ var _util_index_mjs__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(9888);
 
@@ -73385,13 +75111,10 @@ const VSwitch = (0,defineComponent/* genericComponent */.ev)()({
 
  // Types
 const activeTypes = ['color', 'file', 'time', 'date', 'datetime-local', 'week', 'month'];
-const EventProp = [Function, Array];
 const makeVTextFieldProps = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_1__/* .propsFactory */ .U)({
   autofocus: Boolean,
   counter: [Boolean, Number, String],
   counterValue: Function,
-  hint: String,
-  persistentHint: Boolean,
   prefix: String,
   placeholder: String,
   persistentPlaceholder: Boolean,
@@ -73401,7 +75124,8 @@ const makeVTextFieldProps = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_1__/* .p
     type: String,
     default: 'text'
   },
-  ...(0,_VInput_VInput_mjs__WEBPACK_IMPORTED_MODULE_2__/* .makeVInputProps */ .co)(),
+  modelModifiers: Object,
+  ...(0,_VInput_VInput_mjs__WEBPACK_IMPORTED_MODULE_2__/* .makeVInputProps */ .c)(),
   ...(0,_VField_VField_mjs__WEBPACK_IMPORTED_MODULE_3__/* .makeVFieldProps */ .hy)()
 }, 'v-text-field');
 const VTextField = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_4__/* .genericComponent */ .ev)()({
@@ -73445,9 +75169,6 @@ const VTextField = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_4__/* .genericCom
     const vFieldRef = (0,vue__WEBPACK_IMPORTED_MODULE_9__/* .ref */ .iH)();
     const inputRef = (0,vue__WEBPACK_IMPORTED_MODULE_9__/* .ref */ .iH)();
     const isActive = (0,vue__WEBPACK_IMPORTED_MODULE_8__/* .computed */ .Fl)(() => activeTypes.includes(props.type) || props.persistentPlaceholder || isFocused.value);
-    const messages = (0,vue__WEBPACK_IMPORTED_MODULE_8__/* .computed */ .Fl)(() => {
-      return props.messages.length ? props.messages : isFocused.value || props.persistentHint ? props.hint : '';
-    });
     function onFocus() {
       if (inputRef.value !== document.activeElement) {
         inputRef.value?.focus();
@@ -73473,7 +75194,15 @@ const VTextField = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_4__/* .genericCom
       });
     }
     function onInput(e) {
-      model.value = e.target.value;
+      const el = e.target;
+      model.value = el.value;
+      if (props.modelModifiers?.trim && ['text', 'search', 'password', 'tel', 'url'].includes(props.type)) {
+        const caretPosition = [el.selectionStart, el.selectionEnd];
+        (0,vue__WEBPACK_IMPORTED_MODULE_8__/* .nextTick */ .Y3)(() => {
+          el.selectionStart = caretPosition[0];
+          el.selectionEnd = caretPosition[1];
+        });
+      }
     }
     (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_11__/* .useRender */ .L)(() => {
       const hasCounter = !!(slots.counter || props.counter || props.counterValue);
@@ -73482,9 +75211,9 @@ const VTextField = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_4__/* .genericCom
       const [{
         modelValue: _,
         ...inputProps
-      }] = (0,_VInput_VInput_mjs__WEBPACK_IMPORTED_MODULE_2__/* .filterInputProps */ .PE)(props);
+      }] = _VInput_VInput_mjs__WEBPACK_IMPORTED_MODULE_2__/* .VInput.filterProps */ .q.filterProps(props);
       const [fieldProps] = (0,_VField_VField_mjs__WEBPACK_IMPORTED_MODULE_3__/* .filterFieldProps */ .g8)(props);
-      return (0,vue__WEBPACK_IMPORTED_MODULE_8__/* .createVNode */ .Wm)(_VInput_VInput_mjs__WEBPACK_IMPORTED_MODULE_2__/* .VInput */ .q8, (0,vue__WEBPACK_IMPORTED_MODULE_8__/* .mergeProps */ .dG)({
+      return (0,vue__WEBPACK_IMPORTED_MODULE_8__/* .createVNode */ .Wm)(_VInput_VInput_mjs__WEBPACK_IMPORTED_MODULE_2__/* .VInput */ .q, (0,vue__WEBPACK_IMPORTED_MODULE_8__/* .mergeProps */ .dG)({
         "ref": vInputRef,
         "modelValue": model.value,
         "onUpdate:modelValue": $event => model.value = $event,
@@ -73492,12 +75221,10 @@ const VTextField = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_4__/* .genericCom
           'v-text-field--prefixed': props.prefix,
           'v-text-field--suffixed': props.suffix,
           'v-text-field--flush-details': ['plain', 'underlined'].includes(props.variant)
-        }],
-        "onClick:prepend": props['onClick:prepend'],
-        "onClick:append": props['onClick:append']
+        }, props.class],
+        "style": props.style
       }, rootAttrs, inputProps, {
-        "focused": isFocused.value,
-        "messages": messages.value
+        "focused": isFocused.value
       }), {
         ...slots,
         default: _ref2 => {
@@ -73520,6 +75247,7 @@ const VTextField = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_4__/* .genericCom
             "id": id.value,
             "active": isActive.value || isDirty.value,
             "dirty": isDirty.value || props.dirty,
+            "disabled": isDisabled.value,
             "focused": isFocused.value,
             "error": isValid.value === false
           }), {
@@ -73572,9 +75300,6 @@ const VTextField = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_4__/* .genericCom
     return (0,_composables_forwardRefs_mjs__WEBPACK_IMPORTED_MODULE_13__/* .forwardRefs */ .F)({}, vInputRef, vFieldRef, inputRef);
   }
 });
-function filterVTextFieldProps(props) {
-  return (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_10__/* .pick */ .ei)(props, Object.keys(VTextField.props));
-}
 
 /***/ }),
 
@@ -73587,7 +75312,7 @@ function filterVTextFieldProps(props) {
 /* harmony export */ });
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(3396);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(9242);
-/* harmony import */ var _util_index_mjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(320);
+/* harmony import */ var _util_index_mjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1107);
 /* harmony import */ var _util_index_mjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(3122);
 /* harmony import */ var _util_index_mjs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(8587);
 
@@ -73763,18 +75488,19 @@ __webpack_require__.d(__webpack_exports__, {
 var runtime_dom_esm_bundler = __webpack_require__(9242);
 // EXTERNAL MODULE: ./node_modules/@vue/runtime-core/dist/runtime-core.esm-bundler.js
 var runtime_core_esm_bundler = __webpack_require__(3396);
-// EXTERNAL MODULE: ./node_modules/vuetify/lib/util/defineComponent.mjs + 1 modules
-var defineComponent = __webpack_require__(320);
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/util/defineComponent.mjs
+var defineComponent = __webpack_require__(1107);
 ;// CONCATENATED MODULE: ./node_modules/vuetify/lib/components/transitions/createTransition.mjs
 // Utilities
 
  // Types
 function createCssTransition(name) {
-  let origin = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'top center 0';
+  let origin = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'center center';
   let mode = arguments.length > 2 ? arguments[2] : undefined;
   return (0,defineComponent/* genericComponent */.ev)()({
     name,
     props: {
+      disabled: Boolean,
       group: Boolean,
       hideOnLeave: Boolean,
       leaveAbsolute: Boolean,
@@ -73791,56 +75517,62 @@ function createCssTransition(name) {
       let {
         slots
       } = _ref;
+      const functions = {
+        onBeforeEnter(el) {
+          el.style.transformOrigin = props.origin;
+        },
+        onLeave(el) {
+          if (props.leaveAbsolute) {
+            const {
+              offsetTop,
+              offsetLeft,
+              offsetWidth,
+              offsetHeight
+            } = el;
+            el._transitionInitialStyles = {
+              position: el.style.position,
+              top: el.style.top,
+              left: el.style.left,
+              width: el.style.width,
+              height: el.style.height
+            };
+            el.style.position = 'absolute';
+            el.style.top = `${offsetTop}px`;
+            el.style.left = `${offsetLeft}px`;
+            el.style.width = `${offsetWidth}px`;
+            el.style.height = `${offsetHeight}px`;
+          }
+          if (props.hideOnLeave) {
+            el.style.setProperty('display', 'none', 'important');
+          }
+        },
+        onAfterLeave(el) {
+          if (props.leaveAbsolute && el?._transitionInitialStyles) {
+            const {
+              position,
+              top,
+              left,
+              width,
+              height
+            } = el._transitionInitialStyles;
+            delete el._transitionInitialStyles;
+            el.style.position = position || '';
+            el.style.top = top || '';
+            el.style.left = left || '';
+            el.style.width = width || '';
+            el.style.height = height || '';
+          }
+        }
+      };
       return () => {
         const tag = props.group ? runtime_dom_esm_bundler/* TransitionGroup */.W3 : runtime_dom_esm_bundler/* Transition */.uT;
         return (0,runtime_core_esm_bundler.h)(tag, {
-          name,
-          mode: props.mode,
-          onBeforeEnter(el) {
-            el.style.transformOrigin = props.origin;
-          },
-          onLeave(el) {
-            if (props.leaveAbsolute) {
-              const {
-                offsetTop,
-                offsetLeft,
-                offsetWidth,
-                offsetHeight
-              } = el;
-              el._transitionInitialStyles = {
-                position: el.style.position,
-                top: el.style.top,
-                left: el.style.left,
-                width: el.style.width,
-                height: el.style.height
-              };
-              el.style.position = 'absolute';
-              el.style.top = `${offsetTop}px`;
-              el.style.left = `${offsetLeft}px`;
-              el.style.width = `${offsetWidth}px`;
-              el.style.height = `${offsetHeight}px`;
-            }
-            if (props.hideOnLeave) {
-              el.style.setProperty('display', 'none', 'important');
-            }
-          },
-          onAfterLeave(el) {
-            if (props.leaveAbsolute && el?._transitionInitialStyles) {
-              const {
-                position,
-                top,
-                left,
-                width,
-                height
-              } = el._transitionInitialStyles;
-              delete el._transitionInitialStyles;
-              el.style.position = position || '';
-              el.style.top = top || '';
-              el.style.left = left || '';
-              el.style.width = width || '';
-              el.style.height = height || '';
-            }
-          }
+          name: props.disabled ? '' : name,
+          css: !props.disabled,
+          ...(props.group ? undefined : {
+            mode: props.mode
+          }),
+          ...(props.disabled ? {} : functions)
         }, slots.default);
       };
     }
@@ -73854,7 +75586,8 @@ function createJavascriptTransition(name, functions) {
       mode: {
         type: String,
         default: mode
-      }
+      },
+      disabled: Boolean
     },
     setup(props, _ref2) {
       let {
@@ -73862,9 +75595,10 @@ function createJavascriptTransition(name, functions) {
       } = _ref2;
       return () => {
         return (0,runtime_core_esm_bundler.h)(runtime_dom_esm_bundler/* Transition */.uT, {
-          name,
+          name: props.disabled ? '' : name,
+          css: !props.disabled,
           // mode: props.mode, // TODO: vuejs/vue-next#3104
-          ...functions
+          ...(props.disabled ? {} : functions)
         }, slots.default);
       };
     }
@@ -74079,39 +75813,88 @@ function useBackgroundColor(props, name) {
 
 /***/ }),
 
-/***/ 8434:
+/***/ 9166:
 /***/ (function(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "AF": function() { return /* binding */ provideDefaults; },
-/* harmony export */   "qy": function() { return /* binding */ useDefaults; },
-/* harmony export */   "tI": function() { return /* binding */ DefaultsSymbol; },
-/* harmony export */   "yB": function() { return /* binding */ createDefaults; }
+/* harmony export */   "l": function() { return /* binding */ makeComponentProps; }
 /* harmony export */ });
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(4870);
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(3396);
-/* harmony import */ var _util_index_mjs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(131);
+/* harmony import */ var _util_propsFactory_mjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(3766);
 // Utilities
+ // Types
+// Composables
+const makeComponentProps = (0,_util_propsFactory_mjs__WEBPACK_IMPORTED_MODULE_0__/* .propsFactory */ .U)({
+  class: [String, Array],
+  style: {
+    type: [String, Array, Object],
+    default: null
+  }
+}, 'component');
+
+/***/ }),
+
+/***/ 6107:
+/***/ (function(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+
+// EXPORTS
+__webpack_require__.d(__webpack_exports__, {
+  "tI": function() { return /* binding */ DefaultsSymbol; },
+  "yB": function() { return /* binding */ createDefaults; },
+  "Xz": function() { return /* binding */ injectDefaults; },
+  "Vn": function() { return /* binding */ internalUseDefaults; },
+  "AF": function() { return /* binding */ provideDefaults; }
+});
+
+// UNUSED EXPORTS: useDefaults
+
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/toggleScope.mjs
+var toggleScope = __webpack_require__(4770);
+// EXTERNAL MODULE: ./node_modules/@vue/reactivity/dist/reactivity.esm-bundler.js
+var reactivity_esm_bundler = __webpack_require__(4870);
+// EXTERNAL MODULE: ./node_modules/@vue/runtime-core/dist/runtime-core.esm-bundler.js
+var runtime_core_esm_bundler = __webpack_require__(3396);
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/util/helpers.mjs
+var helpers = __webpack_require__(131);
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/util/getCurrentInstance.mjs
+var getCurrentInstance = __webpack_require__(7514);
+;// CONCATENATED MODULE: ./node_modules/vuetify/lib/util/injectSelf.mjs
+
+function injectSelf(key) {
+  const {
+    provides
+  } = (0,getCurrentInstance/* getCurrentInstance */.FN)('injectSelf');
+  if (provides && key in provides) {
+    // TS doesn't allow symbol as index type
+    return provides[key];
+  }
+}
+;// CONCATENATED MODULE: ./node_modules/vuetify/lib/composables/defaults.mjs
+// Composables
+ // Utilities
 
  // Types
 const DefaultsSymbol = Symbol.for('vuetify:defaults');
 function createDefaults(options) {
-  return (0,vue__WEBPACK_IMPORTED_MODULE_0__/* .ref */ .iH)(options);
+  return (0,reactivity_esm_bundler/* ref */.iH)(options);
 }
-function useDefaults() {
-  const defaults = (0,vue__WEBPACK_IMPORTED_MODULE_1__/* .inject */ .f3)(DefaultsSymbol);
+function injectDefaults() {
+  const defaults = (0,runtime_core_esm_bundler/* inject */.f3)(DefaultsSymbol);
   if (!defaults) throw new Error('[Vuetify] Could not find defaults instance');
   return defaults;
 }
 function provideDefaults(defaults, options) {
-  const injectedDefaults = useDefaults();
-  const providedDefaults = (0,vue__WEBPACK_IMPORTED_MODULE_0__/* .ref */ .iH)(defaults);
-  const newDefaults = (0,vue__WEBPACK_IMPORTED_MODULE_1__/* .computed */ .Fl)(() => {
-    const scoped = (0,vue__WEBPACK_IMPORTED_MODULE_0__/* .unref */ .SU)(options?.scoped);
-    const reset = (0,vue__WEBPACK_IMPORTED_MODULE_0__/* .unref */ .SU)(options?.reset);
-    const root = (0,vue__WEBPACK_IMPORTED_MODULE_0__/* .unref */ .SU)(options?.root);
-    let properties = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_2__/* .mergeDeep */ .Ee)(providedDefaults.value, {
+  const injectedDefaults = injectDefaults();
+  const providedDefaults = (0,reactivity_esm_bundler/* ref */.iH)(defaults);
+  const newDefaults = (0,runtime_core_esm_bundler/* computed */.Fl)(() => {
+    const disabled = (0,reactivity_esm_bundler/* unref */.SU)(options?.disabled);
+    if (disabled) return injectedDefaults.value;
+    const scoped = (0,reactivity_esm_bundler/* unref */.SU)(options?.scoped);
+    const reset = (0,reactivity_esm_bundler/* unref */.SU)(options?.reset);
+    const root = (0,reactivity_esm_bundler/* unref */.SU)(options?.root);
+    let properties = (0,helpers/* mergeDeep */.Ee)(providedDefaults.value, {
       prev: injectedDefaults.value
     });
     if (scoped) return properties;
@@ -74125,10 +75908,67 @@ function provideDefaults(defaults, options) {
       }
       return properties;
     }
-    return (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_2__/* .mergeDeep */ .Ee)(properties.prev, properties);
+    return properties.prev ? (0,helpers/* mergeDeep */.Ee)(properties.prev, properties) : properties;
   });
-  (0,vue__WEBPACK_IMPORTED_MODULE_1__/* .provide */ .JJ)(DefaultsSymbol, newDefaults);
+  (0,runtime_core_esm_bundler/* provide */.JJ)(DefaultsSymbol, newDefaults);
   return newDefaults;
+}
+function propIsDefined(vnode, prop) {
+  return typeof vnode.props?.[prop] !== 'undefined' || typeof vnode.props?.[(0,helpers/* toKebabCase */.mA)(prop)] !== 'undefined';
+}
+function internalUseDefaults() {
+  let props = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  let name = arguments.length > 1 ? arguments[1] : undefined;
+  let defaults = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : injectDefaults();
+  const vm = (0,getCurrentInstance/* getCurrentInstance */.FN)('useDefaults');
+  name = name ?? vm.type.name ?? vm.type.__name;
+  if (!name) {
+    throw new Error('[Vuetify] Could not determine component name');
+  }
+  const componentDefaults = (0,runtime_core_esm_bundler/* computed */.Fl)(() => defaults.value?.[props._as ?? name]);
+  const _props = new Proxy(props, {
+    get(target, prop) {
+      const propValue = Reflect.get(target, prop);
+      if (prop === 'class' || prop === 'style') {
+        return [componentDefaults.value?.[prop], propValue].filter(v => v != null);
+      } else if (typeof prop === 'string' && !propIsDefined(vm.vnode, prop)) {
+        return componentDefaults.value?.[prop] ?? defaults.value?.global?.[prop] ?? propValue;
+      }
+      return propValue;
+    }
+  });
+  const _subcomponentDefaults = (0,reactivity_esm_bundler/* shallowRef */.XI)();
+  (0,runtime_core_esm_bundler/* watchEffect */.m0)(() => {
+    if (componentDefaults.value) {
+      const subComponents = Object.entries(componentDefaults.value).filter(_ref => {
+        let [key] = _ref;
+        return key.startsWith(key[0].toUpperCase());
+      });
+      if (subComponents.length) _subcomponentDefaults.value = Object.fromEntries(subComponents);
+    }
+  });
+  function provideSubDefaults() {
+    // If subcomponent defaults are provided, override any
+    // subcomponents provided by the component's setup function.
+    // This uses injectSelf so must be done after the original setup to work.
+    (0,toggleScope/* useToggleScope */.U)(_subcomponentDefaults, () => {
+      provideDefaults((0,helpers/* mergeDeep */.Ee)(injectSelf(DefaultsSymbol)?.value ?? {}, _subcomponentDefaults.value));
+    });
+  }
+  return {
+    props: _props,
+    provideSubDefaults
+  };
+}
+function useDefaults() {
+  let props = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  let name = arguments.length > 1 ? arguments[1] : undefined;
+  const {
+    props: _props,
+    provideSubDefaults
+  } = internalUseDefaults(props, name);
+  provideSubDefaults();
+  return _props;
 }
 
 /***/ }),
@@ -74259,6 +76099,7 @@ function useDimension(props) {
 
 "use strict";
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "AV": function() { return /* binding */ breakpoints; },
 /* harmony export */   "AW": function() { return /* binding */ useDisplay; },
 /* harmony export */   "fT": function() { return /* binding */ createDisplay; },
 /* harmony export */   "x6": function() { return /* binding */ DisplaySymbol; }
@@ -74271,6 +76112,8 @@ function useDimension(props) {
 
  // Globals
  // Types
+const breakpoints = ['sm', 'md', 'lg', 'xl', 'xxl']; // no xs
+
 const DisplaySymbol = Symbol.for('vuetify:display');
 const defaultDisplayOptions = {
   mobileBreakpoint: 'lg',
@@ -74293,8 +76136,8 @@ function getClientWidth(isHydrate) {
 function getClientHeight(isHydrate) {
   return _util_globals_mjs__WEBPACK_IMPORTED_MODULE_1__/* .IN_BROWSER */ .BR && !isHydrate ? window.innerHeight : 0;
 }
-function getPlatform() {
-  const userAgent = _util_globals_mjs__WEBPACK_IMPORTED_MODULE_1__/* .IN_BROWSER */ .BR ? window.navigator.userAgent : 'ssr';
+function getPlatform(isHydrate) {
+  const userAgent = _util_globals_mjs__WEBPACK_IMPORTED_MODULE_1__/* .IN_BROWSER */ .BR && !isHydrate ? window.navigator.userAgent : 'ssr';
   function match(regexp) {
     return Boolean(userAgent.match(regexp));
   }
@@ -74309,7 +76152,6 @@ function getPlatform() {
   const win = match(/win/i);
   const mac = match(/mac/i);
   const linux = match(/linux/i);
-  const ssr = match(/ssr/i);
   return {
     android,
     ios,
@@ -74323,7 +76165,7 @@ function getPlatform() {
     mac,
     linux,
     touch: _util_globals_mjs__WEBPACK_IMPORTED_MODULE_1__/* .SUPPORTS_TOUCH */ .sR,
-    ssr
+    ssr: userAgent === 'ssr'
   };
 }
 function createDisplay(options, ssr) {
@@ -74332,12 +76174,16 @@ function createDisplay(options, ssr) {
     mobileBreakpoint
   } = parseDisplayOptions(options);
   const height = (0,vue__WEBPACK_IMPORTED_MODULE_2__/* .ref */ .iH)(getClientHeight(ssr));
-  const platform = getPlatform();
+  const platform = (0,vue__WEBPACK_IMPORTED_MODULE_2__/* .shallowRef */ .XI)(getPlatform(ssr));
   const state = (0,vue__WEBPACK_IMPORTED_MODULE_2__/* .reactive */ .qj)({});
   const width = (0,vue__WEBPACK_IMPORTED_MODULE_2__/* .ref */ .iH)(getClientWidth(ssr));
-  function update() {
+  function updateSize() {
     height.value = getClientHeight();
     width.value = getClientWidth();
+  }
+  function update() {
+    updateSize();
+    platform.value = getPlatform();
   }
 
   // eslint-disable-next-line max-statements
@@ -74350,7 +76196,7 @@ function createDisplay(options, ssr) {
     const xxl = width.value >= thresholds.xxl;
     const name = xs ? 'xs' : sm ? 'sm' : md ? 'md' : lg ? 'lg' : xl ? 'xl' : 'xxl';
     const breakpointValue = typeof mobileBreakpoint === 'number' ? mobileBreakpoint : thresholds[mobileBreakpoint];
-    const mobile = !platform.ssr ? width.value < breakpointValue : platform.android || platform.ios || platform.opera;
+    const mobile = width.value < breakpointValue;
     state.xs = xs;
     state.sm = sm;
     state.md = md;
@@ -74370,11 +76216,11 @@ function createDisplay(options, ssr) {
     state.width = width.value;
     state.mobile = mobile;
     state.mobileBreakpoint = mobileBreakpoint;
-    state.platform = platform;
+    state.platform = platform.value;
     state.thresholds = thresholds;
   });
   if (_util_globals_mjs__WEBPACK_IMPORTED_MODULE_1__/* .IN_BROWSER */ .BR) {
-    window.addEventListener('resize', update, {
+    window.addEventListener('resize', updateSize, {
       passive: true
     });
   }
@@ -74444,22 +76290,24 @@ function useElevation(props) {
 /* harmony export */   "B": function() { return /* binding */ makeFocusProps; },
 /* harmony export */   "K": function() { return /* binding */ useFocus; }
 /* harmony export */ });
-/* harmony import */ var _proxiedModel_mjs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(8717);
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(3396);
+/* harmony import */ var _proxiedModel_mjs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(8717);
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(3396);
 /* harmony import */ var _util_index_mjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(3766);
-/* harmony import */ var _util_index_mjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(7514);
+/* harmony import */ var _util_index_mjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(131);
+/* harmony import */ var _util_index_mjs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(7514);
 // Components
  // Utilities
 
  // Types
 // Composables
 const makeFocusProps = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_0__/* .propsFactory */ .U)({
-  focused: Boolean
+  focused: Boolean,
+  'onUpdate:focused': (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_1__/* .EventProp */ .as)()
 }, 'focus');
 function useFocus(props) {
-  let name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_1__/* .getCurrentInstanceName */ .BL)();
-  const isFocused = (0,_proxiedModel_mjs__WEBPACK_IMPORTED_MODULE_2__/* .useProxiedModel */ .z)(props, 'focused');
-  const focusClasses = (0,vue__WEBPACK_IMPORTED_MODULE_3__/* .computed */ .Fl)(() => {
+  let name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_2__/* .getCurrentInstanceName */ .BL)();
+  const isFocused = (0,_proxiedModel_mjs__WEBPACK_IMPORTED_MODULE_3__/* .useProxiedModel */ .z)(props, 'focused');
+  const focusClasses = (0,vue__WEBPACK_IMPORTED_MODULE_4__/* .computed */ .Fl)(() => {
     return {
       [`${name}--focused`]: isFocused.value
     };
@@ -74639,6 +76487,15 @@ const Refs = Symbol('Forwarded refs');
 
 /** Omit properties starting with P */
 
+function getDescriptor(obj, key) {
+  let currentObj = obj;
+  while (currentObj) {
+    const descriptor = Reflect.getOwnPropertyDescriptor(currentObj, key);
+    if (descriptor) return descriptor;
+    currentObj = Object.getPrototypeOf(currentObj);
+  }
+  return undefined;
+}
 function forwardRefs(target) {
   for (var _len = arguments.length, refs = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
     refs[_key - 1] = arguments[_key];
@@ -74649,12 +76506,29 @@ function forwardRefs(target) {
       if (Reflect.has(target, key)) {
         return Reflect.get(target, key);
       }
+
+      // Skip internal properties
+      if (typeof key === 'symbol' || key.startsWith('__')) return;
       for (const ref of refs) {
         if (ref.value && Reflect.has(ref.value, key)) {
           const val = Reflect.get(ref.value, key);
           return typeof val === 'function' ? val.bind(ref.value) : val;
         }
       }
+    },
+    has(target, key) {
+      if (Reflect.has(target, key)) {
+        return true;
+      }
+
+      // Skip internal properties
+      if (typeof key === 'symbol' || key.startsWith('__')) return false;
+      for (const ref of refs) {
+        if (ref.value && Reflect.has(ref.value, key)) {
+          return true;
+        }
+      }
+      return false;
     },
     getOwnPropertyDescriptor(target, key) {
       const descriptor = Reflect.getOwnPropertyDescriptor(target, key);
@@ -74666,30 +76540,18 @@ function forwardRefs(target) {
       // Check each ref's own properties
       for (const ref of refs) {
         if (!ref.value) continue;
-        const descriptor = Reflect.getOwnPropertyDescriptor(ref.value, key);
+        const descriptor = getDescriptor(ref.value, key) ?? ('_' in ref.value ? getDescriptor(ref.value._?.setupState, key) : undefined);
         if (descriptor) return descriptor;
-        if ('_' in ref.value && 'setupState' in ref.value._) {
-          const descriptor = Reflect.getOwnPropertyDescriptor(ref.value._.setupState, key);
-          if (descriptor) return descriptor;
-        }
       }
+
       // Recursive search up each ref's prototype
-      for (const ref of refs) {
-        let obj = ref.value && Object.getPrototypeOf(ref.value);
-        while (obj) {
-          const descriptor = Reflect.getOwnPropertyDescriptor(obj, key);
-          if (descriptor) return descriptor;
-          obj = Object.getPrototypeOf(obj);
-        }
-      }
-      // Call forwarded refs' proxies
       for (const ref of refs) {
         const childRefs = ref.value && ref.value[Refs];
         if (!childRefs) continue;
         const queue = childRefs.slice();
         while (queue.length) {
           const ref = queue.shift();
-          const descriptor = Reflect.getOwnPropertyDescriptor(ref.value, key);
+          const descriptor = getDescriptor(ref.value, key);
           if (descriptor) return descriptor;
           const childRefs = ref.value && ref.value[Refs];
           if (childRefs) queue.push(...childRefs);
@@ -75035,8 +76897,8 @@ const mdi = {
 var reactivity_esm_bundler = __webpack_require__(4870);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/util/propsFactory.mjs
 var propsFactory = __webpack_require__(3766);
-// EXTERNAL MODULE: ./node_modules/vuetify/lib/util/defineComponent.mjs + 1 modules
-var defineComponent = __webpack_require__(320);
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/util/defineComponent.mjs
+var defineComponent = __webpack_require__(1107);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/util/helpers.mjs
 var helpers = __webpack_require__(131);
 ;// CONCATENATED MODULE: ./node_modules/vuetify/lib/composables/icons.mjs
@@ -75045,7 +76907,7 @@ var helpers = __webpack_require__(131);
  // Utilities
 
  // Types
-const IconValue = [String, Function, Object];
+const IconValue = [String, Function, Object, Array];
 const IconSymbol = Symbol.for('vuetify:icons');
 const makeIconProps = (0,propsFactory/* propsFactory */.U)({
   icon: {
@@ -75065,8 +76927,9 @@ const VComponentIcon = (0,defineComponent/* genericComponent */.ev)()({
       slots
     } = _ref;
     return () => {
+      const Icon = props.icon;
       return (0,runtime_core_esm_bundler/* createVNode */.Wm)(props.tag, null, {
-        default: () => [props.icon ? (0,runtime_core_esm_bundler/* createVNode */.Wm)(props.icon, null, null) : slots.default?.()]
+        default: () => [props.icon ? (0,runtime_core_esm_bundler/* createVNode */.Wm)(Icon, null, null) : slots.default?.()]
       });
     };
   }
@@ -75089,7 +76952,12 @@ const VSvgIcon = (0,defineComponent/* defineComponent */.aZ)({
           "viewBox": "0 0 24 24",
           "role": "img",
           "aria-hidden": "true"
-        }, [(0,runtime_core_esm_bundler/* createVNode */.Wm)("path", {
+        }, [Array.isArray(props.icon) ? props.icon.map(path => Array.isArray(path) ? (0,runtime_core_esm_bundler/* createVNode */.Wm)("path", {
+          "d": path[0],
+          "fill-opacity": path[1]
+        }, null) : (0,runtime_core_esm_bundler/* createVNode */.Wm)("path", {
+          "d": path
+        }, null)) : (0,runtime_core_esm_bundler/* createVNode */.Wm)("path", {
           "d": props.icon
         }, null)])]
       });
@@ -75154,7 +77022,12 @@ const useIcon = props => {
       }
     }
     if (!icon) throw new Error(`Could not find aliased icon "${iconAlias}"`);
-    if (typeof icon !== 'string') {
+    if (Array.isArray(icon)) {
+      return {
+        component: VSvgIcon,
+        icon
+      };
+    } else if (typeof icon !== 'string') {
       return {
         component: VComponentIcon,
         icon
@@ -75188,14 +77061,14 @@ const useIcon = props => {
 // Utilities
 
 
-function useIntersectionObserver(callback) {
+function useIntersectionObserver(callback, options) {
   const intersectionRef = (0,vue__WEBPACK_IMPORTED_MODULE_0__/* .ref */ .iH)();
   const isIntersecting = (0,vue__WEBPACK_IMPORTED_MODULE_0__/* .ref */ .iH)(false);
   if (_util_index_mjs__WEBPACK_IMPORTED_MODULE_1__/* .SUPPORTS_INTERSECTION */ .cu) {
     const observer = new IntersectionObserver(entries => {
       callback?.(entries, observer);
       isIntersecting.value = !!entries.find(entry => entry.isIntersecting);
-    });
+    }, options);
     (0,vue__WEBPACK_IMPORTED_MODULE_2__/* .onBeforeUnmount */ .Jd)(() => {
       observer.disconnect();
     });
@@ -75287,7 +77160,12 @@ function transformItems(props, items) {
 function useItems(props) {
   const items = (0,vue__WEBPACK_IMPORTED_MODULE_3__/* .computed */ .Fl)(() => transformItems(props, props.items));
   function transformIn(value) {
-    return value.map(item => transformItem(props, item));
+    return value.map(v => {
+      const existingItem = items.value.find(item => (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_2__/* .deepEqual */ .vZ)(v, item.value));
+      // Nullish existingItem means value is a custom input value from combobox
+      // In this case, use transformItem to create an InternalItem based on value
+      return existingItem ?? transformItem(props, v);
+    });
   }
   function transformOut(value) {
     return value.map(_ref => {
@@ -75492,6 +77370,11 @@ var proxiedModel = __webpack_require__(8717);
     ariaLabel: {
       item: 'Rating {0} of {1}'
     }
+  },
+  loading: 'Loading...',
+  infiniteScroll: {
+    loadMore: 'Load more',
+    empty: 'No more'
   }
 });
 ;// CONCATENATED MODULE: ./node_modules/vuetify/lib/locale/adapters/vuetify.mjs
@@ -75646,7 +77529,7 @@ const defaultRtl = {
   en: false,
   es: false,
   et: false,
-  fa: false,
+  fa: true,
   fi: false,
   fr: false,
   hr: false,
@@ -75924,6 +77807,8 @@ const independentSelectStrategy = mandatory => {
         value,
         selected
       } = _ref;
+      id = (0,reactivity_esm_bundler/* toRaw */.IU)(id);
+
       // When mandatory and we're trying to deselect when id
       // is the only currently selected item then do nothing
       if (mandatory && !value) {
@@ -75968,6 +77853,7 @@ const independentSingleSelectStrategy = mandatory => {
         id,
         ...rest
       } = _ref3;
+      id = (0,reactivity_esm_bundler/* toRaw */.IU)(id);
       const singleSelected = selected.has(id) ? new Map([[id, selected.get(id)]]) : new Map();
       return parentStrategy.select({
         ...rest,
@@ -75998,6 +77884,7 @@ const leafSelectStrategy = mandatory => {
         children,
         ...rest
       } = _ref4;
+      id = (0,reactivity_esm_bundler/* toRaw */.IU)(id);
       if (children.has(id)) return selected;
       return parentStrategy.select({
         id,
@@ -76021,6 +77908,7 @@ const leafSingleSelectStrategy = mandatory => {
         children,
         ...rest
       } = _ref5;
+      id = (0,reactivity_esm_bundler/* toRaw */.IU)(id);
       if (children.has(id)) return selected;
       return parentStrategy.select({
         id,
@@ -76044,6 +77932,7 @@ const classicSelectStrategy = mandatory => {
         children,
         parents
       } = _ref6;
+      id = (0,reactivity_esm_bundler/* toRaw */.IU)(id);
       const original = new Map(selected);
       const items = [id];
       while (items.length) {
@@ -76270,7 +78159,7 @@ const useNestedItem = (id, isGroup) => {
     isOpen: (0,runtime_core_esm_bundler/* computed */.Fl)(() => parent.root.opened.value.has(computedId.value)),
     parent: (0,runtime_core_esm_bundler/* computed */.Fl)(() => parent.root.parents.value.get(computedId.value)),
     select: (selected, e) => parent.root.select(computedId.value, selected, e),
-    isSelected: (0,runtime_core_esm_bundler/* computed */.Fl)(() => parent.root.selected.value.get(computedId.value) === 'on'),
+    isSelected: (0,runtime_core_esm_bundler/* computed */.Fl)(() => parent.root.selected.value.get((0,reactivity_esm_bundler/* toRaw */.IU)(computedId.value)) === 'on'),
     isIndeterminate: (0,runtime_core_esm_bundler/* computed */.Fl)(() => parent.root.selected.value.get(computedId.value) === 'indeterminate'),
     isLeaf: (0,runtime_core_esm_bundler/* computed */.Fl)(() => !parent.root.children.value.get(computedId.value)),
     isGroupActivator: parent.isGroupActivator
@@ -76364,7 +78253,8 @@ function useProxiedModel(props, prop, defaultValue) {
   });
   const model = (0,vue__WEBPACK_IMPORTED_MODULE_3__/* .computed */ .Fl)({
     get() {
-      return transformIn((0,vue__WEBPACK_IMPORTED_MODULE_1__/* .toRaw */ .IU)(isControlled.value ? props[prop] : internal.value));
+      const externalValue = props[prop];
+      return transformIn(isControlled.value ? externalValue : internal.value);
     },
     set(internalValue) {
       const newValue = transformOut(internalValue);
@@ -76627,6 +78517,37 @@ function useSize(props) {
       sizeStyles
     };
   });
+}
+
+/***/ }),
+
+/***/ 1372:
+/***/ (function(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "u": function() { return /* binding */ useSsrBoot; }
+/* harmony export */ });
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(4870);
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(3396);
+// Utilities
+
+
+// Composables
+function useSsrBoot() {
+  const isBooted = (0,vue__WEBPACK_IMPORTED_MODULE_0__/* .ref */ .iH)(false);
+  (0,vue__WEBPACK_IMPORTED_MODULE_1__/* .onMounted */ .bv)(() => {
+    window.requestAnimationFrame(() => {
+      isBooted.value = true;
+    });
+  });
+  const ssrBootStyles = (0,vue__WEBPACK_IMPORTED_MODULE_1__/* .computed */ .Fl)(() => !isBooted.value ? {
+    transition: 'none !important'
+  } : undefined);
+  return {
+    ssrBootStyles,
+    isBooted: (0,vue__WEBPACK_IMPORTED_MODULE_0__/* .readonly */ .OT)(isBooted)
+  };
 }
 
 /***/ }),
@@ -76929,17 +78850,9 @@ function createTheme(options) {
     if (current.value.dark) {
       createCssClass(lines, ':root', ['color-scheme: dark']);
     }
+    createCssClass(lines, ':root', genCssVariables(current.value));
     for (const [themeName, theme] of Object.entries(computedThemes.value)) {
-      const {
-        variables,
-        dark
-      } = theme;
-      createCssClass(lines, `.v-theme--${themeName}`, [`color-scheme: ${dark ? 'dark' : 'normal'}`, ...genCssVariables(theme), ...Object.keys(variables).map(key => {
-        const value = variables[key];
-        const color = typeof value === 'string' && value.startsWith('#') ? (0,colorUtils/* parseColor */.lu)(value) : undefined;
-        const rgb = color ? `${color.r}, ${color.g}, ${color.b}` : undefined;
-        return `--v-${key}: ${rgb ?? value}`;
-      })]);
+      createCssClass(lines, `.v-theme--${themeName}`, [`color-scheme: ${theme.dark ? 'dark' : 'normal'}`, ...genCssVariables(theme)]);
     }
     const bgLines = [];
     const fgLines = [];
@@ -76948,7 +78861,7 @@ function createTheme(options) {
       if (/^on-[a-z]/.test(key)) {
         createCssClass(fgLines, `.${key}`, [`color: rgb(var(--v-theme-${key})) !important`]);
       } else {
-        createCssClass(bgLines, `.bg-${key}`, [`--v-theme-overlay-multiplier: var(--v-theme-${key}-overlay-multiplier)`, `background: rgb(var(--v-theme-${key})) !important`, `color: rgb(var(--v-theme-on-${key})) !important`]);
+        createCssClass(bgLines, `.bg-${key}`, [`--v-theme-overlay-multiplier: var(--v-theme-${key}-overlay-multiplier)`, `background-color: rgb(var(--v-theme-${key})) !important`, `color: rgb(var(--v-theme-on-${key})) !important`]);
         createCssClass(fgLines, `.text-${key}`, [`color: rgb(var(--v-theme-${key})) !important`]);
         createCssClass(fgLines, `.border-${key}`, [`--v-border-color: var(--v-theme-${key})`]);
       }
@@ -76956,22 +78869,30 @@ function createTheme(options) {
     lines.push(...bgLines, ...fgLines);
     return lines.map((str, i) => i === 0 ? str : `    ${str}`).join('');
   });
+  function getHead() {
+    return {
+      style: [{
+        children: styles.value,
+        id: 'vuetify-theme-stylesheet',
+        nonce: parsedOptions.cspNonce || false
+      }]
+    };
+  }
   function install(app) {
     const head = app._context.provides.usehead;
     if (head) {
-      head.addHeadObjs((0,runtime_core_esm_bundler/* computed */.Fl)(() => {
-        const style = {
-          children: styles.value,
-          type: 'text/css',
-          id: 'vuetify-theme-stylesheet'
-        };
-        if (parsedOptions.cspNonce) style.nonce = parsedOptions.cspNonce;
-        return {
-          style: [style]
-        };
-      }));
-      if (globals/* IN_BROWSER */.BR) {
-        (0,runtime_core_esm_bundler/* watchEffect */.m0)(() => head.updateDOM());
+      if (head.push) {
+        const entry = head.push(getHead);
+        (0,runtime_core_esm_bundler/* watch */.YP)(styles, () => {
+          entry.patch(getHead);
+        });
+      } else {
+        if (globals/* IN_BROWSER */.BR) {
+          head.addHeadObjs((0,runtime_core_esm_bundler/* computed */.Fl)(getHead));
+          (0,runtime_core_esm_bundler/* watchEffect */.m0)(() => head.updateDOM());
+        } else {
+          head.addHeadObjs(getHead());
+        }
       }
     } else {
       let styleEl = globals/* IN_BROWSER */.BR ? document.getElementById('vuetify-theme-stylesheet') : null;
@@ -77043,6 +78964,11 @@ function genCssVariables(theme) {
     if (!key.startsWith('on-')) {
       variables.push(`--v-theme-${key}-overlay-multiplier: ${(0,colorUtils/* getLuma */.zT)(value) > 0.18 ? lightOverlay : darkOverlay}`);
     }
+  }
+  for (const [key, value] of Object.entries(theme.variables)) {
+    const color = typeof value === 'string' && value.startsWith('#') ? (0,colorUtils/* parseColor */.lu)(value) : undefined;
+    const rgb = color ? `${color.r}, ${color.g}, ${color.b}` : undefined;
+    variables.push(`--v-${key}: ${rgb ?? value}`);
   }
   return variables;
 }
@@ -77250,7 +79176,7 @@ function useValidation(props) {
     const results = [];
     isValidating.value = true;
     for (const rule of props.rules) {
-      if (results.length >= (props.maxErrors ?? 1)) {
+      if (results.length >= +(props.maxErrors ?? 1)) {
         break;
       }
       const handler = typeof rule === 'function' ? rule : () => rule;
@@ -77965,7 +79891,14 @@ function animate(el, keyframes, options) {
   if (typeof el.animate === 'undefined') return {
     finished: Promise.resolve()
   };
-  const animation = el.animate(keyframes, options);
+  let animation;
+  try {
+    animation = el.animate(keyframes, options);
+  } catch (err) {
+    return {
+      finished: Promise.resolve()
+    };
+  }
   if (typeof animation.finished === 'undefined') {
     animation.finished = new Promise(resolve => {
       animation.onfinish = () => {
@@ -78284,11 +80217,12 @@ function RGBtoHex(_ref2) {
     b,
     a
   } = _ref2;
-  return `#${[toHex(r), toHex(g), toHex(b), a !== undefined ? toHex(Math.round(a * 255)) : 'FF'].join('')}`;
+  return `#${[toHex(r), toHex(g), toHex(b), a !== undefined ? toHex(Math.round(a * 255)) : ''].join('')}`;
 }
 function HexToRGB(hex) {
+  hex = parseHex(hex);
   let [r, g, b, a] = (0,helpers/* chunk */.yo)(hex, 2).map(c => parseInt(c, 16));
-  a = a === undefined ? a : Math.round(a / 255 * 100) / 100;
+  a = a === undefined ? a : a / 255;
   return {
     r,
     g,
@@ -78311,9 +80245,7 @@ function parseHex(hex) {
   if (hex.length === 3 || hex.length === 4) {
     hex = hex.split('').map(x => x + x).join('');
   }
-  if (hex.length === 6) {
-    hex = (0,helpers/* padEnd */.qy)(hex, 8, 'F');
-  } else {
+  if (hex.length !== 6) {
     hex = (0,helpers/* padEnd */.qy)((0,helpers/* padEnd */.qy)(hex, 6), 8, 'F');
   }
   return hex;
@@ -78468,9 +80400,11 @@ function generateComponentTrace(vm) {
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "J": function() { return /* binding */ createSimpleFunctional; }
 /* harmony export */ });
+/* harmony import */ var _composables_component_mjs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(9166);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(7139);
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(3396);
-/* harmony import */ var _defineComponent_mjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(320);
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(3396);
+/* harmony import */ var _defineComponent_mjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1107);
+
 
 
 function createSimpleFunctional(klass) {
@@ -78482,125 +80416,79 @@ function createSimpleFunctional(klass) {
       tag: {
         type: String,
         default: tag
-      }
+      },
+      ...(0,_composables_component_mjs__WEBPACK_IMPORTED_MODULE_2__/* .makeComponentProps */ .l)()
     },
     setup(props, _ref) {
       let {
         slots
       } = _ref;
-      return () => (0,vue__WEBPACK_IMPORTED_MODULE_2__.h)(props.tag, {
-        class: klass
-      }, slots.default?.());
+      return () => {
+        return (0,vue__WEBPACK_IMPORTED_MODULE_3__.h)(props.tag, {
+          class: [klass, props.class],
+          style: props.style
+        }, slots.default?.());
+      };
     }
   });
 }
 
 /***/ }),
 
-/***/ 320:
+/***/ 1107:
 /***/ (function(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-
-// EXPORTS
-__webpack_require__.d(__webpack_exports__, {
-  "aZ": function() { return /* binding */ defineComponent; },
-  "ev": function() { return /* binding */ genericComponent; }
-});
-
-// UNUSED EXPORTS: defineFunctionalComponent
-
-// EXTERNAL MODULE: ./node_modules/@vue/runtime-core/dist/runtime-core.esm-bundler.js
-var runtime_core_esm_bundler = __webpack_require__(3396);
-// EXTERNAL MODULE: ./node_modules/@vue/reactivity/dist/reactivity.esm-bundler.js
-var reactivity_esm_bundler = __webpack_require__(4870);
-// EXTERNAL MODULE: ./node_modules/vuetify/lib/util/console.mjs
-var console = __webpack_require__(6033);
-// EXTERNAL MODULE: ./node_modules/vuetify/lib/util/helpers.mjs
-var helpers = __webpack_require__(131);
-// EXTERNAL MODULE: ./node_modules/vuetify/lib/util/getCurrentInstance.mjs
-var getCurrentInstance = __webpack_require__(7514);
-;// CONCATENATED MODULE: ./node_modules/vuetify/lib/util/injectSelf.mjs
-
-function injectSelf(key) {
-  const {
-    provides
-  } = (0,getCurrentInstance/* getCurrentInstance */.FN)('injectSelf');
-  if (provides && key in provides) {
-    // TS doesn't allow symbol as index type
-    return provides[key];
-  }
-}
-// EXTERNAL MODULE: ./node_modules/vuetify/lib/util/propsFactory.mjs
-var propsFactory = __webpack_require__(3766);
-// EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/defaults.mjs
-var composables_defaults = __webpack_require__(8434);
-// EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/toggleScope.mjs
-var toggleScope = __webpack_require__(4770);
-;// CONCATENATED MODULE: ./node_modules/vuetify/lib/util/defineComponent.mjs
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "aZ": function() { return /* binding */ defineComponent; },
+/* harmony export */   "ev": function() { return /* binding */ genericComponent; }
+/* harmony export */ });
+/* unused harmony export defineFunctionalComponent */
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(3396);
+/* harmony import */ var _console_mjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(6033);
+/* harmony import */ var _helpers_mjs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(131);
+/* harmony import */ var _propsFactory_mjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(3766);
+/* harmony import */ var _composables_defaults_mjs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(6107);
 // Utils
 
 
 
 
-
-
  // Types
-function propIsDefined(vnode, prop) {
-  return typeof vnode.props?.[prop] !== 'undefined' || typeof vnode.props?.[(0,helpers/* toKebabCase */.mA)(prop)] !== 'undefined';
-}
-const defineComponent = function defineComponent(options) {
+// Implementation
+function defineComponent(options) {
   options._setup = options._setup ?? options.setup;
   if (!options.name) {
-    (0,console/* consoleWarn */.Kd)('The component is missing an explicit name, unable to generate default prop value');
+    (0,_console_mjs__WEBPACK_IMPORTED_MODULE_0__/* .consoleWarn */ .Kd)('The component is missing an explicit name, unable to generate default prop value');
     return options;
   }
   if (options._setup) {
-    options.props = options.props ?? {};
-    options.props = (0,propsFactory/* propsFactory */.U)(options.props, (0,helpers/* toKebabCase */.mA)(options.name))();
+    options.props = (0,_propsFactory_mjs__WEBPACK_IMPORTED_MODULE_1__/* .propsFactory */ .U)(options.props ?? {}, (0,_helpers_mjs__WEBPACK_IMPORTED_MODULE_2__/* .toKebabCase */ .mA)(options.name))();
+    const propKeys = Object.keys(options.props);
+    options.filterProps = function filterProps(props) {
+      return (0,_helpers_mjs__WEBPACK_IMPORTED_MODULE_2__/* .pick */ .ei)(props, propKeys, ['class', 'style']);
+    };
     options.props._as = String;
     options.setup = function setup(props, ctx) {
-      const defaults = (0,composables_defaults/* useDefaults */.qy)();
+      const defaults = (0,_composables_defaults_mjs__WEBPACK_IMPORTED_MODULE_3__/* .injectDefaults */ .Xz)();
 
       // Skip props proxy if defaults are not provided
       if (!defaults.value) return options._setup(props, ctx);
-      const vm = (0,runtime_core_esm_bundler/* getCurrentInstance */.FN)();
-      const componentDefaults = (0,runtime_core_esm_bundler/* computed */.Fl)(() => defaults.value[props._as ?? options.name]);
-      const _props = new Proxy(props, {
-        get(target, prop) {
-          if (typeof prop === 'string' && !propIsDefined(vm.vnode, prop)) {
-            return componentDefaults.value?.[prop] ?? defaults.value.global?.[prop] ?? target[prop];
-          }
-          return Reflect.get(target, prop);
-        }
-      });
-      const _subcomponentDefaults = (0,reactivity_esm_bundler/* shallowRef */.XI)();
-      (0,runtime_core_esm_bundler/* watchEffect */.m0)(() => {
-        if (componentDefaults.value) {
-          const subComponents = Object.entries(componentDefaults.value).filter(_ref => {
-            let [key] = _ref;
-            return key.startsWith(key[0].toUpperCase());
-          });
-          if (subComponents.length) _subcomponentDefaults.value = Object.fromEntries(subComponents);
-        }
-      });
+      const {
+        props: _props,
+        provideSubDefaults
+      } = (0,_composables_defaults_mjs__WEBPACK_IMPORTED_MODULE_3__/* .internalUseDefaults */ .Vn)(props, props._as ?? options.name, defaults);
       const setupBindings = options._setup(_props, ctx);
-
-      // If subcomponent defaults are provided, override any
-      // subcomponents provided by the component's setup function.
-      // This uses injectSelf so must be done after the original setup to work.
-      (0,toggleScope/* useToggleScope */.U)(_subcomponentDefaults, () => {
-        (0,composables_defaults/* provideDefaults */.AF)((0,helpers/* mergeDeep */.Ee)(injectSelf(composables_defaults/* DefaultsSymbol */.tI)?.value ?? {}, _subcomponentDefaults.value));
-      });
+      provideSubDefaults();
       return setupBindings;
     };
   }
   return options;
-};
+}
 // Implementation
 function genericComponent() {
   let exposeDefaults = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
-  return options => (exposeDefaults ? defineComponent : runtime_core_esm_bundler/* defineComponent */.aZ)(options);
+  return options => (exposeDefaults ? defineComponent : vue__WEBPACK_IMPORTED_MODULE_4__/* .defineComponent */ .aZ)(options);
 }
 function defineFunctionalComponent(props, render) {
   render.props = props;
@@ -78717,7 +80605,7 @@ function hasScrollbar(el) {
 const IN_BROWSER = typeof window !== 'undefined';
 const SUPPORTS_INTERSECTION = IN_BROWSER && 'IntersectionObserver' in window;
 const SUPPORTS_TOUCH = IN_BROWSER && ('ontouchstart' in window || window.navigator.maxTouchPoints > 0);
-const SUPPORTS_FOCUS_VISIBLE = IN_BROWSER && typeof CSS !== 'undefined' && CSS.supports('selector(:focus-visible)');
+const SUPPORTS_FOCUS_VISIBLE = IN_BROWSER && typeof CSS !== 'undefined' && typeof CSS.supports !== 'undefined' && CSS.supports('selector(:focus-visible)');
 
 /***/ }),
 
@@ -78735,6 +80623,7 @@ const SUPPORTS_FOCUS_VISIBLE = IN_BROWSER && typeof CSS !== 'undefined' && CSS.s
 /* harmony export */   "F7": function() { return /* binding */ isOn; },
 /* harmony export */   "FT": function() { return /* binding */ wrapInArray; },
 /* harmony export */   "Kn": function() { return /* binding */ isObject; },
+/* harmony export */   "L7": function() { return /* binding */ focusChild; },
 /* harmony export */   "MT": function() { return /* binding */ createRange; },
 /* harmony export */   "PU": function() { return /* binding */ CircularBuffer; },
 /* harmony export */   "S3": function() { return /* binding */ destructComputed; },
@@ -78743,10 +80632,12 @@ const SUPPORTS_FOCUS_VISIBLE = IN_BROWSER && typeof CSS !== 'undefined' && CSS.s
 /* harmony export */   "as": function() { return /* binding */ EventProp; },
 /* harmony export */   "bY": function() { return /* binding */ findChildrenWithProvide; },
 /* harmony export */   "dr": function() { return /* binding */ callEvent; },
+/* harmony export */   "ef": function() { return /* binding */ focusableChildren; },
 /* harmony export */   "ei": function() { return /* binding */ pick; },
-/* harmony export */   "ff": function() { return /* binding */ keyValues; },
 /* harmony export */   "kb": function() { return /* binding */ convertToUnit; },
+/* harmony export */   "keyValues": function() { return /* binding */ keyValues; },
 /* harmony export */   "mA": function() { return /* binding */ toKebabCase; },
+/* harmony export */   "pC": function() { return /* binding */ getDecimals; },
 /* harmony export */   "q9": function() { return /* binding */ includes; },
 /* harmony export */   "qF": function() { return /* binding */ getPropertyFromItem; },
 /* harmony export */   "qy": function() { return /* binding */ padEnd; },
@@ -78756,7 +80647,7 @@ const SUPPORTS_FOCUS_VISIBLE = IN_BROWSER && typeof CSS !== 'undefined' && CSS.s
 /* harmony export */   "vZ": function() { return /* binding */ deepEqual; },
 /* harmony export */   "yo": function() { return /* binding */ chunk; }
 /* harmony export */ });
-/* unused harmony exports getNestedValue, getZIndex, arrayDiff, groupItems, defaultFilter, searchItems, debounce, throttle, getPrefixedSlots, camelizeObjectKeys, fillArray, flattenFragments, randomHexColor, findChildren */
+/* unused harmony exports getNestedValue, getZIndex, arrayDiff, groupItems, defaultFilter, searchItems, debounce, throttle, getPrefixedSlots, padStart, camelizeObjectKeys, fillArray, flattenFragments, randomHexColor, findChildren */
 /* harmony import */ var core_js_modules_es_array_push_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(7658);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4870);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(3396);
@@ -78930,11 +80821,11 @@ const keyValues = Object.freeze({
 function keys(o) {
   return Object.keys(o);
 }
-function pick(obj, paths) {
+function pick(obj, paths, exclude) {
   const found = Object.create(null);
   const rest = Object.create(null);
   for (const key in obj) {
-    if (paths.some(path => path instanceof RegExp ? path.test(key) : path === key)) {
+    if (paths.some(path => path instanceof RegExp ? path.test(key) : path === key) && !exclude?.some(path => path === key)) {
       found[key] = obj[key];
     } else {
       rest[key] = obj[key];
@@ -79033,9 +80924,17 @@ function clamp(value) {
   let max = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 1;
   return Math.max(min, Math.min(max, value));
 }
+function getDecimals(value) {
+  const trimmedStr = value.toString().trim();
+  return trimmedStr.includes('.') ? trimmedStr.length - trimmedStr.indexOf('.') - 1 : 0;
+}
 function padEnd(str, length) {
   let char = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : '0';
   return str + char.repeat(Math.max(0, length - str.length));
+}
+function padStart(str, length) {
+  let char = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : '0';
+  return char.repeat(Math.max(0, length - str.length)) + str;
 }
 function chunk(str) {
   let size = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1;
@@ -79201,7 +81100,7 @@ function includes(arr, val) {
 }
 const onRE = /^on[^a-z]/;
 const isOn = key => onRE.test(key);
-const EventProp = [Function, Array];
+const EventProp = () => [Function, Array];
 function hasEvent(props, name) {
   name = 'on' + (0,vue__WEBPACK_IMPORTED_MODULE_3__/* .capitalize */ .kC)(name);
   return !!(props[name] || props[`${name}Once`] || props[`${name}Capture`] || props[`${name}OnceCapture`] || props[`${name}CaptureOnce`]);
@@ -79216,6 +81115,32 @@ function callEvent(handler) {
     }
   } else if (typeof handler === 'function') {
     handler(...args);
+  }
+}
+function focusableChildren(el) {
+  const targets = ['button', '[href]', 'input:not([type="hidden"])', 'select', 'textarea', '[tabindex]'].map(s => `${s}:not([tabindex="-1"]):not([disabled])`).join(', ');
+  return [...el.querySelectorAll(targets)];
+}
+function focusChild(el, location) {
+  const focusable = focusableChildren(el);
+  const idx = focusable.indexOf(document.activeElement);
+  if (!location) {
+    if (!el.contains(document.activeElement)) {
+      focusable[0]?.focus();
+    }
+  } else if (location === 'first') {
+    focusable[0]?.focus();
+  } else if (location === 'last') {
+    focusable.at(-1)?.focus();
+  } else {
+    let _el;
+    let idxx = idx;
+    const inc = location === 'next' ? 1 : -1;
+    do {
+      idxx += inc;
+      _el = focusable[idxx];
+    } while ((!_el || _el.offsetParent == null) && idxx < focusable.length && idxx >= 0);
+    if (_el) _el.focus();else focusChild(el, location === 'next' ? 'first' : 'last');
   }
 }
 
@@ -79300,13 +81225,13 @@ function useRender(render) {
 /***/ (function(module) {
 
 "use strict";
-module.exports = JSON.parse('{"name":"pjcan","version":"0.3.6","private":true,"description":"CanBus project for Mazda 3","author":"PJ82. Spiridonov Vladislav","scripts":{"serve":"vue-cli-service serve","build":"vue-cli-service build","lint":"vue-cli-service lint"},"dependencies":{"@egjs/vue3-flicking":"^4.10.2","@mdi/font":"7.0.96","axios":"^1.1.3","bitset":"^5.1.1","core-js":"^3.26.0","eventemitter3":"^4.0.7","moment":"^2.29.4","register-service-worker":"^1.7.2","roboto-fontface":"*","screenfull":"^6.0.2","vue":"^3.2.41","vue-i18n":"^9.2.2","vue-router":"^4.1.6","vue3-toastify":"^0.0.3","vuedraggable":"^2.24.3","vuetify":"^3.1.5","vuex":"^4.1.0","webfontloader":"^1.6.28"},"devDependencies":{"@types/node":"^12.0.2","@types/webfontloader":"^1.6.29","@typescript-eslint/eslint-plugin":"^5.42.0","@typescript-eslint/parser":"^5.42.0","@vue/cli-plugin-babel":"~5.0.8","@vue/cli-plugin-eslint":"~5.0.8","@vue/cli-plugin-pwa":"~5.0.8","@vue/cli-plugin-router":"~5.0.8","@vue/cli-plugin-typescript":"~5.0.8","@vue/cli-plugin-vuex":"~5.0.8","@vue/cli-service":"~5.0.8","@vue/eslint-config-typescript":"^11.0.2","@vueuse/core":"^9.4.0","eslint":"^8.26.0","eslint-config-prettier":"^8.5.0","eslint-plugin-prettier":"^4.2.1","eslint-plugin-vue":"^9.7.0","prettier":"^2.7.1","sass":"^1.56.0","sass-loader":"^13.1.0","script-ext-html-webpack-plugin":"^2.1.5","typescript":"~4.8.4","vue-cli-plugin-vuetify":"~2.5.8","webpack-plugin-vuetify":"^2.0.0"},"eslintConfig":{"root":true,"env":{"node":true},"extends":["plugin:vue/vue3-essential","eslint:recommended","@vue/typescript/recommended","plugin:prettier/recommended"],"parserOptions":{"ecmaVersion":2020},"rules":{}},"browserslist":["> 1%","last 2 versions","not dead","not ie 11"],"productName":"PJCan App"}');
+module.exports = JSON.parse('{"name":"pjcan","version":"0.3.7","private":true,"description":"CanBus project for Mazda 3","author":"PJ82. Spiridonov Vladislav","scripts":{"serve":"vue-cli-service serve","build":"vue-cli-service build","lint":"vue-cli-service lint"},"dependencies":{"@egjs/vue3-flicking":"^4.10.2","@mdi/font":"7.0.96","axios":"^1.1.3","bitset":"^5.1.1","core-js":"^3.26.0","eventemitter3":"^4.0.7","moment":"^2.29.4","register-service-worker":"^1.7.2","roboto-fontface":"*","screenfull":"^6.0.2","vue":"^3.2.41","vue-i18n":"^9.2.2","vue-router":"^4.1.6","vue3-toastify":"^0.0.3","vuedraggable":"^2.24.3","vuetify":"^3.1.5","vuex":"^4.1.0","webfontloader":"^1.6.28"},"devDependencies":{"@types/node":"^12.0.2","@types/webfontloader":"^1.6.29","@typescript-eslint/eslint-plugin":"^5.42.0","@typescript-eslint/parser":"^5.42.0","@vue/cli-plugin-babel":"~5.0.8","@vue/cli-plugin-eslint":"~5.0.8","@vue/cli-plugin-pwa":"~5.0.8","@vue/cli-plugin-router":"~5.0.8","@vue/cli-plugin-typescript":"~5.0.8","@vue/cli-plugin-vuex":"~5.0.8","@vue/cli-service":"~5.0.8","@vue/eslint-config-typescript":"^11.0.2","@vueuse/core":"^9.4.0","eslint":"^8.26.0","eslint-config-prettier":"^8.5.0","eslint-plugin-prettier":"^4.2.1","eslint-plugin-vue":"^9.7.0","prettier":"^2.7.1","sass":"^1.56.0","sass-loader":"^13.1.0","script-ext-html-webpack-plugin":"^2.1.5","typescript":"~4.8.4","vue-cli-plugin-vuetify":"~2.5.8","webpack-plugin-vuetify":"^2.0.0"},"eslintConfig":{"root":true,"env":{"node":true},"extends":["plugin:vue/vue3-essential","eslint:recommended","@vue/typescript/recommended","plugin:prettier/recommended"],"parserOptions":{"ecmaVersion":2020},"rules":{}},"browserslist":["> 1%","last 2 versions","not dead","not ie 11"],"productName":"PJCan App"}');
 
 /***/ })
 
 },
 /******/ function(__webpack_require__) { // webpackRuntimeModules
 /******/ var __webpack_exec__ = function(moduleId) { return __webpack_require__(__webpack_require__.s = moduleId); }
-/******/ var __webpack_exports__ = (__webpack_exec__(4723));
+/******/ var __webpack_exports__ = (__webpack_exec__(441));
 /******/ }
 ]);

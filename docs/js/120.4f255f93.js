@@ -1,7 +1,7 @@
 "use strict";
 (self["webpackChunkpjcan"] = self["webpackChunkpjcan"] || []).push([[120],{
 
-/***/ 7637:
+/***/ 9363:
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 
@@ -24,7 +24,7 @@ name: @egjs/list-differ
 license: MIT
 author: NAVER Corp.
 repository: https://github.com/naver/egjs-list-differ
-version: 1.0.0
+version: 1.0.1
 */
 /*
 egjs-list-differ
@@ -390,7 +390,7 @@ name: @egjs/component
 license: MIT
 author: NAVER Corp.
 repository: https://github.com/naver/egjs-component
-version: 3.0.2
+version: 3.0.4
 */
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation.
@@ -457,13 +457,12 @@ var isUndefined = function (value) {
   return typeof value === "undefined";
 };
 
+// This class name is not matched to file name intentionally
 /**
  * Event class to provide additional properties
  * @ko Component에서 추가적인 프로퍼티를 제공하는 이벤트 클래스
  */
-
-var ComponentEvent = /*#__PURE__*/
-function () {
+var ComponentEvent = /*#__PURE__*/function () {
   /**
    * Create a new instance of ComponentEvent.
    * @ko ComponentEvent의 새로운 인스턴스를 생성한다.
@@ -476,8 +475,8 @@ function () {
     if (props) {
       try {
         for (var _b = __values(Object.keys(props)), _c = _b.next(); !_c.done; _c = _b.next()) {
-          var key = _c.value; // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-
+          var key = _c.value;
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
           this[key] = props[key];
         }
       } catch (e_1_1) {
@@ -498,7 +497,6 @@ function () {
    * Stop the event. {@link ComponentEvent#isCanceled} will return `true` after.
    * @ko 이벤트를 중단한다. 이후 {@link ComponentEvent#isCanceled}가 `true`를 반환한다.
    */
-
   var __proto = ComponentEvent.prototype;
   __proto.stop = function () {
     this._canceled = true;
@@ -508,7 +506,6 @@ function () {
    * @ko {@link ComponentEvent#stop}이 호출되었는지 여부를 반환한다.
    * @return {boolean} A boolean value that indicates whether {@link ComponentEvent#stop} is called before.<ko>이전에 {@link ComponentEvent#stop}이 불려졌는지 여부를 반환한다.</ko>
    */
-
   __proto.isCanceled = function () {
     return this._canceled;
   };
@@ -519,9 +516,7 @@ function () {
  * A class used to manage events in a component
  * @ko 컴포넌트의 이벤트을 관리할 수 있게 하는 클래스
  */
-
-var Component = /*#__PURE__*/
-function () {
+var component_esm_Component = /*#__PURE__*/function () {
   /**
    * @support {"ie": "7+", "ch" : "latest", "ff" : "latest",  "sf" : "latest", "edge" : "latest", "ios" : "7+", "an" : "2.1+ (except 3.x)"}
    */
@@ -569,7 +564,6 @@ function () {
    * // https://github.com/naver/egjs-component/wiki/How-to-make-Component-event-design%3F
    * ```
    */
-
   var __proto = Component.prototype;
   __proto.trigger = function (event) {
     var params = [];
@@ -623,7 +617,6 @@ function () {
    * // Nothing happens
    * ```
    */
-
   __proto.once = function (eventName, handlerToAttach) {
     var _this = this;
     if (typeof eventName === "object" && isUndefined(handlerToAttach)) {
@@ -637,8 +630,8 @@ function () {
         var args = [];
         for (var _i = 0; _i < arguments.length; _i++) {
           args[_i] = arguments[_i];
-        } // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-
+        }
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
         handlerToAttach.apply(void 0, __spread(args));
         _this.off(eventName, listener_1);
       };
@@ -664,7 +657,6 @@ function () {
    * }
    * ```
    */
-
   __proto.hasOn = function (eventName) {
     return !!this._eventHandler[eventName];
   };
@@ -690,7 +682,6 @@ function () {
    * }
    * ```
    */
-
   __proto.on = function (eventName, handlerToAttach) {
     if (typeof eventName === "object" && isUndefined(handlerToAttach)) {
       var eventHash = eventName;
@@ -730,15 +721,14 @@ function () {
    * }
    * ```
    */
-
   __proto.off = function (eventName, handlerToDetach) {
-    var e_1, _a; // Detach all event handlers.
-
+    var e_1, _a;
+    // Detach all event handlers.
     if (isUndefined(eventName)) {
       this._eventHandler = {};
       return this;
-    } // Detach all handlers for eventname or detach event handlers by object.
-
+    }
+    // Detach all handlers for eventname or detach event handlers by object.
     if (isUndefined(handlerToDetach)) {
       if (typeof eventName === "string") {
         delete this._eventHandler[eventName];
@@ -750,8 +740,8 @@ function () {
         }
         return this;
       }
-    } // Detach single event handler
-
+    }
+    // Detach single event handler
     var handlerList = this._eventHandler[eventName];
     if (handlerList) {
       var idx = 0;
@@ -790,8 +780,7 @@ function () {
    * Component.VERSION;  // ex) 3.0.0
    * @memberof Component
    */
-
-  Component.VERSION = "3.0.2";
+  Component.VERSION = "3.0.4";
   return Component;
 }();
 
@@ -799,7 +788,7 @@ function () {
  * Copyright (c) 2015 NAVER Corp.
  * egjs projects are licensed under the MIT license
  */
-
+// eslint-disable-next-line @typescript-eslint/naming-convention, @typescript-eslint/no-unsafe-assignment
 var ComponentEvent$1 = ComponentEvent;
 
 /*
@@ -807,7 +796,7 @@ var ComponentEvent$1 = ComponentEvent;
  * egjs projects are licensed under the MIT license
  */
 
-/* harmony default export */ var component_esm = (Component);
+/* harmony default export */ var component_esm = (component_esm_Component);
 
 ;// CONCATENATED MODULE: ./node_modules/@egjs/agent/dist/agent.esm.js
 /*
@@ -1190,7 +1179,7 @@ function agent(userAgent) {
 }
 /* harmony default export */ var agent_esm = (agent);
 
-;// CONCATENATED MODULE: ./node_modules/@cfcs/core/dist/cfcs.esm.js
+;// CONCATENATED MODULE: ./node_modules/@egjs/axes/node_modules/@cfcs/core/dist/cfcs.esm.js
 /*
 Copyright (c) NAVER Crop.
 name: @cfcs/core
@@ -1355,7 +1344,7 @@ function ReactiveSubscribe(Constructor) {
   var prototype = Constructor.prototype;
   injectReactiveSubscribe(prototype);
 }
-function reactive(setup) {
+function cfcs_esm_reactive(setup) {
   var result = isFunction(setup) ? setup() : setup;
   var reactiveObject = {};
   keys(result).forEach(function (name) {
@@ -1434,7 +1423,7 @@ name: @egjs/axes
 license: MIT
 author: NAVER Corp.
 repository: https://github.com/naver/egjs-axes
-version: 3.8.1
+version: 3.8.4
 */
 
 
@@ -1524,6 +1513,12 @@ var DIRECTION_ALL = 2 | 4 | 8 | 16;
 var MOUSE_LEFT = "left";
 var MOUSE_RIGHT = "right";
 var MOUSE_MIDDLE = "middle";
+var ANY = "any";
+var NONE = "none";
+var SHIFT = "shift";
+var CTRL = "ctrl";
+var ALT = "alt";
+var META = "meta";
 var VELOCITY_INTERVAL = 16;
 var AXES_METHODS = ["connect", "disconnect", "get", "setTo", "setBy", "setOptions", "setAxis", "stopAnimation", "updateAnimation", "isBounceArea"];
 var AXES_EVENTS = ["hold", "release", "change", "animationStart", "animationEnd", "finish"];
@@ -1543,6 +1538,9 @@ var TRANSFORM = function () {
   return "";
 }();
 var PREVENT_DRAG_CSSPROPS = {
+  "-webkit-user-select": "none",
+  "-ms-user-select": "none",
+  "-moz-user-select": "none",
   "user-select": "none",
   "-webkit-user-drag": "none"
 };
@@ -2323,6 +2321,12 @@ var SUPPORT_TOUCH = ("ontouchstart" in win);
 var SUPPORT_POINTER = ("PointerEvent" in win);
 var SUPPORT_MSPOINTER = ("MSPointerEvent" in win);
 var SUPPORT_POINTER_EVENTS = SUPPORT_POINTER || SUPPORT_MSPOINTER;
+var isValidKey = function (event, inputKey) {
+  if (!inputKey || inputKey.indexOf(ANY) > -1 || inputKey.indexOf(NONE) > -1 && !event.shiftKey && !event.ctrlKey && !event.altKey && !event.metaKey || inputKey.indexOf(SHIFT) > -1 && event.shiftKey || inputKey.indexOf(CTRL) > -1 && event.ctrlKey || inputKey.indexOf(ALT) > -1 && event.altKey || inputKey.indexOf(META) > -1 && event.metaKey) {
+    return true;
+  }
+  return false;
+};
 var EventInput = /*#__PURE__*/
 function () {
   function EventInput() {
@@ -2391,10 +2395,13 @@ function () {
     return button ? button : null;
   };
   __proto._isTouchEvent = function (event) {
-    return event.type.indexOf("touch") > -1;
+    return event.type && event.type.indexOf("touch") > -1;
   };
   __proto._isValidButton = function (button, inputButton) {
     return inputButton.indexOf(button) > -1;
+  };
+  __proto._isValidEvent = function (event, inputKey, inputButton) {
+    return (!inputKey || isValidKey(event, inputKey)) && (!inputButton || this._isValidButton(this._getButton(event), inputButton));
   };
   __proto._preventMouseButton = function (event, button) {
     if (button === MOUSE_RIGHT) {
@@ -2416,16 +2423,16 @@ function (_super) {
     return _this;
   }
   var __proto = MouseEventInput.prototype;
-  __proto.onEventStart = function (event, inputButton) {
+  __proto.onEventStart = function (event, inputKey, inputButton) {
     var button = this._getButton(event);
-    if (inputButton && !this._isValidButton(button, inputButton)) {
+    if (!this._isValidEvent(event, inputKey, inputButton)) {
       return null;
     }
     this._preventMouseButton(event, button);
     return this.extendEvent(event);
   };
-  __proto.onEventMove = function (event, inputButton) {
-    if (inputButton && !this._isValidButton(this._getButton(event), inputButton)) {
+  __proto.onEventMove = function (event, inputKey, inputButton) {
+    if (!this._isValidEvent(event, inputKey, inputButton)) {
       return null;
     }
     return this.extendEvent(event);
@@ -2477,11 +2484,17 @@ function (_super) {
     return _this;
   }
   var __proto = TouchEventInput.prototype;
-  __proto.onEventStart = function (event) {
+  __proto.onEventStart = function (event, inputKey) {
     this._baseTouches = event.touches;
+    if (!this._isValidEvent(event, inputKey)) {
+      return null;
+    }
     return this.extendEvent(event);
   };
-  __proto.onEventMove = function (event) {
+  __proto.onEventMove = function (event, inputKey) {
+    if (!this._isValidEvent(event, inputKey)) {
+      return null;
+    }
     return this.extendEvent(event);
   };
   __proto.onEventEnd = function (event) {
@@ -2538,17 +2551,17 @@ function (_super) {
     return _this;
   }
   var __proto = PointerEventInput.prototype;
-  __proto.onEventStart = function (event, inputButton) {
+  __proto.onEventStart = function (event, inputKey, inputButton) {
     var button = this._getButton(event);
-    if (inputButton && !this._isValidButton(button, inputButton)) {
+    if (!this._isValidEvent(event, inputKey, inputButton)) {
       return null;
     }
     this._preventMouseButton(event, button);
     this._updatePointerEvent(event);
     return this.extendEvent(event);
   };
-  __proto.onEventMove = function (event, inputButton) {
-    if (inputButton && !this._isValidButton(this._getButton(event), inputButton)) {
+  __proto.onEventMove = function (event, inputKey, inputButton) {
+    if (!this._isValidEvent(event, inputKey, inputButton)) {
       return null;
     }
     this._updatePointerEvent(event);
@@ -2627,19 +2640,19 @@ function (_super) {
     return _this;
   }
   var __proto = TouchMouseEventInput.prototype;
-  __proto.onEventStart = function (event, inputButton) {
+  __proto.onEventStart = function (event, inputKey, inputButton) {
     var button = this._getButton(event);
     if (this._isTouchEvent(event)) {
       this._baseTouches = event.touches;
     }
-    if (inputButton && !this._isValidButton(button, inputButton)) {
+    if (!this._isValidEvent(event, inputKey, inputButton)) {
       return null;
     }
     this._preventMouseButton(event, button);
     return this.extendEvent(event);
   };
-  __proto.onEventMove = function (event, inputButton) {
-    if (inputButton && !this._isValidButton(this._getButton(event), inputButton)) {
+  __proto.onEventMove = function (event, inputKey, inputButton) {
+    if (!this._isValidEvent(event, inputKey, inputButton)) {
       return null;
     }
     return this.extendEvent(event);
@@ -2749,6 +2762,13 @@ var convertInputType = function (inputType) {
   }
   return null;
 };
+function getAddEventOptions(eventName) {
+  // The passive default value of the touch event is true.
+  // If not a touch event, return false to support ie11
+  return eventName.indexOf("touch") > -1 ? {
+    passive: false
+  } : false;
+}
 var InputObserver = /*#__PURE__*/
 function () {
   function InputObserver(_a) {
@@ -2911,7 +2931,7 @@ function () {
         var max = opt.range[1];
         var out = opt.bounce;
         var circular = opt.circular;
-        if (circular && (circular[0] || circular[1])) {
+        if (circular[0] && v < min || circular[1] && v > max) {
           return v;
         } else if (v < min) {
           // left
@@ -3805,7 +3825,7 @@ function (_super) {
    * ```
    */
 
-  Axes.VERSION = "3.8.1";
+  Axes.VERSION = "3.8.4";
   /* eslint-enable */
 
   /**
@@ -3904,6 +3924,19 @@ var getDirectionByAngle = function (angle, thresholdAngle) {
  * - touch: 터치 입력 장치
  * - mouse: 마우스
  * - pointer: 마우스 및 터치</ko>
+ * @param {String[]} [inputKey=["any"]] List of key combinations to allow input
+ * - any: any key
+ * - shift: shift key
+ * - ctrl: ctrl key and pinch gesture on the trackpad
+ * - alt: alt key
+ * - meta: meta key
+ * - none: none of these keys are pressed <ko>입력을 허용할 키 조합 목록
+ * - any: 아무 키
+ * - shift: shift 키
+ * - ctrl: ctrl 키 및 트랙패드의 pinch 제스쳐
+ * - alt: alt 키
+ * - meta: meta 키
+ * - none: 아무 키도 눌리지 않은 상태 </ko>
  * @param {String[]} [inputButton=["left"]] List of buttons to allow input
  * - left: Left mouse button and normal touch
  * - middle: Mouse wheel press
@@ -3972,6 +4005,7 @@ function () {
     this.element = $(el);
     this.options = __assign({
       inputType: ["touch", "mouse", "pointer"],
+      inputKey: [ANY],
       inputButton: [MOUSE_LEFT],
       scale: [1, 1],
       thresholdAngle: 45,
@@ -4061,9 +4095,11 @@ function () {
     return this;
   };
   __proto._onPanstart = function (event) {
-    var inputButton = this.options.inputButton;
+    var _a = this.options,
+      inputKey = _a.inputKey,
+      inputButton = _a.inputButton;
     var activeEvent = this._activeEvent;
-    var panEvent = activeEvent.onEventStart(event, inputButton);
+    var panEvent = activeEvent.onEventStart(event, inputKey, inputButton);
     if (!panEvent || !this._enabled || activeEvent.getTouches(event, inputButton) > 1) {
       return;
     }
@@ -4081,12 +4117,14 @@ function () {
     var _this = this;
     var _a = this.options,
       iOSEdgeSwipeThreshold = _a.iOSEdgeSwipeThreshold,
+      preventClickOnDrag = _a.preventClickOnDrag,
       releaseOnScroll = _a.releaseOnScroll,
+      inputKey = _a.inputKey,
       inputButton = _a.inputButton,
       threshold = _a.threshold,
       thresholdAngle = _a.thresholdAngle;
     var activeEvent = this._activeEvent;
-    var panEvent = activeEvent.onEventMove(event, inputButton);
+    var panEvent = activeEvent.onEventMove(event, inputKey, inputButton);
     var touches = activeEvent.getTouches(event, inputButton);
     if (touches === 0 || releaseOnScroll && panEvent && !panEvent.srcEvent.cancelable) {
       this._onPanend(event);
@@ -4131,7 +4169,7 @@ function () {
     }
     panEvent.preventSystemEvent = prevent;
     if (prevent && (this._isOverThreshold || distance >= threshold)) {
-      this._dragged = true;
+      this._dragged = preventClickOnDrag;
       this._isOverThreshold = true;
       this._observer.change(this, panEvent, toAxis(this.axes, offset));
     }
@@ -4154,14 +4192,10 @@ function () {
   __proto._attachWindowEvent = function (activeEvent) {
     var _this = this;
     activeEvent === null || activeEvent === void 0 ? void 0 : activeEvent.move.forEach(function (event) {
-      window.addEventListener(event, _this._onPanmove, {
-        passive: false
-      });
+      window.addEventListener(event, _this._onPanmove, getAddEventOptions(event));
     });
     activeEvent === null || activeEvent === void 0 ? void 0 : activeEvent.end.forEach(function (event) {
-      window.addEventListener(event, _this._onPanend, {
-        passive: false
-      });
+      window.addEventListener(event, _this._onPanend, getAddEventOptions(event));
     });
   };
   __proto._detachWindowEvent = function (activeEvent) {
@@ -4193,9 +4227,7 @@ function () {
     this._observer = observer;
     this._enabled = true;
     this._activeEvent = activeEvent;
-    if (this.options.preventClickOnDrag) {
-      element.addEventListener("click", this._preventClickWhenDragged, true);
-    }
+    element.addEventListener("click", this._preventClickWhenDragged, true);
     activeEvent.start.forEach(function (event) {
       element.addEventListener(event, _this._onPanstart);
     }); // adding event listener to element prevents invalid behavior in iOS Safari
@@ -4209,9 +4241,7 @@ function () {
     var activeEvent = this._activeEvent;
     var element = this.element;
     if (element) {
-      if (this.options.preventClickOnDrag) {
-        element.removeEventListener("click", this._preventClickWhenDragged, true);
-      }
+      element.removeEventListener("click", this._preventClickWhenDragged, true);
       activeEvent === null || activeEvent === void 0 ? void 0 : activeEvent.start.forEach(function (event) {
         element.removeEventListener(event, _this._onPanstart);
       });
@@ -4268,8 +4298,11 @@ var RotatePanInput = /*#__PURE__*/
     this.axes = axes;
   };
   __proto._onPanstart = function (event) {
+    var _a = this.options,
+      inputKey = _a.inputKey,
+      inputButton = _a.inputButton;
     var activeEvent = this._activeEvent;
-    var panEvent = activeEvent.onEventStart(event, this.options.inputButton);
+    var panEvent = activeEvent.onEventStart(event, inputKey, inputButton);
     if (!panEvent || !this.isEnabled()) {
       return;
     }
@@ -4287,8 +4320,11 @@ var RotatePanInput = /*#__PURE__*/
     activeEvent.prevEvent = panEvent;
   };
   __proto._onPanmove = function (event) {
+    var _a = this.options,
+      inputKey = _a.inputKey,
+      inputButton = _a.inputButton;
     var activeEvent = this._activeEvent;
-    var panEvent = activeEvent.onEventMove(event, this.options.inputButton);
+    var panEvent = activeEvent.onEventMove(event, inputKey, inputButton);
     if (!panEvent || !this.isEnabled()) {
       return;
     }
@@ -4582,6 +4618,19 @@ var PinchInput = /*#__PURE__*/
 /**
  * @typedef {Object} WheelInputOption The option object of the eg.Axes.WheelInput module
  * @ko eg.Axes.WheelInput 모듈의 옵션 객체
+ * @param {String[]} [inputKey=["any"]] List of key combinations to allow input
+ * - any: any key
+ * - shift: shift key
+ * - ctrl: ctrl key and pinch gesture on the trackpad
+ * - alt: alt key
+ * - meta: meta key
+ * - none: none of these keys are pressed <ko>입력을 허용할 키 조합 목록
+ * - any: 아무 키
+ * - shift: shift 키
+ * - ctrl: ctrl 키 및 트랙패드의 pinch 제스쳐
+ * - alt: alt 키
+ * - meta: meta 키
+ * - none: 아무 키도 눌리지 않은 상태 </ko>
  * @param {Number} [scale=1] Coordinate scale that a user can move<ko>사용자의 동작으로 이동하는 좌표의 배율</ko>
  * @param {Number} [releaseDelay=300] Millisecond that trigger release event after last input<ko>마지막 입력 이후 release 이벤트가 트리거되기까지의 밀리초</ko>
  * @param {Boolean} [useNormalized=true] Whether to calculate scroll speed the same in all browsers<ko>모든 브라우저에서 스크롤 속도를 동일하게 처리할지 여부</ko>
@@ -4625,6 +4674,7 @@ var WheelInput = /*#__PURE__*/
     this._timer = null;
     this.element = $(el);
     this.options = __assign({
+      inputKey: [ANY],
       scale: 1,
       releaseDelay: 300,
       useNormalized: true,
@@ -4687,7 +4737,7 @@ var WheelInput = /*#__PURE__*/
   };
   __proto._onWheel = function (event) {
     var _this = this;
-    if (!this._enabled) {
+    if (!this._enabled || !isValidKey(event, this.options.inputKey)) {
       return;
     }
     var offset = this._getOffset([event.deltaY, event.deltaX], [useDirection(DIRECTION_VERTICAL, this._direction), useDirection(DIRECTION_HORIZONTAL, this._direction)]);
@@ -4954,19 +5004,123 @@ var REACTIVE_AXES = {
 
 /* harmony default export */ var axes_esm = (Axes);
 
-;// CONCATENATED MODULE: ./node_modules/@egjs/imready/dist/imready.esm.js
+;// CONCATENATED MODULE: ./node_modules/@cfcs/core/dist/cfcs.esm.js
 
 /*
-Copyright (c) 2020-present NAVER Corp.
-name: @egjs/imready
+Copyright (c) NAVER Crop.
+name: @cfcs/core
 license: MIT
-author: NAVER Corp.
-repository: https://github.com/naver/egjs-imready
-version: 1.3.0
+author: NAVER Crop.
+repository: https://github.com/naver/cfcs
+version: 0.0.24
 */
 
 
-/*! *****************************************************************************
+/**
+ * cfcs
+ * Copyright (c) 2022-present NAVER Corp.
+ * MIT license
+ */
+
+/**
+ * @hidden
+ */
+function cfcs_esm_keys(obj) {
+  return Object.keys(obj);
+}
+/**
+ * @hidden
+ */
+
+function cfcs_esm_camelize(str) {
+  return str.replace(/[\s-_]([a-z])/g, function (all, letter) {
+    return letter.toUpperCase();
+  });
+}
+/**
+ * @hidden
+ */
+
+function cfcs_esm_isString(val) {
+  return typeof val === "string";
+}
+/**
+ * @hidden
+ */
+
+function cfcs_esm_isObject(val) {
+  return typeof val === "object";
+}
+/**
+ * @hidden
+ */
+
+function cfcs_esm_isFunction(val) {
+  return typeof val === "function";
+}
+
+/**
+ * @hidden
+ */
+
+function findTarget(target) {
+  var el;
+  if (!target) {
+    return null;
+  }
+  if (cfcs_esm_isString(target)) {
+    el = document.querySelector(target);
+  } else if (target instanceof Element) {
+    el = target;
+  } else if ("value" in target || "current" in target) {
+    el = target.value || target.current;
+  }
+  return el;
+}
+/**
+ * @description Sets the name of the class method to be exposed to the outside.
+ * @category DOM
+ * @return Property Decorator
+ * @example
+ * ```ts
+ * import { withClassMethods } from "@cfcs/core";
+ *
+ * class YourFrameworkComponent {
+ *   @withClassMethod(METHOD_NAMES)
+ *   inst = new YourComponent();
+ * }
+ * ```
+ */
+
+function cfcs_esm_withClassMethods(methods) {
+  return function (prototype, memberName) {
+    methods.forEach(function (name) {
+      if (name in prototype) {
+        return;
+      }
+      prototype[name] = function () {
+        var _a;
+        var args = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+          args[_i] = arguments[_i];
+        }
+        var result = (_a = this[memberName])[name].apply(_a, args); // fix `this` type to return your own `class` instance to the instance using the decorator.
+
+        if (result === this[memberName]) {
+          return this;
+        } else {
+          return result;
+        }
+      };
+    });
+  };
+}
+var cfcs_esm_OBSERVERS_PATH = "__observers__";
+var COMPUTED_PATH = "__computed__";
+var CFCS_DETECTED_DEPENDENCIES_VERSION = 1;
+var CFCS_DETECTED_DEPENDENCIES = "__CFCS_DETECTED_DEPENDENCIES__";
+
+/******************************************************************************
 Copyright (c) Microsoft Corporation.
 
 Permission to use, copy, modify, and/or distribute this software for any
@@ -4982,6 +5136,758 @@ PERFORMANCE OF THIS SOFTWARE.
 ***************************************************************************** */
 
 /* global Reflect, Promise */
+var cfcs_esm_extendStatics = function (d, b) {
+  cfcs_esm_extendStatics = Object.setPrototypeOf || {
+    __proto__: []
+  } instanceof Array && function (d, b) {
+    d.__proto__ = b;
+  } || function (d, b) {
+    for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p];
+  };
+  return cfcs_esm_extendStatics(d, b);
+};
+function cfcs_esm_extends(d, b) {
+  if (typeof b !== "function" && b !== null) throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+  cfcs_esm_extendStatics(d, b);
+  function __() {
+    this.constructor = d;
+  }
+  d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+}
+function __spreadArray(to, from, pack) {
+  if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+    if (ar || !(i in from)) {
+      if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+      ar[i] = from[i];
+    }
+  }
+  return to.concat(ar || Array.prototype.slice.call(from));
+}
+function getDetectedStack() {
+  // Version issues do not occur when you access the native object in the global.
+  Object[CFCS_DETECTED_DEPENDENCIES] = Object[CFCS_DETECTED_DEPENDENCIES] || {};
+  var versionList = Object[CFCS_DETECTED_DEPENDENCIES];
+  versionList[CFCS_DETECTED_DEPENDENCIES_VERSION] = versionList[CFCS_DETECTED_DEPENDENCIES_VERSION] || [];
+  return versionList[CFCS_DETECTED_DEPENDENCIES_VERSION];
+}
+function getCurrentDetected() {
+  var stack = getDetectedStack();
+  return stack[stack.length - 1];
+}
+function detectDependencies(host) {
+  var stack = getDetectedStack();
+  var observers = [];
+  var detected = {
+    host: host,
+    observers: observers,
+    push: function (observer) {
+      if (host !== observer && observers.indexOf(observer) === -1) {
+        observers.push(observer);
+      }
+    }
+  };
+  stack.push(detected);
+  return detected;
+}
+function endDetectDependencies() {
+  var stack = getDetectedStack();
+  return stack.pop();
+}
+
+/**
+ * Creates a mutable ref object. You can access the `.current` value and detect the value change through `.subscribe`.
+ * @category Reactive
+ * @see observe
+ */
+
+var cfcs_esm_Observer = /*#__PURE__*/
+(/* unused pure expression or super */ null && (function () {
+  /**
+   *
+   */
+  function Observer(value) {
+    this._emitter = new Component();
+    this._current = value;
+  }
+  var __proto = Observer.prototype;
+  Object.defineProperty(__proto, "current", {
+    /**
+     * return the current value.
+     */
+    get: function () {
+      var currentDetected = getCurrentDetected();
+      currentDetected === null || currentDetected === void 0 ? void 0 : currentDetected.push(this);
+      return this._current;
+    },
+    set: function (value) {
+      this._setCurrent(value);
+    },
+    enumerable: false,
+    configurable: true
+  });
+  /**
+   * When the current value changes, the callback function is called.
+   */
+
+  __proto.subscribe = function (callback) {
+    this.current;
+    this._emitter.on("update", callback);
+    return this;
+  };
+  /**
+   * Cancel the registered subscription through callback.
+   */
+
+  __proto.unsubscribe = function (callback) {
+    this._emitter.off("update", callback);
+    return this;
+  };
+  __proto._setCurrent = function (value) {
+    var prevValue = this._current;
+    var isUpdate = value !== prevValue;
+    this._current = value;
+    if (isUpdate) {
+      this._emitter.trigger("update", value, prevValue);
+    }
+  };
+  /**
+   * @hidden
+   */
+
+  __proto.toString = function () {
+    return "".concat(this.current);
+  };
+  /**
+   * @hidden
+   */
+
+  __proto.valueOf = function () {
+    return this.current;
+  };
+  return Observer;
+}()));
+
+/**
+ * @category Reactive
+ * @hidden
+ */
+
+var ComputedObserver = /*#__PURE__*/
+(/* unused pure expression or super */ null && (function (_super) {
+  cfcs_esm_extends(ComputedObserver, _super);
+  /**
+   * @description Creates a new computed observer from the values of other observers.
+   * It is read-only and if you change the value of the observer used inside the callback, its value will be automatically updated.
+   * @param _computedCallback A function for observers to be computed.
+   */
+
+  function ComputedObserver(_computedCallback) {
+    var _this = _super.call(this) || this;
+    _this._computedCallback = _computedCallback;
+    _this._registered = [];
+    _this._onCheckUpdate = function () {
+      _this._setCurrent(_this.current);
+    };
+    _this._current = _this.current;
+    return _this;
+  }
+  var __proto = ComputedObserver.prototype;
+  Object.defineProperty(__proto, "current", {
+    get: function () {
+      var _this = this;
+      detectDependencies(this);
+      var value = this._computedCallback();
+      var results = endDetectDependencies();
+      this._registered.forEach(function (observer) {
+        observer.unsubscribe(_this._onCheckUpdate);
+      });
+      results.observers.forEach(function (observer) {
+        observer.subscribe(_this._onCheckUpdate);
+      });
+      this._registered = results.observers;
+      return value;
+    },
+    enumerable: false,
+    configurable: true
+  });
+  return ComputedObserver;
+}(cfcs_esm_Observer)));
+function injectObserve(prototype, memberName, publicName) {
+  if (publicName === void 0) {
+    publicName = memberName;
+  }
+  var nextAttributes = {
+    configurable: true,
+    get: function () {
+      return cfcs_esm_getObserver(this, publicName).current;
+    },
+    set: function (value) {
+      cfcs_esm_getObserver(this, publicName, value).current = value;
+    }
+  };
+  Object.defineProperty(prototype, memberName, nextAttributes);
+  if (publicName !== memberName) {
+    Object.defineProperty(prototype, publicName, {
+      configurable: true,
+      get: function () {
+        return cfcs_esm_getObserver(this, publicName).current;
+      }
+    });
+  }
+}
+/**
+ * @description `Observe` is a property decorator and converts the property into a `reactive state`. You can detect its status through `.subscribe`.
+ * @category Reactive-Decorator
+ * @see ReactiveSubscribe
+ * @example
+* ```ts
+import { ReactiveSubscribe, Observe } from "@cfcs/core";
+
+@ReactiveSubscribe
+class Component {
+  // The public name and state name are the same.
+  @Observe value1 = 1;
+  // If you want to set public name and private properties separately
+  @Observe("value2") _value2 = 1;
+
+  constructor() {
+    requestAnimationFrame(() => {
+      this.value1 = 2;
+    });
+  }
+}
+interface C
+```
+ */
+
+function Observe() {
+  var args = [];
+  for (var _i = 0; _i < arguments.length; _i++) {
+    args[_i] = arguments[_i];
+  }
+  if (args.length > 1) {
+    return injectObserve(args[0], args[1]);
+  }
+  return function (prototype, memberName) {
+    return injectObserve(prototype, memberName, args[0]);
+  };
+}
+/**
+ * @hidden
+ */
+
+function cfcs_esm_Reactive() {
+  var args = [];
+  for (var _i = 0; _i < arguments.length; _i++) {
+    args[_i] = arguments[_i];
+  }
+  return Observe.apply(void 0, args);
+}
+
+/**
+ * @hidden
+ */
+
+function cfcs_esm_injectReactiveSubscribe(object) {
+  object["subscribe"] = function (name, callback) {
+    this[name];
+    cfcs_esm_getObserver(this, name).subscribe(callback);
+  };
+  object["unsubscribe"] = function (name, callback) {
+    var _this = this;
+    if (!name) {
+      cfcs_esm_keys(cfcs_esm_getObservers(this)).forEach(function (observerName) {
+        _this.unsubscribe(observerName);
+      });
+      return;
+    }
+    if (!(name in this)) {
+      return;
+    }
+    cfcs_esm_getObserver(this, name).unsubscribe(callback);
+  };
+}
+/**
+ * @description `ReactiveSubscribe` is a class decorator and adds `.subscribe` and `.unsubscribe` methods.
+ * @category Reactive-Decorator
+ * @see Observe
+ * @example
+ * ```ts
+import { ReactiveSubscribe, Observe } from "@cfcs/core";
+
+@ReactiveSubscribe
+class Component {
+  @Observe value1 = 1;
+
+  constructor() {
+    requestAnimationFrame(() => {
+      this.value1 = 2;
+    });
+  }
+}
+
+interface Component extends ReactiveSubscribe<{
+  value1: number;
+  value2: number;
+}> {}
+
+const component = new Component();
+
+// 1
+console.log(component.value1);
+
+component.subscribe("value1", nextValue => {
+  // When the change event occurs => (2, 2)
+  console.log(nextValue, component.value2);
+});
+```
+ */
+
+function cfcs_esm_ReactiveSubscribe(Constructor) {
+  var prototype = Constructor.prototype;
+  cfcs_esm_injectReactiveSubscribe(prototype);
+}
+function makeReactiveObject(setup, all) {
+  var result = cfcs_esm_isFunction(setup) ? setup() : setup;
+  var reactiveObject = {};
+  defineObservers(reactiveObject);
+  cfcs_esm_keys(result).forEach(function (name) {
+    var value = result[name];
+    if (cfcs_esm_isObserver(value)) {
+      cfcs_esm_setObserver(reactiveObject, name, value);
+    } else {
+      cfcs_esm_setObserver(reactiveObject, name, cfcs_esm_observe(value));
+    }
+    Observe(name)(reactiveObject, name);
+  });
+  cfcs_esm_injectReactiveSubscribe(reactiveObject);
+  return reactiveObject;
+}
+/**
+ * @description Make the return value of the corresponding object or function a reactive object.
+ * @category Reactive
+ * @param setup - The target object or function to which reactive is applied
+ * @returns Makes all values into reactive objects.
+ * @example
+ * ```ts
+ * import { reactive } from "@cfcs/core";
+ *
+ * const obj = reactive({
+ *  value1: 1,
+ *  value2: 2,
+ * });
+ *
+ * obj.subscribe("value1", value1 => {
+ *   console.log(value1);
+ * });
+ * obj.value1 = 2;
+ * ```
+ */
+
+function dist_cfcs_esm_reactive(setup) {
+  return makeReactiveObject(setup);
+}
+/**
+ * @description Make the return value of the corresponding object or function a reactive object.
+ * @category Reactive
+ * @param setup - The target object or function to which reactive is applied
+ * @returns Only the values to which observer is applied are objects to which reactive is applied.
+ * @example
+ * ```ts
+ * import { partialReactive, observe } from "@cfcs/core";
+ *
+ * const value1 = observe(1);
+ * const value2 = observe(2);
+ * const obj = partialReactive({
+ *  value1,
+ *  value2,
+ * });
+ *
+ * obj.subscribe("value1", value1 => {
+ *   console.log(value1);
+ * });
+ * value1.current = 2;
+ * ```
+ */
+
+function partialReactive(setup) {
+  return makeReactiveObject(setup);
+}
+/**
+ * @description Creates a mutable ref object. You can access the `.current` value and detect the value change through `.subscribe`.
+ * @category Reactive
+ * @example
+ * ```ts
+ * import { observe } from "@cfcs/core";
+ *
+ * const ob1 = observe(1);
+ *
+ * ob1.subscribe(nextValue => {
+ *   console.log(nextValue);
+ * });
+ *
+ * ob1.current = 2;
+ * ```
+ */
+
+function cfcs_esm_observe(defaultValue) {
+  return new cfcs_esm_Observer(defaultValue);
+}
+/**
+ * @hidden
+ */
+
+function computed(computedCallback) {
+  return new ComputedObserver(computedCallback);
+}
+
+/**
+ * @hidden
+ */
+
+function cfcs_esm_withReactiveMethods(ref, methods) {
+  var obj = {};
+  if (!methods) {
+    return obj;
+  }
+  methods.forEach(function (name) {
+    obj[name] = function () {
+      var args = [];
+      for (var _i = 0; _i < arguments.length; _i++) {
+        args[_i] = arguments[_i];
+      }
+      var current = ref.current || ref.value;
+      return current[name].apply(current, args);
+    };
+  });
+  return obj;
+}
+/**
+ * @hidden
+ */
+
+function defineObservers(instance) {
+  var observers = {};
+  Object.defineProperty(instance, cfcs_esm_OBSERVERS_PATH, {
+    get: function () {
+      return observers;
+    }
+  });
+  return observers;
+}
+/**
+ * @hidden
+ */
+
+function cfcs_esm_getObservers(instance) {
+  var _a, _b;
+  if (!instance[cfcs_esm_OBSERVERS_PATH]) {
+    defineObservers(instance);
+  }
+  var observers = instance[cfcs_esm_OBSERVERS_PATH];
+  var computedList = (_b = (_a = instance === null || instance === void 0 ? void 0 : instance.constructor) === null || _a === void 0 ? void 0 : _a.prototype) === null || _b === void 0 ? void 0 : _b[COMPUTED_PATH];
+  if (computedList) {
+    computedList.forEach(function (name) {
+      if (!(name in observers) && name in instance) {
+        instance[name];
+      }
+    });
+  }
+  return observers;
+}
+/**
+ * @hidden
+ */
+
+function cfcs_esm_getObserver(instance, name, defaultValue) {
+  var observers = cfcs_esm_getObservers(instance);
+  if (!observers[name]) {
+    observers[name] = cfcs_esm_observe(defaultValue);
+  }
+  return observers[name];
+}
+/**
+ * @hidden
+ */
+
+function cfcs_esm_setObserver(instance, name, observer) {
+  var observers = cfcs_esm_getObservers(instance);
+  observers[name] = observer;
+}
+/**
+ * @description Whether that object is an observer instance
+ * @category Reactive
+ */
+
+function cfcs_esm_isObserver(val) {
+  return val && cfcs_esm_isObject(val) && "current" in val && "subscribe" in val && "unsubscribe" in val;
+}
+/**
+ * @description Whether the object is reactive
+ * @category Reactive
+ */
+
+function isReactive(val) {
+  return val && !cfcs_esm_isObserver(val) && "subscribe" in val && "unsubscribe" in val;
+}
+
+/**
+ * @category Reactive
+ * @hidden
+ */
+
+function cfcs_esm_adaptReactive(adapter, props) {
+  var objectAdapter = cfcs_esm_isFunction(adapter) ? {
+    setup: adapter
+  } : adapter;
+  function getProps() {
+    var _a, _b, _c, _d, _e;
+    return (_e = (_c = (_a = props === null || props === void 0 ? void 0 : props()) !== null && _a !== void 0 ? _a : (_b = objectAdapter.props) === null || _b === void 0 ? void 0 : _b.call(objectAdapter)) !== null && _c !== void 0 ? _c : (_d = objectAdapter.data) === null || _d === void 0 ? void 0 : _d.call(objectAdapter)) !== null && _e !== void 0 ? _e : {};
+  }
+  var eventEmitter = new Component();
+  var mountedHooks = [];
+  var initHooks = [];
+  var destroyHooks = [];
+  var onHooks = [];
+  var instanceRef = {
+    current: null
+  };
+  var offHooksList = [];
+  var initialState = null;
+  var eventNames = [];
+  var methodNames = [];
+  var onMounted = function (callback) {
+    mountedHooks.push(callback);
+  };
+  var onInit = function (callback) {
+    initHooks.push(callback);
+  };
+  var onDestroy = function (callback) {
+    destroyHooks.push(callback);
+  };
+  var on = function (callback) {
+    onHooks.push(callback);
+  };
+  var emit = function (eventName) {
+    var params = [];
+    for (var _i = 1; _i < arguments.length; _i++) {
+      params[_i - 1] = arguments[_i];
+    }
+    eventEmitter.trigger.apply(eventEmitter, __spreadArray([eventName], params, false));
+  };
+  var setInitialState = function (state) {
+    initialState = state;
+  };
+  var setEvents = function (events) {
+    eventNames = events;
+  };
+  var setMethods = function (methods) {
+    methodNames = methods;
+  };
+  if (objectAdapter.setup) {
+    instanceRef.current = objectAdapter.setup({
+      getProps: getProps,
+      setInitialState: setInitialState,
+      setEvents: setEvents,
+      setMethods: setMethods,
+      onMounted: onMounted,
+      onDestroy: onDestroy,
+      onInit: onInit,
+      emit: emit,
+      on: on
+    }) || null;
+  }
+  if (objectAdapter.created) {
+    instanceRef.current = objectAdapter.created(getProps()) || null;
+  }
+  if (objectAdapter.events) {
+    setEvents(objectAdapter.events);
+  }
+  if (objectAdapter.state) {
+    setInitialState(objectAdapter.state);
+  }
+  if (objectAdapter.methods) {
+    setMethods(objectAdapter.methods);
+  }
+  if (objectAdapter.mounted) {
+    onMounted(objectAdapter.mounted);
+  }
+  if (objectAdapter.destroy) {
+    destroyHooks.push(objectAdapter.destroy);
+  }
+  if (objectAdapter.init) {
+    initHooks.push(objectAdapter.init);
+  }
+  if (objectAdapter.on) {
+    onHooks.push(function (instance, eventName, listener) {
+      var off = objectAdapter.on(instance, eventName, listener);
+      return function () {
+        var _a;
+        off && off();
+        (_a = objectAdapter.off) === null || _a === void 0 ? void 0 : _a.call(objectAdapter, instance, eventName, listener);
+      };
+    });
+  }
+  return {
+    events: function () {
+      return eventNames;
+    },
+    state: function () {
+      var inst = instanceRef.current;
+      if (initialState) {
+        return initialState;
+      }
+      if (inst) {
+        var observers_1 = cfcs_esm_getObservers(inst);
+        setInitialState(cfcs_esm_keys(observers_1).reduce(function (prev, cur) {
+          prev[cur] = observers_1[cur].current;
+          return prev;
+        }, {}));
+      }
+      return initialState || {};
+    },
+    instance: function () {
+      return instanceRef.current;
+    },
+    mounted: function () {
+      var props = getProps();
+      mountedHooks.forEach(function (hook) {
+        instanceRef.current = hook(props, instanceRef.current) || instanceRef.current;
+      });
+    },
+    init: function () {
+      // on events
+      var instance = instanceRef.current;
+      var props = getProps();
+      offHooksList = eventNames.map(function (eventName) {
+        var listener = function () {
+          var _a;
+          var params = [];
+          for (var _i = 0; _i < arguments.length; _i++) {
+            params[_i] = arguments[_i];
+          }
+          (_a = eventEmitter).trigger.apply(_a, __spreadArray([eventName], params, false));
+        };
+        var instance = instanceRef.current;
+        return onHooks.map(function (hook) {
+          return hook(instance, eventName, listener);
+        }).filter(Boolean);
+      }); // init
+
+      initHooks.forEach(function (hook) {
+        hook(instance, props);
+      });
+    },
+    destroy: function () {
+      // off events
+      offHooksList.forEach(function (offHooks) {
+        offHooks.forEach(function (hook) {
+          hook();
+        });
+      }); // destroy
+
+      eventEmitter.off();
+      var instance = instanceRef.current;
+      var props = getProps();
+      destroyHooks.forEach(function (hook) {
+        hook(instance, props);
+      });
+    },
+    methods: function () {
+      return cfcs_esm_withReactiveMethods(instanceRef, methodNames);
+    },
+    on: function (eventName, listener) {
+      eventEmitter.on(eventName, listener);
+    },
+    off: function (eventName, listener) {
+      eventEmitter.off(eventName, listener);
+    }
+  };
+}
+
+/**
+ * @description `Computed` is a property decorator.
+ * Changes in computed state values are also recognized according to changes in observers used within the getter function.
+ * You can detect its status through `.subscribe`.
+ * @hidden
+ * @category Reactive-Decorator
+ * @see ReactiveSubscribe
+ * @example
+ * ```ts
+const ob1 = observe(0);
+const ob2 = observe(1);
+
+// When
+@ReactiveSubscribe
+class TestComputed {
+    @Computed
+    get ob3() {
+        return ob1.current + ob2.current;
+    }
+}
+const inst = new TestComputed();
+
+inst.subscribe("ob3", ob3 => {
+  console.log(ob3);
+});
+
+ob1.current = 1;
+```
+ */
+
+function Computed(prototype, memberName, attributes) {
+  var get = attributes.get;
+  function getComputed() {
+    var observers = cfcs_esm_getObservers(this);
+    if (!(memberName in observers)) {
+      observers[memberName] = computed(get.bind(this));
+    }
+    return cfcs_esm_getObserver(this, memberName).current;
+  }
+  var nextAttributes = {
+    configurable: true,
+    get: getComputed
+  };
+  if (COMPUTED_PATH in prototype) {
+    prototype[COMPUTED_PATH] || (prototype[COMPUTED_PATH] = []);
+    var computedList = prototype[COMPUTED_PATH];
+    if (computedList.indexOf(memberName) === -1) {
+      computedList.push(memberName);
+    }
+  }
+  Object.defineProperty(prototype, memberName, nextAttributes);
+  return nextAttributes;
+}
+
+;// CONCATENATED MODULE: ./node_modules/@egjs/imready/dist/imready.esm.js
+
+/*
+Copyright (c) NAVER Corp.
+name: @egjs/imready
+license: MIT
+author: NAVER Corp.
+repository: https://github.com/naver/egjs-imready
+version: 1.4.1
+*/
+
+
+
+/******************************************************************************
+Copyright (c) Microsoft Corporation.
+
+Permission to use, copy, modify, and/or distribute this software for any
+purpose with or without fee is hereby granted.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
+AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+PERFORMANCE OF THIS SOFTWARE.
+***************************************************************************** */
+/* global Reflect, Promise */
+
 var imready_esm_extendStatics = function (d, b) {
   imready_esm_extendStatics = Object.setPrototypeOf || {
     __proto__: []
@@ -4993,6 +5899,7 @@ var imready_esm_extendStatics = function (d, b) {
   return imready_esm_extendStatics(d, b);
 };
 function imready_esm_extends(d, b) {
+  if (typeof b !== "function" && b !== null) throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
   imready_esm_extendStatics(d, b);
   function __() {
     this.constructor = d;
@@ -5009,6 +5916,8 @@ var imready_esm_assign = function () {
   };
   return imready_esm_assign.apply(this, arguments);
 };
+
+/** @deprecated */
 function __spreadArrays() {
   for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
   for (var r = Array(s), k = 0, i = 0; i < il; i++) for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++) r[k] = a[j];
@@ -5137,8 +6046,7 @@ function resizeAllAutoSizers() {
     resize(element);
   });
 }
-var Loader = /*#__PURE__*/
-function (_super) {
+var Loader = /*#__PURE__*/function (_super) {
   imready_esm_extends(Loader, _super);
   function Loader(element, options) {
     if (options === void 0) {
@@ -5158,8 +6066,8 @@ function (_super) {
       if (_this.hasLoading && _this.checkElement()) {
         // I'm not ready
         return;
-      } // I'm pre-ready and ready!
-
+      }
+      // I'm pre-ready and ready!
       var withPreReady = !_this.hasDataSize && !_this.hasLoading;
       _this.onReady(withPreReady);
     };
@@ -5186,8 +6094,8 @@ function (_super) {
     if (this.hasDataSize || this.hasLoading) {
       // I'm Pre Ready
       this.onAlreadyPreReady();
-    } // Wati Pre Ready, Ready
-
+    }
+    // Wati Pre Ready, Ready
     return true;
   };
   __proto.addEvents = function () {
@@ -5271,8 +6179,7 @@ function (_super) {
   Loader.EVENTS = [];
   return Loader;
 }(component_esm);
-var ElementLoader = /*#__PURE__*/
-function (_super) {
+var ElementLoader = /*#__PURE__*/function (_super) {
   imready_esm_extends(ElementLoader, _super);
   function ElementLoader() {
     return _super !== null && _super.apply(this, arguments) || this;
@@ -5317,14 +6224,11 @@ function (_super) {
  * @alias eg.ImReady
  * @extends eg.Component
  */
-
-var ImReadyManager = /*#__PURE__*/
-function (_super) {
+var ImReadyManager = /*#__PURE__*/function (_super) {
   imready_esm_extends(ImReadyManager, _super);
   /**
    * @param - ImReady's options
    */
-
   function ImReadyManager(options) {
     if (options === void 0) {
       options = {};
@@ -5369,7 +6273,6 @@ function (_super) {
      * });
      * ```
    */
-
   var __proto = ImReadyManager.prototype;
   __proto.check = function (elements) {
     var _this = this;
@@ -5397,8 +6300,8 @@ function (_super) {
         info.hasLoading = hasLoading;
         info.isSkip = isSkip;
         var isPreReady = withPreReady && _this.checkPreReady(index);
-        var isReady = _this.checkReady(index); // Pre-ready and ready occur simultaneously
-
+        var isReady = _this.checkReady(index);
+        // Pre-ready and ready occur simultaneously
         withPreReady && _this.onPreReadyElement(index);
         _this.onReadyElement(index);
         isPreReady && _this.onPreReady();
@@ -5428,7 +6331,6 @@ function (_super) {
    * Gets the total count of elements to be checked.
    * @ko 체크하는 element의 총 개수를 가져온다.
    */
-
   __proto.getTotalCount = function () {
     return this.totalCount;
   };
@@ -5436,7 +6338,6 @@ function (_super) {
    * Whether the elements are all pre-ready. (all sizes are known)
    * @ko 엘리먼트들이 모두 사전 준비가 됐는지 (사이즈를 전부 알 수 있는지) 여부.
    */
-
   __proto.isPreReady = function () {
     return this.elementInfos.every(function (info) {
       return info.isPreReady;
@@ -5446,7 +6347,6 @@ function (_super) {
    * Whether the elements are all ready.
    * @ko 엘리먼트들이 모두 준비가 됐는지 여부.
    */
-
   __proto.isReady = function () {
     return this.elementInfos.every(function (info) {
       return info.isReady;
@@ -5456,7 +6356,6 @@ function (_super) {
    * Whether an error has occurred in the elements in the current state.
    * @ko 현재 상태에서 엘리먼트들이 에러가 발생했는지 여부.
    */
-
   __proto.hasError = function () {
     return this.totalErrorCount > 0;
   };
@@ -5464,7 +6363,6 @@ function (_super) {
    * Clears events of elements being checked.
    * @ko 체크 중인 엘리먼트들의 이벤트를 해제 한다.
    */
-
   __proto.clear = function () {
     this.isPreReadyOver = false;
     this.totalCount = 0;
@@ -5472,7 +6370,7 @@ function (_super) {
     this.readyCount = 0;
     this.totalErrorCount = 0;
     this.elementInfos.forEach(function (info) {
-      if (!info.isReady && info.loader) {
+      if (info.loader) {
         info.loader.destroy();
       }
     });
@@ -5482,7 +6380,6 @@ function (_super) {
    * Destory all events.
    * @ko 모든 이벤트를 해제 한다.
    */
-
   __proto.destroy = function () {
     this.clear();
     this.off();
@@ -5574,7 +6471,6 @@ function (_super) {
      * });
      * ```
      */
-
     this.trigger(new ComponentEvent$1("error", {
       element: info.element,
       index: index,
@@ -5613,7 +6509,6 @@ function (_super) {
      * });
      * ```
      */
-
     this.trigger(new ComponentEvent$1("preReadyElement", {
       element: info.element,
       index: index,
@@ -5654,7 +6549,6 @@ function (_super) {
      * });
      * ```
      */
-
     this.trigger(new ComponentEvent$1("preReady", {
       readyCount: this.readyCount,
       totalCount: this.totalCount,
@@ -5692,7 +6586,6 @@ function (_super) {
      * });
      * ```
      */
-
     this.trigger(new ComponentEvent$1("readyElement", {
       index: index,
       element: info.element,
@@ -5758,8 +6651,7 @@ function (_super) {
   };
   return ImReadyManager;
 }(component_esm);
-var ImageLoader = /*#__PURE__*/
-function (_super) {
+var ImageLoader = /*#__PURE__*/function (_super) {
   imready_esm_extends(ImageLoader, _super);
   function ImageLoader() {
     return _super !== null && _super.apply(this, arguments) || this;
@@ -5787,20 +6679,19 @@ function (_super) {
   ImageLoader.EVENTS = ["load", "error"];
   return ImageLoader;
 }(Loader);
-var VideoLoader = /*#__PURE__*/
-function (_super) {
+var VideoLoader = /*#__PURE__*/function (_super) {
   imready_esm_extends(VideoLoader, _super);
   function VideoLoader() {
     return _super !== null && _super.apply(this, arguments) || this;
   }
   var __proto = VideoLoader.prototype;
   __proto.checkElement = function () {
-    var element = this.element; // HAVE_NOTHING: 0, no information whether or not the audio/video is ready
+    var element = this.element;
+    // HAVE_NOTHING: 0, no information whether or not the audio/video is ready
     // HAVE_METADATA: 1, HAVE_METADATA - metadata for the audio/video is ready
     // HAVE_CURRENT_DATA: 2, data for the current playback position is available, but not enough data to play next frame/millisecond
     // HAVE_FUTURE_DATA: 3, data for the current and at least the next frame is available
     // HAVE_ENOUGH_DATA: 4, enough data available to start playing
-
     if (element.readyState >= 1) {
       return false;
     }
@@ -5814,8 +6705,7 @@ function (_super) {
   VideoLoader.EVENTS = ["loadedmetadata", "error"];
   return VideoLoader;
 }(Loader);
-var ImReady = /*#__PURE__*/
-function (_super) {
+var ImReady = /*#__PURE__*/function (_super) {
   imready_esm_extends(ImReady, _super);
   function ImReady(options) {
     if (options === void 0) {
@@ -5830,6 +6720,83 @@ function (_super) {
   }
   return ImReady;
 }(ImReadyManager);
+var REACTIVE_IMREADY = function (_a) {
+  var setEvents = _a.setEvents,
+    setMethods = _a.setMethods,
+    on = _a.on,
+    onInit = _a.onInit,
+    onDestroy = _a.onDestroy,
+    getProps = _a.getProps;
+  setEvents(EVENTS);
+  setMethods(["add"]);
+  var children = [];
+  var reactiveImReady = reactive({
+    preReadyCount: 0,
+    readyCount: 0,
+    errorCount: 0,
+    totalErrorCount: 0,
+    totalCount: 0,
+    isPreReady: false,
+    isReady: false,
+    hasError: false,
+    isPreReadyOver: false,
+    add: function (element) {
+      children.push(element);
+    }
+  });
+  var props = getProps() || {};
+  var imReady = new ImReady(props);
+  imReady.on("error", function (e) {
+    reactiveImReady.hasError = true;
+    reactiveImReady.errorCount = e.errorCount;
+    reactiveImReady.totalErrorCount = e.totalErrorCount;
+  }).on("preReadyElement", function (e) {
+    reactiveImReady.preReadyCount = e.preReadyCount;
+  }).on("readyElement", function (e) {
+    reactiveImReady.readyCount = e.readyCount;
+    reactiveImReady.isPreReadyOver = e.isPreReadyOver;
+  }).on("preReady", function () {
+    reactiveImReady.isPreReady = true;
+  }).on("ready", function () {
+    reactiveImReady.isReady = true;
+  });
+  on(function (_, name, callback) {
+    imReady.on(name, callback);
+    return function () {
+      imReady.off(name, callback);
+    };
+  });
+  onInit(function () {
+    var selector = props === null || props === void 0 ? void 0 : props.selector;
+    var checkedElements = [];
+    children.forEach(function (child) {
+      if (!child) {
+        return;
+      }
+      if (isString(child)) {
+        checkedElements = __spreadArrays(checkedElements, imready_esm_toArray(document.querySelectorAll(child)));
+      } else if (child instanceof Element) {
+        checkedElements.push(child);
+      } else if ("value" in child || "current" in child) {
+        var element = child.value || child.current;
+        if (element) {
+          checkedElements.push(element);
+        }
+      }
+    });
+    if (selector) {
+      checkedElements = checkedElements.reduce(function (prev, cur) {
+        return __spreadArrays(prev, [].slice.call(cur.querySelectorAll(selector)));
+      }, []);
+    }
+    reactiveImReady.totalCount = checkedElements.length;
+    imReady.check(checkedElements);
+  });
+  onDestroy(function () {
+    imReady.destroy();
+  });
+  return reactiveImReady;
+};
 
 /*
 egjs-imready
@@ -5847,7 +6814,7 @@ name: @egjs/flicking
 license: MIT
 author: NAVER Corp.
 repository: https://github.com/naver/egjs-flicking
-version: 4.10.2
+version: 4.10.7
 */
 
 
@@ -5867,8 +6834,8 @@ LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
 OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 PERFORMANCE OF THIS SOFTWARE.
 ***************************************************************************** */
-
 /* global Reflect, Promise */
+
 var flicking_esm_extendStatics = function (d, b) {
   flicking_esm_extendStatics = Object.setPrototypeOf || {
     __proto__: []
@@ -6050,8 +7017,8 @@ function flicking_esm_read(o, n) {
   }
   return ar;
 }
-/** @deprecated */
 
+/** @deprecated */
 function flicking_esm_spread() {
   for (var ar = [], i = 0; i < arguments.length; i++) ar = ar.concat(flicking_esm_read(arguments[i]));
   return ar;
@@ -6061,9 +7028,7 @@ function flicking_esm_spread() {
  * Copyright (c) 2015 NAVER Corp.
  * egjs projects are licensed under the MIT license
  */
-
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
-
 /**
  * Error codes of {@link FlickingError}. Below are the conditions where each error code occurs.
  * @ko {@link FlickingError}의 에러 코드. 아래는 각각의 에러 코드가 발생하는 조건입니다.
@@ -6162,7 +7127,6 @@ var MESSAGE = {
  * EVENTS.MOVE_START; // "moveStart"
  * ```
  */
-
 var flicking_esm_EVENTS = {
   READY: "ready",
   BEFORE_RESIZE: "beforeResize",
@@ -6190,7 +7154,6 @@ var flicking_esm_EVENTS = {
  * @property {"center"} CENTER center align<ko>중앙 정렬</ko>
  * @property {"next"} NEXT right/bottom align<ko>우/하 정렬</ko>
  */
-
 var ALIGN = {
   PREV: "prev",
   CENTER: "center",
@@ -6206,7 +7169,6 @@ var ALIGN = {
  * <ko>{@link Flicking#horizontal horizontal}가 `true`일 경우 오른쪽, {@link Flicking#horizontal horizontal}가 `false`일 경우 아래쪽을 의미합니다</ko>
  * @property {null} NONE This value usually means it's the same position<ko>주로 제자리인 경우를 의미합니다</ko>
  */
-
 var DIRECTION = {
   PREV: "PREV",
   NEXT: "NEXT",
@@ -6223,7 +7185,6 @@ var DIRECTION = {
  * @property {"strict"} STRICT Flicking's {@link Flicking#moveType moveType} that enables {@link StrictControl} as a Flicking's {@link Flicking#control control}
  * <ko>Flicking의 {@link Flicking#control control}을 {@link StrictControl}로 설정하게 하는 {@link Flicking#moveType moveType}</ko>
  */
-
 var MOVE_TYPE = {
   SNAP: "snap",
   FREE_SCROLL: "freeScroll",
@@ -6241,11 +7202,12 @@ var CLASS = {
  * @property {string} LINEAR "linear"
  * @property {string} BOUND "bound"
  */
-
 var CIRCULAR_FALLBACK = {
   LINEAR: "linear",
   BOUND: "bound"
 };
+
+// eslint-disable-next-line @typescript-eslint/ban-types
 var merge = function (target) {
   var sources = [];
   for (var _i = 1; _i < arguments.length; _i++) {
@@ -6260,7 +7222,7 @@ var merge = function (target) {
 };
 var getElement = function (el, parent) {
   var targetEl = null;
-  if (isString(el)) {
+  if (flicking_esm_isString(el)) {
     var parentEl = parent ? parent : document;
     var queryResult = parentEl.querySelector(el);
     if (!queryResult) {
@@ -6294,7 +7256,7 @@ var flicking_esm_toArray = function (iterable) {
 };
 var parseAlign$1 = function (align, size) {
   var alignPoint;
-  if (isString(align)) {
+  if (flicking_esm_isString(align)) {
     switch (align) {
       case ALIGN.PREV:
         alignPoint = 0;
@@ -6359,8 +7321,8 @@ var parseArithmeticExpression = function (cssValue) {
     var parsedValue = parseFloat(value);
     if (idx <= 0) {
       sign = sign || "+";
-    } // Return default value for values not in good form
-
+    }
+    // Return default value for values not in good form
     if (!sign) {
       return null;
     }
@@ -6369,19 +7331,19 @@ var parseArithmeticExpression = function (cssValue) {
       parsed.percentage += signMultiplier * (parsedValue / 100);
     } else {
       parsed.absolute += signMultiplier * parsedValue;
-    } // Match next occurrence
-
+    }
+    // Match next occurrence
     ++idx;
     matchResult = cssRegex.exec(cssValue);
-  } // None-matched
-
+  }
+  // None-matched
   if (idx === 0) {
     return null;
   }
   return parsed;
 };
 var parseCSSSizeValue = function (val) {
-  return isString(val) ? val : val + "px";
+  return flicking_esm_isString(val) ? val : val + "px";
 };
 var parsePanelAlign = function (align) {
   return typeof align === "object" ? align.panel : align;
@@ -6396,7 +7358,7 @@ var parseElement = function (element) {
   }
   var elements = [];
   element.forEach(function (el) {
-    if (isString(el)) {
+    if (flicking_esm_isString(el)) {
       var tempDiv = document.createElement("div");
       tempDiv.innerHTML = el;
       elements.push.apply(elements, flicking_esm_spread(flicking_esm_toArray(tempDiv.children)));
@@ -6434,7 +7396,7 @@ var includes = function (array, target) {
   }
   return false;
 };
-var isString = function (val) {
+var flicking_esm_isString = function (val) {
   return typeof val === "string";
 };
 var circulatePosition = function (pos, min, max) {
@@ -6489,8 +7451,8 @@ var findIndex = function (array, checker) {
 };
 var getProgress = function (pos, prev, next) {
   return (pos - prev) / (next - prev);
-}; // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-
+};
+// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
 var getStyle = function (el) {
   return window.getComputedStyle(el) || el.currentStyle;
 };
@@ -6498,14 +7460,14 @@ var setSize = function (el, _a) {
   var width = _a.width,
     height = _a.height;
   if (width != null) {
-    if (isString(width)) {
+    if (flicking_esm_isString(width)) {
       el.style.width = width;
     } else {
       el.style.width = width + "px";
     }
   }
   if (height != null) {
-    if (isString(height)) {
+    if (flicking_esm_isString(height)) {
       el.style.height = height;
     } else {
       el.style.height = height + "px";
@@ -6579,15 +7541,12 @@ var setPrototypeOf = Object.setPrototypeOf || function (obj, proto) {
  * }
  * ```
  */
-
-var FlickingError = /*#__PURE__*/
-function (_super) {
+var FlickingError = /*#__PURE__*/function (_super) {
   flicking_esm_extends(FlickingError, _super);
   /**
    * @param message Error message<ko>에러 메시지</ko>
    * @param code Error code<ko>에러 코드</ko>
    */
-
   function FlickingError(message, code) {
     var _this = _super.call(this, message) || this;
     setPrototypeOf(_this, FlickingError.prototype);
@@ -6602,9 +7561,7 @@ function (_super) {
  * A component that manages viewport size
  * @ko 뷰포트 크기 정보를 담당하는 컴포넌트
  */
-
-var Viewport = /*#__PURE__*/
-function () {
+var Viewport = /*#__PURE__*/function () {
   /**
    * @param el A viewport element<ko>뷰포트 엘리먼트</ko>
    */
@@ -6687,7 +7644,6 @@ function () {
    * @param {number|string} [size.width] CSS string or number(in px)<ko>CSS 문자열 또는 숫자(px)</ko>
    * @param {number|string} [size.height] CSS string or number(in px)<ko>CSS 문자열 또는 숫자(px)</ko>
    */
-
   __proto.setSize = function (_a) {
     var width = _a.width,
       height = _a.height;
@@ -6695,7 +7651,7 @@ function () {
     var padding = this._padding;
     var isBorderBoxSizing = this._isBorderBoxSizing;
     if (width != null) {
-      if (isString(width)) {
+      if (flicking_esm_isString(width)) {
         el.style.width = width;
       } else {
         var newWidth = isBorderBoxSizing ? width + padding.left + padding.right : width;
@@ -6703,7 +7659,7 @@ function () {
       }
     }
     if (height != null) {
-      if (isString(height)) {
+      if (flicking_esm_isString(height)) {
         el.style.height = height;
       } else {
         var newHeight = isBorderBoxSizing ? height + padding.top + padding.bottom : height;
@@ -6716,7 +7672,6 @@ function () {
    * Update width/height to the current viewport element's size
    * @ko 현재 뷰포트 엘리먼트의 크기로 너비/높이를 업데이트합니다
    */
-
   __proto.resize = function () {
     var el = this._el;
     var elStyle = getStyle(el);
@@ -6745,8 +7700,7 @@ function () {
   };
   return Viewport;
 }();
-var AutoResizer = /*#__PURE__*/
-function () {
+var AutoResizer = /*#__PURE__*/function () {
   function AutoResizer(flicking) {
     var _this = this;
     this._onResize = function () {
@@ -6774,8 +7728,8 @@ function () {
       _this._maxResizeDebounceTimer = -1;
       _this._resizeTimer = -1;
       void _this._flicking.resize();
-    }; // eslint-disable-next-line @typescript-eslint/member-ordering
-
+    };
+    // eslint-disable-next-line @typescript-eslint/member-ordering
     this._skipFirstResize = function () {
       var isFirstResize = true;
       return function () {
@@ -6835,8 +7789,7 @@ function () {
 /**
  * @internal
  */
-var VanillaElementProvider = /*#__PURE__*/
-function () {
+var VanillaElementProvider = /*#__PURE__*/function () {
   function VanillaElementProvider(element) {
     this._element = element;
     this._rendered = true;
@@ -6879,12 +7832,10 @@ function () {
  * Copyright (c) 2015 NAVER Corp.
  * egjs projects are licensed under the MIT license
  */
-
 /**
  * @internal
  */
-var VirtualElementProvider = /*#__PURE__*/
-function () {
+var VirtualElementProvider = /*#__PURE__*/function () {
   function VirtualElementProvider(flicking) {
     this._flicking = flicking;
   }
@@ -6916,10 +7867,12 @@ function () {
   __proto.init = function (panel) {
     this._panel = panel;
   };
-  __proto.show = function () {// DO_NOTHING
+  __proto.show = function () {
+    // DO_NOTHING
     // Actual element visibility is controlled by VirtualManager
   };
-  __proto.hide = function () {// DO_NOTHING
+  __proto.hide = function () {
+    // DO_NOTHING
     // Actual element visibility is controlled by VirtualManager
   };
   return VirtualElementProvider;
@@ -6928,9 +7881,7 @@ function () {
 /**
  * A manager class to add / remove virtual panels
  */
-
-var VirtualManager = /*#__PURE__*/
-function () {
+var VirtualManager = /*#__PURE__*/function () {
   function VirtualManager(flicking, options) {
     var _a, _b, _c, _d;
     this._flicking = flicking;
@@ -6952,7 +7903,6 @@ function () {
   });
   Object.defineProperty(__proto, "renderPanel", {
     // Options
-
     /**
      * A rendering function for the panel element's innerHTML
      * @ko 패널 엘리먼트의 innerHTML을 렌더링하는 함수
@@ -7053,7 +8003,6 @@ function () {
    * @param {number} count The number of panels to add<ko>추가할 패널의 개수</ko>
    * @returns {Array<VirtualPanel>} The new panels added<ko>새롭게 추가된 패널들</ko>
    */
-
   __proto.append = function (count) {
     if (count === void 0) {
       count = 1;
@@ -7067,7 +8016,6 @@ function () {
    * @param {number} count The number of panels to add<ko>추가할 패널의 개수</ko>
    * @returns {Array<VirtualPanel>} The new panels added<ko>새롭게 추가된 패널들</ko>
    */
-
   __proto.prepend = function (count) {
     if (count === void 0) {
       count = 1;
@@ -7080,7 +8028,6 @@ function () {
    * @param {number} count The number of panels to add<ko>추가할 패널의 개수</ko>
    * @returns {Array<VirtualPanel>} The new panels added<ko>새롭게 추가된 패널들</ko>
    */
-
   __proto.insert = function (index, count) {
     if (count === void 0) {
       count = 1;
@@ -7099,7 +8046,6 @@ function () {
    * @param {number} count The number of panels to remove<ko>삭제할 패널의 개수</ko>
    * @returns {Array<VirtualPanel>} The panels removed<ko>삭제된 패널들</ko>
    */
-
   __proto.remove = function (index, count) {
     if (count <= 0) return [];
     var flicking = this._flicking;
@@ -7144,7 +8090,6 @@ var EVENT = {
  * An Axis key that Flicking uses
  * @internal
  */
-
 var POSITION_KEY = "flick";
 var STATE_TYPE;
 (function (STATE_TYPE) {
@@ -7159,9 +8104,7 @@ var STATE_TYPE;
  * @ko 현재 사용자 입력 또는 애니메이션 상태를 나타내는 컴포넌트
  * @internal
  */
-
-var State = /*#__PURE__*/
-function () {
+var State = /*#__PURE__*/function () {
   function State() {
     this._delta = 0;
     this._targetPanel = null;
@@ -7202,7 +8145,6 @@ function () {
    * @param {State} prevState An previous state<ko>이전 상태값</ko>
    * @return {void}
    */
-
   __proto.onEnter = function (prevState) {
     this._delta = prevState._delta;
     this._targetPanel = prevState._targetPanel;
@@ -7217,8 +8159,8 @@ function () {
    * @param {function} [ctx.transitTo] A function for changing current state to other state<ko>다른 상태로 변경하기 위한 함수</ko>
    * @return {void}
    */
-
-  __proto.onHold = function (ctx) {// DO NOTHING
+  __proto.onHold = function (ctx) {
+    // DO NOTHING
   };
   /**
    * An event handler for Axes's {@link https://naver.github.io/egjs-axes/release/latest/doc/eg.Axes.html#event:change change} event
@@ -7230,8 +8172,8 @@ function () {
    * @param {function} [ctx.transitTo] A function for changing current state to other state<ko>다른 상태로 변경하기 위한 함수</ko>
    * @return {void}
    */
-
-  __proto.onChange = function (ctx) {// DO NOTHING
+  __proto.onChange = function (ctx) {
+    // DO NOTHING
   };
   /**
    * An event handler for Axes's {@link https://naver.github.io/egjs-axes/release/latest/doc/eg.Axes.html#event:release release} event
@@ -7243,8 +8185,8 @@ function () {
    * @param {function} [ctx.transitTo] A function for changing current state to other state<ko>다른 상태로 변경하기 위한 함수</ko>
    * @return {void}
    */
-
-  __proto.onRelease = function (ctx) {// DO NOTHING
+  __proto.onRelease = function (ctx) {
+    // DO NOTHING
   };
   /**
    * An event handler for Axes's {@link https://naver.github.io/egjs-axes/release/latest/doc/eg.Axes.html#event:animationEnd animationEnd} event
@@ -7256,8 +8198,8 @@ function () {
    * @param {function} [ctx.transitTo] A function for changing current state to other state<ko>다른 상태로 변경하기 위한 함수</ko>
    * @return {void}
    */
-
-  __proto.onAnimationEnd = function (ctx) {// DO NOTHING
+  __proto.onAnimationEnd = function (ctx) {
+    // DO NOTHING
   };
   /**
    * An event handler for Axes's {@link https://naver.github.io/egjs-axes/release/latest/doc/eg.Axes.html#event:finish finish} event
@@ -7268,8 +8210,8 @@ function () {
    * @param {function} [ctx.transitTo] A function for changing current state to other state<ko>다른 상태로 변경하기 위한 함수</ko>
    * @return {void}
    */
-
-  __proto.onFinish = function (ctx) {// DO NOTHING
+  __proto.onFinish = function (ctx) {
+    // DO NOTHING
   };
   __proto._moveToChangedPosition = function (ctx) {
     var flicking = ctx.flicking,
@@ -7306,9 +8248,7 @@ function () {
  * @ko 사용자의 입력이 없고, 애니메이션이 동작하고있지 않은 기본 상태
  * @internal
  */
-
-var IdleState = /*#__PURE__*/
-function (_super) {
+var IdleState = /*#__PURE__*/function (_super) {
   flicking_esm_extends(IdleState, _super);
   function IdleState() {
     var _this = _super !== null && _super.apply(this, arguments) || this;
@@ -7318,7 +8258,6 @@ function (_super) {
      * @type {false}
      * @readonly
      */
-
     _this.holding = false;
     /**
      * Whether Flicking's animating
@@ -7326,7 +8265,6 @@ function (_super) {
      * @type {false}
      * @readonly
      */
-
     _this.animating = false;
     return _this;
   }
@@ -7353,8 +8291,8 @@ function (_super) {
     } else {
       transitTo(STATE_TYPE.HOLDING);
     }
-  }; // By methods call
-
+  };
+  // By methods call
   __proto.onChange = function (ctx) {
     var flicking = ctx.flicking,
       axesEvent = ctx.axesEvent,
@@ -7383,9 +8321,7 @@ function (_super) {
  * @ko 사용자의 입력이 시작되었으나, 아직 움직이지는 않은 상태
  * @internal
  */
-
-var HoldingState = /*#__PURE__*/
-function (_super) {
+var HoldingState = /*#__PURE__*/function (_super) {
   flicking_esm_extends(HoldingState, _super);
   function HoldingState() {
     var _this = _super !== null && _super.apply(this, arguments) || this;
@@ -7395,7 +8331,6 @@ function (_super) {
      * @type {true}
      * @readonly
      */
-
     _this.holding = true;
     /**
      * Whether Flicking's animating
@@ -7403,7 +8338,6 @@ function (_super) {
      * @type {false}
      * @readonly
      */
-
     _this.animating = false;
     _this._releaseEvent = null;
     return _this;
@@ -7447,27 +8381,26 @@ function (_super) {
       }, 0);
       transitTo(STATE_TYPE.IDLE);
       return;
-    } // Can't handle select event here,
+    }
+    // Can't handle select event here,
     // As "finish" axes event happens
-
     this._releaseEvent = axesEvent;
   };
   __proto.onFinish = function (ctx) {
     var e_1, _a;
     var flicking = ctx.flicking,
-      transitTo = ctx.transitTo; // Should transite to IDLE state before select event
+      transitTo = ctx.transitTo;
+    // Should transite to IDLE state before select event
     // As user expects hold is already finished
-
     transitTo(STATE_TYPE.IDLE);
     if (!this._releaseEvent) {
       return;
-    } // Handle release event here
+    }
+    // Handle release event here
     // To prevent finish event called twice
-
-    var releaseEvent = this._releaseEvent; // Static click
-
+    var releaseEvent = this._releaseEvent;
+    // Static click
     /* eslint-disable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access */
-
     var srcEvent = releaseEvent.inputEvent.srcEvent;
     var clickedElement;
     if (srcEvent.type === "touchend") {
@@ -7478,7 +8411,6 @@ function (_super) {
       clickedElement = srcEvent.target;
     }
     /* eslint-enable */
-
     var panels = flicking.renderer.panels;
     var clickedPanel = null;
     try {
@@ -7519,9 +8451,7 @@ function (_super) {
  * @ko 사용자가 드래깅중인 상태
  * @internal
  */
-
-var DraggingState = /*#__PURE__*/
-function (_super) {
+var DraggingState = /*#__PURE__*/function (_super) {
   flicking_esm_extends(DraggingState, _super);
   function DraggingState() {
     var _this = _super !== null && _super.apply(this, arguments) || this;
@@ -7531,7 +8461,6 @@ function (_super) {
      * @type {true}
      * @readonly
      */
-
     _this.holding = true;
     /**
      * Whether Flicking's animating
@@ -7539,7 +8468,6 @@ function (_super) {
      * @type {true}
      * @readonly
      */
-
     _this.animating = true;
     return _this;
   }
@@ -7551,9 +8479,9 @@ function (_super) {
     var _a;
     var flicking = ctx.flicking,
       axesEvent = ctx.axesEvent,
-      transitTo = ctx.transitTo; // Update last position to cope with Axes's animating behavior
+      transitTo = ctx.transitTo;
+    // Update last position to cope with Axes's animating behavior
     // Axes uses start position when animation start
-
     flicking.trigger(new ComponentEvent$1(flicking_esm_EVENTS.HOLD_END, {
       axesEvent: axesEvent
     }));
@@ -7581,9 +8509,7 @@ function (_super) {
  * @ko 사용자 입력이나 메소드 호출에 의해 Flicking의 애니메이션이 동작중인 상태
  * @internal
  */
-
-var AnimatingState = /*#__PURE__*/
-function (_super) {
+var AnimatingState = /*#__PURE__*/function (_super) {
   flicking_esm_extends(AnimatingState, _super);
   function AnimatingState() {
     var _this = _super !== null && _super.apply(this, arguments) || this;
@@ -7593,7 +8519,6 @@ function (_super) {
      * @type {false}
      * @readonly
      */
-
     _this.holding = false;
     /**
      * Whether Flicking's animating
@@ -7601,7 +8526,6 @@ function (_super) {
      * @type {true}
      * @readonly
      */
-
     _this.animating = true;
     return _this;
   }
@@ -7656,9 +8580,7 @@ function (_super) {
  * @ko 이벤트의 `stop`호출에 의해 Flicking이 정지된 상태
  * @internal
  */
-
-var DisabledState = /*#__PURE__*/
-function (_super) {
+var DisabledState = /*#__PURE__*/function (_super) {
   flicking_esm_extends(DisabledState, _super);
   function DisabledState() {
     var _this = _super !== null && _super.apply(this, arguments) || this;
@@ -7668,7 +8590,6 @@ function (_super) {
      * @type {false}
      * @readonly
      */
-
     _this.holding = false;
     /**
      * Whether Flicking's animating
@@ -7676,7 +8597,6 @@ function (_super) {
      * @type {true}
      * @readonly
      */
-
     _this.animating = true;
     return _this;
   }
@@ -7687,15 +8607,15 @@ function (_super) {
   };
   __proto.onChange = function (ctx) {
     var axesEvent = ctx.axesEvent,
-      transitTo = ctx.transitTo; // Can stop Axes's change event
-
+      transitTo = ctx.transitTo;
+    // Can stop Axes's change event
     axesEvent.stop();
     transitTo(STATE_TYPE.IDLE);
   };
   __proto.onRelease = function (ctx) {
     var axesEvent = ctx.axesEvent,
-      transitTo = ctx.transitTo; // This is needed when stopped hold start event
-
+      transitTo = ctx.transitTo;
+    // This is needed when stopped hold start event
     if (axesEvent.delta.flick === 0) {
       transitTo(STATE_TYPE.IDLE);
     }
@@ -7706,9 +8626,7 @@ function (_super) {
 /**
  * @internal
  */
-
-var StateMachine = /*#__PURE__*/
-function () {
+var StateMachine = /*#__PURE__*/function () {
   function StateMachine() {
     var _this = this;
     this.transitTo = function (nextStateType) {
@@ -7775,9 +8693,7 @@ function () {
  * @ko {@link https://naver.github.io/egjs-axes/ @egjs/axes}의 이벤트를 처리하는 컨트롤러 컴포넌트
  * @internal
  */
-
-var AxesController = /*#__PURE__*/
-function () {
+var AxesController = /*#__PURE__*/function () {
   /** */
   function AxesController() {
     var _this = this;
@@ -7959,7 +8875,6 @@ function () {
    * @chainable
    * @return {this}
    */
-
   __proto.init = function (flicking) {
     var _a;
     var _this = this;
@@ -8002,7 +8917,6 @@ function () {
    * @ko AxesController를 초기 상태로 되돌립니다
    * @return {void}
    */
-
   __proto.destroy = function () {
     var _a;
     if (this._axes) {
@@ -8018,7 +8932,6 @@ function () {
    * @chainable
    * @return {this}
    */
-
   __proto.enable = function () {
     var _a;
     (_a = this._panInput) === null || _a === void 0 ? void 0 : _a.enable();
@@ -8030,7 +8943,6 @@ function () {
    * @chainable
    * @return {this}
    */
-
   __proto.disable = function () {
     var _a;
     (_a = this._panInput) === null || _a === void 0 ? void 0 : _a.disable();
@@ -8042,7 +8954,6 @@ function () {
    * @chainable
    * @return {this}
    */
-
   __proto.release = function () {
     var _a;
     (_a = this._panInput) === null || _a === void 0 ? void 0 : _a.release();
@@ -8056,7 +8967,6 @@ function () {
    * @chainable
    * @return {this}
    */
-
   __proto.updateAnimation = function (position, duration) {
     var _a;
     var _b;
@@ -8075,7 +8985,6 @@ function () {
    * @chainable
    * @return {this}
    */
-
   __proto.stopAnimation = function () {
     var _a;
     (_a = this._axes) === null || _a === void 0 ? void 0 : _a.stopAnimation();
@@ -8090,7 +8999,6 @@ function () {
    * <ko>{@link AxesController#init init}이 이전에 호출되지 않은 경우</ko>
    * @return {this}
    */
-
   __proto.update = function (controlParams) {
     var _a;
     var flicking = getFlickingAttached(this._flicking);
@@ -8108,7 +9016,6 @@ function () {
    * @ko 카메라 엘리먼트에 애니메이션 도중에 클릭 이벤트를 방지하는 핸들러를 부착합니다
    * @return {this}
    */
-
   __proto.addPreventClickHandler = function () {
     var flicking = getFlickingAttached(this._flicking);
     var axes = this._axes;
@@ -8123,7 +9030,6 @@ function () {
    * @ko 카메라 엘리먼트에 애니메이션 도중에 클릭 이벤트를 방지하는 핸들러를 탈착합니다
    * @return {this}
    */
-
   __proto.removePreventClickHandler = function () {
     var flicking = getFlickingAttached(this._flicking);
     var axes = this._axes;
@@ -8154,11 +9060,9 @@ function () {
    * </ko>
    * @return {Promise<void>} A Promise which will be resolved after reaching the target position<ko>해당 좌표 도달시에 resolve되는 Promise</ko>
    */
-
   __proto.animateTo = function (position, duration, axesEvent) {
-    var _a;
     var _this = this;
-    var _b;
+    var _a;
     var axes = this._axes;
     var state = this._stateMachine.state;
     if (!axes) {
@@ -8169,7 +9073,7 @@ function () {
       var flicking = getFlickingAttached(this._flicking);
       flicking.camera.lookAt(position);
       if (state.targetPanel) {
-        flicking.control.setActive(state.targetPanel, flicking.control.activePanel, (_b = axesEvent === null || axesEvent === void 0 ? void 0 : axesEvent.isTrusted) !== null && _b !== void 0 ? _b : false);
+        flicking.control.setActive(state.targetPanel, flicking.control.activePanel, (_a = axesEvent === null || axesEvent === void 0 ? void 0 : axesEvent.isTrusted) !== null && _a !== void 0 ? _a : false);
       }
       return Promise.resolve();
     }
@@ -8194,28 +9098,19 @@ function () {
         axes.setTo((_b = {}, _b[POSITION_KEY] = position, _b), duration);
       }
     };
-    if (duration === 0) {
-      var flicking = getFlickingAttached(this._flicking);
-      var camera = flicking.camera;
+    return new Promise(function (resolve, reject) {
+      var animationFinishHandler = function () {
+        axes.off(EVENT.HOLD, interruptionHandler);
+        resolve();
+      };
+      var interruptionHandler = function () {
+        axes.off(EVENT.FINISH, animationFinishHandler);
+        reject(new FlickingError(MESSAGE.ANIMATION_INTERRUPTED, CODE.ANIMATION_INTERRUPTED));
+      };
+      axes.once(EVENT.FINISH, animationFinishHandler);
+      axes.once(EVENT.HOLD, interruptionHandler);
       animate();
-      var newPos = flicking.circularEnabled ? circulatePosition(position, camera.range.min, camera.range.max) : position;
-      axes.axisManager.set((_a = {}, _a[POSITION_KEY] = newPos, _a));
-      return Promise.resolve();
-    } else {
-      return new Promise(function (resolve, reject) {
-        var animationFinishHandler = function () {
-          axes.off(EVENT.HOLD, interruptionHandler);
-          resolve();
-        };
-        var interruptionHandler = function () {
-          axes.off(EVENT.FINISH, animationFinishHandler);
-          reject(new FlickingError(MESSAGE.ANIMATION_INTERRUPTED, CODE.ANIMATION_INTERRUPTED));
-        };
-        axes.once(EVENT.FINISH, animationFinishHandler);
-        axes.once(EVENT.HOLD, interruptionHandler);
-        animate();
-      });
-    }
+    });
   };
   __proto.updateDirection = function () {
     var flicking = getFlickingAttached(this._flicking);
@@ -8243,9 +9138,7 @@ function () {
  * A component that manages inputs and animation of Flicking
  * @ko Flicking의 입력 장치 & 애니메이션을 담당하는 컴포넌트
  */
-
-var Control = /*#__PURE__*/
-function () {
+var Control = /*#__PURE__*/function () {
   /** */
   function Control() {
     this._flicking = null;
@@ -8327,7 +9220,6 @@ function () {
    * @chainable
    * @return {this}
    */
-
   __proto.init = function (flicking) {
     this._flicking = flicking;
     this._controller.init(flicking);
@@ -8338,7 +9230,6 @@ function () {
    * @ko Control을 초기 상태로 되돌립니다
    * @return {void}
    */
-
   __proto.destroy = function () {
     this._controller.destroy();
     this._flicking = null;
@@ -8350,7 +9241,6 @@ function () {
    * @chainable
    * @return {this}
    */
-
   __proto.enable = function () {
     this._controller.enable();
     return this;
@@ -8361,7 +9251,6 @@ function () {
    * @chainable
    * @return {this}
    */
-
   __proto.disable = function () {
     this._controller.disable();
     return this;
@@ -8372,7 +9261,6 @@ function () {
    * @chainable
    * @return {this}
    */
-
   __proto.release = function () {
     this._controller.release();
     return this;
@@ -8389,7 +9277,6 @@ function () {
    * <ko>{@link ERROR_CODE POSITION_NOT_REACHABLE} 주어진 패널이 제거되었거나, Camera의 {@link Camera#range range} 밖에 있을 경우</ko>
    * @return {this}
    */
-
   __proto.updateAnimation = function (panel, duration, direction) {
     var state = this._controller.state;
     var position = this._getPosition(panel, direction !== null && direction !== void 0 ? direction : DIRECTION.NONE);
@@ -8403,7 +9290,6 @@ function () {
    * @chainable
    * @return {this}
    */
-
   __proto.stopAnimation = function () {
     var state = this._controller.state;
     state.targetPanel = null;
@@ -8420,7 +9306,6 @@ function () {
    * @chainable
    * @return {Promise<void>}
    */
-
   __proto.updatePosition = function (progressInPanel) {
     var flicking = getFlickingAttached(this._flicking);
     var camera = flicking.camera;
@@ -8435,7 +9320,6 @@ function () {
    * @chainable
    * @return {this}
    */
-
   __proto.updateInput = function () {
     var flicking = getFlickingAttached(this._flicking);
     var camera = flicking.camera;
@@ -8448,7 +9332,6 @@ function () {
    * @chainable
    * @return {this}
    */
-
   __proto.resetActive = function () {
     this._activePanel = null;
     return this;
@@ -8491,7 +9374,6 @@ function () {
    * </ko>
    * @return {Promise<void>} A Promise which will be resolved after reaching the target panel<ko>해당 패널 도달시에 resolve되는 Promise</ko>
    */
-
   __proto.moveToPanel = function (panel, _a) {
     var duration = _a.duration,
       _b = _a.direction,
@@ -8502,8 +9384,7 @@ function () {
       return __generator(this, function (_c) {
         position = this._getPosition(panel, direction);
         this._triggerIndexChangeEvent(panel, panel.position, axesEvent);
-        return [2
-        /*return*/, this._animateToPosition({
+        return [2 /*return*/, this._animateToPosition({
           position: position,
           duration: duration,
           newActivePanel: panel,
@@ -8515,7 +9396,6 @@ function () {
   /**
    * @internal
    */
-
   __proto.setActive = function (newActivePanel, prevActivePanel, isTrusted) {
     var _a;
     var flicking = getFlickingAttached(this._flicking);
@@ -8539,7 +9419,6 @@ function () {
   /**
    * @internal
    */
-
   __proto.copy = function (control) {
     this._flicking = control._flicking;
     this._activePanel = control._activePanel;
@@ -8578,21 +9457,17 @@ function () {
         state = this._controller.state;
         state.targetPanel = newActivePanel;
         if (duration <= 0) {
-          return [2
-          /*return*/, animate()];
+          return [2 /*return*/, animate()];
         } else {
-          return [2
-          /*return*/, animate().then(function () {
+          return [2 /*return*/, animate().then(function () {
             return __awaiter(_this, void 0, void 0, function () {
               return __generator(this, function (_a) {
                 switch (_a.label) {
                   case 0:
-                    return [4
-                    /*yield*/, flicking.renderer.render()];
+                    return [4 /*yield*/, flicking.renderer.render()];
                   case 1:
                     _a.sent();
-                    return [2
-                    /*return*/];
+                    return [2 /*return*/];
                 }
               });
             });
@@ -8622,7 +9497,6 @@ function () {
     } else if (flicking.circularEnabled) {
       // Circular mode is enabled, find nearest distance to panel
       var camPos_1 = this._controller.position; // Actual position of the Axes
-
       var camRangeDiff = camera.rangeDiff;
       var possiblePositions = [position, position + camRangeDiff, position - camRangeDiff].filter(function (pos) {
         if (direction === DIRECTION.NONE) return true;
@@ -8645,8 +9519,7 @@ function () {
  * A data component that has actual position where the camera should be stopped at
  * @ko 카메라가 정지해야하는 실제 위치를 담고 있는 데이터 컴포넌트
  */
-var AnchorPoint = /*#__PURE__*/
-function () {
+var AnchorPoint = /*#__PURE__*/function () {
   /**
    * @param {object} options An options object<ko>옵션 객체</ko>
    * @param {number} [options.index] Index of AnchorPoint<ko>AnchorPoint의 인덱스</ko>
@@ -8708,12 +9581,9 @@ function () {
  * A {@link Control} that uses a release momentum to choose destination panel
  * @ko 입력을 중단한 시점의 가속도에 영향받아 도달할 패널을 계산하는 이동 방식을 사용하는 {@link Control}
  */
-
-var SnapControl = /*#__PURE__*/
-function (_super) {
+var SnapControl = /*#__PURE__*/function (_super) {
   flicking_esm_extends(SnapControl, _super);
   /** */
-
   function SnapControl(_a) {
     var _b = (_a === void 0 ? {} : _a).count,
       count = _b === void 0 ? Infinity : _b;
@@ -8774,7 +9644,6 @@ function (_super) {
    * </ko>
    * @return {Promise<void>} A Promise which will be resolved after reaching the target position<ko>해당 좌표 도달시에 resolve되는 Promise</ko>
    */
-
   __proto.moveToPosition = function (position, duration, axesEvent) {
     var flicking = getFlickingAttached(this._flicking);
     var camera = flicking.camera;
@@ -8796,8 +9665,8 @@ function (_super) {
       // Move to the adjacent panel
       targetAnchor = this._findAdjacentAnchor(position, posDelta, anchorAtCamera);
     } else {
-      // Restore to active panel
-      return this.moveToPanel(activeAnchor.panel, {
+      // Fallback to nearest panel from current camera
+      return this.moveToPanel(anchorAtCamera.panel, {
         duration: duration,
         axesEvent: axesEvent
       });
@@ -8875,14 +9744,13 @@ function (_super) {
     var isNextDirection = position > activeAnchor.position;
     var panel = activeAnchor.panel;
     var panelSize = panel.size;
-    var alignPos = panel.alignPosition; // Minimum distance needed to decide prev/next panel as nearest
-
+    var alignPos = panel.alignPosition;
+    // Minimum distance needed to decide prev/next panel as nearest
     /*
      * |  Prev  |     Next     |
      * |<------>|<------------>|
      * [        |<-Anchor      ]
      */
-
     return isNextDirection ? panelSize - alignPos + panel.margin.next : alignPos + panel.margin.prev;
   };
   return SnapControl;
@@ -8892,12 +9760,9 @@ function (_super) {
  * A {@link Control} that can be scrolled freely without alignment
  * @ko 패널이 정해진 지점에 정렬되지 않고, 자유롭게 스크롤할 수 있는 이동 방식을 사용하는 {@link Control}
  */
-
-var FreeControl = /*#__PURE__*/
-function (_super) {
+var FreeControl = /*#__PURE__*/function (_super) {
   flicking_esm_extends(FreeControl, _super);
   /** */
-
   function FreeControl(_a) {
     var _b = (_a === void 0 ? {} : _a).stopAtEdge,
       stopAtEdge = _b === void 0 ? true : _b;
@@ -8932,7 +9797,6 @@ function (_super) {
    * @chainable
    * @return {Promise<void>}
    */
-
   __proto.updatePosition = function (progressInPanel) {
     var flicking = getFlickingAttached(this._flicking);
     var camera = flicking.camera;
@@ -8979,7 +9843,6 @@ function (_super) {
    * </ko>
    * @return {Promise<void>} A Promise which will be resolved after reaching the target position<ko>해당 좌표 도달시에 resolve되는 Promise</ko>
    */
-
   __proto.moveToPosition = function (position, duration, axesEvent) {
     var flicking = getFlickingAttached(this._flicking);
     var camera = flicking.camera;
@@ -8988,8 +9851,8 @@ function (_super) {
     if (!anchorAtPosition) {
       return Promise.reject(new FlickingError(MESSAGE.POSITION_NOT_REACHABLE(position), CODE.POSITION_NOT_REACHABLE));
     }
-    var targetPanel = anchorAtPosition.panel; // Trigger only change event
-
+    var targetPanel = anchorAtPosition.panel;
+    // Trigger only change event
     if (targetPanel !== this._activePanel) {
       this._triggerIndexChangeEvent(targetPanel, position, axesEvent);
     }
@@ -9007,12 +9870,9 @@ function (_super) {
  * A {@link Control} that allow you to select the maximum number of panels to move at a time
  * @ko 한번에 최대로 이동할 패널의 개수를 선택 가능한 {@link Control}
  */
-
-var StrictControl = /*#__PURE__*/
-function (_super) {
+var StrictControl = /*#__PURE__*/function (_super) {
   flicking_esm_extends(StrictControl, _super);
   /** */
-
   function StrictControl(_a) {
     var _b = (_a === void 0 ? {} : _a).count,
       count = _b === void 0 ? 1 : _b;
@@ -9047,7 +9907,6 @@ function (_super) {
    * @ko Control을 초기 상태로 되돌립니다
    * @return {void}
    */
-
   __proto.destroy = function () {
     _super.prototype.destroy.call(this);
     this._resetIndexRange();
@@ -9058,7 +9917,6 @@ function (_super) {
    * @chainable
    * @return {this}
    */
-
   __proto.updateInput = function () {
     var _a;
     var flicking = getFlickingAttached(this._flicking);
@@ -9123,8 +9981,7 @@ function (_super) {
         camera = flicking.camera;
         controller = this._controller;
         controller.update(camera.controlParams);
-        return [2
-        /*return*/, _super.prototype.moveToPanel.call(this, panel, options)];
+        return [2 /*return*/, _super.prototype.moveToPanel.call(this, panel, options)];
       });
     });
   };
@@ -9164,7 +10021,6 @@ function (_super) {
    * </ko>
    * @return {Promise<void>} A Promise which will be resolved after reaching the target position<ko>해당 좌표 도달시에 resolve되는 Promise</ko>
    */
-
   __proto.moveToPosition = function (position, duration, axesEvent) {
     var flicking = getFlickingAttached(this._flicking);
     var camera = flicking.camera;
@@ -9204,9 +10060,15 @@ function (_super) {
       targetPanel = adjacentAnchor.panel;
       targetPos = adjacentAnchor.position;
     } else {
-      // Restore to active panel
-      targetPos = camera.clampToReachablePosition(activePanel.position);
-      targetPanel = activePanel;
+      // Fallback to nearest panel from current camera
+      var anchorAtCamera = camera.findNearestAnchor(camera.position);
+      if (!anchorAtCamera) {
+        return Promise.reject(new FlickingError(MESSAGE.POSITION_NOT_REACHABLE(position), CODE.POSITION_NOT_REACHABLE));
+      }
+      return this.moveToPanel(anchorAtCamera.panel, {
+        duration: duration,
+        axesEvent: axesEvent
+      });
     }
     this._triggerIndexChangeEvent(targetPanel, position, axesEvent);
     return this._animateToPosition({
@@ -9228,9 +10090,7 @@ function (_super) {
 /**
  * A mode of camera
  */
-
-var CameraMode = /*#__PURE__*/
-function () {
+var CameraMode = /*#__PURE__*/function () {
   /** */
   function CameraMode(flicking) {
     this._flicking = flicking;
@@ -9268,8 +10128,8 @@ function () {
         return anchors[anchorIdx - 1];
       }
       prevDist = dist;
-    } // Return last anchor
-
+    }
+    // Return last anchor
     return anchors[anchors.length - 1];
   };
   __proto.clampToReachablePosition = function (position) {
@@ -9289,14 +10149,13 @@ function () {
   };
   __proto.canSee = function (panel) {
     var camera = this._flicking.camera;
-    var visibleRange = camera.visibleRange; // Should not include margin, as we don't declare what the margin is visible as what the panel is visible.
-
+    var visibleRange = camera.visibleRange;
+    // Should not include margin, as we don't declare what the margin is visible as what the panel is visible.
     return panel.isVisibleOnRange(visibleRange.min, visibleRange.max);
   };
   return CameraMode;
 }();
-var LinearCameraMode = /*#__PURE__*/
-function (_super) {
+var LinearCameraMode = /*#__PURE__*/function (_super) {
   flicking_esm_extends(LinearCameraMode, _super);
   function LinearCameraMode() {
     return _super !== null && _super.apply(this, arguments) || this;
@@ -9323,9 +10182,7 @@ function (_super) {
  * A {@link Camera} mode that connects the last panel and the first panel, enabling continuous loop
  * @ko 첫번째 패널과 마지막 패널이 이어진 상태로, 무한히 회전할 수 있는 종류의 {@link Camera} 모드
  */
-
-var CircularCameraMode = /*#__PURE__*/
-function (_super) {
+var CircularCameraMode = /*#__PURE__*/function (_super) {
   flicking_esm_extends(CircularCameraMode, _super);
   function CircularCameraMode() {
     return _super !== null && _super.apply(this, arguments) || this;
@@ -9392,8 +10249,8 @@ function (_super) {
         minDist = dist;
         minDistIndex = anchorIdx;
       }
-    } // Return last anchor
-
+    }
+    // Return last anchor
     return anchors[minDistIndex];
   };
   __proto.findAnchorIncludePosition = function (position) {
@@ -9459,8 +10316,8 @@ function (_super) {
     return position;
   };
   __proto.canReach = function (panel) {
-    if (panel.removed) return false; // Always reachable on circular mode
-
+    if (panel.removed) return false;
+    // Always reachable on circular mode
     return true;
   };
   __proto.canSee = function (panel) {
@@ -9468,8 +10325,8 @@ function (_super) {
     var range = camera.range;
     var rangeDiff = camera.rangeDiff;
     var visibleRange = camera.visibleRange;
-    var visibleInCurrentRange = _super.prototype.canSee.call(this, panel); // Check looped visible area for circular case
-
+    var visibleInCurrentRange = _super.prototype.canSee.call(this, panel);
+    // Check looped visible area for circular case
     if (visibleRange.min < range.min) {
       return visibleInCurrentRange || panel.isVisibleOnRange(visibleRange.min + rangeDiff, visibleRange.max + rangeDiff);
     } else if (visibleRange.max > range.max) {
@@ -9484,8 +10341,7 @@ function (_super) {
   };
   return CircularCameraMode;
 }(CameraMode);
-var BoundCameraMode = /*#__PURE__*/
-function (_super) {
+var BoundCameraMode = /*#__PURE__*/function (_super) {
   flicking_esm_extends(BoundCameraMode, _super);
   function BoundCameraMode() {
     return _super !== null && _super.apply(this, arguments) || this;
@@ -9622,8 +10478,8 @@ function (_super) {
         return panels[panelIdx - 1];
       }
       prevDist = dist;
-    } // Return last anchor
-
+    }
+    // Return last anchor
     return panels[panels.length - 1];
   };
   return BoundCameraMode;
@@ -9633,9 +10489,7 @@ function (_super) {
  * A component that manages actual movement inside the viewport
  * @ko 뷰포트 내에서의 실제 움직임을 담당하는 컴포넌트
  */
-
-var Camera = /*#__PURE__*/
-function () {
+var Camera = /*#__PURE__*/function () {
   /** */
   function Camera(flicking, _a) {
     var _this = this;
@@ -9670,14 +10524,13 @@ function () {
       _this._transform = transformName;
     };
     this._flicking = flicking;
-    this._resetInternalValues(); // Options
-
+    this._resetInternalValues();
+    // Options
     this._align = align;
   }
   var __proto = Camera.prototype;
   Object.defineProperty(__proto, "element", {
     // Internal states getter
-
     /**
      * The camera element(`.flicking-camera`)
      * @ko 카메라 엘리먼트(`.flicking-camera`)
@@ -9915,16 +10768,16 @@ function () {
       }
       if (position < panelPos) {
         var prevPanel = nearestPanel.prev();
-        var prevPosition = prevPanel ? prevPanel.position + prevPanel.offset : prevRange - bounceSize[0]; // Looped
-
+        var prevPosition = prevPanel ? prevPanel.position + prevPanel.offset : prevRange - bounceSize[0];
+        // Looped
         if (prevPosition > panelPos) {
           prevPosition -= rangeDiff;
         }
         return nearestPanel.index - 1 + getProgress(position, prevPosition, panelPos);
       } else {
         var nextPanel = nearestPanel.next();
-        var nextPosition = nextPanel ? nextPanel.position + nextPanel.offset : nextRange + bounceSize[1]; // Looped
-
+        var nextPosition = nextPanel ? nextPanel.position + nextPanel.offset : nextRange + bounceSize[1];
+        // Looped
         if (nextPosition < panelPos) {
           nextPosition += rangeDiff;
         }
@@ -9936,7 +10789,6 @@ function () {
   });
   Object.defineProperty(__proto, "align", {
     // Options Getter
-
     /**
      * A value indicating where the {@link Camera#alignPosition alignPosition} should be located at inside the viewport element
      * @ko {@link Camera#alignPosition alignPosition}이 뷰포트 엘리먼트 내의 어디에 위치해야 하는지를 나타내는 값
@@ -9960,7 +10812,6 @@ function () {
    * <ko>{@link ERROR_CODE VAL_MUST_NOT_NULL} 뷰포트 엘리먼트 내부에 카메라 엘리먼트(`.flicking-camera`)가 존재하지 않을 경우</ko>
    * @return {this}
    */
-
   __proto.init = function () {
     var viewportEl = this._flicking.viewport.element;
     checkExistence(viewportEl.firstElementChild, "First element child of the viewport element");
@@ -9974,7 +10825,6 @@ function () {
    * @ko Camera를 초기 상태로 되돌립니다
    * @return {void}
    */
-
   __proto.destroy = function () {
     this._resetInternalValues();
     return this;
@@ -9988,7 +10838,6 @@ function () {
    * <ko>{@link ERROR_CODE NOT_ATTACHED_TO_FLICKING} {@link Camera#init init}이 이전에 호출되지 않은 경우</ko>
    * @return {this}
    */
-
   __proto.lookAt = function (pos) {
     var _this = this;
     var flicking = getFlickingAttached(this._flicking);
@@ -10014,7 +10863,6 @@ function () {
    * @param {AnchorPoint} anchor A reference {@link AnchorPoint}<ko>기준 {@link AnchorPoint}</ko>
    * @return {AnchorPoint | null} The previous {@link AnchorPoint}<ko>이전 {@link AnchorPoint}</ko>
    */
-
   __proto.getPrevAnchor = function (anchor) {
     if (!this._circularEnabled || anchor.index !== 0) {
       return this._anchors[anchor.index - 1] || null;
@@ -10037,7 +10885,6 @@ function () {
    * @param {AnchorPoint} anchor A reference {@link AnchorPoint}<ko>기준 {@link AnchorPoint}</ko>
    * @return {AnchorPoint | null} The next {@link AnchorPoint}<ko>다음 {@link AnchorPoint}</ko>
    */
-
   __proto.getNextAnchor = function (anchor) {
     var anchors = this._anchors;
     if (!this._circularEnabled || anchor.index !== anchors.length - 1) {
@@ -10060,7 +10907,6 @@ function () {
    * 반환값은 카메라가 패널 내부에 있을 경우 0부터 1까지의 값을 갖습니다
    * 패널의 margin 영역에 있을 경우 0보다 작거나 1보다 큰 값을 반환할 수 있습니다
    */
-
   __proto.getProgressInPanel = function (panel) {
     var panelRange = panel.range;
     return (this._position - panelRange.min) / (panelRange.max - panelRange.min);
@@ -10073,7 +10919,6 @@ function () {
    * @param {number} position A position to check<ko>확인할 좌표</ko>
    * @return {AnchorPoint | null} The {@link AnchorPoint} that includes the given position<ko>해당 좌표를 포함하는 {@link AnchorPoint}</ko>
    */
-
   __proto.findAnchorIncludePosition = function (position) {
     return this._mode.findAnchorIncludePosition(position);
   };
@@ -10085,7 +10930,6 @@ function () {
    * @param {number} position A position to check<ko>확인할 좌표</ko>
    * @return {AnchorPoint | null} The {@link AnchorPoint} nearest to the given position<ko>해당 좌표에 가장 인접한 {@link AnchorPoint}</ko>
    */
-
   __proto.findNearestAnchor = function (position) {
     return this._mode.findNearestAnchor(position);
   };
@@ -10094,7 +10938,6 @@ function () {
    * @ko 현재 {@link Flicking#currentPanel}에 해당하는 {@link AnchorPoint}를 반환합니다
    * @return {AnchorPoint | null}
    */
-
   __proto.findActiveAnchor = function () {
     var flicking = getFlickingAttached(this._flicking);
     var activeIndex = flicking.control.activeIndex;
@@ -10108,7 +10951,6 @@ function () {
    * @param {number} position A position to clamp<ko>범위를 제한할 좌표</ko>
    * @return {number} A clamped position<ko>범위 제한된 좌표</ko>
    */
-
   __proto.clampToReachablePosition = function (position) {
     return this._mode.clampToReachablePosition(position);
   };
@@ -10118,7 +10960,6 @@ function () {
    * @param panel An instance of {@link Panel} to check<ko>확인할 {@link Panel}의 인스턴스</ko>
    * @return {boolean} Whether the panel's inside Camera's range<ko>도달 가능한 범위 내에 해당 패널이 존재하는지 여부</ko>
    */
-
   __proto.canReach = function (panel) {
     return this._mode.canReach(panel);
   };
@@ -10128,7 +10969,6 @@ function () {
    * @param panel An instance of {@link Panel} to check<ko>확인할 {@link Panel}의 인스턴스</ko>
    * @return Whether the panel element is visible at the current position<ko>현재 위치에서 해당 패널 엘리먼트가 보이는지 여부</ko>
    */
-
   __proto.canSee = function (panel) {
     return this._mode.canSee(panel);
   };
@@ -10146,7 +10986,6 @@ function () {
    * <ko>{@link ERROR_CODE NOT_ATTACHED_TO_FLICKING} {@link Camera#init init}이 이전에 호출되지 않은 경우</ko>
    * @return {this}
    */
-
   __proto.updateRange = function () {
     var flicking = getFlickingAttached(this._flicking);
     var renderer = flicking.renderer;
@@ -10164,7 +11003,6 @@ function () {
    * @chainable
    * @return {this}
    */
-
   __proto.updateAlignPos = function () {
     var align = this._align;
     var alignVal = typeof align === "object" ? align.camera : align;
@@ -10180,7 +11018,6 @@ function () {
    * @chainable
    * @return {this}
    */
-
   __proto.updateAnchors = function () {
     this._anchors = this._mode.getAnchors();
     return this;
@@ -10194,7 +11031,6 @@ function () {
    * @chainable
    * @return {this}
    */
-
   __proto.updateAdaptiveHeight = function () {
     var flicking = getFlickingAttached(this._flicking);
     var activePanel = flicking.control.activePanel;
@@ -10209,7 +11045,6 @@ function () {
    * @chainable
    * @return {this}
    */
-
   __proto.updateOffset = function () {
     var flicking = getFlickingAttached(this._flicking);
     var position = this._position;
@@ -10231,7 +11066,6 @@ function () {
    * @chainable
    * @return {this}
    */
-
   __proto.resetNeedPanelHistory = function () {
     this._needPanelTriggered = {
       prev: false,
@@ -10244,12 +11078,11 @@ function () {
    * @ko 현재 위치를 기준으로한 transform 스타일을 카메라 엘리먼트에 적용합니다.
    * @return {this}
    */
-
   __proto.applyTransform = function () {
     var el = this._el;
     var flicking = getFlickingAttached(this._flicking);
     var renderer = flicking.renderer;
-    if (renderer.rendering) return this;
+    if (renderer.rendering || !flicking.initialized) return this;
     var actualPosition = this._position - this._alignPos - this._offset + this._circularOffset;
     el.style[this._transform] = flicking.horizontal ? "translate(" + -actualPosition + "px)" : "translate(0, " + -actualPosition + "px)";
     return this;
@@ -10389,9 +11222,7 @@ function () {
  * A component that manages {@link Panel} and its elements
  * @ko {@link Panel}과 그 엘리먼트들을 관리하는 컴포넌트
  */
-
-var Renderer = /*#__PURE__*/
-function () {
+var Renderer = /*#__PURE__*/function () {
   /**
    * @param {object} options An options object<ko>옵션 오브젝트</ko>
    * @param {Constants.ALIGN | string | number} [options.align="center"] An {@link Flicking#align align} value that will be applied to all panels<ko>전체 패널에 적용될 {@link Flicking#align align} 값</ko>
@@ -10403,15 +11234,14 @@ function () {
       strategy = _a.strategy;
     this._flicking = null;
     this._panels = [];
-    this._rendering = false; // Bind options
-
+    this._rendering = false;
+    // Bind options
     this._align = align;
     this._strategy = strategy;
   }
   var __proto = Renderer.prototype;
   Object.defineProperty(__proto, "panels", {
     // Internal states Getter
-
     /**
      * Array of panels
      * @ko 전체 패널들의 배열
@@ -10464,7 +11294,6 @@ function () {
   });
   Object.defineProperty(__proto, "align", {
     // Options Getter
-
     /**
      * A {@link Panel}'s {@link Panel#align align} value that applied to all panels
      * @ko {@link Panel}에 공통적으로 적용할 {@link Panel#align align} 값
@@ -10491,7 +11320,6 @@ function () {
    * @chainable
    * @return {this}
    */
-
   __proto.init = function (flicking) {
     this._flicking = flicking;
     this._collectPanels();
@@ -10502,7 +11330,6 @@ function () {
    * @ko Renderer를 초기 상태로 되돌립니다
    * @return {void}
    */
-
   __proto.destroy = function () {
     this._flicking = null;
     this._panels = [];
@@ -10513,7 +11340,6 @@ function () {
    * @return {Panel | null} Panel at the given index<ko>주어진 인덱스에 해당하는 패널</ko>
    * @see Panel
    */
-
   __proto.getPanel = function (index) {
     return this._panels[index] || null;
   };
@@ -10529,7 +11355,6 @@ function () {
    * @chainable
    * @return {this}
    */
-
   __proto.updatePanelSize = function () {
     var flicking = getFlickingAttached(this._flicking);
     var panels = this._panels;
@@ -10556,7 +11381,6 @@ function () {
    * @param {boolean} [items.hasDOMInElements] Whether it contains actual DOM elements. If set to true, renderer will add them to the camera element<ko>내부에 실제 DOM 엘리먼트들을 포함하고 있는지 여부. true로 설정할 경우, 렌더러는 해당 엘리먼트들을 카메라 엘리먼트 내부에 추가합니다</ko>
    * @return {Panel[]} An array of prepended panels<ko>추가된 패널들의 배열</ko>
    */
-
   __proto.batchInsert = function () {
     var items = [];
     for (var _i = 0; _i < arguments.length; _i++) {
@@ -10572,7 +11396,6 @@ function () {
    * camera position & others will be updated after calling updateAfterPanelChange
    * @internal
    */
-
   __proto.batchInsertDefer = function () {
     var _this = this;
     var items = [];
@@ -10598,8 +11421,8 @@ function () {
       if (item.hasDOMInElements) {
         // Insert the actual elements as camera element's children
         _this._insertPanelElements(panelsInserted, (_a = panelsPushed[0]) !== null && _a !== void 0 ? _a : null);
-      } // Resize the newly added panels
-
+      }
+      // Resize the newly added panels
       if (flicking.panelsPerView > 0) {
         var firstPanel = prevFirstPanel || panelsInserted[0].resize();
         _this._updatePanelSizeByGrid(firstPanel, panelsInserted);
@@ -10607,8 +11430,8 @@ function () {
         panelsInserted.forEach(function (panel) {
           return panel.resize();
         });
-      } // Update panel indexes & positions
-
+      }
+      // Update panel indexes & positions
       panelsPushed.forEach(function (panel) {
         panel.increaseIndex(panelsInserted.length);
         panel.updatePosition();
@@ -10628,7 +11451,6 @@ function () {
    * @param {boolean} [items.hasDOMInElements=1] Whether it contains actual DOM elements. If set to true, renderer will remove them from the camera element<ko>내부에 실제 DOM 엘리먼트들을 포함하고 있는지 여부. true로 설정할 경우, 렌더러는 해당 엘리먼트들을 카메라 엘리먼트 내부에서 제거합니다</ko>
    * @return An array of removed panels<ko>제거된 패널들의 배열</ko>
    */
-
   __proto.batchRemove = function () {
     var items = [];
     for (var _i = 0; _i < arguments.length; _i++) {
@@ -10644,7 +11466,6 @@ function () {
    * camera position & others will be updated after calling updateAfterPanelChange
    * @internal
    */
-
   __proto.batchRemoveDefer = function () {
     var _this = this;
     var items = [];
@@ -10661,16 +11482,16 @@ function () {
       var removingIdx = getMinusCompensatedIndex(index, panels.length);
       var panelsPulled = panels.slice(removingIdx + deleteCount);
       var panelsRemoved = panels.splice(removingIdx, deleteCount);
-      if (panelsRemoved.length <= 0) return []; // Update panel indexes & positions
-
+      if (panelsRemoved.length <= 0) return [];
+      // Update panel indexes & positions
       panelsPulled.forEach(function (panel) {
         panel.decreaseIndex(panelsRemoved.length);
         panel.updatePosition();
       });
       if (item.hasDOMInElements) {
         _this._removePanelElements(panelsRemoved);
-      } // Remove panel elements
-
+      }
+      // Remove panel elements
       panelsRemoved.forEach(function (panel) {
         return panel.destroy();
       });
@@ -10684,15 +11505,14 @@ function () {
   /**
    * @internal
    */
-
   __proto.updateAfterPanelChange = function (panelsAdded, panelsRemoved) {
     var _a;
     var flicking = getFlickingAttached(this._flicking);
     var camera = flicking.camera,
       control = flicking.control;
     var panels = this._panels;
-    var activePanel = control.activePanel; // Update camera & control
-
+    var activePanel = control.activePanel;
+    // Update camera & control
     this._updateCameraAndControl();
     void this.render();
     if (!flicking.animating) {
@@ -10731,7 +11551,6 @@ function () {
   /**
    * @internal
    */
-
   __proto.checkPanelContentsReady = function (checkingPanels) {
     var _this = this;
     var flicking = getFlickingAttached(this._flicking);
@@ -10848,8 +11667,8 @@ function () {
   };
   __proto._removeAllChildsFromCamera = function () {
     var flicking = getFlickingAttached(this._flicking);
-    var cameraElement = flicking.camera.element; // Remove other elements
-
+    var cameraElement = flicking.camera.element;
+    // Remove other elements
     while (cameraElement.firstChild) {
       cameraElement.removeChild(cameraElement.firstChild);
     }
@@ -10875,20 +11694,22 @@ function () {
       cameraElement.removeChild(panel.element);
     });
   };
+  __proto._afterRender = function () {
+    var flicking = getFlickingAttached(this._flicking);
+    flicking.camera.applyTransform();
+  };
   return Renderer;
 }();
 
 /**
  *
  */
-
-var VanillaRenderer = /*#__PURE__*/
-function (_super) {
+var VanillaRenderer = /*#__PURE__*/function (_super) {
   flicking_esm_extends(VanillaRenderer, _super);
   function VanillaRenderer() {
     return _super !== null && _super.apply(this, arguments) || this;
-  } // eslint-disable-next-line @typescript-eslint/require-await
-
+  }
+  // eslint-disable-next-line @typescript-eslint/require-await
   var __proto = VanillaRenderer.prototype;
   __proto.render = function () {
     return __awaiter(this, void 0, void 0, function () {
@@ -10899,8 +11720,8 @@ function (_super) {
         strategy.updateRenderingPanels(flicking);
         strategy.renderPanels(flicking);
         this._resetPanelElementOrder();
-        return [2
-        /*return*/];
+        this._afterRender();
+        return [2 /*return*/];
       });
     });
   };
@@ -10916,8 +11737,8 @@ function (_super) {
   };
   __proto._resetPanelElementOrder = function () {
     var flicking = getFlickingAttached(this._flicking);
-    var cameraEl = flicking.camera.element; // We're using reversed panels here as last panel should be the last element of camera element
-
+    var cameraEl = flicking.camera.element;
+    // We're using reversed panels here as last panel should be the last element of camera element
     var reversedElements = this._strategy.getRenderingElementsByOrder(flicking).reverse();
     reversedElements.forEach(function (el, idx) {
       var nextEl = reversedElements[idx - 1] ? reversedElements[idx - 1] : null;
@@ -10928,8 +11749,8 @@ function (_super) {
   };
   __proto._removeAllTextNodes = function () {
     var flicking = getFlickingAttached(this._flicking);
-    var cameraElement = flicking.camera.element; // Remove all text nodes in the camera element
-
+    var cameraElement = flicking.camera.element;
+    // Remove all text nodes in the camera element
     flicking_esm_toArray(cameraElement.childNodes).forEach(function (node) {
       if (node.nodeType === Node.TEXT_NODE) {
         cameraElement.removeChild(node);
@@ -10942,19 +11763,18 @@ function (_super) {
 /**
  * @internal
  */
-
-var ExternalRenderer = /*#__PURE__*/
-function (_super) {
+var ExternalRenderer = /*#__PURE__*/function (_super) {
   flicking_esm_extends(ExternalRenderer, _super);
   function ExternalRenderer() {
     return _super !== null && _super.apply(this, arguments) || this;
   }
   /* eslint-disable @typescript-eslint/no-unused-vars */
-
   var __proto = ExternalRenderer.prototype;
-  __proto._removePanelElements = function (panels) {// DO NOTHING, overrided to prevent an unexpected error
+  __proto._removePanelElements = function (panels) {
+    // DO NOTHING, overrided to prevent an unexpected error
   };
-  __proto._removeAllChildsFromCamera = function () {// DO NOTHING, overrided to prevent an unexpected error
+  __proto._removeAllChildsFromCamera = function () {
+    // DO NOTHING, overrided to prevent an unexpected error
   };
   return ExternalRenderer;
 }(Renderer);
@@ -10963,9 +11783,7 @@ function (_super) {
  * A slide data component that holds information of a single HTMLElement
  * @ko 슬라이드 데이터 컴포넌트로, 단일 HTMLElement의 정보를 갖고 있습니다
  */
-
-var Panel = /*#__PURE__*/
-function () {
+var Panel = /*#__PURE__*/function () {
   /**
    * @param {object} options An options object<ko>옵션 오브젝트</ko>
    * @param {number} [options.index] An initial index of the panel<ko>패널의 초기 인덱스</ko>
@@ -10990,7 +11808,6 @@ function () {
   var __proto = Panel.prototype;
   Object.defineProperty(__proto, "element", {
     // Internal States Getter
-
     /**
      * `HTMLElement` that panel's referencing
      * @ko 패널이 참조하고 있는 `HTMLElement`
@@ -11287,7 +12104,6 @@ function () {
   });
   Object.defineProperty(__proto, "align", {
     // Options Getter
-
     /**
      * A value indicating where the {@link Panel#alignPosition alignPosition} should be located at inside the panel element
      * @ko {@link Panel#alignPosition alignPosition}이 패널 내의 어디에 위치해야 하는지를 나타내는 값
@@ -11308,7 +12124,6 @@ function () {
    * Mark panel element to be appended on the camera element
    * @internal
    */
-
   __proto.markForShow = function () {
     this._rendered = true;
     this._elProvider.show(this._flicking);
@@ -11317,7 +12132,6 @@ function () {
    * Mark panel element to be removed from the camera element
    * @internal
    */
-
   __proto.markForHide = function () {
     this._rendered = false;
     this._elProvider.hide(this._flicking);
@@ -11329,7 +12143,6 @@ function () {
    * @chainable
    * @return {this}
    */
-
   __proto.resize = function (cached) {
     var _a;
     var el = this.element;
@@ -11383,7 +12196,6 @@ function () {
    * @chainable
    * @return {this}
    */
-
   __proto.setSize = function (size) {
     setSize(this.element, size);
     return this;
@@ -11394,7 +12206,6 @@ function () {
    * @param {HTMLElement} element The HTMLElement to check<ko>확인하고자 하는 HTMLElement</ko>
    * @return {boolean} A Boolean value indicating the element is inside of this panel {@link Panel#element element}<ko>패널의 {@link Panel#element element}내에 해당 엘리먼트 포함 여부</ko>
    */
-
   __proto.contains = function (element) {
     var _a;
     return !!((_a = this.element) === null || _a === void 0 ? void 0 : _a.contains(element));
@@ -11404,7 +12215,6 @@ function () {
    * @ko 내부 상태를 초기화하고 {@link Panel#removed removed}를 `true`로 설정합니다.
    * @return {void}
    */
-
   __proto.destroy = function () {
     this._resetInternalStates();
     this._removed = true;
@@ -11416,7 +12226,6 @@ function () {
    * @param {boolean} [includeMargin=false] Include {@link Panel#margin margin} to the range<ko>패널 영역에 {@link Panel#margin margin}값을 포함시킵니다</ko>
    * @return {boolean} A Boolean value indicating whether the given position is included in the panel range<ko>해당 좌표가 패널 영역 내에 속해있는지 여부</ko>
    */
-
   __proto.includePosition = function (pos, includeMargin) {
     if (includeMargin === void 0) {
       includeMargin = false;
@@ -11431,7 +12240,6 @@ function () {
    * @param {boolean} [includeMargin=false] Include {@link Panel#margin margin} to the range<ko>패널 영역에 {@link Panel#margin margin}값을 포함시킵니다</ko>
    * @returns {boolean} A Boolean value indicating whether the given range is fully included in the panel range<ko>해당 범위가 패널 영역 내에 완전히 속해있는지 여부</ko>
    */
-
   __proto.includeRange = function (min, max, includeMargin) {
     if (includeMargin === void 0) {
       includeMargin = false;
@@ -11451,7 +12259,6 @@ function () {
    * @param {number} max Maximum value of the range to check<ko>확인하고자 하는 최대 범위</ko>
    * @returns {boolean} A Boolean value indicating whether the panel is visible<ko>해당 범위 내에서 패널을 볼 수 있는지 여부</ko>
    */
-
   __proto.isVisibleOnRange = function (min, max) {
     var panelRange = this.range;
     return max > panelRange.min && min < panelRange.max;
@@ -11462,7 +12269,6 @@ function () {
    * @param {number} [duration] Duration of the animation (unit: ms)<ko>애니메이션 진행 시간 (단위: ms)</ko>
    * @returns {Promise<void>} A Promise which will be resolved after reaching the panel<ko>패널 도달시에 resolve되는 Promise</ko>
    */
-
   __proto.focus = function (duration) {
     return this._flicking.moveTo(this._index, duration);
   };
@@ -11473,7 +12279,6 @@ function () {
    * {@link Flicking#circularEnabled circular} 모드가 활성화되었을 때 첫번째 패널에서 이 메소드를 호출할 경우 마지막 패널을 반환합니다
    * @returns {Panel | null} The previous panel<ko>이전 패널</ko>
    */
-
   __proto.prev = function () {
     var index = this._index;
     var flicking = this._flicking;
@@ -11489,7 +12294,6 @@ function () {
    * {@link Flicking#circularEnabled circular} 모드가 활성화되었을 때 마지막 패널에서 이 메소드를 호출할 경우 첫번째 패널을 반환합니다
    * @returns {Panel | null} The previous panel<ko>다음 패널</ko>
    */
-
   __proto.next = function () {
     var index = this._index;
     var flicking = this._flicking;
@@ -11506,7 +12310,6 @@ function () {
    * @param val An integer greater than or equal to 0<ko>0보다 같거나 큰 정수</ko>
    * @returns {this}
    */
-
   __proto.increaseIndex = function (val) {
     this._index += Math.max(val, 0);
     return this;
@@ -11519,7 +12322,6 @@ function () {
    * @param val An integer greater than or equal to 0<ko>0보다 같거나 큰 정수</ko>
    * @returns {this}
    */
-
   __proto.decreaseIndex = function (val) {
     this._index -= Math.max(val, 0);
     return this;
@@ -11527,7 +12329,6 @@ function () {
   /**
    * @internal
    */
-
   __proto.updatePosition = function () {
     var prevPanel = this._flicking.renderer.panels[this._index - 1];
     this._pos = prevPanel ? prevPanel.range.max + prevPanel.margin.next + this._margin.prev : this._margin.prev;
@@ -11537,7 +12338,6 @@ function () {
    * @internal
    * @return {boolean} toggled
    */
-
   __proto.toggle = function (prevPos, newPos) {
     var toggleDirection = this._toggleDirection;
     var togglePosition = this._togglePosition;
@@ -11557,7 +12357,6 @@ function () {
   /**
    * @internal
    */
-
   __proto.updateCircularToggleDirection = function () {
     var flicking = this._flicking;
     if (!flicking.circularEnabled) {
@@ -11608,14 +12407,14 @@ function () {
   };
   return Panel;
 }();
-var NormalRenderingStrategy = /*#__PURE__*/
-function () {
+var NormalRenderingStrategy = /*#__PURE__*/function () {
   function NormalRenderingStrategy(_a) {
     var providerCtor = _a.providerCtor;
     this._providerCtor = providerCtor;
   }
   var __proto = NormalRenderingStrategy.prototype;
-  __proto.renderPanels = function () {// DO_NOTHING
+  __proto.renderPanels = function () {
+    // DO_NOTHING
   };
   __proto.getRenderingIndexesByOrder = function (flicking) {
     var renderedPanels = flicking.renderer.panels.filter(function (panel) {
@@ -11696,9 +12495,7 @@ function () {
  * An slide data component that holds information of a single HTMLElement
  * @ko 슬라이드 데이터 컴포넌트로, 단일 HTMLElement의 정보를 갖고 있습니다
  */
-
-var VirtualPanel = /*#__PURE__*/
-function (_super) {
+var VirtualPanel = /*#__PURE__*/function (_super) {
   flicking_esm_extends(VirtualPanel, _super);
   /**
    * @param {object} options An options object<ko>옵션 오브젝트</ko>
@@ -11706,7 +12503,6 @@ function (_super) {
    * @param {Constants.ALIGN | string | number} [options.align] An initial {@link Flicking#align align} value of the panel<ko>패널의 초기 {@link Flicking#align align}값</ko>
    * @param {Flicking} [options.flicking] A Flicking instance panel's referencing<ko>패널이 참조하는 {@link Flicking} 인스턴스</ko>
    */
-
   function VirtualPanel(options) {
     var _this = _super.call(this, options) || this;
     options.elementProvider.init(_this);
@@ -11791,8 +12587,7 @@ function (_super) {
   };
   return VirtualPanel;
 }(Panel);
-var VirtualRenderingStrategy = /*#__PURE__*/
-function () {
+var VirtualRenderingStrategy = /*#__PURE__*/function () {
   function VirtualRenderingStrategy() {}
   var __proto = VirtualRenderingStrategy.prototype;
   __proto.renderPanels = function (flicking) {
@@ -11891,9 +12686,7 @@ function () {
  * @requires {@link https://github.com/naver/egjs-component|@egjs/component}
  * @requires {@link https://github.com/naver/egjs-axes|@egjs/axes}
  */
-
-var Flicking = /*#__PURE__*/
-function (_super) {
+var Flicking = /*#__PURE__*/function (_super) {
   flicking_esm_extends(Flicking, _super);
   /**
    * @param root A root HTMLElement to initialize Flicking on it. When it's a typeof `string`, it should be a css selector string
@@ -11923,7 +12716,6 @@ function (_super) {
    * const flicking2 = new Flicking(".flicking-viewport", { circular: true });
    * ```
    */
-
   function Flicking(root, _a) {
     var _b = _a === void 0 ? {} : _a,
       _c = _b.align,
@@ -11998,11 +12790,11 @@ function (_super) {
       externalRenderer = _11 === void 0 ? null : _11,
       _12 = _b.renderExternal,
       renderExternal = _12 === void 0 ? null : _12;
-    var _this = _super.call(this) || this; // Internal states
-
+    var _this = _super.call(this) || this;
+    // Internal states
     _this._initialized = false;
-    _this._plugins = []; // Bind options
-
+    _this._plugins = [];
+    // Bind options
     _this._align = align;
     _this._defaultIndex = defaultIndex;
     _this._horizontal = horizontal;
@@ -12037,8 +12829,8 @@ function (_super) {
     _this._maxResizeDebounce = maxResizeDebounce;
     _this._useFractionalSize = useFractionalSize;
     _this._externalRenderer = externalRenderer;
-    _this._renderExternal = renderExternal; // Create core components
-
+    _this._renderExternal = renderExternal;
+    // Create core components
     _this._viewport = new Viewport(_this, getElement(root));
     _this._autoResizer = new AutoResizer(_this);
     _this._renderer = _this._createRenderer();
@@ -12053,7 +12845,6 @@ function (_super) {
   var __proto = Flicking.prototype;
   Object.defineProperty(__proto, "control", {
     // Components
-
     /**
      * {@link Control} instance of the Flicking
      * @ko 현재 Flicking에 활성화된 {@link Control} 인스턴스
@@ -12121,7 +12912,6 @@ function (_super) {
   });
   Object.defineProperty(__proto, "initialized", {
     // Internal States
-
     /**
      * Whether Flicking's {@link Flicking#init init()} is called.
      * This is `true` when {@link Flicking#init init()} is called, and is `false` after calling {@link Flicking#destroy destroy()}.
@@ -12293,7 +13083,6 @@ function (_super) {
   Object.defineProperty(__proto, "align", {
     // Options Getter
     // UI / LAYOUT
-
     /**
      * Align position of the panels within viewport. You can set different values each for the panel and camera
      * @ko 뷰포트 내에서 패널 정렬방식을 설정하는 옵션. 카메라와 패널 개별로 옵션을 설정할 수도 있습니다
@@ -12301,6 +13090,7 @@ function (_super) {
      * @property {ALIGN | string | number} panel The align value for each {@link Panel}s<ko>개개의 {@link Panel}에 적용할 값</ko>
      * @property {ALIGN | string | number} camera The align value for {@link Camera}<ko>{@link Camera}에 적용할 값</ko>
      * @default "center"
+     * @see {@link https://naver.github.io/egjs-flicking/Options#align align ( Options )}
      * @example
      * ```ts
      * const possibleOptions = [
@@ -12341,6 +13131,7 @@ function (_super) {
      * @ko Flicking의 {@link Flicking#init init()}이 호출될 때 이동할 디폴트 패널의 인덱스로, 0부터 시작하는 정수입니다
      * @type {number}
      * @default 0
+     * @see {@link https://naver.github.io/egjs-flicking/Options#defaultindex defaultIndex ( Options )}
      */
     get: function () {
       return this._defaultIndex;
@@ -12357,6 +13148,7 @@ function (_super) {
      * @ko 패널 이동 방향 (true: 가로방향, false: 세로방향)
      * @type {boolean}
      * @default true
+     * @see {@link https://naver.github.io/egjs-flicking/Options#horizontal horizontal ( Options )}
      */
     get: function () {
       return this._horizontal;
@@ -12375,6 +13167,7 @@ function (_super) {
      * @ko 순환 모드를 활성화합니다. 순환 모드에서는 양 끝의 패널이 서로 연결되어 끊김없는 스크롤이 가능합니다.
      * @type {boolean}
      * @default false
+     * @see {@link https://naver.github.io/egjs-flicking/Options#circular circular ( Options )}
      */
     get: function () {
       return this._circular;
@@ -12397,6 +13190,7 @@ function (_super) {
      * @see CIRCULAR_FALLBACK
      * @type {string}
      * @default "linear"
+     * @see {@link https://naver.github.io/egjs-flicking/Options#circularfallback circularFallback ( Options )}
      */
     get: function () {
       return this._circularFallback;
@@ -12412,6 +13206,7 @@ function (_super) {
      * `circular=false`인 경우에만 사용할 수 있습니다
      * @type {boolean}
      * @default false
+     * @see {@link https://naver.github.io/egjs-flicking/Options#bound bound ( Options )}
      */
     get: function () {
       return this._bound;
@@ -12429,6 +13224,7 @@ function (_super) {
      * @ko 이동한 후 뷰포트 엘리먼트의 크기를 현재 패널의 높이와 동일하게 설정합니다. `horizontal=true`인 경우에만 사용할 수 있습니다.
      * @type {boolean}
      * @default false
+     * @see {@link https://naver.github.io/egjs-flicking/Options#adaptive adaptive ( Options )}
      */
     get: function () {
       return this._adaptive;
@@ -12446,6 +13242,7 @@ function (_super) {
      * @ko 한 화면에 보이는 패널의 개수. 이 옵션을 활성화할 경우 패널의 크기를 강제로 재조정합니다
      * @type {number}
      * @default -1
+     * @see {@link https://naver.github.io/egjs-flicking/Options#panelsperview panelsPerView ( Options )}
      */
     get: function () {
       return this._panelsPerView;
@@ -12484,6 +13281,7 @@ function (_super) {
      * 이 동작은 Flicking 내부에 로드 전/후로 크기가 변하는 콘텐츠를 포함하고 있을 때 유용하게 사용하실 수 있습니다.
      * @type {boolean}
      * @default false
+     * @see {@link https://naver.github.io/egjs-flicking/Options#resizeOnContentsReady resizeOnContentsReady ( Options )}
      */
     get: function () {
       return this._resizeOnContentsReady;
@@ -12505,6 +13303,7 @@ function (_super) {
      * 만약 상위 Flicking과 하위 Flicking이 서로 다른 horizontal 옵션을 가지고 있다면 이 옵션을 설정할 필요가 없습니다.
      * @type {boolean}
      * @default false
+     * @see {@link https://naver.github.io/egjs-flicking/Options#nested nested ( Options )}
      */
     get: function () {
       return this._nested;
@@ -12521,12 +13320,12 @@ function (_super) {
   });
   Object.defineProperty(__proto, "needPanelThreshold", {
     // EVENTS
-
     /**
      * A Threshold from viewport edge before triggering `needPanel` event
      * @ko `needPanel`이벤트가 발생하기 위한 뷰포트 끝으로부터의 최대 거리
      * @type {number}
      * @default 0
+     * @see {@link https://naver.github.io/egjs-flicking/Options#needpanelthreshold needPanelThreshold ( Options )}
      */
     get: function () {
       return this._needPanelThreshold;
@@ -12544,6 +13343,7 @@ function (_super) {
      * @ko 활성화할 경우 초기화시 `ready` 이벤트 이전의 이벤트가 발생하지 않습니다.
      * @type {boolean}
      * @default true
+     * @see {@link https://naver.github.io/egjs-flicking/Options#preventeventsbeforeinit preventEventsBeforeInit ( Options )}
      */
     get: function () {
       return this._preventEventsBeforeInit;
@@ -12556,12 +13356,12 @@ function (_super) {
   });
   Object.defineProperty(__proto, "deceleration", {
     // ANIMATION
-
     /**
      * Deceleration value for panel movement animation which is triggered by user input. A higher value means a shorter animation time
      * @ko 사용자의 동작으로 가속도가 적용된 패널 이동 애니메이션의 감속도. 값이 높을수록 애니메이션 실행 시간이 짧아집니다
      * @type {number}
      * @default 0.0075
+     * @see {@link https://naver.github.io/egjs-flicking/Options#deceleration deceleration ( Options )}
      */
     get: function () {
       return this._deceleration;
@@ -12584,6 +13384,7 @@ function (_super) {
      * @type {function}
      * @default x => 1 - Math.pow(1 - x, 3)
      * @see Easing Functions Cheat Sheet {@link http://easings.net/} <ko>이징 함수 Cheat Sheet {@link http://easings.net/}</ko>
+     * @see {@link https://naver.github.io/egjs-flicking/Options#easing Easing ( Options )}
      */
     get: function () {
       return this._easing;
@@ -12604,6 +13405,7 @@ function (_super) {
      * @ko 디폴트 애니메이션 재생 시간 (ms)
      * @type {number}
      * @default 500
+     * @see {@link https://naver.github.io/egjs-flicking/Options#duration duration ( Options )}
      */
     get: function () {
       return this._duration;
@@ -12616,14 +13418,14 @@ function (_super) {
   });
   Object.defineProperty(__proto, "inputType", {
     // INPUT
-
     /**
      * Types of input devices to enable
      * @ko 활성화할 입력 장치 종류
      * @type {string[]}
      * @default ["touch", "mouse"]
-     * @see {@link https://naver.github.io/egjs-axes/release/latest/doc/global.html#PanInputOption Possible values (PanInputOption#inputType)}
-     * <ko>{@link https://naver.github.io/egjs-axes/release/latest/doc/global.html#PanInputOption 가능한 값들 (PanInputOption#inputType)}</ko>
+     * @see {@link https://naver.github.io/egjs-axes/Options#paninput-options Possible values (PanInputOption#inputType)}
+     * <ko>{@link https://naver.github.io/egjs-axes/Options#paninput-options 가능한 값들 (PanInputOption#inputType)}</ko>
+     * @see {@link https://naver.github.io/egjs-flicking/Options#inputtype inputType ( Options )}
      */
     get: function () {
       return this._inputType;
@@ -12647,6 +13449,7 @@ function (_super) {
      * 상수 {@link MOVE_TYPE}에 정의된 값들을 이용할 수 있습니다
      * @type {MOVE_TYPE | Pair<string, object>}
      * @default "snap"
+     * @see {@link https://naver.github.io/egjs-flicking/Options#movetype moveType ( Options )}
      * @example
      * |moveType|control|options|
      * |:---:|:---:|:---:|
@@ -12693,6 +13496,7 @@ function (_super) {
      * @ko 패널 변경을 위한 이동 임계값 (단위: px). 주어진 값 이상으로 스크롤해야만 패널 변경이 가능하다.
      * @type {number}
      * @default 40
+     * @see {@link https://naver.github.io/egjs-flicking/Options#threshold Threshold ( Options )}
      */
     get: function () {
       return this._threshold;
@@ -12709,6 +13513,7 @@ function (_super) {
      * @ko 사용자의 클릭/터치로 인해 애니메이션을 도중에 멈출 수 있도록 설정합니다.
      * @type {boolean}
      * @default true
+     * @see {@link https://naver.github.io/egjs-flicking/Options#interruptable Interruptable ( Options )}
      */
     get: function () {
       return this._interruptable;
@@ -12735,6 +13540,7 @@ function (_super) {
      * 이 값을 변경시 {@link Control#updateInput}를 호출해야 합니다.
      * @type {string | number | Array<string | number>}
      * @default "20%"
+     * @see {@link https://naver.github.io/egjs-flicking/Options#bounce bounce ( Options )}
      * @example
      * ```ts
      * const possibleOptions = [
@@ -12771,6 +13577,7 @@ function (_super) {
      * @ko iOS Safari에서 swipe를 통한 뒤로가기/앞으로가기를 활성화하는 오른쪽 끝으로부터의 영역의 크기 (px)
      * @type {number}
      * @default 30
+     * @see {@link https://naver.github.io/egjs-flicking/Options#iosedgeswipethreshold iOSEdgeSwipeThreshold ( Options )}
      */
     get: function () {
       return this._iOSEdgeSwipeThreshold;
@@ -12791,6 +13598,7 @@ function (_super) {
      * @ko 사용자가 뷰포트 영역을 1픽셀이라도 드래그했을 경우 자동으로 {@link https://developer.mozilla.org/ko/docs/Web/API/Element/click_event click} 이벤트를 취소합니다
      * @type {boolean}
      * @default true
+     * @see {@link https://naver.github.io/egjs-flicking/Options#preventclickondrag preventClickOnDrag ( Options )}
      */
     get: function () {
       return this._preventClickOnDrag;
@@ -12815,6 +13623,7 @@ function (_super) {
      * @ko Flicking init시에 {@link Flicking#disableInput disableInput()}을 바로 호출합니다
      * @type {boolean}
      * @default false
+     * @see {@link https://naver.github.io/egjs-flicking/Options#disableoninit disableOnInit ( Options )}
      */
     get: function () {
       return this._disableOnInit;
@@ -12833,6 +13642,7 @@ function (_super) {
      * `willChange`/`willRestore` 이벤트의 `index`값이 새로운 인덱스로 사용될 것입니다.
      * @type {boolean}
      * @default false
+     * @see {@link https://naver.github.io/egjs-flicking/Options#changeonhold changeOnHold ( Options )}
      */
     get: function () {
       return this._changeOnHold;
@@ -12845,12 +13655,12 @@ function (_super) {
   });
   Object.defineProperty(__proto, "renderOnlyVisible", {
     // PERFORMANCE
-
     /**
      * Whether to render visible panels only. This can dramatically increase performance when there're many panels
      * @ko 보이는 패널만 렌더링할지 여부를 설정합니다. 패널이 많을 경우에 퍼포먼스를 크게 향상시킬 수 있습니다
      * @type {boolean}
      * @default false
+     * @see {@link https://naver.github.io/egjs-flicking/Options#renderonlyvisible renderOnlyVisible ( Options )}
      */
     get: function () {
       return this._renderOnlyVisible;
@@ -12876,6 +13686,7 @@ function (_super) {
      * @property {number} initialPanelCount Initial panel count to render<ko>최초로 렌더링할 패널의 개수</ko>
      * @property {boolean} [cache=false] Whether to cache rendered panel's innerHTML<ko>렌더링된 패널의 innerHTML 정보를 캐시할지 여부</ko>
      * @property {string} [panelClass="flicking-panel"] The class name that will be applied to rendered panel elements<ko>렌더링되는 패널 엘리먼트에 적용될 클래스 이름</ko>
+     * @see {@link https://naver.github.io/egjs-flicking/Options#virtual virtual ( Options )}
      * @example
      * ```ts
      * import Flicking, { VirtualPanel } from "@egjs/flicking";
@@ -12903,12 +13714,12 @@ function (_super) {
   });
   Object.defineProperty(__proto, "autoInit", {
     // OTHERS
-
     /**
      * Call {@link Flicking#init init()} automatically when creating Flicking's instance
      * @ko Flicking 인스턴스를 생성할 때 자동으로 {@link Flicking#init init()}를 호출합니다
      * @type {boolean}
      * @default true
+     * @see {@link https://naver.github.io/egjs-flicking/Options#autoinit autoInit ( Options )}
      * @readonly
      */
     get: function () {
@@ -12945,6 +13756,7 @@ function (_super) {
      * @ko autoResize 옵션 사용시 {@link https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver ResizeObserver}의 이벤트를 Window객체의 {@link https://developer.mozilla.org/ko/docs/Web/API/Window/resize_event resize} 이벤트 대신 수신할지 여부를 설정합니다
      * @type {boolean}
      * @default true
+     * @see {@link https://naver.github.io/egjs-flicking/Options#useresizeobserver useResizeObserver ( Options )}
      */
     get: function () {
       return this._useResizeObserver;
@@ -12968,6 +13780,7 @@ function (_super) {
      * 이를 통해 `resize`가 너무 많이 호출되는 것을 방지하여 성능을 향상시킬 수 있습니다.
      * @type {number}
      * @default 0
+     * @see {@link https://naver.github.io/egjs-flicking/Options#resizedebounce resizeDebounce ( Options )}
      */
     get: function () {
       return this._resizeDebounce;
@@ -12983,6 +13796,7 @@ function (_super) {
      * 이를 통해, 적어도 (n)ms에 한번은 크기 재계산을 수행하는 것을 보장할 수 있습니다.
      * @type {number}
      * @default 100
+     * @see {@link https://naver.github.io/egjs-flicking/Options#maxresizedebounce maxResizeDebounce ( Options )}
      */
     get: function () {
       return this._maxResizeDebounce;
@@ -13000,6 +13814,7 @@ function (_super) {
      * 모든 크기는 CSS {@link https://developer.mozilla.org/en-US/docs/Web/CSS/transform transform}이 엘리먼트에 적용되기 이전의 크기를 사용할 것입니다.
      * @type {boolean}
      * @default false
+     * @see {@link https://naver.github.io/egjs-flicking/Options#usefractionalsize useFractionalSize ( Options )}
      */
     get: function () {
       return this._useFractionalSize;
@@ -13044,7 +13859,6 @@ function (_super) {
    * @fires Flicking#ready
    * @return {Promise<void>}
    */
-
   __proto.init = function () {
     var _this = this;
     if (this._initialized) return Promise.resolve();
@@ -13063,8 +13877,8 @@ function (_super) {
         return _this;
       };
     }
-    this._initialResize(); // Look at initial panel
-
+    this._initialResize();
+    // Look at initial panel
     this._moveToInitialPanel();
     if (this._autoResize) {
       this._autoResizer.enable();
@@ -13076,12 +13890,12 @@ function (_super) {
       this.disableInput();
     }
     renderer.checkPanelContentsReady(renderer.panels);
+    this._initialized = true;
     return renderer.render().then(function () {
       // Done initializing & emit ready event
       _this._plugins.forEach(function (plugin) {
         return plugin.init(_this);
       });
-      _this._initialized = true;
       if (preventEventsBeforeInit) {
         _this.trigger = originalTrigger;
       }
@@ -13093,7 +13907,6 @@ function (_super) {
    * @ko Flicking과 하위 컴포넌트들을 초기 상태로 되돌리고, 부착된 모든 이벤트 핸들러를 제거합니다
    * @return {void}
    */
-
   __proto.destroy = function () {
     this.off();
     this._autoResizer.disable();
@@ -13138,7 +13951,6 @@ function (_super) {
    * </ko>
    * @return {Promise<void>} A Promise which will be resolved after reaching the previous panel<ko>이전 패널 도달시에 resolve되는 Promise</ko>
    */
-
   __proto.prev = function (duration) {
     var _a, _b, _c;
     if (duration === void 0) {
@@ -13180,7 +13992,6 @@ function (_super) {
    * </ko>
    * @return {Promise<void>} A Promise which will be resolved after reaching the next panel<ko>다음 패널 도달시에 resolve되는 Promise</ko>
    */
-
   __proto.next = function (duration) {
     var _a, _b, _c;
     if (duration === void 0) {
@@ -13224,7 +14035,6 @@ function (_super) {
    * </ko>
    * @return {Promise<void>} A Promise which will be resolved after reaching the target panel<ko>해당 패널 도달시에 resolve되는 Promise</ko>
    */
-
   __proto.moveTo = function (index, duration, direction) {
     if (duration === void 0) {
       duration = this._duration;
@@ -13260,7 +14070,6 @@ function (_super) {
    * <ko>{@link ERROR_CODE INDEX_OUT_OF_RANGE} 해당 인덱스를 가진 패널이 존재하지 않을 경우</ko>
    * @return {void}
    */
-
   __proto.updateAnimation = function (index, duration, direction) {
     if (!this._control.animating) {
       return;
@@ -13279,7 +14088,6 @@ function (_super) {
    * @fires Flicking#moveEnd
    * @return {void}
    */
-
   __proto.stopAnimation = function () {
     if (!this._control.animating) {
       return;
@@ -13298,7 +14106,6 @@ function (_super) {
    * const samePanel = flicking.panels[0];
    * ```
    */
-
   __proto.getPanel = function (index) {
     return this._renderer.getPanel(index);
   };
@@ -13307,7 +14114,6 @@ function (_super) {
    * @ko 사용자의 입력(마우스/터치)를 활성화합니다
    * @return {this}
    */
-
   __proto.enableInput = function () {
     this._control.enable();
     return this;
@@ -13317,7 +14123,6 @@ function (_super) {
    * @ko 사용자의 입력(마우스/터치)를 막습니다
    * @return {this}
    */
-
   __proto.disableInput = function () {
     this._control.disable();
     return this;
@@ -13333,7 +14138,6 @@ function (_super) {
    * <ko>현재 보이는 패널({@link Flicking#visiblePanel visiblePanel})의 HTML만 반환합니다. `includePanelHTML`이 `true`일 경우에만 동작합니다.</ko>
    * @return {Status} An object with current status value information<ko>현재 상태값 정보를 가진 객체.</ko>
    */
-
   __proto.getStatus = function (_a) {
     var _b, _c;
     var _d = _a === void 0 ? {} : _a,
@@ -13382,7 +14186,6 @@ function (_super) {
    * @param {Partial<Status>} status Status value to be restored. You should use the return value of the {@link Flicking#getStatus getStatus()} method<ko>복원할 상태 값. {@link Flicking#getStatus getStatus()} 메서드의 반환값을 지정하면 됩니다</ko>
    * @return {void}
    */
-
   __proto.setStatus = function (status) {
     var _a;
     if (!this._initialized) {
@@ -13393,8 +14196,8 @@ function (_super) {
       visibleOffset = status.visibleOffset,
       panels = status.panels;
     var renderer = this._renderer;
-    var control = this._control; // Can't add/remove panels on external rendering
-
+    var control = this._control;
+    // Can't add/remove panels on external rendering
     if (((_a = panels[0]) === null || _a === void 0 ? void 0 : _a.html) && !this._renderExternal) {
       renderer.batchRemove({
         index: 0,
@@ -13409,7 +14212,7 @@ function (_super) {
         hasDOMInElements: true
       });
     }
-    if (index) {
+    if (index != null) {
       var panelIndex = visibleOffset ? index - visibleOffset : index;
       void this.moveTo(panelIndex, 0).catch(function () {
         return void 0;
@@ -13433,7 +14236,6 @@ function (_super) {
    * @return {this}
    * @see https://github.com/naver/egjs-flicking-plugins
    */
-
   __proto.addPlugins = function () {
     var _a;
     var _this = this;
@@ -13456,7 +14258,6 @@ function (_super) {
    * @return {this}
    * @see https://github.com/naver/egjs-flicking-plugins
    */
-
   __proto.removePlugins = function () {
     var _this = this;
     var plugins = [];
@@ -13482,7 +14283,6 @@ function (_super) {
    * @fires Flicking#afterResize
    * @return {this}
    */
-
   __proto.resize = function () {
     return __awaiter(this, void 0, void 0, function () {
       var viewport, renderer, camera, control, activePanel, prevWidth, prevHeight, prevProgressInPanel, newWidth, newHeight, sizeChanged;
@@ -13503,19 +14303,16 @@ function (_super) {
               element: viewport.element
             }));
             viewport.resize();
-            return [4
-            /*yield*/, renderer.forceRenderAllPanels()];
+            return [4 /*yield*/, renderer.forceRenderAllPanels()];
           case 1:
             _a.sent(); // Render all panel elements, to update sizes
-
             renderer.updatePanelSize();
             camera.updateAlignPos();
             camera.updateRange();
             camera.updateAnchors();
             camera.updateAdaptiveHeight();
             camera.updateOffset();
-            return [4
-            /*yield*/, renderer.render()];
+            return [4 /*yield*/, renderer.render()];
           case 2:
             _a.sent();
             if (control.animating) ;else {
@@ -13535,8 +14332,7 @@ function (_super) {
               sizeChanged: sizeChanged,
               element: viewport.element
             }));
-            return [2
-            /*return*/];
+            return [2 /*return*/];
         }
       });
     });
@@ -13561,7 +14357,6 @@ function (_super) {
    * flicking.append("\<div\>Panel 1\</div\>\<div\>Panel 2\</div\>");
    * ```
    */
-
   __proto.append = function (element) {
     return this.insert(this._renderer.panelCount, element);
   };
@@ -13586,7 +14381,6 @@ function (_super) {
    * flicking.prepend("\<div\>Panel 1\</div\>\<div\>Panel 2\</div\>");
    * ```
    */
-
   __proto.prepend = function (element) {
     return this.insert(0, element);
   };
@@ -13610,7 +14404,6 @@ function (_super) {
    * flicking.insert(3, "\<div\>Panel 1\</div\>\<div\>Panel 2\</div\>");
    * ```
    */
-
   __proto.insert = function (index, element) {
     if (this._renderExternal) {
       throw new FlickingError(MESSAGE.NOT_ALLOWED_IN_FRAMEWORK, CODE.NOT_ALLOWED_IN_FRAMEWORK);
@@ -13630,7 +14423,6 @@ function (_super) {
    * @param {number} [deleteCount=1] Number of panels to remove from index<ko>`index` 이후로 제거할 패널의 개수</ko>
    * @return {Panel[]} An array of removed panels<ko>제거된 패널들의 배열</ko>
    */
-
   __proto.remove = function (index, deleteCount) {
     if (deleteCount === void 0) {
       deleteCount = 1;
@@ -13759,8 +14551,7 @@ function (_super) {
    * Flicking.VERSION;  // ex) 4.0.0
    * ```
    */
-
-  Flicking.VERSION = "4.10.2";
+  Flicking.VERSION = "4.10.7";
   return Flicking;
 }(component_esm);
 
@@ -13779,7 +14570,6 @@ function (_super) {
  * }
  * ```
  */
-
 var withFlickingMethods = function (prototype, flickingName) {
   [component_esm.prototype, Flicking.prototype].forEach(function (proto) {
     Object.getOwnPropertyNames(proto).filter(function (name) {
@@ -13924,7 +14714,8 @@ var getRenderingPanels = function (flicking, diffResult) {
   }, {});
   return flicking_esm_spread(flicking.panels.filter(function (panel) {
     return !removedPanels[panel.index];
-  }) // Sort panels by position
+  })
+  // Sort panels by position
   .sort(function (panel1, panel2) {
     return panel1.position + panel1.offset - (panel2.position + panel2.offset);
   }).map(function (panel) {
@@ -13984,7 +14775,7 @@ name: @egjs/vue3-flicking
 license: MIT
 author: NAVER Corp.
 repository: https://github.com/naver/egjs-flicking/tree/master/packages/vue3-flicking
-version: 4.10.2
+version: 4.10.7
 */
 
 
@@ -14159,7 +14950,7 @@ function flicking_esm_generator(thisArg, body) {
     };
   }
 }
-function __spreadArray(to, from, pack) {
+function flicking_esm_spreadArray(to, from, pack) {
   if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
     if (ar || !(i in from)) {
       if (!ar) ar = Array.prototype.slice.call(from, 0, i);
@@ -14224,6 +15015,7 @@ function (_super) {
   __proto.render = function () {
     return flicking_esm_awaiter(this, void 0, void 0, function () {
       var flicking, vueFlicking, strategy;
+      var _this = this;
       return flicking_esm_generator(this, function (_a) {
         flicking = getFlickingAttached(this._flicking);
         vueFlicking = this._vueFlicking;
@@ -14232,7 +15024,10 @@ function (_super) {
         strategy.renderPanels(flicking);
         return [2
         /*return*/, new Promise(function (resolve) {
-          vueFlicking.renderEmitter.once("render", resolve);
+          vueFlicking.renderEmitter.once("render", function () {
+            _this._afterRender();
+            resolve();
+          });
           vueFlicking.$forceUpdate();
         })];
       });
@@ -14455,7 +15250,7 @@ var flicking_esm_Flicking = (0,runtime_core_esm_bundler/* defineComponent */.aZ)
     };
     var panels = options.virtual && options.panelsPerView && options.panelsPerView > 0 ? this.getVirtualPanels : this.getPanels;
     var viewportSlots = this.$slots.viewport ? this.$slots.viewport() : [];
-    return (0,runtime_core_esm_bundler.h)(this.viewportTag, viewportData, __spreadArray([(0,runtime_core_esm_bundler.h)(this.cameraTag, cameraData, {
+    return (0,runtime_core_esm_bundler.h)(this.viewportTag, viewportData, flicking_esm_spreadArray([(0,runtime_core_esm_bundler.h)(this.cameraTag, cameraData, {
       default: panels
     })], viewportSlots, true));
   },
@@ -14464,7 +15259,7 @@ var flicking_esm_Flicking = (0,runtime_core_esm_bundler/* defineComponent */.aZ)
       var _this = this;
       var slots = this.$slots.default ? this.$slots.default() : [];
       return slots.reduce(function (elementSlots, slot) {
-        return __spreadArray(__spreadArray([], elementSlots, true), _this.getElementVNodes(slot), true);
+        return flicking_esm_spreadArray(flicking_esm_spreadArray([], elementSlots, true), _this.getElementVNodes(slot), true);
       }, []).filter(function (slot) {
         return slot.type !== runtime_core_esm_bundler/* Comment */.sv && slot.type !== runtime_core_esm_bundler/* Text */.xv;
       });
@@ -14599,7 +15394,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     }), (0,runtime_core_esm_bundler/* createVNode */.Wm)(VCardActions/* VCardActions */.h, {
       class: "justify-space-between"
     }, {
-      default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createElementVNode */._)("div", _hoisted_1, (0,shared_esm_bundler/* toDisplayString */.zw)($props.title), 1), (0,runtime_core_esm_bundler/* createVNode */.Wm)(VBtnGroup/* VBtnGroup */.Yz, {
+      default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createElementVNode */._)("div", _hoisted_1, (0,shared_esm_bundler/* toDisplayString */.zw)($props.title), 1), (0,runtime_core_esm_bundler/* createVNode */.Wm)(VBtnGroup/* VBtnGroup */.Y, {
         class: "border-dialog-btns"
       }, {
         default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [$props.custom !== undefined ? ((0,runtime_core_esm_bundler/* openBlock */.wg)(), (0,runtime_core_esm_bundler/* createBlock */.j4)(VBtn/* VBtn */.T, {
@@ -14704,7 +15499,7 @@ const _hoisted_1 = {
 function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                                     
                                                             
-  return (0,runtime_core_esm_bundler/* openBlock */.wg)(), (0,runtime_core_esm_bundler/* createElementBlock */.iD)("div", _hoisted_1, [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VTextField/* VTextField */.hw, {
+  return (0,runtime_core_esm_bundler/* openBlock */.wg)(), (0,runtime_core_esm_bundler/* createElementBlock */.iD)("div", _hoisted_1, [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VTextField/* VTextField */.h, {
     "model-value": $props.title,
     hint: $props.description,
     variant: "underlined",
@@ -14916,7 +15711,7 @@ var DialogTemplate = __webpack_require__(2196);
 // EXTERNAL MODULE: ./src/components/cards/SwitchCardItem.vue + 6 modules
 var SwitchCardItem = __webpack_require__(1070);
 // EXTERNAL MODULE: ./src/components/common/NumberField.vue + 3 modules
-var NumberField = __webpack_require__(3066);
+var NumberField = __webpack_require__(5412);
 ;// CONCATENATED MODULE: ./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/onboard/components/ViewSettingDialog.vue?vue&type=script&lang=ts
 
 
@@ -15063,8 +15858,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 var reactivity_esm_bundler = __webpack_require__(4870);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/display.mjs
 var composables_display = __webpack_require__(8157);
-// EXTERNAL MODULE: ./node_modules/@egjs/vue3-flicking/dist/flicking.esm.js + 7 modules
-var flicking_esm = __webpack_require__(7637);
+// EXTERNAL MODULE: ./node_modules/@egjs/vue3-flicking/dist/flicking.esm.js + 8 modules
+var flicking_esm = __webpack_require__(9363);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/components/VGrid/VRow.mjs
 var VRow = __webpack_require__(6824);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/components/VGrid/VCol.mjs
@@ -15105,7 +15900,7 @@ function LcdCardvue_type_template_id_04a30762_ts_true_render(_ctx, _cache, $prop
         cols: "12",
         class: "pb-0"
       }, {
-        default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VTextField/* VTextField */.hw, {
+        default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VTextField/* VTextField */.h, {
           modelValue: $setup.logo,
           "onUpdate:modelValue": _cache[1] || (_cache[1] = $event => $setup.logo = $event),
           label: _ctx.$t('options.lcd.logo.title'),
@@ -15121,7 +15916,7 @@ function LcdCardvue_type_template_id_04a30762_ts_true_render(_ctx, _cache, $prop
         cols: "12",
         class: "pb-0"
       }, {
-        default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VTextField/* VTextField */.hw, {
+        default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VTextField/* VTextField */.h, {
           modelValue: $setup.hello,
           "onUpdate:modelValue": _cache[2] || (_cache[2] = $event => $setup.hello = $event),
           label: _ctx.$t('options.lcd.hello.title'),
@@ -15230,11 +16025,11 @@ var canbus = __webpack_require__(3956);
     const onApplyCarConfig = () => {
       const {
         car
-      } = canbus/* default.configs */.Z.configs;
+      } = canbus["default"].configs;
       car.lcd = enabled.value;
       car.logo = logo.value;
       car.hello = hello.value;
-      canbus/* default.queryConfig */.Z.queryConfig(pjcan_car/* API_CAR_CONFIG_EXEC */.j6);
+      canbus["default"].queryConfig(pjcan_car/* API_CAR_CONFIG_EXEC */.j6);
     };
     /**
      * Входящие значения отображения
@@ -15245,15 +16040,15 @@ var canbus = __webpack_require__(3956);
     };
     // регистрируем события
     (0,runtime_core_esm_bundler/* onMounted */.bv)(() => {
-      canbus/* default.addListener */.Z.addListener(pjcan_car/* API_CAR_CONFIG_EVENT */.Gd, onReceiveCarConfig);
-      canbus/* default.addListener */.Z.addListener(pjcan_car/* API_CAR_VIEW_EVENT */.Or, onReceiveCarView);
-      onReceiveCarConfig(canbus/* default.configs.car */.Z.configs.car);
-      onReceiveCarView(canbus/* default.views.car */.Z.views.car);
+      canbus["default"].addListener(pjcan_car/* API_CAR_CONFIG_EVENT */.Gd, onReceiveCarConfig);
+      canbus["default"].addListener(pjcan_car/* API_CAR_VIEW_EVENT */.Or, onReceiveCarView);
+      onReceiveCarConfig(canbus["default"].configs.car);
+      onReceiveCarView(canbus["default"].views.car);
     });
     // удаляем события
     (0,runtime_core_esm_bundler/* onUnmounted */.Ah)(() => {
-      canbus/* default.removeListener */.Z.removeListener(pjcan_car/* API_CAR_CONFIG_EVENT */.Gd, onReceiveCarConfig);
-      canbus/* default.removeListener */.Z.removeListener(pjcan_car/* API_CAR_VIEW_EVENT */.Or, onReceiveCarView);
+      canbus["default"].removeListener(pjcan_car/* API_CAR_CONFIG_EVENT */.Gd, onReceiveCarConfig);
+      canbus["default"].removeListener(pjcan_car/* API_CAR_VIEW_EVENT */.Or, onReceiveCarView);
     });
     // МЕНЮ ОТОБРАЖЕНИЯ
     const menu = (0,runtime_core_esm_bundler/* computed */.Fl)(() => [{
@@ -15272,7 +16067,7 @@ var canbus = __webpack_require__(3956);
       menuSelected.value = item;
       const {
         car
-      } = canbus/* default.views */.Z.views;
+      } = canbus["default"].views;
       switch (item.id) {
         case 0:
           menuViewConfig.value = car.logo;
@@ -15289,7 +16084,7 @@ var canbus = __webpack_require__(3956);
     const onViewSettingApply = data => {
       const {
         car
-      } = canbus/* default.views */.Z.views;
+      } = canbus["default"].views;
       switch (menuSelected.value.id) {
         case 0:
           car.logo = data;
@@ -15298,7 +16093,7 @@ var canbus = __webpack_require__(3956);
           car.hello = data;
           break;
       }
-      canbus/* default.queryView */.Z.queryView(pjcan_car/* API_CAR_VIEW_EXEC */.kn);
+      canbus["default"].queryView(pjcan_car/* API_CAR_VIEW_EXEC */.kn);
     };
     return {
       loadedCarConfig,
@@ -15525,7 +16320,7 @@ var pjcan_teyes = __webpack_require__(8674);
     const onApplyTeyesConfig = () => {
       const {
         teyes
-      } = canbus/* default.configs */.Z.configs;
+      } = canbus["default"].configs;
       teyes.receiveClock = receiveClock.value;
       teyes.receiveButtons = receiveButtons.value;
       teyes.receiveText = receiveText.value;
@@ -15534,7 +16329,7 @@ var pjcan_teyes = __webpack_require__(8674);
       teyes.sendDoors = sendDoors.value;
       teyes.parseVolume = parseVolume.value;
       teyes.lcdShow = lcdShow.value;
-      canbus/* default.queryConfig */.Z.queryConfig(pjcan_teyes/* API_TEYES_CONFIG_EXEC */.jc);
+      canbus["default"].queryConfig(pjcan_teyes/* API_TEYES_CONFIG_EXEC */.jc);
     };
     /**
      * Входящие значения отображения
@@ -15545,15 +16340,15 @@ var pjcan_teyes = __webpack_require__(8674);
     };
     // регистрируем события
     (0,runtime_core_esm_bundler/* onMounted */.bv)(() => {
-      canbus/* default.addListener */.Z.addListener(pjcan_teyes/* API_TEYES_CONFIG_EVENT */.IE, onReceiveTeyesConfig);
-      canbus/* default.addListener */.Z.addListener(pjcan_teyes/* API_TEYES_VIEW_EVENT */.mj, onReceiveTeyesView);
-      onReceiveTeyesConfig(canbus/* default.configs.teyes */.Z.configs.teyes);
-      onReceiveTeyesView(canbus/* default.views.teyes */.Z.views.teyes);
+      canbus["default"].addListener(pjcan_teyes/* API_TEYES_CONFIG_EVENT */.IE, onReceiveTeyesConfig);
+      canbus["default"].addListener(pjcan_teyes/* API_TEYES_VIEW_EVENT */.mj, onReceiveTeyesView);
+      onReceiveTeyesConfig(canbus["default"].configs.teyes);
+      onReceiveTeyesView(canbus["default"].views.teyes);
     });
     // удаляем события
     (0,runtime_core_esm_bundler/* onUnmounted */.Ah)(() => {
-      canbus/* default.removeListener */.Z.removeListener(pjcan_teyes/* API_TEYES_CONFIG_EVENT */.IE, onReceiveTeyesConfig);
-      canbus/* default.removeListener */.Z.removeListener(pjcan_teyes/* API_TEYES_VIEW_EVENT */.mj, onReceiveTeyesView);
+      canbus["default"].removeListener(pjcan_teyes/* API_TEYES_CONFIG_EVENT */.IE, onReceiveTeyesConfig);
+      canbus["default"].removeListener(pjcan_teyes/* API_TEYES_VIEW_EVENT */.mj, onReceiveTeyesView);
     });
     // МЕНЮ ОТОБРАЖЕНИЯ
     const menu = (0,runtime_core_esm_bundler/* computed */.Fl)(() => [{
@@ -15567,15 +16362,15 @@ var pjcan_teyes = __webpack_require__(8674);
     const onMenuClick = item => {
       menuVisible.value = true;
       menuSelected.value = item;
-      menuViewConfig.value = canbus/* default.views.teyes.view */.Z.views.teyes.view;
+      menuViewConfig.value = canbus["default"].views.teyes.view;
     };
     /**
      * Применить параметры отображения на информационном экране
      * @param {IViewConfig} data Новые параметры отображения
      */
     const onViewSettingApply = data => {
-      canbus/* default.views.teyes.view */.Z.views.teyes.view = data;
-      canbus/* default.queryView */.Z.queryView(pjcan_teyes/* API_TEYES_VIEW_EXEC */.nY);
+      canbus["default"].views.teyes.view = data;
+      canbus["default"].queryView(pjcan_teyes/* API_TEYES_VIEW_EXEC */.nY);
     };
     return {
       loadedTeyesConfig,
