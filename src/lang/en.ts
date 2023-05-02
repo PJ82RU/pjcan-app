@@ -374,7 +374,7 @@ export default {
 
 		resistance: {
 			title: "Button resistance",
-			description: "Button resistance in conventional units"
+			description: "The resistance of the button in units is allowed an error of ± 300 units."
 		},
 		pressSingle: {
 			title: "Button pressed 1 time",

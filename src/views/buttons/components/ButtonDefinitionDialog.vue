@@ -12,11 +12,12 @@
 			<v-row>
 				<v-col cols="12">
 					<number-field
-						v-model="resistance"
+						:model-value="resistance"
 						:label="$t('buttons.resistance.title')"
 						:hint="$t('buttons.resistance.description')"
 						:min="1"
 						:max="3999"
+						readonly
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0">
