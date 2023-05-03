@@ -81,7 +81,7 @@ export default {
 
 				// включаем сканирование
 				canbus.scanner.enabled = true;
-				canbus.queryConfig(API_SCANNER_CONFIG_EXEC).then(() =>
+				if (canbus.queryConfig(API_SCANNER_CONFIG_EXEC))
 				{
 					efuseMac = toMac(canbus.deviceInfo.efuseMac);
 					scanClose = false;
@@ -92,8 +92,7 @@ export default {
 					canbus.addListener(API_SCANNER_VALUE_EVENT, onReceiveValue);
 					// запускаем диалог
 					steps();
-				});
-
+				}
 				store.commit("app/clearMessages");
 			}
 			else

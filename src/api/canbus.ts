@@ -125,6 +125,8 @@ import {
 	ScannerValue
 } from "@/models/pjcan/scanner";
 
+const dev = process.env.NODE_ENV === "development";
+
 export class Canbus extends EventEmitter
 {
 	/** Bluetooth */
@@ -180,20 +182,29 @@ export class Canbus extends EventEmitter
 	/**
 	 * Запрос/отправка данных
 	 * @param {IBaseModel} obj Объект данных
-	 * @private
 	 */
-	private async query(obj: IBaseModel)
+	private query(obj: IBaseModel): boolean
 	{
-		if (!this.bluetooth.connected) return;
-
-		this.queue.push(this.bluetooth.send(obj.get()));
-		if (!this.promises)
+		if (this.bluetooth.connected)
 		{
-			this.promises = this.queue;
-			this.queue = [];
-			await Promise.all(this.promises);
-			this.promises = null;
+			this.queue.push(this.bluetooth.send(obj.get()));
+			if (!this.promises)
+			{
+				this.promises = this.queue;
+				this.queue = [];
+				Promise.all(this.promises)
+					.catch((err) =>
+					{
+						if (dev) console.log("Query:", err);
+					})
+					.finally(() =>
+					{
+						this.promises = null;
+					});
+			}
+			return true;
 		}
+		return false;
 	}
 
 	/**
@@ -202,27 +213,28 @@ export class Canbus extends EventEmitter
 	 */
 	onConnected(status: TConnectedStatus)
 	{
-		if (status !== TConnectedStatus.CONNECT)
+		if (status === TConnectedStatus.CONNECT)
+		{
+			// с начало получаем версию прошивки
+			this.queryConfig(API_VERSION_EXEC);
+		}
+		else
 		{
 			this.queryDisabled = true;
-			return;
 		}
-
-		// с начало получаем версию прошивки
-		this.queryConfig(API_VERSION_EXEC).then();
 	}
 
 	/** Запуск опросов PJCAN */
-	async begin()
+	begin()
 	{
 		if (!this.version.is) return;
 
-		await this.queryConfig();
-		await this.queryView();
+		this.queryConfig();
+		this.queryView();
 		this.queryDisabled = false;
 		if (this.debounceFetchValue === undefined)
 		{
-			await this.queryValue();
+			this.queryValue();
 		}
 	}
 
@@ -230,57 +242,45 @@ export class Canbus extends EventEmitter
 	 * Отправить/получить конфигурацию
 	 * @param {number} type Тип конфигурации
 	 */
-	async queryConfig(type: number = 0)
+	queryConfig(type: number = 0): boolean
 	{
 		switch (type)
 		{
 			case API_VERSION_EXEC:
-				await this.query(this.version);
-				break;
+				return this.query(this.version);
 
 			case API_VARIABLE_CONFIGS_EXEC:
-				await this.query(this.configs.variable);
-				break;
+				return this.query(this.configs.variable);
 
 			case API_BUTTONS_CONFIG_EXEC:
-				if (!this.queryDisabled) await this.query(this.configs.buttons);
-				break;
+				return !this.queryDisabled && this.query(this.configs.buttons);
 
 			case API_CAR_CONFIG_EXEC:
-				await this.query(this.configs.car);
-				break;
+				return this.query(this.configs.car);
 
 			case API_DEVICE_CONFIG_EXEC:
-				await this.query(this.configs.device);
-				break;
+				return this.query(this.configs.device);
 
 			case API_TEYES_CONFIG_EXEC:
-				await this.query(this.configs.teyes);
-				break;
+				return this.query(this.configs.teyes);
 
 			case API_VARIABLE_BOSE_EXEC:
-				await this.query(this.configs.variable.bose);
-				break;
+				return this.query(this.configs.variable.bose);
 
 			case API_VARIABLE_ENGINE_CONFIG_EXEC:
-				await this.query(this.configs.variable.engine);
-				break;
+				return this.query(this.configs.variable.engine);
 
 			case API_VARIABLE_FUEL_CONFIG_EXEC:
-				await this.query(this.configs.variable.fuel);
-				break;
+				return this.query(this.configs.variable.fuel);
 
 			case API_VARIABLE_VOLUME_CONFIG_EXEC:
-				await this.query(this.configs.variable.volume);
-				break;
+				return this.query(this.configs.variable.volume);
 
 			case API_SCANNER_CONFIG_EXEC:
-				await this.query(this.scanner);
-				break;
+				return this.query(this.scanner);
 
 			default:
-				await this.query(this.configs);
-				break;
+				return this.query(this.configs);
 		}
 	}
 
@@ -288,61 +288,48 @@ export class Canbus extends EventEmitter
 	 * Отправить/получить конфигурацию отображения значений
 	 * @param {number} type Тип конфигурации отображения значений
 	 */
-	async queryView(type: number = 0)
+	queryView(type: number = 0): boolean
 	{
 		switch (type)
 		{
 			case API_VARIABLE_VIEWS_EXEC:
-				await this.query(this.views.variable);
-				break;
+				return this.query(this.views.variable);
 
 			case API_CAR_VIEW_EXEC:
-				if (!this.queryDisabled) await this.query(this.views.car);
-				break;
+				return !this.queryDisabled && this.query(this.views.car);
 
 			case API_TEYES_VIEW_EXEC:
-				if (!this.queryDisabled) await this.query(this.views.teyes);
-				break;
+				return !this.queryDisabled && this.query(this.views.teyes);
 
 			case API_VARIABLE_BOSE_VIEW_EXEC:
-				if (!this.queryDisabled) await this.query(this.views.variable.bose);
-				break;
+				return !this.queryDisabled && this.query(this.views.variable.bose);
 
 			case API_VARIABLE_CLIMATE_VIEW_EXEC:
-				if (!this.queryDisabled) await this.query(this.views.variable.climate);
-				break;
+				return !this.queryDisabled && this.query(this.views.variable.climate);
 
 			case API_VARIABLE_DOORS_VIEW_EXEC:
-				if (!this.queryDisabled) await this.query(this.views.variable.doors);
-				break;
+				return !this.queryDisabled && this.query(this.views.variable.doors);
 
 			case API_VARIABLE_ENGINE_VIEW_EXEC:
-				if (!this.queryDisabled) await this.query(this.views.variable.engine);
-				break;
+				return !this.queryDisabled && this.query(this.views.variable.engine);
 
 			case API_VARIABLE_FUEL_VIEW_EXEC:
-				if (!this.queryDisabled) await this.query(this.views.variable.fuel);
-				break;
+				return !this.queryDisabled && this.query(this.views.variable.fuel);
 
 			case API_VARIABLE_MOVEMENT_VIEW_EXEC:
-				if (!this.queryDisabled) await this.query(this.views.variable.movement);
-				break;
+				return !this.queryDisabled && this.query(this.views.variable.movement);
 
 			case API_VARIABLE_SENSORS_VIEW_EXEC:
-				if (!this.queryDisabled) await this.query(this.views.variable.sensors);
-				break;
+				return !this.queryDisabled && this.query(this.views.variable.sensors);
 
 			case API_VARIABLE_TEMPERATURE_VIEW_EXEC:
-				if (!this.queryDisabled) await this.query(this.views.variable.temperature);
-				break;
+				return !this.queryDisabled && this.query(this.views.variable.temperature);
 
 			case API_VARIABLE_VOLUME_VIEW_EXEC:
-				if (!this.queryDisabled) await this.query(this.views.variable.volume);
-				break;
+				return !this.queryDisabled && this.query(this.views.variable.volume);
 
 			default:
-				await this.query(this.views);
-				break;
+				return this.query(this.views);
 		}
 	}
 
@@ -350,71 +337,56 @@ export class Canbus extends EventEmitter
 	 * @param {number} type Тип значения
 	 * @param {IBaseModel|undefined} value Передаваемые значения
 	 */
-	async queryValue(type: number = 0, value: IBaseModel | undefined = undefined)
+	queryValue(type: number = 0, value: IBaseModel | undefined = undefined): boolean
 	{
-		if (this.queryDisabled) return;
+		if (this.queryDisabled) return false;
 
 		switch (type)
 		{
 			case API_VARIABLE_VALUES_EXEC:
-				await this.query(this.values.variable);
-				break;
+				return this.query(this.values.variable);
 
 			case API_DEVICE_VALUE_EXEC:
-				await this.query(this.values.device);
-				break;
+				return this.query(this.values.device);
 
 			case API_INFO_EXEC:
-				await this.query(this.deviceInfo);
-				break;
+				return this.query(this.deviceInfo);
 
 			case API_LCD_VALUE_EXEC:
-				await this.query(this.values.lcd);
-				break;
+				return this.query(this.values.lcd);
 
 			case API_VARIABLE_CLIMATE_EXEC:
-				await this.query(this.values.variable.climate);
-				break;
+				return this.query(this.values.variable.climate);
 
 			case API_VARIABLE_DOORS_EXEC:
-				await this.query(this.values.variable.doors);
-				break;
+				return this.query(this.values.variable.doors);
 
 			case API_VARIABLE_ENGINE_EXEC:
-				await this.query(this.values.variable.engine);
-				break;
+				return this.query(this.values.variable.engine);
 
 			case API_VARIABLE_FUEL_EXEC:
-				await this.query(this.values.variable.fuel);
-				break;
+				return this.query(this.values.variable.fuel);
 
 			case API_VARIABLE_MOVEMENT_EXEC:
-				await this.query(this.values.variable.movement);
-				break;
+				return this.query(this.values.variable.movement);
 
 			case API_VARIABLE_SENSORS_EXEC:
-				await this.query(this.values.variable.sensors);
-				break;
+				return this.query(this.values.variable.sensors);
 
 			case API_VARIABLE_TEMPERATURE_EXEC:
-				await this.query(this.values.variable.temperature);
-				break;
+				return this.query(this.values.variable.temperature);
 
 			case API_VARIABLE_VOLUME_EXEC:
-				await this.query(this.values.variable.volume);
-				break;
+				return this.query(this.values.variable.volume);
 
 			case API_VARIABLE_TEST_EXEC:
-				if (value) await this.query(value);
-				break;
+				return !!value && this.query(value);
 
 			case API_SCANNER_VALUE_EXEC:
-				await this.query(value ?? new ScannerValue());
-				break;
+				return this.query(value ?? new ScannerValue());
 
 			default:
-				await this.query(this.values);
-				break;
+				return this.query(this.values);
 		}
 	}
 
@@ -429,7 +401,7 @@ export class Canbus extends EventEmitter
 		this.debounceFetchValue = type;
 		debounce(async () =>
 		{
-			await this.queryValue(type, value);
+			this.queryValue(type, value);
 			if (this.debounceFetchValue !== undefined)
 			{
 				this.startFetchValue(type, value, timeout);
@@ -508,6 +480,12 @@ export class Canbus extends EventEmitter
 
 			case API_CONFIG_EXEC: // Вся конфигурация
 				this.configs.set(data);
+				// для совместимости
+				if (this.version.setVersion(this.configs.version))
+				{
+					this.emit(API_VERSION_EVENT, this.version);
+					this.logVersion();
+				}
 
 				this.emit(API_CONFIGS_EVENT, this.configs);
 				this.emit(API_DEVICE_CONFIG_EVENT, this.configs.device);
@@ -530,7 +508,7 @@ export class Canbus extends EventEmitter
 				this.values.set(data);
 				if (!this.values.device.activation && !this.sha)
 				{
-					this.queryValue(API_INFO_EXEC).then();
+					this.queryValue(API_INFO_EXEC);
 				}
 
 				this.emit(API_VALUES_EVENT, this.values);
@@ -799,7 +777,7 @@ export class Canbus extends EventEmitter
 	{
 		this.values.device.reboot = true;
 		this.values.device.save = save;
-		this.queryValue(API_DEVICE_VALUE_EXEC).then();
+		this.queryValue(API_DEVICE_VALUE_EXEC);
 	}
 
 	/**

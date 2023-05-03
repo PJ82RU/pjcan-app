@@ -1,5 +1,4 @@
 /* eslint-disable no-undef */
-// noinspection JSUnusedGlobalSymbols
 
 import EventEmitter from "eventemitter3";
 import { t } from "@/lang";
@@ -14,6 +13,7 @@ export const BLUETOOTH_EVENT_RECEIVE = "Receive"; // Событие входящ
 export const BLUETOOTH_EVENT_SEND = "Send"; // Событие исходящих данных
 
 const dev = process.env.NODE_ENV === "development";
+const COUNTER_RESEND_MAX = 6;
 
 /** Bluetooth */
 export class Bluetooth extends EventEmitter
@@ -22,6 +22,8 @@ export class Bluetooth extends EventEmitter
 	private _device: BluetoothDevice | undefined;
 	/** Характеристика устройства */
 	private _characteristic: BluetoothRemoteGATTCharacteristic | undefined;
+	/** Счетчик повторной отправки */
+	private _counterReSend: number = 0;
 
 	constructor()
 	{
@@ -230,23 +232,35 @@ export class Bluetooth extends EventEmitter
 		if (!this.connected)
 		{
 			// this.emit(BLUETOOTH_EVENT_CONNECTED, TConnectedStatus.NO_CONNECT);
-			return Promise.resolve();
+			return Promise.reject("No connection");
 		}
 		if (!data)
 		{
 			this.emit(BLUETOOTH_EVENT_SEND);
-			return Promise.resolve();
+			return Promise.reject("No data available");
 		}
 
 		if (dev) console.log(t("BLE.server.send", { n: data?.getUint8(0) ?? "..." }), data);
 
 		return (
-			this._characteristic?.writeValue(data).catch(() =>
-			{
-				return Promise.resolve()
-					.then(() => this.delayPromise(50))
-					.then(() => this.send(data));
-			}) ?? Promise.resolve()
+			this._characteristic
+				?.writeValue(data)
+				.then(() =>
+				{
+					this._counterReSend = 0;
+				})
+				.catch(() =>
+				{
+					return Promise.resolve()
+						.then(() => this.delayPromise(50))
+						.then(() =>
+						{
+							this._counterReSend++;
+							return this._counterReSend < COUNTER_RESEND_MAX
+								? this.send(data)
+								: Promise.reject("The counter has reached its maximum value");
+						});
+				}) ?? Promise.reject("No characteristic")
 		);
 	}
 

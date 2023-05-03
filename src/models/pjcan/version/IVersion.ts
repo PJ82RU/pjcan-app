@@ -11,4 +11,5 @@ export interface IVersion extends IBaseModel {
 
 	compare: (ver: IVersion, len: number) => number;
 	clear: () => void;
+	setVersion: (ver: IVersion) => boolean;
 }

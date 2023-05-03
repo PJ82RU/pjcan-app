@@ -45,9 +45,9 @@ import router from "@/router";
 import DialogTemplate from "@/layout/components/DialogTemplate.vue";
 
 import { API_UPDATE_EVENT, API_UPDATE_EVENT_ERROR } from "@/models/pjcan/update";
-import { API_CONFIGS_EVENT } from "@/models/pjcan/configs";
+import { API_VERSION_EVENT } from "@/models/pjcan/version";
 
-import { getFormatTime } from "@/utils/time";
+import { RemainingTime } from "@/utils/time";
 
 import canbus from "@/api/canbus";
 
@@ -93,7 +93,7 @@ export default {
 		{
 			if (canbus.update.total > 0)
 			{
-				if (canbus.configs.version.is)
+				if (canbus.version.is)
 				{
 					canbus
 						.checkVersion()
@@ -120,11 +120,7 @@ export default {
 			canbus.updateStart();
 		};
 
-		const last = {
-			value: 0,
-			offset: 0,
-			now: 0
-		};
+		let remainingTime: RemainingTime | undefined;
 
 		/**
 		 * Событие загрузки прошивки на устройство PJCAN
@@ -142,22 +138,14 @@ export default {
 					canbus.updateUpload();
 
 					// подсчет оставшегося времени
-					if (!last.now)
+					if (!remainingTime)
 					{
-						last.value = 0;
-						last.offset = canbus.update.offset;
-						last.now = Date.now();
+						remainingTime = new RemainingTime(canbus.update.total);
 					}
 					else
 					{
-						const value = Math.floor(
-							((canbus.update.total - canbus.update.offset) / (canbus.update.offset - last.offset)) *
-								(Date.now() - last.now)
-						);
-						last.value = Math.floor((last.value + value) / 2);
-						last.offset = canbus.update.offset;
-						last.now = Date.now();
-						timeLeft.value = getFormatTime(last.value);
+						remainingTime.offset = canbus.update.offset;
+						timeLeft.value = remainingTime.get();
 					}
 				}
 				else
@@ -166,10 +154,10 @@ export default {
 					progress.value = 0;
 					uploading.value = "";
 
-					last.now = 0;
+					remainingTime = undefined;
 					timeLeft.value = "";
 
-					canbus.configs.version.clear();
+					canbus.version.clear();
 				}
 			}
 			else
@@ -187,13 +175,13 @@ export default {
 
 		onMounted(() =>
 		{
-			canbus.addListener(API_CONFIGS_EVENT, onCompletingFirmware);
+			canbus.addListener(API_VERSION_EVENT, onCompletingFirmware);
 			canbus.update.addListener(API_UPDATE_EVENT, onUpdate);
 		});
 
 		onUnmounted(() =>
 		{
-			canbus.removeListener(API_CONFIGS_EVENT, onCompletingFirmware);
+			canbus.removeListener(API_VERSION_EVENT, onCompletingFirmware);
 			canbus.update.removeListener(API_UPDATE_EVENT, onUpdate);
 			canbus.removeListener(API_UPDATE_EVENT_ERROR, onErrorUpdate);
 		});

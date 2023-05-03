@@ -1,4 +1,3 @@
-<!--suppress JSUnresolvedVariable -->
 <template>
 	<v-app class="base-layout">
 		<v-app-bar flat class="base-layout__toolbar" color="primary" :height="50">

@@ -64,6 +64,21 @@ export class Version extends BaseModel implements IVersion
 	}
 
 	/**
+	 * Запись версии
+	 * @param {IVersion} ver Версия
+	 */
+	setVersion(ver: IVersion): boolean
+	{
+		if (this.is || !ver.is) return false;
+
+		this.major = ver.major;
+		this.minor = ver.minor;
+		this.build = ver.build;
+		this.revision = ver.revision;
+		return true;
+	}
+
+	/**
 	 * Запись данных
 	 * @param {DataView} buf Буффер данных
 	 */
