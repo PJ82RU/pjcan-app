@@ -111,6 +111,7 @@ export default {
 			test.view.type = style.value;
 			test.view.time = time.value;
 			canbus.queryValue(API_VARIABLE_TEST_EXEC, test);
+			visible.value = false;
 		};
 
 		return {
