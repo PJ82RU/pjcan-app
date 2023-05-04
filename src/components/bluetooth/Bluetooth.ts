@@ -13,7 +13,6 @@ export const BLUETOOTH_EVENT_RECEIVE = "Receive"; // Событие входящ
 export const BLUETOOTH_EVENT_SEND = "Send"; // Событие исходящих данных
 
 const dev = process.env.NODE_ENV === "development";
-const COUNTER_RESEND_MAX = 6;
 
 /** Bluetooth */
 export class Bluetooth extends EventEmitter
@@ -24,11 +23,14 @@ export class Bluetooth extends EventEmitter
 	private _characteristic: BluetoothRemoteGATTCharacteristic | undefined;
 	/** Счетчик повторной отправки */
 	private _counterReSend: number = 0;
+	/** Максимальное значение счетчика повторной отправки */
+	readonly counterReSendMax: number;
 
-	constructor()
+	constructor(counterReSendMax: number = 6)
 	{
 		super();
 		this.clear();
+		this.counterReSendMax = counterReSendMax;
 	}
 
 	/** Очистка переменных */
@@ -256,7 +258,7 @@ export class Bluetooth extends EventEmitter
 						.then(() =>
 						{
 							this._counterReSend++;
-							return this._counterReSend < COUNTER_RESEND_MAX
+							return this._counterReSend < this.counterReSendMax
 								? this.send(data)
 								: Promise.reject("The counter has reached its maximum value");
 						});
