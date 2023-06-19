@@ -22,7 +22,7 @@ export class TemperatureValue extends BaseModel implements ITemperatureValue
 
 	/**
 	 * Запись данных
-	 * @param {DataView} buf Буффер данных
+	 * @param {DataView} buf Буфер данных
 	 */
 	set(buf: DataView): boolean
 	{

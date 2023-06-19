@@ -73,7 +73,7 @@ export class Update extends EventEmitter implements IUpdate
 
 	/**
 	 * Запись данных
-	 * @param {DataView} buf Буффер данных
+	 * @param {DataView} buf Буфер данных
 	 */
 	set(buf: DataView): void
 	{

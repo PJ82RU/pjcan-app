@@ -24,7 +24,7 @@ export class CarConfig extends BaseModel implements ICarConfig
 
 	/**
 	 * Запись данных
-	 * @param {DataView} buf Буффер данных
+	 * @param {DataView} buf Буфер данных
 	 */
 	set(buf: DataView): boolean
 	{

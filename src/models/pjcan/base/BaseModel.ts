@@ -11,7 +11,7 @@ export class BaseModel
 	 * @param {number} exec Команда API
 	 * @param {number} len Длина данных API
 	 * @param {BluetoothStruct} struct Структура данных
-	 * @param {DataView} buf Буффер данных
+	 * @param {DataView} buf Буфер данных
 	 * @protected
 	 */
 	protected _set(th: any, exec: number, len: number, struct: BluetoothStruct, buf: DataView): boolean

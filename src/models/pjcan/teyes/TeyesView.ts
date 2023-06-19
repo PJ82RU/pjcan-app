@@ -22,7 +22,7 @@ export class TeyesView extends BaseModel implements ITeyesView
 
 	/**
 	 * Запись данных
-	 * @param {DataView} buf Буффер данных
+	 * @param {DataView} buf Буфер данных
 	 */
 	set(buf: DataView): boolean
 	{

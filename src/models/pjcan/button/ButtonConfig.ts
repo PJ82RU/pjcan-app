@@ -38,7 +38,7 @@ export class ButtonsConfig extends BaseModel implements IButtonsConfig
 
 	/**
 	 * Запись данных
-	 * @param {DataView} buf Буффер данных
+	 * @param {DataView} buf Буфер данных
 	 */
 	set(buf: DataView): boolean
 	{

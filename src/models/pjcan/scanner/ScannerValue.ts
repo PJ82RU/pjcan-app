@@ -36,7 +36,7 @@ export class ScannerValue extends BaseModel implements IScannerValue
 
 	/**
 	 * Запись данных
-	 * @param {DataView} buf Буффер данных
+	 * @param {DataView} buf Буфер данных
 	 */
 	set(buf: DataView): boolean
 	{

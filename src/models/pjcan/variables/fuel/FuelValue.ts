@@ -24,7 +24,7 @@ export class FuelValue extends BaseModel implements IFuelValue
 
 	/**
 	 * Запись данных
-	 * @param {DataView} buf Буффер данных
+	 * @param {DataView} buf Буфер данных
 	 */
 	set(buf: DataView): boolean
 	{

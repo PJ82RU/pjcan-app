@@ -30,7 +30,7 @@ export class BoseConfig extends BaseModel implements IBoseConfig
 
 	/**
 	 * Запись данных
-	 * @param {DataView} buf Буффер данных
+	 * @param {DataView} buf Буфер данных
 	 */
 	set(buf: DataView): boolean
 	{
