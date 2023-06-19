@@ -99,7 +99,7 @@ export default {
 			if (res.isData)
 			{
 				showDays.value = res.showDays;
-				worktime.value = res.totalSeconds > 0 ? res.totalSeconds / 60 : 0;
+				worktime.value = res.totalSeconds > 0 ? Math.round(res.totalSeconds / 60) : 0;
 				totalCountRPM.value = res.totalCountRPM;
 			}
 		};
