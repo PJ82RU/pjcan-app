@@ -507,6 +507,14 @@ export default {
 				description:
 					"Show the text of the Teyes on the information screen at the time of the absence of data display",
 				menu: "LCD: Show the text Teyes"
+			},
+			uartBaud: {
+				title: "Serial protocol",
+				description: "Serial protocol for PJCAN communication with the head unit",
+				list: {
+					0xFD: "Raise HM_ND01 2019.06.21 (38400)",
+					0xFC: "Raise HM_ND00 2017.12.11 (19200)"
+				}
 			}
 		}
 	},
