@@ -127,6 +127,10 @@ import {
 
 const dev = process.env.NODE_ENV === "development";
 
+// Заполняем пустые значения структуры по очереди
+TeyesConfig.update();
+Configs.update();
+
 export class Canbus extends EventEmitter
 {
 	/** Bluetooth */
@@ -738,7 +742,8 @@ export class Canbus extends EventEmitter
 		const { major, minor, build, revision } = this.version;
 		console.log(t("BLE.server.versionProtocol", { mj: major, mn: minor, bl: build, rv: revision }));
 
-		TeyesConfig.updateVersion(this.version);
+		TeyesConfig.update(this.version);
+		Configs.update();
 	}
 
 	/** Проверить версию прошивки */

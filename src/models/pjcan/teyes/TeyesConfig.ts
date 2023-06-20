@@ -20,15 +20,15 @@ export class TeyesConfig extends BaseModel implements ITeyesConfig
 	parseVolume = false;
 	lcdShow = false;
 
-	static struct: any = StructTeyesConfig;
-	static bleStruct: IBluetoothStruct = new BluetoothStruct(StructTeyesConfig);
-	static size: number = API_TEYES_CONFIG_SIZE;
+	static struct: any;
+	static bleStruct: IBluetoothStruct;
+	static size: number;
 
 	/**
 	 * Обновить версию структуры
 	 * @param {IVersion} version Версия протокола
 	 */
-	static updateVersion(version?: IVersion): void
+	static update(version?: IVersion): void
 	{
 		if (!version || version.compareString("4.0.2") !== 1)
 		{
