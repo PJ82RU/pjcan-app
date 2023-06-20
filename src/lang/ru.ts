@@ -531,6 +531,9 @@ export default {
 					0xFC: "Raise HM_ND00 2017.12.11 (19200)"
 				}
 			}
+		},
+		onboard: {
+			title: "Бортовой компьютер"
 		}
 	},
 

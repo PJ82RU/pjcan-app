@@ -24,7 +24,7 @@
 		"vue-i18n": "^9.2.2",
 		"vue-router": "^4.1.6",
 		"vue3-toastify": "^0.0.3",
-		"vuedraggable": "^2.24.3",
+		"vuedraggable": "^4.1.0",
 		"vuetify": "^3.1.5",
 		"vuex": "^4.1.0",
 		"webfontloader": "^1.6.28"
