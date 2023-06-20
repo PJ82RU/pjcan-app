@@ -7,7 +7,7 @@
 	"scripts": {
 		"serve": "vue-cli-service serve",
 		"build": "vue-cli-service build",
-		"lint": "vue-cli-service lint"
+		"build test": "vue-cli-service build --mode test"
 	},
 	"dependencies": {
 		"@egjs/vue3-flicking": "^4.10.2",
