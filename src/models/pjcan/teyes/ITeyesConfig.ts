@@ -10,5 +10,5 @@ export interface ITeyesConfig extends IBaseModel {
 	sendDoors: boolean;
 	parseVolume: boolean;
 	lcdShow: boolean;
-	uart_baud?: number;			// 4.0.2
+	uartBaud?: number;			// 4.0.2
 }

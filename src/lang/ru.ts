@@ -522,6 +522,14 @@ export default {
 				title: "Показывать текст ГУ",
 				description: "Показывать текст ГУ на информационном экране в момент отсутствия данных отображения",
 				menu: "LCD: Показывать текст ГУ"
+			},
+			uartBaud: {
+				title: "Протокол Serial",
+				description: "Протокол Serial для связи PJCAN с ГУ",
+				list: {
+					0xFD: "Raise HM_ND01 2019.06.21 (38400)",
+					0xFC: "Raise HM_ND00 2017.12.11 (19200)"
+				}
 			}
 		}
 	},

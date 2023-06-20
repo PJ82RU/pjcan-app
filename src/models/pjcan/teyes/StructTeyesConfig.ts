@@ -12,5 +12,5 @@ export const StructTeyesConfig = {
 	sendDoors: BluetoothStruct.bit(),
 	parseVolume: BluetoothStruct.bit(),
 	lcdShow: BluetoothStruct.bit(),
-	uart_baud: BluetoothStruct.uint8()
+	uartBaud: BluetoothStruct.uint8()
 };

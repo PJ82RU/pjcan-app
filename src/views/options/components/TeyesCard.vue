@@ -2,6 +2,19 @@
 	<card class="teyes-card" :title="$t('options.teyes.title')" :menu="menu" @click:menu="onMenuClick">
 		<template #body>
 			<v-row>
+                <v-col cols="12" class="pt-0 pb-0">
+                    <v-select
+                        v-model="uartBaud"
+                        :label="$t('options.teyes.uartBaud.title')"
+                        :items="listUartBaud"
+                        :hint="$t('options.teyes.uartBaud.description')"
+                        variant="underlined"
+                        item-title="label"
+                        item-value="value"
+                        persistent-hint
+                        :disabled="!loadedTeyesConfig || typeof uartBaud !== 'number'"
+                    />
+                </v-col>
 				<v-col cols="12" class="pt-0 pb-0">
 					<switch-card-item
 						v-model="lcdShow"
@@ -106,7 +119,7 @@
 </template>
 
 <script lang="ts">
-import { computed, onMounted, onUnmounted, ref } from "vue";
+import { computed, onMounted, onUnmounted, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
 import Card from "@/components/cards/Card.vue";
@@ -131,7 +144,7 @@ export default {
 	components: { Card, SwitchCardItem, ViewSettingDialog },
 	setup()
 	{
-		const { t } = useI18n();
+		const { t, tm } = useI18n();
 
 		const loadedTeyesConfig = ref(false);
 		const loadedTeyesView = ref(false);
@@ -143,9 +156,25 @@ export default {
 		const sendDoors = ref(false);
 		const parseVolume = ref(false);
 		const lcdShow = ref(false);
+		const uartBaud = ref(undefined as number | undefined);
+
+		/** Список Uart Baud */
+		const listUartBaud = computed((): object[] =>
+		{
+			const list: any = tm("options.teyes.uartBaud.list");
+			const result = [];
+			for (const key in list) result.push({ label: list[key], value: Number(key) });
+			return result;
+		});
+
 		const menuVisible = ref(false);
 		const menuSelected = ref({} as IMenuItem);
 		const menuViewConfig = ref({} as IViewConfig);
+
+		watch(uartBaud, (val) =>
+		{
+			if (val && loadedTeyesConfig.value) onApplyTeyesConfig();
+		});
 
 		/**
 		 * Входящая конфигурация Teyes
@@ -164,6 +193,7 @@ export default {
 				sendDoors.value = res.sendDoors;
 				parseVolume.value = res.parseVolume;
 				lcdShow.value = res.lcdShow;
+				uartBaud.value = res.uartBaud;
 			}
 		};
 
@@ -179,6 +209,7 @@ export default {
 			teyes.sendDoors = sendDoors.value;
 			teyes.parseVolume = parseVolume.value;
 			teyes.lcdShow = lcdShow.value;
+			teyes.uartBaud = uartBaud.value;
 			canbus.queryConfig(API_TEYES_CONFIG_EXEC);
 		};
 
@@ -242,6 +273,8 @@ export default {
 			sendDoors,
 			parseVolume,
 			lcdShow,
+			uartBaud,
+			listUartBaud,
 			menu,
 			menuVisible,
 			menuSelected,
