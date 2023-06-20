@@ -1,5 +1,5 @@
 import { API_TEYES_CONFIG_EXEC, API_TEYES_CONFIG_EVENT, TeyesConfig } from "./TeyesConfig";
-import { API_TEYES_CONFIG_SIZE, StructTeyesConfig } from "./StructTeyesConfig";
+import { StructTeyesConfig } from "./StructTeyesConfig";
 import { ITeyesConfig } from "./ITeyesConfig";
 
 import { API_TEYES_TEXT_EXEC, API_TEYES_TEXT_EVENT, TeyesText } from "./TeyesText";
@@ -13,7 +13,6 @@ import { ITeyesView } from "./ITeyesView";
 export {
 	API_TEYES_CONFIG_EXEC,
 	API_TEYES_CONFIG_EVENT,
-	API_TEYES_CONFIG_SIZE,
 	StructTeyesConfig,
 	TeyesConfig,
 	API_TEYES_TEXT_EXEC,

@@ -8,6 +8,7 @@ import {
 	Bluetooth
 } from "./Bluetooth";
 import { BluetoothStruct } from "./BluetoothStruct";
+import { IBluetoothStruct } from "./IBluetoothStruct";
 import { TConnectedStatus } from "./TConnectedStatus";
 import { TTypeValue } from "./TTypeValue";
 
@@ -23,3 +24,5 @@ export {
 	TConnectedStatus,
 	TTypeValue
 };
+
+export type { IBluetoothStruct };

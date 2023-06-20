@@ -46,7 +46,7 @@ import {
 	API_TEYES_VIEW_EXEC,
 	API_TEYES_VIEW_EVENT,
 	TeyesText,
-	ITeyesText
+	ITeyesText, TeyesConfig
 } from "@/models/pjcan/teyes";
 import { API_LCD_VALUE_EXEC, API_LCD_EVENT } from "@/models/pjcan/lcd";
 import { API_CAR_CONFIG_EXEC, API_CAR_CONFIG_EVENT, API_CAR_VIEW_EXEC, API_CAR_VIEW_EVENT } from "@/models/pjcan/car";
@@ -475,7 +475,7 @@ export class Canbus extends EventEmitter
 			case API_VERSION_EXEC: // Версия прошивки
 				this.version.set(data);
 				this.emit(API_VERSION_EVENT, this.version);
-				this.logVersion();
+				this.updateStructVersion();
 				break;
 
 			case API_CONFIG_EXEC: // Вся конфигурация
@@ -484,7 +484,7 @@ export class Canbus extends EventEmitter
 				if (this.version.setVersion(this.configs.version))
 				{
 					this.emit(API_VERSION_EVENT, this.version);
-					this.logVersion();
+					this.updateStructVersion();
 				}
 
 				this.emit(API_CONFIGS_EVENT, this.configs);
@@ -732,11 +732,13 @@ export class Canbus extends EventEmitter
 		}
 	}
 
-	/** Лог версии прошивки */
-	private logVersion()
+	/** Обновление структур */
+	private updateStructVersion()
 	{
 		const { major, minor, build, revision } = this.version;
 		console.log(t("BLE.server.versionProtocol", { mj: major, mn: minor, bl: build, rv: revision }));
+
+		TeyesConfig.updateVersion(this.version);
 	}
 
 	/** Проверить версию прошивки */
