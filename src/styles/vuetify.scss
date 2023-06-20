@@ -142,6 +142,7 @@ html{
 }
 
 .flicking {
+	&-xxl,
 	&-xl {
 		width: calc(100% / 4 - 16px + 16px / 4);
 	}
@@ -153,9 +154,10 @@ html{
 		width: calc(100% / 2 - 16px + 16px / 2);
 	}
 	&-xs {
-		width: calc(100%);
+		width: 100%;
 	}
 
+	&-xxl,
 	&-xl,
 	&-lg,
 	&-md,
