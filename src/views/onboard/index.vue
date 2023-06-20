@@ -1,13 +1,13 @@
 <template>
 	<flicking ref="flicking" class="onboard" :options="{ bound: true, align: 'prev' }">
-		<div v-for="name in onboardCardList" :key="name" class="mr-4" :class="`flicking-${display}`">
-			<component :is="`${name}-card`" />
+		<div v-for="item in onboardCardList" :key="item.name" class="mr-4" :class="`flicking-${display}`">
+			<component :is="`${item.name}-card`" />
 		</div>
 	</flicking>
 </template>
 
 <script lang="ts">
-import { computed, onMounted, onUnmounted, provide, ref } from "vue";
+import { onMounted, onUnmounted, provide, ref } from "vue";
 import { useDisplay } from "vuetify";
 import store from "@/store";
 
@@ -21,6 +21,8 @@ import VolumeCard from "./components/VolumeCard.vue";
 import ClimateCard from "./components/ClimateCard.vue";
 
 import canbus from "@/api/canbus";
+import { IOnboardCard } from "@/models/interfaces/IOnboardCard";
+import { API_CAR_CONFIG_EVENT, ICarConfig } from "@/models/pjcan/car";
 
 export default {
 	name: "onboard",
@@ -31,10 +33,28 @@ export default {
 		const flicking = ref(null);
 		provide("flicking", flicking);
 
-		const onboardCardList = computed(() => store.getters["app/onboardCardList"]);
+		const onboardCardList = ref([] as IOnboardCard[]);
+		const onReceiveCarConfig = (res: ICarConfig): void =>
+		{
+			if (res.isData)
+			{
+				onboardCardList.value = store.getters["app/onboardCardList"]?.filter(
+					(x: IOnboardCard) => x.car?.indexOf(res.carModel) >= 0
+				);
+			}
+		};
 
-		onMounted(() => canbus.startFetchValue());
-		onUnmounted(() => canbus.stopFetchValue());
+		onMounted(() =>
+		{
+			canbus.startFetchValue();
+			canbus.addListener(API_CAR_CONFIG_EVENT, onReceiveCarConfig);
+			onReceiveCarConfig(canbus.configs.car);
+		});
+		onUnmounted(() =>
+		{
+			canbus.stopFetchValue();
+			canbus.removeListener(API_CAR_CONFIG_EVENT, onReceiveCarConfig);
+		});
 
 		return {
 			flicking,
