@@ -1,4 +1,4 @@
-import { BluetoothStruct } from "@/components/bluetooth";
+import { IBluetoothStruct } from "@/components/bluetooth/IBluetoothStruct";
 
 /** Базовая модель */
 export class BaseModel
@@ -10,11 +10,11 @@ export class BaseModel
 	 * @param {any} th Объект модели
 	 * @param {number} exec Команда API
 	 * @param {number} len Длина данных API
-	 * @param {BluetoothStruct} struct Структура данных
+	 * @param {IBluetoothStruct} struct Структура данных
 	 * @param {DataView} buf Буфер данных
 	 * @protected
 	 */
-	protected _set(th: any, exec: number, len: number, struct: BluetoothStruct, buf: DataView): boolean
+	protected _set(th: any, exec: number, len: number, struct: IBluetoothStruct, buf: DataView): boolean
 	{
 		try
 		{
@@ -37,9 +37,9 @@ export class BaseModel
 	 * @param {any} th Объект модели
 	 * @param {number} exec Команда API
 	 * @param {number} len Длина данных API
-	 * @param {BluetoothStruct} struct Структура данных
+	 * @param {IBluetoothStruct} struct Структура данных
 	 */
-	protected _get(th: any, exec: number, len: number, struct?: BluetoothStruct): DataView | undefined
+	protected _get(th: any, exec: number, len: number, struct?: IBluetoothStruct): DataView | undefined
 	{
 		try
 		{

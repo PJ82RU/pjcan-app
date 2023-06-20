@@ -1,11 +1,10 @@
-// noinspection JSUnusedGlobalSymbols
-
 import BitSet from "bitset";
 import { ILooseObject } from "@/models/interfaces/ILooseObject";
 import { TTypeValue } from "./TTypeValue";
+import { IBluetoothStruct } from "./IBluetoothStruct";
 
 /** Парсинг структуры данных С++ */
-export class BluetoothStruct
+export class BluetoothStruct implements IBluetoothStruct
 {
 	/** Прямой порядок байтов */
 	littleEndian: boolean = true;
