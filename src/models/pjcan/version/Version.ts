@@ -54,6 +54,28 @@ export class Version extends BaseModel implements IVersion
 		return 0;
 	}
 
+	compareString(ver: string): number
+	{
+		if (ver?.length > 0)
+		{
+			const verA = [this.major, this.minor, this.build, this.revision];
+			const verB = ver.split(".")?.map(x => parseInt(x));
+
+			if (verB?.length > 0)
+			{
+				let len = verB.length;
+				if (len > 4) len = 4;
+
+				for (let i = 0; i < len; i++)
+				{
+					if (verB[i] > verA[i]) return 1;
+					else if (verB[i] < verA[i]) return -1;
+				}
+			}
+		}
+		return 0;
+	}
+
 	/** Очистить значения версии */
 	clear(): void
 	{

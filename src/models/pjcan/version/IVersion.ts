@@ -10,6 +10,7 @@ export interface IVersion extends IBaseModel {
 	toString: string;
 
 	compare: (ver: IVersion, len: number) => number;
+	compareString: (ver: string) => number;
 	clear: () => void;
 	setVersion: (ver: IVersion) => boolean;
 }
