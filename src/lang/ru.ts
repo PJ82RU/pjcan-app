@@ -382,6 +382,10 @@ export default {
 				title: "Воздушный поток",
 				description: "Направление воздушного потока"
 			}
+		},
+
+		bose: {
+			title: "Bose"
 		}
 	},
 

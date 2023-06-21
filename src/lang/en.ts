@@ -365,6 +365,10 @@ export default {
 				title: "Air flow",
 				description: "Airflow direction"
 			}
+		},
+
+		bose: {
+			title: "Bose"
 		}
 	},
 
@@ -516,6 +520,9 @@ export default {
 					0xFC: "Raise HM_ND00 2017.12.11 (19200)"
 				}
 			}
+		},
+		onboard: {
+			title: "On-board"
 		}
 	},
 

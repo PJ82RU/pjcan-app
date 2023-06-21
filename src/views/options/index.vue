@@ -13,16 +13,18 @@ import { useDisplay } from "vuetify";
 import Flicking from "@egjs/vue3-flicking";
 import LcdCard from "./components/LcdCard.vue";
 import TeyesCard from "./components/TeyesCard.vue";
+import OnboardCard from "./components/OnboardCard.vue";
+
 export default {
 	name: "setting",
-	components: { Flicking, LcdCard, TeyesCard },
+	components: { Flicking, LcdCard, TeyesCard, OnboardCard },
 	setup()
 	{
 		const { name: display } = useDisplay();
 		const flicking = ref(null);
 		provide("flicking", flicking);
 
-		const cards = computed(() => ["lcd", "teyes"]);
+		const cards = computed(() => ["lcd", "teyes", "onboard"]);
 
 		return {
 			flicking,

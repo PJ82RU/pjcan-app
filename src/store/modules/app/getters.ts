@@ -1,3 +1,5 @@
+import { IOnboardCard } from "@/models/interfaces/IOnboardCard";
+
 /**
  * Сообщение из очереди сообщений
  * @param state
@@ -14,4 +16,4 @@ export const visibleMessage = (state: any) => state.visibleMessage;
  * Список карточек бортового компьютера
  * @param state
  */
-export const onboardCardList = (state: any): string[] => state.onboardCardList;
+export const onboardCardList = (state: any): IOnboardCard[] => state.onboardCardList;

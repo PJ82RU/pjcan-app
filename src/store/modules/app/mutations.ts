@@ -1,5 +1,6 @@
 import store from "@/store";
 import { IMessage } from "@/models/interfaces/message/IMessage";
+import { IOnboardCard } from "@/models/interfaces/IOnboardCard";
 
 /**
  * Записать новое сообщение
@@ -38,3 +39,13 @@ export const freeMessage = (state: any) =>
  * @param state
  */
 export const clearMessages = (state: any) => (state.messages = []);
+
+/**
+ * Изменить список карточек бортового компьютера
+ * @param {any} state
+ * @param {IOnboardCard[]} value Новый список
+ */
+export const setOnboardCardList = (state: any, value: IOnboardCard[]) =>
+{
+	state.onboardCardList = [...value].map((x: IOnboardCard) => ({ ...x }));
+};
