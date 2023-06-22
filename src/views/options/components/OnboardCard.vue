@@ -77,6 +77,7 @@ export default {
 		const { t } = useI18n();
 		const flicking = inject("flicking") as any;
 
+		store.dispatch("app/readOnboardCardList");
 		const isLoading = ref(false);
 		const cardList = ref(
 			[...store.getters["app/onboardCardList"]].map((x: IOnboardCard) => ({
@@ -103,6 +104,7 @@ export default {
 		const onCardListChange = (): void =>
 		{
 			store.commit("app/setOnboardCardList", cardList.value);
+			store.dispatch("app/writeOnboardCardList");
 		};
 
 		const menuVisible = ref(false);
