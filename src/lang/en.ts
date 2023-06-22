@@ -522,7 +522,8 @@ export default {
 			}
 		},
 		onboard: {
-			title: "On-board"
+			title: "On-board",
+			description: "A list of cards displayed on the On-Board Computer screen. The order is changed by dragging the block up/down. You can also enable/disable the display on the page"
 		}
 	},
 

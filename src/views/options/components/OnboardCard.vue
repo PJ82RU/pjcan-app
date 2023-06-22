@@ -37,6 +37,9 @@
 						</template>
 					</draggable>
 				</v-col>
+                <v-col cols="12" class="pt-0 onboard-card__description">
+                    <span> {{ $t("options.onboard.description") }} </span>
+                </v-col>
 			</v-row>
 		</template>
 	</card>
@@ -171,5 +174,11 @@ export default {
             background: $disable !important;
         }
 	}
+    &__description {
+        font-weight: 300;
+        font-size: 0.875rem;
+        line-height: 1rem !important;
+        opacity: var(--v-disabled-opacity);
+    }
 }
 </style>
