@@ -27,10 +27,20 @@ export const readOnboardCardList = ({ commit }: { commit: any }) =>
 /**
  * Запись списка onboardCardList в local storage
  * @param {any} commit
- * @param reset
  */
-export const writeOnboardCardList = ({ getters }: { getters: any }, reset: boolean) =>
+export const writeOnboardCardList = ({ getters }: { getters: any }) =>
 {
-	const res = JSON.stringify(reset ? onboardCardListDefault : getters.onboardCardList);
+	const res = JSON.stringify(getters.onboardCardList);
 	window.localStorage.setItem("OnboardCardList", res);
+};
+
+/**
+ * Сбросить значения списка onboardCardList по умолчанию
+ * @param {any} commit
+ * @param {any} dispatch
+ */
+export const resetOnboardCardList = ({ commit, dispatch }: { commit: any, dispatch: any }) =>
+{
+	commit("setOnboardCardList", onboardCardListDefault);
+	dispatch("writeOnboardCardList");
 };

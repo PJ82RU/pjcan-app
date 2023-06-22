@@ -43,16 +43,6 @@
 			</v-row>
 		</template>
 	</card>
-
-	<view-setting-dialog
-		v-model="menuVisible"
-		:title="menuSelected.title"
-		:enabled="menuViewConfig.enabled"
-		:type="menuViewConfig.type"
-		:time="menuViewConfig.time"
-		disabled
-		@click:apply="onViewSettingApply"
-	/>
 </template>
 
 <script lang="ts">
@@ -62,11 +52,9 @@ import draggable from "vuedraggable";
 import { useI18n } from "vue-i18n";
 
 import Card from "@/components/cards/Card.vue";
-import ViewSettingDialog from "@/views/onboard/components/ViewSettingDialog.vue";
 import IconCustom from "@/components/common/icon-custom/IconCustom.vue";
 
 import { IMenuItem } from "@/components/MenuDots.vue";
-import { IViewConfig } from "@/models/pjcan/view";
 import { IOnboardCard } from "@/models/interfaces/IOnboardCard";
 import { API_CAR_CONFIG_EVENT, ICarConfig } from "@/models/pjcan/car";
 
@@ -74,7 +62,7 @@ import canbus from "@/api/canbus";
 
 export default {
 	name: "OnboardCard",
-	components: { IconCustom, Card, ViewSettingDialog, draggable },
+	components: { IconCustom, Card, draggable },
 	setup()
 	{
 		const { t } = useI18n();
@@ -110,10 +98,6 @@ export default {
 			store.dispatch("app/writeOnboardCardList");
 		};
 
-		const menuVisible = ref(false);
-		const menuSelected = ref({} as IMenuItem);
-		const menuViewConfig = ref({} as IViewConfig);
-
 		onMounted(() =>
 		{
 			canbus.addListener(API_CAR_CONFIG_EVENT, onReceiveCarConfig);
@@ -124,11 +108,10 @@ export default {
 			canbus.removeListener(API_CAR_CONFIG_EVENT, onReceiveCarConfig);
 		});
 
-		// МЕНЮ ОТОБРАЖЕНИЯ
+		// МЕНЮ
 
 		const menu = computed((): IMenuItem[] => [
-			{ id: 0, title: t("options.lcd.logo.menu") },
-			{ id: 1, title: t("options.lcd.hello.menu") }
+			{ id: 0, title: t("options.onboard.reset.menu") }
 		]);
 
 		/**
@@ -137,27 +120,26 @@ export default {
 		 */
 		const onMenuClick = (item: IMenuItem): void =>
 		{
-			menuVisible.value = true;
-			menuSelected.value = item;
+			switch (item.id)
+			{
+				case 0:
+					store.dispatch("app/resetOnboardCardList");
+					cardList.value = [...store.getters["app/onboardCardList"]].map((x: IOnboardCard) => ({
+						...x,
+						disabled: false,
+						visible: x.car.indexOf(canbus.configs.car.carModel) >= 0
+					}));
+					break;
+			}
 		};
-
-		/**
-		 * Применить параметры отображения на информационном экране
-		 * @param {IViewConfig} data Новые параметры отображения
-		 */
-		const onViewSettingApply = (data: IViewConfig): void => {};
 
 		return {
 			isLoading,
 			flicking,
 			cardList,
 			menu,
-			menuVisible,
-			menuSelected,
-			menuViewConfig,
 			onCardListChange,
-			onMenuClick,
-			onViewSettingApply
+			onMenuClick
 		};
 	}
 };
