@@ -260,12 +260,12 @@ export default {
 			total: {
 				title: "Fuel quantity",
 				description: "Experimental value (calculated), l",
-				menu: "LCD: Fuel quantity"
+				menu: "LCD: Fuel quantity (calc)"
 			},
 			consumption: {
 				title: "Fuel consumption",
 				description: "Experimental value (calculated), l/h",
-				menu: "LCD: Fuel consumption"
+				menu: "LCD: Fuel consumption (calc)"
 			},
 			settings: {
 				title: "Fuel consumption settings",
