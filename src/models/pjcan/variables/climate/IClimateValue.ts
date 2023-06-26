@@ -9,7 +9,8 @@ export interface IClimateValue extends IBaseModel {
 	airDLegs: boolean;
 	airDBody: boolean;
 	airDWindshield: boolean;
-	visible: boolean;
+	airDBackWin: boolean;
+	eco: boolean;
 	airRate: number;
 	airType: TAir;
 	tempType: number;

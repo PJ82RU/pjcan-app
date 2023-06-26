@@ -17,7 +17,8 @@ export class ClimateValue extends BaseModel implements IClimateValue
 	airDLegs = false;
 	airDBody = false;
 	airDWindshield = false;
-	visible = false;
+	airDBackWin = false;
+	eco = false;
 	airRate = 0;
 	airType = 0;
 	tempType = 0;
