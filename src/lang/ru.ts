@@ -227,7 +227,7 @@ export default {
 				description: "Нагрузка чего-то на что-то, хз как рассчитывается",
 				menu: "LCD: Нагрузка на ДВС"
 			},
-			motors: {
+			worktime: {
 				title: "Моточасы",
 				description: "Общее время работы двигателя",
 				menu: "LCD: Моточасы"
@@ -255,7 +255,7 @@ export default {
 					description: "Общее время работы двигателя"
 				},
 				countRPM: {
-					title: "Счетчик RPM",
+					title: "Счетчик RPM, тыс.",
 					description: "Общее количество полных оборотов коленчатого вала двигателя в тысячах"
 				}
 			}

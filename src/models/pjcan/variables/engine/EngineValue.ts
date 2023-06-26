@@ -14,12 +14,15 @@ export class EngineValue extends BaseModel implements IEngineValue
 	enabled = false;
 	coolant = 0;
 	rpm = 0;
-	mseconds = 0;
-	totalSeconds = 0;
-	totalCountRPM = 0;
+	worktime = 0;
 	countRPM = 0;
 	load = 0;
 	throttle = 0;
+	viewDays = 0;
+	viewHours = 0;
+	viewMinutes = 0;
+	viewSeconds = 0;
+	viewCountRPM = 0;
 
 	constructor(data?: DataView)
 	{

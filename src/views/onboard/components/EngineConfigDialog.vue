@@ -99,8 +99,8 @@ export default {
 			if (res.isData)
 			{
 				showDays.value = res.showDays;
-				worktime.value = res.totalSeconds > 0 ? Math.round(res.totalSeconds / 60) : 0;
-				totalCountRPM.value = res.totalCountRPM;
+				worktime.value = res.totalSeconds > 0 ? Math.round(Number(res.totalSeconds / BigInt(60))) : 0;
+				totalCountRPM.value = Math.round(Number(res.totalCountRPM / BigInt(1000)));
 			}
 		};
 
@@ -109,8 +109,8 @@ export default {
 		{
 			const { engine } = canbus.configs.variable;
 			engine.showDays = showDays.value;
-			engine.totalSeconds = 0;
-			engine.totalCountRPM = 0;
+			engine.totalSeconds = BigInt(0);
+			engine.totalCountRPM = BigInt(0);
 			canbus.queryConfig(API_VARIABLE_ENGINE_CONFIG_EXEC);
 			visible.value = false;
 		};
@@ -120,8 +120,8 @@ export default {
 		{
 			const { engine } = canbus.configs.variable;
 			engine.showDays = showDays.value;
-			engine.totalSeconds = worktime.value * 60;
-			engine.totalCountRPM = totalCountRPM.value;
+			engine.totalSeconds = BigInt(worktime.value) * BigInt(60);
+			engine.totalCountRPM = BigInt(totalCountRPM.value) * BigInt(1000);
 			canbus.queryConfig(API_VARIABLE_ENGINE_CONFIG_EXEC);
 			visible.value = false;
 		};

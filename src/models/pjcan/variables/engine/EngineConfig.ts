@@ -12,8 +12,8 @@ const struct = new BluetoothStruct(StructEngineConfig);
 export class EngineConfig extends BaseModel implements IEngineConfig
 {
 	showDays = false;
-	totalSeconds = 0;
-	totalCountRPM = 0;
+	totalSeconds = BigInt(0);
+	totalCountRPM = BigInt(0);
 
 	constructor(data?: DataView)
 	{

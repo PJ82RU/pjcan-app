@@ -211,7 +211,7 @@ export default {
 				description: "The load of something on something, I don’t know how it is calculated",
 				menu: "LCD: Engine load"
 			},
-			motors: {
+			worktime: {
 				title: "Hours",
 				description: "Total engine running time",
 				menu: "LCD: Hours"
@@ -238,7 +238,7 @@ export default {
 					description: "Total engine operating time"
 				},
 				countRPM: {
-					title: "RPM counter",
+					title: "RPM counter, thous.",
 					description: "The total number of full speed of the crankshaft of the engine in thousands"
 				}
 			}

@@ -1,10 +1,10 @@
 import { BluetoothStruct } from "@/components/bluetooth";
 
-export const API_VARIABLE_ENGINE_CONFIG_SIZE = 9;
+export const API_VARIABLE_ENGINE_CONFIG_SIZE = 17;
 
 /** Структура данных */
 export const StructEngineConfig = {
 	showDays: BluetoothStruct.bit(),
-	totalSeconds: BluetoothStruct.uint32(),
-	totalCountRPM: BluetoothStruct.uint32()
+	totalSeconds: BluetoothStruct.uint64(),
+	totalCountRPM: BluetoothStruct.uint64()
 };

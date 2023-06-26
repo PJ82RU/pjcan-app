@@ -32,10 +32,9 @@
 				</v-col>
 				<v-col cols="12" class="pt-0 pb-0">
 					<input-card-item
-						:value="motors"
-						:title="$t('onboard.engine.motors.title')"
-						:description="$t('onboard.engine.motors.description')"
-						type="time"
+						:value="worktime"
+						:title="$t('onboard.engine.worktime.title')"
+						:description="$t('onboard.engine.worktime.description')"
 						:nodata="!enabled"
 						:disabled="!isLoadedView"
 					/>
@@ -122,7 +121,7 @@ export default {
 		const rpm = ref("");
 		const countRPM = ref("");
 		const load = ref(0);
-		const motors = ref(0);
+		const worktime = ref("");
 		const throttle = ref(0);
 		const coolant = ref(0);
 
@@ -134,9 +133,15 @@ export default {
 			{
 				enabled.value = res.enabled;
 				rpm.value = res.rpm.toFixed();
-				countRPM.value = (res.totalCountRPM / 1000).toFixed(2);
+				countRPM.value = res.viewCountRPM.toString();
 				load.value = res.load / 1000;
-				motors.value = res.totalSeconds;
+
+				let wt = res.viewDays > 0 ? res.viewDays + "." : "";
+				wt += (res.viewHours < 10 ? "0" : "") + res.viewHours + ":";
+				wt += (res.viewMinutes < 10 ? "0" : "") + res.viewMinutes + ":";
+				wt += (res.viewSeconds < 10 ? "0" : "") + res.viewSeconds;
+				worktime.value = wt;
+
 				throttle.value = res.throttle / 100;
 				coolant.value = res.coolant;
 			}
@@ -171,7 +176,7 @@ export default {
 			{ id: 1, title: t("onboard.engine.RPM.menu") },
 			{ id: 2, title: t("onboard.engine.countRPM.menu") },
 			{ id: 3, title: t("onboard.engine.load.menu") },
-			{ id: 4, title: t("onboard.engine.motors.menu") },
+			{ id: 4, title: t("onboard.engine.worktime.menu") },
 			{ id: 5, title: t("onboard.engine.throttle.menu") },
 			{ id: 6, title: t("onboard.engine.coolant.menu") }
 		]);
@@ -276,7 +281,7 @@ export default {
 			rpm,
 			countRPM,
 			load,
-			motors,
+			worktime,
 			throttle,
 			coolant,
 			menu,
