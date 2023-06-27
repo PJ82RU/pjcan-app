@@ -6,7 +6,7 @@ const resolve = (dir) => path.join(__dirname, dir);
 module.exports = defineConfig({
 	transpileDependencies: true,
 	publicPath: process.env.VUE_APP_MODE === "test" ? "/pjcan-test/" : "/pjcan-app/",
-	outputDir: process.env.VUE_APP_MODE === "test" ? "../pjcan-test/docs" : "/dist",
+	outputDir: process.env.VUE_APP_MODE === "test" ? "../pjcan-test/docs" : "./dist",
 	productionSourceMap: false,
 
 	configureWebpack: {
