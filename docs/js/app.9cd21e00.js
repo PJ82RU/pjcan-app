@@ -2757,8 +2757,8 @@ const clearDebounce = () => {
 
 // EXTERNAL MODULE: ./src/components/bluetooth/index.ts + 4 modules
 var bluetooth = __webpack_require__(9014);
-// EXTERNAL MODULE: ./src/models/pjcan/configs/index.ts + 2 modules
-var configs = __webpack_require__(9993);
+// EXTERNAL MODULE: ./src/models/pjcan/configs/index.ts + 1 modules
+var configs = __webpack_require__(1303);
 // EXTERNAL MODULE: ./src/models/pjcan/base/BaseModel.ts
 var BaseModel = __webpack_require__(9036);
 // EXTERNAL MODULE: ./src/models/pjcan/car/index.ts + 4 modules
@@ -2870,7 +2870,7 @@ class VariableView extends BaseModel/* BaseModel */.g {
   }
   /**
    * Запись данных
-   * @param {DataView} buf Буффер данных
+   * @param {DataView} buf Буфер данных
    */
   set(buf) {
     const result = this._set(this, API_VARIABLE_VIEWS_EXEC, API_VARIABLE_VIEWS_SIZE + 1, struct, buf);
@@ -2896,8 +2896,8 @@ class VariableView extends BaseModel/* BaseModel */.g {
 
 
 
-// EXTERNAL MODULE: ./src/models/pjcan/teyes/index.ts + 6 modules
-var teyes = __webpack_require__(8674);
+// EXTERNAL MODULE: ./src/models/pjcan/teyes/index.ts + 7 modules
+var teyes = __webpack_require__(8181);
 ;// CONCATENATED MODULE: ./src/models/pjcan/views/StructViews.ts
 
 
@@ -2930,7 +2930,7 @@ class Views extends BaseModel/* BaseModel */.g {
   }
   /**
    * Запись данных
-   * @param {DataView} buf Буффер данных
+   * @param {DataView} buf Буфер данных
    */
   set(buf) {
     const result = this._set(this, API_VIEWS_EXEC, API_VIEWS_SIZE + 1, Views_struct, buf);
@@ -3025,7 +3025,7 @@ class VariablesValue extends BaseModel/* BaseModel */.g {
   }
   /**
    * Запись данных
-   * @param {DataView} buf Буффер данных
+   * @param {DataView} buf Буфер данных
    */
   set(buf) {
     const result = this._set(this, API_VARIABLE_VALUES_EXEC, API_VARIABLE_VALUES_SIZE + 1, VariablesValue_struct, buf);
@@ -3082,7 +3082,7 @@ class Values extends BaseModel/* BaseModel */.g {
   }
   /**
    * Запись данных
-   * @param {DataView} buf Буффер данных
+   * @param {DataView} buf Буфер данных
    */
   set(buf) {
     const result = this._set(this, API_VALUES_EXEC, API_VALUES_SIZE + 1, Values_struct, buf);
@@ -3152,6 +3152,10 @@ var scanner = __webpack_require__(510);
 
 
 
+const dev = "production" === "development";
+// Заполняем пустые значения структуры по очереди
+teyes/* TeyesConfig.update */.mL.update();
+configs/* Configs.update */.zo.update();
 class Canbus extends (eventemitter3_default()) {
   /** Статус циклического запроса значений */
   get startedFetchValue() {
@@ -3161,6 +3165,8 @@ class Canbus extends (eventemitter3_default()) {
     super();
     /** Bluetooth */
     (0,defineProperty/* default */.Z)(this, "bluetooth", new bluetooth/* Bluetooth */.$4());
+    /** Версия прошивки PJCAN */
+    (0,defineProperty/* default */.Z)(this, "version", new version/* Version */.Gf());
     /** Конфигурация устройства */
     (0,defineProperty/* default */.Z)(this, "configs", new configs/* Configs */.zo());
     /** Конфигурация отображения значений */
@@ -3189,178 +3195,153 @@ class Canbus extends (eventemitter3_default()) {
     (0,defineProperty/* default */.Z)(this, "debounceFetchValue", undefined);
     this.bluetooth.addListener(bluetooth/* BLUETOOTH_EVENT_CONNECTED */.Dx, ev => this.onConnected(ev));
     this.bluetooth.addListener(bluetooth/* BLUETOOTH_EVENT_RECEIVE */.j9, ev => this.onReceive(ev));
+    this.addListener(version/* API_VERSION_EVENT */.MK, () => this.begin());
   }
   /**
    * Запрос/отправка данных
    * @param {IBaseModel} obj Объект данных
-   * @private
    */
-  async query(obj) {
-    if (!this.bluetooth.connected) return;
-    this.queue.push(this.bluetooth.send(obj.get()));
-    if (!this.promises) {
-      this.promises = this.queue;
-      this.queue = [];
-      await Promise.all(this.promises);
-      this.promises = null;
+  query(obj) {
+    if (this.bluetooth.connected) {
+      this.queue.push(this.bluetooth.send(obj.get()));
+      if (!this.promises) {
+        this.promises = this.queue;
+        this.queue = [];
+        Promise.all(this.promises).catch(err => {
+          if (dev) console.log("Query:", err);
+        }).finally(() => {
+          this.promises = null;
+        });
+      }
+      return true;
     }
+    return false;
   }
   /**
    * Событие подключения Bluetooth
    * @param {TConnectedStatus} status Статус подключения
    */
-  async onConnected(status) {
-    if (status !== bluetooth/* TConnectedStatus.CONNECT */.xz.CONNECT) {
+  onConnected(status) {
+    if (status === bluetooth/* TConnectedStatus.CONNECT */.xz.CONNECT) {
+      // с начало получаем версию прошивки
+      this.queryConfig(version/* API_VERSION_EXEC */._u);
+    } else {
       this.queryDisabled = true;
-      return;
     }
-    await this.queryConfig();
-    await this.queryView();
+  }
+  /** Запуск опросов PJCAN */
+  begin() {
+    if (!this.version.is) return;
+    this.queryConfig();
+    this.queryView();
     this.queryDisabled = false;
     if (this.debounceFetchValue === undefined) {
-      await this.queryValue();
+      this.queryValue();
     }
   }
   /**
    * Отправить/получить конфигурацию
    * @param {number} type Тип конфигурации
    */
-  async queryConfig(type = 0) {
+  queryConfig(type = 0) {
     switch (type) {
+      case version/* API_VERSION_EXEC */._u:
+        return this.query(this.version);
       case variables_configs/* API_VARIABLE_CONFIGS_EXEC */.Kw:
-        await this.query(this.configs.variable);
-        break;
+        return this.query(this.configs.variable);
       case pjcan_button/* API_BUTTONS_CONFIG_EXEC */.XY:
-        if (!this.queryDisabled) await this.query(this.configs.buttons);
-        break;
+        return !this.queryDisabled && this.query(this.configs.buttons);
       case car/* API_CAR_CONFIG_EXEC */.j6:
-        await this.query(this.configs.car);
-        break;
+        return this.query(this.configs.car);
       case device/* API_DEVICE_CONFIG_EXEC */.bI:
-        await this.query(this.configs.device);
-        break;
+        return this.query(this.configs.device);
       case teyes/* API_TEYES_CONFIG_EXEC */.jc:
-        await this.query(this.configs.teyes);
-        break;
+        return this.query(this.configs.teyes);
       case bose/* API_VARIABLE_BOSE_EXEC */.j3:
-        await this.query(this.configs.variable.bose);
-        break;
+        return this.query(this.configs.variable.bose);
       case engine/* API_VARIABLE_ENGINE_CONFIG_EXEC */.LH:
-        await this.query(this.configs.variable.engine);
-        break;
+        return this.query(this.configs.variable.engine);
       case fuel/* API_VARIABLE_FUEL_CONFIG_EXEC */.Wm:
-        await this.query(this.configs.variable.fuel);
-        break;
+        return this.query(this.configs.variable.fuel);
       case volume/* API_VARIABLE_VOLUME_CONFIG_EXEC */.U0:
-        await this.query(this.configs.variable.volume);
-        break;
+        return this.query(this.configs.variable.volume);
       case scanner/* API_SCANNER_CONFIG_EXEC */.X8:
-        await this.query(this.scanner);
-        break;
+        return this.query(this.scanner);
       default:
-        await this.query(this.configs);
-        break;
+        return this.query(this.configs);
     }
   }
   /**
    * Отправить/получить конфигурацию отображения значений
    * @param {number} type Тип конфигурации отображения значений
    */
-  async queryView(type = 0) {
+  queryView(type = 0) {
     switch (type) {
       case API_VARIABLE_VIEWS_EXEC:
-        await this.query(this.views.variable);
-        break;
+        return this.query(this.views.variable);
       case car/* API_CAR_VIEW_EXEC */.kn:
-        if (!this.queryDisabled) await this.query(this.views.car);
-        break;
+        return !this.queryDisabled && this.query(this.views.car);
       case teyes/* API_TEYES_VIEW_EXEC */.nY:
-        if (!this.queryDisabled) await this.query(this.views.teyes);
-        break;
+        return !this.queryDisabled && this.query(this.views.teyes);
       case bose/* API_VARIABLE_BOSE_VIEW_EXEC */.qT:
-        if (!this.queryDisabled) await this.query(this.views.variable.bose);
-        break;
+        return !this.queryDisabled && this.query(this.views.variable.bose);
       case climate/* API_VARIABLE_CLIMATE_VIEW_EXEC */.EW:
-        if (!this.queryDisabled) await this.query(this.views.variable.climate);
-        break;
+        return !this.queryDisabled && this.query(this.views.variable.climate);
       case doors/* API_VARIABLE_DOORS_VIEW_EXEC */.EJ:
-        if (!this.queryDisabled) await this.query(this.views.variable.doors);
-        break;
+        return !this.queryDisabled && this.query(this.views.variable.doors);
       case engine/* API_VARIABLE_ENGINE_VIEW_EXEC */._L:
-        if (!this.queryDisabled) await this.query(this.views.variable.engine);
-        break;
+        return !this.queryDisabled && this.query(this.views.variable.engine);
       case fuel/* API_VARIABLE_FUEL_VIEW_EXEC */.ES:
-        if (!this.queryDisabled) await this.query(this.views.variable.fuel);
-        break;
+        return !this.queryDisabled && this.query(this.views.variable.fuel);
       case movement/* API_VARIABLE_MOVEMENT_VIEW_EXEC */.hQ:
-        if (!this.queryDisabled) await this.query(this.views.variable.movement);
-        break;
+        return !this.queryDisabled && this.query(this.views.variable.movement);
       case sensors/* API_VARIABLE_SENSORS_VIEW_EXEC */.Sw:
-        if (!this.queryDisabled) await this.query(this.views.variable.sensors);
-        break;
+        return !this.queryDisabled && this.query(this.views.variable.sensors);
       case temperature/* API_VARIABLE_TEMPERATURE_VIEW_EXEC */.kh:
-        if (!this.queryDisabled) await this.query(this.views.variable.temperature);
-        break;
+        return !this.queryDisabled && this.query(this.views.variable.temperature);
       case volume/* API_VARIABLE_VOLUME_VIEW_EXEC */.Ge:
-        if (!this.queryDisabled) await this.query(this.views.variable.volume);
-        break;
+        return !this.queryDisabled && this.query(this.views.variable.volume);
       default:
-        await this.query(this.views);
-        break;
+        return this.query(this.views);
     }
   }
   /** Отправить/получить значения
    * @param {number} type Тип значения
    * @param {IBaseModel|undefined} value Передаваемые значения
    */
-  async queryValue(type = 0, value = undefined) {
-    if (this.queryDisabled) return;
+  queryValue(type = 0, value = undefined) {
+    if (this.queryDisabled) return false;
     switch (type) {
       case API_VARIABLE_VALUES_EXEC:
-        await this.query(this.values.variable);
-        break;
+        return this.query(this.values.variable);
       case device/* API_DEVICE_VALUE_EXEC */.tB:
-        await this.query(this.values.device);
-        break;
+        return this.query(this.values.device);
       case device/* API_INFO_EXEC */.PR:
-        await this.query(this.deviceInfo);
-        break;
+        return this.query(this.deviceInfo);
       case lcd/* API_LCD_VALUE_EXEC */.Q0:
-        await this.query(this.values.lcd);
-        break;
+        return this.query(this.values.lcd);
       case climate/* API_VARIABLE_CLIMATE_EXEC */.sP:
-        await this.query(this.values.variable.climate);
-        break;
+        return this.query(this.values.variable.climate);
       case doors/* API_VARIABLE_DOORS_EXEC */.b7:
-        await this.query(this.values.variable.doors);
-        break;
+        return this.query(this.values.variable.doors);
       case engine/* API_VARIABLE_ENGINE_EXEC */.g$:
-        await this.query(this.values.variable.engine);
-        break;
+        return this.query(this.values.variable.engine);
       case fuel/* API_VARIABLE_FUEL_EXEC */.tM:
-        await this.query(this.values.variable.fuel);
-        break;
+        return this.query(this.values.variable.fuel);
       case movement/* API_VARIABLE_MOVEMENT_EXEC */.Kq:
-        await this.query(this.values.variable.movement);
-        break;
+        return this.query(this.values.variable.movement);
       case sensors/* API_VARIABLE_SENSORS_EXEC */.XV:
-        await this.query(this.values.variable.sensors);
-        break;
+        return this.query(this.values.variable.sensors);
       case temperature/* API_VARIABLE_TEMPERATURE_EXEC */.Sg:
-        await this.query(this.values.variable.temperature);
-        break;
+        return this.query(this.values.variable.temperature);
       case volume/* API_VARIABLE_VOLUME_EXEC */.pf:
-        await this.query(this.values.variable.volume);
-        break;
+        return this.query(this.values.variable.volume);
       case test/* API_VARIABLE_TEST_EXEC */.Ez:
-        if (value) await this.query(value);
-        break;
+        return !!value && this.query(value);
       case scanner/* API_SCANNER_VALUE_EXEC */.v3:
-        await this.query(value ?? new scanner/* ScannerValue */.dL());
-        break;
+        return this.query(value ?? new scanner/* ScannerValue */.dL());
       default:
-        await this.query(this.values);
-        break;
+        return this.query(this.values);
     }
   }
   /**
@@ -3372,7 +3353,7 @@ class Canbus extends (eventemitter3_default()) {
   startFetchValue(type = 0, value = undefined, timeout = 500) {
     this.debounceFetchValue = type;
     debounce(async () => {
-      await this.queryValue(type, value);
+      this.queryValue(type, value);
       if (this.debounceFetchValue !== undefined) {
         this.startFetchValue(type, value, timeout);
       }
@@ -3431,10 +3412,20 @@ class Canbus extends (eventemitter3_default()) {
    */
   onReceive(data) {
     switch (data.getUint8(0)) {
+      case version/* API_VERSION_EXEC */._u:
+        // Версия прошивки
+        this.version.set(data);
+        this.emit(version/* API_VERSION_EVENT */.MK, this.version);
+        this.updateStructVersion();
+        break;
       case configs/* API_CONFIG_EXEC */.XH:
         // Вся конфигурация
         this.configs.set(data);
-        this.logVersion();
+        // для совместимости
+        if (this.version.setVersion(this.configs.version)) {
+          this.emit(version/* API_VERSION_EVENT */.MK, this.version);
+          this.updateStructVersion();
+        }
         this.emit(configs/* API_CONFIGS_EVENT */.cF, this.configs);
         this.emit(device/* API_DEVICE_CONFIG_EVENT */.Zh, this.configs.device);
         this.emit(pjcan_button/* API_BUTTONS_CONFIG_EVENT */.MM, this.configs.buttons);
@@ -3454,7 +3445,7 @@ class Canbus extends (eventemitter3_default()) {
         // Все значения
         this.values.set(data);
         if (!this.values.device.activation && !this.sha) {
-          this.queryValue(device/* API_INFO_EXEC */.PR).then();
+          this.queryValue(device/* API_INFO_EXEC */.PR);
         }
         this.emit(API_VALUES_EVENT, this.values);
         this.emit(device/* API_DEVICE_EVENT */.kS, this.values.device);
@@ -3680,20 +3671,22 @@ class Canbus extends (eventemitter3_default()) {
       debounce(() => this.emit(update/* API_UPDATE_EVENT_ERROR */.rX, (0,lang.t)("update.notify.errorUpload")), 5000);
     }
   }
-  /** Лог версии прошивки */
-  logVersion() {
+  /** Обновление структур */
+  updateStructVersion() {
     const {
       major,
       minor,
       build,
       revision
-    } = this.configs.version;
+    } = this.version;
     console.log((0,lang.t)("BLE.server.versionProtocol", {
       mj: major,
       mn: minor,
       bl: build,
       rv: revision
     }));
+    teyes/* TeyesConfig.update */.mL.update(this.version);
+    configs/* Configs.update */.zo.update();
   }
   /** Проверить версию прошивки */
   checkVersion() {
@@ -3709,7 +3702,7 @@ class Canbus extends (eventemitter3_default()) {
           newVersion.minor = ver[1];
           newVersion.build = ver[2];
           newVersion.revision = ver[3];
-          if (this.configs.version.compare(newVersion) > 0) resolve(newVersion);else reject("Current version");
+          if (this.version.compare(newVersion, 4) > 0) resolve(newVersion);else reject("Current version");
         } else reject("No data");
       }).catch(e => reject(e));
     });
@@ -3721,7 +3714,7 @@ class Canbus extends (eventemitter3_default()) {
   rebootDevice(save = false) {
     this.values.device.reboot = true;
     this.values.device.save = save;
-    this.queryValue(device/* API_DEVICE_VALUE_EXEC */.tB).then();
+    this.queryValue(device/* API_DEVICE_VALUE_EXEC */.tB);
   }
   /**
    * Сбросить настройки устройства
@@ -3793,7 +3786,6 @@ var TConnectedStatus;
 ;// CONCATENATED MODULE: ./src/components/bluetooth/Bluetooth.ts
 
 /* eslint-disable no-undef */
-// noinspection JSUnusedGlobalSymbols
 
 
 
@@ -3806,13 +3798,18 @@ const BLUETOOTH_EVENT_SEND = "Send"; // Событие исходящих дан
 const dev = "production" === "development";
 /** Bluetooth */
 class Bluetooth extends (eventemitter3_default()) {
-  constructor() {
+  constructor(counterReSendMax = 6) {
     super();
     /** Объект устройства */
     (0,defineProperty/* default */.Z)(this, "_device", void 0);
     /** Характеристика устройства */
     (0,defineProperty/* default */.Z)(this, "_characteristic", void 0);
+    /** Счетчик повторной отправки */
+    (0,defineProperty/* default */.Z)(this, "_counterReSend", 0);
+    /** Максимальное значение счетчика повторной отправки */
+    (0,defineProperty/* default */.Z)(this, "counterReSendMax", void 0);
     this.clear();
+    this.counterReSendMax = counterReSendMax;
   }
   /** Очистка переменных */
   clear() {
@@ -3952,18 +3949,23 @@ class Bluetooth extends (eventemitter3_default()) {
   send(data) {
     if (!this.connected) {
       // this.emit(BLUETOOTH_EVENT_CONNECTED, TConnectedStatus.NO_CONNECT);
-      return Promise.resolve();
+      return Promise.reject("No connection");
     }
     if (!data) {
       this.emit(BLUETOOTH_EVENT_SEND);
-      return Promise.resolve();
+      return Promise.reject("No data available");
     }
     if (dev) console.log((0,lang.t)("BLE.server.send", {
       n: data?.getUint8(0) ?? "..."
     }), data);
-    return this._characteristic?.writeValue(data).catch(() => {
-      return Promise.resolve().then(() => this.delayPromise(50)).then(() => this.send(data));
-    }) ?? Promise.resolve();
+    return this._characteristic?.writeValue(data).then(() => {
+      this._counterReSend = 0;
+    }).catch(() => {
+      return Promise.resolve().then(() => this.delayPromise(50)).then(() => {
+        this._counterReSend++;
+        return this._counterReSend < this.counterReSendMax ? this.send(data) : Promise.reject("The counter has reached its maximum value");
+      });
+    }) ?? Promise.reject("No characteristic");
   }
   /**
    * Таймаут Promise
@@ -4003,7 +4005,6 @@ var TTypeValue;
 ;// CONCATENATED MODULE: ./src/components/bluetooth/BluetoothStruct.ts
 
 
-// noinspection JSUnusedGlobalSymbols
 
 
 /** Парсинг структуры данных С++ */
@@ -4477,12 +4478,14 @@ var vue_i18n_esm_bundler = __webpack_require__(5658);
   },
   update: {
     title: "Обновление PJCAN",
+    warning: "Внимание!",
     btn: {
       update: "Обновить",
       later: "Позже"
     },
     dialog: {
-      new: "Доступна новая версия прошивки устройства PJCAN. Обновить до версии {n} ?"
+      updateTo: "Обновить прошивку PJCAN до версии {version} ?",
+      browserOutdated: "Версия вашего браузера устарела.\n" + "Обновите его и откройте web-приложение заново."
     },
     process: {
       preparation: "Подготовка к загрузке ...",
@@ -4491,6 +4494,7 @@ var vue_i18n_esm_bundler = __webpack_require__(5658);
       timeLeft: "Оставшееся время"
     },
     notify: {
+      newVersion: "Доступно обновление {version}",
       completed: "Прошивка успешно завершена",
       warning: "Прошивка завершена не удачно. Выключите и включите устройство, и попробуйте обновить еще раз",
       error: "Ошибка обновления прошивки",
@@ -4519,6 +4523,7 @@ var vue_i18n_esm_bundler = __webpack_require__(5658);
       buttons: "Настройка кнопок руля",
       options: "Параметры"
     },
+    update: "Обновить до {version}",
     about: "О программе"
   },
   activation: {
@@ -4570,7 +4575,8 @@ var vue_i18n_esm_bundler = __webpack_require__(5658);
     close: "Закрыть",
     deviceInfo: "Об устройстве",
     deviceReset: "Сбросить конфигурацию",
-    reset: "Сбросить"
+    reset: "Сбросить",
+    ok: "OK"
   },
   onboard: {
     title: "Бортовой компьютер",
@@ -4648,7 +4654,7 @@ var vue_i18n_esm_bundler = __webpack_require__(5658);
         description: "Нагрузка чего-то на что-то, хз как рассчитывается",
         menu: "LCD: Нагрузка на ДВС"
       },
-      motors: {
+      worktime: {
         title: "Моточасы",
         description: "Общее время работы двигателя",
         menu: "LCD: Моточасы"
@@ -4676,7 +4682,7 @@ var vue_i18n_esm_bundler = __webpack_require__(5658);
           description: "Общее время работы двигателя"
         },
         countRPM: {
-          title: "Счетчик RPM",
+          title: "Счетчик RPM, тыс.",
           description: "Общее количество полных оборотов коленчатого вала двигателя в тысячах"
         }
       }
@@ -4696,12 +4702,12 @@ var vue_i18n_esm_bundler = __webpack_require__(5658);
       total: {
         title: "Количество топлива",
         description: "Экспериментальное значение (расчетное), л",
-        menu: "LCD: Количество топлива"
+        menu: "LCD: Количество топлива (расчетное)"
       },
       consumption: {
         title: "Расход топлива",
         description: "Экспериментальное значение (расчетное), л/ч",
-        menu: "LCD: Расход топлива"
+        menu: "LCD: Расход топлива (расчетное)"
       },
       settings: {
         title: "Настройки расхода",
@@ -4793,6 +4799,9 @@ var vue_i18n_esm_bundler = __webpack_require__(5658);
         title: "Воздушный поток",
         description: "Направление воздушного потока"
       }
+    },
+    bose: {
+      title: "Bose"
     }
   },
   buttons: {
@@ -4922,6 +4931,21 @@ var vue_i18n_esm_bundler = __webpack_require__(5658);
         title: "Показывать текст ГУ",
         description: "Показывать текст ГУ на информационном экране в момент отсутствия данных отображения",
         menu: "LCD: Показывать текст ГУ"
+      },
+      uartBaud: {
+        title: "Протокол Serial",
+        description: "Протокол Serial для связи PJCAN с ГУ",
+        list: {
+          0xFD: "Raise HM_ND01 2019.06.21 (38400)",
+          0xFC: "Raise HM_ND00 2017.12.11 (19200)"
+        }
+      }
+    },
+    onboard: {
+      title: "Бортовой компьютер",
+      description: "Список карточек отображаемых на экране \"Бортовой компьютер\". Порядок меняется путем перетаскивания блока вверх/вниз. Так же можно включить/выключить отображения на странице",
+      reset: {
+        menu: "Упорядочить по умолчанию"
       }
     }
   },
@@ -5007,12 +5031,14 @@ var vue_i18n_esm_bundler = __webpack_require__(5658);
   },
   update: {
     title: "Update PJCAN",
+    warning: "Attention!",
     btn: {
       update: "Update",
       later: "Later"
     },
     dialog: {
-      new: "A new firmware version of the PJCAN device is available. Upgrade to version {n} ?"
+      updateTo: "Update PJCAN firmware to version {version} ?",
+      browserOutdated: "Your browser version is outdated.\n" + "Update it and open the web application again."
     },
     process: {
       preparation: "Preparing to upload...",
@@ -5021,6 +5047,7 @@ var vue_i18n_esm_bundler = __webpack_require__(5658);
       timeLeft: "Time left"
     },
     notify: {
+      newVersion: "Update available {version}",
       completed: "Firmware completed successfully",
       warning: "The firmware was not completed successfully. Turn your device off and on and try updating again",
       error: "Firmware update error",
@@ -5049,6 +5076,7 @@ var vue_i18n_esm_bundler = __webpack_require__(5658);
       buttons: "Steering wheel button settings",
       options: "Options"
     },
+    update: "Upgrade to {version}",
     about: "About"
   },
   activation: {
@@ -5085,7 +5113,8 @@ var vue_i18n_esm_bundler = __webpack_require__(5658);
     close: "Close",
     deviceInfo: "About device",
     deviceReset: "Reset configuration",
-    reset: "Reset"
+    reset: "Reset",
+    ok: "OK"
   },
   onboard: {
     title: "On-board",
@@ -5163,7 +5192,7 @@ var vue_i18n_esm_bundler = __webpack_require__(5658);
         description: "The load of something on something, I don’t know how it is calculated",
         menu: "LCD: Engine load"
       },
-      motors: {
+      worktime: {
         title: "Hours",
         description: "Total engine running time",
         menu: "LCD: Hours"
@@ -5190,7 +5219,7 @@ var vue_i18n_esm_bundler = __webpack_require__(5658);
           description: "Total engine operating time"
         },
         countRPM: {
-          title: "RPM counter",
+          title: "RPM counter, thous.",
           description: "The total number of full speed of the crankshaft of the engine in thousands"
         }
       }
@@ -5210,12 +5239,12 @@ var vue_i18n_esm_bundler = __webpack_require__(5658);
       total: {
         title: "Fuel quantity",
         description: "Experimental value (calculated), l",
-        menu: "LCD: Fuel quantity"
+        menu: "LCD: Fuel quantity (calc)"
       },
       consumption: {
         title: "Fuel consumption",
         description: "Experimental value (calculated), l/h",
-        menu: "LCD: Fuel consumption"
+        menu: "LCD: Fuel consumption (calc)"
       },
       settings: {
         title: "Fuel consumption settings",
@@ -5307,6 +5336,9 @@ var vue_i18n_esm_bundler = __webpack_require__(5658);
         title: "Air flow",
         description: "Airflow direction"
       }
+    },
+    bose: {
+      title: "Bose"
     }
   },
   buttons: {
@@ -5436,6 +5468,21 @@ var vue_i18n_esm_bundler = __webpack_require__(5658);
         title: "Show the text Teyes",
         description: "Show the text of the Teyes on the information screen at the time of the absence of data display",
         menu: "LCD: Show the text Teyes"
+      },
+      uartBaud: {
+        title: "Serial protocol",
+        description: "Serial protocol for PJCAN communication with the head unit",
+        list: {
+          0xFD: "Raise HM_ND01 2019.06.21 (38400)",
+          0xFC: "Raise HM_ND00 2017.12.11 (19200)"
+        }
+      }
+    },
+    onboard: {
+      title: "On-board",
+      description: "A list of cards displayed on the On-Board Computer screen. The order is changed by dragging the block up/down. You can also enable/disable the display on the page",
+      reset: {
+        menu: "Arrange by default"
       }
     }
   },
@@ -5532,7 +5579,7 @@ const t = i18n.global.t;
 
 /***/ }),
 
-/***/ 441:
+/***/ 4638:
 /***/ (function(__unused_webpack_module, __unused_webpack___webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -6546,9 +6593,9 @@ const VMain = (0,defineComponent/* genericComponent */.ev)()({
     return {};
   }
 });
-;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/layout/BaseLayout.vue?vue&type=template&id=190f320e&scoped=true&ts=true
+;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/layout/BaseLayout.vue?vue&type=template&id=7d20b89d&scoped=true&ts=true
 
-const _withScopeId = n => ((0,runtime_core_esm_bundler/* pushScopeId */.dD)("data-v-190f320e"), n = n(), (0,runtime_core_esm_bundler/* popScopeId */.Cn)(), n);
+const _withScopeId = n => ((0,runtime_core_esm_bundler/* pushScopeId */.dD)("data-v-7d20b89d"), n = n(), (0,runtime_core_esm_bundler/* popScopeId */.Cn)(), n);
 const _hoisted_1 = {
   class: "text-h4"
 };
@@ -6558,7 +6605,7 @@ const _hoisted_2 = /*#__PURE__*/_withScopeId(() => /*#__PURE__*/(0,runtime_core_
 const _hoisted_3 = /*#__PURE__*/_withScopeId(() => /*#__PURE__*/(0,runtime_core_esm_bundler/* createElementVNode */._)("div", {
   class: "base-layout__bg"
 }, null, -1));
-function BaseLayoutvue_type_template_id_190f320e_scoped_true_ts_true_render(_ctx, _cache, $props, $setup, $data, $options) {
+function BaseLayoutvue_type_template_id_7d20b89d_scoped_true_ts_true_render(_ctx, _cache, $props, $setup, $data, $options) {
                                                                           
                                                             
   const _component_icon_custom = (0,runtime_core_esm_bundler/* resolveComponent */.up)("icon-custom");
@@ -6602,18 +6649,22 @@ function BaseLayoutvue_type_template_id_190f320e_scoped_true_ts_true_render(_ctx
       })) : (0,runtime_core_esm_bundler/* createCommentVNode */.kq)("", true), (0,runtime_core_esm_bundler/* createVNode */.Wm)(VBtn/* VBtn */.T, {
         icon: "mdi-fit-to-screen-outline",
         onClick: $setup.toggleFullscreen
-      }, null, 8, ["onClick"]), (0,runtime_core_esm_bundler/* createVNode */.Wm)(_component_bluetooth_btn), (0,runtime_core_esm_bundler/* createVNode */.Wm)(_component_update_firmware_dialog), (0,runtime_core_esm_bundler/* createVNode */.Wm)(_component_menu_dots, {
+      }, null, 8, ["onClick"]), (0,runtime_core_esm_bundler/* createVNode */.Wm)(_component_bluetooth_btn), (0,runtime_core_esm_bundler/* createVNode */.Wm)(_component_update_firmware_dialog, {
+        modelValue: $setup.visibleUpdate,
+        "onUpdate:modelValue": _cache[1] || (_cache[1] = $event => $setup.visibleUpdate = $event),
+        "new-version": $setup.newVersionFirmware
+      }, null, 8, ["modelValue", "new-version"]), (0,runtime_core_esm_bundler/* createVNode */.Wm)(_component_menu_dots, {
         menu: $setup.menu,
         "onClick:item": $setup.onMenuClick
       }, null, 8, ["menu", "onClick:item"]), (0,runtime_core_esm_bundler/* createVNode */.Wm)(_component_about_dialog, {
         modelValue: $setup.visibleAbout,
-        "onUpdate:modelValue": _cache[1] || (_cache[1] = $event => $setup.visibleAbout = $event)
+        "onUpdate:modelValue": _cache[2] || (_cache[2] = $event => $setup.visibleAbout = $event)
       }, null, 8, ["modelValue"]), (0,runtime_core_esm_bundler/* createVNode */.Wm)(_component_onboard_buttons_dialog, {
         modelValue: $setup.visibleOnboardButtons,
-        "onUpdate:modelValue": _cache[2] || (_cache[2] = $event => $setup.visibleOnboardButtons = $event)
+        "onUpdate:modelValue": _cache[3] || (_cache[3] = $event => $setup.visibleOnboardButtons = $event)
       }, null, 8, ["modelValue"]), (0,runtime_core_esm_bundler/* createVNode */.Wm)(_component_test_dialog, {
         modelValue: $setup.visibleTest,
-        "onUpdate:modelValue": _cache[3] || (_cache[3] = $event => $setup.visibleTest = $event)
+        "onUpdate:modelValue": _cache[4] || (_cache[4] = $event => $setup.visibleTest = $event)
       }, null, 8, ["modelValue"])]),
       _: 1
     }), (0,runtime_core_esm_bundler/* createVNode */.Wm)(VMain, null, {
@@ -6626,7 +6677,7 @@ function BaseLayoutvue_type_template_id_190f320e_scoped_true_ts_true_render(_ctx
       }, [(0,runtime_core_esm_bundler/* createVNode */.Wm)(_component_router_view)], 4), $setup.message ? ((0,runtime_core_esm_bundler/* openBlock */.wg)(), (0,runtime_core_esm_bundler/* createBlock */.j4)(_component_message_dialog, {
         key: 0,
         modelValue: $setup.visibleMessage,
-        "onUpdate:modelValue": _cache[4] || (_cache[4] = $event => $setup.visibleMessage = $event),
+        "onUpdate:modelValue": _cache[5] || (_cache[5] = $event => $setup.visibleMessage = $event),
         title: $setup.message.title,
         icon: $setup.message?.icon,
         text: $setup.message.text,
@@ -6648,7 +6699,7 @@ function BaseLayoutvue_type_template_id_190f320e_scoped_true_ts_true_render(_ctx
 
 
 
-;// CONCATENATED MODULE: ./src/layout/BaseLayout.vue?vue&type=template&id=190f320e&scoped=true&ts=true
+;// CONCATENATED MODULE: ./src/layout/BaseLayout.vue?vue&type=template&id=7d20b89d&scoped=true&ts=true
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.unshift.js
 var es_array_unshift = __webpack_require__(541);
@@ -9882,10 +9933,12 @@ router.beforeEach(async (to, from, next) => {
   next();
 });
 /* harmony default export */ var src_router = (router);
-// EXTERNAL MODULE: ./src/store/index.ts + 10 modules
-var store = __webpack_require__(5986);
+// EXTERNAL MODULE: ./src/store/index.ts + 12 modules
+var store = __webpack_require__(9918);
 // EXTERNAL MODULE: ./node_modules/vue-i18n/dist/vue-i18n.esm-bundler.js + 4 modules
 var vue_i18n_esm_bundler = __webpack_require__(5658);
+// EXTERNAL MODULE: ./node_modules/vue3-toastify/dist/esm/index.js
+var esm = __webpack_require__(672);
 // EXTERNAL MODULE: ./node_modules/moment/moment.js
 var moment = __webpack_require__(6797);
 var moment_default = /*#__PURE__*/__webpack_require__.n(moment);
@@ -9997,9 +10050,9 @@ if (!nativeAPI) {
 /* harmony default export */ var node_modules_screenfull = (screenfull);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/components/VIcon/VIcon.mjs + 1 modules
 var VIcon = __webpack_require__(3289);
-;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/BluetoothBtn.vue?vue&type=template&id=19d8bf89&scoped=true&ts=true
+;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/BluetoothBtn.vue?vue&type=template&id=7c336fc0&scoped=true&ts=true
 
-function BluetoothBtnvue_type_template_id_19d8bf89_scoped_true_ts_true_render(_ctx, _cache, $props, $setup, $data, $options) {
+function BluetoothBtnvue_type_template_id_7c336fc0_scoped_true_ts_true_render(_ctx, _cache, $props, $setup, $data, $options) {
                                                         
                                                       
   return (0,runtime_core_esm_bundler/* openBlock */.wg)(), (0,runtime_core_esm_bundler/* createBlock */.j4)(VBtn/* VBtn */.T, {
@@ -10027,8 +10080,6 @@ function BluetoothBtnvue_type_template_id_19d8bf89_scoped_true_ts_true_render(_c
 
 
 
-// EXTERNAL MODULE: ./node_modules/vue3-toastify/dist/esm/index.js
-var esm = __webpack_require__(672);
 // EXTERNAL MODULE: ./src/layout/components/DialogTemplate.vue + 6 modules
 var DialogTemplate = __webpack_require__(2196);
 // EXTERNAL MODULE: ./src/components/bluetooth/index.ts + 4 modules
@@ -10065,7 +10116,8 @@ var canbus = __webpack_require__(3956);
         }, {
           title: t("btn.close"),
           icon: "mdi-close"
-        }]
+        }],
+        width: 700
       });
     };
     /** Событие кнопки подключения/отключения Bluetooth */
@@ -10117,10 +10169,10 @@ var canbus = __webpack_require__(3956);
 });
 ;// CONCATENATED MODULE: ./src/components/BluetoothBtn.vue?vue&type=script&lang=ts
  
-;// CONCATENATED MODULE: ./node_modules/mini-css-extract-plugin/dist/loader.js??clonedRuleSet-22.use[0]!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/BluetoothBtn.vue?vue&type=style&index=0&id=19d8bf89&lang=scss&scoped=true
+;// CONCATENATED MODULE: ./node_modules/mini-css-extract-plugin/dist/loader.js??clonedRuleSet-22.use[0]!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/BluetoothBtn.vue?vue&type=style&index=0&id=7c336fc0&lang=scss&scoped=true
 // extracted by mini-css-extract-plugin
 
-;// CONCATENATED MODULE: ./src/components/BluetoothBtn.vue?vue&type=style&index=0&id=19d8bf89&lang=scss&scoped=true
+;// CONCATENATED MODULE: ./src/components/BluetoothBtn.vue?vue&type=style&index=0&id=7c336fc0&lang=scss&scoped=true
 
 // EXTERNAL MODULE: ./node_modules/vue-loader/dist/exportHelper.js
 var exportHelper = __webpack_require__(89);
@@ -10132,18 +10184,18 @@ var exportHelper = __webpack_require__(89);
 ;
 
 
-const __exports__ = /*#__PURE__*/(0,exportHelper/* default */.Z)(BluetoothBtnvue_type_script_lang_ts, [['render',BluetoothBtnvue_type_template_id_19d8bf89_scoped_true_ts_true_render],['__scopeId',"data-v-19d8bf89"]])
+const __exports__ = /*#__PURE__*/(0,exportHelper/* default */.Z)(BluetoothBtnvue_type_script_lang_ts, [['render',BluetoothBtnvue_type_template_id_7c336fc0_scoped_true_ts_true_render],['__scopeId',"data-v-7c336fc0"]])
 
 /* harmony default export */ var BluetoothBtn = (__exports__);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/components/VProgressLinear/VProgressLinear.mjs + 1 modules
 var VProgressLinear = __webpack_require__(7325);
-;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/dialogs/UpdateFirmwareDialog.vue?vue&type=template&id=60d00330&ts=true
+;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/dialogs/UpdateFirmwareDialog.vue?vue&type=template&id=f4d2b6ac&ts=true
 
-const UpdateFirmwareDialogvue_type_template_id_60d00330_ts_true_hoisted_1 = {
+const UpdateFirmwareDialogvue_type_template_id_f4d2b6ac_ts_true_hoisted_1 = {
   key: 0,
   class: "pb-3 d-flex justify-space-between"
 };
-function UpdateFirmwareDialogvue_type_template_id_60d00330_ts_true_render(_ctx, _cache, $props, $setup, $data, $options) {
+function UpdateFirmwareDialogvue_type_template_id_f4d2b6ac_ts_true_render(_ctx, _cache, $props, $setup, $data, $options) {
                                                       
   const _component_dialog_template = (0,runtime_core_esm_bundler/* resolveComponent */.up)("dialog-template");
                                                                               
@@ -10152,11 +10204,12 @@ function UpdateFirmwareDialogvue_type_template_id_60d00330_ts_true_render(_ctx, 
     "onUpdate:modelValue": _cache[0] || (_cache[0] = $event => $setup.visibleUpdate = $event),
     icon: "mdi-update",
     title: _ctx.$t('update.title'),
+    width: "700",
     text: "",
     actions: ""
   }, {
-    body: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createElementVNode */._)("span", null, (0,shared_esm_bundler/* toDisplayString */.zw)(_ctx.$t("update.dialog.new", {
-      n: $setup.version
+    body: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createElementVNode */._)("span", null, (0,shared_esm_bundler/* toDisplayString */.zw)(_ctx.$t("update.dialog.updateTo", {
+      version: $props.newVersion
     })), 1)]),
     btns: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VBtn/* VBtn */.T, {
       color: "primary",
@@ -10183,7 +10236,7 @@ function UpdateFirmwareDialogvue_type_template_id_60d00330_ts_true_render(_ctx, 
       class: (0,shared_esm_bundler/* normalizeClass */.C_)(["d-flex justify-space-between", {
         'pb-3': $setup.progress === 0 || !$setup.timeLeft?.length
       }])
-    }, [(0,runtime_core_esm_bundler/* createElementVNode */._)("span", null, (0,shared_esm_bundler/* toDisplayString */.zw)($setup.message), 1), (0,runtime_core_esm_bundler/* createElementVNode */._)("span", null, (0,shared_esm_bundler/* toDisplayString */.zw)($setup.uploading), 1)], 2), $setup.progress > 0 && $setup.timeLeft?.length ? ((0,runtime_core_esm_bundler/* openBlock */.wg)(), (0,runtime_core_esm_bundler/* createElementBlock */.iD)("div", UpdateFirmwareDialogvue_type_template_id_60d00330_ts_true_hoisted_1, [(0,runtime_core_esm_bundler/* createElementVNode */._)("span", null, (0,shared_esm_bundler/* toDisplayString */.zw)(_ctx.$t("update.process.timeLeft")), 1), (0,runtime_core_esm_bundler/* createElementVNode */._)("span", null, (0,shared_esm_bundler/* toDisplayString */.zw)($setup.timeLeft), 1)])) : (0,runtime_core_esm_bundler/* createCommentVNode */.kq)("", true), (0,runtime_core_esm_bundler/* createVNode */.Wm)(VProgressLinear/* VProgressLinear */.K, {
+    }, [(0,runtime_core_esm_bundler/* createElementVNode */._)("span", null, (0,shared_esm_bundler/* toDisplayString */.zw)($setup.message), 1), (0,runtime_core_esm_bundler/* createElementVNode */._)("span", null, (0,shared_esm_bundler/* toDisplayString */.zw)($setup.uploading), 1)], 2), $setup.progress > 0 && $setup.timeLeft?.length ? ((0,runtime_core_esm_bundler/* openBlock */.wg)(), (0,runtime_core_esm_bundler/* createElementBlock */.iD)("div", UpdateFirmwareDialogvue_type_template_id_f4d2b6ac_ts_true_hoisted_1, [(0,runtime_core_esm_bundler/* createElementVNode */._)("span", null, (0,shared_esm_bundler/* toDisplayString */.zw)(_ctx.$t("update.process.timeLeft")), 1), (0,runtime_core_esm_bundler/* createElementVNode */._)("span", null, (0,shared_esm_bundler/* toDisplayString */.zw)($setup.timeLeft), 1)])) : (0,runtime_core_esm_bundler/* createCommentVNode */.kq)("", true), (0,runtime_core_esm_bundler/* createVNode */.Wm)(VProgressLinear/* VProgressLinear */.K, {
       "model-value": $setup.progress,
       color: "primary",
       height: "10",
@@ -10200,10 +10253,12 @@ function UpdateFirmwareDialogvue_type_template_id_60d00330_ts_true_render(_ctx, 
 
 
 
-;// CONCATENATED MODULE: ./src/components/dialogs/UpdateFirmwareDialog.vue?vue&type=template&id=60d00330&ts=true
+;// CONCATENATED MODULE: ./src/components/dialogs/UpdateFirmwareDialog.vue?vue&type=template&id=f4d2b6ac&ts=true
 
 // EXTERNAL MODULE: ./src/models/pjcan/update/index.ts + 2 modules
 var update = __webpack_require__(8293);
+// EXTERNAL MODULE: ./src/models/pjcan/version/index.ts + 2 modules
+var pjcan_version = __webpack_require__(5717);
 // EXTERNAL MODULE: ./src/utils/time.ts
 var time = __webpack_require__(2123);
 ;// CONCATENATED MODULE: ./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/dialogs/UpdateFirmwareDialog.vue?vue&type=script&lang=ts
@@ -10216,64 +10271,53 @@ var time = __webpack_require__(2123);
 
 
 
-// таймаут проверки обновления 5 мин.
-const DELAY_CHECK_VERSION = 300000;
 /* harmony default export */ var UpdateFirmwareDialogvue_type_script_lang_ts = ({
   name: "UpdateFirmwareDialog",
   components: {
     DialogTemplate: DialogTemplate/* default */.Z
   },
-  setup() {
+  props: {
+    /** Показать диалог */
+    modelValue: {
+      type: Boolean,
+      default: false
+    },
+    newVersion: [String, Boolean]
+  },
+  setup(props, {
+    emit
+  }) {
+    const {
+      modelValue
+    } = (0,reactivity_esm_bundler/* toRefs */.BK)(props);
     const {
       t
     } = (0,vue_i18n_esm_bundler/* useI18n */.QT)();
-    const visibleUpdate = (0,reactivity_esm_bundler/* ref */.iH)(false);
+    const visibleUpdate = (0,runtime_core_esm_bundler/* computed */.Fl)({
+      get: () => modelValue.value,
+      set: val => emit("update:modelValue", val)
+    });
     const visibleProcess = (0,reactivity_esm_bundler/* ref */.iH)(false);
     const version = (0,reactivity_esm_bundler/* ref */.iH)("");
     const message = (0,reactivity_esm_bundler/* ref */.iH)("");
     const progress = (0,reactivity_esm_bundler/* ref */.iH)(0);
     const uploading = (0,reactivity_esm_bundler/* ref */.iH)("");
     const timeLeft = (0,reactivity_esm_bundler/* ref */.iH)("");
-    let timerCheckVersion;
-    /**
-     * Проверка версии прошивки
-     * @param delay Пауза проверки обновления
-     */
-    const onCheckVersion = delay => {
-      timerCheckVersion = setTimeout(() => {
-        if (canbus["default"].bluetooth.connected) {
-          canbus["default"].checkVersion().then(newVersion => {
-            version.value = newVersion.toString;
-            visibleUpdate.value = true;
-          }).catch(() => onCheckVersion(DELAY_CHECK_VERSION));
-        } else onCheckVersion(DELAY_CHECK_VERSION);
-      }, delay);
-    };
     /** Отменить обновление */
     const onCancel = () => {
       visibleUpdate.value = false;
       visibleProcess.value = false;
-      if (timerCheckVersion) clearTimeout(timerCheckVersion);
       canbus["default"].removeListener(update/* API_UPDATE_EVENT_ERROR */.rX, onErrorUpdate);
       canbus["default"].update.clear();
     };
-    /**
-     * Событие подключения к Bluetooth
-     * @param {TConnectedStatus} status Статус подключения Bluetooth
-     */
-    const onConnected = status => {
+    /** Завершение прошивки */
+    const onCompletingFirmware = () => {
       if (canbus["default"].update.total > 0) {
-        if (status !== bluetooth/* TConnectedStatus.CONNECT */.xz.CONNECT) return;
-        // завершение прошивки
-        setTimeout(() => {
-          if (canbus["default"].configs.version.is) {
-            canbus["default"].checkVersion().then(() => esm/* toast.error */.Am.error(t("update.notify.warning"))).catch(() => esm/* toast.success */.Am.success(t("update.notify.completed")));
-            setTimeout(() => src_router.go(0), 5000);
-            onCancel();
-          } else canbus["default"].bluetooth.disconnect();
-        }, 1000);
-      } else {
-        if (status === bluetooth/* TConnectedStatus.CONNECT */.xz.CONNECT) onCheckVersion(5000);else if (timerCheckVersion) clearTimeout(timerCheckVersion);
+        if (canbus["default"].version.is) {
+          canbus["default"].checkVersion().then(() => esm/* toast.error */.Am.error(t("update.notify.warning"))).catch(() => esm/* toast.success */.Am.success(t("update.notify.completed")));
+          setTimeout(() => src_router.go(0), 5000);
+          onCancel();
+        } else canbus["default"].bluetooth.disconnect();
       }
     };
     /** Событие запуска прошивки */
@@ -10286,11 +10330,7 @@ const DELAY_CHECK_VERSION = 300000;
       canbus["default"].addListener(update/* API_UPDATE_EVENT_ERROR */.rX, onErrorUpdate);
       canbus["default"].updateStart();
     };
-    const last = {
-      value: 0,
-      offset: 0,
-      now: 0
-    };
+    let remainingTime;
     /**
      * Событие загрузки прошивки на устройство PJCAN
      * @param {number} error Код ошибки
@@ -10303,24 +10343,19 @@ const DELAY_CHECK_VERSION = 300000;
           uploading.value = progress.value.toFixed(2) + "%";
           canbus["default"].updateUpload();
           // подсчет оставшегося времени
-          if (!last.now) {
-            last.value = 0;
-            last.offset = canbus["default"].update.offset;
-            last.now = Date.now();
+          if (!remainingTime) {
+            remainingTime = new time/* RemainingTime */.v(canbus["default"].update.total);
           } else {
-            const value = Math.floor((canbus["default"].update.total - canbus["default"].update.offset) / (canbus["default"].update.offset - last.offset) * (Date.now() - last.now));
-            last.value = Math.floor((last.value + value) / 2);
-            last.offset = canbus["default"].update.offset;
-            last.now = Date.now();
-            timeLeft.value = (0,time/* getFormatTime */.g)(last.value);
+            remainingTime.offset = canbus["default"].update.offset;
+            timeLeft.value = remainingTime.get();
           }
         } else {
           message.value = t("update.process.update");
           progress.value = 0;
           uploading.value = "";
-          last.now = 0;
+          remainingTime = undefined;
           timeLeft.value = "";
-          canbus["default"].configs.version.clear();
+          canbus["default"].version.clear();
         }
       } else {
         onErrorUpdate(t("update.notify.error"));
@@ -10332,11 +10367,11 @@ const DELAY_CHECK_VERSION = 300000;
       onCancel();
     };
     (0,runtime_core_esm_bundler/* onMounted */.bv)(() => {
-      canbus["default"].bluetooth.addListener(bluetooth/* BLUETOOTH_EVENT_CONNECTED */.Dx, onConnected);
+      canbus["default"].addListener(pjcan_version/* API_VERSION_EVENT */.MK, onCompletingFirmware);
       canbus["default"].update.addListener(update/* API_UPDATE_EVENT */.an, onUpdate);
     });
     (0,runtime_core_esm_bundler/* onUnmounted */.Ah)(() => {
-      canbus["default"].bluetooth.removeListener(bluetooth/* BLUETOOTH_EVENT_CONNECTED */.Dx, onConnected);
+      canbus["default"].removeListener(pjcan_version/* API_VERSION_EVENT */.MK, onCompletingFirmware);
       canbus["default"].update.removeListener(update/* API_UPDATE_EVENT */.an, onUpdate);
       canbus["default"].removeListener(update/* API_UPDATE_EVENT_ERROR */.rX, onErrorUpdate);
     });
@@ -10361,7 +10396,7 @@ const DELAY_CHECK_VERSION = 300000;
 
 
 ;
-const UpdateFirmwareDialog_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(UpdateFirmwareDialogvue_type_script_lang_ts, [['render',UpdateFirmwareDialogvue_type_template_id_60d00330_ts_true_render]])
+const UpdateFirmwareDialog_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(UpdateFirmwareDialogvue_type_script_lang_ts, [['render',UpdateFirmwareDialogvue_type_template_id_f4d2b6ac_ts_true_render]])
 
 /* harmony default export */ var UpdateFirmwareDialog = (UpdateFirmwareDialog_exports_);
 // EXTERNAL MODULE: ./src/components/MenuDots.vue + 3 modules
@@ -10712,12 +10747,12 @@ function DeviceResetDialogvue_type_template_id_a9e57686_ts_true_render(_ctx, _ca
 const DeviceResetDialog_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(DeviceResetDialogvue_type_script_lang_ts, [['render',DeviceResetDialogvue_type_template_id_a9e57686_ts_true_render]])
 
 /* harmony default export */ var DeviceResetDialog = (DeviceResetDialog_exports_);
-;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/Scanner.vue?vue&type=template&id=49a605e7&ts=true
+;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/Scanner.vue?vue&type=template&id=43cc2344&ts=true
 
-const Scannervue_type_template_id_49a605e7_ts_true_hoisted_1 = {
+const Scannervue_type_template_id_43cc2344_ts_true_hoisted_1 = {
   class: "mb-2"
 };
-function Scannervue_type_template_id_49a605e7_ts_true_render(_ctx, _cache, $props, $setup, $data, $options) {
+function Scannervue_type_template_id_43cc2344_ts_true_render(_ctx, _cache, $props, $setup, $data, $options) {
                                                                               
   const _component_dialog_template = (0,runtime_core_esm_bundler/* resolveComponent */.up)("dialog-template");
   return (0,runtime_core_esm_bundler/* openBlock */.wg)(), (0,runtime_core_esm_bundler/* createBlock */.j4)(_component_dialog_template, {
@@ -10727,7 +10762,7 @@ function Scannervue_type_template_id_49a605e7_ts_true_render(_ctx, _cache, $prop
     title: _ctx.$t('scanner.upload.title'),
     text: ""
   }, {
-    body: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createElementVNode */._)("div", null, (0,shared_esm_bundler/* toDisplayString */.zw)(_ctx.$t("scanner.upload.text")), 1), (0,runtime_core_esm_bundler/* createElementVNode */._)("div", Scannervue_type_template_id_49a605e7_ts_true_hoisted_1, (0,shared_esm_bundler/* toDisplayString */.zw)(_ctx.$t("scanner.upload.leftToLoad", {
+    body: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createElementVNode */._)("div", null, (0,shared_esm_bundler/* toDisplayString */.zw)(_ctx.$t("scanner.upload.text")), 1), (0,runtime_core_esm_bundler/* createElementVNode */._)("div", Scannervue_type_template_id_43cc2344_ts_true_hoisted_1, (0,shared_esm_bundler/* toDisplayString */.zw)(_ctx.$t("scanner.upload.leftToLoad", {
       n: $setup.leftUploading
     })), 1), (0,runtime_core_esm_bundler/* createVNode */.Wm)(VProgressLinear/* VProgressLinear */.K, {
       color: "primary",
@@ -10744,7 +10779,7 @@ function Scannervue_type_template_id_49a605e7_ts_true_render(_ctx, _cache, $prop
 
 
 
-;// CONCATENATED MODULE: ./src/components/Scanner.vue?vue&type=template&id=49a605e7&ts=true
+;// CONCATENATED MODULE: ./src/components/Scanner.vue?vue&type=template&id=43cc2344&ts=true
 
 // EXTERNAL MODULE: ./src/models/pjcan/scanner/index.ts + 5 modules
 var scanner = __webpack_require__(510);
@@ -10834,7 +10869,7 @@ const toMac = value => {
         canbus["default"].stopFetchValue();
         // включаем сканирование
         canbus["default"].scanner.enabled = true;
-        canbus["default"].queryConfig(scanner/* API_SCANNER_CONFIG_EXEC */.X8).then(() => {
+        if (canbus["default"].queryConfig(scanner/* API_SCANNER_CONFIG_EXEC */.X8)) {
           efuseMac = toMac(canbus["default"].deviceInfo.efuseMac);
           scanClose = false;
           // запускаем циклический запрос значений сканирования
@@ -10843,7 +10878,7 @@ const toMac = value => {
           canbus["default"].addListener(scanner/* API_SCANNER_VALUE_EVENT */.sn, onReceiveValue);
           // запускаем диалог
           steps();
-        });
+        }
         store/* default.commit */.Z.commit("app/clearMessages");
       } else {
         if (scannerValue) {
@@ -10947,7 +10982,7 @@ const toMac = value => {
 
 
 ;
-const Scanner_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(Scannervue_type_script_lang_ts, [['render',Scannervue_type_template_id_49a605e7_ts_true_render]])
+const Scanner_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(Scannervue_type_script_lang_ts, [['render',Scannervue_type_template_id_43cc2344_ts_true_render]])
 
 /* harmony default export */ var Scanner = (Scanner_exports_);
 // EXTERNAL MODULE: ./src/models/pjcan/device/index.ts + 6 modules
@@ -11079,8 +11114,8 @@ var device = __webpack_require__(1423);
 const DeviceInfoDialog_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(DeviceInfoDialogvue_type_script_lang_ts, [['render',DeviceInfoDialogvue_type_template_id_c86c42d4_ts_true_render]])
 
 /* harmony default export */ var DeviceInfoDialog = (DeviceInfoDialog_exports_);
-// EXTERNAL MODULE: ./src/models/pjcan/configs/index.ts + 2 modules
-var configs = __webpack_require__(9993);
+// EXTERNAL MODULE: ./src/models/pjcan/configs/index.ts + 1 modules
+var configs = __webpack_require__(1303);
 // EXTERNAL MODULE: ./src/models/pjcan/car/index.ts + 4 modules
 var car = __webpack_require__(7530);
 ;// CONCATENATED MODULE: ./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/dialogs/AboutDialog.vue?vue&type=script&lang=ts
@@ -11403,9 +11438,9 @@ const OnboardButtonsDialog_exports_ = /*#__PURE__*/(0,exportHelper/* default */.
 /* harmony default export */ var OnboardButtonsDialog = (OnboardButtonsDialog_exports_);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/components/VSelect/VSelect.mjs + 1 modules
 var VSelect = __webpack_require__(240);
-;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/dialogs/TestDialog.vue?vue&type=template&id=204996a0&scoped=true&ts=true
+;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/dialogs/TestDialog.vue?vue&type=template&id=3bcd2b05&scoped=true&ts=true
 
-function TestDialogvue_type_template_id_204996a0_scoped_true_ts_true_render(_ctx, _cache, $props, $setup, $data, $options) {
+function TestDialogvue_type_template_id_3bcd2b05_scoped_true_ts_true_render(_ctx, _cache, $props, $setup, $data, $options) {
                                                                     
                                                       
                                                             
@@ -11562,6 +11597,7 @@ var variables_test = __webpack_require__(6045);
       test.view.type = style.value;
       test.view.time = time.value;
       canbus["default"].queryValue(variables_test/* API_VARIABLE_TEST_EXEC */.Ez, test);
+      visible.value = false;
     };
     return {
       visible,
@@ -11576,10 +11612,10 @@ var variables_test = __webpack_require__(6045);
 });
 ;// CONCATENATED MODULE: ./src/components/dialogs/TestDialog.vue?vue&type=script&lang=ts
  
-;// CONCATENATED MODULE: ./node_modules/mini-css-extract-plugin/dist/loader.js??clonedRuleSet-22.use[0]!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/dialogs/TestDialog.vue?vue&type=style&index=0&id=204996a0&lang=scss&scoped=true
+;// CONCATENATED MODULE: ./node_modules/mini-css-extract-plugin/dist/loader.js??clonedRuleSet-22.use[0]!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/dialogs/TestDialog.vue?vue&type=style&index=0&id=3bcd2b05&lang=scss&scoped=true
 // extracted by mini-css-extract-plugin
 
-;// CONCATENATED MODULE: ./src/components/dialogs/TestDialog.vue?vue&type=style&index=0&id=204996a0&lang=scss&scoped=true
+;// CONCATENATED MODULE: ./src/components/dialogs/TestDialog.vue?vue&type=style&index=0&id=3bcd2b05&lang=scss&scoped=true
 
 ;// CONCATENATED MODULE: ./src/components/dialogs/TestDialog.vue
 
@@ -11589,7 +11625,7 @@ var variables_test = __webpack_require__(6045);
 ;
 
 
-const TestDialog_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(TestDialogvue_type_script_lang_ts, [['render',TestDialogvue_type_template_id_204996a0_scoped_true_ts_true_render],['__scopeId',"data-v-204996a0"]])
+const TestDialog_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(TestDialogvue_type_script_lang_ts, [['render',TestDialogvue_type_template_id_3bcd2b05_scoped_true_ts_true_render],['__scopeId',"data-v-3bcd2b05"]])
 
 /* harmony default export */ var TestDialog = (TestDialog_exports_);
 ;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/dialogs/MessageDialog.vue?vue&type=template&id=28316c2c&ts=true
@@ -11701,6 +11737,9 @@ var IconCustom = __webpack_require__(1776);
 
 
 
+
+
+
 /* harmony default export */ var BaseLayoutvue_type_script_lang_ts = ({
   name: "BaseLayout",
   components: {
@@ -11722,6 +11761,7 @@ var IconCustom = __webpack_require__(1776);
       const result = src_router.currentRoute.value.meta?.title;
       return "PJCAN: " + (result?.length > 0 ? t(result) : "");
     });
+    const newVersionFirmware = (0,reactivity_esm_bundler/* ref */.iH)(false);
     const menu = (0,runtime_core_esm_bundler/* computed */.Fl)(() => {
       const result = [];
       const {
@@ -11748,7 +11788,16 @@ var IconCustom = __webpack_require__(1776);
       }, {}, {
         id: 2,
         title: t("menu.language." + (locale.value !== "ru" ? "russian" : "english"))
-      }, {
+      });
+      if (typeof newVersionFirmware.value === "string") {
+        result.push({
+          id: 7,
+          title: t("menu.update", {
+            version: newVersionFirmware.value
+          })
+        });
+      }
+      result.push({
         id: 3,
         title: t("menu.about")
       });
@@ -11757,6 +11806,7 @@ var IconCustom = __webpack_require__(1776);
     const visibleAbout = (0,reactivity_esm_bundler/* ref */.iH)(false);
     const visibleOnboardButtons = (0,reactivity_esm_bundler/* ref */.iH)(false);
     const visibleTest = (0,reactivity_esm_bundler/* ref */.iH)(false);
+    const visibleUpdate = (0,reactivity_esm_bundler/* ref */.iH)(false);
     /** Событие выбора пункта меню */
     const onMenuClick = data => {
       switch (data.id) {
@@ -11788,6 +11838,9 @@ var IconCustom = __webpack_require__(1776);
             name: "Options"
           });
           break;
+        case 7:
+          visibleUpdate.value = true;
+          break;
       }
     };
     const pageWidth = (0,reactivity_esm_bundler/* ref */.iH)(0);
@@ -11799,9 +11852,11 @@ var IconCustom = __webpack_require__(1776);
     (0,runtime_core_esm_bundler/* onMounted */.bv)(() => {
       window.addEventListener("resize", windowSize);
       windowSize();
+      canbus["default"].addListener(pjcan_version/* API_VERSION_EVENT */.MK, onCheckVersion);
     });
     (0,runtime_core_esm_bundler/* onUnmounted */.Ah)(() => {
       window.removeEventListener("resize", windowSize);
+      canbus["default"].removeListener(pjcan_version/* API_VERSION_EVENT */.MK, onCheckVersion);
     });
     /** Переключение полноэкранного режима */
     const toggleFullscreen = () => {
@@ -11823,12 +11878,40 @@ var IconCustom = __webpack_require__(1776);
         }, msg.timeout);
       }
     });
+    /** Проверка версии прошивки */
+    const onCheckVersion = () => {
+      if (!newVersionFirmware.value) {
+        newVersionFirmware.value = true;
+        canbus["default"].checkVersion().then(newVersion => {
+          newVersionFirmware.value = newVersion.toString;
+          if (!newVersion.is) {
+            store/* default.commit */.Z.commit("app/setMessage", {
+              title: t("update.warning"),
+              icon: "mdi-alert-outline",
+              text: t("update.dialog.browserOutdated"),
+              btns: [{
+                title: t("btn.ok")
+              }],
+              width: 700
+            });
+          } else {
+            setTimeout(() => {
+              esm/* toast.warning */.Am.warning(t("update.notify.newVersion", {
+                version: newVersionFirmware.value
+              }));
+            }, 5000);
+          }
+        }).catch(() => {});
+      }
+    };
     return {
       title,
       menu,
+      newVersionFirmware,
       visibleAbout,
       visibleOnboardButtons,
       visibleTest,
+      visibleUpdate,
       pageWidth,
       pageHeight,
       visibleMessage,
@@ -11840,10 +11923,10 @@ var IconCustom = __webpack_require__(1776);
 });
 ;// CONCATENATED MODULE: ./src/layout/BaseLayout.vue?vue&type=script&lang=ts
  
-;// CONCATENATED MODULE: ./node_modules/mini-css-extract-plugin/dist/loader.js??clonedRuleSet-22.use[0]!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/layout/BaseLayout.vue?vue&type=style&index=0&id=190f320e&lang=scss&scoped=true
+;// CONCATENATED MODULE: ./node_modules/mini-css-extract-plugin/dist/loader.js??clonedRuleSet-22.use[0]!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/layout/BaseLayout.vue?vue&type=style&index=0&id=7d20b89d&lang=scss&scoped=true
 // extracted by mini-css-extract-plugin
 
-;// CONCATENATED MODULE: ./src/layout/BaseLayout.vue?vue&type=style&index=0&id=190f320e&lang=scss&scoped=true
+;// CONCATENATED MODULE: ./src/layout/BaseLayout.vue?vue&type=style&index=0&id=7d20b89d&lang=scss&scoped=true
 
 ;// CONCATENATED MODULE: ./src/layout/BaseLayout.vue
 
@@ -11853,7 +11936,7 @@ var IconCustom = __webpack_require__(1776);
 ;
 
 
-const BaseLayout_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(BaseLayoutvue_type_script_lang_ts, [['render',BaseLayoutvue_type_template_id_190f320e_scoped_true_ts_true_render],['__scopeId',"data-v-190f320e"]])
+const BaseLayout_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(BaseLayoutvue_type_script_lang_ts, [['render',BaseLayoutvue_type_template_id_7d20b89d_scoped_true_ts_true_render],['__scopeId',"data-v-7d20b89d"]])
 
 /* harmony default export */ var BaseLayout = (BaseLayout_exports_);
 ;// CONCATENATED MODULE: ./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/App.vue?vue&type=script&lang=ts
@@ -20937,20 +21020,20 @@ const Vue3ToasityOptions = {
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "g": function() { return /* binding */ BaseModel; }
 /* harmony export */ });
-/* harmony import */ var C_Projects_PJ82_PJCAN_pjcan_app_node_modules_babel_runtime_helpers_esm_defineProperty_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(7327);
+/* harmony import */ var D_Projects_PJ82_PJCAN_pjcan_app_node_modules_babel_runtime_helpers_esm_defineProperty_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(7327);
 
 /** Базовая модель */
 class BaseModel {
   constructor() {
-    (0,C_Projects_PJ82_PJCAN_pjcan_app_node_modules_babel_runtime_helpers_esm_defineProperty_js__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z)(this, "isData", false);
+    (0,D_Projects_PJ82_PJCAN_pjcan_app_node_modules_babel_runtime_helpers_esm_defineProperty_js__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z)(this, "isData", false);
   }
   /**
    * Запись данных
    * @param {any} th Объект модели
    * @param {number} exec Команда API
    * @param {number} len Длина данных API
-   * @param {BluetoothStruct} struct Структура данных
-   * @param {DataView} buf Буффер данных
+   * @param {IBluetoothStruct} struct Структура данных
+   * @param {DataView} buf Буфер данных
    * @protected
    */
   _set(th, exec, len, struct, buf) {
@@ -20970,7 +21053,7 @@ class BaseModel {
    * @param {any} th Объект модели
    * @param {number} exec Команда API
    * @param {number} len Длина данных API
-   * @param {BluetoothStruct} struct Структура данных
+   * @param {IBluetoothStruct} struct Структура данных
    */
   _get(th, exec, len, struct) {
     try {
@@ -21079,7 +21162,7 @@ class ButtonsConfig extends BaseModel/* BaseModel */.g {
   }
   /**
    * Запись данных
-   * @param {DataView} buf Буффер данных
+   * @param {DataView} buf Буфер данных
    */
   set(buf) {
     return this._set(this, API_BUTTONS_CONFIG_EXEC, API_BUTTONS_CONFIG_SIZE + 1, struct, buf);
@@ -21121,7 +21204,7 @@ class ButtonValue extends BaseModel/* BaseModel */.g {
   }
   /**
    * Запись данных
-   * @param {DataView} buf Буффер данных
+   * @param {DataView} buf Буфер данных
    */
   set(buf) {
     return this._set(this, API_BUTTONS_VALUE_EXEC, API_BUTTONS_VALUE_SIZE + 1, ButtonValue_struct, buf);
@@ -21242,7 +21325,7 @@ class CarConfig extends BaseModel/* BaseModel */.g {
   }
   /**
    * Запись данных
-   * @param {DataView} buf Буффер данных
+   * @param {DataView} buf Буфер данных
    */
   set(buf) {
     return this._set(this, API_CAR_CONFIG_EXEC, API_CAR_CONFIG_SIZE + 1, struct, buf);
@@ -21282,7 +21365,7 @@ class CarView extends BaseModel/* BaseModel */.g {
   }
   /**
    * Запись данных
-   * @param {DataView} buf Буффер данных
+   * @param {DataView} buf Буфер данных
    */
   set(buf) {
     return this._set(this, API_CAR_VIEW_EXEC, API_CAR_VIEW_SIZE + 1, CarView_struct, buf);
@@ -21301,7 +21384,7 @@ class CarView extends BaseModel/* BaseModel */.g {
 
 /***/ }),
 
-/***/ 9993:
+/***/ 1303:
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -21312,8 +21395,6 @@ __webpack_require__.d(__webpack_exports__, {
   "XH": function() { return /* reexport */ API_CONFIG_EXEC; },
   "zo": function() { return /* reexport */ Configs; }
 });
-
-// UNUSED EXPORTS: API_CONFIG_SIZE, StructConfigs
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/defineProperty.js + 3 modules
 var defineProperty = __webpack_require__(7327);
@@ -21329,29 +21410,11 @@ var device = __webpack_require__(1423);
 var pjcan_button = __webpack_require__(1483);
 // EXTERNAL MODULE: ./src/models/pjcan/car/index.ts + 4 modules
 var car = __webpack_require__(7530);
-// EXTERNAL MODULE: ./src/models/pjcan/teyes/index.ts + 6 modules
-var teyes = __webpack_require__(8674);
+// EXTERNAL MODULE: ./src/models/pjcan/teyes/index.ts + 7 modules
+var teyes = __webpack_require__(8181);
 // EXTERNAL MODULE: ./src/models/pjcan/variables/configs/index.ts + 2 modules
 var configs = __webpack_require__(9617);
-;// CONCATENATED MODULE: ./src/models/pjcan/configs/StructConfigs.ts
-
-
-
-
-
-
-
-const API_CONFIG_SIZE = version/* API_VERSION_SIZE */.Q8 + device/* API_DEVICE_CONFIG_SIZE */.dW + pjcan_button/* API_BUTTONS_CONFIG_SIZE */.IM + car/* API_CAR_CONFIG_SIZE */.Pv + teyes/* API_TEYES_CONFIG_SIZE */.ZG + configs/* API_VARIABLE_CONFIGS_SIZE */.QE;
-const StructConfigs = {
-  version: bluetooth/* BluetoothStruct.struct */.GD.struct(version/* StructVersion */.BB),
-  device: bluetooth/* BluetoothStruct.struct */.GD.struct(device/* StructDeviceConfig */.TY),
-  buttons: bluetooth/* BluetoothStruct.struct */.GD.struct(pjcan_button/* StructButtonsConfig */.Rj),
-  car: bluetooth/* BluetoothStruct.struct */.GD.struct(car/* StructCarConfig */.p9),
-  teyes: bluetooth/* BluetoothStruct.struct */.GD.struct(teyes/* StructTeyesConfig */.wb),
-  variable: bluetooth/* BluetoothStruct.struct */.GD.struct(configs/* StructVariableConfigs */.Le)
-};
 ;// CONCATENATED MODULE: ./src/models/pjcan/configs/Configs.ts
-
 
 
 
@@ -21363,8 +21426,19 @@ const StructConfigs = {
 
 const API_CONFIG_EXEC = 1;
 const API_CONFIGS_EVENT = "Configs";
-const struct = new bluetooth/* BluetoothStruct */.GD(StructConfigs);
 class Configs extends BaseModel/* BaseModel */.g {
+  static update() {
+    Configs.struct = {
+      version: bluetooth/* BluetoothStruct.struct */.GD.struct(version/* StructVersion */.BB),
+      device: bluetooth/* BluetoothStruct.struct */.GD.struct(device/* StructDeviceConfig */.TY),
+      buttons: bluetooth/* BluetoothStruct.struct */.GD.struct(pjcan_button/* StructButtonsConfig */.Rj),
+      car: bluetooth/* BluetoothStruct.struct */.GD.struct(car/* StructCarConfig */.p9),
+      teyes: bluetooth/* BluetoothStruct.struct */.GD.struct(teyes/* TeyesConfig.struct */.mL.struct),
+      variable: bluetooth/* BluetoothStruct.struct */.GD.struct(configs/* StructVariableConfigs */.Le)
+    };
+    Configs.bleStruct = new bluetooth/* BluetoothStruct */.GD(Configs.struct);
+    Configs.size = version/* API_VERSION_SIZE */.Q8 + device/* API_DEVICE_CONFIG_SIZE */.dW + pjcan_button/* API_BUTTONS_CONFIG_SIZE */.IM + car/* API_CAR_CONFIG_SIZE */.Pv + teyes/* TeyesConfig.size */.mL.size + configs/* API_VARIABLE_CONFIGS_SIZE */.QE;
+  }
   constructor(data) {
     super();
     (0,defineProperty/* default */.Z)(this, "version", new version/* Version */.Gf());
@@ -21377,10 +21451,10 @@ class Configs extends BaseModel/* BaseModel */.g {
   }
   /**
    * Запись данных
-   * @param {DataView} buf Буффер данных
+   * @param {DataView} buf Буфер данных
    */
   set(buf) {
-    const result = this._set(this, API_CONFIG_EXEC, API_CONFIG_SIZE + 1, struct, buf);
+    const result = this._set(this, API_CONFIG_EXEC, Configs.size + 1, Configs.bleStruct, buf);
     if (result) {
       this.device.isData = true;
       this.buttons.isData = true;
@@ -21398,8 +21472,10 @@ class Configs extends BaseModel/* BaseModel */.g {
     return this._get(this, API_CONFIG_EXEC, 1);
   }
 }
+(0,defineProperty/* default */.Z)(Configs, "struct", void 0);
+(0,defineProperty/* default */.Z)(Configs, "bleStruct", void 0);
+(0,defineProperty/* default */.Z)(Configs, "size", void 0);
 ;// CONCATENATED MODULE: ./src/models/pjcan/configs/index.ts
-
 
 
 
@@ -21460,7 +21536,7 @@ class DeviceConfig extends BaseModel/* BaseModel */.g {
   }
   /**
    * Запись данных
-   * @param {DataView} buf Буффер данных
+   * @param {DataView} buf Буфер данных
    */
   set(buf) {
     return this._set(this, API_DEVICE_CONFIG_EXEC, API_DEVICE_CONFIG_SIZE + 1, struct, buf);
@@ -21539,7 +21615,7 @@ class DeviceInfo extends BaseModel/* BaseModel */.g {
   }
   /**
    * Запись данных
-   * @param {DataView} buf Буффер данных
+   * @param {DataView} buf Буфер данных
    */
   set(buf) {
     return this._set(this, API_INFO_EXEC, API_INFO_SIZE + 1, DeviceInfo_struct, buf);
@@ -21585,7 +21661,7 @@ class DeviceValue extends BaseModel/* BaseModel */.g {
   }
   /**
    * Запись данных
-   * @param {DataView} buf Буффер данных
+   * @param {DataView} buf Буфер данных
    */
   set(buf) {
     return this._set(this, API_DEVICE_VALUE_EXEC, API_DEVICE_VALUE_SIZE + 1, DeviceValue_struct, buf);
@@ -21694,7 +21770,7 @@ class LCDValue extends BaseModel/* BaseModel */.g {
   }
   /**
    * Запись данных
-   * @param {DataView} buf Буффер данных
+   * @param {DataView} buf Буфер данных
    */
   set(buf) {
     return this._set(this, API_LCD_VALUE_EXEC, API_LCD_VALUE_SIZE + 1, struct, buf);
@@ -21760,7 +21836,7 @@ class ScannerConfig extends BaseModel/* BaseModel */.g {
   }
   /**
    * Запись данных
-   * @param {DataView} buf Буффер данных
+   * @param {DataView} buf Буфер данных
    */
   set(buf) {
     return this._set(this, API_SCANNER_CONFIG_EXEC, API_SCANNER_CONFIG_SIZE + 1, struct, buf);
@@ -21821,7 +21897,7 @@ class ScannerValue extends BaseModel/* BaseModel */.g {
   }
   /**
    * Запись данных
-   * @param {DataView} buf Буффер данных
+   * @param {DataView} buf Буфер данных
    */
   set(buf) {
     return this._set(this, API_SCANNER_VALUE_EXEC, API_SCANNER_VALUE_SIZE + 1, ScannerValue_struct, buf);
@@ -21842,7 +21918,7 @@ class ScannerValue extends BaseModel/* BaseModel */.g {
 
 /***/ }),
 
-/***/ 8674:
+/***/ 8181:
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -21851,20 +21927,18 @@ class ScannerValue extends BaseModel/* BaseModel */.g {
 __webpack_require__.d(__webpack_exports__, {
   "IE": function() { return /* reexport */ API_TEYES_CONFIG_EVENT; },
   "jc": function() { return /* reexport */ API_TEYES_CONFIG_EXEC; },
-  "ZG": function() { return /* reexport */ API_TEYES_CONFIG_SIZE; },
   "Z$": function() { return /* reexport */ API_TEYES_TEXT_EVENT; },
   "vl": function() { return /* reexport */ API_TEYES_TEXT_EXEC; },
   "mj": function() { return /* reexport */ API_TEYES_VIEW_EVENT; },
   "nY": function() { return /* reexport */ API_TEYES_VIEW_EXEC; },
   "jQ": function() { return /* reexport */ API_TEYES_VIEW_SIZE; },
-  "wb": function() { return /* reexport */ StructTeyesConfig; },
   "Te": function() { return /* reexport */ StructTeyesView; },
   "mL": function() { return /* reexport */ TeyesConfig; },
   "VA": function() { return /* reexport */ TeyesText; },
   "U5": function() { return /* reexport */ TeyesView; }
 });
 
-// UNUSED EXPORTS: API_TEYES_TEXT_SIZE, StructTeyesText
+// UNUSED EXPORTS: API_TEYES_TEXT_SIZE, StructTeyesConfig, StructTeyesText
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/defineProperty.js + 3 modules
 var defineProperty = __webpack_require__(7327);
@@ -21874,9 +21948,24 @@ var bluetooth = __webpack_require__(9014);
 var BaseModel = __webpack_require__(9036);
 ;// CONCATENATED MODULE: ./src/models/pjcan/teyes/StructTeyesConfig.ts
 
-const API_TEYES_CONFIG_SIZE = 1;
+const API_TEYES_CONFIG_SIZE = 2;
 /** Структура данных */
 const StructTeyesConfig = {
+  receiveClock: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+  receiveButtons: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+  receiveText: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+  sendButton: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+  sendClimate: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+  sendDoors: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+  parseVolume: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+  lcdShow: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+  uartBaud: bluetooth/* BluetoothStruct.uint8 */.GD.uint8()
+};
+;// CONCATENATED MODULE: ./src/models/pjcan/teyes/StructTeyesConfig_401.ts
+
+const API_TEYES_CONFIG_SIZE_401 = 1;
+/** Структура данных */
+const StructTeyesConfig_401 = {
   receiveClock: bluetooth/* BluetoothStruct.bit */.GD.bit(),
   receiveButtons: bluetooth/* BluetoothStruct.bit */.GD.bit(),
   receiveText: bluetooth/* BluetoothStruct.bit */.GD.bit(),
@@ -21891,11 +21980,30 @@ const StructTeyesConfig = {
 
 
 
+
 const API_TEYES_CONFIG_EXEC = 30;
 const API_TEYES_CONFIG_EVENT = "TeyesConfig";
-const struct = new bluetooth/* BluetoothStruct */.GD(StructTeyesConfig);
 /** Модель параметров Teyes */
 class TeyesConfig extends BaseModel/* BaseModel */.g {
+  /**
+   * Обновить версию структуры
+   * @param {IVersion} version Версия протокола
+   */
+  static update(version) {
+    if (!version || version.compareString("4.0.2") !== 1) {
+      if (TeyesConfig.struct !== StructTeyesConfig) {
+        TeyesConfig.struct = StructTeyesConfig;
+        TeyesConfig.bleStruct = new bluetooth/* BluetoothStruct */.GD(StructTeyesConfig);
+        TeyesConfig.size = API_TEYES_CONFIG_SIZE;
+      }
+    } else {
+      if (TeyesConfig.struct !== StructTeyesConfig_401) {
+        TeyesConfig.struct = StructTeyesConfig_401;
+        TeyesConfig.bleStruct = new bluetooth/* BluetoothStruct */.GD(StructTeyesConfig_401);
+        TeyesConfig.size = API_TEYES_CONFIG_SIZE_401;
+      }
+    }
+  }
   constructor(data) {
     super();
     (0,defineProperty/* default */.Z)(this, "receiveClock", false);
@@ -21910,16 +22018,19 @@ class TeyesConfig extends BaseModel/* BaseModel */.g {
   }
   /**
    * Запись данных
-   * @param {DataView} buf Буффер данных
+   * @param {DataView} buf Буфер данных
    */
   set(buf) {
-    return this._set(this, API_TEYES_CONFIG_EXEC, API_TEYES_CONFIG_SIZE + 1, struct, buf);
+    return this._set(this, API_TEYES_CONFIG_EXEC, TeyesConfig.size + 1, TeyesConfig.bleStruct, buf);
   }
   /** Чтение данных */
   get() {
-    return this._get(this, API_TEYES_CONFIG_EXEC, API_TEYES_CONFIG_SIZE + 1, struct);
+    return this._get(this, API_TEYES_CONFIG_EXEC, TeyesConfig.size + 1, TeyesConfig.bleStruct);
   }
 }
+(0,defineProperty/* default */.Z)(TeyesConfig, "struct", void 0);
+(0,defineProperty/* default */.Z)(TeyesConfig, "bleStruct", void 0);
+(0,defineProperty/* default */.Z)(TeyesConfig, "size", void 0);
 ;// CONCATENATED MODULE: ./src/models/pjcan/teyes/StructTeyesText.ts
 
 const API_TEYES_TEXT_SIZE = 12;
@@ -21934,7 +22045,7 @@ const StructTeyesText = {
 
 const API_TEYES_TEXT_EXEC = 31;
 const API_TEYES_TEXT_EVENT = "TeyesText";
-const TeyesText_struct = new bluetooth/* BluetoothStruct */.GD(StructTeyesText);
+const struct = new bluetooth/* BluetoothStruct */.GD(StructTeyesText);
 /** Модель значения текста Teyes */
 class TeyesText extends BaseModel/* BaseModel */.g {
   constructor(data) {
@@ -21944,14 +22055,14 @@ class TeyesText extends BaseModel/* BaseModel */.g {
   }
   /**
    * Запись данных
-   * @param {DataView} buf Буффер данных
+   * @param {DataView} buf Буфер данных
    */
   set(buf) {
-    return this._set(this, API_TEYES_TEXT_EXEC, API_TEYES_TEXT_SIZE + 1, TeyesText_struct, buf);
+    return this._set(this, API_TEYES_TEXT_EXEC, API_TEYES_TEXT_SIZE + 1, struct, buf);
   }
   /** Чтение данных */
   get() {
-    return this._get(this, API_TEYES_TEXT_EXEC, API_TEYES_TEXT_SIZE + 1, TeyesText_struct);
+    return this._get(this, API_TEYES_TEXT_EXEC, API_TEYES_TEXT_SIZE + 1, struct);
   }
 }
 // EXTERNAL MODULE: ./src/models/pjcan/view/index.ts + 3 modules
@@ -21982,7 +22093,7 @@ class TeyesView extends BaseModel/* BaseModel */.g {
   }
   /**
    * Запись данных
-   * @param {DataView} buf Буффер данных
+   * @param {DataView} buf Буфер данных
    */
   set(buf) {
     return this._set(this, API_TEYES_VIEW_EXEC, API_TEYES_VIEW_SIZE + 1, TeyesView_struct, buf);
@@ -22108,7 +22219,7 @@ class Update extends (eventemitter3_default()) {
   }
   /**
    * Запись данных
-   * @param {DataView} buf Буффер данных
+   * @param {DataView} buf Буфер данных
    */
   set(buf) {
     if (buf.getUint8(0) === API_UPDATE_EXEC && buf.byteLength === 2) {
@@ -22229,7 +22340,7 @@ class BoseConfig extends BaseModel/* BaseModel */.g {
   }
   /**
    * Запись данных
-   * @param {DataView} buf Буффер данных
+   * @param {DataView} buf Буфер данных
    */
   set(buf) {
     return this._set(this, API_VARIABLE_BOSE_EXEC, API_VARIABLE_BOSE_SIZE + 1, struct, buf);
@@ -22267,7 +22378,7 @@ class BoseView extends BaseModel/* BaseModel */.g {
   }
   /**
    * Запись данных
-   * @param {DataView} buf Буффер данных
+   * @param {DataView} buf Буфер данных
    */
   set(buf) {
     return this._set(this, API_VARIABLE_BOSE_VIEW_EXEC, API_VARIABLE_BOSE_VIEW_SIZE + 1, BoseView_struct, buf);
@@ -22324,7 +22435,8 @@ const StructClimateValue = {
   airDLegs: bluetooth/* BluetoothStruct.bit */.GD.bit(),
   airDBody: bluetooth/* BluetoothStruct.bit */.GD.bit(),
   airDWindshield: bluetooth/* BluetoothStruct.bit */.GD.bit(),
-  visible: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+  airDBackWin: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+  eco: bluetooth/* BluetoothStruct.bit */.GD.bit(),
   airRate: bluetooth/* BluetoothStruct.uint8 */.GD.uint8(),
   airType: bluetooth/* BluetoothStruct.uint8 */.GD.uint8(),
   tempType: bluetooth/* BluetoothStruct.uint8 */.GD.uint8(),
@@ -22349,7 +22461,8 @@ class ClimateValue extends BaseModel/* BaseModel */.g {
     (0,defineProperty/* default */.Z)(this, "airDLegs", false);
     (0,defineProperty/* default */.Z)(this, "airDBody", false);
     (0,defineProperty/* default */.Z)(this, "airDWindshield", false);
-    (0,defineProperty/* default */.Z)(this, "visible", false);
+    (0,defineProperty/* default */.Z)(this, "airDBackWin", false);
+    (0,defineProperty/* default */.Z)(this, "eco", false);
     (0,defineProperty/* default */.Z)(this, "airRate", 0);
     (0,defineProperty/* default */.Z)(this, "airType", 0);
     (0,defineProperty/* default */.Z)(this, "tempType", 0);
@@ -22359,7 +22472,7 @@ class ClimateValue extends BaseModel/* BaseModel */.g {
   }
   /**
    * Запись данных
-   * @param {DataView} buf Буффер данных
+   * @param {DataView} buf Буфер данных
    */
   set(buf) {
     return this._set(this, API_VARIABLE_CLIMATE_EXEC, API_VARIABLE_CLIMATE_SIZE + 1, struct, buf);
@@ -22397,7 +22510,7 @@ class ClimateView extends BaseModel/* BaseModel */.g {
   }
   /**
    * Запись данных
-   * @param {DataView} buf Буффер данных
+   * @param {DataView} buf Буфер данных
    */
   set(buf) {
     return this._set(this, API_VARIABLE_CLIMATE_VIEW_EXEC, API_VARIABLE_CLIMATE_VIEW_SIZE + 1, ClimateView_struct, buf);
@@ -22491,7 +22604,7 @@ class VariableConfig extends BaseModel/* BaseModel */.g {
   }
   /**
    * Запись данных
-   * @param {DataView} buf Буффер данных
+   * @param {DataView} buf Буфер данных
    */
   set(buf) {
     const result = this._set(this, API_VARIABLE_CONFIGS_EXEC, API_VARIABLE_CONFIGS_SIZE + 1, struct, buf);
@@ -22572,7 +22685,7 @@ class DoorsValue extends BaseModel/* BaseModel */.g {
   }
   /**
    * Запись данных
-   * @param {DataView} buf Буффер данных
+   * @param {DataView} buf Буфер данных
    */
   set(buf) {
     return this._set(this, API_VARIABLE_DOORS_EXEC, API_VARIABLE_DOORS_SIZE + 1, struct, buf);
@@ -22610,7 +22723,7 @@ class DoorsView extends BaseModel/* BaseModel */.g {
   }
   /**
    * Запись данных
-   * @param {DataView} buf Буффер данных
+   * @param {DataView} buf Буфер данных
    */
   set(buf) {
     return this._set(this, API_VARIABLE_DOORS_VIEW_EXEC, API_VARIABLE_DOORS_VIEW_SIZE + 1, DoorsView_struct, buf);
@@ -22661,12 +22774,12 @@ var bluetooth = __webpack_require__(9014);
 var BaseModel = __webpack_require__(9036);
 ;// CONCATENATED MODULE: ./src/models/pjcan/variables/engine/StructEngineConfig.ts
 
-const API_VARIABLE_ENGINE_CONFIG_SIZE = 9;
+const API_VARIABLE_ENGINE_CONFIG_SIZE = 17;
 /** Структура данных */
 const StructEngineConfig = {
   showDays: bluetooth/* BluetoothStruct.bit */.GD.bit(),
-  totalSeconds: bluetooth/* BluetoothStruct.uint32 */.GD.uint32(),
-  totalCountRPM: bluetooth/* BluetoothStruct.uint32 */.GD.uint32()
+  totalSeconds: bluetooth/* BluetoothStruct.uint64 */.GD.uint64(),
+  totalCountRPM: bluetooth/* BluetoothStruct.uint64 */.GD.uint64()
 };
 ;// CONCATENATED MODULE: ./src/models/pjcan/variables/engine/EngineConfig.ts
 
@@ -22681,13 +22794,13 @@ class EngineConfig extends BaseModel/* BaseModel */.g {
   constructor(data) {
     super();
     (0,defineProperty/* default */.Z)(this, "showDays", false);
-    (0,defineProperty/* default */.Z)(this, "totalSeconds", 0);
-    (0,defineProperty/* default */.Z)(this, "totalCountRPM", 0);
+    (0,defineProperty/* default */.Z)(this, "totalSeconds", BigInt(0));
+    (0,defineProperty/* default */.Z)(this, "totalCountRPM", BigInt(0));
     if (data) this.set(data);
   }
   /**
    * Запись данных
-   * @param {DataView} buf Буффер данных
+   * @param {DataView} buf Буфер данных
    */
   set(buf) {
     return this._set(this, API_VARIABLE_ENGINE_CONFIG_EXEC, API_VARIABLE_ENGINE_CONFIG_SIZE + 1, struct, buf);
@@ -22699,18 +22812,21 @@ class EngineConfig extends BaseModel/* BaseModel */.g {
 }
 ;// CONCATENATED MODULE: ./src/models/pjcan/variables/engine/StructEngineValue.ts
 
-const API_VARIABLE_ENGINE_SIZE = 24;
+const API_VARIABLE_ENGINE_SIZE = 25;
 /** Структура данных */
 const StructEngineValue = {
   enabled: bluetooth/* BluetoothStruct.bit */.GD.bit(),
   coolant: bluetooth/* BluetoothStruct.int8 */.GD.int8(),
   rpm: bluetooth/* BluetoothStruct.uint16 */.GD.uint16(),
-  mseconds: bluetooth/* BluetoothStruct.uint32 */.GD.uint32(),
-  totalSeconds: bluetooth/* BluetoothStruct.uint32 */.GD.uint32(),
-  totalCountRPM: bluetooth/* BluetoothStruct.uint32 */.GD.uint32(),
+  worktime: bluetooth/* BluetoothStruct.uint32 */.GD.uint32(),
   countRPM: bluetooth/* BluetoothStruct.uint32 */.GD.uint32(),
   load: bluetooth/* BluetoothStruct.uint16 */.GD.uint16(),
-  throttle: bluetooth/* BluetoothStruct.uint16 */.GD.uint16()
+  throttle: bluetooth/* BluetoothStruct.uint16 */.GD.uint16(),
+  viewDays: bluetooth/* BluetoothStruct.uint16 */.GD.uint16(),
+  viewHours: bluetooth/* BluetoothStruct.uint8 */.GD.uint8(),
+  viewMinutes: bluetooth/* BluetoothStruct.uint8 */.GD.uint8(),
+  viewSeconds: bluetooth/* BluetoothStruct.uint8 */.GD.uint8(),
+  viewCountRPM: bluetooth/* BluetoothStruct.uint32 */.GD.uint32()
 };
 ;// CONCATENATED MODULE: ./src/models/pjcan/variables/engine/EngineValue.ts
 
@@ -22727,17 +22843,20 @@ class EngineValue extends BaseModel/* BaseModel */.g {
     (0,defineProperty/* default */.Z)(this, "enabled", false);
     (0,defineProperty/* default */.Z)(this, "coolant", 0);
     (0,defineProperty/* default */.Z)(this, "rpm", 0);
-    (0,defineProperty/* default */.Z)(this, "mseconds", 0);
-    (0,defineProperty/* default */.Z)(this, "totalSeconds", 0);
-    (0,defineProperty/* default */.Z)(this, "totalCountRPM", 0);
+    (0,defineProperty/* default */.Z)(this, "worktime", 0);
     (0,defineProperty/* default */.Z)(this, "countRPM", 0);
     (0,defineProperty/* default */.Z)(this, "load", 0);
     (0,defineProperty/* default */.Z)(this, "throttle", 0);
+    (0,defineProperty/* default */.Z)(this, "viewDays", 0);
+    (0,defineProperty/* default */.Z)(this, "viewHours", 0);
+    (0,defineProperty/* default */.Z)(this, "viewMinutes", 0);
+    (0,defineProperty/* default */.Z)(this, "viewSeconds", 0);
+    (0,defineProperty/* default */.Z)(this, "viewCountRPM", 0);
     if (data) this.set(data);
   }
   /**
    * Запись данных
-   * @param {DataView} buf Буффер данных
+   * @param {DataView} buf Буфер данных
    */
   set(buf) {
     return this._set(this, API_VARIABLE_ENGINE_EXEC, API_VARIABLE_ENGINE_SIZE + 1, EngineValue_struct, buf);
@@ -22787,7 +22906,7 @@ class EngineView extends BaseModel/* BaseModel */.g {
   }
   /**
    * Запись данных
-   * @param {DataView} buf Буффер данных
+   * @param {DataView} buf Буфер данных
    */
   set(buf) {
     return this._set(this, API_VARIABLE_ENGINE_VIEW_EXEC, API_VARIABLE_ENGINE_VIEW_SIZE + 1, EngineView_struct, buf);
@@ -22861,7 +22980,7 @@ class FuelConfig extends BaseModel/* BaseModel */.g {
   }
   /**
    * Запись данных
-   * @param {DataView} buf Буффер данных
+   * @param {DataView} buf Буфер данных
    */
   set(buf) {
     return this._set(this, API_VARIABLE_FUEL_CONFIG_EXEC, API_VARIABLE_FUEL_CONFIG_SIZE + 1, struct, buf);
@@ -22901,7 +23020,7 @@ class FuelValue extends BaseModel/* BaseModel */.g {
   }
   /**
    * Запись данных
-   * @param {DataView} buf Буффер данных
+   * @param {DataView} buf Буфер данных
    */
   set(buf) {
     return this._set(this, API_VARIABLE_FUEL_EXEC, API_VARIABLE_FUEL_SIZE + 1, FuelValue_struct, buf);
@@ -22945,7 +23064,7 @@ class FuelView extends BaseModel/* BaseModel */.g {
   }
   /**
    * Запись данных
-   * @param {DataView} buf Буффер данных
+   * @param {DataView} buf Буфер данных
    */
   set(buf) {
     return this._set(this, API_VARIABLE_FUEL_VIEW_EXEC, API_VARIABLE_FUEL_VIEW_SIZE + 1, FuelView_struct, buf);
@@ -23019,7 +23138,7 @@ class MovementValue extends BaseModel/* BaseModel */.g {
   }
   /**
    * Запись данных
-   * @param {DataView} buf Буффер данных
+   * @param {DataView} buf Буфер данных
    */
   set(buf) {
     return this._set(this, API_VARIABLE_MOVEMENT_EXEC, API_VARIABLE_MOVEMENT_SIZE + 1, struct, buf);
@@ -23061,7 +23180,7 @@ class MovementView extends BaseModel/* BaseModel */.g {
   }
   /**
    * Запись данных
-   * @param {DataView} buf Буффер данных
+   * @param {DataView} buf Буфер данных
    */
   set(buf) {
     return this._set(this, API_VARIABLE_MOVEMENT_VIEW_EXEC, API_VARIABLE_MOVEMENT_VIEW_SIZE + 1, MovementView_struct, buf);
@@ -23150,7 +23269,7 @@ class SensorsValue extends BaseModel/* BaseModel */.g {
   }
   /**
    * Запись данных
-   * @param {DataView} buf Буффер данных
+   * @param {DataView} buf Буфер данных
    */
   set(buf) {
     return this._set(this, API_VARIABLE_SENSORS_EXEC, API_VARIABLE_SENSORS_SIZE + 1, struct, buf);
@@ -23194,7 +23313,7 @@ class SensorsView extends BaseModel/* BaseModel */.g {
   }
   /**
    * Запись данных
-   * @param {DataView} buf Буффер данных
+   * @param {DataView} buf Буфер данных
    */
   set(buf) {
     return this._set(this, API_VARIABLE_SENSORS_VIEW_EXEC, API_VARIABLE_SENSORS_VIEW_SIZE + 1, SensorsView_struct, buf);
@@ -23265,7 +23384,7 @@ class TemperatureValue extends BaseModel/* BaseModel */.g {
   }
   /**
    * Запись данных
-   * @param {DataView} buf Буффер данных
+   * @param {DataView} buf Буфер данных
    */
   set(buf) {
     return this._set(this, API_VARIABLE_TEMPERATURE_EXEC, API_VARIABLE_TEMPERATURE_SIZE + 1, struct, buf);
@@ -23303,7 +23422,7 @@ class TemperatureView extends BaseModel/* BaseModel */.g {
   }
   /**
    * Запись данных
-   * @param {DataView} buf Буффер данных
+   * @param {DataView} buf Буфер данных
    */
   set(buf) {
     return this._set(this, API_VARIABLE_TEMPERATURE_VIEW_EXEC, API_VARIABLE_TEMPERATURE_VIEW_SIZE + 1, TemperatureView_struct, buf);
@@ -23370,7 +23489,7 @@ class TestValue extends BaseModel/* BaseModel */.g {
   }
   /**
    * Запись данных
-   * @param {DataView} buf Буффер данных
+   * @param {DataView} buf Буфер данных
    */
   set(buf) {
     return this._set(this, API_VARIABLE_TEST_EXEC, API_VARIABLE_TEST_SIZE + 1, struct, buf);
@@ -23445,7 +23564,7 @@ class VolumeConfig extends BaseModel/* BaseModel */.g {
   }
   /**
    * Запись данных
-   * @param {DataView} buf Буффер данных
+   * @param {DataView} buf Буфер данных
    */
   set(buf) {
     return this._set(this, API_VARIABLE_VOLUME_CONFIG_EXEC, API_VARIABLE_VOLUME_CONFIG_SIZE + 1, struct, buf);
@@ -23481,7 +23600,7 @@ class VolumeValue extends BaseModel/* BaseModel */.g {
   }
   /**
    * Запись данных
-   * @param {DataView} buf Буффер данных
+   * @param {DataView} buf Буфер данных
    */
   set(buf) {
     return this._set(this, API_VARIABLE_VOLUME_EXEC, API_VARIABLE_VOLUME_SIZE + 1, VolumeValue_struct, buf);
@@ -23519,7 +23638,7 @@ class VolumeView extends BaseModel/* BaseModel */.g {
   }
   /**
    * Запись данных
-   * @param {DataView} buf Буффер данных
+   * @param {DataView} buf Буфер данных
    */
   set(buf) {
     return this._set(this, API_VARIABLE_VOLUME_VIEW_EXEC, API_VARIABLE_VOLUME_VIEW_SIZE + 1, VolumeView_struct, buf);
@@ -23547,6 +23666,8 @@ class VolumeView extends BaseModel/* BaseModel */.g {
 
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, {
+  "MK": function() { return /* reexport */ API_VERSION_EVENT; },
+  "_u": function() { return /* reexport */ API_VERSION_EXEC; },
   "Q8": function() { return /* reexport */ API_VERSION_SIZE; },
   "BB": function() { return /* reexport */ StructVersion; },
   "Gf": function() { return /* reexport */ Version; }
@@ -23554,46 +23675,10 @@ __webpack_require__.d(__webpack_exports__, {
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/defineProperty.js + 3 modules
 var defineProperty = __webpack_require__(7327);
-;// CONCATENATED MODULE: ./src/models/pjcan/version/Version.ts
-
-/** Модель версии */
-class Version {
-  constructor() {
-    (0,defineProperty/* default */.Z)(this, "major", 0);
-    (0,defineProperty/* default */.Z)(this, "minor", 0);
-    (0,defineProperty/* default */.Z)(this, "build", 0);
-    (0,defineProperty/* default */.Z)(this, "revision", 0);
-  }
-  /** Наличие версии */
-  get is() {
-    return this.major > 0;
-  }
-  /** Строковое представление */
-  get toString() {
-    return `${this.major}.${this.minor}.${this.build}.${this.revision}`;
-  }
-  /**
-   * Сравнение версий
-   * @param {IVersion} ver Объект версии
-   */
-  compare(ver) {
-    const verA = [this.major, this.minor, this.build, this.revision];
-    const verB = [ver.major, ver.minor, ver.build, ver.revision];
-    for (let i = 0; i < 4; i++) {
-      if (verB[i] > verA[i]) return 1;else if (verB[i] < verA[i]) return -1;
-    }
-    return 0;
-  }
-  /** Очистить значения версии */
-  clear() {
-    this.major = 0;
-    this.minor = 0;
-    this.build = 0;
-    this.revision = 0;
-  }
-}
 // EXTERNAL MODULE: ./src/components/bluetooth/index.ts + 4 modules
 var bluetooth = __webpack_require__(9014);
+// EXTERNAL MODULE: ./src/models/pjcan/base/BaseModel.ts
+var BaseModel = __webpack_require__(9036);
 ;// CONCATENATED MODULE: ./src/models/pjcan/version/StructVersion.ts
 
 const API_VERSION_SIZE = 4;
@@ -23604,6 +23689,91 @@ const StructVersion = {
   build: bluetooth/* BluetoothStruct.uint8 */.GD.uint8(),
   revision: bluetooth/* BluetoothStruct.uint8 */.GD.uint8()
 };
+;// CONCATENATED MODULE: ./src/models/pjcan/version/Version.ts
+
+
+
+
+const API_VERSION_EXEC = 6;
+const API_VERSION_EVENT = "Version";
+const struct = new bluetooth/* BluetoothStruct */.GD(StructVersion);
+/** Модель версии */
+class Version extends BaseModel/* BaseModel */.g {
+  /** Наличие версии */
+  get is() {
+    return this.major > 0;
+  }
+  /** Строковое представление */
+  get toString() {
+    return `${this.major}.${this.minor}.${this.build}.${this.revision}`;
+  }
+  constructor(data) {
+    super();
+    (0,defineProperty/* default */.Z)(this, "major", 0);
+    (0,defineProperty/* default */.Z)(this, "minor", 0);
+    (0,defineProperty/* default */.Z)(this, "build", 0);
+    (0,defineProperty/* default */.Z)(this, "revision", 0);
+    if (data) this.set(data);
+  }
+  /**
+   * Сравнение версий
+   * @param {IVersion} ver Объект версии
+   * @param {number} len Длина сравниваемой версии (от 1 до 4)
+   */
+  compare(ver, len) {
+    const verA = [this.major, this.minor, this.build, this.revision];
+    const verB = [ver.major, ver.minor, ver.build, ver.revision];
+    if (len < 1) len = 1;else if (len > 4) len = 4;
+    for (let i = 0; i < len; i++) {
+      if (verB[i] > verA[i]) return 1;else if (verB[i] < verA[i]) return -1;
+    }
+    return 0;
+  }
+  compareString(ver) {
+    if (ver?.length > 0) {
+      const verA = [this.major, this.minor, this.build, this.revision];
+      const verB = ver.split(".")?.map(x => parseInt(x));
+      if (verB?.length > 0) {
+        let len = verB.length;
+        if (len > 4) len = 4;
+        for (let i = 0; i < len; i++) {
+          if (verB[i] > verA[i]) return 1;else if (verB[i] < verA[i]) return -1;
+        }
+      }
+    }
+    return 0;
+  }
+  /** Очистить значения версии */
+  clear() {
+    this.major = 0;
+    this.minor = 0;
+    this.build = 0;
+    this.revision = 0;
+  }
+  /**
+   * Запись версии
+   * @param {IVersion} ver Версия
+   */
+  setVersion(ver) {
+    if (this.is || !ver.is) return false;
+    this.major = ver.major;
+    this.minor = ver.minor;
+    this.build = ver.build;
+    this.revision = ver.revision;
+    return true;
+  }
+  /**
+   * Запись данных
+   * @param {DataView} buf Буфер данных
+   */
+  set(buf) {
+    return this._set(this, API_VERSION_EXEC, API_VERSION_SIZE + 1, struct, buf);
+  }
+  /** Чтение данных */
+  get() {
+    return this._get(this, API_VERSION_EXEC, 1);
+  }
+}
 ;// CONCATENATED MODULE: ./src/models/pjcan/version/index.ts
 
 
@@ -23666,7 +23836,7 @@ const StructViewConfig = {
 
 /***/ }),
 
-/***/ 5986:
+/***/ 9918:
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -23692,7 +23862,17 @@ __webpack_require__.d(mutations_namespaceObject, {
   "clearMessages": function() { return clearMessages; },
   "freeMessage": function() { return freeMessage; },
   "setMessage": function() { return setMessage; },
+  "setOnboardCardList": function() { return setOnboardCardList; },
   "setVisibleMessage": function() { return setVisibleMessage; }
+});
+
+// NAMESPACE OBJECT: ./src/store/modules/app/actions.ts
+var actions_namespaceObject = {};
+__webpack_require__.r(actions_namespaceObject);
+__webpack_require__.d(actions_namespaceObject, {
+  "readOnboardCardList": function() { return readOnboardCardList; },
+  "resetOnboardCardList": function() { return resetOnboardCardList; },
+  "writeOnboardCardList": function() { return writeOnboardCardList; }
 });
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.push.js
@@ -25201,11 +25381,42 @@ var index = {
 };
 /* harmony default export */ var vuex_esm_bundler = ((/* unused pure expression or super */ null && (index)));
 
+;// CONCATENATED MODULE: ./src/store/modules/app/onboard-card-list-default.ts
+/* harmony default export */ var onboard_card_list_default = ([{
+  name: "info",
+  enabled: true,
+  car: [0, 1, 2]
+}, {
+  name: "bose",
+  enabled: false,
+  car: [2]
+}, {
+  name: "engine",
+  enabled: true,
+  car: [0, 1, 2]
+}, {
+  name: "fuel",
+  enabled: true,
+  car: [0, 1, 2]
+}, {
+  name: "movement",
+  enabled: true,
+  car: [0, 1, 2]
+}, {
+  name: "doors",
+  enabled: true,
+  car: [0, 1]
+}, {
+  name: "climate",
+  enabled: true,
+  car: [0, 1, 2]
+}]);
 ;// CONCATENATED MODULE: ./src/store/modules/app/state.ts
+
 const state = {
   messages: [],
   visibleMessage: false,
-  onboardCardList: ["info", "engine", "fuel", "movement", "doors", "climate", "bose"]
+  onboardCardList: onboard_card_list_default
 };
 /* harmony default export */ var app_state = (state);
 ;// CONCATENATED MODULE: ./src/store/modules/app/getters.ts
@@ -25256,17 +25467,70 @@ const freeMessage = state => {
  * @param state
  */
 const clearMessages = state => state.messages = [];
+/**
+ * Изменить список карточек бортового компьютера
+ * @param {any} state
+ * @param {IOnboardCard[]} value Новый список
+ */
+const setOnboardCardList = (state, value) => {
+  state.onboardCardList = [...value].map(x => ({
+    ...x
+  }));
+};
+;// CONCATENATED MODULE: ./src/store/modules/app/actions.ts
+
+/**
+ * Чтение списка onboardCardList из local storage
+ * @param {any} commit
+ */
+const readOnboardCardList = ({
+  commit
+}) => {
+  const res = window.localStorage.getItem("OnboardCardList");
+  if (res?.length) {
+    try {
+      const onboardCardList = JSON.parse(res);
+      if (Array.isArray(onboardCardList)) {
+        commit("setOnboardCardList", onboardCardList);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  }
+};
+/**
+ * Запись списка onboardCardList в local storage
+ * @param {any} commit
+ */
+const writeOnboardCardList = ({
+  getters
+}) => {
+  const res = JSON.stringify(getters.onboardCardList);
+  window.localStorage.setItem("OnboardCardList", res);
+};
+/**
+ * Сбросить значения списка onboardCardList по умолчанию
+ * @param {any} commit
+ * @param {any} dispatch
+ */
+const resetOnboardCardList = ({
+  commit,
+  dispatch
+}) => {
+  commit("setOnboardCardList", onboard_card_list_default);
+  dispatch("writeOnboardCardList");
+};
 ;// CONCATENATED MODULE: ./src/store/modules/app/index.ts
 
 
 
-// import * as actions from "./actions";
+
 /* harmony default export */ var app = ({
   namespaced: true,
   state: app_state,
   getters: getters_namespaceObject,
-  mutations: mutations_namespaceObject
-  // actions
+  mutations: mutations_namespaceObject,
+  actions: actions_namespaceObject
 });
 ;// CONCATENATED MODULE: ./src/store/index.ts
 
@@ -28332,8 +28596,14 @@ service.interceptors.response.use(response => {
 
 "use strict";
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "g": function() { return /* binding */ getFormatTime; }
+/* harmony export */   "g": function() { return /* binding */ getFormatTime; },
+/* harmony export */   "v": function() { return /* binding */ RemainingTime; }
 /* harmony export */ });
+/* harmony import */ var D_Projects_PJ82_PJCAN_pjcan_app_node_modules_babel_runtime_helpers_esm_defineProperty_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(7327);
+/* harmony import */ var core_js_modules_es_array_push_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(7658);
+/* harmony import */ var core_js_modules_es_array_push_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_push_js__WEBPACK_IMPORTED_MODULE_0__);
+
+
 /**
  * Чтение форматированного времени типа hh:mm:ss
  * @param {number|bigint} value Значение
@@ -28350,6 +28620,58 @@ const getFormatTime = (value, msec = true) => {
   const _hour = _msec < 10 ? "0" + Math.floor(_msec).toString() : Math.floor(_msec).toString();
   return `${_hour}:${_minute}:${_second}`;
 };
+class RemainingTime {
+  /** Текущая дата */
+  get now() {
+    return this._now;
+  }
+  /** Итого */
+  get total() {
+    return this._total;
+  }
+  /** Текущая позиция */
+  get offset() {
+    return this._offset;
+  }
+  /** Изменить текущую позицию */
+  set offset(val) {
+    const now = Date.now();
+    const value = Math.floor((this._total - val) / (val - this._offset) * (now - this._now));
+    this._index++;
+    if (this._index > this._countValues) this._index = 0;
+    if (this._values.length <= this._index) this._values.push(value);else this._values[this._index] = value;
+    this._offset = val;
+    this._now = now;
+  }
+  /** Последнее значение */
+  get value() {
+    return this._values[this._index];
+  }
+  /** Среднее значение */
+  get avg() {
+    if (this._values.length === 0) return 0;
+    let result = 0;
+    this._values.forEach(x => result += x);
+    return Math.floor(result / this._values.length);
+  }
+  constructor(total, countValues = 10) {
+    (0,D_Projects_PJ82_PJCAN_pjcan_app_node_modules_babel_runtime_helpers_esm_defineProperty_js__WEBPACK_IMPORTED_MODULE_1__/* ["default"] */ .Z)(this, "_now", void 0);
+    (0,D_Projects_PJ82_PJCAN_pjcan_app_node_modules_babel_runtime_helpers_esm_defineProperty_js__WEBPACK_IMPORTED_MODULE_1__/* ["default"] */ .Z)(this, "_total", void 0);
+    (0,D_Projects_PJ82_PJCAN_pjcan_app_node_modules_babel_runtime_helpers_esm_defineProperty_js__WEBPACK_IMPORTED_MODULE_1__/* ["default"] */ .Z)(this, "_offset", void 0);
+    (0,D_Projects_PJ82_PJCAN_pjcan_app_node_modules_babel_runtime_helpers_esm_defineProperty_js__WEBPACK_IMPORTED_MODULE_1__/* ["default"] */ .Z)(this, "_values", void 0);
+    (0,D_Projects_PJ82_PJCAN_pjcan_app_node_modules_babel_runtime_helpers_esm_defineProperty_js__WEBPACK_IMPORTED_MODULE_1__/* ["default"] */ .Z)(this, "_index", void 0);
+    (0,D_Projects_PJ82_PJCAN_pjcan_app_node_modules_babel_runtime_helpers_esm_defineProperty_js__WEBPACK_IMPORTED_MODULE_1__/* ["default"] */ .Z)(this, "_countValues", void 0);
+    this._now = Date.now();
+    this._offset = 0;
+    this._total = total;
+    this._values = [];
+    this._index = -1;
+    this._countValues = countValues;
+  }
+  get() {
+    return getFormatTime(this.avg);
+  }
+}
 
 
 /***/ }),
@@ -28359,6 +28681,7 @@ const getFormatTime = (value, msec = true) => {
 
 "use strict";
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "$y": function() { return /* binding */ isReadonly; },
 /* harmony export */   "B": function() { return /* binding */ effectScope; },
 /* harmony export */   "BK": function() { return /* binding */ toRefs; },
 /* harmony export */   "Bj": function() { return /* binding */ EffectScope; },
@@ -28376,16 +28699,21 @@ const getFormatTime = (value, msec = true) => {
 /* harmony export */   "X3": function() { return /* binding */ isProxy; },
 /* harmony export */   "XI": function() { return /* binding */ shallowRef; },
 /* harmony export */   "Xl": function() { return /* binding */ markRaw; },
+/* harmony export */   "YS": function() { return /* binding */ shallowReadonly; },
+/* harmony export */   "ZM": function() { return /* binding */ customRef; },
+/* harmony export */   "cE": function() { return /* binding */ effect; },
 /* harmony export */   "dq": function() { return /* binding */ isRef; },
 /* harmony export */   "iH": function() { return /* binding */ ref; },
 /* harmony export */   "j": function() { return /* binding */ track; },
 /* harmony export */   "lk": function() { return /* binding */ resetTracking; },
 /* harmony export */   "nZ": function() { return /* binding */ getCurrentScope; },
+/* harmony export */   "oR": function() { return /* binding */ triggerRef; },
 /* harmony export */   "qj": function() { return /* binding */ reactive; },
 /* harmony export */   "qq": function() { return /* binding */ ReactiveEffect; },
+/* harmony export */   "sT": function() { return /* binding */ stop; },
 /* harmony export */   "yT": function() { return /* binding */ isShallow; }
 /* harmony export */ });
-/* unused harmony exports ITERATE_KEY, customRef, deferredComputed, effect, enableTracking, isReadonly, shallowReadonly, stop, triggerRef */
+/* unused harmony exports ITERATE_KEY, deferredComputed, enableTracking */
 /* harmony import */ var core_js_modules_es_array_push_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(7658);
 /* harmony import */ var core_js_modules_es_array_push_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_push_js__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _vue_shared__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(7139);
@@ -28613,7 +28941,7 @@ function effect(fn, options) {
   }
   const _effect = new ReactiveEffect(fn);
   if (options) {
-    extend(_effect, options);
+    (0,_vue_shared__WEBPACK_IMPORTED_MODULE_1__/* .extend */ .l7)(_effect, options);
     if (options.scope) recordEffectScope(_effect, options.scope);
   }
   if (!options || !options.lazy) {
@@ -29565,58 +29893,131 @@ function deferredComputed(getter) {
 "use strict";
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "$d": function() { return /* binding */ callWithAsyncErrorHandling; },
+/* harmony export */   "$y": function() { return /* reexport safe */ _vue_reactivity__WEBPACK_IMPORTED_MODULE_2__.$y; },
 /* harmony export */   "Ah": function() { return /* binding */ onUnmounted; },
+/* harmony export */   "B": function() { return /* reexport safe */ _vue_reactivity__WEBPACK_IMPORTED_MODULE_2__.B; },
+/* harmony export */   "BK": function() { return /* reexport safe */ _vue_reactivity__WEBPACK_IMPORTED_MODULE_2__.BK; },
+/* harmony export */   "Bj": function() { return /* reexport safe */ _vue_reactivity__WEBPACK_IMPORTED_MODULE_2__.Bj; },
+/* harmony export */   "Bz": function() { return /* binding */ defineEmits; },
+/* harmony export */   "C3": function() { return /* binding */ transformVNodeArgs; },
+/* harmony export */   "C_": function() { return /* reexport safe */ _vue_shared__WEBPACK_IMPORTED_MODULE_3__.C_; },
 /* harmony export */   "Cn": function() { return /* binding */ popScopeId; },
+/* harmony export */   "EB": function() { return /* reexport safe */ _vue_reactivity__WEBPACK_IMPORTED_MODULE_2__.EB; },
+/* harmony export */   "Eo": function() { return /* binding */ createHydrationRenderer; },
+/* harmony export */   "F4": function() { return /* binding */ guardReactiveProps; },
 /* harmony export */   "FN": function() { return /* binding */ getCurrentInstance; },
 /* harmony export */   "Fl": function() { return /* binding */ computed; },
+/* harmony export */   "G": function() { return /* binding */ ssrUtils; },
+/* harmony export */   "HX": function() { return /* binding */ withScopeId; },
 /* harmony export */   "HY": function() { return /* binding */ Fragment; },
 /* harmony export */   "Ho": function() { return /* binding */ cloneVNode; },
+/* harmony export */   "IU": function() { return /* reexport safe */ _vue_reactivity__WEBPACK_IMPORTED_MODULE_2__.IU; },
 /* harmony export */   "JJ": function() { return /* binding */ provide; },
 /* harmony export */   "Jd": function() { return /* binding */ onBeforeUnmount; },
+/* harmony export */   "KU": function() { return /* binding */ callWithErrorHandling; },
 /* harmony export */   "Ko": function() { return /* binding */ renderList; },
 /* harmony export */   "LL": function() { return /* binding */ resolveDynamicComponent; },
+/* harmony export */   "MW": function() { return /* binding */ defineProps; },
+/* harmony export */   "MX": function() { return /* binding */ withMemo; },
+/* harmony export */   "Mr": function() { return /* binding */ initCustomFormatter; },
+/* harmony export */   "Nv": function() { return /* binding */ createSlots; },
+/* harmony export */   "OT": function() { return /* reexport safe */ _vue_reactivity__WEBPACK_IMPORTED_MODULE_2__.OT; },
+/* harmony export */   "Ob": function() { return /* binding */ KeepAlive; },
 /* harmony export */   "P$": function() { return /* binding */ BaseTransition; },
+/* harmony export */   "PG": function() { return /* reexport safe */ _vue_reactivity__WEBPACK_IMPORTED_MODULE_2__.PG; },
 /* harmony export */   "Q2": function() { return /* binding */ resolveDirective; },
 /* harmony export */   "Q6": function() { return /* binding */ getTransitionRawChildren; },
 /* harmony export */   "RC": function() { return /* binding */ defineAsyncComponent; },
+/* harmony export */   "Rh": function() { return /* binding */ watchPostEffect; },
+/* harmony export */   "Rr": function() { return /* binding */ useSlots; },
+/* harmony export */   "S3": function() { return /* binding */ handleError; },
+/* harmony export */   "SU": function() { return /* reexport safe */ _vue_reactivity__WEBPACK_IMPORTED_MODULE_2__.SU; },
 /* harmony export */   "U2": function() { return /* binding */ resolveTransitionHooks; },
+/* harmony export */   "Uc": function() { return /* binding */ ssrContextKey; },
 /* harmony export */   "Uk": function() { return /* binding */ createTextVNode; },
+/* harmony export */   "Um": function() { return /* reexport safe */ _vue_reactivity__WEBPACK_IMPORTED_MODULE_2__.Um; },
 /* harmony export */   "Us": function() { return /* binding */ createRenderer; },
+/* harmony export */   "Vh": function() { return /* reexport safe */ _vue_reactivity__WEBPACK_IMPORTED_MODULE_2__.Vh; },
 /* harmony export */   "WI": function() { return /* binding */ renderSlot; },
+/* harmony export */   "WL": function() { return /* reexport safe */ _vue_reactivity__WEBPACK_IMPORTED_MODULE_2__.WL; },
+/* harmony export */   "WY": function() { return /* binding */ defineExpose; },
 /* harmony export */   "Wm": function() { return /* binding */ createVNode; },
+/* harmony export */   "Wu": function() { return /* binding */ assertNumber; },
+/* harmony export */   "X3": function() { return /* reexport safe */ _vue_reactivity__WEBPACK_IMPORTED_MODULE_2__.X3; },
+/* harmony export */   "XI": function() { return /* reexport safe */ _vue_reactivity__WEBPACK_IMPORTED_MODULE_2__.XI; },
+/* harmony export */   "Xl": function() { return /* reexport safe */ _vue_reactivity__WEBPACK_IMPORTED_MODULE_2__.Xl; },
 /* harmony export */   "Xn": function() { return /* binding */ onBeforeUpdate; },
+/* harmony export */   "Y1": function() { return /* binding */ registerRuntimeCompiler; },
 /* harmony export */   "Y3": function() { return /* binding */ nextTick; },
 /* harmony export */   "Y8": function() { return /* binding */ useTransitionState; },
 /* harmony export */   "YP": function() { return /* binding */ watch; },
+/* harmony export */   "YS": function() { return /* reexport safe */ _vue_reactivity__WEBPACK_IMPORTED_MODULE_2__.YS; },
+/* harmony export */   "Yq": function() { return /* binding */ onRenderTriggered; },
 /* harmony export */   "ZK": function() { return /* binding */ warn; },
+/* harmony export */   "ZM": function() { return /* reexport safe */ _vue_reactivity__WEBPACK_IMPORTED_MODULE_2__.ZM; },
+/* harmony export */   "Zq": function() { return /* binding */ useSSRContext; },
 /* harmony export */   "_": function() { return /* binding */ createBaseVNode; },
+/* harmony export */   "_A": function() { return /* reexport safe */ _vue_shared__WEBPACK_IMPORTED_MODULE_3__._A; },
 /* harmony export */   "aZ": function() { return /* binding */ defineComponent; },
+/* harmony export */   "b9": function() { return /* binding */ withDefaults; },
+/* harmony export */   "bT": function() { return /* binding */ onRenderTracked; },
 /* harmony export */   "bv": function() { return /* binding */ onMounted; },
+/* harmony export */   "cE": function() { return /* reexport safe */ _vue_reactivity__WEBPACK_IMPORTED_MODULE_2__.cE; },
+/* harmony export */   "d1": function() { return /* binding */ onErrorCaptured; },
 /* harmony export */   "dD": function() { return /* binding */ pushScopeId; },
 /* harmony export */   "dG": function() { return /* binding */ mergeProps; },
 /* harmony export */   "dl": function() { return /* binding */ onActivated; },
+/* harmony export */   "dq": function() { return /* reexport safe */ _vue_reactivity__WEBPACK_IMPORTED_MODULE_2__.dq; },
+/* harmony export */   "ec": function() { return /* binding */ setDevtoolsHook; },
+/* harmony export */   "eq": function() { return /* binding */ resolveFilter; },
 /* harmony export */   "f3": function() { return /* binding */ inject; },
 /* harmony export */   "h": function() { return /* binding */ h; },
+/* harmony export */   "hR": function() { return /* reexport safe */ _vue_shared__WEBPACK_IMPORTED_MODULE_3__.hR; },
+/* harmony export */   "i8": function() { return /* binding */ version; },
 /* harmony export */   "iD": function() { return /* binding */ createElementBlock; },
+/* harmony export */   "iH": function() { return /* reexport safe */ _vue_reactivity__WEBPACK_IMPORTED_MODULE_2__.iH; },
 /* harmony export */   "ic": function() { return /* binding */ onUpdated; },
 /* harmony export */   "j4": function() { return /* binding */ createBlock; },
+/* harmony export */   "j5": function() { return /* reexport safe */ _vue_shared__WEBPACK_IMPORTED_MODULE_3__.j5; },
+/* harmony export */   "kC": function() { return /* reexport safe */ _vue_shared__WEBPACK_IMPORTED_MODULE_3__.kC; },
 /* harmony export */   "kq": function() { return /* binding */ createCommentVNode; },
+/* harmony export */   "l1": function() { return /* binding */ useAttrs; },
 /* harmony export */   "lA": function() { return /* binding */ isVNode; },
 /* harmony export */   "lR": function() { return /* binding */ Teleport; },
 /* harmony export */   "m0": function() { return /* binding */ watchEffect; },
+/* harmony export */   "mW": function() { return /* binding */ devtools; },
+/* harmony export */   "mv": function() { return /* binding */ withAsyncContext; },
 /* harmony export */   "mx": function() { return /* binding */ toHandlers; },
 /* harmony export */   "n4": function() { return /* binding */ Suspense; },
 /* harmony export */   "nK": function() { return /* binding */ setTransitionHooks; },
+/* harmony export */   "nQ": function() { return /* binding */ isMemoSame; },
+/* harmony export */   "nZ": function() { return /* reexport safe */ _vue_reactivity__WEBPACK_IMPORTED_MODULE_2__.nZ; },
+/* harmony export */   "oR": function() { return /* reexport safe */ _vue_reactivity__WEBPACK_IMPORTED_MODULE_2__.oR; },
+/* harmony export */   "of": function() { return /* binding */ isRuntimeOnly; },
+/* harmony export */   "p1": function() { return /* binding */ createPropsRestProxy; },
+/* harmony export */   "qG": function() { return /* binding */ Static; },
+/* harmony export */   "qZ": function() { return /* binding */ setBlockTracking; },
+/* harmony export */   "qb": function() { return /* binding */ queuePostFlushCb; },
+/* harmony export */   "qj": function() { return /* reexport safe */ _vue_reactivity__WEBPACK_IMPORTED_MODULE_2__.qj; },
+/* harmony export */   "qq": function() { return /* reexport safe */ _vue_reactivity__WEBPACK_IMPORTED_MODULE_2__.qq; },
+/* harmony export */   "ry": function() { return /* binding */ compatUtils; },
+/* harmony export */   "sT": function() { return /* reexport safe */ _vue_reactivity__WEBPACK_IMPORTED_MODULE_2__.sT; },
 /* harmony export */   "se": function() { return /* binding */ onDeactivated; },
 /* harmony export */   "sv": function() { return /* binding */ Comment; },
+/* harmony export */   "uE": function() { return /* binding */ createStaticVNode; },
+/* harmony export */   "u_": function() { return /* binding */ mergeDefaults; },
 /* harmony export */   "up": function() { return /* binding */ resolveComponent; },
+/* harmony export */   "vl": function() { return /* binding */ onServerPrefetch; },
+/* harmony export */   "vs": function() { return /* reexport safe */ _vue_shared__WEBPACK_IMPORTED_MODULE_3__.vs; },
 /* harmony export */   "w5": function() { return /* binding */ withCtx; },
 /* harmony export */   "wF": function() { return /* binding */ onBeforeMount; },
 /* harmony export */   "wg": function() { return /* binding */ openBlock; },
 /* harmony export */   "wy": function() { return /* binding */ withDirectives; },
-/* harmony export */   "xv": function() { return /* binding */ Text; }
+/* harmony export */   "xv": function() { return /* binding */ Text; },
+/* harmony export */   "yT": function() { return /* reexport safe */ _vue_reactivity__WEBPACK_IMPORTED_MODULE_2__.yT; },
+/* harmony export */   "yX": function() { return /* binding */ watchSyncEffect; },
+/* harmony export */   "zw": function() { return /* reexport safe */ _vue_shared__WEBPACK_IMPORTED_MODULE_3__.zw; }
 /* harmony export */ });
-/* unused harmony exports KeepAlive, Static, assertNumber, callWithErrorHandling, compatUtils, createHydrationRenderer, createPropsRestProxy, createSlots, createStaticVNode, defineEmits, defineExpose, defineProps, devtools, guardReactiveProps, handleError, initCustomFormatter, isMemoSame, isRuntimeOnly, mergeDefaults, onErrorCaptured, onRenderTracked, onRenderTriggered, onServerPrefetch, queuePostFlushCb, registerRuntimeCompiler, resolveFilter, setBlockTracking, setDevtoolsHook, ssrContextKey, ssrUtils, transformVNodeArgs, useAttrs, useSSRContext, useSlots, version, watchPostEffect, watchSyncEffect, withAsyncContext, withDefaults, withMemo, withScopeId */
 /* harmony import */ var core_js_modules_es_array_push_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(7658);
 /* harmony import */ var core_js_modules_es_array_push_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_push_js__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var core_js_modules_es_array_unshift_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(541);
@@ -30125,7 +30526,7 @@ function tryWrap(fn) {
   };
 }
 let devtools;
-let buffer = (/* unused pure expression or super */ null && ([]));
+let buffer = [];
 let devtoolsNotInstalled = false;
 function emit$1(event, ...args) {
   if (devtools) {
@@ -32045,7 +32446,7 @@ const KeepAliveImpl = {
 };
 // export the public type for h/tsx inference
 // also to avoid inline import() in generated d.ts files
-const KeepAlive = (/* unused pure expression or super */ null && (KeepAliveImpl));
+const KeepAlive = KeepAliveImpl;
 function matches(pattern, name) {
   if ((0,_vue_shared__WEBPACK_IMPORTED_MODULE_3__/* .isArray */ .kJ)(pattern)) {
     return pattern.some(p => matches(p, name));
@@ -32328,7 +32729,7 @@ function createSlots(slots, dynamicSlots) {
   for (let i = 0; i < dynamicSlots.length; i++) {
     const slot = dynamicSlots[i];
     // array of dynamic slot generated by <template v-for="..." #[...]>
-    if (isArray(slot)) {
+    if ((0,_vue_shared__WEBPACK_IMPORTED_MODULE_3__/* .isArray */ .kJ)(slot)) {
       for (let j = 0; j < slot.length; j++) {
         slots[slot[j].name] = slot[j].fn;
       }
@@ -33919,7 +34320,7 @@ function createHydrationFunctions(rendererInternals) {
       if (props) {
         if (forcePatchValue || !optimized || patchFlag & (16 /* PatchFlags.FULL_PROPS */ | 32 /* PatchFlags.HYDRATE_EVENTS */)) {
           for (const key in props) {
-            if (forcePatchValue && key.endsWith('value') || isOn(key) && !isReservedProp(key)) {
+            if (forcePatchValue && key.endsWith('value') || (0,_vue_shared__WEBPACK_IMPORTED_MODULE_3__/* .isOn */ .F7)(key) && !(0,_vue_shared__WEBPACK_IMPORTED_MODULE_3__/* .isReservedProp */ .Gg)(key)) {
               patchProp(el, key, null, props[key], false, undefined, parentComponent);
             }
           }
@@ -36381,11 +36782,11 @@ function getContext() {
  * @internal
  */
 function mergeDefaults(raw, defaults) {
-  const props = isArray(raw) ? raw.reduce((normalized, p) => (normalized[p] = {}, normalized), {}) : raw;
+  const props = (0,_vue_shared__WEBPACK_IMPORTED_MODULE_3__/* .isArray */ .kJ)(raw) ? raw.reduce((normalized, p) => (normalized[p] = {}, normalized), {}) : raw;
   for (const key in defaults) {
     const opt = props[key];
     if (opt) {
-      if (isArray(opt) || isFunction(opt)) {
+      if ((0,_vue_shared__WEBPACK_IMPORTED_MODULE_3__/* .isArray */ .kJ)(opt) || (0,_vue_shared__WEBPACK_IMPORTED_MODULE_3__/* .isFunction */ .mf)(opt)) {
         props[key] = {
           type: opt,
           default: defaults[key]
@@ -36441,7 +36842,7 @@ function withAsyncContext(getAwaitable) {
   if (false) {}
   let awaitable = getAwaitable();
   unsetCurrentInstance();
-  if (isPromise(awaitable)) {
+  if ((0,_vue_shared__WEBPACK_IMPORTED_MODULE_3__/* .isPromise */ .tI)(awaitable)) {
     awaitable = awaitable.catch(e => {
       setCurrentInstance(ctx);
       throw e;
@@ -36510,16 +36911,16 @@ function initCustomFormatter() {
   const formatter = {
     header(obj) {
       // TODO also format ComponentPublicInstance & ctx.slots/attrs in setup
-      if (!isObject(obj)) {
+      if (!(0,_vue_shared__WEBPACK_IMPORTED_MODULE_3__/* .isObject */ .Kn)(obj)) {
         return null;
       }
       if (obj.__isVue) {
         return ['div', vueStyle, `VueInstance`];
-      } else if (isRef(obj)) {
+      } else if ((0,_vue_reactivity__WEBPACK_IMPORTED_MODULE_2__/* .isRef */ .dq)(obj)) {
         return ['div', {}, ['span', vueStyle, genRefFlag(obj)], '<', formatValue(obj.value), `>`];
-      } else if (isReactive(obj)) {
-        return ['div', {}, ['span', vueStyle, isShallow(obj) ? 'ShallowReactive' : 'Reactive'], '<', formatValue(obj), `>${isReadonly(obj) ? ` (readonly)` : ``}`];
-      } else if (isReadonly(obj)) {
+      } else if ((0,_vue_reactivity__WEBPACK_IMPORTED_MODULE_2__/* .isReactive */ .PG)(obj)) {
+        return ['div', {}, ['span', vueStyle, isShallow(obj) ? 'ShallowReactive' : 'Reactive'], '<', formatValue(obj), `>${(0,_vue_reactivity__WEBPACK_IMPORTED_MODULE_2__/* .isReadonly */ .$y)(obj) ? ` (readonly)` : ``}`];
+      } else if ((0,_vue_reactivity__WEBPACK_IMPORTED_MODULE_2__/* .isReadonly */ .$y)(obj)) {
         return ['div', {}, ['span', vueStyle, isShallow(obj) ? 'ShallowReadonly' : 'Readonly'], '<', formatValue(obj), '>'];
       }
       return null;
@@ -36536,13 +36937,13 @@ function initCustomFormatter() {
   function formatInstance(instance) {
     const blocks = [];
     if (instance.type.props && instance.props) {
-      blocks.push(createInstanceBlock('props', toRaw(instance.props)));
+      blocks.push(createInstanceBlock('props', (0,_vue_reactivity__WEBPACK_IMPORTED_MODULE_2__/* .toRaw */ .IU)(instance.props)));
     }
-    if (instance.setupState !== EMPTY_OBJ) {
+    if (instance.setupState !== _vue_shared__WEBPACK_IMPORTED_MODULE_3__/* .EMPTY_OBJ */ .kT) {
       blocks.push(createInstanceBlock('setup', instance.setupState));
     }
-    if (instance.data !== EMPTY_OBJ) {
-      blocks.push(createInstanceBlock('data', toRaw(instance.data)));
+    if (instance.data !== _vue_shared__WEBPACK_IMPORTED_MODULE_3__/* .EMPTY_OBJ */ .kT) {
+      blocks.push(createInstanceBlock('data', (0,_vue_reactivity__WEBPACK_IMPORTED_MODULE_2__/* .toRaw */ .IU)(instance.data)));
     }
     const computed = extractKeys(instance, 'computed');
     if (computed) {
@@ -36560,7 +36961,7 @@ function initCustomFormatter() {
     return blocks;
   }
   function createInstanceBlock(type, target) {
-    target = extend({}, target);
+    target = (0,_vue_shared__WEBPACK_IMPORTED_MODULE_3__/* .extend */ .l7)({}, target);
     if (!Object.keys(target).length) {
       return ['span', {}];
     }
@@ -36581,9 +36982,9 @@ function initCustomFormatter() {
       return ['span', stringStyle, JSON.stringify(v)];
     } else if (typeof v === 'boolean') {
       return ['span', keywordStyle, v];
-    } else if (isObject(v)) {
+    } else if ((0,_vue_shared__WEBPACK_IMPORTED_MODULE_3__/* .isObject */ .Kn)(v)) {
       return ['object', {
-        object: asRaw ? toRaw(v) : v
+        object: asRaw ? (0,_vue_reactivity__WEBPACK_IMPORTED_MODULE_2__/* .toRaw */ .IU)(v) : v
       }];
     } else {
       return ['span', stringStyle, String(v)];
@@ -36591,7 +36992,7 @@ function initCustomFormatter() {
   }
   function extractKeys(instance, type) {
     const Comp = instance.type;
-    if (isFunction(Comp)) {
+    if ((0,_vue_shared__WEBPACK_IMPORTED_MODULE_3__/* .isFunction */ .mf)(Comp)) {
       return;
     }
     const extracted = {};
@@ -36604,7 +37005,7 @@ function initCustomFormatter() {
   }
   function isKeyOfType(Comp, key, type) {
     const opts = Comp[type];
-    if (isArray(opts) && opts.includes(key) || isObject(opts) && key in opts) {
+    if ((0,_vue_shared__WEBPACK_IMPORTED_MODULE_3__/* .isArray */ .kJ)(opts) && opts.includes(key) || (0,_vue_shared__WEBPACK_IMPORTED_MODULE_3__/* .isObject */ .Kn)(opts) && key in opts) {
       return true;
     }
     if (Comp.extends && isKeyOfType(Comp.extends, key, type)) {
@@ -36645,7 +37046,7 @@ function isMemoSame(cached, memo) {
     return false;
   }
   for (let i = 0; i < prev.length; i++) {
-    if (hasChanged(prev[i], memo[i])) {
+    if ((0,_vue_shared__WEBPACK_IMPORTED_MODULE_3__/* .hasChanged */ .aU)(prev[i], memo[i])) {
       return false;
     }
   }
@@ -36670,7 +37071,7 @@ const _ssrUtils = {
  * SSR utils for \@vue/server-renderer. Only exposed in ssr-possible builds.
  * @internal
  */
-const ssrUtils = (/* unused pure expression or super */ null && (_ssrUtils));
+const ssrUtils = _ssrUtils;
 /**
  * @internal only exposed in compat builds
  */
@@ -36688,17 +37089,156 @@ const compatUtils = null;
 
 "use strict";
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "$d": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.$d; },
+/* harmony export */   "$y": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.$y; },
+/* harmony export */   "Ah": function() { return /* binding */ defineSSRCustomElement; },
+/* harmony export */   "B": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.B; },
+/* harmony export */   "BK": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.BK; },
+/* harmony export */   "Bj": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.Bj; },
+/* harmony export */   "Bz": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.Bz; },
+/* harmony export */   "C3": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.C3; },
+/* harmony export */   "C_": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.C_; },
+/* harmony export */   "Cn": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.Cn; },
+/* harmony export */   "D2": function() { return /* binding */ withKeys; },
+/* harmony export */   "EB": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.EB; },
+/* harmony export */   "Eo": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.Eo; },
+/* harmony export */   "F4": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.F4; },
 /* harmony export */   "F8": function() { return /* binding */ vShow; },
+/* harmony export */   "FN": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.FN; },
+/* harmony export */   "Fl": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.Fl; },
+/* harmony export */   "G": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.G; },
+/* harmony export */   "G2": function() { return /* binding */ vModelRadio; },
+/* harmony export */   "HX": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.HX; },
+/* harmony export */   "HY": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.HY; },
+/* harmony export */   "Ho": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.Ho; },
+/* harmony export */   "IU": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.IU; },
+/* harmony export */   "JJ": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.JJ; },
+/* harmony export */   "Jd": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.Jd; },
+/* harmony export */   "KU": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.KU; },
+/* harmony export */   "Ko": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.Ko; },
+/* harmony export */   "LL": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.LL; },
+/* harmony export */   "MW": function() { return /* binding */ defineCustomElement; },
+/* harmony export */   "MX": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.MX; },
+/* harmony export */   "Mr": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.Mr; },
+/* harmony export */   "Nd": function() { return /* binding */ initDirectivesForSSR; },
+/* harmony export */   "Nv": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.Nv; },
+/* harmony export */   "OT": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.OT; },
+/* harmony export */   "Ob": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.Ob; },
+/* harmony export */   "P$": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.P$; },
+/* harmony export */   "PG": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.PG; },
+/* harmony export */   "Q2": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.Q2; },
+/* harmony export */   "Q6": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.Q6; },
+/* harmony export */   "RC": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.RC; },
+/* harmony export */   "Rh": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.Rh; },
+/* harmony export */   "Rr": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.Rr; },
+/* harmony export */   "S3": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.S3; },
+/* harmony export */   "SK": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.Ah; },
+/* harmony export */   "SU": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.SU; },
+/* harmony export */   "U2": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.U2; },
+/* harmony export */   "Uc": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.Uc; },
+/* harmony export */   "Uk": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.Uk; },
+/* harmony export */   "Um": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.Um; },
+/* harmony export */   "Us": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.Us; },
+/* harmony export */   "Vh": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.Vh; },
 /* harmony export */   "W3": function() { return /* binding */ TransitionGroup; },
+/* harmony export */   "WI": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.WI; },
+/* harmony export */   "WL": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.WL; },
+/* harmony export */   "WY": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.WY; },
+/* harmony export */   "Wm": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.Wm; },
+/* harmony export */   "Wu": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.Wu; },
+/* harmony export */   "X3": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.X3; },
+/* harmony export */   "XI": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.XI; },
+/* harmony export */   "Xl": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.Xl; },
+/* harmony export */   "Xn": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.Xn; },
+/* harmony export */   "Y1": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.Y1; },
+/* harmony export */   "Y3": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.Y3; },
+/* harmony export */   "Y8": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.Y8; },
+/* harmony export */   "YP": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.YP; },
+/* harmony export */   "YS": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.YS; },
+/* harmony export */   "YZ": function() { return /* binding */ vModelDynamic; },
+/* harmony export */   "Yq": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.Yq; },
+/* harmony export */   "ZB": function() { return /* binding */ hydrate; },
+/* harmony export */   "ZK": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.ZK; },
+/* harmony export */   "ZM": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.ZM; },
+/* harmony export */   "Zq": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.Zq; },
+/* harmony export */   "_": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__._; },
+/* harmony export */   "_A": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__._A; },
+/* harmony export */   "a2": function() { return /* binding */ VueElement; },
+/* harmony export */   "aZ": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.aZ; },
+/* harmony export */   "b9": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.b9; },
+/* harmony export */   "bM": function() { return /* binding */ vModelSelect; },
+/* harmony export */   "bT": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.bT; },
+/* harmony export */   "bv": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.bv; },
+/* harmony export */   "cE": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.cE; },
+/* harmony export */   "d1": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.d1; },
+/* harmony export */   "dD": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.dD; },
+/* harmony export */   "dG": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.dG; },
+/* harmony export */   "dl": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.dl; },
+/* harmony export */   "dq": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.dq; },
+/* harmony export */   "e8": function() { return /* binding */ vModelCheckbox; },
+/* harmony export */   "ec": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.ec; },
+/* harmony export */   "eq": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.eq; },
+/* harmony export */   "f3": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.f3; },
+/* harmony export */   "fb": function() { return /* binding */ useCssModule; },
+/* harmony export */   "h": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.h; },
+/* harmony export */   "hR": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.hR; },
+/* harmony export */   "i8": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.i8; },
+/* harmony export */   "iD": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.iD; },
+/* harmony export */   "iH": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.iH; },
+/* harmony export */   "iM": function() { return /* binding */ withModifiers; },
+/* harmony export */   "ic": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.ic; },
+/* harmony export */   "j4": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.j4; },
+/* harmony export */   "j5": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.j5; },
+/* harmony export */   "kC": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.kC; },
+/* harmony export */   "kq": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.kq; },
+/* harmony export */   "l1": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.l1; },
+/* harmony export */   "lA": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.lA; },
+/* harmony export */   "lR": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.lR; },
+/* harmony export */   "m0": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.m0; },
+/* harmony export */   "mW": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.mW; },
+/* harmony export */   "mv": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.mv; },
+/* harmony export */   "mx": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.mx; },
+/* harmony export */   "n4": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.n4; },
+/* harmony export */   "nK": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.nK; },
+/* harmony export */   "nQ": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.nQ; },
+/* harmony export */   "nZ": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.nZ; },
 /* harmony export */   "nr": function() { return /* binding */ vModelText; },
+/* harmony export */   "oR": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.oR; },
+/* harmony export */   "of": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.of; },
+/* harmony export */   "p1": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.p1; },
+/* harmony export */   "qG": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.qG; },
+/* harmony export */   "qZ": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.qZ; },
+/* harmony export */   "qb": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.qb; },
+/* harmony export */   "qj": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.qj; },
+/* harmony export */   "qq": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.qq; },
 /* harmony export */   "ri": function() { return /* binding */ createApp; },
-/* harmony export */   "uT": function() { return /* binding */ Transition; }
+/* harmony export */   "ry": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.ry; },
+/* harmony export */   "sT": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.sT; },
+/* harmony export */   "sY": function() { return /* binding */ render; },
+/* harmony export */   "se": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.se; },
+/* harmony export */   "sj": function() { return /* binding */ useCssVars; },
+/* harmony export */   "sv": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.sv; },
+/* harmony export */   "uE": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.uE; },
+/* harmony export */   "uT": function() { return /* binding */ Transition; },
+/* harmony export */   "u_": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.u_; },
+/* harmony export */   "up": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.up; },
+/* harmony export */   "vl": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.vl; },
+/* harmony export */   "vr": function() { return /* binding */ createSSRApp; },
+/* harmony export */   "vs": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.vs; },
+/* harmony export */   "w5": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.w5; },
+/* harmony export */   "wF": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.wF; },
+/* harmony export */   "wg": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.wg; },
+/* harmony export */   "wy": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.wy; },
+/* harmony export */   "xv": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.xv; },
+/* harmony export */   "yT": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.yT; },
+/* harmony export */   "yX": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.yX; },
+/* harmony export */   "yb": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.MW; },
+/* harmony export */   "zw": function() { return /* reexport safe */ _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.zw; }
 /* harmony export */ });
-/* unused harmony exports VueElement, createSSRApp, defineCustomElement, defineSSRCustomElement, hydrate, initDirectivesForSSR, render, useCssModule, useCssVars, vModelCheckbox, vModelDynamic, vModelRadio, vModelSelect, withKeys, withModifiers */
 /* harmony import */ var core_js_modules_es_array_push_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(7658);
 /* harmony import */ var core_js_modules_es_array_push_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_push_js__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _vue_shared__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(7139);
-/* harmony import */ var _vue_runtime_core__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(3396);
+/* harmony import */ var _vue_shared__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(7139);
+/* harmony import */ var _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(3396);
 /* harmony import */ var _vue_runtime_core__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(4870);
 
 
@@ -36798,9 +37338,9 @@ function patchClass(el, value, isSVG) {
 }
 function patchStyle(el, prev, next) {
   const style = el.style;
-  const isCssString = (0,_vue_shared__WEBPACK_IMPORTED_MODULE_1__/* .isString */ .HD)(next);
+  const isCssString = (0,_vue_shared__WEBPACK_IMPORTED_MODULE_2__/* .isString */ .HD)(next);
   if (next && !isCssString) {
-    if (prev && !(0,_vue_shared__WEBPACK_IMPORTED_MODULE_1__/* .isString */ .HD)(prev)) {
+    if (prev && !(0,_vue_shared__WEBPACK_IMPORTED_MODULE_2__/* .isString */ .HD)(prev)) {
       for (const key in prev) {
         if (next[key] == null) {
           setStyle(style, key, '');
@@ -36830,7 +37370,7 @@ function patchStyle(el, prev, next) {
 const semicolonRE = /[^\\];\s*$/;
 const importantRE = /\s*!important$/;
 function setStyle(style, name, val) {
-  if ((0,_vue_shared__WEBPACK_IMPORTED_MODULE_1__/* .isArray */ .kJ)(val)) {
+  if ((0,_vue_shared__WEBPACK_IMPORTED_MODULE_2__/* .isArray */ .kJ)(val)) {
     val.forEach(v => setStyle(style, name, v));
   } else {
     if (val == null) val = '';
@@ -36842,7 +37382,7 @@ function setStyle(style, name, val) {
       const prefixed = autoPrefix(style, name);
       if (importantRE.test(val)) {
         // !important
-        style.setProperty((0,_vue_shared__WEBPACK_IMPORTED_MODULE_1__/* .hyphenate */ .rs)(prefixed), val.replace(importantRE, ''), 'important');
+        style.setProperty((0,_vue_shared__WEBPACK_IMPORTED_MODULE_2__/* .hyphenate */ .rs)(prefixed), val.replace(importantRE, ''), 'important');
       } else {
         style[prefixed] = val;
       }
@@ -36856,11 +37396,11 @@ function autoPrefix(style, rawName) {
   if (cached) {
     return cached;
   }
-  let name = (0,_vue_shared__WEBPACK_IMPORTED_MODULE_1__/* .camelize */ ._A)(rawName);
+  let name = (0,_vue_shared__WEBPACK_IMPORTED_MODULE_2__/* .camelize */ ._A)(rawName);
   if (name !== 'filter' && name in style) {
     return prefixCache[rawName] = name;
   }
-  name = (0,_vue_shared__WEBPACK_IMPORTED_MODULE_1__/* .capitalize */ .kC)(name);
+  name = (0,_vue_shared__WEBPACK_IMPORTED_MODULE_2__/* .capitalize */ .kC)(name);
   for (let i = 0; i < prefixes.length; i++) {
     const prefixed = prefixes[i] + name;
     if (prefixed in style) {
@@ -36880,8 +37420,8 @@ function patchAttr(el, key, value, isSVG, instance) {
   } else {
     // note we are only checking boolean attributes that don't have a
     // corresponding dom prop of the same name here.
-    const isBoolean = (0,_vue_shared__WEBPACK_IMPORTED_MODULE_1__/* .isSpecialBooleanAttr */ .Pq)(key);
-    if (value == null || isBoolean && !(0,_vue_shared__WEBPACK_IMPORTED_MODULE_1__/* .includeBooleanAttr */ .yA)(value)) {
+    const isBoolean = (0,_vue_shared__WEBPACK_IMPORTED_MODULE_2__/* .isSpecialBooleanAttr */ .Pq)(key);
+    if (value == null || isBoolean && !(0,_vue_shared__WEBPACK_IMPORTED_MODULE_2__/* .includeBooleanAttr */ .yA)(value)) {
       el.removeAttribute(key);
     } else {
       el.setAttribute(key, isBoolean ? '' : value);
@@ -36927,7 +37467,7 @@ prevChildren, parentComponent, parentSuspense, unmountChildren) {
     const type = typeof el[key];
     if (type === 'boolean') {
       // e.g. <select multiple> compiles to { multiple: '' }
-      value = (0,_vue_shared__WEBPACK_IMPORTED_MODULE_1__/* .includeBooleanAttr */ .yA)(value);
+      value = (0,_vue_shared__WEBPACK_IMPORTED_MODULE_2__/* .includeBooleanAttr */ .yA)(value);
     } else if (value == null && type === 'string') {
       // e.g. <div :id="null">
       value = '';
@@ -36986,7 +37526,7 @@ function parseName(name) {
       options[m[0].toLowerCase()] = true;
     }
   }
-  const event = name[2] === ':' ? name.slice(3) : (0,_vue_shared__WEBPACK_IMPORTED_MODULE_1__/* .hyphenate */ .rs)(name.slice(2));
+  const event = name[2] === ':' ? name.slice(3) : (0,_vue_shared__WEBPACK_IMPORTED_MODULE_2__/* .hyphenate */ .rs)(name.slice(2));
   return [event, options];
 }
 // To avoid the overhead of repeatedly calling Date.now(), we cache
@@ -37013,14 +37553,14 @@ function createInvoker(initialValue, instance) {
     } else if (e._vts <= invoker.attached) {
       return;
     }
-    (0,_vue_runtime_core__WEBPACK_IMPORTED_MODULE_2__/* .callWithAsyncErrorHandling */ .$d)(patchStopImmediatePropagation(e, invoker.value), instance, 5 /* ErrorCodes.NATIVE_EVENT_HANDLER */, [e]);
+    (0,_vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__/* .callWithAsyncErrorHandling */ .$d)(patchStopImmediatePropagation(e, invoker.value), instance, 5 /* ErrorCodes.NATIVE_EVENT_HANDLER */, [e]);
   };
   invoker.value = initialValue;
   invoker.attached = getNow();
   return invoker;
 }
 function patchStopImmediatePropagation(e, value) {
-  if ((0,_vue_shared__WEBPACK_IMPORTED_MODULE_1__/* .isArray */ .kJ)(value)) {
+  if ((0,_vue_shared__WEBPACK_IMPORTED_MODULE_2__/* .isArray */ .kJ)(value)) {
     const originalStop = e.stopImmediatePropagation;
     e.stopImmediatePropagation = () => {
       originalStop.call(e);
@@ -37037,9 +37577,9 @@ const patchProp = (el, key, prevValue, nextValue, isSVG = false, prevChildren, p
     patchClass(el, nextValue, isSVG);
   } else if (key === 'style') {
     patchStyle(el, prevValue, nextValue);
-  } else if ((0,_vue_shared__WEBPACK_IMPORTED_MODULE_1__/* .isOn */ .F7)(key)) {
+  } else if ((0,_vue_shared__WEBPACK_IMPORTED_MODULE_2__/* .isOn */ .F7)(key)) {
     // ignore v-model listeners
-    if (!(0,_vue_shared__WEBPACK_IMPORTED_MODULE_1__/* .isModelListener */ .tR)(key)) {
+    if (!(0,_vue_shared__WEBPACK_IMPORTED_MODULE_2__/* .isModelListener */ .tR)(key)) {
       patchEvent(el, key, prevValue, nextValue, parentComponent);
     }
   } else if (key[0] === '.' ? (key = key.slice(1), true) : key[0] === '^' ? (key = key.slice(1), false) : shouldSetAsProp(el, key, nextValue, isSVG)) {
@@ -37065,7 +37605,7 @@ function shouldSetAsProp(el, key, value, isSVG) {
       return true;
     }
     // or native onclick with function values
-    if (key in el && nativeOnRE.test(key) && (0,_vue_shared__WEBPACK_IMPORTED_MODULE_1__/* .isFunction */ .mf)(value)) {
+    if (key in el && nativeOnRE.test(key) && (0,_vue_shared__WEBPACK_IMPORTED_MODULE_2__/* .isFunction */ .mf)(value)) {
       return true;
     }
     return false;
@@ -37093,13 +37633,13 @@ function shouldSetAsProp(el, key, value, isSVG) {
     return false;
   }
   // native onclick with string value, must be set as attribute
-  if (nativeOnRE.test(key) && (0,_vue_shared__WEBPACK_IMPORTED_MODULE_1__/* .isString */ .HD)(value)) {
+  if (nativeOnRE.test(key) && (0,_vue_shared__WEBPACK_IMPORTED_MODULE_2__/* .isString */ .HD)(value)) {
     return false;
   }
   return key in el;
 }
 function defineCustomElement(options, hydrate) {
-  const Comp = defineComponent(options);
+  const Comp = (0,_vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__/* .defineComponent */ .aZ)(options);
   class VueCustomElement extends VueElement {
     constructor(initialProps) {
       super(Comp, initialProps, hydrate);
@@ -37113,7 +37653,7 @@ const defineSSRCustomElement = options => {
   return defineCustomElement(options, hydrate);
 };
 const BaseClass = typeof HTMLElement !== 'undefined' ? HTMLElement : class {};
-class VueElement extends (/* unused pure expression or super */ null && (BaseClass)) {
+class VueElement extends BaseClass {
   constructor(_def, _props = {}, hydrate) {
     super();
     this._def = _def;
@@ -37150,7 +37690,7 @@ class VueElement extends (/* unused pure expression or super */ null && (BaseCla
   }
   disconnectedCallback() {
     this._connected = false;
-    nextTick(() => {
+    (0,_vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__/* .nextTick */ .Y3)(() => {
       if (!this._connected) {
         render(null, this.shadowRoot);
         this._instance = null;
@@ -37181,14 +37721,14 @@ class VueElement extends (/* unused pure expression or super */ null && (BaseCla
       } = def;
       // cast Number-type props set before resolve
       let numberProps;
-      if (props && !isArray(props)) {
+      if (props && !(0,_vue_shared__WEBPACK_IMPORTED_MODULE_2__/* .isArray */ .kJ)(props)) {
         for (const key in props) {
           const opt = props[key];
           if (opt === Number || opt && opt.type === Number) {
             if (key in this._props) {
-              this._props[key] = toNumber(this._props[key]);
+              this._props[key] = (0,_vue_shared__WEBPACK_IMPORTED_MODULE_2__/* .toNumber */ .He)(this._props[key]);
             }
-            (numberProps || (numberProps = Object.create(null)))[camelize$1(key)] = true;
+            (numberProps || (numberProps = Object.create(null)))[(0,_vue_shared__WEBPACK_IMPORTED_MODULE_2__/* .camelize */ ._A)(key)] = true;
           }
         }
       }
@@ -37214,7 +37754,7 @@ class VueElement extends (/* unused pure expression or super */ null && (BaseCla
     const {
       props
     } = def;
-    const declaredPropKeys = isArray(props) ? props : Object.keys(props || {});
+    const declaredPropKeys = (0,_vue_shared__WEBPACK_IMPORTED_MODULE_2__/* .isArray */ .kJ)(props) ? props : Object.keys(props || {});
     // check if there are props set pre-upgrade or connect
     for (const key of Object.keys(this)) {
       if (key[0] !== '_' && declaredPropKeys.includes(key)) {
@@ -37222,7 +37762,7 @@ class VueElement extends (/* unused pure expression or super */ null && (BaseCla
       }
     }
     // defining getter/setters on prototype
-    for (const key of declaredPropKeys.map(camelize$1)) {
+    for (const key of declaredPropKeys.map(_vue_shared__WEBPACK_IMPORTED_MODULE_2__/* .camelize */ ._A)) {
       Object.defineProperty(this, key, {
         get() {
           return this._getProp(key);
@@ -37235,9 +37775,9 @@ class VueElement extends (/* unused pure expression or super */ null && (BaseCla
   }
   _setAttr(key) {
     let value = this.getAttribute(key);
-    const camelKey = camelize$1(key);
+    const camelKey = (0,_vue_shared__WEBPACK_IMPORTED_MODULE_2__/* .camelize */ ._A)(key);
     if (this._numberProps && this._numberProps[camelKey]) {
-      value = toNumber(value);
+      value = (0,_vue_shared__WEBPACK_IMPORTED_MODULE_2__/* .toNumber */ .He)(value);
     }
     this._setProp(camelKey, value, false);
   }
@@ -37259,11 +37799,11 @@ class VueElement extends (/* unused pure expression or super */ null && (BaseCla
       // reflect
       if (shouldReflect) {
         if (val === true) {
-          this.setAttribute(hyphenate(key), '');
+          this.setAttribute((0,_vue_shared__WEBPACK_IMPORTED_MODULE_2__/* .hyphenate */ .rs)(key), '');
         } else if (typeof val === 'string' || typeof val === 'number') {
-          this.setAttribute(hyphenate(key), val + '');
+          this.setAttribute((0,_vue_shared__WEBPACK_IMPORTED_MODULE_2__/* .hyphenate */ .rs)(key), val + '');
         } else if (!val) {
-          this.removeAttribute(hyphenate(key));
+          this.removeAttribute((0,_vue_shared__WEBPACK_IMPORTED_MODULE_2__/* .hyphenate */ .rs)(key));
         }
       }
     }
@@ -37272,7 +37812,7 @@ class VueElement extends (/* unused pure expression or super */ null && (BaseCla
     render(this._createVNode(), this.shadowRoot);
   }
   _createVNode() {
-    const vnode = createVNode(this._def, extend({}, this._props));
+    const vnode = (0,_vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__/* .createVNode */ .Wm)(this._def, (0,_vue_shared__WEBPACK_IMPORTED_MODULE_2__/* .extend */ .l7)({}, this._props));
     if (!this._instance) {
       vnode.ce = instance => {
         this._instance = instance;
@@ -37289,8 +37829,8 @@ class VueElement extends (/* unused pure expression or super */ null && (BaseCla
           // dispatch both the raw and hyphenated versions of an event
           // to match Vue behavior
           dispatch(event, args);
-          if (hyphenate(event) !== event) {
-            dispatch(hyphenate(event), args);
+          if ((0,_vue_shared__WEBPACK_IMPORTED_MODULE_2__/* .hyphenate */ .rs)(event) !== event) {
+            dispatch((0,_vue_shared__WEBPACK_IMPORTED_MODULE_2__/* .hyphenate */ .rs)(event), args);
           }
         };
         // locate nearest Vue custom element parent for provide/inject
@@ -37321,20 +37861,20 @@ class VueElement extends (/* unused pure expression or super */ null && (BaseCla
 function useCssModule(name = '$style') {
   /* istanbul ignore else */
   {
-    const instance = getCurrentInstance();
+    const instance = (0,_vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__/* .getCurrentInstance */ .FN)();
     if (!instance) {
        false && 0;
-      return EMPTY_OBJ;
+      return _vue_shared__WEBPACK_IMPORTED_MODULE_2__/* .EMPTY_OBJ */ .kT;
     }
     const modules = instance.type.__cssModules;
     if (!modules) {
        false && 0;
-      return EMPTY_OBJ;
+      return _vue_shared__WEBPACK_IMPORTED_MODULE_2__/* .EMPTY_OBJ */ .kT;
     }
     const mod = modules[name];
     if (!mod) {
        false && 0;
-      return EMPTY_OBJ;
+      return _vue_shared__WEBPACK_IMPORTED_MODULE_2__/* .EMPTY_OBJ */ .kT;
     }
     return mod;
   }
@@ -37345,7 +37885,7 @@ function useCssModule(name = '$style') {
  * @private
  */
 function useCssVars(getter) {
-  const instance = getCurrentInstance();
+  const instance = (0,_vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__/* .getCurrentInstance */ .FN)();
   /* istanbul ignore next */
   if (!instance) {
      false && 0;
@@ -37359,13 +37899,13 @@ function useCssVars(getter) {
     setVarsOnVNode(instance.subTree, vars);
     updateTeleports(vars);
   };
-  watchPostEffect(setVars);
-  onMounted(() => {
+  (0,_vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__/* .watchPostEffect */ .Rh)(setVars);
+  (0,_vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__/* .onMounted */ .bv)(() => {
     const ob = new MutationObserver(setVars);
     ob.observe(instance.subTree.el.parentNode, {
       childList: true
     });
-    onUnmounted(() => ob.disconnect());
+    (0,_vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__/* .onUnmounted */ .Ah)(() => ob.disconnect());
   });
 }
 function setVarsOnVNode(vnode, vars) {
@@ -37384,9 +37924,9 @@ function setVarsOnVNode(vnode, vars) {
   }
   if (vnode.shapeFlag & 1 /* ShapeFlags.ELEMENT */ && vnode.el) {
     setVarsOnNode(vnode.el, vars);
-  } else if (vnode.type === Fragment) {
+  } else if (vnode.type === _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__/* .Fragment */ .HY) {
     vnode.children.forEach(c => setVarsOnVNode(c, vars));
-  } else if (vnode.type === Static) {
+  } else if (vnode.type === _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__/* .Static */ .qG) {
     let {
       el,
       anchor
@@ -37412,7 +37952,7 @@ const ANIMATION = 'animation';
 // base Transition component, with DOM-specific logic.
 const Transition = (props, {
   slots
-}) => (0,_vue_runtime_core__WEBPACK_IMPORTED_MODULE_2__.h)(_vue_runtime_core__WEBPACK_IMPORTED_MODULE_2__/* .BaseTransition */ .P$, resolveTransitionProps(props), slots);
+}) => (0,_vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.h)(_vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__/* .BaseTransition */ .P$, resolveTransitionProps(props), slots);
 Transition.displayName = 'Transition';
 const DOMTransitionPropsValidators = {
   name: String,
@@ -37432,13 +37972,13 @@ const DOMTransitionPropsValidators = {
   leaveActiveClass: String,
   leaveToClass: String
 };
-const TransitionPropsValidators = Transition.props = /*#__PURE__*/(0,_vue_shared__WEBPACK_IMPORTED_MODULE_1__/* .extend */ .l7)({}, _vue_runtime_core__WEBPACK_IMPORTED_MODULE_2__/* .BaseTransition.props */ .P$.props, DOMTransitionPropsValidators);
+const TransitionPropsValidators = Transition.props = /*#__PURE__*/(0,_vue_shared__WEBPACK_IMPORTED_MODULE_2__/* .extend */ .l7)({}, _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__/* .BaseTransition.props */ .P$.props, DOMTransitionPropsValidators);
 /**
  * #3227 Incoming hooks may be merged into arrays when wrapping Transition
  * with custom HOCs.
  */
 const callHook = (hook, args = []) => {
-  if ((0,_vue_shared__WEBPACK_IMPORTED_MODULE_1__/* .isArray */ .kJ)(hook)) {
+  if ((0,_vue_shared__WEBPACK_IMPORTED_MODULE_2__/* .isArray */ .kJ)(hook)) {
     hook.forEach(h => h(...args));
   } else if (hook) {
     hook(...args);
@@ -37449,7 +37989,7 @@ const callHook = (hook, args = []) => {
  * intends to explicitly control the end of the transition.
  */
 const hasExplicitCallback = hook => {
-  return hook ? (0,_vue_shared__WEBPACK_IMPORTED_MODULE_1__/* .isArray */ .kJ)(hook) ? hook.some(h => h.length > 1) : hook.length > 1 : false;
+  return hook ? (0,_vue_shared__WEBPACK_IMPORTED_MODULE_2__/* .isArray */ .kJ)(hook) ? hook.some(h => h.length > 1) : hook.length > 1 : false;
 };
 function resolveTransitionProps(rawProps) {
   const baseProps = {};
@@ -37514,7 +38054,7 @@ function resolveTransitionProps(rawProps) {
       });
     };
   };
-  return (0,_vue_shared__WEBPACK_IMPORTED_MODULE_1__/* .extend */ .l7)(baseProps, {
+  return (0,_vue_shared__WEBPACK_IMPORTED_MODULE_2__/* .extend */ .l7)(baseProps, {
     onBeforeEnter(el) {
       callHook(onBeforeEnter, [el]);
       addTransitionClass(el, enterFromClass);
@@ -37564,7 +38104,7 @@ function resolveTransitionProps(rawProps) {
 function normalizeDuration(duration) {
   if (duration == null) {
     return null;
-  } else if ((0,_vue_shared__WEBPACK_IMPORTED_MODULE_1__/* .isObject */ .Kn)(duration)) {
+  } else if ((0,_vue_shared__WEBPACK_IMPORTED_MODULE_2__/* .isObject */ .Kn)(duration)) {
     return [NumberOf(duration.enter), NumberOf(duration.leave)];
   } else {
     const n = NumberOf(duration);
@@ -37572,7 +38112,7 @@ function normalizeDuration(duration) {
   }
 }
 function NumberOf(val) {
-  const res = (0,_vue_shared__WEBPACK_IMPORTED_MODULE_1__/* .toNumber */ .He)(val);
+  const res = (0,_vue_shared__WEBPACK_IMPORTED_MODULE_2__/* .toNumber */ .He)(val);
   if (false) {}
   return res;
 }
@@ -37694,18 +38234,18 @@ const positionMap = new WeakMap();
 const newPositionMap = new WeakMap();
 const TransitionGroupImpl = {
   name: 'TransitionGroup',
-  props: /*#__PURE__*/(0,_vue_shared__WEBPACK_IMPORTED_MODULE_1__/* .extend */ .l7)({}, TransitionPropsValidators, {
+  props: /*#__PURE__*/(0,_vue_shared__WEBPACK_IMPORTED_MODULE_2__/* .extend */ .l7)({}, TransitionPropsValidators, {
     tag: String,
     moveClass: String
   }),
   setup(props, {
     slots
   }) {
-    const instance = (0,_vue_runtime_core__WEBPACK_IMPORTED_MODULE_2__/* .getCurrentInstance */ .FN)();
-    const state = (0,_vue_runtime_core__WEBPACK_IMPORTED_MODULE_2__/* .useTransitionState */ .Y8)();
+    const instance = (0,_vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__/* .getCurrentInstance */ .FN)();
+    const state = (0,_vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__/* .useTransitionState */ .Y8)();
     let prevChildren;
     let children;
-    (0,_vue_runtime_core__WEBPACK_IMPORTED_MODULE_2__/* .onUpdated */ .ic)(() => {
+    (0,_vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__/* .onUpdated */ .ic)(() => {
       // children is guaranteed to exist after initial render
       if (!prevChildren.length) {
         return;
@@ -37742,23 +38282,23 @@ const TransitionGroupImpl = {
     return () => {
       const rawProps = (0,_vue_runtime_core__WEBPACK_IMPORTED_MODULE_3__/* .toRaw */ .IU)(props);
       const cssTransitionProps = resolveTransitionProps(rawProps);
-      let tag = rawProps.tag || _vue_runtime_core__WEBPACK_IMPORTED_MODULE_2__/* .Fragment */ .HY;
+      let tag = rawProps.tag || _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__/* .Fragment */ .HY;
       prevChildren = children;
-      children = slots.default ? (0,_vue_runtime_core__WEBPACK_IMPORTED_MODULE_2__/* .getTransitionRawChildren */ .Q6)(slots.default()) : [];
+      children = slots.default ? (0,_vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__/* .getTransitionRawChildren */ .Q6)(slots.default()) : [];
       for (let i = 0; i < children.length; i++) {
         const child = children[i];
         if (child.key != null) {
-          (0,_vue_runtime_core__WEBPACK_IMPORTED_MODULE_2__/* .setTransitionHooks */ .nK)(child, (0,_vue_runtime_core__WEBPACK_IMPORTED_MODULE_2__/* .resolveTransitionHooks */ .U2)(child, cssTransitionProps, state, instance));
+          (0,_vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__/* .setTransitionHooks */ .nK)(child, (0,_vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__/* .resolveTransitionHooks */ .U2)(child, cssTransitionProps, state, instance));
         } else if (false) {}
       }
       if (prevChildren) {
         for (let i = 0; i < prevChildren.length; i++) {
           const child = prevChildren[i];
-          (0,_vue_runtime_core__WEBPACK_IMPORTED_MODULE_2__/* .setTransitionHooks */ .nK)(child, (0,_vue_runtime_core__WEBPACK_IMPORTED_MODULE_2__/* .resolveTransitionHooks */ .U2)(child, cssTransitionProps, state, instance));
+          (0,_vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__/* .setTransitionHooks */ .nK)(child, (0,_vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__/* .resolveTransitionHooks */ .U2)(child, cssTransitionProps, state, instance));
           positionMap.set(child, child.el.getBoundingClientRect());
         }
       }
-      return (0,_vue_runtime_core__WEBPACK_IMPORTED_MODULE_2__/* .createVNode */ .Wm)(tag, null, children);
+      return (0,_vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__/* .createVNode */ .Wm)(tag, null, children);
     };
   }
 };
@@ -37820,7 +38360,7 @@ function hasCSSTransform(el, root, moveClass) {
 }
 const getModelAssigner = vnode => {
   const fn = vnode.props['onUpdate:modelValue'] || false;
-  return (0,_vue_shared__WEBPACK_IMPORTED_MODULE_1__/* .isArray */ .kJ)(fn) ? value => (0,_vue_shared__WEBPACK_IMPORTED_MODULE_1__/* .invokeArrayFns */ .ir)(fn, value) : fn;
+  return (0,_vue_shared__WEBPACK_IMPORTED_MODULE_2__/* .isArray */ .kJ)(fn) ? value => (0,_vue_shared__WEBPACK_IMPORTED_MODULE_2__/* .invokeArrayFns */ .ir)(fn, value) : fn;
 };
 function onCompositionStart(e) {
   e.target.composing = true;
@@ -37851,7 +38391,7 @@ const vModelText = {
         domValue = domValue.trim();
       }
       if (castToNumber) {
-        domValue = (0,_vue_shared__WEBPACK_IMPORTED_MODULE_1__/* .looseToNumber */ .h5)(domValue);
+        domValue = (0,_vue_shared__WEBPACK_IMPORTED_MODULE_2__/* .looseToNumber */ .h5)(domValue);
       }
       el._assign(domValue);
     });
@@ -37894,7 +38434,7 @@ const vModelText = {
       if (trim && el.value.trim() === value) {
         return;
       }
-      if ((number || el.type === 'number') && (0,_vue_shared__WEBPACK_IMPORTED_MODULE_1__/* .looseToNumber */ .h5)(el.value) === value) {
+      if ((number || el.type === 'number') && (0,_vue_shared__WEBPACK_IMPORTED_MODULE_2__/* .looseToNumber */ .h5)(el.value) === value) {
         return;
       }
     }
@@ -37914,8 +38454,8 @@ const vModelCheckbox = {
       const elementValue = getValue(el);
       const checked = el.checked;
       const assign = el._assign;
-      if ((0,_vue_shared__WEBPACK_IMPORTED_MODULE_1__/* .isArray */ .kJ)(modelValue)) {
-        const index = (0,_vue_shared__WEBPACK_IMPORTED_MODULE_1__/* .looseIndexOf */ .hq)(modelValue, elementValue);
+      if ((0,_vue_shared__WEBPACK_IMPORTED_MODULE_2__/* .isArray */ .kJ)(modelValue)) {
+        const index = (0,_vue_shared__WEBPACK_IMPORTED_MODULE_2__/* .looseIndexOf */ .hq)(modelValue, elementValue);
         const found = index !== -1;
         if (checked && !found) {
           assign(modelValue.concat(elementValue));
@@ -37924,7 +38464,7 @@ const vModelCheckbox = {
           filtered.splice(index, 1);
           assign(filtered);
         }
-      } else if ((0,_vue_shared__WEBPACK_IMPORTED_MODULE_1__/* .isSet */ .DM)(modelValue)) {
+      } else if ((0,_vue_shared__WEBPACK_IMPORTED_MODULE_2__/* .isSet */ .DM)(modelValue)) {
         const cloned = new Set(modelValue);
         if (checked) {
           cloned.add(elementValue);
@@ -37949,19 +38489,19 @@ function setChecked(el, {
   oldValue
 }, vnode) {
   el._modelValue = value;
-  if ((0,_vue_shared__WEBPACK_IMPORTED_MODULE_1__/* .isArray */ .kJ)(value)) {
-    el.checked = (0,_vue_shared__WEBPACK_IMPORTED_MODULE_1__/* .looseIndexOf */ .hq)(value, vnode.props.value) > -1;
-  } else if ((0,_vue_shared__WEBPACK_IMPORTED_MODULE_1__/* .isSet */ .DM)(value)) {
+  if ((0,_vue_shared__WEBPACK_IMPORTED_MODULE_2__/* .isArray */ .kJ)(value)) {
+    el.checked = (0,_vue_shared__WEBPACK_IMPORTED_MODULE_2__/* .looseIndexOf */ .hq)(value, vnode.props.value) > -1;
+  } else if ((0,_vue_shared__WEBPACK_IMPORTED_MODULE_2__/* .isSet */ .DM)(value)) {
     el.checked = value.has(vnode.props.value);
   } else if (value !== oldValue) {
-    el.checked = (0,_vue_shared__WEBPACK_IMPORTED_MODULE_1__/* .looseEqual */ .WV)(value, getCheckboxValue(el, true));
+    el.checked = (0,_vue_shared__WEBPACK_IMPORTED_MODULE_2__/* .looseEqual */ .WV)(value, getCheckboxValue(el, true));
   }
 }
 const vModelRadio = {
   created(el, {
     value
   }, vnode) {
-    el.checked = (0,_vue_shared__WEBPACK_IMPORTED_MODULE_1__/* .looseEqual */ .WV)(value, vnode.props.value);
+    el.checked = (0,_vue_shared__WEBPACK_IMPORTED_MODULE_2__/* .looseEqual */ .WV)(value, vnode.props.value);
     el._assign = getModelAssigner(vnode);
     addEventListener(el, 'change', () => {
       el._assign(getValue(el));
@@ -37973,7 +38513,7 @@ const vModelRadio = {
   }, vnode) {
     el._assign = getModelAssigner(vnode);
     if (value !== oldValue) {
-      el.checked = (0,_vue_shared__WEBPACK_IMPORTED_MODULE_1__/* .looseEqual */ .WV)(value, vnode.props.value);
+      el.checked = (0,_vue_shared__WEBPACK_IMPORTED_MODULE_2__/* .looseEqual */ .WV)(value, vnode.props.value);
     }
   }
 };
@@ -37986,9 +38526,9 @@ const vModelSelect = {
       number
     }
   }, vnode) {
-    const isSetModel = (0,_vue_shared__WEBPACK_IMPORTED_MODULE_1__/* .isSet */ .DM)(value);
+    const isSetModel = (0,_vue_shared__WEBPACK_IMPORTED_MODULE_2__/* .isSet */ .DM)(value);
     addEventListener(el, 'change', () => {
-      const selectedVal = Array.prototype.filter.call(el.options, o => o.selected).map(o => number ? (0,_vue_shared__WEBPACK_IMPORTED_MODULE_1__/* .looseToNumber */ .h5)(getValue(o)) : getValue(o));
+      const selectedVal = Array.prototype.filter.call(el.options, o => o.selected).map(o => number ? (0,_vue_shared__WEBPACK_IMPORTED_MODULE_2__/* .looseToNumber */ .h5)(getValue(o)) : getValue(o));
       el._assign(el.multiple ? isSetModel ? new Set(selectedVal) : selectedVal : selectedVal[0]);
     });
     el._assign = getModelAssigner(vnode);
@@ -38011,7 +38551,7 @@ const vModelSelect = {
 };
 function setSelected(el, value) {
   const isMultiple = el.multiple;
-  if (isMultiple && !(0,_vue_shared__WEBPACK_IMPORTED_MODULE_1__/* .isArray */ .kJ)(value) && !(0,_vue_shared__WEBPACK_IMPORTED_MODULE_1__/* .isSet */ .DM)(value)) {
+  if (isMultiple && !(0,_vue_shared__WEBPACK_IMPORTED_MODULE_2__/* .isArray */ .kJ)(value) && !(0,_vue_shared__WEBPACK_IMPORTED_MODULE_2__/* .isSet */ .DM)(value)) {
      false && 0;
     return;
   }
@@ -38019,13 +38559,13 @@ function setSelected(el, value) {
     const option = el.options[i];
     const optionValue = getValue(option);
     if (isMultiple) {
-      if ((0,_vue_shared__WEBPACK_IMPORTED_MODULE_1__/* .isArray */ .kJ)(value)) {
-        option.selected = (0,_vue_shared__WEBPACK_IMPORTED_MODULE_1__/* .looseIndexOf */ .hq)(value, optionValue) > -1;
+      if ((0,_vue_shared__WEBPACK_IMPORTED_MODULE_2__/* .isArray */ .kJ)(value)) {
+        option.selected = (0,_vue_shared__WEBPACK_IMPORTED_MODULE_2__/* .looseIndexOf */ .hq)(value, optionValue) > -1;
       } else {
         option.selected = value.has(optionValue);
       }
     } else {
-      if ((0,_vue_shared__WEBPACK_IMPORTED_MODULE_1__/* .looseEqual */ .WV)(getValue(option), value)) {
+      if ((0,_vue_shared__WEBPACK_IMPORTED_MODULE_2__/* .looseEqual */ .WV)(getValue(option), value)) {
         if (el.selectedIndex !== i) el.selectedIndex = i;
         return;
       }
@@ -38091,7 +38631,7 @@ function initVModelForSSR() {
   vModelRadio.getSSRProps = ({
     value
   }, vnode) => {
-    if (vnode.props && looseEqual(vnode.props.value, value)) {
+    if (vnode.props && (0,_vue_shared__WEBPACK_IMPORTED_MODULE_2__/* .looseEqual */ .WV)(vnode.props.value, value)) {
       return {
         checked: true
       };
@@ -38100,13 +38640,13 @@ function initVModelForSSR() {
   vModelCheckbox.getSSRProps = ({
     value
   }, vnode) => {
-    if (isArray(value)) {
-      if (vnode.props && looseIndexOf(value, vnode.props.value) > -1) {
+    if ((0,_vue_shared__WEBPACK_IMPORTED_MODULE_2__/* .isArray */ .kJ)(value)) {
+      if (vnode.props && (0,_vue_shared__WEBPACK_IMPORTED_MODULE_2__/* .looseIndexOf */ .hq)(value, vnode.props.value) > -1) {
         return {
           checked: true
         };
       }
-    } else if (isSet(value)) {
+    } else if ((0,_vue_shared__WEBPACK_IMPORTED_MODULE_2__/* .isSet */ .DM)(value)) {
       if (vnode.props && value.has(vnode.props.value)) {
         return {
           checked: true
@@ -38175,7 +38715,7 @@ const withKeys = (fn, modifiers) => {
     if (!('key' in event)) {
       return;
     }
-    const eventKey = hyphenate(event.key);
+    const eventKey = (0,_vue_shared__WEBPACK_IMPORTED_MODULE_2__/* .hyphenate */ .rs)(event.key);
     if (modifiers.some(k => k === eventKey || keyNames[k] === eventKey)) {
       return fn(event);
     }
@@ -38248,7 +38788,7 @@ function initVShowForSSR() {
     }
   };
 }
-const rendererOptions = /*#__PURE__*/(0,_vue_shared__WEBPACK_IMPORTED_MODULE_1__/* .extend */ .l7)({
+const rendererOptions = /*#__PURE__*/(0,_vue_shared__WEBPACK_IMPORTED_MODULE_2__/* .extend */ .l7)({
   patchProp
 }, nodeOps);
 // lazy create the renderer - this makes core renderer logic tree-shakable
@@ -38256,10 +38796,10 @@ const rendererOptions = /*#__PURE__*/(0,_vue_shared__WEBPACK_IMPORTED_MODULE_1__
 let renderer;
 let enabledHydration = false;
 function ensureRenderer() {
-  return renderer || (renderer = (0,_vue_runtime_core__WEBPACK_IMPORTED_MODULE_2__/* .createRenderer */ .Us)(rendererOptions));
+  return renderer || (renderer = (0,_vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__/* .createRenderer */ .Us)(rendererOptions));
 }
 function ensureHydrationRenderer() {
-  renderer = enabledHydration ? renderer : createHydrationRenderer(rendererOptions);
+  renderer = enabledHydration ? renderer : (0,_vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__/* .createHydrationRenderer */ .Eo)(rendererOptions);
   enabledHydration = true;
   return renderer;
 }
@@ -38280,7 +38820,7 @@ const createApp = (...args) => {
     const container = normalizeContainer(containerOrSelector);
     if (!container) return;
     const component = app._component;
-    if (!(0,_vue_shared__WEBPACK_IMPORTED_MODULE_1__/* .isFunction */ .mf)(component) && !component.render && !component.template) {
+    if (!(0,_vue_shared__WEBPACK_IMPORTED_MODULE_2__/* .isFunction */ .mf)(component) && !component.render && !component.template) {
       // __UNSAFE__
       // Reason: potential execution of JS expressions in in-DOM template.
       // The user must make sure the in-DOM template is trusted. If it's
@@ -38346,7 +38886,7 @@ function injectCompilerOptionsCheck(app) {
   }
 }
 function normalizeContainer(container) {
-  if ((0,_vue_shared__WEBPACK_IMPORTED_MODULE_1__/* .isString */ .HD)(container)) {
+  if ((0,_vue_shared__WEBPACK_IMPORTED_MODULE_2__/* .isString */ .HD)(container)) {
     const res = document.querySelector(container);
     if (false) {}
     return res;
@@ -38412,11 +38952,12 @@ const initDirectivesForSSR = () => {
 /* harmony export */   "rs": function() { return /* binding */ hyphenate; },
 /* harmony export */   "tI": function() { return /* binding */ isPromise; },
 /* harmony export */   "tR": function() { return /* binding */ isModelListener; },
+/* harmony export */   "vs": function() { return /* binding */ normalizeProps; },
 /* harmony export */   "yA": function() { return /* binding */ includeBooleanAttr; },
 /* harmony export */   "yk": function() { return /* binding */ isSymbol; },
 /* harmony export */   "zw": function() { return /* binding */ toDisplayString; }
 /* harmony export */ });
-/* unused harmony exports PatchFlagNames, escapeHtml, escapeHtmlComment, genPropsAccessExp, generateCodeFrame, isBooleanAttr, isBuiltInDirective, isDate, isHTMLTag, isKnownHtmlAttr, isKnownSvgAttr, isSSRSafeAttrName, isSVGTag, isVoidTag, normalizeProps, objectToString, parseStringStyle, propsToAttrMap, slotFlagsText, stringifyStyle, toTypeString */
+/* unused harmony exports PatchFlagNames, escapeHtml, escapeHtmlComment, genPropsAccessExp, generateCodeFrame, isBooleanAttr, isBuiltInDirective, isDate, isHTMLTag, isKnownHtmlAttr, isKnownSvgAttr, isSSRSafeAttrName, isSVGTag, isVoidTag, objectToString, parseStringStyle, propsToAttrMap, slotFlagsText, stringifyStyle, toTypeString */
 /* harmony import */ var core_js_modules_es_array_push_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(7658);
 /* harmony import */ var core_js_modules_es_array_push_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_push_js__WEBPACK_IMPORTED_MODULE_0__);
 
@@ -81225,13 +81766,13 @@ function useRender(render) {
 /***/ (function(module) {
 
 "use strict";
-module.exports = JSON.parse('{"name":"pjcan","version":"0.3.7","private":true,"description":"CanBus project for Mazda 3","author":"PJ82. Spiridonov Vladislav","scripts":{"serve":"vue-cli-service serve","build":"vue-cli-service build","lint":"vue-cli-service lint"},"dependencies":{"@egjs/vue3-flicking":"^4.10.2","@mdi/font":"7.0.96","axios":"^1.1.3","bitset":"^5.1.1","core-js":"^3.26.0","eventemitter3":"^4.0.7","moment":"^2.29.4","register-service-worker":"^1.7.2","roboto-fontface":"*","screenfull":"^6.0.2","vue":"^3.2.41","vue-i18n":"^9.2.2","vue-router":"^4.1.6","vue3-toastify":"^0.0.3","vuedraggable":"^2.24.3","vuetify":"^3.1.5","vuex":"^4.1.0","webfontloader":"^1.6.28"},"devDependencies":{"@types/node":"^12.0.2","@types/webfontloader":"^1.6.29","@typescript-eslint/eslint-plugin":"^5.42.0","@typescript-eslint/parser":"^5.42.0","@vue/cli-plugin-babel":"~5.0.8","@vue/cli-plugin-eslint":"~5.0.8","@vue/cli-plugin-pwa":"~5.0.8","@vue/cli-plugin-router":"~5.0.8","@vue/cli-plugin-typescript":"~5.0.8","@vue/cli-plugin-vuex":"~5.0.8","@vue/cli-service":"~5.0.8","@vue/eslint-config-typescript":"^11.0.2","@vueuse/core":"^9.4.0","eslint":"^8.26.0","eslint-config-prettier":"^8.5.0","eslint-plugin-prettier":"^4.2.1","eslint-plugin-vue":"^9.7.0","prettier":"^2.7.1","sass":"^1.56.0","sass-loader":"^13.1.0","script-ext-html-webpack-plugin":"^2.1.5","typescript":"~4.8.4","vue-cli-plugin-vuetify":"~2.5.8","webpack-plugin-vuetify":"^2.0.0"},"eslintConfig":{"root":true,"env":{"node":true},"extends":["plugin:vue/vue3-essential","eslint:recommended","@vue/typescript/recommended","plugin:prettier/recommended"],"parserOptions":{"ecmaVersion":2020},"rules":{}},"browserslist":["> 1%","last 2 versions","not dead","not ie 11"],"productName":"PJCan App"}');
+module.exports = JSON.parse('{"name":"pjcan","version":"0.3.9","private":true,"description":"CanBus project for Mazda 3","author":"PJ82. Spiridonov Vladislav","scripts":{"serve":"vue-cli-service serve","build":"vue-cli-service build","build test":"vue-cli-service build --mode test"},"dependencies":{"@egjs/vue3-flicking":"^4.10.2","@mdi/font":"7.0.96","axios":"^1.1.3","bitset":"^5.1.1","core-js":"^3.26.0","eventemitter3":"^4.0.7","moment":"^2.29.4","register-service-worker":"^1.7.2","roboto-fontface":"*","screenfull":"^6.0.2","vue":"^3.2.41","vue-i18n":"^9.2.2","vue-router":"^4.1.6","vue3-toastify":"^0.0.3","vuedraggable":"^4.1.0","vuetify":"^3.1.5","vuex":"^4.1.0","webfontloader":"^1.6.28"},"devDependencies":{"@types/node":"^12.0.2","@types/webfontloader":"^1.6.29","@typescript-eslint/eslint-plugin":"^5.42.0","@typescript-eslint/parser":"^5.42.0","@vue/cli-plugin-babel":"~5.0.8","@vue/cli-plugin-eslint":"~5.0.8","@vue/cli-plugin-pwa":"~5.0.8","@vue/cli-plugin-router":"~5.0.8","@vue/cli-plugin-typescript":"~5.0.8","@vue/cli-plugin-vuex":"~5.0.8","@vue/cli-service":"~5.0.8","@vue/eslint-config-typescript":"^11.0.2","@vueuse/core":"^9.4.0","eslint":"^8.26.0","eslint-config-prettier":"^8.5.0","eslint-plugin-prettier":"^4.2.1","eslint-plugin-vue":"^9.7.0","prettier":"^2.7.1","sass":"^1.56.0","sass-loader":"^13.1.0","script-ext-html-webpack-plugin":"^2.1.5","typescript":"~4.8.4","vue-cli-plugin-vuetify":"~2.5.8","webpack-plugin-vuetify":"^2.0.0"},"eslintConfig":{"root":true,"env":{"node":true},"extends":["plugin:vue/vue3-essential","eslint:recommended","@vue/typescript/recommended","plugin:prettier/recommended"],"parserOptions":{"ecmaVersion":2020},"rules":{}},"browserslist":["> 1%","last 2 versions","not dead","not ie 11"],"productName":"PJCan App"}');
 
 /***/ })
 
 },
 /******/ function(__webpack_require__) { // webpackRuntimeModules
 /******/ var __webpack_exec__ = function(moduleId) { return __webpack_require__(__webpack_require__.s = moduleId); }
-/******/ var __webpack_exports__ = (__webpack_exec__(441));
+/******/ var __webpack_exports__ = (__webpack_exec__(4638));
 /******/ }
 ]);
