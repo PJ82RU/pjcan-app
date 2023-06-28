@@ -10,7 +10,6 @@ import { FuelValue } from "../fuel";
 import { MovementValue } from "../movement";
 import { SensorsValue } from "../sensors";
 import { TemperatureValue } from "../temperature";
-import { VolumeValue } from "../volume";
 
 export const API_VARIABLE_VALUES_EXEC = 102;
 export const API_VARIABLE_VALUES_EVENT = "VariableValues";
@@ -28,7 +27,6 @@ export class VariablesValue extends BaseModel implements IVariablesValue
 	movement = new MovementValue();
 	sensors = new SensorsValue();
 	temperature = new TemperatureValue();
-	volume = new VolumeValue();
 
 	constructor(data?: DataView)
 	{
@@ -52,7 +50,6 @@ export class VariablesValue extends BaseModel implements IVariablesValue
 			this.movement.isData = true;
 			this.sensors.isData = true;
 			this.temperature.isData = true;
-			this.volume.isData = true;
 		}
 		return result;
 	}

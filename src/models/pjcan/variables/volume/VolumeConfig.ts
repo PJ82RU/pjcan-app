@@ -3,7 +3,7 @@ import { BaseModel } from "../../base";
 import { API_VARIABLE_VOLUME_CONFIG_SIZE, StructVolumeConfig } from "./StructVolumeConfig";
 import { IVolumeConfig } from "./IVolumeConfig";
 
-export const API_VARIABLE_VOLUME_CONFIG_EXEC = 201;
+export const API_VARIABLE_VOLUME_CONFIG_EXEC = 200;
 export const API_VARIABLE_VOLUME_CONFIG_EVENT = "VariableVolumeConfig";
 
 const struct = new BluetoothStruct(StructVolumeConfig);
@@ -12,6 +12,7 @@ const struct = new BluetoothStruct(StructVolumeConfig);
 export class VolumeConfig extends BaseModel implements IVolumeConfig
 {
 	mute = false;
+	boseOnly = false;
 	volume = 0;
 	max = 0;
 

@@ -7,7 +7,6 @@ import { API_VARIABLE_FUEL_SIZE, StructFuelValue } from "../fuel";
 import { API_VARIABLE_MOVEMENT_SIZE, StructMovementValue } from "../movement";
 import { API_VARIABLE_SENSORS_SIZE, StructSensorsValue } from "../sensors";
 import { API_VARIABLE_TEMPERATURE_SIZE, StructTemperatureValue } from "../temperature";
-import { API_VARIABLE_VOLUME_SIZE, StructVolumeValue } from "../volume";
 
 export const API_VARIABLE_VALUES_SIZE =
 	API_VARIABLE_CLIMATE_SIZE +
@@ -17,8 +16,7 @@ export const API_VARIABLE_VALUES_SIZE =
 	API_VARIABLE_FUEL_SIZE +
 	API_VARIABLE_MOVEMENT_SIZE +
 	API_VARIABLE_SENSORS_SIZE +
-	API_VARIABLE_TEMPERATURE_SIZE +
-	API_VARIABLE_VOLUME_SIZE;
+	API_VARIABLE_TEMPERATURE_SIZE;
 
 export const StructVariablesValue = {
 	climate: BluetoothStruct.struct(StructClimateValue),
@@ -28,6 +26,5 @@ export const StructVariablesValue = {
 	fuel: BluetoothStruct.struct(StructFuelValue),
 	movement: BluetoothStruct.struct(StructMovementValue),
 	sensors: BluetoothStruct.struct(StructSensorsValue),
-	temperature: BluetoothStruct.struct(StructTemperatureValue),
-	volume: BluetoothStruct.struct(StructVolumeValue)
+	temperature: BluetoothStruct.struct(StructTemperatureValue)
 };

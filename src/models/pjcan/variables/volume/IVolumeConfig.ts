@@ -4,6 +4,8 @@ import { IBaseModel } from "../../base";
 export interface IVolumeConfig extends IBaseModel {
 	/** Выкл. звук */
 	mute: boolean;
+	/** Управление только уровнем звука Bose */
+	boseOnly: boolean;
 	/** Уровень звука */
 	volume: number;
 	/** Максимальный уровень звука */
