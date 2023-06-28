@@ -2365,6 +2365,15 @@ if (PolyfilledDOMExceptionPrototype.constructor !== PolyfilledDOMException) {
 
 /***/ }),
 
+/***/ 6290:
+/***/ (function() {
+
+"use strict";
+// extracted by mini-css-extract-plugin
+
+
+/***/ }),
+
 /***/ 348:
 /***/ (function() {
 
@@ -2772,8 +2781,8 @@ var movement = __webpack_require__(8229);
 var sensors = __webpack_require__(2775);
 // EXTERNAL MODULE: ./src/models/pjcan/variables/temperature/index.ts + 4 modules
 var temperature = __webpack_require__(1044);
-// EXTERNAL MODULE: ./src/models/pjcan/variables/volume/index.ts + 4 modules
-var volume = __webpack_require__(2031);
+// EXTERNAL MODULE: ./src/models/pjcan/variables/volume/index.ts + 6 modules
+var volume = __webpack_require__(3057);
 ;// CONCATENATED MODULE: ./src/models/pjcan/variables/clock/ClockValue.ts
 
 /** Модель значения часов */
@@ -2969,7 +2978,8 @@ var update = __webpack_require__(8293);
 
 
 
-const API_VARIABLE_VALUES_SIZE = climate/* API_VARIABLE_CLIMATE_SIZE */.sO + API_VARIABLE_CLOCK_SIZE + doors/* API_VARIABLE_DOORS_SIZE */.dC + engine/* API_VARIABLE_ENGINE_SIZE */.OO + fuel/* API_VARIABLE_FUEL_SIZE */.y2 + movement/* API_VARIABLE_MOVEMENT_SIZE */.HR + sensors/* API_VARIABLE_SENSORS_SIZE */.$ + temperature/* API_VARIABLE_TEMPERATURE_SIZE */.u8;
+
+const API_VARIABLE_VALUES_SIZE = climate/* API_VARIABLE_CLIMATE_SIZE */.sO + API_VARIABLE_CLOCK_SIZE + doors/* API_VARIABLE_DOORS_SIZE */.dC + engine/* API_VARIABLE_ENGINE_SIZE */.OO + fuel/* API_VARIABLE_FUEL_SIZE */.y2 + movement/* API_VARIABLE_MOVEMENT_SIZE */.HR + sensors/* API_VARIABLE_SENSORS_SIZE */.$ + temperature/* API_VARIABLE_TEMPERATURE_SIZE */.u8 + volume/* API_VARIABLE_VOLUME_SIZE */.ER;
 const StructVariablesValue = {
   climate: bluetooth/* BluetoothStruct.struct */.GD.struct(climate/* StructClimateValue */.dA),
   clock: bluetooth/* BluetoothStruct.struct */.GD.struct(StructClockValue),
@@ -2978,9 +2988,11 @@ const StructVariablesValue = {
   fuel: bluetooth/* BluetoothStruct.struct */.GD.struct(fuel/* StructFuelValue */.IN),
   movement: bluetooth/* BluetoothStruct.struct */.GD.struct(movement/* StructMovementValue */.LU),
   sensors: bluetooth/* BluetoothStruct.struct */.GD.struct(sensors/* StructSensorsValue */.Xs),
-  temperature: bluetooth/* BluetoothStruct.struct */.GD.struct(temperature/* StructTemperatureValue */.Ew)
+  temperature: bluetooth/* BluetoothStruct.struct */.GD.struct(temperature/* StructTemperatureValue */.Ew),
+  volume: bluetooth/* BluetoothStruct.struct */.GD.struct(volume/* StructVolumeValue */.ME)
 };
 ;// CONCATENATED MODULE: ./src/models/pjcan/variables/values/VariablesValue.ts
+
 
 
 
@@ -3008,6 +3020,7 @@ class VariablesValue extends BaseModel/* BaseModel */.g {
     (0,defineProperty/* default */.Z)(this, "movement", new movement/* MovementValue */.bt());
     (0,defineProperty/* default */.Z)(this, "sensors", new sensors/* SensorsValue */.I8());
     (0,defineProperty/* default */.Z)(this, "temperature", new temperature/* TemperatureValue */.j3());
+    (0,defineProperty/* default */.Z)(this, "volume", new volume/* VolumeValue */.RD());
     if (data) this.set(data);
   }
   /**
@@ -3024,6 +3037,7 @@ class VariablesValue extends BaseModel/* BaseModel */.g {
       this.movement.isData = true;
       this.sensors.isData = true;
       this.temperature.isData = true;
+      this.volume.isData = true;
     }
     return result;
   }
@@ -3082,6 +3096,7 @@ class Values extends BaseModel/* BaseModel */.g {
       this.variable.movement.isData = true;
       this.variable.sensors.isData = true;
       this.variable.temperature.isData = true;
+      this.variable.volume.isData = true;
     }
     return result;
   }
@@ -3319,6 +3334,8 @@ class Canbus extends (eventemitter3_default()) {
         return this.query(this.values.variable.sensors);
       case temperature/* API_VARIABLE_TEMPERATURE_EXEC */.Sg:
         return this.query(this.values.variable.temperature);
+      case volume/* API_VARIABLE_VOLUME_EXEC */.pf:
+        return this.query(this.values.variable.volume);
       case test/* API_VARIABLE_TEST_EXEC */.Ez:
         return !!value && this.query(value);
       case scanner/* API_SCANNER_VALUE_EXEC */.v3:
@@ -3387,6 +3404,7 @@ class Canbus extends (eventemitter3_default()) {
     this.emit(movement/* API_VARIABLE_MOVEMENT_EVENT */.Ju, value.movement);
     this.emit(sensors/* API_VARIABLE_SENSORS_EVENT */.bs, value.sensors);
     this.emit(temperature/* API_VARIABLE_TEMPERATURE_EVENT */.Yk, value.temperature);
+    this.emit(volume/* API_VARIABLE_VOLUME_EVENT */.FN, value.volume);
   }
   /**
    * Входящие данные
@@ -3599,6 +3617,11 @@ class Canbus extends (eventemitter3_default()) {
         // Параметры отображения температуры
         this.views.variable.temperature.set(data);
         this.emit(temperature/* API_VARIABLE_TEMPERATURE_VIEW_EVENT */.LN, this.views.variable.temperature);
+        break;
+      case volume/* API_VARIABLE_VOLUME_EXEC */.pf:
+        // Значения уровня звука
+        this.values.variable.volume.set(data);
+        this.emit(volume/* API_VARIABLE_VOLUME_EVENT */.FN, this.values.variable.volume);
         break;
       case volume/* API_VARIABLE_VOLUME_CONFIG_EXEC */.U0:
         // Конфигурация уровня звука
@@ -5556,7 +5579,7 @@ const t = i18n.global.t;
 
 /***/ }),
 
-/***/ 6298:
+/***/ 4638:
 /***/ (function(__unused_webpack_module, __unused_webpack___webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -5676,7 +5699,7 @@ __webpack_require__.d(components_namespaceObject, {
   "VSlideXTransition": function() { return transitions/* VSlideXTransition */.Qn; },
   "VSlideYReverseTransition": function() { return transitions/* VSlideYReverseTransition */.V; },
   "VSlideYTransition": function() { return transitions/* VSlideYTransition */.cu; },
-  "VSlider": function() { return VSlider; },
+  "VSlider": function() { return VSlider/* VSlider */.R; },
   "VSnackbar": function() { return VSnackbar; },
   "VSpacer": function() { return VSpacer/* VSpacer */.C; },
   "VSvgIcon": function() { return composables_icons/* VSvgIcon */.oX; },
@@ -6121,9 +6144,9 @@ const VToolbarTitle = (0,defineComponent/* genericComponent */.ev)()({
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/border.mjs
 var border = __webpack_require__(2718);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/elevation.mjs
-var composables_elevation = __webpack_require__(2465);
+var elevation = __webpack_require__(2465);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/rounded.mjs
-var composables_rounded = __webpack_require__(4231);
+var rounded = __webpack_require__(4231);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/defaults.mjs + 1 modules
 var composables_defaults = __webpack_require__(6107);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/color.mjs
@@ -6173,8 +6196,8 @@ const makeVToolbarProps = (0,propsFactory/* propsFactory */.U)({
   title: String,
   ...(0,border/* makeBorderProps */.m)(),
   ...(0,component/* makeComponentProps */.l)(),
-  ...(0,composables_elevation/* makeElevationProps */.c)(),
-  ...(0,composables_rounded/* makeRoundedProps */.I)(),
+  ...(0,elevation/* makeElevationProps */.c)(),
+  ...(0,rounded/* makeRoundedProps */.I)(),
   ...(0,tag/* makeTagProps */.Q)({
     tag: 'header'
   }),
@@ -6196,10 +6219,10 @@ const VToolbar = (0,defineComponent/* genericComponent */.ev)()({
     } = (0,border/* useBorder */.P)(props);
     const {
       elevationClasses
-    } = (0,composables_elevation/* useElevation */.Y)(props);
+    } = (0,elevation/* useElevation */.Y)(props);
     const {
       roundedClasses
-    } = (0,composables_rounded/* useRounded */.b)(props);
+    } = (0,rounded/* useRounded */.b)(props);
     const {
       themeClasses
     } = (0,composables_theme/* provideTheme */.ER)(props);
@@ -12627,10 +12650,10 @@ const VAlert = (0,defineComponent/* genericComponent */.ev)()({
     ...(0,component/* makeComponentProps */.l)(),
     ...(0,composables_density/* makeDensityProps */.f)(),
     ...(0,dimensions/* makeDimensionProps */.x)(),
-    ...(0,composables_elevation/* makeElevationProps */.c)(),
+    ...(0,elevation/* makeElevationProps */.c)(),
     ...(0,composables_location/* makeLocationProps */.y)(),
     ...(0,position/* makePositionProps */.F)(),
-    ...(0,composables_rounded/* makeRoundedProps */.I)(),
+    ...(0,rounded/* makeRoundedProps */.I)(),
     ...(0,tag/* makeTagProps */.Q)(),
     ...(0,composables_theme/* makeThemeProps */.x$)(),
     ...(0,variant/* makeVariantProps */.bk)({
@@ -12672,7 +12695,7 @@ const VAlert = (0,defineComponent/* genericComponent */.ev)()({
     } = (0,dimensions/* useDimension */.$)(props);
     const {
       elevationClasses
-    } = (0,composables_elevation/* useElevation */.Y)(props);
+    } = (0,elevation/* useElevation */.Y)(props);
     const {
       locationStyles
     } = (0,composables_location/* useLocation */.T)(props);
@@ -12681,7 +12704,7 @@ const VAlert = (0,defineComponent/* genericComponent */.ev)()({
     } = (0,position/* usePosition */.K)(props);
     const {
       roundedClasses
-    } = (0,composables_rounded/* useRounded */.b)(props);
+    } = (0,rounded/* useRounded */.b)(props);
     const {
       textColorClasses,
       textColorStyles
@@ -13315,7 +13338,7 @@ const VBadge = (0,defineComponent/* genericComponent */.ev)()({
     ...(0,composables_location/* makeLocationProps */.y)({
       location: 'top end'
     }),
-    ...(0,composables_rounded/* makeRoundedProps */.I)(),
+    ...(0,rounded/* makeRoundedProps */.I)(),
     ...(0,tag/* makeTagProps */.Q)(),
     ...(0,composables_theme/* makeThemeProps */.x$)(),
     ...(0,composables_transition/* makeTransitionProps */.X)({
@@ -13329,7 +13352,7 @@ const VBadge = (0,defineComponent/* genericComponent */.ev)()({
     } = (0,composables_color/* useBackgroundColor */.Y5)((0,reactivity_esm_bundler/* toRef */.Vh)(props, 'color'));
     const {
       roundedClasses
-    } = (0,composables_rounded/* useRounded */.b)(props);
+    } = (0,rounded/* useRounded */.b)(props);
     const {
       t
     } = (0,composables_locale/* useLocale */.bU)();
@@ -13462,10 +13485,10 @@ const VBanner = (0,defineComponent/* genericComponent */.ev)()({
     ...(0,component/* makeComponentProps */.l)(),
     ...(0,composables_density/* makeDensityProps */.f)(),
     ...(0,dimensions/* makeDimensionProps */.x)(),
-    ...(0,composables_elevation/* makeElevationProps */.c)(),
+    ...(0,elevation/* makeElevationProps */.c)(),
     ...(0,composables_location/* makeLocationProps */.y)(),
     ...(0,position/* makePositionProps */.F)(),
-    ...(0,composables_rounded/* makeRoundedProps */.I)(),
+    ...(0,rounded/* makeRoundedProps */.I)(),
     ...(0,tag/* makeTagProps */.Q)(),
     ...(0,composables_theme/* makeThemeProps */.x$)()
   },
@@ -13487,7 +13510,7 @@ const VBanner = (0,defineComponent/* genericComponent */.ev)()({
     } = (0,dimensions/* useDimension */.$)(props);
     const {
       elevationClasses
-    } = (0,composables_elevation/* useElevation */.Y)(props);
+    } = (0,elevation/* useElevation */.Y)(props);
     const {
       locationStyles
     } = (0,composables_location/* useLocation */.T)(props);
@@ -13496,7 +13519,7 @@ const VBanner = (0,defineComponent/* genericComponent */.ev)()({
     } = (0,position/* usePosition */.K)(props);
     const {
       roundedClasses
-    } = (0,composables_rounded/* useRounded */.b)(props);
+    } = (0,rounded/* useRounded */.b)(props);
     const {
       themeClasses
     } = (0,composables_theme/* provideTheme */.ER)(props);
@@ -13607,8 +13630,8 @@ const VBottomNavigation = (0,defineComponent/* genericComponent */.ev)()({
     ...(0,border/* makeBorderProps */.m)(),
     ...(0,component/* makeComponentProps */.l)(),
     ...(0,composables_density/* makeDensityProps */.f)(),
-    ...(0,composables_elevation/* makeElevationProps */.c)(),
-    ...(0,composables_rounded/* makeRoundedProps */.I)(),
+    ...(0,elevation/* makeElevationProps */.c)(),
+    ...(0,rounded/* makeRoundedProps */.I)(),
     ...makeLayoutItemProps({
       name: 'bottom-navigation'
     }),
@@ -13643,10 +13666,10 @@ const VBottomNavigation = (0,defineComponent/* genericComponent */.ev)()({
     } = (0,composables_density/* useDensity */.t)(props);
     const {
       elevationClasses
-    } = (0,composables_elevation/* useElevation */.Y)(props);
+    } = (0,elevation/* useElevation */.Y)(props);
     const {
       roundedClasses
-    } = (0,composables_rounded/* useRounded */.b)(props);
+    } = (0,rounded/* useRounded */.b)(props);
     const {
       ssrBootStyles
     } = (0,ssrBoot/* useSsrBoot */.u)();
@@ -13820,7 +13843,7 @@ const VBreadcrumbs = (0,defineComponent/* genericComponent */.ev)()({
     },
     ...(0,component/* makeComponentProps */.l)(),
     ...(0,composables_density/* makeDensityProps */.f)(),
-    ...(0,composables_rounded/* makeRoundedProps */.I)(),
+    ...(0,rounded/* makeRoundedProps */.I)(),
     ...(0,tag/* makeTagProps */.Q)({
       tag: 'ul'
     })
@@ -13838,7 +13861,7 @@ const VBreadcrumbs = (0,defineComponent/* genericComponent */.ev)()({
     } = (0,composables_density/* useDensity */.t)(props);
     const {
       roundedClasses
-    } = (0,composables_rounded/* useRounded */.b)(props);
+    } = (0,rounded/* useRounded */.b)(props);
     (0,composables_defaults/* provideDefaults */.AF)({
       VBreadcrumbsDivider: {
         divider: (0,reactivity_esm_bundler/* toRef */.Vh)(props, 'divider')
@@ -14571,10 +14594,10 @@ const makeVSheetProps = (0,propsFactory/* propsFactory */.U)({
   ...(0,border/* makeBorderProps */.m)(),
   ...(0,component/* makeComponentProps */.l)(),
   ...(0,dimensions/* makeDimensionProps */.x)(),
-  ...(0,composables_elevation/* makeElevationProps */.c)(),
+  ...(0,elevation/* makeElevationProps */.c)(),
   ...(0,composables_location/* makeLocationProps */.y)(),
   ...(0,position/* makePositionProps */.F)(),
-  ...(0,composables_rounded/* makeRoundedProps */.I)(),
+  ...(0,rounded/* makeRoundedProps */.I)(),
   ...(0,tag/* makeTagProps */.Q)(),
   ...(0,composables_theme/* makeThemeProps */.x$)()
 }, 'v-sheet');
@@ -14602,7 +14625,7 @@ const VSheet = (0,defineComponent/* genericComponent */.ev)()({
     } = (0,dimensions/* useDimension */.$)(props);
     const {
       elevationClasses
-    } = (0,composables_elevation/* useElevation */.Y)(props);
+    } = (0,elevation/* useElevation */.Y)(props);
     const {
       locationStyles
     } = (0,composables_location/* useLocation */.T)(props);
@@ -14611,7 +14634,7 @@ const VSheet = (0,defineComponent/* genericComponent */.ev)()({
     } = (0,position/* usePosition */.K)(props);
     const {
       roundedClasses
-    } = (0,composables_rounded/* useRounded */.b)(props);
+    } = (0,rounded/* useRounded */.b)(props);
     (0,useRender/* useRender */.L)(() => (0,runtime_core_esm_bundler/* createVNode */.Wm)(props.tag, {
       "class": ['v-sheet', themeClasses.value, backgroundColorClasses.value, borderClasses.value, elevationClasses.value, positionClasses.value, roundedClasses.value, props.class],
       "style": [backgroundColorStyles.value, dimensionStyles.value, locationStyles.value, props.style]
@@ -15112,734 +15135,8 @@ const VColorPickerEdit = (0,defineComponent/* defineComponent */.aZ)({
 ;// CONCATENATED MODULE: ./node_modules/vuetify/lib/components/VColorPicker/VColorPickerPreview.css
 // extracted by mini-css-extract-plugin
 
-;// CONCATENATED MODULE: ./node_modules/vuetify/lib/components/VSlider/VSlider.css
-// extracted by mini-css-extract-plugin
-
-// EXTERNAL MODULE: ./node_modules/vuetify/lib/components/VLabel/VLabel.mjs + 1 modules
-var VLabel = __webpack_require__(7302);
-;// CONCATENATED MODULE: ./node_modules/vuetify/lib/components/VSlider/VSliderThumb.css
-// extracted by mini-css-extract-plugin
-
-;// CONCATENATED MODULE: ./node_modules/vuetify/lib/components/VSlider/slider.mjs
-/* eslint-disable max-statements */
-// Composables
-
-
- // Utilities
-
-
-
-// Types
-
-const VSliderSymbol = Symbol.for('vuetify:v-slider');
-function getOffset(e, el, direction) {
-  const vertical = direction === 'vertical';
-  const rect = el.getBoundingClientRect();
-  const touch = 'touches' in e ? e.touches[0] : e;
-  return vertical ? touch.clientY - (rect.top + rect.height / 2) : touch.clientX - (rect.left + rect.width / 2);
-}
-function getPosition(e, position) {
-  if ('touches' in e && e.touches.length) return e.touches[0][position];else if ('changedTouches' in e && e.changedTouches.length) return e.changedTouches[0][position];else return e[position];
-}
-const makeSliderProps = (0,propsFactory/* propsFactory */.U)({
-  disabled: Boolean,
-  error: Boolean,
-  readonly: Boolean,
-  max: {
-    type: [Number, String],
-    default: 100
-  },
-  min: {
-    type: [Number, String],
-    default: 0
-  },
-  step: {
-    type: [Number, String],
-    default: 0
-  },
-  thumbColor: String,
-  thumbLabel: {
-    type: [Boolean, String],
-    default: undefined,
-    validator: v => typeof v === 'boolean' || v === 'always'
-  },
-  thumbSize: {
-    type: [Number, String],
-    default: 20
-  },
-  showTicks: {
-    type: [Boolean, String],
-    default: false,
-    validator: v => typeof v === 'boolean' || v === 'always'
-  },
-  ticks: {
-    type: [Array, Object]
-  },
-  tickSize: {
-    type: [Number, String],
-    default: 2
-  },
-  color: String,
-  trackColor: String,
-  trackFillColor: String,
-  trackSize: {
-    type: [Number, String],
-    default: 4
-  },
-  direction: {
-    type: String,
-    default: 'horizontal',
-    validator: v => ['vertical', 'horizontal'].includes(v)
-  },
-  reverse: Boolean,
-  ...(0,composables_rounded/* makeRoundedProps */.I)(),
-  ...(0,composables_elevation/* makeElevationProps */.c)({
-    elevation: 2
-  })
-}, 'slider');
-const useSteps = props => {
-  const min = (0,runtime_core_esm_bundler/* computed */.Fl)(() => parseFloat(props.min));
-  const max = (0,runtime_core_esm_bundler/* computed */.Fl)(() => parseFloat(props.max));
-  const step = (0,runtime_core_esm_bundler/* computed */.Fl)(() => +props.step > 0 ? parseFloat(props.step) : 0);
-  const decimals = (0,runtime_core_esm_bundler/* computed */.Fl)(() => Math.max((0,helpers/* getDecimals */.pC)(step.value), (0,helpers/* getDecimals */.pC)(min.value)));
-  function roundValue(value) {
-    if (step.value <= 0) return value;
-    const clamped = (0,helpers/* clamp */.uZ)(value, min.value, max.value);
-    const offset = min.value % step.value;
-    const newValue = Math.round((clamped - offset) / step.value) * step.value + offset;
-    return parseFloat(Math.min(newValue, max.value).toFixed(decimals.value));
-  }
-  return {
-    min,
-    max,
-    step,
-    decimals,
-    roundValue
-  };
-};
-const useSlider = _ref => {
-  let {
-    props,
-    steps,
-    onSliderStart,
-    onSliderMove,
-    onSliderEnd,
-    getActiveThumb
-  } = _ref;
-  const {
-    isRtl
-  } = (0,composables_locale/* useRtl */.Vw)();
-  const isReversed = (0,reactivity_esm_bundler/* toRef */.Vh)(props, 'reverse');
-  const horizontalDirection = (0,runtime_core_esm_bundler/* computed */.Fl)(() => {
-    let hd = isRtl.value ? 'rtl' : 'ltr';
-    if (props.reverse) {
-      hd = hd === 'rtl' ? 'ltr' : 'rtl';
-    }
-    return hd;
-  });
-  const {
-    min,
-    max,
-    step,
-    decimals,
-    roundValue
-  } = steps;
-  const thumbSize = (0,runtime_core_esm_bundler/* computed */.Fl)(() => parseInt(props.thumbSize, 10));
-  const tickSize = (0,runtime_core_esm_bundler/* computed */.Fl)(() => parseInt(props.tickSize, 10));
-  const trackSize = (0,runtime_core_esm_bundler/* computed */.Fl)(() => parseInt(props.trackSize, 10));
-  const numTicks = (0,runtime_core_esm_bundler/* computed */.Fl)(() => (max.value - min.value) / step.value);
-  const disabled = (0,reactivity_esm_bundler/* toRef */.Vh)(props, 'disabled');
-  const vertical = (0,runtime_core_esm_bundler/* computed */.Fl)(() => props.direction === 'vertical');
-  const thumbColor = (0,runtime_core_esm_bundler/* computed */.Fl)(() => props.error || props.disabled ? undefined : props.thumbColor ?? props.color);
-  const trackColor = (0,runtime_core_esm_bundler/* computed */.Fl)(() => props.error || props.disabled ? undefined : props.trackColor ?? props.color);
-  const trackFillColor = (0,runtime_core_esm_bundler/* computed */.Fl)(() => props.error || props.disabled ? undefined : props.trackFillColor ?? props.color);
-  const mousePressed = (0,reactivity_esm_bundler/* ref */.iH)(false);
-  const startOffset = (0,reactivity_esm_bundler/* ref */.iH)(0);
-  const trackContainerRef = (0,reactivity_esm_bundler/* ref */.iH)();
-  const activeThumbRef = (0,reactivity_esm_bundler/* ref */.iH)();
-  function parseMouseMove(e) {
-    const vertical = props.direction === 'vertical';
-    const start = vertical ? 'top' : 'left';
-    const length = vertical ? 'height' : 'width';
-    const position = vertical ? 'clientY' : 'clientX';
-    const {
-      [start]: trackStart,
-      [length]: trackLength
-    } = trackContainerRef.value?.$el.getBoundingClientRect();
-    const clickOffset = getPosition(e, position);
-
-    // It is possible for left to be NaN, force to number
-    let clickPos = Math.min(Math.max((clickOffset - trackStart - startOffset.value) / trackLength, 0), 1) || 0;
-    if (vertical || horizontalDirection.value === 'rtl') clickPos = 1 - clickPos;
-    return roundValue(min.value + clickPos * (max.value - min.value));
-  }
-  const handleStop = e => {
-    onSliderEnd({
-      value: parseMouseMove(e)
-    });
-    mousePressed.value = false;
-    startOffset.value = 0;
-  };
-  const handleStart = e => {
-    activeThumbRef.value = getActiveThumb(e);
-    if (!activeThumbRef.value) return;
-    activeThumbRef.value.focus();
-    mousePressed.value = true;
-    if (activeThumbRef.value.contains(e.target)) {
-      startOffset.value = getOffset(e, activeThumbRef.value, props.direction);
-    } else {
-      startOffset.value = 0;
-      onSliderMove({
-        value: parseMouseMove(e)
-      });
-    }
-    onSliderStart({
-      value: parseMouseMove(e)
-    });
-  };
-  const moveListenerOptions = {
-    passive: true,
-    capture: true
-  };
-  function onMouseMove(e) {
-    onSliderMove({
-      value: parseMouseMove(e)
-    });
-  }
-  function onSliderMouseUp(e) {
-    e.stopPropagation();
-    e.preventDefault();
-    handleStop(e);
-    window.removeEventListener('mousemove', onMouseMove, moveListenerOptions);
-    window.removeEventListener('mouseup', onSliderMouseUp);
-  }
-  function onSliderTouchend(e) {
-    handleStop(e);
-    window.removeEventListener('touchmove', onMouseMove, moveListenerOptions);
-    e.target?.removeEventListener('touchend', onSliderTouchend);
-  }
-  function onSliderTouchstart(e) {
-    handleStart(e);
-    window.addEventListener('touchmove', onMouseMove, moveListenerOptions);
-    e.target?.addEventListener('touchend', onSliderTouchend, {
-      passive: false
-    });
-  }
-  function onSliderMousedown(e) {
-    e.preventDefault();
-    handleStart(e);
-    window.addEventListener('mousemove', onMouseMove, moveListenerOptions);
-    window.addEventListener('mouseup', onSliderMouseUp, {
-      passive: false
-    });
-  }
-  const position = val => {
-    const percentage = (val - min.value) / (max.value - min.value) * 100;
-    return (0,helpers/* clamp */.uZ)(isNaN(percentage) ? 0 : percentage, 0, 100);
-  };
-  const showTicks = (0,reactivity_esm_bundler/* toRef */.Vh)(props, 'showTicks');
-  const parsedTicks = (0,runtime_core_esm_bundler/* computed */.Fl)(() => {
-    if (!showTicks.value) return [];
-    if (!props.ticks) {
-      return numTicks.value !== Infinity ? (0,helpers/* createRange */.MT)(numTicks.value + 1).map(t => {
-        const value = min.value + t * step.value;
-        return {
-          value,
-          position: position(value)
-        };
-      }) : [];
-    }
-    if (Array.isArray(props.ticks)) return props.ticks.map(t => ({
-      value: t,
-      position: position(t),
-      label: t.toString()
-    }));
-    return Object.keys(props.ticks).map(key => ({
-      value: parseFloat(key),
-      position: position(parseFloat(key)),
-      label: props.ticks[key]
-    }));
-  });
-  const hasLabels = (0,runtime_core_esm_bundler/* computed */.Fl)(() => parsedTicks.value.some(_ref2 => {
-    let {
-      label
-    } = _ref2;
-    return !!label;
-  }));
-  const data = {
-    activeThumbRef,
-    color: (0,reactivity_esm_bundler/* toRef */.Vh)(props, 'color'),
-    decimals,
-    disabled,
-    direction: (0,reactivity_esm_bundler/* toRef */.Vh)(props, 'direction'),
-    elevation: (0,reactivity_esm_bundler/* toRef */.Vh)(props, 'elevation'),
-    hasLabels,
-    horizontalDirection,
-    isReversed,
-    min,
-    max,
-    mousePressed,
-    numTicks,
-    onSliderMousedown,
-    onSliderTouchstart,
-    parsedTicks,
-    parseMouseMove,
-    position,
-    readonly: (0,reactivity_esm_bundler/* toRef */.Vh)(props, 'readonly'),
-    rounded: (0,reactivity_esm_bundler/* toRef */.Vh)(props, 'rounded'),
-    roundValue,
-    showTicks,
-    startOffset,
-    step,
-    thumbSize,
-    thumbColor,
-    thumbLabel: (0,reactivity_esm_bundler/* toRef */.Vh)(props, 'thumbLabel'),
-    ticks: (0,reactivity_esm_bundler/* toRef */.Vh)(props, 'ticks'),
-    tickSize,
-    trackColor,
-    trackContainerRef,
-    trackFillColor,
-    trackSize,
-    vertical
-  };
-  (0,runtime_core_esm_bundler/* provide */.JJ)(VSliderSymbol, data);
-  return data;
-};
-// EXTERNAL MODULE: ./node_modules/vuetify/lib/directives/ripple/index.mjs + 1 modules
-var ripple = __webpack_require__(3824);
-;// CONCATENATED MODULE: ./node_modules/vuetify/lib/components/VSlider/VSliderThumb.mjs
-
-// Styles
-
-
-// Components
-
- // Directives
- // Composables
-
-
- // Utilities
-
-
-const VSliderThumb = (0,defineComponent/* genericComponent */.ev)()({
-  name: 'VSliderThumb',
-  directives: {
-    Ripple: ripple/* default */.Z
-  },
-  props: {
-    focused: Boolean,
-    max: {
-      type: Number,
-      required: true
-    },
-    min: {
-      type: Number,
-      required: true
-    },
-    modelValue: {
-      type: Number,
-      required: true
-    },
-    position: {
-      type: Number,
-      required: true
-    },
-    ripple: {
-      type: Boolean,
-      default: true
-    },
-    ...(0,component/* makeComponentProps */.l)()
-  },
-  emits: {
-    'update:modelValue': v => true
-  },
-  setup(props, _ref) {
-    let {
-      slots,
-      emit
-    } = _ref;
-    const slider = (0,runtime_core_esm_bundler/* inject */.f3)(VSliderSymbol);
-    if (!slider) throw new Error('[Vuetify] v-slider-thumb must be used inside v-slider or v-range-slider');
-    const {
-      thumbColor,
-      step,
-      vertical,
-      disabled,
-      thumbSize,
-      thumbLabel,
-      direction,
-      readonly,
-      elevation,
-      isReversed,
-      horizontalDirection,
-      mousePressed,
-      decimals
-    } = slider;
-    const {
-      textColorClasses,
-      textColorStyles
-    } = (0,composables_color/* useTextColor */.rY)(thumbColor);
-    const {
-      pageup,
-      pagedown,
-      end,
-      home,
-      left,
-      right,
-      down,
-      up
-    } = helpers.keyValues;
-    const relevantKeys = [pageup, pagedown, end, home, left, right, down, up];
-    const multipliers = (0,runtime_core_esm_bundler/* computed */.Fl)(() => {
-      if (step.value) return [1, 2, 3];else return [1, 5, 10];
-    });
-    function parseKeydown(e, value) {
-      if (!relevantKeys.includes(e.key)) return;
-      e.preventDefault();
-      const _step = step.value || 0.1;
-      const steps = (props.max - props.min) / _step;
-      if ([left, right, down, up].includes(e.key)) {
-        const increase = horizontalDirection.value === 'rtl' ? [left, up] : [right, up];
-        const direction = increase.includes(e.key) ? 1 : -1;
-        const multiplier = e.shiftKey ? 2 : e.ctrlKey ? 1 : 0;
-        value = value + direction * _step * multipliers.value[multiplier];
-      } else if (e.key === home) {
-        value = props.min;
-      } else if (e.key === end) {
-        value = props.max;
-      } else {
-        const direction = e.key === pagedown ? 1 : -1;
-        value = value - direction * _step * (steps > 100 ? steps / 10 : 10);
-      }
-      return Math.max(props.min, Math.min(props.max, value));
-    }
-    function onKeydown(e) {
-      const newValue = parseKeydown(e, props.modelValue);
-      newValue != null && emit('update:modelValue', newValue);
-    }
-    (0,useRender/* useRender */.L)(() => {
-      const positionPercentage = (0,helpers/* convertToUnit */.kb)(vertical.value || isReversed.value ? 100 - props.position : props.position, '%');
-      const {
-        elevationClasses
-      } = (0,composables_elevation/* useElevation */.Y)((0,runtime_core_esm_bundler/* computed */.Fl)(() => !disabled.value ? elevation.value : undefined));
-      return (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
-        "class": ['v-slider-thumb', {
-          'v-slider-thumb--focused': props.focused,
-          'v-slider-thumb--pressed': props.focused && mousePressed.value
-        }, props.class],
-        "style": [{
-          '--v-slider-thumb-position': positionPercentage,
-          '--v-slider-thumb-size': (0,helpers/* convertToUnit */.kb)(thumbSize.value)
-        }, props.style],
-        "role": "slider",
-        "tabindex": disabled.value ? -1 : 0,
-        "aria-valuemin": props.min,
-        "aria-valuemax": props.max,
-        "aria-valuenow": props.modelValue,
-        "aria-readonly": readonly.value,
-        "aria-orientation": direction.value,
-        "onKeydown": !readonly.value ? onKeydown : undefined
-      }, [(0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
-        "class": ['v-slider-thumb__surface', textColorClasses.value, elevationClasses.value],
-        "style": {
-          ...textColorStyles.value
-        }
-      }, null), (0,runtime_core_esm_bundler/* withDirectives */.wy)((0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
-        "class": ['v-slider-thumb__ripple', textColorClasses.value],
-        "style": textColorStyles.value
-      }, null), [[(0,runtime_core_esm_bundler/* resolveDirective */.Q2)("ripple"), props.ripple, null, {
-        circle: true,
-        center: true
-      }]]), (0,runtime_core_esm_bundler/* createVNode */.Wm)(transitions/* VScaleTransition */.T0, {
-        "origin": "bottom center"
-      }, {
-        default: () => [(0,runtime_core_esm_bundler/* withDirectives */.wy)((0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
-          "class": "v-slider-thumb__label-container"
-        }, [(0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
-          "class": ['v-slider-thumb__label']
-        }, [(0,runtime_core_esm_bundler/* createVNode */.Wm)("div", null, [slots['thumb-label']?.({
-          modelValue: props.modelValue
-        }) ?? props.modelValue.toFixed(step.value ? decimals.value : 1)])])]), [[runtime_dom_esm_bundler/* vShow */.F8, thumbLabel.value && props.focused || thumbLabel.value === 'always']])]
-      })]);
-    });
-    return {};
-  }
-});
-;// CONCATENATED MODULE: ./node_modules/vuetify/lib/components/VSlider/VSliderTrack.css
-// extracted by mini-css-extract-plugin
-
-;// CONCATENATED MODULE: ./node_modules/vuetify/lib/components/VSlider/VSliderTrack.mjs
-
-// Styles
-
-
-// Components
- // Composables
-
-
- // Utilities
-
-
-const VSliderTrack = (0,defineComponent/* genericComponent */.ev)()({
-  name: 'VSliderTrack',
-  props: {
-    start: {
-      type: Number,
-      required: true
-    },
-    stop: {
-      type: Number,
-      required: true
-    },
-    ...(0,component/* makeComponentProps */.l)()
-  },
-  emits: {},
-  setup(props, _ref) {
-    let {
-      slots
-    } = _ref;
-    const slider = (0,runtime_core_esm_bundler/* inject */.f3)(VSliderSymbol);
-    if (!slider) throw new Error('[Vuetify] v-slider-track must be inside v-slider or v-range-slider');
-    const {
-      color,
-      horizontalDirection,
-      parsedTicks,
-      rounded,
-      showTicks,
-      tickSize,
-      trackColor,
-      trackFillColor,
-      trackSize,
-      vertical,
-      min,
-      max
-    } = slider;
-    const {
-      roundedClasses
-    } = (0,composables_rounded/* useRounded */.b)(rounded);
-    const {
-      backgroundColorClasses: trackFillColorClasses,
-      backgroundColorStyles: trackFillColorStyles
-    } = (0,composables_color/* useBackgroundColor */.Y5)(trackFillColor);
-    const {
-      backgroundColorClasses: trackColorClasses,
-      backgroundColorStyles: trackColorStyles
-    } = (0,composables_color/* useBackgroundColor */.Y5)(trackColor);
-    const startDir = (0,runtime_core_esm_bundler/* computed */.Fl)(() => `inset-${vertical.value ? 'block-end' : 'inline-start'}`);
-    const endDir = (0,runtime_core_esm_bundler/* computed */.Fl)(() => vertical.value ? 'height' : 'width');
-    const backgroundStyles = (0,runtime_core_esm_bundler/* computed */.Fl)(() => {
-      return {
-        [startDir.value]: '0%',
-        [endDir.value]: '100%'
-      };
-    });
-    const trackFillWidth = (0,runtime_core_esm_bundler/* computed */.Fl)(() => props.stop - props.start);
-    const trackFillStyles = (0,runtime_core_esm_bundler/* computed */.Fl)(() => {
-      return {
-        [startDir.value]: (0,helpers/* convertToUnit */.kb)(props.start, '%'),
-        [endDir.value]: (0,helpers/* convertToUnit */.kb)(trackFillWidth.value, '%')
-      };
-    });
-    const computedTicks = (0,runtime_core_esm_bundler/* computed */.Fl)(() => {
-      if (!showTicks.value) return [];
-      const ticks = vertical.value ? parsedTicks.value.slice().reverse() : parsedTicks.value;
-      return ticks.map((tick, index) => {
-        const directionProperty = vertical.value ? 'bottom' : 'margin-inline-start';
-        const directionValue = tick.value !== min.value && tick.value !== max.value ? (0,helpers/* convertToUnit */.kb)(tick.position, '%') : undefined;
-        return (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
-          "key": tick.value,
-          "class": ['v-slider-track__tick', {
-            'v-slider-track__tick--filled': tick.position >= props.start && tick.position <= props.stop,
-            'v-slider-track__tick--first': tick.value === min.value,
-            'v-slider-track__tick--last': tick.value === max.value
-          }],
-          "style": {
-            [directionProperty]: directionValue
-          }
-        }, [(tick.label || slots['tick-label']) && (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
-          "class": "v-slider-track__tick-label"
-        }, [slots['tick-label']?.({
-          tick,
-          index
-        }) ?? tick.label])]);
-      });
-    });
-    (0,useRender/* useRender */.L)(() => {
-      return (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
-        "class": ['v-slider-track', roundedClasses.value, props.class],
-        "style": [{
-          '--v-slider-track-size': (0,helpers/* convertToUnit */.kb)(trackSize.value),
-          '--v-slider-tick-size': (0,helpers/* convertToUnit */.kb)(tickSize.value),
-          direction: !vertical.value ? horizontalDirection.value : undefined
-        }, props.style]
-      }, [(0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
-        "class": ['v-slider-track__background', trackColorClasses.value, {
-          'v-slider-track__background--opacity': !!color.value || !trackFillColor.value
-        }],
-        "style": {
-          ...backgroundStyles.value,
-          ...trackColorStyles.value
-        }
-      }, null), (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
-        "class": ['v-slider-track__fill', trackFillColorClasses.value],
-        "style": {
-          ...trackFillStyles.value,
-          ...trackFillColorStyles.value
-        }
-      }, null), showTicks.value && (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
-        "class": ['v-slider-track__ticks', {
-          'v-slider-track__ticks--always-show': showTicks.value === 'always'
-        }]
-      }, [computedTicks.value])]);
-    });
-    return {};
-  }
-});
-;// CONCATENATED MODULE: ./node_modules/vuetify/lib/components/VSlider/VSlider.mjs
-
-// Styles
-
-
-// Components
-
-
-
- // Composables
-
-
- // Utilities
-
- // Types
-const VSlider = (0,defineComponent/* genericComponent */.ev)()({
-  name: 'VSlider',
-  props: {
-    ...(0,composables_focus/* makeFocusProps */.B)(),
-    ...makeSliderProps(),
-    ...(0,VInput/* makeVInputProps */.c)(),
-    modelValue: {
-      type: [Number, String],
-      default: 0
-    }
-  },
-  emits: {
-    'update:focused': value => true,
-    'update:modelValue': v => true,
-    start: value => true,
-    end: value => true
-  },
-  setup(props, _ref) {
-    let {
-      slots,
-      emit
-    } = _ref;
-    const thumbContainerRef = (0,reactivity_esm_bundler/* ref */.iH)();
-    const steps = useSteps(props);
-    const model = (0,proxiedModel/* useProxiedModel */.z)(props, 'modelValue', undefined, v => {
-      const value = typeof v === 'string' ? parseFloat(v) : v == null ? steps.min.value : v;
-      return steps.roundValue(value);
-    });
-    const {
-      min,
-      max,
-      mousePressed,
-      roundValue,
-      onSliderMousedown,
-      onSliderTouchstart,
-      trackContainerRef,
-      position,
-      hasLabels,
-      readonly
-    } = useSlider({
-      props,
-      steps,
-      onSliderStart: () => {
-        emit('start', model.value);
-      },
-      onSliderEnd: _ref2 => {
-        let {
-          value
-        } = _ref2;
-        const roundedValue = roundValue(value);
-        model.value = roundedValue;
-        emit('end', roundedValue);
-      },
-      onSliderMove: _ref3 => {
-        let {
-          value
-        } = _ref3;
-        return model.value = roundValue(value);
-      },
-      getActiveThumb: () => thumbContainerRef.value?.$el
-    });
-    const {
-      isFocused,
-      focus,
-      blur
-    } = (0,composables_focus/* useFocus */.K)(props);
-    const trackStop = (0,runtime_core_esm_bundler/* computed */.Fl)(() => position(model.value));
-    (0,useRender/* useRender */.L)(() => {
-      const [inputProps, _] = VInput/* VInput.filterProps */.q.filterProps(props);
-      const hasPrepend = !!(props.label || slots.label || slots.prepend);
-      return (0,runtime_core_esm_bundler/* createVNode */.Wm)(VInput/* VInput */.q, (0,runtime_core_esm_bundler/* mergeProps */.dG)({
-        "class": ['v-slider', {
-          'v-slider--has-labels': !!slots['tick-label'] || hasLabels.value,
-          'v-slider--focused': isFocused.value,
-          'v-slider--pressed': mousePressed.value,
-          'v-slider--disabled': props.disabled
-        }, props.class],
-        "style": props.style
-      }, inputProps, {
-        "focused": isFocused.value
-      }), {
-        ...slots,
-        prepend: hasPrepend ? slotProps => (0,runtime_core_esm_bundler/* createVNode */.Wm)(runtime_core_esm_bundler/* Fragment */.HY, null, [slots.label?.(slotProps) ?? props.label ? (0,runtime_core_esm_bundler/* createVNode */.Wm)(VLabel/* VLabel */.J, {
-          "id": slotProps.id.value,
-          "class": "v-slider__label",
-          "text": props.label
-        }, null) : undefined, slots.prepend?.(slotProps)]) : undefined,
-        default: _ref4 => {
-          let {
-            id,
-            messagesId
-          } = _ref4;
-          return (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
-            "class": "v-slider__container",
-            "onMousedown": !readonly.value ? onSliderMousedown : undefined,
-            "onTouchstartPassive": !readonly.value ? onSliderTouchstart : undefined
-          }, [(0,runtime_core_esm_bundler/* createVNode */.Wm)("input", {
-            "id": id.value,
-            "name": props.name || id.value,
-            "disabled": props.disabled,
-            "readonly": props.readonly,
-            "tabindex": "-1",
-            "value": model.value
-          }, null), (0,runtime_core_esm_bundler/* createVNode */.Wm)(VSliderTrack, {
-            "ref": trackContainerRef,
-            "start": 0,
-            "stop": trackStop.value
-          }, {
-            'tick-label': slots['tick-label']
-          }), (0,runtime_core_esm_bundler/* createVNode */.Wm)(VSliderThumb, {
-            "ref": thumbContainerRef,
-            "aria-describedby": messagesId.value,
-            "focused": isFocused.value,
-            "min": min.value,
-            "max": max.value,
-            "modelValue": model.value,
-            "onUpdate:modelValue": v => model.value = v,
-            "position": trackStop.value,
-            "elevation": props.elevation,
-            "onFocus": focus,
-            "onBlur": blur
-          }, {
-            'thumb-label': slots['thumb-label']
-          })]);
-        }
-      });
-    });
-    return {};
-  }
-});
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/components/VSlider/VSlider.mjs
+var VSlider = __webpack_require__(5999);
 ;// CONCATENATED MODULE: ./node_modules/vuetify/lib/components/VColorPicker/VColorPickerPreview.mjs
 
 // Styles
@@ -15880,7 +15177,7 @@ const VColorPickerPreview = (0,defineComponent/* defineComponent */.aZ)({
       }
     }, null)]), (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
       "class": "v-color-picker-preview__sliders"
-    }, [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VSlider, {
+    }, [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VSlider/* VSlider */.R, {
       "class": "v-color-picker-preview__track v-color-picker-preview__hue",
       "modelValue": props.color?.h,
       "onUpdate:modelValue": h => emit('update:color', {
@@ -15895,7 +15192,7 @@ const VColorPickerPreview = (0,defineComponent/* defineComponent */.aZ)({
       "trackSize": 8,
       "trackFillColor": "white",
       "hideDetails": true
-    }, null), !props.hideAlpha && (0,runtime_core_esm_bundler/* createVNode */.Wm)(VSlider, {
+    }, null), !props.hideAlpha && (0,runtime_core_esm_bundler/* createVNode */.Wm)(VSlider/* VSlider */.R, {
       "class": "v-color-picker-preview__track v-color-picker-preview__alpha",
       "modelValue": props.color?.a ?? 1,
       "onUpdate:modelValue": a => emit('update:color', {
@@ -16931,6 +16228,8 @@ const VExpansionPanels = (0,defineComponent/* genericComponent */.ev)()({
     return {};
   }
 });
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/directives/ripple/index.mjs + 1 modules
+var ripple = __webpack_require__(3824);
 ;// CONCATENATED MODULE: ./node_modules/vuetify/lib/components/VExpansionPanel/VExpansionPanelTitle.mjs
 
 // Components
@@ -17066,10 +16365,10 @@ const VExpansionPanel = (0,defineComponent/* genericComponent */.ev)()({
     text: String,
     bgColor: String,
     ...(0,component/* makeComponentProps */.l)(),
-    ...(0,composables_elevation/* makeElevationProps */.c)(),
+    ...(0,elevation/* makeElevationProps */.c)(),
     ...(0,composables_group/* makeGroupItemProps */.YQ)(),
     ...(0,lazy/* makeLazyProps */.H)(),
-    ...(0,composables_rounded/* makeRoundedProps */.I)(),
+    ...(0,rounded/* makeRoundedProps */.I)(),
     ...(0,tag/* makeTagProps */.Q)(),
     ...makeVExpansionPanelTitleProps()
   },
@@ -17087,10 +16386,10 @@ const VExpansionPanel = (0,defineComponent/* genericComponent */.ev)()({
     } = (0,composables_color/* useBackgroundColor */.Y5)(props, 'bgColor');
     const {
       elevationClasses
-    } = (0,composables_elevation/* useElevation */.Y)(props);
+    } = (0,elevation/* useElevation */.Y)(props);
     const {
       roundedClasses
-    } = (0,composables_rounded/* useRounded */.b)(props);
+    } = (0,rounded/* useRounded */.b)(props);
     const isDisabled = (0,runtime_core_esm_bundler/* computed */.Fl)(() => groupItem?.disabled.value || props.disabled);
     const selectedIndices = (0,runtime_core_esm_bundler/* computed */.Fl)(() => groupItem.group.items.value.reduce((arr, item, index) => {
       if (groupItem.group.selected.value.includes(item.id)) arr.push(index);
@@ -17409,9 +16708,9 @@ const VFooter = (0,defineComponent/* genericComponent */.ev)()({
     },
     ...(0,border/* makeBorderProps */.m)(),
     ...(0,component/* makeComponentProps */.l)(),
-    ...(0,composables_elevation/* makeElevationProps */.c)(),
+    ...(0,elevation/* makeElevationProps */.c)(),
     ...makeLayoutItemProps(),
-    ...(0,composables_rounded/* makeRoundedProps */.I)(),
+    ...(0,rounded/* makeRoundedProps */.I)(),
     ...(0,tag/* makeTagProps */.Q)({
       tag: 'footer'
     }),
@@ -17433,10 +16732,10 @@ const VFooter = (0,defineComponent/* genericComponent */.ev)()({
     } = (0,border/* useBorder */.P)(props);
     const {
       elevationClasses
-    } = (0,composables_elevation/* useElevation */.Y)(props);
+    } = (0,elevation/* useElevation */.Y)(props);
     const {
       roundedClasses
-    } = (0,composables_rounded/* useRounded */.b)(props);
+    } = (0,rounded/* useRounded */.b)(props);
     const autoHeight = (0,reactivity_esm_bundler/* ref */.iH)(32);
     const {
       resizeRef
@@ -17680,6 +16979,8 @@ const VItem = (0,defineComponent/* genericComponent */.ev)()({
 
 
 const VKbd = (0,createSimpleFunctional/* createSimpleFunctional */.J)('v-kbd');
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/components/VLabel/VLabel.mjs + 1 modules
+var VLabel = __webpack_require__(7302);
 ;// CONCATENATED MODULE: ./node_modules/vuetify/lib/components/VLabel/index.mjs
 
 ;// CONCATENATED MODULE: ./node_modules/vuetify/lib/components/VLayout/VLayout.css
@@ -18341,9 +17642,9 @@ const VNavigationDrawer = (0,defineComponent/* genericComponent */.ev)()({
     sticky: Boolean,
     ...(0,border/* makeBorderProps */.m)(),
     ...(0,component/* makeComponentProps */.l)(),
-    ...(0,composables_elevation/* makeElevationProps */.c)(),
+    ...(0,elevation/* makeElevationProps */.c)(),
     ...makeLayoutItemProps(),
-    ...(0,composables_rounded/* makeRoundedProps */.I)(),
+    ...(0,rounded/* makeRoundedProps */.I)(),
     ...(0,tag/* makeTagProps */.Q)({
       tag: 'nav'
     }),
@@ -18374,13 +17675,13 @@ const VNavigationDrawer = (0,defineComponent/* genericComponent */.ev)()({
     } = (0,composables_color/* useBackgroundColor */.Y5)((0,reactivity_esm_bundler/* toRef */.Vh)(props, 'color'));
     const {
       elevationClasses
-    } = (0,composables_elevation/* useElevation */.Y)(props);
+    } = (0,elevation/* useElevation */.Y)(props);
     const {
       mobile
     } = (0,composables_display/* useDisplay */.AW)();
     const {
       roundedClasses
-    } = (0,composables_rounded/* useRounded */.b)(props);
+    } = (0,rounded/* useRounded */.b)(props);
     const router = (0,composables_router/* useRouter */.tv)();
     const isActive = (0,proxiedModel/* useProxiedModel */.z)(props, 'modelValue', null, v => !!v);
     const {
@@ -18664,8 +17965,8 @@ const VPagination = (0,defineComponent/* genericComponent */.ev)()({
     ...(0,border/* makeBorderProps */.m)(),
     ...(0,component/* makeComponentProps */.l)(),
     ...(0,composables_density/* makeDensityProps */.f)(),
-    ...(0,composables_elevation/* makeElevationProps */.c)(),
-    ...(0,composables_rounded/* makeRoundedProps */.I)(),
+    ...(0,elevation/* makeElevationProps */.c)(),
+    ...(0,rounded/* makeRoundedProps */.I)(),
     ...(0,size/* makeSizeProps */.Z)(),
     ...(0,tag/* makeTagProps */.Q)({
       tag: 'nav'
@@ -19157,6 +18458,14 @@ const VRadioGroup = (0,defineComponent/* genericComponent */.ev)()({
 });
 ;// CONCATENATED MODULE: ./node_modules/vuetify/lib/components/VRadioGroup/index.mjs
 
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/components/VSlider/VSlider.css
+var VSlider_VSlider = __webpack_require__(6290);
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/components/VSlider/slider.mjs
+var slider = __webpack_require__(3192);
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/components/VSlider/VSliderThumb.mjs + 1 modules
+var VSliderThumb = __webpack_require__(8635);
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/components/VSlider/VSliderTrack.mjs + 1 modules
+var VSliderTrack = __webpack_require__(9831);
 ;// CONCATENATED MODULE: ./node_modules/vuetify/lib/components/VRangeSlider/VRangeSlider.mjs
 
 // Styles
@@ -19177,7 +18486,7 @@ const VRangeSlider = (0,defineComponent/* genericComponent */.ev)()({
   props: {
     ...(0,composables_focus/* makeFocusProps */.B)(),
     ...(0,VInput/* makeVInputProps */.c)(),
-    ...makeSliderProps(),
+    ...(0,slider/* makeSliderProps */.gS)(),
     strict: Boolean,
     modelValue: {
       type: Array,
@@ -19200,13 +18509,13 @@ const VRangeSlider = (0,defineComponent/* genericComponent */.ev)()({
     const inputRef = (0,reactivity_esm_bundler/* ref */.iH)();
     function getActiveThumb(e) {
       if (!startThumbRef.value || !stopThumbRef.value) return;
-      const startOffset = getOffset(e, startThumbRef.value.$el, props.direction);
-      const stopOffset = getOffset(e, stopThumbRef.value.$el, props.direction);
+      const startOffset = (0,slider/* getOffset */.os)(e, startThumbRef.value.$el, props.direction);
+      const stopOffset = (0,slider/* getOffset */.os)(e, stopThumbRef.value.$el, props.direction);
       const a = Math.abs(startOffset);
       const b = Math.abs(stopOffset);
       return a < b || a === b && startOffset < 0 ? startThumbRef.value.$el : stopThumbRef.value.$el;
     }
-    const steps = useSteps(props);
+    const steps = (0,slider/* useSteps */.h4)(props);
     const model = (0,proxiedModel/* useProxiedModel */.z)(props, 'modelValue', undefined, arr => {
       if (!arr?.length) return [0, 0];
       return arr.map(value => steps.roundValue(value));
@@ -19221,7 +18530,7 @@ const VRangeSlider = (0,defineComponent/* genericComponent */.ev)()({
       onSliderTouchstart,
       position,
       trackContainerRef
-    } = useSlider({
+    } = (0,slider/* useSlider */.oN)({
       props,
       steps,
       onSliderStart: () => {
@@ -19302,13 +18611,13 @@ const VRangeSlider = (0,defineComponent/* genericComponent */.ev)()({
             "readonly": props.readonly,
             "tabindex": "-1",
             "value": model.value[1]
-          }, null), (0,runtime_core_esm_bundler/* createVNode */.Wm)(VSliderTrack, {
+          }, null), (0,runtime_core_esm_bundler/* createVNode */.Wm)(VSliderTrack/* VSliderTrack */.x, {
             "ref": trackContainerRef,
             "start": trackStart.value,
             "stop": trackStop.value
           }, {
             'tick-label': slots['tick-label']
-          }), (0,runtime_core_esm_bundler/* createVNode */.Wm)(VSliderThumb, {
+          }), (0,runtime_core_esm_bundler/* createVNode */.Wm)(VSliderThumb/* VSliderThumb */.B, {
             "ref": startThumbRef,
             "aria-describedby": messagesId.value,
             "focused": isFocused && activeThumbRef.value === startThumbRef.value?.$el,
@@ -19336,7 +18645,7 @@ const VRangeSlider = (0,defineComponent/* genericComponent */.ev)()({
             "position": trackStart.value
           }, {
             'thumb-label': slots['thumb-label']
-          }), (0,runtime_core_esm_bundler/* createVNode */.Wm)(VSliderThumb, {
+          }), (0,runtime_core_esm_bundler/* createVNode */.Wm)(VSliderThumb/* VSliderThumb */.B, {
             "ref": stopThumbRef,
             "aria-describedby": messagesId.value,
             "focused": isFocused && activeThumbRef.value === stopThumbRef.value?.$el,
@@ -20041,7 +19350,7 @@ const VSnackbar = (0,defineComponent/* genericComponent */.ev)()({
       location: 'bottom'
     }),
     ...(0,position/* makePositionProps */.F)(),
-    ...(0,composables_rounded/* makeRoundedProps */.I)(),
+    ...(0,rounded/* makeRoundedProps */.I)(),
     ...(0,variant/* makeVariantProps */.bk)(),
     ...(0,composables_theme/* makeThemeProps */.x$)(),
     ...(0,helpers/* omit */.CE)((0,VOverlay/* makeVOverlayProps */.B)({
@@ -20075,7 +19384,7 @@ const VSnackbar = (0,defineComponent/* genericComponent */.ev)()({
     } = (0,variant/* useVariant */.c1)(props);
     const {
       roundedClasses
-    } = (0,composables_rounded/* useRounded */.b)(props);
+    } = (0,rounded/* useRounded */.b)(props);
     const overlay = (0,reactivity_esm_bundler/* ref */.iH)();
     (0,runtime_core_esm_bundler/* watch */.YP)(isActive, startTimeout);
     (0,runtime_core_esm_bundler/* watch */.YP)(() => props.timeout, startTimeout);
@@ -20173,9 +19482,9 @@ const VSystemBar = (0,defineComponent/* genericComponent */.ev)()({
     height: [Number, String],
     window: Boolean,
     ...(0,component/* makeComponentProps */.l)(),
-    ...(0,composables_elevation/* makeElevationProps */.c)(),
+    ...(0,elevation/* makeElevationProps */.c)(),
     ...makeLayoutItemProps(),
-    ...(0,composables_rounded/* makeRoundedProps */.I)(),
+    ...(0,rounded/* makeRoundedProps */.I)(),
     ...(0,tag/* makeTagProps */.Q)(),
     ...(0,composables_theme/* makeThemeProps */.x$)()
   },
@@ -20192,10 +19501,10 @@ const VSystemBar = (0,defineComponent/* genericComponent */.ev)()({
     } = (0,composables_color/* useBackgroundColor */.Y5)((0,reactivity_esm_bundler/* toRef */.Vh)(props, 'color'));
     const {
       elevationClasses
-    } = (0,composables_elevation/* useElevation */.Y)(props);
+    } = (0,elevation/* useElevation */.Y)(props);
     const {
       roundedClasses
-    } = (0,composables_rounded/* useRounded */.b)(props);
+    } = (0,rounded/* useRounded */.b)(props);
     const {
       ssrBootStyles
     } = (0,ssrBoot/* useSsrBoot */.u)();
@@ -20924,9 +20233,9 @@ const VTimelineDivider = (0,defineComponent/* genericComponent */.ev)()({
     iconColor: String,
     lineColor: String,
     ...(0,component/* makeComponentProps */.l)(),
-    ...(0,composables_rounded/* makeRoundedProps */.I)(),
+    ...(0,rounded/* makeRoundedProps */.I)(),
     ...(0,size/* makeSizeProps */.Z)(),
-    ...(0,composables_elevation/* makeElevationProps */.c)()
+    ...(0,elevation/* makeElevationProps */.c)()
   },
   setup(props, _ref) {
     let {
@@ -20942,10 +20251,10 @@ const VTimelineDivider = (0,defineComponent/* genericComponent */.ev)()({
     } = (0,composables_color/* useBackgroundColor */.Y5)((0,reactivity_esm_bundler/* toRef */.Vh)(props, 'dotColor'));
     const {
       roundedClasses
-    } = (0,composables_rounded/* useRounded */.b)(props, 'v-timeline-divider__dot');
+    } = (0,rounded/* useRounded */.b)(props, 'v-timeline-divider__dot');
     const {
       elevationClasses
-    } = (0,composables_elevation/* useElevation */.Y)(props);
+    } = (0,elevation/* useElevation */.Y)(props);
     const {
       backgroundColorClasses: lineColorClasses,
       backgroundColorStyles: lineColorStyles
@@ -21019,8 +20328,8 @@ const VTimelineItem = (0,defineComponent/* genericComponent */.ev)()({
     lineInset: [Number, String],
     ...(0,component/* makeComponentProps */.l)(),
     ...(0,dimensions/* makeDimensionProps */.x)(),
-    ...(0,composables_elevation/* makeElevationProps */.c)(),
-    ...(0,composables_rounded/* makeRoundedProps */.I)(),
+    ...(0,elevation/* makeElevationProps */.c)(),
+    ...(0,rounded/* makeRoundedProps */.I)(),
     ...(0,size/* makeSizeProps */.Z)(),
     ...(0,tag/* makeTagProps */.Q)()
   },
@@ -23255,8 +22564,8 @@ var bose = __webpack_require__(4547);
 var engine = __webpack_require__(7925);
 // EXTERNAL MODULE: ./src/models/pjcan/variables/fuel/index.ts + 6 modules
 var fuel = __webpack_require__(4873);
-// EXTERNAL MODULE: ./src/models/pjcan/variables/volume/index.ts + 4 modules
-var volume = __webpack_require__(2031);
+// EXTERNAL MODULE: ./src/models/pjcan/variables/volume/index.ts + 6 modules
+var volume = __webpack_require__(3057);
 ;// CONCATENATED MODULE: ./src/models/pjcan/variables/configs/StructVariableConfigs.ts
 
 
@@ -24197,7 +23506,7 @@ class TestValue extends BaseModel/* BaseModel */.g {
 
 /***/ }),
 
-/***/ 2031:
+/***/ 3057:
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -24207,12 +23516,17 @@ __webpack_require__.d(__webpack_exports__, {
   "Vy": function() { return /* reexport */ API_VARIABLE_VOLUME_CONFIG_EVENT; },
   "U0": function() { return /* reexport */ API_VARIABLE_VOLUME_CONFIG_EXEC; },
   "t7": function() { return /* reexport */ API_VARIABLE_VOLUME_CONFIG_SIZE; },
+  "FN": function() { return /* reexport */ API_VARIABLE_VOLUME_EVENT; },
+  "pf": function() { return /* reexport */ API_VARIABLE_VOLUME_EXEC; },
+  "ER": function() { return /* reexport */ API_VARIABLE_VOLUME_SIZE; },
   "H7": function() { return /* reexport */ API_VARIABLE_VOLUME_VIEW_EVENT; },
   "Ge": function() { return /* reexport */ API_VARIABLE_VOLUME_VIEW_EXEC; },
   "Ac": function() { return /* reexport */ API_VARIABLE_VOLUME_VIEW_SIZE; },
   "RW": function() { return /* reexport */ StructVolumeConfig; },
+  "ME": function() { return /* reexport */ StructVolumeValue; },
   "rb": function() { return /* reexport */ StructVolumeView; },
   "Rf": function() { return /* reexport */ VolumeConfig; },
+  "RD": function() { return /* reexport */ VolumeValue; },
   "Cw": function() { return /* reexport */ VolumeView; }
 });
 
@@ -24228,7 +23542,6 @@ const API_VARIABLE_VOLUME_CONFIG_SIZE = 3;
 /** Структура данных */
 const StructVolumeConfig = {
   mute: bluetooth/* BluetoothStruct.bit */.GD.bit(),
-  boseOnly: bluetooth/* BluetoothStruct.bit */.GD.bit(),
   volume: bluetooth/* BluetoothStruct.uint8 */.GD.uint8(),
   max: bluetooth/* BluetoothStruct.uint8 */.GD.uint8()
 };
@@ -24237,7 +23550,7 @@ const StructVolumeConfig = {
 
 
 
-const API_VARIABLE_VOLUME_CONFIG_EXEC = 200;
+const API_VARIABLE_VOLUME_CONFIG_EXEC = 201;
 const API_VARIABLE_VOLUME_CONFIG_EVENT = "VariableVolumeConfig";
 const struct = new bluetooth/* BluetoothStruct */.GD(StructVolumeConfig);
 /** Модель конфигурации уровня звука */
@@ -24245,7 +23558,6 @@ class VolumeConfig extends BaseModel/* BaseModel */.g {
   constructor(data) {
     super();
     (0,defineProperty/* default */.Z)(this, "mute", false);
-    (0,defineProperty/* default */.Z)(this, "boseOnly", false);
     (0,defineProperty/* default */.Z)(this, "volume", 0);
     (0,defineProperty/* default */.Z)(this, "max", 0);
     if (data) this.set(data);
@@ -24260,6 +23572,42 @@ class VolumeConfig extends BaseModel/* BaseModel */.g {
   /** Чтение данных */
   get() {
     return this._get(this, API_VARIABLE_VOLUME_CONFIG_EXEC, API_VARIABLE_VOLUME_CONFIG_SIZE + 1, struct);
+  }
+}
+;// CONCATENATED MODULE: ./src/models/pjcan/variables/volume/StructVolumeValue.ts
+
+const API_VARIABLE_VOLUME_SIZE = 2;
+/** Структура данных */
+const StructVolumeValue = {
+  mute: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+  volume: bluetooth/* BluetoothStruct.uint8 */.GD.uint8()
+};
+;// CONCATENATED MODULE: ./src/models/pjcan/variables/volume/VolumeValue.ts
+
+
+
+
+const API_VARIABLE_VOLUME_EXEC = 200;
+const API_VARIABLE_VOLUME_EVENT = "VariableVolumeValue";
+const VolumeValue_struct = new bluetooth/* BluetoothStruct */.GD(StructVolumeValue);
+/** Модель конфигурации уровня звука */
+class VolumeValue extends BaseModel/* BaseModel */.g {
+  constructor(data) {
+    super();
+    (0,defineProperty/* default */.Z)(this, "mute", false);
+    (0,defineProperty/* default */.Z)(this, "volume", 0);
+    if (data) this.set(data);
+  }
+  /**
+   * Запись данных
+   * @param {DataView} buf Буфер данных
+   */
+  set(buf) {
+    return this._set(this, API_VARIABLE_VOLUME_EXEC, API_VARIABLE_VOLUME_SIZE + 1, VolumeValue_struct, buf);
+  }
+  /** Чтение данных */
+  get() {
+    return this._get(this, API_VARIABLE_VOLUME_EXEC, API_VARIABLE_VOLUME_SIZE + 1, VolumeValue_struct);
   }
 }
 // EXTERNAL MODULE: ./src/models/pjcan/view/index.ts + 3 modules
@@ -24278,7 +23626,7 @@ const StructVolumeView = {
 
 
 
-const API_VARIABLE_VOLUME_VIEW_EXEC = 201;
+const API_VARIABLE_VOLUME_VIEW_EXEC = 202;
 const API_VARIABLE_VOLUME_VIEW_EVENT = "VariableVolumeView";
 const VolumeView_struct = new bluetooth/* BluetoothStruct */.GD(StructVolumeView);
 /** Модель параметров отображения данных уровня звука */
@@ -24301,6 +23649,8 @@ class VolumeView extends BaseModel/* BaseModel */.g {
   }
 }
 ;// CONCATENATED MODULE: ./src/models/pjcan/variables/volume/index.ts
+
+
 
 
 
@@ -75263,6 +74613,832 @@ const VSelectionControl = (0,defineComponent/* genericComponent */.ev)()({
 
 /***/ }),
 
+/***/ 5999:
+/***/ (function(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "R": function() { return /* binding */ VSlider; }
+/* harmony export */ });
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(3396);
+/* harmony import */ var _VSlider_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(6290);
+/* harmony import */ var _VInput_VInput_mjs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(9317);
+/* harmony import */ var _VLabel_index_mjs__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(7302);
+/* harmony import */ var _VSliderThumb_mjs__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(8635);
+/* harmony import */ var _VSliderTrack_mjs__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(9831);
+/* harmony import */ var _composables_focus_mjs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(8969);
+/* harmony import */ var _slider_mjs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(3192);
+/* harmony import */ var _composables_proxiedModel_mjs__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(8717);
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(4870);
+/* harmony import */ var _util_index_mjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(1107);
+/* harmony import */ var _util_index_mjs__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(9888);
+
+// Styles
+
+
+// Components
+
+
+
+ // Composables
+
+
+ // Utilities
+
+ // Types
+const VSlider = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_1__/* .genericComponent */ .ev)()({
+  name: 'VSlider',
+  props: {
+    ...(0,_composables_focus_mjs__WEBPACK_IMPORTED_MODULE_2__/* .makeFocusProps */ .B)(),
+    ...(0,_slider_mjs__WEBPACK_IMPORTED_MODULE_3__/* .makeSliderProps */ .gS)(),
+    ...(0,_VInput_VInput_mjs__WEBPACK_IMPORTED_MODULE_4__/* .makeVInputProps */ .c)(),
+    modelValue: {
+      type: [Number, String],
+      default: 0
+    }
+  },
+  emits: {
+    'update:focused': value => true,
+    'update:modelValue': v => true,
+    start: value => true,
+    end: value => true
+  },
+  setup(props, _ref) {
+    let {
+      slots,
+      emit
+    } = _ref;
+    const thumbContainerRef = (0,vue__WEBPACK_IMPORTED_MODULE_5__/* .ref */ .iH)();
+    const steps = (0,_slider_mjs__WEBPACK_IMPORTED_MODULE_3__/* .useSteps */ .h4)(props);
+    const model = (0,_composables_proxiedModel_mjs__WEBPACK_IMPORTED_MODULE_6__/* .useProxiedModel */ .z)(props, 'modelValue', undefined, v => {
+      const value = typeof v === 'string' ? parseFloat(v) : v == null ? steps.min.value : v;
+      return steps.roundValue(value);
+    });
+    const {
+      min,
+      max,
+      mousePressed,
+      roundValue,
+      onSliderMousedown,
+      onSliderTouchstart,
+      trackContainerRef,
+      position,
+      hasLabels,
+      readonly
+    } = (0,_slider_mjs__WEBPACK_IMPORTED_MODULE_3__/* .useSlider */ .oN)({
+      props,
+      steps,
+      onSliderStart: () => {
+        emit('start', model.value);
+      },
+      onSliderEnd: _ref2 => {
+        let {
+          value
+        } = _ref2;
+        const roundedValue = roundValue(value);
+        model.value = roundedValue;
+        emit('end', roundedValue);
+      },
+      onSliderMove: _ref3 => {
+        let {
+          value
+        } = _ref3;
+        return model.value = roundValue(value);
+      },
+      getActiveThumb: () => thumbContainerRef.value?.$el
+    });
+    const {
+      isFocused,
+      focus,
+      blur
+    } = (0,_composables_focus_mjs__WEBPACK_IMPORTED_MODULE_2__/* .useFocus */ .K)(props);
+    const trackStop = (0,vue__WEBPACK_IMPORTED_MODULE_7__/* .computed */ .Fl)(() => position(model.value));
+    (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_8__/* .useRender */ .L)(() => {
+      const [inputProps, _] = _VInput_VInput_mjs__WEBPACK_IMPORTED_MODULE_4__/* .VInput.filterProps */ .q.filterProps(props);
+      const hasPrepend = !!(props.label || slots.label || slots.prepend);
+      return (0,vue__WEBPACK_IMPORTED_MODULE_7__/* .createVNode */ .Wm)(_VInput_VInput_mjs__WEBPACK_IMPORTED_MODULE_4__/* .VInput */ .q, (0,vue__WEBPACK_IMPORTED_MODULE_7__/* .mergeProps */ .dG)({
+        "class": ['v-slider', {
+          'v-slider--has-labels': !!slots['tick-label'] || hasLabels.value,
+          'v-slider--focused': isFocused.value,
+          'v-slider--pressed': mousePressed.value,
+          'v-slider--disabled': props.disabled
+        }, props.class],
+        "style": props.style
+      }, inputProps, {
+        "focused": isFocused.value
+      }), {
+        ...slots,
+        prepend: hasPrepend ? slotProps => (0,vue__WEBPACK_IMPORTED_MODULE_7__/* .createVNode */ .Wm)(vue__WEBPACK_IMPORTED_MODULE_7__/* .Fragment */ .HY, null, [slots.label?.(slotProps) ?? props.label ? (0,vue__WEBPACK_IMPORTED_MODULE_7__/* .createVNode */ .Wm)(_VLabel_index_mjs__WEBPACK_IMPORTED_MODULE_9__/* .VLabel */ .J, {
+          "id": slotProps.id.value,
+          "class": "v-slider__label",
+          "text": props.label
+        }, null) : undefined, slots.prepend?.(slotProps)]) : undefined,
+        default: _ref4 => {
+          let {
+            id,
+            messagesId
+          } = _ref4;
+          return (0,vue__WEBPACK_IMPORTED_MODULE_7__/* .createVNode */ .Wm)("div", {
+            "class": "v-slider__container",
+            "onMousedown": !readonly.value ? onSliderMousedown : undefined,
+            "onTouchstartPassive": !readonly.value ? onSliderTouchstart : undefined
+          }, [(0,vue__WEBPACK_IMPORTED_MODULE_7__/* .createVNode */ .Wm)("input", {
+            "id": id.value,
+            "name": props.name || id.value,
+            "disabled": props.disabled,
+            "readonly": props.readonly,
+            "tabindex": "-1",
+            "value": model.value
+          }, null), (0,vue__WEBPACK_IMPORTED_MODULE_7__/* .createVNode */ .Wm)(_VSliderTrack_mjs__WEBPACK_IMPORTED_MODULE_10__/* .VSliderTrack */ .x, {
+            "ref": trackContainerRef,
+            "start": 0,
+            "stop": trackStop.value
+          }, {
+            'tick-label': slots['tick-label']
+          }), (0,vue__WEBPACK_IMPORTED_MODULE_7__/* .createVNode */ .Wm)(_VSliderThumb_mjs__WEBPACK_IMPORTED_MODULE_11__/* .VSliderThumb */ .B, {
+            "ref": thumbContainerRef,
+            "aria-describedby": messagesId.value,
+            "focused": isFocused.value,
+            "min": min.value,
+            "max": max.value,
+            "modelValue": model.value,
+            "onUpdate:modelValue": v => model.value = v,
+            "position": trackStop.value,
+            "elevation": props.elevation,
+            "onFocus": focus,
+            "onBlur": blur
+          }, {
+            'thumb-label': slots['thumb-label']
+          })]);
+        }
+      });
+    });
+    return {};
+  }
+});
+
+/***/ }),
+
+/***/ 8635:
+/***/ (function(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+
+// EXPORTS
+__webpack_require__.d(__webpack_exports__, {
+  "B": function() { return /* binding */ VSliderThumb; }
+});
+
+// EXTERNAL MODULE: ./node_modules/@vue/runtime-core/dist/runtime-core.esm-bundler.js
+var runtime_core_esm_bundler = __webpack_require__(3396);
+// EXTERNAL MODULE: ./node_modules/@vue/runtime-dom/dist/runtime-dom.esm-bundler.js
+var runtime_dom_esm_bundler = __webpack_require__(9242);
+;// CONCATENATED MODULE: ./node_modules/vuetify/lib/components/VSlider/VSliderThumb.css
+// extracted by mini-css-extract-plugin
+
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/components/transitions/index.mjs + 2 modules
+var transitions = __webpack_require__(8952);
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/components/VSlider/slider.mjs
+var VSlider_slider = __webpack_require__(3192);
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/directives/ripple/index.mjs + 1 modules
+var ripple = __webpack_require__(3824);
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/component.mjs
+var component = __webpack_require__(9166);
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/elevation.mjs
+var composables_elevation = __webpack_require__(2465);
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/color.mjs
+var color = __webpack_require__(2370);
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/util/defineComponent.mjs
+var defineComponent = __webpack_require__(1107);
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/util/helpers.mjs
+var helpers = __webpack_require__(131);
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/util/useRender.mjs
+var useRender = __webpack_require__(9888);
+;// CONCATENATED MODULE: ./node_modules/vuetify/lib/components/VSlider/VSliderThumb.mjs
+
+// Styles
+
+
+// Components
+
+ // Directives
+ // Composables
+
+
+ // Utilities
+
+
+const VSliderThumb = (0,defineComponent/* genericComponent */.ev)()({
+  name: 'VSliderThumb',
+  directives: {
+    Ripple: ripple/* default */.Z
+  },
+  props: {
+    focused: Boolean,
+    max: {
+      type: Number,
+      required: true
+    },
+    min: {
+      type: Number,
+      required: true
+    },
+    modelValue: {
+      type: Number,
+      required: true
+    },
+    position: {
+      type: Number,
+      required: true
+    },
+    ripple: {
+      type: Boolean,
+      default: true
+    },
+    ...(0,component/* makeComponentProps */.l)()
+  },
+  emits: {
+    'update:modelValue': v => true
+  },
+  setup(props, _ref) {
+    let {
+      slots,
+      emit
+    } = _ref;
+    const slider = (0,runtime_core_esm_bundler/* inject */.f3)(VSlider_slider/* VSliderSymbol */.ld);
+    if (!slider) throw new Error('[Vuetify] v-slider-thumb must be used inside v-slider or v-range-slider');
+    const {
+      thumbColor,
+      step,
+      vertical,
+      disabled,
+      thumbSize,
+      thumbLabel,
+      direction,
+      readonly,
+      elevation,
+      isReversed,
+      horizontalDirection,
+      mousePressed,
+      decimals
+    } = slider;
+    const {
+      textColorClasses,
+      textColorStyles
+    } = (0,color/* useTextColor */.rY)(thumbColor);
+    const {
+      pageup,
+      pagedown,
+      end,
+      home,
+      left,
+      right,
+      down,
+      up
+    } = helpers.keyValues;
+    const relevantKeys = [pageup, pagedown, end, home, left, right, down, up];
+    const multipliers = (0,runtime_core_esm_bundler/* computed */.Fl)(() => {
+      if (step.value) return [1, 2, 3];else return [1, 5, 10];
+    });
+    function parseKeydown(e, value) {
+      if (!relevantKeys.includes(e.key)) return;
+      e.preventDefault();
+      const _step = step.value || 0.1;
+      const steps = (props.max - props.min) / _step;
+      if ([left, right, down, up].includes(e.key)) {
+        const increase = horizontalDirection.value === 'rtl' ? [left, up] : [right, up];
+        const direction = increase.includes(e.key) ? 1 : -1;
+        const multiplier = e.shiftKey ? 2 : e.ctrlKey ? 1 : 0;
+        value = value + direction * _step * multipliers.value[multiplier];
+      } else if (e.key === home) {
+        value = props.min;
+      } else if (e.key === end) {
+        value = props.max;
+      } else {
+        const direction = e.key === pagedown ? 1 : -1;
+        value = value - direction * _step * (steps > 100 ? steps / 10 : 10);
+      }
+      return Math.max(props.min, Math.min(props.max, value));
+    }
+    function onKeydown(e) {
+      const newValue = parseKeydown(e, props.modelValue);
+      newValue != null && emit('update:modelValue', newValue);
+    }
+    (0,useRender/* useRender */.L)(() => {
+      const positionPercentage = (0,helpers/* convertToUnit */.kb)(vertical.value || isReversed.value ? 100 - props.position : props.position, '%');
+      const {
+        elevationClasses
+      } = (0,composables_elevation/* useElevation */.Y)((0,runtime_core_esm_bundler/* computed */.Fl)(() => !disabled.value ? elevation.value : undefined));
+      return (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
+        "class": ['v-slider-thumb', {
+          'v-slider-thumb--focused': props.focused,
+          'v-slider-thumb--pressed': props.focused && mousePressed.value
+        }, props.class],
+        "style": [{
+          '--v-slider-thumb-position': positionPercentage,
+          '--v-slider-thumb-size': (0,helpers/* convertToUnit */.kb)(thumbSize.value)
+        }, props.style],
+        "role": "slider",
+        "tabindex": disabled.value ? -1 : 0,
+        "aria-valuemin": props.min,
+        "aria-valuemax": props.max,
+        "aria-valuenow": props.modelValue,
+        "aria-readonly": readonly.value,
+        "aria-orientation": direction.value,
+        "onKeydown": !readonly.value ? onKeydown : undefined
+      }, [(0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
+        "class": ['v-slider-thumb__surface', textColorClasses.value, elevationClasses.value],
+        "style": {
+          ...textColorStyles.value
+        }
+      }, null), (0,runtime_core_esm_bundler/* withDirectives */.wy)((0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
+        "class": ['v-slider-thumb__ripple', textColorClasses.value],
+        "style": textColorStyles.value
+      }, null), [[(0,runtime_core_esm_bundler/* resolveDirective */.Q2)("ripple"), props.ripple, null, {
+        circle: true,
+        center: true
+      }]]), (0,runtime_core_esm_bundler/* createVNode */.Wm)(transitions/* VScaleTransition */.T0, {
+        "origin": "bottom center"
+      }, {
+        default: () => [(0,runtime_core_esm_bundler/* withDirectives */.wy)((0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
+          "class": "v-slider-thumb__label-container"
+        }, [(0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
+          "class": ['v-slider-thumb__label']
+        }, [(0,runtime_core_esm_bundler/* createVNode */.Wm)("div", null, [slots['thumb-label']?.({
+          modelValue: props.modelValue
+        }) ?? props.modelValue.toFixed(step.value ? decimals.value : 1)])])]), [[runtime_dom_esm_bundler/* vShow */.F8, thumbLabel.value && props.focused || thumbLabel.value === 'always']])]
+      })]);
+    });
+    return {};
+  }
+});
+
+/***/ }),
+
+/***/ 9831:
+/***/ (function(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+
+// EXPORTS
+__webpack_require__.d(__webpack_exports__, {
+  "x": function() { return /* binding */ VSliderTrack; }
+});
+
+// EXTERNAL MODULE: ./node_modules/@vue/runtime-core/dist/runtime-core.esm-bundler.js
+var runtime_core_esm_bundler = __webpack_require__(3396);
+;// CONCATENATED MODULE: ./node_modules/vuetify/lib/components/VSlider/VSliderTrack.css
+// extracted by mini-css-extract-plugin
+
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/components/VSlider/slider.mjs
+var VSlider_slider = __webpack_require__(3192);
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/component.mjs
+var component = __webpack_require__(9166);
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/color.mjs
+var composables_color = __webpack_require__(2370);
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/composables/rounded.mjs
+var composables_rounded = __webpack_require__(4231);
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/util/defineComponent.mjs
+var defineComponent = __webpack_require__(1107);
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/util/helpers.mjs
+var helpers = __webpack_require__(131);
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/util/useRender.mjs
+var useRender = __webpack_require__(9888);
+;// CONCATENATED MODULE: ./node_modules/vuetify/lib/components/VSlider/VSliderTrack.mjs
+
+// Styles
+
+
+// Components
+ // Composables
+
+
+ // Utilities
+
+
+const VSliderTrack = (0,defineComponent/* genericComponent */.ev)()({
+  name: 'VSliderTrack',
+  props: {
+    start: {
+      type: Number,
+      required: true
+    },
+    stop: {
+      type: Number,
+      required: true
+    },
+    ...(0,component/* makeComponentProps */.l)()
+  },
+  emits: {},
+  setup(props, _ref) {
+    let {
+      slots
+    } = _ref;
+    const slider = (0,runtime_core_esm_bundler/* inject */.f3)(VSlider_slider/* VSliderSymbol */.ld);
+    if (!slider) throw new Error('[Vuetify] v-slider-track must be inside v-slider or v-range-slider');
+    const {
+      color,
+      horizontalDirection,
+      parsedTicks,
+      rounded,
+      showTicks,
+      tickSize,
+      trackColor,
+      trackFillColor,
+      trackSize,
+      vertical,
+      min,
+      max
+    } = slider;
+    const {
+      roundedClasses
+    } = (0,composables_rounded/* useRounded */.b)(rounded);
+    const {
+      backgroundColorClasses: trackFillColorClasses,
+      backgroundColorStyles: trackFillColorStyles
+    } = (0,composables_color/* useBackgroundColor */.Y5)(trackFillColor);
+    const {
+      backgroundColorClasses: trackColorClasses,
+      backgroundColorStyles: trackColorStyles
+    } = (0,composables_color/* useBackgroundColor */.Y5)(trackColor);
+    const startDir = (0,runtime_core_esm_bundler/* computed */.Fl)(() => `inset-${vertical.value ? 'block-end' : 'inline-start'}`);
+    const endDir = (0,runtime_core_esm_bundler/* computed */.Fl)(() => vertical.value ? 'height' : 'width');
+    const backgroundStyles = (0,runtime_core_esm_bundler/* computed */.Fl)(() => {
+      return {
+        [startDir.value]: '0%',
+        [endDir.value]: '100%'
+      };
+    });
+    const trackFillWidth = (0,runtime_core_esm_bundler/* computed */.Fl)(() => props.stop - props.start);
+    const trackFillStyles = (0,runtime_core_esm_bundler/* computed */.Fl)(() => {
+      return {
+        [startDir.value]: (0,helpers/* convertToUnit */.kb)(props.start, '%'),
+        [endDir.value]: (0,helpers/* convertToUnit */.kb)(trackFillWidth.value, '%')
+      };
+    });
+    const computedTicks = (0,runtime_core_esm_bundler/* computed */.Fl)(() => {
+      if (!showTicks.value) return [];
+      const ticks = vertical.value ? parsedTicks.value.slice().reverse() : parsedTicks.value;
+      return ticks.map((tick, index) => {
+        const directionProperty = vertical.value ? 'bottom' : 'margin-inline-start';
+        const directionValue = tick.value !== min.value && tick.value !== max.value ? (0,helpers/* convertToUnit */.kb)(tick.position, '%') : undefined;
+        return (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
+          "key": tick.value,
+          "class": ['v-slider-track__tick', {
+            'v-slider-track__tick--filled': tick.position >= props.start && tick.position <= props.stop,
+            'v-slider-track__tick--first': tick.value === min.value,
+            'v-slider-track__tick--last': tick.value === max.value
+          }],
+          "style": {
+            [directionProperty]: directionValue
+          }
+        }, [(tick.label || slots['tick-label']) && (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
+          "class": "v-slider-track__tick-label"
+        }, [slots['tick-label']?.({
+          tick,
+          index
+        }) ?? tick.label])]);
+      });
+    });
+    (0,useRender/* useRender */.L)(() => {
+      return (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
+        "class": ['v-slider-track', roundedClasses.value, props.class],
+        "style": [{
+          '--v-slider-track-size': (0,helpers/* convertToUnit */.kb)(trackSize.value),
+          '--v-slider-tick-size': (0,helpers/* convertToUnit */.kb)(tickSize.value),
+          direction: !vertical.value ? horizontalDirection.value : undefined
+        }, props.style]
+      }, [(0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
+        "class": ['v-slider-track__background', trackColorClasses.value, {
+          'v-slider-track__background--opacity': !!color.value || !trackFillColor.value
+        }],
+        "style": {
+          ...backgroundStyles.value,
+          ...trackColorStyles.value
+        }
+      }, null), (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
+        "class": ['v-slider-track__fill', trackFillColorClasses.value],
+        "style": {
+          ...trackFillStyles.value,
+          ...trackFillColorStyles.value
+        }
+      }, null), showTicks.value && (0,runtime_core_esm_bundler/* createVNode */.Wm)("div", {
+        "class": ['v-slider-track__ticks', {
+          'v-slider-track__ticks--always-show': showTicks.value === 'always'
+        }]
+      }, [computedTicks.value])]);
+    });
+    return {};
+  }
+});
+
+/***/ }),
+
+/***/ 3192:
+/***/ (function(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "gS": function() { return /* binding */ makeSliderProps; },
+/* harmony export */   "h4": function() { return /* binding */ useSteps; },
+/* harmony export */   "ld": function() { return /* binding */ VSliderSymbol; },
+/* harmony export */   "oN": function() { return /* binding */ useSlider; },
+/* harmony export */   "os": function() { return /* binding */ getOffset; }
+/* harmony export */ });
+/* harmony import */ var _composables_elevation_mjs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(2465);
+/* harmony import */ var _composables_rounded_mjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4231);
+/* harmony import */ var _composables_locale_mjs__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(1629);
+/* harmony import */ var _util_index_mjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(3766);
+/* harmony import */ var _util_index_mjs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(131);
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(3396);
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(4870);
+/* eslint-disable max-statements */
+// Composables
+
+
+ // Utilities
+
+
+
+// Types
+
+const VSliderSymbol = Symbol.for('vuetify:v-slider');
+function getOffset(e, el, direction) {
+  const vertical = direction === 'vertical';
+  const rect = el.getBoundingClientRect();
+  const touch = 'touches' in e ? e.touches[0] : e;
+  return vertical ? touch.clientY - (rect.top + rect.height / 2) : touch.clientX - (rect.left + rect.width / 2);
+}
+function getPosition(e, position) {
+  if ('touches' in e && e.touches.length) return e.touches[0][position];else if ('changedTouches' in e && e.changedTouches.length) return e.changedTouches[0][position];else return e[position];
+}
+const makeSliderProps = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_0__/* .propsFactory */ .U)({
+  disabled: Boolean,
+  error: Boolean,
+  readonly: Boolean,
+  max: {
+    type: [Number, String],
+    default: 100
+  },
+  min: {
+    type: [Number, String],
+    default: 0
+  },
+  step: {
+    type: [Number, String],
+    default: 0
+  },
+  thumbColor: String,
+  thumbLabel: {
+    type: [Boolean, String],
+    default: undefined,
+    validator: v => typeof v === 'boolean' || v === 'always'
+  },
+  thumbSize: {
+    type: [Number, String],
+    default: 20
+  },
+  showTicks: {
+    type: [Boolean, String],
+    default: false,
+    validator: v => typeof v === 'boolean' || v === 'always'
+  },
+  ticks: {
+    type: [Array, Object]
+  },
+  tickSize: {
+    type: [Number, String],
+    default: 2
+  },
+  color: String,
+  trackColor: String,
+  trackFillColor: String,
+  trackSize: {
+    type: [Number, String],
+    default: 4
+  },
+  direction: {
+    type: String,
+    default: 'horizontal',
+    validator: v => ['vertical', 'horizontal'].includes(v)
+  },
+  reverse: Boolean,
+  ...(0,_composables_rounded_mjs__WEBPACK_IMPORTED_MODULE_1__/* .makeRoundedProps */ .I)(),
+  ...(0,_composables_elevation_mjs__WEBPACK_IMPORTED_MODULE_2__/* .makeElevationProps */ .c)({
+    elevation: 2
+  })
+}, 'slider');
+const useSteps = props => {
+  const min = (0,vue__WEBPACK_IMPORTED_MODULE_3__/* .computed */ .Fl)(() => parseFloat(props.min));
+  const max = (0,vue__WEBPACK_IMPORTED_MODULE_3__/* .computed */ .Fl)(() => parseFloat(props.max));
+  const step = (0,vue__WEBPACK_IMPORTED_MODULE_3__/* .computed */ .Fl)(() => +props.step > 0 ? parseFloat(props.step) : 0);
+  const decimals = (0,vue__WEBPACK_IMPORTED_MODULE_3__/* .computed */ .Fl)(() => Math.max((0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_4__/* .getDecimals */ .pC)(step.value), (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_4__/* .getDecimals */ .pC)(min.value)));
+  function roundValue(value) {
+    if (step.value <= 0) return value;
+    const clamped = (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_4__/* .clamp */ .uZ)(value, min.value, max.value);
+    const offset = min.value % step.value;
+    const newValue = Math.round((clamped - offset) / step.value) * step.value + offset;
+    return parseFloat(Math.min(newValue, max.value).toFixed(decimals.value));
+  }
+  return {
+    min,
+    max,
+    step,
+    decimals,
+    roundValue
+  };
+};
+const useSlider = _ref => {
+  let {
+    props,
+    steps,
+    onSliderStart,
+    onSliderMove,
+    onSliderEnd,
+    getActiveThumb
+  } = _ref;
+  const {
+    isRtl
+  } = (0,_composables_locale_mjs__WEBPACK_IMPORTED_MODULE_5__/* .useRtl */ .Vw)();
+  const isReversed = (0,vue__WEBPACK_IMPORTED_MODULE_6__/* .toRef */ .Vh)(props, 'reverse');
+  const horizontalDirection = (0,vue__WEBPACK_IMPORTED_MODULE_3__/* .computed */ .Fl)(() => {
+    let hd = isRtl.value ? 'rtl' : 'ltr';
+    if (props.reverse) {
+      hd = hd === 'rtl' ? 'ltr' : 'rtl';
+    }
+    return hd;
+  });
+  const {
+    min,
+    max,
+    step,
+    decimals,
+    roundValue
+  } = steps;
+  const thumbSize = (0,vue__WEBPACK_IMPORTED_MODULE_3__/* .computed */ .Fl)(() => parseInt(props.thumbSize, 10));
+  const tickSize = (0,vue__WEBPACK_IMPORTED_MODULE_3__/* .computed */ .Fl)(() => parseInt(props.tickSize, 10));
+  const trackSize = (0,vue__WEBPACK_IMPORTED_MODULE_3__/* .computed */ .Fl)(() => parseInt(props.trackSize, 10));
+  const numTicks = (0,vue__WEBPACK_IMPORTED_MODULE_3__/* .computed */ .Fl)(() => (max.value - min.value) / step.value);
+  const disabled = (0,vue__WEBPACK_IMPORTED_MODULE_6__/* .toRef */ .Vh)(props, 'disabled');
+  const vertical = (0,vue__WEBPACK_IMPORTED_MODULE_3__/* .computed */ .Fl)(() => props.direction === 'vertical');
+  const thumbColor = (0,vue__WEBPACK_IMPORTED_MODULE_3__/* .computed */ .Fl)(() => props.error || props.disabled ? undefined : props.thumbColor ?? props.color);
+  const trackColor = (0,vue__WEBPACK_IMPORTED_MODULE_3__/* .computed */ .Fl)(() => props.error || props.disabled ? undefined : props.trackColor ?? props.color);
+  const trackFillColor = (0,vue__WEBPACK_IMPORTED_MODULE_3__/* .computed */ .Fl)(() => props.error || props.disabled ? undefined : props.trackFillColor ?? props.color);
+  const mousePressed = (0,vue__WEBPACK_IMPORTED_MODULE_6__/* .ref */ .iH)(false);
+  const startOffset = (0,vue__WEBPACK_IMPORTED_MODULE_6__/* .ref */ .iH)(0);
+  const trackContainerRef = (0,vue__WEBPACK_IMPORTED_MODULE_6__/* .ref */ .iH)();
+  const activeThumbRef = (0,vue__WEBPACK_IMPORTED_MODULE_6__/* .ref */ .iH)();
+  function parseMouseMove(e) {
+    const vertical = props.direction === 'vertical';
+    const start = vertical ? 'top' : 'left';
+    const length = vertical ? 'height' : 'width';
+    const position = vertical ? 'clientY' : 'clientX';
+    const {
+      [start]: trackStart,
+      [length]: trackLength
+    } = trackContainerRef.value?.$el.getBoundingClientRect();
+    const clickOffset = getPosition(e, position);
+
+    // It is possible for left to be NaN, force to number
+    let clickPos = Math.min(Math.max((clickOffset - trackStart - startOffset.value) / trackLength, 0), 1) || 0;
+    if (vertical || horizontalDirection.value === 'rtl') clickPos = 1 - clickPos;
+    return roundValue(min.value + clickPos * (max.value - min.value));
+  }
+  const handleStop = e => {
+    onSliderEnd({
+      value: parseMouseMove(e)
+    });
+    mousePressed.value = false;
+    startOffset.value = 0;
+  };
+  const handleStart = e => {
+    activeThumbRef.value = getActiveThumb(e);
+    if (!activeThumbRef.value) return;
+    activeThumbRef.value.focus();
+    mousePressed.value = true;
+    if (activeThumbRef.value.contains(e.target)) {
+      startOffset.value = getOffset(e, activeThumbRef.value, props.direction);
+    } else {
+      startOffset.value = 0;
+      onSliderMove({
+        value: parseMouseMove(e)
+      });
+    }
+    onSliderStart({
+      value: parseMouseMove(e)
+    });
+  };
+  const moveListenerOptions = {
+    passive: true,
+    capture: true
+  };
+  function onMouseMove(e) {
+    onSliderMove({
+      value: parseMouseMove(e)
+    });
+  }
+  function onSliderMouseUp(e) {
+    e.stopPropagation();
+    e.preventDefault();
+    handleStop(e);
+    window.removeEventListener('mousemove', onMouseMove, moveListenerOptions);
+    window.removeEventListener('mouseup', onSliderMouseUp);
+  }
+  function onSliderTouchend(e) {
+    handleStop(e);
+    window.removeEventListener('touchmove', onMouseMove, moveListenerOptions);
+    e.target?.removeEventListener('touchend', onSliderTouchend);
+  }
+  function onSliderTouchstart(e) {
+    handleStart(e);
+    window.addEventListener('touchmove', onMouseMove, moveListenerOptions);
+    e.target?.addEventListener('touchend', onSliderTouchend, {
+      passive: false
+    });
+  }
+  function onSliderMousedown(e) {
+    e.preventDefault();
+    handleStart(e);
+    window.addEventListener('mousemove', onMouseMove, moveListenerOptions);
+    window.addEventListener('mouseup', onSliderMouseUp, {
+      passive: false
+    });
+  }
+  const position = val => {
+    const percentage = (val - min.value) / (max.value - min.value) * 100;
+    return (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_4__/* .clamp */ .uZ)(isNaN(percentage) ? 0 : percentage, 0, 100);
+  };
+  const showTicks = (0,vue__WEBPACK_IMPORTED_MODULE_6__/* .toRef */ .Vh)(props, 'showTicks');
+  const parsedTicks = (0,vue__WEBPACK_IMPORTED_MODULE_3__/* .computed */ .Fl)(() => {
+    if (!showTicks.value) return [];
+    if (!props.ticks) {
+      return numTicks.value !== Infinity ? (0,_util_index_mjs__WEBPACK_IMPORTED_MODULE_4__/* .createRange */ .MT)(numTicks.value + 1).map(t => {
+        const value = min.value + t * step.value;
+        return {
+          value,
+          position: position(value)
+        };
+      }) : [];
+    }
+    if (Array.isArray(props.ticks)) return props.ticks.map(t => ({
+      value: t,
+      position: position(t),
+      label: t.toString()
+    }));
+    return Object.keys(props.ticks).map(key => ({
+      value: parseFloat(key),
+      position: position(parseFloat(key)),
+      label: props.ticks[key]
+    }));
+  });
+  const hasLabels = (0,vue__WEBPACK_IMPORTED_MODULE_3__/* .computed */ .Fl)(() => parsedTicks.value.some(_ref2 => {
+    let {
+      label
+    } = _ref2;
+    return !!label;
+  }));
+  const data = {
+    activeThumbRef,
+    color: (0,vue__WEBPACK_IMPORTED_MODULE_6__/* .toRef */ .Vh)(props, 'color'),
+    decimals,
+    disabled,
+    direction: (0,vue__WEBPACK_IMPORTED_MODULE_6__/* .toRef */ .Vh)(props, 'direction'),
+    elevation: (0,vue__WEBPACK_IMPORTED_MODULE_6__/* .toRef */ .Vh)(props, 'elevation'),
+    hasLabels,
+    horizontalDirection,
+    isReversed,
+    min,
+    max,
+    mousePressed,
+    numTicks,
+    onSliderMousedown,
+    onSliderTouchstart,
+    parsedTicks,
+    parseMouseMove,
+    position,
+    readonly: (0,vue__WEBPACK_IMPORTED_MODULE_6__/* .toRef */ .Vh)(props, 'readonly'),
+    rounded: (0,vue__WEBPACK_IMPORTED_MODULE_6__/* .toRef */ .Vh)(props, 'rounded'),
+    roundValue,
+    showTicks,
+    startOffset,
+    step,
+    thumbSize,
+    thumbColor,
+    thumbLabel: (0,vue__WEBPACK_IMPORTED_MODULE_6__/* .toRef */ .Vh)(props, 'thumbLabel'),
+    ticks: (0,vue__WEBPACK_IMPORTED_MODULE_6__/* .toRef */ .Vh)(props, 'ticks'),
+    tickSize,
+    trackColor,
+    trackContainerRef,
+    trackFillColor,
+    trackSize,
+    vertical
+  };
+  (0,vue__WEBPACK_IMPORTED_MODULE_3__/* .provide */ .JJ)(VSliderSymbol, data);
+  return data;
+};
+
+/***/ }),
+
 /***/ 3104:
 /***/ (function(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
@@ -81590,13 +81766,13 @@ function useRender(render) {
 /***/ (function(module) {
 
 "use strict";
-module.exports = JSON.parse('{"name":"pjcan","version":"0.3.10","private":true,"description":"CanBus project for Mazda 3","author":"PJ82. Spiridonov Vladislav","scripts":{"serve":"vue-cli-service serve","build":"vue-cli-service build","build test":"vue-cli-service build --mode test"},"dependencies":{"@egjs/vue3-flicking":"^4.10.2","@mdi/font":"7.0.96","axios":"^1.1.3","bitset":"^5.1.1","core-js":"^3.26.0","eventemitter3":"^4.0.7","moment":"^2.29.4","register-service-worker":"^1.7.2","roboto-fontface":"*","screenfull":"^6.0.2","vue":"^3.2.41","vue-i18n":"^9.2.2","vue-router":"^4.1.6","vue3-toastify":"^0.0.3","vuedraggable":"^4.1.0","vuetify":"^3.1.5","vuex":"^4.1.0","webfontloader":"^1.6.28"},"devDependencies":{"@types/node":"^12.0.2","@types/webfontloader":"^1.6.29","@typescript-eslint/eslint-plugin":"^5.42.0","@typescript-eslint/parser":"^5.42.0","@vue/cli-plugin-babel":"~5.0.8","@vue/cli-plugin-eslint":"~5.0.8","@vue/cli-plugin-pwa":"~5.0.8","@vue/cli-plugin-router":"~5.0.8","@vue/cli-plugin-typescript":"~5.0.8","@vue/cli-plugin-vuex":"~5.0.8","@vue/cli-service":"~5.0.8","@vue/eslint-config-typescript":"^11.0.2","@vueuse/core":"^9.4.0","eslint":"^8.26.0","eslint-config-prettier":"^8.5.0","eslint-plugin-prettier":"^4.2.1","eslint-plugin-vue":"^9.7.0","prettier":"^2.7.1","sass":"^1.56.0","sass-loader":"^13.1.0","script-ext-html-webpack-plugin":"^2.1.5","typescript":"~4.8.4","vue-cli-plugin-vuetify":"~2.5.8","webpack-plugin-vuetify":"^2.0.0"},"eslintConfig":{"root":true,"env":{"node":true},"extends":["plugin:vue/vue3-essential","eslint:recommended","@vue/typescript/recommended","plugin:prettier/recommended"],"parserOptions":{"ecmaVersion":2020},"rules":{}},"browserslist":["> 1%","last 2 versions","not dead","not ie 11"],"productName":"PJCan App"}');
+module.exports = JSON.parse('{"name":"pjcan","version":"0.3.9","private":true,"description":"CanBus project for Mazda 3","author":"PJ82. Spiridonov Vladislav","scripts":{"serve":"vue-cli-service serve","build":"vue-cli-service build","build test":"vue-cli-service build --mode test"},"dependencies":{"@egjs/vue3-flicking":"^4.10.2","@mdi/font":"7.0.96","axios":"^1.1.3","bitset":"^5.1.1","core-js":"^3.26.0","eventemitter3":"^4.0.7","moment":"^2.29.4","register-service-worker":"^1.7.2","roboto-fontface":"*","screenfull":"^6.0.2","vue":"^3.2.41","vue-i18n":"^9.2.2","vue-router":"^4.1.6","vue3-toastify":"^0.0.3","vuedraggable":"^4.1.0","vuetify":"^3.1.5","vuex":"^4.1.0","webfontloader":"^1.6.28"},"devDependencies":{"@types/node":"^12.0.2","@types/webfontloader":"^1.6.29","@typescript-eslint/eslint-plugin":"^5.42.0","@typescript-eslint/parser":"^5.42.0","@vue/cli-plugin-babel":"~5.0.8","@vue/cli-plugin-eslint":"~5.0.8","@vue/cli-plugin-pwa":"~5.0.8","@vue/cli-plugin-router":"~5.0.8","@vue/cli-plugin-typescript":"~5.0.8","@vue/cli-plugin-vuex":"~5.0.8","@vue/cli-service":"~5.0.8","@vue/eslint-config-typescript":"^11.0.2","@vueuse/core":"^9.4.0","eslint":"^8.26.0","eslint-config-prettier":"^8.5.0","eslint-plugin-prettier":"^4.2.1","eslint-plugin-vue":"^9.7.0","prettier":"^2.7.1","sass":"^1.56.0","sass-loader":"^13.1.0","script-ext-html-webpack-plugin":"^2.1.5","typescript":"~4.8.4","vue-cli-plugin-vuetify":"~2.5.8","webpack-plugin-vuetify":"^2.0.0"},"eslintConfig":{"root":true,"env":{"node":true},"extends":["plugin:vue/vue3-essential","eslint:recommended","@vue/typescript/recommended","plugin:prettier/recommended"],"parserOptions":{"ecmaVersion":2020},"rules":{}},"browserslist":["> 1%","last 2 versions","not dead","not ie 11"],"productName":"PJCan App"}');
 
 /***/ })
 
 },
 /******/ function(__webpack_require__) { // webpackRuntimeModules
 /******/ var __webpack_exec__ = function(moduleId) { return __webpack_require__(__webpack_require__.s = moduleId); }
-/******/ var __webpack_exports__ = (__webpack_exec__(6298));
+/******/ var __webpack_exports__ = (__webpack_exec__(4638));
 /******/ }
 ]);

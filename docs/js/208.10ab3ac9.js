@@ -1,5 +1,5 @@
 "use strict";
-(self["webpackChunkpjcan"] = self["webpackChunkpjcan"] || []).push([[757],{
+(self["webpackChunkpjcan"] = self["webpackChunkpjcan"] || []).push([[208],{
 
 /***/ 9363:
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
@@ -15818,7 +15818,7 @@ const __exports__ = /*#__PURE__*/(0,exportHelper/* default */.Z)(ViewSettingDial
 
 /***/ }),
 
-/***/ 4757:
+/***/ 6208:
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 // ESM COMPAT FLAG
@@ -15833,7 +15833,7 @@ __webpack_require__.d(__webpack_exports__, {
 var runtime_core_esm_bundler = __webpack_require__(3396);
 // EXTERNAL MODULE: ./node_modules/@vue/shared/dist/shared.esm-bundler.js
 var shared_esm_bundler = __webpack_require__(7139);
-;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/onboard/index.vue?vue&type=template&id=be4d32aa&scoped=true&ts=true
+;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/onboard/index.vue?vue&type=template&id=52ea28ea&scoped=true&ts=true
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_flicking = (0,runtime_core_esm_bundler/* resolveComponent */.up)("flicking");
@@ -17839,6 +17839,324 @@ var doors = __webpack_require__(1971);
 const DoorsCard_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(DoorsCardvue_type_script_lang_ts, [['render',DoorsCardvue_type_template_id_5d33d7c0_ts_true_render]])
 
 /* harmony default export */ var DoorsCard = (DoorsCard_exports_);
+;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/onboard/components/VolumeCard.vue?vue&type=template&id=0b0da0dc&ts=true
+
+function VolumeCardvue_type_template_id_0b0da0dc_ts_true_render(_ctx, _cache, $props, $setup, $data, $options) {
+  const _component_slider_card_item = (0,runtime_core_esm_bundler/* resolveComponent */.up)("slider-card-item");
+                                                      
+                                                      
+  const _component_card = (0,runtime_core_esm_bundler/* resolveComponent */.up)("card");
+  const _component_view_setting_dialog = (0,runtime_core_esm_bundler/* resolveComponent */.up)("view-setting-dialog");
+  return (0,runtime_core_esm_bundler/* openBlock */.wg)(), (0,runtime_core_esm_bundler/* createElementBlock */.iD)(runtime_core_esm_bundler/* Fragment */.HY, null, [(0,runtime_core_esm_bundler/* createVNode */.Wm)(_component_card, {
+    class: "volume-card",
+    title: _ctx.$t('onboard.volume.title'),
+    menu: $setup.menu,
+    "onClick:menu": $setup.onMenuClick
+  }, {
+    body: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VRow/* VRow */.o, null, {
+      default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VCol/* VCol */.D, {
+        cols: "12",
+        class: "pb-0"
+      }, {
+        default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(_component_slider_card_item, {
+          modelValue: $setup.volume,
+          "onUpdate:modelValue": _cache[0] || (_cache[0] = $event => $setup.volume = $event),
+          title: _ctx.$t('onboard.volume.level.title'),
+          description: _ctx.$t('onboard.volume.level.description'),
+          max: $setup.max,
+          nodata: !$setup.isLoadedValue,
+          disabled: !$setup.isLoadedView
+        }, null, 8, ["modelValue", "title", "description", "max", "nodata", "disabled"])]),
+        _: 1
+      })]),
+      _: 1
+    })]),
+    _: 1
+  }, 8, ["title", "menu", "onClick:menu"]), (0,runtime_core_esm_bundler/* createVNode */.Wm)(_component_view_setting_dialog, {
+    modelValue: $setup.menuVisible,
+    "onUpdate:modelValue": _cache[1] || (_cache[1] = $event => $setup.menuVisible = $event),
+    title: $setup.menuSelected.title,
+    enabled: $setup.menuViewConfig.enabled,
+    type: $setup.menuViewConfig.type,
+    time: $setup.menuViewConfig.time,
+    disabled: !$setup.isLoadedView,
+    "onClick:apply": $setup.onViewSettingApply
+  }, null, 8, ["modelValue", "title", "enabled", "type", "time", "disabled", "onClick:apply"])], 64);
+}
+
+/* Vuetify */
+
+
+
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/components/VSlider/VSlider.mjs
+var VSlider = __webpack_require__(5999);
+;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/cards/SliderCardItem.vue?vue&type=template&id=6e405fe2&scoped=true&ts=true
+
+const SliderCardItemvue_type_template_id_6e405fe2_scoped_true_ts_true_withScopeId = n => (_pushScopeId("data-v-6e405fe2"), n = n(), _popScopeId(), n);
+const SliderCardItemvue_type_template_id_6e405fe2_scoped_true_ts_true_hoisted_1 = {
+  class: "slider-card-item"
+};
+const SliderCardItemvue_type_template_id_6e405fe2_scoped_true_ts_true_hoisted_2 = {
+  class: "text-h4"
+};
+const SliderCardItemvue_type_template_id_6e405fe2_scoped_true_ts_true_hoisted_3 = {
+  class: "mt-1 slider-card-item__description"
+};
+function SliderCardItemvue_type_template_id_6e405fe2_scoped_true_ts_true_render(_ctx, _cache, $props, $setup, $data, $options) {
+                                                            
+  return (0,runtime_core_esm_bundler/* openBlock */.wg)(), (0,runtime_core_esm_bundler/* createElementBlock */.iD)("div", SliderCardItemvue_type_template_id_6e405fe2_scoped_true_ts_true_hoisted_1, [(0,runtime_core_esm_bundler/* createElementVNode */._)("div", SliderCardItemvue_type_template_id_6e405fe2_scoped_true_ts_true_hoisted_2, (0,shared_esm_bundler/* toDisplayString */.zw)($props.title), 1), (0,runtime_core_esm_bundler/* createVNode */.Wm)(VSlider/* VSlider */.R, {
+    modelValue: $setup.modelSlider,
+    "onUpdate:modelValue": _cache[0] || (_cache[0] = $event => $setup.modelSlider = $event),
+    min: $props.min,
+    max: $props.max,
+    "prepend-icon": $props.prependIconMdi,
+    "append-icon": $props.appendIconMdi,
+    color: $setup.color(),
+    step: 1,
+    "hide-details": "",
+    "onUpdate:focused": $setup.onFocusedUpdate
+  }, null, 8, ["modelValue", "min", "max", "prepend-icon", "append-icon", "color", "onUpdate:focused"]), (0,runtime_core_esm_bundler/* createElementVNode */._)("div", SliderCardItemvue_type_template_id_6e405fe2_scoped_true_ts_true_hoisted_3, (0,shared_esm_bundler/* toDisplayString */.zw)($props.description), 1)]);
+}
+
+/* Vuetify */
+
+
+
+;// CONCATENATED MODULE: ./src/components/cards/SliderCardItem.vue?vue&type=template&id=6e405fe2&scoped=true&ts=true
+
+;// CONCATENATED MODULE: ./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/cards/SliderCardItem.vue?vue&type=script&lang=ts
+
+/* harmony default export */ var SliderCardItemvue_type_script_lang_ts = ({
+  name: "SliderCardItem",
+  props: {
+    /** Значение slider */
+    modelValue: Number,
+    /** Заголовок */
+    title: String,
+    /** Описание */
+    description: String,
+    /** Минимальное значение */
+    min: {
+      type: Number,
+      default: 0
+    },
+    /** Максимальное значение */
+    max: {
+      type: Number,
+      default: 32
+    },
+    /** Имя MDI иконки в начале */
+    prependIconMdi: {
+      type: String,
+      default: "mdi-volume-minus"
+    },
+    /** Имя MDI иконки в конце */
+    appendIconMdi: {
+      type: String,
+      default: "mdi-volume-plus"
+    },
+    /** Точки */
+    points: {
+      type: Array,
+      default: () => [7, 18, 26, 32]
+    },
+    /** Цвет точки */
+    pointColors: {
+      type: Array,
+      default: () => ["primary", "success", "warning", "error"]
+    }
+  },
+  emits: ["update:modelValue"],
+  setup(props, {
+    emit
+  }) {
+    const {
+      modelValue,
+      points,
+      pointColors
+    } = (0,reactivity_esm_bundler/* toRefs */.BK)(props);
+    const flicking = (0,runtime_core_esm_bundler/* inject */.f3)("flicking");
+    const modelSlider = (0,runtime_core_esm_bundler/* computed */.Fl)({
+      get: () => modelValue.value,
+      set: val => emit("update:modelValue", val)
+    });
+    /**
+     * Блокировка flicking
+     * @param {boolean} ev Статус фокуса
+     */
+    const onFocusedUpdate = ev => {
+      if (ev) flicking.value.disableInput();else flicking.value.enableInput();
+    };
+    /** Цвет */
+    const color = () => {
+      const index = points.value?.findIndex(x => modelSlider.value <= x);
+      return pointColors.value?.[index] ?? "error";
+    };
+    return {
+      flicking,
+      modelSlider,
+      onFocusedUpdate,
+      color
+    };
+  }
+});
+;// CONCATENATED MODULE: ./src/components/cards/SliderCardItem.vue?vue&type=script&lang=ts
+ 
+;// CONCATENATED MODULE: ./node_modules/mini-css-extract-plugin/dist/loader.js??clonedRuleSet-22.use[0]!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/cards/SliderCardItem.vue?vue&type=style&index=0&id=6e405fe2&lang=scss&scoped=true
+// extracted by mini-css-extract-plugin
+
+;// CONCATENATED MODULE: ./src/components/cards/SliderCardItem.vue?vue&type=style&index=0&id=6e405fe2&lang=scss&scoped=true
+
+;// CONCATENATED MODULE: ./src/components/cards/SliderCardItem.vue
+
+
+
+
+;
+
+
+const SliderCardItem_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(SliderCardItemvue_type_script_lang_ts, [['render',SliderCardItemvue_type_template_id_6e405fe2_scoped_true_ts_true_render],['__scopeId',"data-v-6e405fe2"]])
+
+/* harmony default export */ var SliderCardItem = (SliderCardItem_exports_);
+// EXTERNAL MODULE: ./src/models/pjcan/variables/volume/index.ts + 6 modules
+var variables_volume = __webpack_require__(3057);
+;// CONCATENATED MODULE: ./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/onboard/components/VolumeCard.vue?vue&type=script&lang=ts
+
+
+
+
+
+
+
+
+/* harmony default export */ var VolumeCardvue_type_script_lang_ts = ({
+  name: "VolumeCard",
+  components: {
+    Card: Card/* default */.Z,
+    SwitchCardItem: SwitchCardItem/* default */.Z,
+    SliderCardItem: SliderCardItem,
+    ViewSettingDialog: ViewSettingDialog/* default */.Z
+  },
+  setup() {
+    const {
+      t
+    } = (0,vue_i18n_esm_bundler/* useI18n */.QT)();
+    const isLoadedValue = (0,reactivity_esm_bundler/* ref */.iH)(false);
+    const isLoadedView = (0,reactivity_esm_bundler/* ref */.iH)(false);
+    const mute = (0,reactivity_esm_bundler/* ref */.iH)(false);
+    const volume = (0,reactivity_esm_bundler/* ref */.iH)(0);
+    const max = (0,reactivity_esm_bundler/* ref */.iH)(0);
+    let queryValueVolumeDisabled = false;
+    (0,runtime_core_esm_bundler/* watch */.YP)(mute, val => {
+      if (isLoadedValue.value && canbus["default"].values.variable.volume.mute !== val) {
+        canbus["default"].values.variable.volume.mute = val;
+        canbus["default"].queryValue(variables_volume/* API_VARIABLE_VOLUME_EXEC */.pf);
+      }
+    });
+    (0,runtime_core_esm_bundler/* watch */.YP)(volume, val => {
+      if (isLoadedValue.value && canbus["default"].values.variable.volume.volume !== val) {
+        canbus["default"].values.variable.volume.volume = val;
+        if (!queryValueVolumeDisabled) {
+          queryValueVolumeDisabled = true;
+          setTimeout(() => {
+            queryValueVolumeDisabled = false;
+            canbus["default"].queryValue(variables_volume/* API_VARIABLE_VOLUME_EXEC */.pf);
+          }, 250);
+          canbus["default"].queryValue(variables_volume/* API_VARIABLE_VOLUME_EXEC */.pf);
+        }
+      }
+    });
+    // watch(max, (val: number) =>
+    // {
+    // 	if (isLoadedValue.value && canbus.configs.variable.volume.max !== val)
+    // 	{
+    // 		canbus.configs.variable.volume.max = val;
+    // 	}
+    // });
+    /** Входящие значения звука */
+    const onReceiveValue = res => {
+      isLoadedValue.value = res.isData;
+      if (res.isData) {
+        mute.value = res.mute;
+        volume.value = res.volume;
+      }
+    };
+    /** Входящие конфигурация звука */
+    const onReceiveConfig = res => {
+      if (res.isData) {
+        max.value = res.max;
+      }
+    };
+    /** Входящие значения отображения звука */
+    const onReceiveView = res => {
+      isLoadedView.value = res.isData;
+    };
+    // регистрируем события
+    (0,runtime_core_esm_bundler/* onMounted */.bv)(() => {
+      canbus["default"].addListener(variables_volume/* API_VARIABLE_VOLUME_EVENT */.FN, onReceiveValue);
+      canbus["default"].addListener(variables_volume/* API_VARIABLE_VOLUME_CONFIG_EVENT */.Vy, onReceiveConfig);
+      canbus["default"].addListener(variables_volume/* API_VARIABLE_VOLUME_VIEW_EVENT */.H7, onReceiveView);
+      onReceiveValue(canbus["default"].values.variable.volume);
+      onReceiveConfig(canbus["default"].configs.variable.volume);
+      onReceiveView(canbus["default"].views.variable.volume);
+    });
+    // удаляем события
+    (0,runtime_core_esm_bundler/* onUnmounted */.Ah)(() => {
+      canbus["default"].removeListener(variables_volume/* API_VARIABLE_VOLUME_EVENT */.FN, onReceiveValue);
+      canbus["default"].removeListener(variables_volume/* API_VARIABLE_VOLUME_CONFIG_EVENT */.Vy, onReceiveConfig);
+      canbus["default"].removeListener(variables_volume/* API_VARIABLE_VOLUME_VIEW_EVENT */.H7, onReceiveView);
+    });
+    // МЕНЮ ОТОБРАЖЕНИЯ
+    const menu = (0,runtime_core_esm_bundler/* computed */.Fl)(() => [{
+      id: 0,
+      title: t("onboard.volume.menu")
+    }]);
+    const menuVisible = (0,reactivity_esm_bundler/* ref */.iH)(false);
+    const menuSelected = (0,reactivity_esm_bundler/* ref */.iH)({});
+    const menuViewConfig = (0,reactivity_esm_bundler/* ref */.iH)({});
+    /**
+     * Выбор пункта меню отображения на информационном экране
+     * @param {IMenuItem} item Элемент меню
+     */
+    const onMenuClick = item => {
+      menuVisible.value = true;
+      menuSelected.value = item;
+      menuViewConfig.value = canbus["default"].views.variable.volume.view;
+    };
+    /**
+     * Применить параметры отображения на информационном экране
+     * @param {IViewConfig} data Новые параметры отображения
+     */
+    const onViewSettingApply = data => {
+      canbus["default"].views.variable.volume.view = data;
+      canbus["default"].queryView(variables_volume/* API_VARIABLE_VOLUME_VIEW_EXEC */.Ge);
+    };
+    return {
+      isLoadedValue,
+      isLoadedView,
+      mute,
+      volume,
+      max,
+      menu,
+      menuVisible,
+      menuSelected,
+      menuViewConfig,
+      onMenuClick,
+      onViewSettingApply
+    };
+  }
+});
+;// CONCATENATED MODULE: ./src/views/onboard/components/VolumeCard.vue?vue&type=script&lang=ts
+ 
+;// CONCATENATED MODULE: ./src/views/onboard/components/VolumeCard.vue
+
+
+
+
+;
+const VolumeCard_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(VolumeCardvue_type_script_lang_ts, [['render',VolumeCardvue_type_template_id_0b0da0dc_ts_true_render]])
+
+/* harmony default export */ var VolumeCard = (VolumeCard_exports_);
 ;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/onboard/components/ClimateCard.vue?vue&type=template&id=0cf699c6&ts=true
 
 function ClimateCardvue_type_template_id_0cf699c6_ts_true_render(_ctx, _cache, $props, $setup, $data, $options) {
@@ -18097,6 +18415,7 @@ var car = __webpack_require__(7530);
 
 
 
+
 /* harmony default export */ var onboardvue_type_script_lang_ts = ({
   name: "onboard",
   components: {
@@ -18106,6 +18425,7 @@ var car = __webpack_require__(7530);
     FuelCard: FuelCard,
     MovementCard: MovementCard,
     DoorsCard: DoorsCard,
+    VolumeCard: VolumeCard,
     ClimateCard: ClimateCard
   },
   setup() {
@@ -18139,10 +18459,10 @@ var car = __webpack_require__(7530);
 });
 ;// CONCATENATED MODULE: ./src/views/onboard/index.vue?vue&type=script&lang=ts
  
-;// CONCATENATED MODULE: ./node_modules/mini-css-extract-plugin/dist/loader.js??clonedRuleSet-22.use[0]!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/onboard/index.vue?vue&type=style&index=0&id=be4d32aa&lang=scss&scoped=true
+;// CONCATENATED MODULE: ./node_modules/mini-css-extract-plugin/dist/loader.js??clonedRuleSet-22.use[0]!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/onboard/index.vue?vue&type=style&index=0&id=52ea28ea&lang=scss&scoped=true
 // extracted by mini-css-extract-plugin
 
-;// CONCATENATED MODULE: ./src/views/onboard/index.vue?vue&type=style&index=0&id=be4d32aa&lang=scss&scoped=true
+;// CONCATENATED MODULE: ./src/views/onboard/index.vue?vue&type=style&index=0&id=52ea28ea&lang=scss&scoped=true
 
 ;// CONCATENATED MODULE: ./src/views/onboard/index.vue
 
@@ -18152,7 +18472,7 @@ var car = __webpack_require__(7530);
 ;
 
 
-const onboard_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(onboardvue_type_script_lang_ts, [['render',render],['__scopeId',"data-v-be4d32aa"]])
+const onboard_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(onboardvue_type_script_lang_ts, [['render',render],['__scopeId',"data-v-52ea28ea"]])
 
 /* harmony default export */ var onboard = (onboard_exports_);
 
