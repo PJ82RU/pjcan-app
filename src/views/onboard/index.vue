@@ -17,6 +17,7 @@ import EngineCard from "./components/EngineCard.vue";
 import FuelCard from "./components/FuelCard.vue";
 import MovementCard from "./components/MovementCard.vue";
 import DoorsCard from "./components/DoorsCard.vue";
+import VolumeCard from "./components/VolumeCard.vue";
 import ClimateCard from "./components/ClimateCard.vue";
 
 import { IOnboardCard } from "@/models/interfaces/IOnboardCard";
@@ -26,7 +27,7 @@ import canbus from "@/api/canbus";
 
 export default {
 	name: "onboard",
-	components: { Flicking, InfoCard, EngineCard, FuelCard, MovementCard, DoorsCard, ClimateCard },
+	components: { Flicking, InfoCard, EngineCard, FuelCard, MovementCard, DoorsCard, VolumeCard, ClimateCard },
 	setup()
 	{
 		const { name: display } = useDisplay();

@@ -41,6 +41,7 @@ export class Values extends BaseModel implements IValues
 			this.variable.movement.isData = true;
 			this.variable.sensors.isData = true;
 			this.variable.temperature.isData = true;
+			this.variable.volume.isData = true;
 		}
 		return result;
 	}
