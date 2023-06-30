@@ -29,27 +29,52 @@ export class VariablesValue extends BaseModel implements IVariablesValue
 	{
 		EngineValue.update(version);
 
-		VariablesValue.struct = {
-			climate: BluetoothStruct.struct(ClimateValue.struct),
-			clock: BluetoothStruct.struct(ClockValue.struct),
-			doors: BluetoothStruct.struct(DoorsValue.struct),
-			engine: BluetoothStruct.struct(EngineValue.struct),
-			fuel: BluetoothStruct.struct(FuelValue.struct),
-			movement: BluetoothStruct.struct(MovementValue.struct),
-			sensors: BluetoothStruct.struct(SensorsValue.struct),
-			temperature: BluetoothStruct.struct(TemperatureValue.struct),
-			volume: BluetoothStruct.struct(VolumeValue.struct)
-		};
-		VariablesValue.size =
-			ClimateValue.size +
-			ClockValue.size +
-			DoorsValue.size +
-			EngineValue.size +
-			FuelValue.size +
-			MovementValue.size +
-			SensorsValue.size +
-			TemperatureValue.size +
-			VolumeValue.size;
+		if (!version || version.compareString("4.0.3") !== 1)
+		{
+			VariablesValue.struct = {
+				climate: BluetoothStruct.struct(ClimateValue.struct),
+				clock: BluetoothStruct.struct(ClockValue.struct),
+				doors: BluetoothStruct.struct(DoorsValue.struct),
+				engine: BluetoothStruct.struct(EngineValue.struct),
+				fuel: BluetoothStruct.struct(FuelValue.struct),
+				movement: BluetoothStruct.struct(MovementValue.struct),
+				sensors: BluetoothStruct.struct(SensorsValue.struct),
+				temperature: BluetoothStruct.struct(TemperatureValue.struct)
+			};
+			VariablesValue.size =
+				ClimateValue.size +
+				ClockValue.size +
+				DoorsValue.size +
+				EngineValue.size +
+				FuelValue.size +
+				MovementValue.size +
+				SensorsValue.size +
+				TemperatureValue.size;
+		}
+		else
+		{
+			VariablesValue.struct = {
+				climate: BluetoothStruct.struct(ClimateValue.struct),
+				clock: BluetoothStruct.struct(ClockValue.struct),
+				doors: BluetoothStruct.struct(DoorsValue.struct),
+				engine: BluetoothStruct.struct(EngineValue.struct),
+				fuel: BluetoothStruct.struct(FuelValue.struct),
+				movement: BluetoothStruct.struct(MovementValue.struct),
+				sensors: BluetoothStruct.struct(SensorsValue.struct),
+				temperature: BluetoothStruct.struct(TemperatureValue.struct),
+				volume: BluetoothStruct.struct(VolumeValue.struct)
+			};
+			VariablesValue.size =
+				ClimateValue.size +
+				ClockValue.size +
+				DoorsValue.size +
+				EngineValue.size +
+				FuelValue.size +
+				MovementValue.size +
+				SensorsValue.size +
+				TemperatureValue.size +
+				VolumeValue.size;
+		}
 	}
 
 	climate = new ClimateValue();
