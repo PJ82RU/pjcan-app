@@ -16071,10 +16071,10 @@ var DialogTemplate = __webpack_require__(2196);
 const ButtonDefinitionDialog_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(ButtonDefinitionDialogvue_type_script_lang_ts, [['render',ButtonDefinitionDialogvue_type_template_id_552687af_scoped_true_ts_true_render],['__scopeId',"data-v-552687af"]])
 
 /* harmony default export */ var ButtonDefinitionDialog = (ButtonDefinitionDialog_exports_);
-// EXTERNAL MODULE: ./src/models/pjcan/button/index.ts + 7 modules
-var pjcan_button = __webpack_require__(1483);
-// EXTERNAL MODULE: ./src/api/canbus.ts + 18 modules
-var canbus = __webpack_require__(3956);
+// EXTERNAL MODULE: ./src/models/pjcan/button/index.ts + 5 modules
+var pjcan_button = __webpack_require__(6841);
+// EXTERNAL MODULE: ./src/api/canbus.ts + 13 modules
+var canbus = __webpack_require__(4077);
 ;// CONCATENATED MODULE: ./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/buttons/index.vue?vue&type=script&lang=ts
 
 

@@ -2681,7 +2681,7 @@ webpackContext.id = 6700;
 
 /***/ }),
 
-/***/ 3956:
+/***/ 4077:
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2761,81 +2761,29 @@ var bluetooth = __webpack_require__(9014);
 var configs = __webpack_require__(1303);
 // EXTERNAL MODULE: ./src/models/pjcan/base/BaseModel.ts
 var BaseModel = __webpack_require__(9036);
-// EXTERNAL MODULE: ./src/models/pjcan/car/index.ts + 4 modules
-var car = __webpack_require__(7530);
-// EXTERNAL MODULE: ./src/models/pjcan/view/index.ts + 3 modules
-var view = __webpack_require__(7037);
-// EXTERNAL MODULE: ./src/models/pjcan/variables/bose/index.ts + 5 modules
-var bose = __webpack_require__(4547);
-// EXTERNAL MODULE: ./src/models/pjcan/variables/climate/index.ts + 5 modules
-var climate = __webpack_require__(3910);
-// EXTERNAL MODULE: ./src/models/pjcan/variables/doors/index.ts + 4 modules
-var doors = __webpack_require__(1971);
-// EXTERNAL MODULE: ./src/models/pjcan/variables/engine/index.ts + 6 modules
-var engine = __webpack_require__(7925);
-// EXTERNAL MODULE: ./src/models/pjcan/variables/fuel/index.ts + 6 modules
-var fuel = __webpack_require__(4873);
-// EXTERNAL MODULE: ./src/models/pjcan/variables/movement/index.ts + 4 modules
-var movement = __webpack_require__(8229);
-// EXTERNAL MODULE: ./src/models/pjcan/variables/sensors/index.ts + 5 modules
-var sensors = __webpack_require__(2775);
-// EXTERNAL MODULE: ./src/models/pjcan/variables/temperature/index.ts + 4 modules
-var temperature = __webpack_require__(1044);
-// EXTERNAL MODULE: ./src/models/pjcan/variables/volume/index.ts + 6 modules
-var volume = __webpack_require__(3057);
-;// CONCATENATED MODULE: ./src/models/pjcan/variables/clock/ClockValue.ts
-
-/** Модель значения часов */
-class ClockValue {
-  constructor() {
-    (0,defineProperty/* default */.Z)(this, "hour", 0);
-    (0,defineProperty/* default */.Z)(this, "minutes", 0);
-    (0,defineProperty/* default */.Z)(this, "seconds", 0);
-  }
-}
-;// CONCATENATED MODULE: ./src/models/pjcan/variables/clock/StructClockValue.ts
-
-const API_VARIABLE_CLOCK_SIZE = 3;
-const API_VARIABLE_CLOCK_VIEW_SIZE = 4;
-/** Структура данных */
-const StructClockValue = {
-  hour: bluetooth/* BluetoothStruct.uint8 */.GD.uint8(),
-  minutes: bluetooth/* BluetoothStruct.uint8 */.GD.uint8(),
-  seconds: bluetooth/* BluetoothStruct.uint8 */.GD.uint8()
-};
-;// CONCATENATED MODULE: ./src/models/pjcan/variables/clock/index.ts
-
-
-
-;// CONCATENATED MODULE: ./src/models/pjcan/variables/views/StructVariableViews.ts
-
-
-
-
-
-
-
-
-
-
-
-
-const API_VARIABLE_VIEWS_SIZE = bose/* API_VARIABLE_BOSE_VIEW_SIZE */.UU + climate/* API_VARIABLE_CLIMATE_VIEW_SIZE */.jG + API_VARIABLE_CLOCK_VIEW_SIZE + doors/* API_VARIABLE_DOORS_VIEW_SIZE */.dr + engine/* API_VARIABLE_ENGINE_VIEW_SIZE */.vN + fuel/* API_VARIABLE_FUEL_VIEW_SIZE */.P5 + movement/* API_VARIABLE_MOVEMENT_VIEW_SIZE */.XW + sensors/* API_VARIABLE_SENSORS_VIEW_SIZE */.m_ + temperature/* API_VARIABLE_TEMPERATURE_VIEW_SIZE */.xz + volume/* API_VARIABLE_VOLUME_VIEW_SIZE */.Ac;
-/** Структура данных */
-const StructVariableViews = {
-  bose: bluetooth/* BluetoothStruct.struct */.GD.struct(bose/* StructBoseView */.Bt),
-  climate: bluetooth/* BluetoothStruct.struct */.GD.struct(climate/* StructClimateView */.$M),
-  clock: bluetooth/* BluetoothStruct.struct */.GD.struct(view/* StructViewConfig */.hQ),
-  doors: bluetooth/* BluetoothStruct.struct */.GD.struct(doors/* StructDoorsView */.mG),
-  engine: bluetooth/* BluetoothStruct.struct */.GD.struct(engine/* StructEngineView */.gR),
-  fuel: bluetooth/* BluetoothStruct.struct */.GD.struct(fuel/* StructFuelView */.ij),
-  movement: bluetooth/* BluetoothStruct.struct */.GD.struct(movement/* StructMovementView */.QT),
-  sensors: bluetooth/* BluetoothStruct.struct */.GD.struct(sensors/* StructSensorsView */.qP),
-  temperature: bluetooth/* BluetoothStruct.struct */.GD.struct(temperature/* StructTemperatureView */.cb),
-  volume: bluetooth/* BluetoothStruct.struct */.GD.struct(volume/* StructVolumeView */.rb)
-};
+// EXTERNAL MODULE: ./src/models/pjcan/car/index.ts + 2 modules
+var car = __webpack_require__(5178);
+// EXTERNAL MODULE: ./src/models/pjcan/view/index.ts + 2 modules
+var view = __webpack_require__(7374);
+// EXTERNAL MODULE: ./src/models/pjcan/variables/bose/index.ts + 3 modules
+var bose = __webpack_require__(9217);
+// EXTERNAL MODULE: ./src/models/pjcan/variables/climate/index.ts + 3 modules
+var climate = __webpack_require__(2481);
+// EXTERNAL MODULE: ./src/models/pjcan/variables/doors/index.ts + 2 modules
+var doors = __webpack_require__(3558);
+// EXTERNAL MODULE: ./src/models/pjcan/variables/engine/index.ts + 3 modules
+var engine = __webpack_require__(2658);
+// EXTERNAL MODULE: ./src/models/pjcan/variables/fuel/index.ts + 3 modules
+var fuel = __webpack_require__(9422);
+// EXTERNAL MODULE: ./src/models/pjcan/variables/movement/index.ts + 2 modules
+var movement = __webpack_require__(6297);
+// EXTERNAL MODULE: ./src/models/pjcan/variables/sensors/index.ts + 3 modules
+var sensors = __webpack_require__(2343);
+// EXTERNAL MODULE: ./src/models/pjcan/variables/temperature/index.ts + 2 modules
+var temperature = __webpack_require__(8951);
+// EXTERNAL MODULE: ./src/models/pjcan/variables/volume/index.ts + 3 modules
+var volume = __webpack_require__(139);
 ;// CONCATENATED MODULE: ./src/models/pjcan/variables/views/VariablesViews.ts
-
 
 
 
@@ -2851,14 +2799,32 @@ const StructVariableViews = {
 
 const API_VARIABLE_VIEWS_EXEC = 101;
 const API_VARIABLE_VIEWS_EVENT = "VariableViews";
-const struct = new bluetooth/* BluetoothStruct */.GD(StructVariableViews);
 /** Модель параметров отображения данных переменных */
-class VariableView extends BaseModel/* BaseModel */.g {
+class VariableViews extends BaseModel/* BaseModel */.g {
+  /**
+   * Обновить версию структуры
+   * @param {IVersion} version Версия протокола
+   */
+  static update(version) {
+    VariableViews.struct = {
+      bose: bluetooth/* BluetoothStruct.struct */.GD.struct(bose/* BoseView.struct */.Jn.struct),
+      climate: bluetooth/* BluetoothStruct.struct */.GD.struct(climate/* ClimateView.struct */.Zv.struct),
+      clock: bluetooth/* BluetoothStruct.struct */.GD.struct(view/* ViewConfig.struct */.F.struct),
+      doors: bluetooth/* BluetoothStruct.struct */.GD.struct(doors/* DoorsView.struct */.mF.struct),
+      engine: bluetooth/* BluetoothStruct.struct */.GD.struct(engine/* EngineView.struct */.wS.struct),
+      fuel: bluetooth/* BluetoothStruct.struct */.GD.struct(fuel/* FuelView.struct */.c_.struct),
+      movement: bluetooth/* BluetoothStruct.struct */.GD.struct(movement/* MovementView.struct */.Zd.struct),
+      sensors: bluetooth/* BluetoothStruct.struct */.GD.struct(sensors/* SensorsView.struct */.e1.struct),
+      temperature: bluetooth/* BluetoothStruct.struct */.GD.struct(temperature/* TemperatureView.struct */.v7.struct),
+      volume: bluetooth/* BluetoothStruct.struct */.GD.struct(volume/* VolumeView.struct */.Cw.struct)
+    };
+    VariableViews.size = bose/* BoseView.size */.Jn.size + climate/* ClimateView.size */.Zv.size + view/* ViewConfig.size */.F.size + doors/* DoorsView.size */.mF.size + engine/* EngineView.size */.wS.size + fuel/* FuelView.size */.c_.size + movement/* MovementView.size */.Zd.size + sensors/* SensorsView.size */.e1.size + temperature/* TemperatureView.size */.v7.size + volume/* VolumeView.size */.Cw.size;
+  }
   constructor(data) {
     super();
     (0,defineProperty/* default */.Z)(this, "bose", new bose/* BoseView */.Jn());
     (0,defineProperty/* default */.Z)(this, "climate", new climate/* ClimateView */.Zv());
-    (0,defineProperty/* default */.Z)(this, "clock", new view/* ViewConfig */.Fx());
+    (0,defineProperty/* default */.Z)(this, "clock", new view/* ViewConfig */.F());
     (0,defineProperty/* default */.Z)(this, "doors", new doors/* DoorsView */.mF());
     (0,defineProperty/* default */.Z)(this, "engine", new engine/* EngineView */.wS());
     (0,defineProperty/* default */.Z)(this, "fuel", new fuel/* FuelView */.c_());
@@ -2873,7 +2839,7 @@ class VariableView extends BaseModel/* BaseModel */.g {
    * @param {DataView} buf Буфер данных
    */
   set(buf) {
-    const result = this._set(this, API_VARIABLE_VIEWS_EXEC, API_VARIABLE_VIEWS_SIZE + 1, struct, buf);
+    const result = this._set(this, API_VARIABLE_VIEWS_EXEC, VariableViews.size + 1, new bluetooth/* BluetoothStruct */.GD(VariableViews.struct), buf);
     if (result) {
       this.bose.isData = true;
       this.climate.isData = true;
@@ -2892,25 +2858,14 @@ class VariableView extends BaseModel/* BaseModel */.g {
     return this._get(this, API_VARIABLE_VIEWS_EXEC, 1);
   }
 }
+(0,defineProperty/* default */.Z)(VariableViews, "struct", void 0);
+(0,defineProperty/* default */.Z)(VariableViews, "size", void 0);
 ;// CONCATENATED MODULE: ./src/models/pjcan/variables/views/index.ts
 
 
-
-// EXTERNAL MODULE: ./src/models/pjcan/teyes/index.ts + 7 modules
-var teyes = __webpack_require__(8181);
-;// CONCATENATED MODULE: ./src/models/pjcan/views/StructViews.ts
-
-
-
-
-const API_VIEWS_SIZE = car/* API_CAR_VIEW_SIZE */.ow + teyes/* API_TEYES_VIEW_SIZE */.jQ + API_VARIABLE_VIEWS_SIZE;
-const StructViews = {
-  car: bluetooth/* BluetoothStruct.struct */.GD.struct(car/* StructCarView */.MN),
-  teyes: bluetooth/* BluetoothStruct.struct */.GD.struct(teyes/* StructTeyesView */.Te),
-  variable: bluetooth/* BluetoothStruct.struct */.GD.struct(StructVariableViews)
-};
+// EXTERNAL MODULE: ./src/models/pjcan/teyes/index.ts + 3 modules
+var teyes = __webpack_require__(2754);
 ;// CONCATENATED MODULE: ./src/models/pjcan/views/Views.ts
-
 
 
 
@@ -2919,13 +2874,25 @@ const StructViews = {
 
 const API_VIEWS_EXEC = 2;
 const API_VIEWS_EVENT = "Views";
-const Views_struct = new bluetooth/* BluetoothStruct */.GD(StructViews);
 class Views extends BaseModel/* BaseModel */.g {
+  /**
+   * Обновить версию структуры
+   * @param {IVersion} version Версия протокола
+   */
+  static update(version) {
+    VariableViews.update(version);
+    Views.struct = {
+      car: bluetooth/* BluetoothStruct.struct */.GD.struct(car/* CarView.struct */.bs.struct),
+      teyes: bluetooth/* BluetoothStruct.struct */.GD.struct(teyes/* TeyesView.struct */.U5.struct),
+      variable: bluetooth/* BluetoothStruct.struct */.GD.struct(VariableViews.struct)
+    };
+    Views.size = car/* CarView.size */.bs.size + teyes/* TeyesView.size */.U5.size + VariableViews.size;
+  }
   constructor(data) {
     super();
     (0,defineProperty/* default */.Z)(this, "car", new car/* CarView */.bs());
     (0,defineProperty/* default */.Z)(this, "teyes", new teyes/* TeyesView */.U5());
-    (0,defineProperty/* default */.Z)(this, "variable", new VariableView());
+    (0,defineProperty/* default */.Z)(this, "variable", new VariableViews());
     if (data) this.set(data);
   }
   /**
@@ -2933,7 +2900,7 @@ class Views extends BaseModel/* BaseModel */.g {
    * @param {DataView} buf Буфер данных
    */
   set(buf) {
-    const result = this._set(this, API_VIEWS_EXEC, API_VIEWS_SIZE + 1, Views_struct, buf);
+    const result = this._set(this, API_VIEWS_EXEC, Views.size + 1, new bluetooth/* BluetoothStruct */.GD(Views.struct), buf);
     if (result) {
       this.car.isData = true;
       this.teyes.isData = true;
@@ -2954,45 +2921,44 @@ class Views extends BaseModel/* BaseModel */.g {
     return this._get(this, API_VIEWS_EXEC, 1);
   }
 }
+(0,defineProperty/* default */.Z)(Views, "struct", void 0);
+(0,defineProperty/* default */.Z)(Views, "size", void 0);
+Views.update();
 ;// CONCATENATED MODULE: ./src/models/pjcan/views/index.ts
 
 
-
-// EXTERNAL MODULE: ./src/models/pjcan/variables/configs/index.ts + 2 modules
-var variables_configs = __webpack_require__(9617);
-// EXTERNAL MODULE: ./src/models/pjcan/device/index.ts + 6 modules
-var device = __webpack_require__(1423);
-// EXTERNAL MODULE: ./src/models/pjcan/button/index.ts + 7 modules
-var pjcan_button = __webpack_require__(1483);
-// EXTERNAL MODULE: ./src/models/pjcan/lcd/index.ts + 2 modules
-var lcd = __webpack_require__(7689);
-// EXTERNAL MODULE: ./src/models/pjcan/update/index.ts + 2 modules
-var update = __webpack_require__(8293);
-;// CONCATENATED MODULE: ./src/models/pjcan/variables/values/StructVariablesValue.ts
-
+// EXTERNAL MODULE: ./src/models/pjcan/variables/configs/index.ts + 1 modules
+var variables_configs = __webpack_require__(1529);
+// EXTERNAL MODULE: ./src/models/pjcan/device/index.ts + 3 modules
+var device = __webpack_require__(9065);
+// EXTERNAL MODULE: ./src/models/pjcan/button/index.ts + 5 modules
+var pjcan_button = __webpack_require__(6841);
+// EXTERNAL MODULE: ./src/models/pjcan/lcd/index.ts + 1 modules
+var lcd = __webpack_require__(6026);
+// EXTERNAL MODULE: ./src/models/pjcan/update/index.ts + 1 modules
+var update = __webpack_require__(6385);
+;// CONCATENATED MODULE: ./src/models/pjcan/variables/clock/ClockValue.ts
 
 
+/** Модель значения часов */
+class ClockValue {
+  constructor() {
+    (0,defineProperty/* default */.Z)(this, "hour", 0);
+    (0,defineProperty/* default */.Z)(this, "minutes", 0);
+    (0,defineProperty/* default */.Z)(this, "seconds", 0);
+  }
+}
+(0,defineProperty/* default */.Z)(ClockValue, "struct", {
+  hour: bluetooth/* BluetoothStruct.uint8 */.GD.uint8(),
+  minutes: bluetooth/* BluetoothStruct.uint8 */.GD.uint8(),
+  seconds: bluetooth/* BluetoothStruct.uint8 */.GD.uint8()
+});
+(0,defineProperty/* default */.Z)(ClockValue, "size", 3);
+(0,defineProperty/* default */.Z)(ClockValue, "sizeView", 4);
+;// CONCATENATED MODULE: ./src/models/pjcan/variables/clock/index.ts
 
 
-
-
-
-
-
-const API_VARIABLE_VALUES_SIZE = climate/* API_VARIABLE_CLIMATE_SIZE */.sO + API_VARIABLE_CLOCK_SIZE + doors/* API_VARIABLE_DOORS_SIZE */.dC + engine/* API_VARIABLE_ENGINE_SIZE */.OO + fuel/* API_VARIABLE_FUEL_SIZE */.y2 + movement/* API_VARIABLE_MOVEMENT_SIZE */.HR + sensors/* API_VARIABLE_SENSORS_SIZE */.$ + temperature/* API_VARIABLE_TEMPERATURE_SIZE */.u8 + volume/* API_VARIABLE_VOLUME_SIZE */.ER;
-const StructVariablesValue = {
-  climate: bluetooth/* BluetoothStruct.struct */.GD.struct(climate/* StructClimateValue */.dA),
-  clock: bluetooth/* BluetoothStruct.struct */.GD.struct(StructClockValue),
-  doors: bluetooth/* BluetoothStruct.struct */.GD.struct(doors/* StructDoorsValue */.cP),
-  engine: bluetooth/* BluetoothStruct.struct */.GD.struct(engine/* StructEngineValue */.BD),
-  fuel: bluetooth/* BluetoothStruct.struct */.GD.struct(fuel/* StructFuelValue */.IN),
-  movement: bluetooth/* BluetoothStruct.struct */.GD.struct(movement/* StructMovementValue */.LU),
-  sensors: bluetooth/* BluetoothStruct.struct */.GD.struct(sensors/* StructSensorsValue */.Xs),
-  temperature: bluetooth/* BluetoothStruct.struct */.GD.struct(temperature/* StructTemperatureValue */.Ew),
-  volume: bluetooth/* BluetoothStruct.struct */.GD.struct(volume/* StructVolumeValue */.ME)
-};
 ;// CONCATENATED MODULE: ./src/models/pjcan/variables/values/VariablesValue.ts
-
 
 
 
@@ -3007,9 +2973,27 @@ const StructVariablesValue = {
 
 const API_VARIABLE_VALUES_EXEC = 102;
 const API_VARIABLE_VALUES_EVENT = "VariableValues";
-const VariablesValue_struct = new bluetooth/* BluetoothStruct */.GD(StructVariablesValue);
 /** Модель значений температуры */
 class VariablesValue extends BaseModel/* BaseModel */.g {
+  /**
+   * Обновить версию структуры
+   * @param {IVersion} version Версия протокола
+   */
+  static update(version) {
+    engine/* EngineValue.update */.E_.update(version);
+    VariablesValue.struct = {
+      climate: bluetooth/* BluetoothStruct.struct */.GD.struct(climate/* ClimateValue.struct */.JF.struct),
+      clock: bluetooth/* BluetoothStruct.struct */.GD.struct(ClockValue.struct),
+      doors: bluetooth/* BluetoothStruct.struct */.GD.struct(doors/* DoorsValue.struct */.Uv.struct),
+      engine: bluetooth/* BluetoothStruct.struct */.GD.struct(engine/* EngineValue.struct */.E_.struct),
+      fuel: bluetooth/* BluetoothStruct.struct */.GD.struct(fuel/* FuelValue.struct */.Kh.struct),
+      movement: bluetooth/* BluetoothStruct.struct */.GD.struct(movement/* MovementValue.struct */.bt.struct),
+      sensors: bluetooth/* BluetoothStruct.struct */.GD.struct(sensors/* SensorsValue.struct */.I8.struct),
+      temperature: bluetooth/* BluetoothStruct.struct */.GD.struct(temperature/* TemperatureValue.struct */.j3.struct),
+      volume: bluetooth/* BluetoothStruct.struct */.GD.struct(volume/* VolumeValue.struct */.RD.struct)
+    };
+    VariablesValue.size = climate/* ClimateValue.size */.JF.size + ClockValue.size + doors/* DoorsValue.size */.Uv.size + engine/* EngineValue.size */.E_.size + fuel/* FuelValue.size */.Kh.size + movement/* MovementValue.size */.bt.size + sensors/* SensorsValue.size */.I8.size + temperature/* TemperatureValue.size */.j3.size + volume/* VolumeValue.size */.RD.size;
+  }
   constructor(data) {
     super();
     (0,defineProperty/* default */.Z)(this, "climate", new climate/* ClimateValue */.JF());
@@ -3028,7 +3012,7 @@ class VariablesValue extends BaseModel/* BaseModel */.g {
    * @param {DataView} buf Буфер данных
    */
   set(buf) {
-    const result = this._set(this, API_VARIABLE_VALUES_EXEC, API_VARIABLE_VALUES_SIZE + 1, VariablesValue_struct, buf);
+    const result = this._set(this, API_VARIABLE_VALUES_EXEC, VariablesValue.size + 1, new bluetooth/* BluetoothStruct */.GD(VariablesValue.struct), buf);
     if (result) {
       this.climate.isData = true;
       this.doors.isData = true;
@@ -3043,26 +3027,15 @@ class VariablesValue extends BaseModel/* BaseModel */.g {
   }
   /** Чтение данных */
   get() {
-    return this._get(this, API_VARIABLE_VALUES_EXEC, API_VARIABLE_VALUES_SIZE + 1, VariablesValue_struct);
+    return this._get(this, API_VARIABLE_VALUES_EXEC, VariablesValue.size + 1, new bluetooth/* BluetoothStruct */.GD(VariablesValue.struct));
   }
 }
+(0,defineProperty/* default */.Z)(VariablesValue, "struct", void 0);
+(0,defineProperty/* default */.Z)(VariablesValue, "size", void 0);
 ;// CONCATENATED MODULE: ./src/models/pjcan/variables/values/index.ts
 
 
-
-;// CONCATENATED MODULE: ./src/models/pjcan/values/StructValues.ts
-
-
-
-
-const API_VALUES_SIZE = device/* API_DEVICE_VALUE_SIZE */.fb + lcd/* API_LCD_VALUE_SIZE */.D0 + API_VARIABLE_VALUES_SIZE;
-const StructValues = {
-  device: bluetooth/* BluetoothStruct.struct */.GD.struct(device/* StructDeviceValue */.a6),
-  lcd: bluetooth/* BluetoothStruct.struct */.GD.struct(lcd/* StructLCDValue */.O),
-  variable: bluetooth/* BluetoothStruct.struct */.GD.struct(StructVariablesValue)
-};
 ;// CONCATENATED MODULE: ./src/models/pjcan/values/Values.ts
-
 
 
 
@@ -3071,8 +3044,20 @@ const StructValues = {
 
 const API_VALUES_EXEC = 3;
 const API_VALUES_EVENT = "Values";
-const Values_struct = new bluetooth/* BluetoothStruct */.GD(StructValues);
 class Values extends BaseModel/* BaseModel */.g {
+  /**
+   * Обновить версию структуры
+   * @param {IVersion} version Версия протокола
+   */
+  static update(version) {
+    VariablesValue.update(version);
+    Values.struct = {
+      device: bluetooth/* BluetoothStruct.struct */.GD.struct(device/* DeviceValue.struct */.cQ.struct),
+      lcd: bluetooth/* BluetoothStruct.struct */.GD.struct(lcd/* LCDValue.struct */.iN.struct),
+      variable: bluetooth/* BluetoothStruct.struct */.GD.struct(VariablesValue.struct)
+    };
+    Values.size = device/* DeviceValue.size */.cQ.size + lcd/* LCDValue.size */.iN.size + VariablesValue.size;
+  }
   constructor(data) {
     super();
     (0,defineProperty/* default */.Z)(this, "device", new device/* DeviceValue */.cQ());
@@ -3085,7 +3070,7 @@ class Values extends BaseModel/* BaseModel */.g {
    * @param {DataView} buf Буфер данных
    */
   set(buf) {
-    const result = this._set(this, API_VALUES_EXEC, API_VALUES_SIZE + 1, Values_struct, buf);
+    const result = this._set(this, API_VALUES_EXEC, Values.size + 1, new bluetooth/* BluetoothStruct */.GD(Values.struct), buf);
     if (result) {
       this.device.isData = true;
       this.lcd.isData = true;
@@ -3105,16 +3090,18 @@ class Values extends BaseModel/* BaseModel */.g {
     return this._get(this, API_VALUES_EXEC, 1);
   }
 }
+(0,defineProperty/* default */.Z)(Values, "struct", void 0);
+(0,defineProperty/* default */.Z)(Values, "size", void 0);
+Values.update();
 ;// CONCATENATED MODULE: ./src/models/pjcan/values/index.ts
 
 
-
-// EXTERNAL MODULE: ./src/models/pjcan/version/index.ts + 2 modules
-var version = __webpack_require__(5717);
-// EXTERNAL MODULE: ./src/models/pjcan/variables/test/index.ts + 2 modules
-var test = __webpack_require__(6045);
-// EXTERNAL MODULE: ./src/models/pjcan/scanner/index.ts + 5 modules
-var scanner = __webpack_require__(510);
+// EXTERNAL MODULE: ./src/models/pjcan/version/index.ts + 1 modules
+var version = __webpack_require__(6351);
+// EXTERNAL MODULE: ./src/models/pjcan/variables/test/index.ts + 1 modules
+var test = __webpack_require__(6181);
+// EXTERNAL MODULE: ./src/models/pjcan/scanner/index.ts + 2 modules
+var scanner = __webpack_require__(577);
 ;// CONCATENATED MODULE: ./src/api/canbus.ts
 
 
@@ -3336,7 +3323,7 @@ class Canbus extends (eventemitter3_default()) {
         return this.query(this.values.variable.temperature);
       case volume/* API_VARIABLE_VOLUME_EXEC */.pf:
         return this.query(this.values.variable.volume);
-      case test/* API_VARIABLE_TEST_EXEC */.Ez:
+      case test/* API_VARIABLE_TEST_EXEC */.E:
         return !!value && this.query(value);
       case scanner/* API_SCANNER_VALUE_EXEC */.v3:
         return this.query(value ?? new scanner/* ScannerValue */.dL());
@@ -3415,16 +3402,16 @@ class Canbus extends (eventemitter3_default()) {
       case version/* API_VERSION_EXEC */._u:
         // Версия прошивки
         this.version.set(data);
-        this.emit(version/* API_VERSION_EVENT */.MK, this.version);
         this.updateStructVersion();
+        this.emit(version/* API_VERSION_EVENT */.MK, this.version);
         break;
       case configs/* API_CONFIG_EXEC */.XH:
         // Вся конфигурация
         this.configs.set(data);
         // для совместимости
         if (this.version.setVersion(this.configs.version)) {
-          this.emit(version/* API_VERSION_EVENT */.MK, this.version);
           this.updateStructVersion();
+          this.emit(version/* API_VERSION_EVENT */.MK, this.version);
         }
         this.emit(configs/* API_CONFIGS_EVENT */.cF, this.configs);
         this.emit(device/* API_DEVICE_CONFIG_EVENT */.Zh, this.configs.device);
@@ -3685,8 +3672,9 @@ class Canbus extends (eventemitter3_default()) {
       bl: build,
       rv: revision
     }));
-    teyes/* TeyesConfig.update */.mL.update(this.version);
-    configs/* Configs.update */.zo.update();
+    configs/* Configs.update */.zo.update(this.version);
+    Values.update(this.version);
+    Views.update(this.version);
   }
   /** Проверить версию прошивки */
   checkVersion() {
@@ -10084,8 +10072,8 @@ function BluetoothBtnvue_type_template_id_7c336fc0_scoped_true_ts_true_render(_c
 var DialogTemplate = __webpack_require__(2196);
 // EXTERNAL MODULE: ./src/components/bluetooth/index.ts + 4 modules
 var bluetooth = __webpack_require__(9014);
-// EXTERNAL MODULE: ./src/api/canbus.ts + 18 modules
-var canbus = __webpack_require__(3956);
+// EXTERNAL MODULE: ./src/api/canbus.ts + 13 modules
+var canbus = __webpack_require__(4077);
 ;// CONCATENATED MODULE: ./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/BluetoothBtn.vue?vue&type=script&lang=ts
 
 
@@ -10255,10 +10243,10 @@ function UpdateFirmwareDialogvue_type_template_id_f4d2b6ac_ts_true_render(_ctx, 
 
 ;// CONCATENATED MODULE: ./src/components/dialogs/UpdateFirmwareDialog.vue?vue&type=template&id=f4d2b6ac&ts=true
 
-// EXTERNAL MODULE: ./src/models/pjcan/update/index.ts + 2 modules
-var update = __webpack_require__(8293);
-// EXTERNAL MODULE: ./src/models/pjcan/version/index.ts + 2 modules
-var pjcan_version = __webpack_require__(5717);
+// EXTERNAL MODULE: ./src/models/pjcan/update/index.ts + 1 modules
+var update = __webpack_require__(6385);
+// EXTERNAL MODULE: ./src/models/pjcan/version/index.ts + 1 modules
+var pjcan_version = __webpack_require__(6351);
 // EXTERNAL MODULE: ./src/utils/time.ts
 var time = __webpack_require__(2123);
 ;// CONCATENATED MODULE: ./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/dialogs/UpdateFirmwareDialog.vue?vue&type=script&lang=ts
@@ -10781,8 +10769,8 @@ function Scannervue_type_template_id_43cc2344_ts_true_render(_ctx, _cache, $prop
 
 ;// CONCATENATED MODULE: ./src/components/Scanner.vue?vue&type=template&id=43cc2344&ts=true
 
-// EXTERNAL MODULE: ./src/models/pjcan/scanner/index.ts + 5 modules
-var scanner = __webpack_require__(510);
+// EXTERNAL MODULE: ./src/models/pjcan/scanner/index.ts + 2 modules
+var scanner = __webpack_require__(577);
 // EXTERNAL MODULE: ./src/utils/request.ts + 41 modules
 var request = __webpack_require__(1312);
 ;// CONCATENATED MODULE: ./src/api/google.ts
@@ -10985,8 +10973,8 @@ const toMac = value => {
 const Scanner_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(Scannervue_type_script_lang_ts, [['render',Scannervue_type_template_id_43cc2344_ts_true_render]])
 
 /* harmony default export */ var Scanner = (Scanner_exports_);
-// EXTERNAL MODULE: ./src/models/pjcan/device/index.ts + 6 modules
-var device = __webpack_require__(1423);
+// EXTERNAL MODULE: ./src/models/pjcan/device/index.ts + 3 modules
+var device = __webpack_require__(9065);
 ;// CONCATENATED MODULE: ./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/dialogs/DeviceInfoDialog.vue?vue&type=script&lang=ts
 
 
@@ -11116,8 +11104,8 @@ const DeviceInfoDialog_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(D
 /* harmony default export */ var DeviceInfoDialog = (DeviceInfoDialog_exports_);
 // EXTERNAL MODULE: ./src/models/pjcan/configs/index.ts + 1 modules
 var configs = __webpack_require__(1303);
-// EXTERNAL MODULE: ./src/models/pjcan/car/index.ts + 4 modules
-var car = __webpack_require__(7530);
+// EXTERNAL MODULE: ./src/models/pjcan/car/index.ts + 2 modules
+var car = __webpack_require__(5178);
 ;// CONCATENATED MODULE: ./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/dialogs/AboutDialog.vue?vue&type=script&lang=ts
 
 
@@ -11352,8 +11340,8 @@ function OnboardButtonsDialogvue_type_template_id_202e5ccc_scoped_true_ts_true_r
 
 
 
-// EXTERNAL MODULE: ./src/models/pjcan/lcd/index.ts + 2 modules
-var lcd = __webpack_require__(7689);
+// EXTERNAL MODULE: ./src/models/pjcan/lcd/index.ts + 1 modules
+var lcd = __webpack_require__(6026);
 ;// CONCATENATED MODULE: ./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/dialogs/OnboardButtonsDialog.vue?vue&type=script&lang=ts
 
 
@@ -11539,8 +11527,8 @@ function TestDialogvue_type_template_id_3bcd2b05_scoped_true_ts_true_render(_ctx
 var InputCardItem = __webpack_require__(5943);
 // EXTERNAL MODULE: ./src/components/common/NumberField.vue + 3 modules
 var NumberField = __webpack_require__(5412);
-// EXTERNAL MODULE: ./src/models/pjcan/variables/test/index.ts + 2 modules
-var variables_test = __webpack_require__(6045);
+// EXTERNAL MODULE: ./src/models/pjcan/variables/test/index.ts + 1 modules
+var variables_test = __webpack_require__(6181);
 ;// CONCATENATED MODULE: ./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/dialogs/TestDialog.vue?vue&type=script&lang=ts
 
 
@@ -11591,12 +11579,12 @@ var variables_test = __webpack_require__(6045);
     })));
     /** Кнопка: "Показать" */
     const onShowClick = () => {
-      const test = new variables_test/* TestValue */.bv();
+      const test = new variables_test/* TestValue */.b();
       test.text = text.value;
       test.view.enabled = true;
       test.view.type = style.value;
       test.view.time = time.value;
-      canbus["default"].queryValue(variables_test/* API_VARIABLE_TEST_EXEC */.Ez, test);
+      canbus["default"].queryValue(variables_test/* API_VARIABLE_TEST_EXEC */.E, test);
       visible.value = false;
     };
     return {
@@ -21079,7 +21067,7 @@ class BaseModel {
 
 /***/ }),
 
-/***/ 1483:
+/***/ 6841:
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -21088,17 +21076,15 @@ class BaseModel {
 __webpack_require__.d(__webpack_exports__, {
   "MM": function() { return /* reexport */ API_BUTTONS_CONFIG_EVENT; },
   "XY": function() { return /* reexport */ API_BUTTONS_CONFIG_EXEC; },
-  "IM": function() { return /* reexport */ API_BUTTONS_CONFIG_SIZE; },
   "sN": function() { return /* reexport */ API_BUTTONS_VALUE_EXEC; },
   "Ai": function() { return /* reexport */ API_BUTTON_EVENT; },
   "js": function() { return /* reexport */ ButtonValue; },
   "Mx": function() { return /* reexport */ ButtonsConfig; },
-  "Rj": function() { return /* reexport */ StructButtonsConfig; },
   "SM": function() { return /* reexport */ TButtonItem; },
   "AV": function() { return /* reexport */ TButtonPress; }
 });
 
-// UNUSED EXPORTS: API_BUTTONS_VALUE_SIZE, BUTTON_NUMBER, BUTTON_PRESS_TYPE_NUMBER, StructButtonsValue, TButtonExec
+// UNUSED EXPORTS: BUTTON_NUMBER, BUTTON_PRESS_TYPE_NUMBER, TButtonExec
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/defineProperty.js + 3 modules
 var defineProperty = __webpack_require__(7327);
@@ -21108,35 +21094,15 @@ var es_array_push = __webpack_require__(7658);
 var bluetooth = __webpack_require__(9014);
 // EXTERNAL MODULE: ./src/models/pjcan/base/BaseModel.ts
 var BaseModel = __webpack_require__(9036);
-;// CONCATENATED MODULE: ./src/models/pjcan/button/StructButtonsConfig.ts
-
-const API_BUTTONS_CONFIG_SIZE = 69;
-const BUTTON_NUMBER = 6; // количество кнопок
-const BUTTON_PRESS_TYPE_NUMBER = 5; // количество типов кнопок
-/** Структура данных */
-const StructButtonsConfig = {
-  enabled: bluetooth/* BluetoothStruct.bit */.GD.bit(),
-  out: bluetooth/* BluetoothStruct.bit */.GD.bit(),
-  reset: bluetooth/* BluetoothStruct.bit */.GD.bit(),
-  sendValue: bluetooth/* BluetoothStruct.bit */.GD.bit(),
-  range: bluetooth/* BluetoothStruct.uint16 */.GD.uint16(),
-  items: bluetooth/* BluetoothStruct.struct */.GD.struct({
-    delayExec: bluetooth/* BluetoothStruct.bit */.GD.bit(),
-    hold: bluetooth/* BluetoothStruct.uint8 */.GD.uint8(),
-    inR: bluetooth/* BluetoothStruct.uint16 */.GD.uint16(),
-    outR: bluetooth/* BluetoothStruct.uint16 */.GD.uint16(),
-    exec: bluetooth/* BluetoothStruct.uint8 */.GD.uint8(BUTTON_PRESS_TYPE_NUMBER)
-  }, BUTTON_NUMBER)
-};
 ;// CONCATENATED MODULE: ./src/models/pjcan/button/ButtonConfig.ts
-
 
 
 
 
 const API_BUTTONS_CONFIG_EXEC = 20;
 const API_BUTTONS_CONFIG_EVENT = "ButtonsConfig";
-const struct = new bluetooth/* BluetoothStruct */.GD(StructButtonsConfig);
+const BUTTON_NUMBER = 6; // количество кнопок
+const BUTTON_PRESS_TYPE_NUMBER = 5; // количество типов кнопок
 /** Модель конфигурации кнопок */
 class ButtonsConfig extends BaseModel/* BaseModel */.g {
   constructor(data) {
@@ -21165,32 +21131,34 @@ class ButtonsConfig extends BaseModel/* BaseModel */.g {
    * @param {DataView} buf Буфер данных
    */
   set(buf) {
-    return this._set(this, API_BUTTONS_CONFIG_EXEC, API_BUTTONS_CONFIG_SIZE + 1, struct, buf);
+    return this._set(this, API_BUTTONS_CONFIG_EXEC, ButtonsConfig.size + 1, new bluetooth/* BluetoothStruct */.GD(ButtonsConfig.struct), buf);
   }
   /** Чтение данных */
   get() {
-    return this._get(this, API_BUTTONS_CONFIG_EXEC, API_BUTTONS_CONFIG_SIZE + 1, struct);
+    return this._get(this, API_BUTTONS_CONFIG_EXEC, ButtonsConfig.size + 1, new bluetooth/* BluetoothStruct */.GD(ButtonsConfig.struct));
   }
 }
-;// CONCATENATED MODULE: ./src/models/pjcan/button/StructButtonsValue.ts
-
-const API_BUTTONS_VALUE_SIZE = 6;
-/** Структура данных */
-const StructButtonsValue = {
-  index: bluetooth/* BluetoothStruct.int8 */.GD.int8(),
-  exec: bluetooth/* BluetoothStruct.uint8 */.GD.uint8(),
-  count: bluetooth/* BluetoothStruct.uint8 */.GD.uint8(),
-  type: bluetooth/* BluetoothStruct.uint8 */.GD.uint8(),
-  r: bluetooth/* BluetoothStruct.uint16 */.GD.uint16()
-};
+(0,defineProperty/* default */.Z)(ButtonsConfig, "struct", {
+  enabled: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+  out: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+  reset: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+  sendValue: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+  range: bluetooth/* BluetoothStruct.uint16 */.GD.uint16(),
+  items: bluetooth/* BluetoothStruct.struct */.GD.struct({
+    delayExec: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+    hold: bluetooth/* BluetoothStruct.uint8 */.GD.uint8(),
+    inR: bluetooth/* BluetoothStruct.uint16 */.GD.uint16(),
+    outR: bluetooth/* BluetoothStruct.uint16 */.GD.uint16(),
+    exec: bluetooth/* BluetoothStruct.uint8 */.GD.uint8(BUTTON_PRESS_TYPE_NUMBER)
+  }, BUTTON_NUMBER)
+});
+(0,defineProperty/* default */.Z)(ButtonsConfig, "size", 69);
 ;// CONCATENATED MODULE: ./src/models/pjcan/button/ButtonValue.ts
-
 
 
 
 const API_BUTTONS_VALUE_EXEC = 21;
 const API_BUTTON_EVENT = "ButtonsValue";
-const ButtonValue_struct = new bluetooth/* BluetoothStruct */.GD(StructButtonsValue);
 /** Модель значений кнопок */
 class ButtonValue extends BaseModel/* BaseModel */.g {
   constructor(data) {
@@ -21207,13 +21175,21 @@ class ButtonValue extends BaseModel/* BaseModel */.g {
    * @param {DataView} buf Буфер данных
    */
   set(buf) {
-    return this._set(this, API_BUTTONS_VALUE_EXEC, API_BUTTONS_VALUE_SIZE + 1, ButtonValue_struct, buf);
+    return this._set(this, API_BUTTONS_VALUE_EXEC, ButtonValue.size + 1, new bluetooth/* BluetoothStruct */.GD(ButtonValue.struct), buf);
   }
   /** Чтение данных */
   get() {
-    return this._get(this, API_BUTTONS_VALUE_EXEC, API_BUTTONS_VALUE_SIZE + 1, ButtonValue_struct);
+    return this._get(this, API_BUTTONS_VALUE_EXEC, ButtonValue.size + 1, new bluetooth/* BluetoothStruct */.GD(ButtonValue.struct));
   }
 }
+(0,defineProperty/* default */.Z)(ButtonValue, "struct", {
+  index: bluetooth/* BluetoothStruct.int8 */.GD.int8(),
+  exec: bluetooth/* BluetoothStruct.uint8 */.GD.uint8(),
+  count: bluetooth/* BluetoothStruct.uint8 */.GD.uint8(),
+  type: bluetooth/* BluetoothStruct.uint8 */.GD.uint8(),
+  r: bluetooth/* BluetoothStruct.uint16 */.GD.uint16()
+});
+(0,defineProperty/* default */.Z)(ButtonValue, "size", 6);
 ;// CONCATENATED MODULE: ./src/models/pjcan/button/TButtonItem.ts
 /* eslint-disable */
 /** Список ID кнопки */
@@ -21266,11 +21242,9 @@ var TButtonPress;
 
 
 
-
-
 /***/ }),
 
-/***/ 7530:
+/***/ 5178:
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -21279,14 +21253,10 @@ var TButtonPress;
 __webpack_require__.d(__webpack_exports__, {
   "Gd": function() { return /* reexport */ API_CAR_CONFIG_EVENT; },
   "j6": function() { return /* reexport */ API_CAR_CONFIG_EXEC; },
-  "Pv": function() { return /* reexport */ API_CAR_CONFIG_SIZE; },
   "Or": function() { return /* reexport */ API_CAR_VIEW_EVENT; },
   "kn": function() { return /* reexport */ API_CAR_VIEW_EXEC; },
-  "ow": function() { return /* reexport */ API_CAR_VIEW_SIZE; },
   "XK": function() { return /* reexport */ CarConfig; },
-  "bs": function() { return /* reexport */ CarView; },
-  "p9": function() { return /* reexport */ StructCarConfig; },
-  "MN": function() { return /* reexport */ StructCarView; }
+  "bs": function() { return /* reexport */ CarView; }
 });
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/defineProperty.js + 3 modules
@@ -21295,24 +21265,12 @@ var defineProperty = __webpack_require__(7327);
 var bluetooth = __webpack_require__(9014);
 // EXTERNAL MODULE: ./src/models/pjcan/base/BaseModel.ts
 var BaseModel = __webpack_require__(9036);
-;// CONCATENATED MODULE: ./src/models/pjcan/car/StructCarConfig.ts
-
-const API_CAR_CONFIG_SIZE = 48;
-/** Структура данных */
-const StructCarConfig = {
-  lcd: bluetooth/* BluetoothStruct.bit */.GD.bit(),
-  carModel: bluetooth/* BluetoothStruct.uint8 */.GD.uint8(),
-  logo: bluetooth/* BluetoothStruct.char */.GD.char(13),
-  hello: bluetooth/* BluetoothStruct.char */.GD.char(33)
-};
 ;// CONCATENATED MODULE: ./src/models/pjcan/car/CarConfig.ts
-
 
 
 
 const API_CAR_CONFIG_EXEC = 50;
 const API_CAR_CONFIG_EVENT = "CarConfig";
-const struct = new bluetooth/* BluetoothStruct */.GD(StructCarConfig);
 /** Модель параметров автомобиля */
 class CarConfig extends BaseModel/* BaseModel */.g {
   constructor(data) {
@@ -21328,39 +21286,35 @@ class CarConfig extends BaseModel/* BaseModel */.g {
    * @param {DataView} buf Буфер данных
    */
   set(buf) {
-    return this._set(this, API_CAR_CONFIG_EXEC, API_CAR_CONFIG_SIZE + 1, struct, buf);
+    return this._set(this, API_CAR_CONFIG_EXEC, CarConfig.size + 1, new bluetooth/* BluetoothStruct */.GD(CarConfig.struct), buf);
   }
   /** Чтение данных */
   get() {
-    return this._get(this, API_CAR_CONFIG_EXEC, API_CAR_CONFIG_SIZE + 1, struct);
+    return this._get(this, API_CAR_CONFIG_EXEC, CarConfig.size + 1, new bluetooth/* BluetoothStruct */.GD(CarConfig.struct));
   }
 }
-// EXTERNAL MODULE: ./src/models/pjcan/view/index.ts + 3 modules
-var view = __webpack_require__(7037);
-;// CONCATENATED MODULE: ./src/models/pjcan/car/StructCarView.ts
-
-
-const API_CAR_VIEW_SIZE = view/* API_VIEWS_SIZE */.KX * 2;
-/** Структура данных */
-const StructCarView = {
-  logo: bluetooth/* BluetoothStruct.struct */.GD.struct(view/* StructViewConfig */.hQ),
-  hello: bluetooth/* BluetoothStruct.struct */.GD.struct(view/* StructViewConfig */.hQ)
-};
+(0,defineProperty/* default */.Z)(CarConfig, "struct", {
+  lcd: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+  carModel: bluetooth/* BluetoothStruct.uint8 */.GD.uint8(),
+  logo: bluetooth/* BluetoothStruct.char */.GD.char(13),
+  hello: bluetooth/* BluetoothStruct.char */.GD.char(33)
+});
+(0,defineProperty/* default */.Z)(CarConfig, "size", 48);
+// EXTERNAL MODULE: ./src/models/pjcan/view/index.ts + 2 modules
+var view = __webpack_require__(7374);
 ;// CONCATENATED MODULE: ./src/models/pjcan/car/CarView.ts
-
 
 
 
 
 const API_CAR_VIEW_EXEC = 51;
 const API_CAR_VIEW_EVENT = "CarView";
-const CarView_struct = new bluetooth/* BluetoothStruct */.GD(StructCarView);
 /** Модель параметров отображения данных автомобиля */
 class CarView extends BaseModel/* BaseModel */.g {
   constructor(data) {
     super();
-    (0,defineProperty/* default */.Z)(this, "logo", new view/* ViewConfig */.Fx());
-    (0,defineProperty/* default */.Z)(this, "hello", new view/* ViewConfig */.Fx());
+    (0,defineProperty/* default */.Z)(this, "logo", new view/* ViewConfig */.F());
+    (0,defineProperty/* default */.Z)(this, "hello", new view/* ViewConfig */.F());
     if (data) this.set(data);
   }
   /**
@@ -21368,16 +21322,19 @@ class CarView extends BaseModel/* BaseModel */.g {
    * @param {DataView} buf Буфер данных
    */
   set(buf) {
-    return this._set(this, API_CAR_VIEW_EXEC, API_CAR_VIEW_SIZE + 1, CarView_struct, buf);
+    return this._set(this, API_CAR_VIEW_EXEC, CarView.size + 1, new bluetooth/* BluetoothStruct */.GD(CarView.struct), buf);
   }
   /** Чтение данных */
   get() {
-    return this._get(this, API_CAR_VIEW_EXEC, API_CAR_VIEW_SIZE + 1, CarView_struct);
+    return this._get(this, API_CAR_VIEW_EXEC, CarView.size + 1, new bluetooth/* BluetoothStruct */.GD(CarView.struct));
   }
 }
+(0,defineProperty/* default */.Z)(CarView, "struct", {
+  logo: bluetooth/* BluetoothStruct.struct */.GD.struct(view/* ViewConfig.struct */.F.struct),
+  hello: bluetooth/* BluetoothStruct.struct */.GD.struct(view/* ViewConfig.struct */.F.struct)
+});
+(0,defineProperty/* default */.Z)(CarView, "size", view/* ViewConfig.size */.F.size * 2);
 ;// CONCATENATED MODULE: ./src/models/pjcan/car/index.ts
-
-
 
 
 
@@ -21402,18 +21359,18 @@ var defineProperty = __webpack_require__(7327);
 var bluetooth = __webpack_require__(9014);
 // EXTERNAL MODULE: ./src/models/pjcan/base/BaseModel.ts
 var BaseModel = __webpack_require__(9036);
-// EXTERNAL MODULE: ./src/models/pjcan/version/index.ts + 2 modules
-var version = __webpack_require__(5717);
-// EXTERNAL MODULE: ./src/models/pjcan/device/index.ts + 6 modules
-var device = __webpack_require__(1423);
-// EXTERNAL MODULE: ./src/models/pjcan/button/index.ts + 7 modules
-var pjcan_button = __webpack_require__(1483);
-// EXTERNAL MODULE: ./src/models/pjcan/car/index.ts + 4 modules
-var car = __webpack_require__(7530);
-// EXTERNAL MODULE: ./src/models/pjcan/teyes/index.ts + 7 modules
-var teyes = __webpack_require__(8181);
-// EXTERNAL MODULE: ./src/models/pjcan/variables/configs/index.ts + 2 modules
-var configs = __webpack_require__(9617);
+// EXTERNAL MODULE: ./src/models/pjcan/version/index.ts + 1 modules
+var pjcan_version = __webpack_require__(6351);
+// EXTERNAL MODULE: ./src/models/pjcan/device/index.ts + 3 modules
+var device = __webpack_require__(9065);
+// EXTERNAL MODULE: ./src/models/pjcan/button/index.ts + 5 modules
+var pjcan_button = __webpack_require__(6841);
+// EXTERNAL MODULE: ./src/models/pjcan/car/index.ts + 2 modules
+var car = __webpack_require__(5178);
+// EXTERNAL MODULE: ./src/models/pjcan/teyes/index.ts + 3 modules
+var teyes = __webpack_require__(2754);
+// EXTERNAL MODULE: ./src/models/pjcan/variables/configs/index.ts + 1 modules
+var configs = __webpack_require__(1529);
 ;// CONCATENATED MODULE: ./src/models/pjcan/configs/Configs.ts
 
 
@@ -21427,21 +21384,26 @@ var configs = __webpack_require__(9617);
 const API_CONFIG_EXEC = 1;
 const API_CONFIGS_EVENT = "Configs";
 class Configs extends BaseModel/* BaseModel */.g {
-  static update() {
+  /**
+   * Обновить версию структуры
+   * @param {IVersion} version Версия протокола
+   */
+  static update(version) {
+    teyes/* TeyesConfig.update */.mL.update(version);
+    configs/* VariableConfig.update */.Pk.update(version);
     Configs.struct = {
-      version: bluetooth/* BluetoothStruct.struct */.GD.struct(version/* StructVersion */.BB),
-      device: bluetooth/* BluetoothStruct.struct */.GD.struct(device/* StructDeviceConfig */.TY),
-      buttons: bluetooth/* BluetoothStruct.struct */.GD.struct(pjcan_button/* StructButtonsConfig */.Rj),
-      car: bluetooth/* BluetoothStruct.struct */.GD.struct(car/* StructCarConfig */.p9),
+      version: bluetooth/* BluetoothStruct.struct */.GD.struct(pjcan_version/* Version.struct */.Gf.struct),
+      device: bluetooth/* BluetoothStruct.struct */.GD.struct(device/* DeviceConfig.struct */.W1.struct),
+      buttons: bluetooth/* BluetoothStruct.struct */.GD.struct(pjcan_button/* ButtonsConfig.struct */.Mx.struct),
+      car: bluetooth/* BluetoothStruct.struct */.GD.struct(car/* CarConfig.struct */.XK.struct),
       teyes: bluetooth/* BluetoothStruct.struct */.GD.struct(teyes/* TeyesConfig.struct */.mL.struct),
-      variable: bluetooth/* BluetoothStruct.struct */.GD.struct(configs/* StructVariableConfigs */.Le)
+      variable: bluetooth/* BluetoothStruct.struct */.GD.struct(configs/* VariableConfig.struct */.Pk.struct)
     };
-    Configs.bleStruct = new bluetooth/* BluetoothStruct */.GD(Configs.struct);
-    Configs.size = version/* API_VERSION_SIZE */.Q8 + device/* API_DEVICE_CONFIG_SIZE */.dW + pjcan_button/* API_BUTTONS_CONFIG_SIZE */.IM + car/* API_CAR_CONFIG_SIZE */.Pv + teyes/* TeyesConfig.size */.mL.size + configs/* API_VARIABLE_CONFIGS_SIZE */.QE;
+    Configs.size = pjcan_version/* Version.size */.Gf.size + device/* DeviceConfig.size */.W1.size + pjcan_button/* ButtonsConfig.size */.Mx.size + car/* CarConfig.size */.XK.size + teyes/* TeyesConfig.size */.mL.size + configs/* VariableConfig.size */.Pk.size;
   }
   constructor(data) {
     super();
-    (0,defineProperty/* default */.Z)(this, "version", new version/* Version */.Gf());
+    (0,defineProperty/* default */.Z)(this, "version", new pjcan_version/* Version */.Gf());
     (0,defineProperty/* default */.Z)(this, "device", new device/* DeviceConfig */.W1());
     (0,defineProperty/* default */.Z)(this, "buttons", new pjcan_button/* ButtonsConfig */.Mx());
     (0,defineProperty/* default */.Z)(this, "car", new car/* CarConfig */.XK());
@@ -21454,7 +21416,7 @@ class Configs extends BaseModel/* BaseModel */.g {
    * @param {DataView} buf Буфер данных
    */
   set(buf) {
-    const result = this._set(this, API_CONFIG_EXEC, Configs.size + 1, Configs.bleStruct, buf);
+    const result = this._set(this, API_CONFIG_EXEC, Configs.size + 1, new bluetooth/* BluetoothStruct */.GD(Configs.struct), buf);
     if (result) {
       this.device.isData = true;
       this.buttons.isData = true;
@@ -21473,15 +21435,15 @@ class Configs extends BaseModel/* BaseModel */.g {
   }
 }
 (0,defineProperty/* default */.Z)(Configs, "struct", void 0);
-(0,defineProperty/* default */.Z)(Configs, "bleStruct", void 0);
 (0,defineProperty/* default */.Z)(Configs, "size", void 0);
+Configs.update();
 ;// CONCATENATED MODULE: ./src/models/pjcan/configs/index.ts
 
 
 
 /***/ }),
 
-/***/ 1423:
+/***/ 9065:
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -21490,20 +21452,14 @@ class Configs extends BaseModel/* BaseModel */.g {
 __webpack_require__.d(__webpack_exports__, {
   "Zh": function() { return /* reexport */ API_DEVICE_CONFIG_EVENT; },
   "bI": function() { return /* reexport */ API_DEVICE_CONFIG_EXEC; },
-  "dW": function() { return /* reexport */ API_DEVICE_CONFIG_SIZE; },
   "kS": function() { return /* reexport */ API_DEVICE_EVENT; },
   "tB": function() { return /* reexport */ API_DEVICE_VALUE_EXEC; },
-  "fb": function() { return /* reexport */ API_DEVICE_VALUE_SIZE; },
   "a_": function() { return /* reexport */ API_INFO_EVENT; },
   "PR": function() { return /* reexport */ API_INFO_EXEC; },
   "W1": function() { return /* reexport */ DeviceConfig; },
   "TG": function() { return /* reexport */ DeviceInfo; },
-  "cQ": function() { return /* reexport */ DeviceValue; },
-  "TY": function() { return /* reexport */ StructDeviceConfig; },
-  "a6": function() { return /* reexport */ StructDeviceValue; }
+  "cQ": function() { return /* reexport */ DeviceValue; }
 });
-
-// UNUSED EXPORTS: API_INFO_SIZE, StructDeviceInfo
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/defineProperty.js + 3 modules
 var defineProperty = __webpack_require__(7327);
@@ -21511,22 +21467,13 @@ var defineProperty = __webpack_require__(7327);
 var bluetooth = __webpack_require__(9014);
 // EXTERNAL MODULE: ./src/models/pjcan/base/BaseModel.ts
 var BaseModel = __webpack_require__(9036);
-;// CONCATENATED MODULE: ./src/models/pjcan/device/StructDeviceConfig.ts
-
-const API_DEVICE_SERIAL_SIZE = 64;
-const API_DEVICE_CONFIG_SIZE = API_DEVICE_SERIAL_SIZE;
-/** Структура данных */
-const StructDeviceConfig = {
-  serial: bluetooth/* BluetoothStruct.char */.GD.char(API_DEVICE_SERIAL_SIZE)
-};
 ;// CONCATENATED MODULE: ./src/models/pjcan/device/DeviceConfig.ts
-
 
 
 
 const API_DEVICE_CONFIG_EXEC = 10;
 const API_DEVICE_CONFIG_EVENT = "DeviceConfig";
-const struct = new bluetooth/* BluetoothStruct */.GD(StructDeviceConfig);
+const API_DEVICE_SERIAL_SIZE = 64;
 /** Модель параметров устройства */
 class DeviceConfig extends BaseModel/* BaseModel */.g {
   constructor(data) {
@@ -21539,51 +21486,24 @@ class DeviceConfig extends BaseModel/* BaseModel */.g {
    * @param {DataView} buf Буфер данных
    */
   set(buf) {
-    return this._set(this, API_DEVICE_CONFIG_EXEC, API_DEVICE_CONFIG_SIZE + 1, struct, buf);
+    return this._set(this, API_DEVICE_CONFIG_EXEC, DeviceConfig.size + 1, new bluetooth/* BluetoothStruct */.GD(DeviceConfig.struct), buf);
   }
   /** Чтение данных */
   get() {
-    return this._get(this, API_DEVICE_CONFIG_EXEC, API_DEVICE_CONFIG_SIZE + 1, struct);
+    return this._get(this, API_DEVICE_CONFIG_EXEC, DeviceConfig.size + 1, new bluetooth/* BluetoothStruct */.GD(DeviceConfig.struct));
   }
 }
-;// CONCATENATED MODULE: ./src/models/pjcan/device/StructDeviceInfo.ts
-
-const API_DEVICE_SHA_SIZE = 32;
-const API_INFO_SIZE = 111 + API_DEVICE_SHA_SIZE;
-/** Структура данных */
-const StructDeviceInfo = {
-  chipCores: bluetooth/* BluetoothStruct.uint8 */.GD.uint8(),
-  chipModel: bluetooth/* BluetoothStruct.char */.GD.char(16),
-  chipRevision: bluetooth/* BluetoothStruct.uint8 */.GD.uint8(),
-  cpuFreqMHz: bluetooth/* BluetoothStruct.uint32 */.GD.uint32(),
-  cycleCount: bluetooth/* BluetoothStruct.uint32 */.GD.uint32(),
-  efuseMac: bluetooth/* BluetoothStruct.uint64 */.GD.uint64(),
-  flashChipMode: bluetooth/* BluetoothStruct.uint8 */.GD.uint8(),
-  flashChipSize: bluetooth/* BluetoothStruct.uint32 */.GD.uint32(),
-  flashChipSpeed: bluetooth/* BluetoothStruct.uint32 */.GD.uint32(),
-  freeHeap: bluetooth/* BluetoothStruct.uint32 */.GD.uint32(),
-  freePsram: bluetooth/* BluetoothStruct.uint32 */.GD.uint32(),
-  freeSketchSpace: bluetooth/* BluetoothStruct.uint32 */.GD.uint32(),
-  heapSize: bluetooth/* BluetoothStruct.uint32 */.GD.uint32(),
-  maxAllocHeap: bluetooth/* BluetoothStruct.uint32 */.GD.uint32(),
-  maxAllocPsram: bluetooth/* BluetoothStruct.uint32 */.GD.uint32(),
-  minFreeHeap: bluetooth/* BluetoothStruct.uint32 */.GD.uint32(),
-  minFreePsram: bluetooth/* BluetoothStruct.uint32 */.GD.uint32(),
-  psramSize: bluetooth/* BluetoothStruct.uint32 */.GD.uint32(),
-  sdkVersion: bluetooth/* BluetoothStruct.char */.GD.char(8),
-  sketchMD5: bluetooth/* BluetoothStruct.char */.GD.char(16),
-  sketchSize: bluetooth/* BluetoothStruct.uint32 */.GD.uint32(),
-  temperatureChip: bluetooth/* BluetoothStruct.uint32 */.GD.uint32(),
-  sha: bluetooth/* BluetoothStruct.uint8 */.GD.uint8(API_DEVICE_SHA_SIZE)
-};
+(0,defineProperty/* default */.Z)(DeviceConfig, "struct", {
+  serial: bluetooth/* BluetoothStruct.char */.GD.char(API_DEVICE_SERIAL_SIZE)
+});
+(0,defineProperty/* default */.Z)(DeviceConfig, "size", API_DEVICE_SERIAL_SIZE);
 ;// CONCATENATED MODULE: ./src/models/pjcan/device/DeviceInfo.ts
-
 
 
 
 const API_INFO_EXEC = 5;
 const API_INFO_EVENT = "Info";
-const DeviceInfo_struct = new bluetooth/* BluetoothStruct */.GD(StructDeviceInfo);
+const API_DEVICE_SHA_SIZE = 32;
 /** Модель характеристик устройства */
 class DeviceInfo extends BaseModel/* BaseModel */.g {
   constructor(data) {
@@ -21618,34 +21538,45 @@ class DeviceInfo extends BaseModel/* BaseModel */.g {
    * @param {DataView} buf Буфер данных
    */
   set(buf) {
-    return this._set(this, API_INFO_EXEC, API_INFO_SIZE + 1, DeviceInfo_struct, buf);
+    return this._set(this, API_INFO_EXEC, DeviceInfo.size + 1, new bluetooth/* BluetoothStruct */.GD(DeviceInfo.struct), buf);
   }
   /** Чтение данных */
   get() {
     return this._get(this, API_INFO_EXEC, 1);
   }
 }
-;// CONCATENATED MODULE: ./src/models/pjcan/device/StructDeviceValue.ts
-
-const API_DEVICE_VALUE_SIZE = 10;
-/** Структура данных */
-const StructDeviceValue = {
-  reboot: bluetooth/* BluetoothStruct.bit */.GD.bit(),
-  resetConfig: bluetooth/* BluetoothStruct.bit */.GD.bit(),
-  resetView: bluetooth/* BluetoothStruct.bit */.GD.bit(),
-  activation: bluetooth/* BluetoothStruct.bit */.GD.bit(),
-  save: bluetooth/* BluetoothStruct.bit */.GD.bit(),
-  led: bluetooth/* BluetoothStruct.uint8 */.GD.uint8(),
-  worktime: bluetooth/* BluetoothStruct.uint64 */.GD.uint64()
-};
+(0,defineProperty/* default */.Z)(DeviceInfo, "struct", {
+  chipCores: bluetooth/* BluetoothStruct.uint8 */.GD.uint8(),
+  chipModel: bluetooth/* BluetoothStruct.char */.GD.char(16),
+  chipRevision: bluetooth/* BluetoothStruct.uint8 */.GD.uint8(),
+  cpuFreqMHz: bluetooth/* BluetoothStruct.uint32 */.GD.uint32(),
+  cycleCount: bluetooth/* BluetoothStruct.uint32 */.GD.uint32(),
+  efuseMac: bluetooth/* BluetoothStruct.uint64 */.GD.uint64(),
+  flashChipMode: bluetooth/* BluetoothStruct.uint8 */.GD.uint8(),
+  flashChipSize: bluetooth/* BluetoothStruct.uint32 */.GD.uint32(),
+  flashChipSpeed: bluetooth/* BluetoothStruct.uint32 */.GD.uint32(),
+  freeHeap: bluetooth/* BluetoothStruct.uint32 */.GD.uint32(),
+  freePsram: bluetooth/* BluetoothStruct.uint32 */.GD.uint32(),
+  freeSketchSpace: bluetooth/* BluetoothStruct.uint32 */.GD.uint32(),
+  heapSize: bluetooth/* BluetoothStruct.uint32 */.GD.uint32(),
+  maxAllocHeap: bluetooth/* BluetoothStruct.uint32 */.GD.uint32(),
+  maxAllocPsram: bluetooth/* BluetoothStruct.uint32 */.GD.uint32(),
+  minFreeHeap: bluetooth/* BluetoothStruct.uint32 */.GD.uint32(),
+  minFreePsram: bluetooth/* BluetoothStruct.uint32 */.GD.uint32(),
+  psramSize: bluetooth/* BluetoothStruct.uint32 */.GD.uint32(),
+  sdkVersion: bluetooth/* BluetoothStruct.char */.GD.char(8),
+  sketchMD5: bluetooth/* BluetoothStruct.char */.GD.char(16),
+  sketchSize: bluetooth/* BluetoothStruct.uint32 */.GD.uint32(),
+  temperatureChip: bluetooth/* BluetoothStruct.uint32 */.GD.uint32(),
+  sha: bluetooth/* BluetoothStruct.uint8 */.GD.uint8(API_DEVICE_SHA_SIZE)
+});
+(0,defineProperty/* default */.Z)(DeviceInfo, "size", 111 + API_DEVICE_SHA_SIZE);
 ;// CONCATENATED MODULE: ./src/models/pjcan/device/DeviceValue.ts
-
 
 
 
 const API_DEVICE_VALUE_EXEC = 11;
 const API_DEVICE_EVENT = "DeviceValue";
-const DeviceValue_struct = new bluetooth/* BluetoothStruct */.GD(StructDeviceValue);
 /** Модель значений устройства */
 class DeviceValue extends BaseModel/* BaseModel */.g {
   constructor(data) {
@@ -21664,17 +21595,24 @@ class DeviceValue extends BaseModel/* BaseModel */.g {
    * @param {DataView} buf Буфер данных
    */
   set(buf) {
-    return this._set(this, API_DEVICE_VALUE_EXEC, API_DEVICE_VALUE_SIZE + 1, DeviceValue_struct, buf);
+    return this._set(this, API_DEVICE_VALUE_EXEC, DeviceValue.size + 1, new bluetooth/* BluetoothStruct */.GD(DeviceValue.struct), buf);
   }
   /** Чтение данных */
   get() {
-    return this._get(this, API_DEVICE_VALUE_EXEC, API_DEVICE_VALUE_SIZE + 1, DeviceValue_struct);
+    return this._get(this, API_DEVICE_VALUE_EXEC, DeviceValue.size + 1, new bluetooth/* BluetoothStruct */.GD(DeviceValue.struct));
   }
 }
+(0,defineProperty/* default */.Z)(DeviceValue, "struct", {
+  reboot: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+  resetConfig: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+  resetView: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+  activation: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+  save: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+  led: bluetooth/* BluetoothStruct.uint8 */.GD.uint8(),
+  worktime: bluetooth/* BluetoothStruct.uint64 */.GD.uint64()
+});
+(0,defineProperty/* default */.Z)(DeviceValue, "size", 10);
 ;// CONCATENATED MODULE: ./src/models/pjcan/device/index.ts
-
-
-
 
 
 
@@ -21682,7 +21620,7 @@ class DeviceValue extends BaseModel/* BaseModel */.g {
 
 /***/ }),
 
-/***/ 7689:
+/***/ 6026:
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -21691,9 +21629,7 @@ class DeviceValue extends BaseModel/* BaseModel */.g {
 __webpack_require__.d(__webpack_exports__, {
   "Qv": function() { return /* reexport */ API_LCD_EVENT; },
   "Q0": function() { return /* reexport */ API_LCD_VALUE_EXEC; },
-  "D0": function() { return /* reexport */ API_LCD_VALUE_SIZE; },
-  "iN": function() { return /* reexport */ LCDValue; },
-  "O": function() { return /* reexport */ StructLCDValue; }
+  "iN": function() { return /* reexport */ LCDValue; }
 });
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/defineProperty.js + 3 modules
@@ -21702,43 +21638,12 @@ var defineProperty = __webpack_require__(7327);
 var bluetooth = __webpack_require__(9014);
 // EXTERNAL MODULE: ./src/models/pjcan/base/BaseModel.ts
 var BaseModel = __webpack_require__(9036);
-;// CONCATENATED MODULE: ./src/models/pjcan/lcd/StructLCDValue.ts
-
-const API_LCD_VALUE_SIZE = 15;
-/** Структура данных */
-const StructLCDValue = {
-  icoCDIN: bluetooth/* BluetoothStruct.bit */.GD.bit(),
-  icoMDIN: bluetooth/* BluetoothStruct.bit */.GD.bit(),
-  icoST: bluetooth/* BluetoothStruct.bit */.GD.bit(),
-  icoDOLBY: bluetooth/* BluetoothStruct.bit */.GD.bit(),
-  icoRPT: bluetooth/* BluetoothStruct.bit */.GD.bit(),
-  icoRDM: bluetooth/* BluetoothStruct.bit */.GD.bit(),
-  icoAF: bluetooth/* BluetoothStruct.bit */.GD.bit(),
-  icoPTY: bluetooth/* BluetoothStruct.bit */.GD.bit(),
-  icoTA: bluetooth/* BluetoothStruct.bit */.GD.bit(),
-  icoTP: bluetooth/* BluetoothStruct.bit */.GD.bit(),
-  icoAUTOM: bluetooth/* BluetoothStruct.bit */.GD.bit(),
-  charS1: bluetooth/* BluetoothStruct.bit */.GD.bit(),
-  charS2: bluetooth/* BluetoothStruct.bit */.GD.bit(),
-  charS3: bluetooth/* BluetoothStruct.bit */.GD.bit(),
-  charS4: bluetooth/* BluetoothStruct.bit */.GD.bit(),
-  btnChange: bluetooth/* BluetoothStruct.bit */.GD.bit(),
-  btnInfo: bluetooth/* BluetoothStruct.bit */.GD.bit(),
-  btnClock: bluetooth/* BluetoothStruct.bit */.GD.bit(),
-  btnClockH: bluetooth/* BluetoothStruct.bit */.GD.bit(),
-  btnClockM: bluetooth/* BluetoothStruct.bit */.GD.bit(),
-  btnClockRM: bluetooth/* BluetoothStruct.bit */.GD.bit(),
-  flgClock24: bluetooth/* BluetoothStruct.bit */.GD.bit(),
-  buffer: bluetooth/* BluetoothStruct.char */.GD.char(12)
-};
 ;// CONCATENATED MODULE: ./src/models/pjcan/lcd/LCDValue.ts
-
 
 
 
 const API_LCD_VALUE_EXEC = 40;
 const API_LCD_EVENT = "LCDValue";
-const struct = new bluetooth/* BluetoothStruct */.GD(StructLCDValue);
 /** Модель значений LCD */
 class LCDValue extends BaseModel/* BaseModel */.g {
   constructor(data) {
@@ -21773,21 +21678,46 @@ class LCDValue extends BaseModel/* BaseModel */.g {
    * @param {DataView} buf Буфер данных
    */
   set(buf) {
-    return this._set(this, API_LCD_VALUE_EXEC, API_LCD_VALUE_SIZE + 1, struct, buf);
+    return this._set(this, API_LCD_VALUE_EXEC, LCDValue.size + 1, new bluetooth/* BluetoothStruct */.GD(LCDValue.struct), buf);
   }
   /** Чтение данных */
   get() {
-    return this._get(this, API_LCD_VALUE_EXEC, API_LCD_VALUE_SIZE + 1, struct);
+    return this._get(this, API_LCD_VALUE_EXEC, LCDValue.size + 1, new bluetooth/* BluetoothStruct */.GD(LCDValue.struct));
   }
 }
+(0,defineProperty/* default */.Z)(LCDValue, "struct", {
+  icoCDIN: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+  icoMDIN: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+  icoST: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+  icoDOLBY: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+  icoRPT: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+  icoRDM: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+  icoAF: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+  icoPTY: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+  icoTA: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+  icoTP: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+  icoAUTOM: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+  charS1: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+  charS2: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+  charS3: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+  charS4: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+  btnChange: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+  btnInfo: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+  btnClock: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+  btnClockH: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+  btnClockM: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+  btnClockRM: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+  flgClock24: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+  buffer: bluetooth/* BluetoothStruct.char */.GD.char(12)
+});
+(0,defineProperty/* default */.Z)(LCDValue, "size", 15);
 ;// CONCATENATED MODULE: ./src/models/pjcan/lcd/index.ts
-
 
 
 
 /***/ }),
 
-/***/ 510:
+/***/ 577:
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -21802,30 +21732,18 @@ __webpack_require__.d(__webpack_exports__, {
   "dL": function() { return /* reexport */ ScannerValue; }
 });
 
-// UNUSED EXPORTS: API_SCANNER_CONFIG_SIZE, API_SCANNER_VALUE_SIZE, StructScannerConfig, StructScannerValue
-
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/defineProperty.js + 3 modules
 var defineProperty = __webpack_require__(7327);
 // EXTERNAL MODULE: ./src/components/bluetooth/index.ts + 4 modules
 var bluetooth = __webpack_require__(9014);
 // EXTERNAL MODULE: ./src/models/pjcan/base/BaseModel.ts
 var BaseModel = __webpack_require__(9036);
-;// CONCATENATED MODULE: ./src/models/pjcan/scanner/StructScannerConfig.ts
-
-const API_SCANNER_CONFIG_SIZE = 2;
-const StructScannerConfig = {
-  enabled: bluetooth/* BluetoothStruct.bit */.GD.bit(),
-  addSend: bluetooth/* BluetoothStruct.bit */.GD.bit(),
-  timeoutOff: bluetooth/* BluetoothStruct.uint8 */.GD.uint8()
-};
 ;// CONCATENATED MODULE: ./src/models/pjcan/scanner/ScannerConfig.ts
-
 
 
 
 const API_SCANNER_CONFIG_EXEC = 60;
 const API_SCANNER_CONFIG_EVENT = "ScannerConfig";
-const struct = new bluetooth/* BluetoothStruct */.GD(StructScannerConfig);
 class ScannerConfig extends BaseModel/* BaseModel */.g {
   constructor(data) {
     super();
@@ -21839,45 +21757,30 @@ class ScannerConfig extends BaseModel/* BaseModel */.g {
    * @param {DataView} buf Буфер данных
    */
   set(buf) {
-    return this._set(this, API_SCANNER_CONFIG_EXEC, API_SCANNER_CONFIG_SIZE + 1, struct, buf);
+    return this._set(this, API_SCANNER_CONFIG_EXEC, ScannerConfig.size + 1, new bluetooth/* BluetoothStruct */.GD(ScannerConfig.struct), buf);
   }
   /** Чтение данных */
   get() {
-    return this._get(this, API_SCANNER_CONFIG_EXEC, API_SCANNER_CONFIG_SIZE + 1, struct);
+    return this._get(this, API_SCANNER_CONFIG_EXEC, ScannerConfig.size + 1, new bluetooth/* BluetoothStruct */.GD(ScannerConfig.struct));
   }
 }
+(0,defineProperty/* default */.Z)(ScannerConfig, "struct", {
+  enabled: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+  addSend: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+  timeoutOff: bluetooth/* BluetoothStruct.uint8 */.GD.uint8()
+});
+(0,defineProperty/* default */.Z)(ScannerConfig, "size", 2);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.push.js
 var es_array_push = __webpack_require__(7658);
-;// CONCATENATED MODULE: ./src/models/pjcan/scanner/StructScannerFrame.ts
-
-const API_SCANNER_FRAME_SIZE = 22;
-const StructScannerFrame = {
-  receive: bluetooth/* BluetoothStruct.bit */.GD.bit(),
-  send: bluetooth/* BluetoothStruct.bit */.GD.bit(),
-  id: bluetooth/* BluetoothStruct.uint32 */.GD.uint32(),
-  data: bluetooth/* BluetoothStruct.uint8 */.GD.uint8(8),
-  length: bluetooth/* BluetoothStruct.uint8 */.GD.uint8(),
-  timestamp: bluetooth/* BluetoothStruct.uint64 */.GD.uint64()
-};
-;// CONCATENATED MODULE: ./src/models/pjcan/scanner/StructScannerValue.ts
-
-
-const API_SCANNER_FRAME_COUNT = 16;
-const API_SCANNER_VALUE_SIZE = API_SCANNER_FRAME_SIZE * API_SCANNER_FRAME_COUNT + 1;
-const StructScannerValue = {
-  count: bluetooth/* BluetoothStruct.uint8 */.GD.uint8(),
-  frames: bluetooth/* BluetoothStruct.struct */.GD.struct(StructScannerFrame, API_SCANNER_FRAME_COUNT)
-};
 ;// CONCATENATED MODULE: ./src/models/pjcan/scanner/ScannerValue.ts
-
-
 
 
 
 
 const API_SCANNER_VALUE_EXEC = 61;
 const API_SCANNER_VALUE_EVENT = "ScannerValue";
-const ScannerValue_struct = new bluetooth/* BluetoothStruct */.GD(StructScannerValue);
+const API_SCANNER_FRAME_COUNT = 16;
+const API_SCANNER_FRAME_SIZE = 22;
 class ScannerValue extends BaseModel/* BaseModel */.g {
   constructor(data) {
     super();
@@ -21900,7 +21803,7 @@ class ScannerValue extends BaseModel/* BaseModel */.g {
    * @param {DataView} buf Буфер данных
    */
   set(buf) {
-    return this._set(this, API_SCANNER_VALUE_EXEC, API_SCANNER_VALUE_SIZE + 1, ScannerValue_struct, buf);
+    return this._set(this, API_SCANNER_VALUE_EXEC, ScannerValue.size + 1, new bluetooth/* BluetoothStruct */.GD(ScannerValue.struct), buf);
   }
   /** Чтение данных */
   get() {
@@ -21909,16 +21812,26 @@ class ScannerValue extends BaseModel/* BaseModel */.g {
     return buf;
   }
 }
+(0,defineProperty/* default */.Z)(ScannerValue, "struct", {
+  count: bluetooth/* BluetoothStruct.uint8 */.GD.uint8(),
+  frames: bluetooth/* BluetoothStruct.struct */.GD.struct({
+    receive: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+    send: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+    id: bluetooth/* BluetoothStruct.uint32 */.GD.uint32(),
+    data: bluetooth/* BluetoothStruct.uint8 */.GD.uint8(8),
+    length: bluetooth/* BluetoothStruct.uint8 */.GD.uint8(),
+    timestamp: bluetooth/* BluetoothStruct.uint64 */.GD.uint64()
+  }, API_SCANNER_FRAME_COUNT)
+});
+(0,defineProperty/* default */.Z)(ScannerValue, "size", API_SCANNER_FRAME_SIZE * API_SCANNER_FRAME_COUNT + 1);
 ;// CONCATENATED MODULE: ./src/models/pjcan/scanner/index.ts
-
-
 
 
 
 
 /***/ }),
 
-/***/ 8181:
+/***/ 2754:
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -21931,14 +21844,10 @@ __webpack_require__.d(__webpack_exports__, {
   "vl": function() { return /* reexport */ API_TEYES_TEXT_EXEC; },
   "mj": function() { return /* reexport */ API_TEYES_VIEW_EVENT; },
   "nY": function() { return /* reexport */ API_TEYES_VIEW_EXEC; },
-  "jQ": function() { return /* reexport */ API_TEYES_VIEW_SIZE; },
-  "Te": function() { return /* reexport */ StructTeyesView; },
   "mL": function() { return /* reexport */ TeyesConfig; },
   "VA": function() { return /* reexport */ TeyesText; },
   "U5": function() { return /* reexport */ TeyesView; }
 });
-
-// UNUSED EXPORTS: API_TEYES_TEXT_SIZE, StructTeyesConfig, StructTeyesText
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/defineProperty.js + 3 modules
 var defineProperty = __webpack_require__(7327);
@@ -21946,38 +21855,7 @@ var defineProperty = __webpack_require__(7327);
 var bluetooth = __webpack_require__(9014);
 // EXTERNAL MODULE: ./src/models/pjcan/base/BaseModel.ts
 var BaseModel = __webpack_require__(9036);
-;// CONCATENATED MODULE: ./src/models/pjcan/teyes/StructTeyesConfig.ts
-
-const API_TEYES_CONFIG_SIZE = 2;
-/** Структура данных */
-const StructTeyesConfig = {
-  receiveClock: bluetooth/* BluetoothStruct.bit */.GD.bit(),
-  receiveButtons: bluetooth/* BluetoothStruct.bit */.GD.bit(),
-  receiveText: bluetooth/* BluetoothStruct.bit */.GD.bit(),
-  sendButton: bluetooth/* BluetoothStruct.bit */.GD.bit(),
-  sendClimate: bluetooth/* BluetoothStruct.bit */.GD.bit(),
-  sendDoors: bluetooth/* BluetoothStruct.bit */.GD.bit(),
-  parseVolume: bluetooth/* BluetoothStruct.bit */.GD.bit(),
-  lcdShow: bluetooth/* BluetoothStruct.bit */.GD.bit(),
-  uartBaud: bluetooth/* BluetoothStruct.uint8 */.GD.uint8()
-};
-;// CONCATENATED MODULE: ./src/models/pjcan/teyes/StructTeyesConfig_401.ts
-
-const API_TEYES_CONFIG_SIZE_401 = 1;
-/** Структура данных */
-const StructTeyesConfig_401 = {
-  receiveClock: bluetooth/* BluetoothStruct.bit */.GD.bit(),
-  receiveButtons: bluetooth/* BluetoothStruct.bit */.GD.bit(),
-  receiveText: bluetooth/* BluetoothStruct.bit */.GD.bit(),
-  sendButton: bluetooth/* BluetoothStruct.bit */.GD.bit(),
-  sendClimate: bluetooth/* BluetoothStruct.bit */.GD.bit(),
-  sendDoors: bluetooth/* BluetoothStruct.bit */.GD.bit(),
-  parseVolume: bluetooth/* BluetoothStruct.bit */.GD.bit(),
-  lcdShow: bluetooth/* BluetoothStruct.bit */.GD.bit()
-};
 ;// CONCATENATED MODULE: ./src/models/pjcan/teyes/TeyesConfig.ts
-
-
 
 
 
@@ -21991,17 +21869,30 @@ class TeyesConfig extends BaseModel/* BaseModel */.g {
    */
   static update(version) {
     if (!version || version.compareString("4.0.2") !== 1) {
-      if (TeyesConfig.struct !== StructTeyesConfig) {
-        TeyesConfig.struct = StructTeyesConfig;
-        TeyesConfig.bleStruct = new bluetooth/* BluetoothStruct */.GD(StructTeyesConfig);
-        TeyesConfig.size = API_TEYES_CONFIG_SIZE;
-      }
+      TeyesConfig.struct = {
+        receiveClock: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+        receiveButtons: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+        receiveText: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+        sendButton: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+        sendClimate: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+        sendDoors: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+        parseVolume: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+        lcdShow: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+        uartBaud: bluetooth/* BluetoothStruct.uint8 */.GD.uint8()
+      };
+      TeyesConfig.size = 2;
     } else {
-      if (TeyesConfig.struct !== StructTeyesConfig_401) {
-        TeyesConfig.struct = StructTeyesConfig_401;
-        TeyesConfig.bleStruct = new bluetooth/* BluetoothStruct */.GD(StructTeyesConfig_401);
-        TeyesConfig.size = API_TEYES_CONFIG_SIZE_401;
-      }
+      TeyesConfig.struct = {
+        receiveClock: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+        receiveButtons: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+        receiveText: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+        sendButton: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+        sendClimate: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+        sendDoors: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+        parseVolume: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+        lcdShow: bluetooth/* BluetoothStruct.bit */.GD.bit()
+      };
+      TeyesConfig.size = 1;
     }
   }
   constructor(data) {
@@ -22021,31 +21912,21 @@ class TeyesConfig extends BaseModel/* BaseModel */.g {
    * @param {DataView} buf Буфер данных
    */
   set(buf) {
-    return this._set(this, API_TEYES_CONFIG_EXEC, TeyesConfig.size + 1, TeyesConfig.bleStruct, buf);
+    return this._set(this, API_TEYES_CONFIG_EXEC, TeyesConfig.size + 1, new bluetooth/* BluetoothStruct */.GD(TeyesConfig.struct), buf);
   }
   /** Чтение данных */
   get() {
-    return this._get(this, API_TEYES_CONFIG_EXEC, TeyesConfig.size + 1, TeyesConfig.bleStruct);
+    return this._get(this, API_TEYES_CONFIG_EXEC, TeyesConfig.size + 1, new bluetooth/* BluetoothStruct */.GD(TeyesConfig.struct));
   }
 }
 (0,defineProperty/* default */.Z)(TeyesConfig, "struct", void 0);
-(0,defineProperty/* default */.Z)(TeyesConfig, "bleStruct", void 0);
 (0,defineProperty/* default */.Z)(TeyesConfig, "size", void 0);
-;// CONCATENATED MODULE: ./src/models/pjcan/teyes/StructTeyesText.ts
-
-const API_TEYES_TEXT_SIZE = 12;
-/** Структура данных */
-const StructTeyesText = {
-  text: bluetooth/* BluetoothStruct.char */.GD.char(API_TEYES_TEXT_SIZE)
-};
 ;// CONCATENATED MODULE: ./src/models/pjcan/teyes/TeyesText.ts
-
 
 
 
 const API_TEYES_TEXT_EXEC = 31;
 const API_TEYES_TEXT_EVENT = "TeyesText";
-const struct = new bluetooth/* BluetoothStruct */.GD(StructTeyesText);
 /** Модель значения текста Teyes */
 class TeyesText extends BaseModel/* BaseModel */.g {
   constructor(data) {
@@ -22058,37 +21939,31 @@ class TeyesText extends BaseModel/* BaseModel */.g {
    * @param {DataView} buf Буфер данных
    */
   set(buf) {
-    return this._set(this, API_TEYES_TEXT_EXEC, API_TEYES_TEXT_SIZE + 1, struct, buf);
+    return this._set(this, API_TEYES_TEXT_EXEC, TeyesText.size + 1, new bluetooth/* BluetoothStruct */.GD(TeyesText.struct), buf);
   }
   /** Чтение данных */
   get() {
-    return this._get(this, API_TEYES_TEXT_EXEC, API_TEYES_TEXT_SIZE + 1, struct);
+    return this._get(this, API_TEYES_TEXT_EXEC, TeyesText.size + 1, new bluetooth/* BluetoothStruct */.GD(TeyesText.struct));
   }
 }
-// EXTERNAL MODULE: ./src/models/pjcan/view/index.ts + 3 modules
-var view = __webpack_require__(7037);
-;// CONCATENATED MODULE: ./src/models/pjcan/teyes/StructTeyesView.ts
-
-
-const API_TEYES_VIEW_SIZE = view/* API_VIEWS_SIZE */.KX;
-/** Структура данных */
-const StructTeyesView = {
-  view: bluetooth/* BluetoothStruct.struct */.GD.struct(view/* StructViewConfig */.hQ)
-};
+(0,defineProperty/* default */.Z)(TeyesText, "struct", {
+  text: bluetooth/* BluetoothStruct.char */.GD.char(12)
+});
+(0,defineProperty/* default */.Z)(TeyesText, "size", 12);
+// EXTERNAL MODULE: ./src/models/pjcan/view/index.ts + 2 modules
+var view = __webpack_require__(7374);
 ;// CONCATENATED MODULE: ./src/models/pjcan/teyes/TeyesView.ts
-
 
 
 
 
 const API_TEYES_VIEW_EXEC = 32;
 const API_TEYES_VIEW_EVENT = "TeyesView";
-const TeyesView_struct = new bluetooth/* BluetoothStruct */.GD(StructTeyesView);
 /** Модель параметров отображения данных Teyes */
 class TeyesView extends BaseModel/* BaseModel */.g {
   constructor(data) {
     super();
-    (0,defineProperty/* default */.Z)(this, "view", new view/* ViewConfig */.Fx());
+    (0,defineProperty/* default */.Z)(this, "view", new view/* ViewConfig */.F());
     if (data) this.set(data);
   }
   /**
@@ -22096,17 +21971,18 @@ class TeyesView extends BaseModel/* BaseModel */.g {
    * @param {DataView} buf Буфер данных
    */
   set(buf) {
-    return this._set(this, API_TEYES_VIEW_EXEC, API_TEYES_VIEW_SIZE + 1, TeyesView_struct, buf);
+    return this._set(this, API_TEYES_VIEW_EXEC, TeyesView.size + 1, new bluetooth/* BluetoothStruct */.GD(TeyesView.struct), buf);
   }
   /** Чтение данных */
   get() {
-    return this._get(this, API_TEYES_VIEW_EXEC, API_TEYES_VIEW_SIZE + 1, TeyesView_struct);
+    return this._get(this, API_TEYES_VIEW_EXEC, TeyesView.size + 1, new bluetooth/* BluetoothStruct */.GD(TeyesView.struct));
   }
 }
+(0,defineProperty/* default */.Z)(TeyesView, "struct", {
+  view: bluetooth/* BluetoothStruct.struct */.GD.struct(view/* ViewConfig.struct */.F.struct)
+});
+(0,defineProperty/* default */.Z)(TeyesView, "size", view/* ViewConfig.size */.F.size);
 ;// CONCATENATED MODULE: ./src/models/pjcan/teyes/index.ts
-
-
-
 
 
 
@@ -22114,7 +21990,7 @@ class TeyesView extends BaseModel/* BaseModel */.g {
 
 /***/ }),
 
-/***/ 8293:
+/***/ 6385:
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -22126,8 +22002,6 @@ __webpack_require__.d(__webpack_exports__, {
   "c3": function() { return /* reexport */ API_UPDATE_EXEC; },
   "BN": function() { return /* reexport */ Update; }
 });
-
-// UNUSED EXPORTS: API_UPDATE_SIZE, StructUpdate
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/defineProperty.js + 3 modules
 var defineProperty = __webpack_require__(7327);
@@ -22142,22 +22016,7 @@ var eventemitter3 = __webpack_require__(6856);
 var eventemitter3_default = /*#__PURE__*/__webpack_require__.n(eventemitter3);
 // EXTERNAL MODULE: ./src/components/bluetooth/index.ts + 4 modules
 var bluetooth = __webpack_require__(9014);
-;// CONCATENATED MODULE: ./src/models/pjcan/update/StructUpdate.ts
-
-const UPDATE_VALUE_DATA_SIZE = 496;
-const API_UPDATE_SIZE = 503;
-/** Структура данных */
-const StructUpdate = {
-  begin: bluetooth/* BluetoothStruct.bit */.GD.bit(),
-  end: bluetooth/* BluetoothStruct.bit */.GD.bit(),
-  abort: bluetooth/* BluetoothStruct.bit */.GD.bit(),
-  encrypt: bluetooth/* BluetoothStruct.bit */.GD.bit(),
-  iv: bluetooth/* BluetoothStruct.bit */.GD.bit(),
-  total: bluetooth/* BluetoothStruct.uint32 */.GD.uint32(),
-  size: bluetooth/* BluetoothStruct.uint16 */.GD.uint16()
-};
 ;// CONCATENATED MODULE: ./src/models/pjcan/update/Update.ts
-
 
 
 
@@ -22167,7 +22026,7 @@ const StructUpdate = {
 const API_UPDATE_EXEC = 90;
 const API_UPDATE_EVENT = "Update";
 const API_UPDATE_EVENT_ERROR = "ErrorUpdate";
-const struct = new bluetooth/* BluetoothStruct */.GD(StructUpdate);
+const UPDATE_VALUE_DATA_SIZE = 496;
 /** Модель обновления прошивки */
 class Update extends (eventemitter3_default()) {
   get uploading() {
@@ -22230,7 +22089,7 @@ class Update extends (eventemitter3_default()) {
   /** Чтение данных */
   get() {
     try {
-      const buf = new DataView(new ArrayBuffer(API_UPDATE_SIZE + 1));
+      const buf = new DataView(new ArrayBuffer(Update.size + 1));
       buf.setUint8(0, API_UPDATE_EXEC);
       this.begin = !this.begin && this.offset === 0;
       if (this.begin && this.encrypt && this.iv) {
@@ -22247,21 +22106,30 @@ class Update extends (eventemitter3_default()) {
         }
       }
       this.end = this.offset >= this.total;
-      struct?.encode(buf, this, 1);
+      new bluetooth/* BluetoothStruct */.GD(Update.struct)?.encode(buf, this, 1);
       return buf;
     } catch (e) {
       console.log(e);
     }
   }
 }
+(0,defineProperty/* default */.Z)(Update, "struct", {
+  begin: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+  end: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+  abort: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+  encrypt: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+  iv: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+  total: bluetooth/* BluetoothStruct.uint32 */.GD.uint32(),
+  size: bluetooth/* BluetoothStruct.uint16 */.GD.uint16()
+});
+(0,defineProperty/* default */.Z)(Update, "size", 503);
 ;// CONCATENATED MODULE: ./src/models/pjcan/update/index.ts
-
 
 
 
 /***/ }),
 
-/***/ 4547:
+/***/ 9217:
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -22270,14 +22138,10 @@ class Update extends (eventemitter3_default()) {
 __webpack_require__.d(__webpack_exports__, {
   "uj": function() { return /* reexport */ API_VARIABLE_BOSE_EVENT; },
   "j3": function() { return /* reexport */ API_VARIABLE_BOSE_EXEC; },
-  "rQ": function() { return /* reexport */ API_VARIABLE_BOSE_SIZE; },
   "sO": function() { return /* reexport */ API_VARIABLE_BOSE_VIEW_EVENT; },
   "qT": function() { return /* reexport */ API_VARIABLE_BOSE_VIEW_EXEC; },
-  "UU": function() { return /* reexport */ API_VARIABLE_BOSE_VIEW_SIZE; },
   "jp": function() { return /* reexport */ BoseConfig; },
-  "Jn": function() { return /* reexport */ BoseView; },
-  "XM": function() { return /* reexport */ StructBoseConfig; },
-  "Bt": function() { return /* reexport */ StructBoseView; }
+  "Jn": function() { return /* reexport */ BoseView; }
 });
 
 // UNUSED EXPORTS: TCenterPoint
@@ -22288,21 +22152,6 @@ var defineProperty = __webpack_require__(7327);
 var bluetooth = __webpack_require__(9014);
 // EXTERNAL MODULE: ./src/models/pjcan/base/BaseModel.ts
 var BaseModel = __webpack_require__(9036);
-;// CONCATENATED MODULE: ./src/models/pjcan/variables/bose/StructBoseConfig.ts
-
-const API_VARIABLE_BOSE_SIZE = 6;
-/** Структура данных */
-const StructBoseConfig = {
-  enabled: bluetooth/* BluetoothStruct.bit */.GD.bit(),
-  audioPLT: bluetooth/* BluetoothStruct.bit */.GD.bit(),
-  radioFM: bluetooth/* BluetoothStruct.bit */.GD.bit(),
-  wow: bluetooth/* BluetoothStruct.bit */.GD.bit(),
-  balance: bluetooth/* BluetoothStruct.int8 */.GD.int8(),
-  bass: bluetooth/* BluetoothStruct.int8 */.GD.int8(),
-  fade: bluetooth/* BluetoothStruct.int8 */.GD.int8(),
-  treble: bluetooth/* BluetoothStruct.int8 */.GD.int8(),
-  centerPoint: bluetooth/* BluetoothStruct.uint8 */.GD.uint8()
-};
 ;// CONCATENATED MODULE: ./src/models/pjcan/variables/bose/TCenterPoint.ts
 /* eslint-disable */
 var TCenterPoint;
@@ -22319,10 +22168,8 @@ var TCenterPoint;
 
 
 
-
 const API_VARIABLE_BOSE_EXEC = 110;
 const API_VARIABLE_BOSE_EVENT = "VariableBoseConfig";
-const struct = new bluetooth/* BluetoothStruct */.GD(StructBoseConfig);
 /** Модель параметров Bose */
 class BoseConfig extends BaseModel/* BaseModel */.g {
   constructor(data) {
@@ -22343,37 +22190,39 @@ class BoseConfig extends BaseModel/* BaseModel */.g {
    * @param {DataView} buf Буфер данных
    */
   set(buf) {
-    return this._set(this, API_VARIABLE_BOSE_EXEC, API_VARIABLE_BOSE_SIZE + 1, struct, buf);
+    return this._set(this, API_VARIABLE_BOSE_EXEC, BoseConfig.size + 1, new bluetooth/* BluetoothStruct */.GD(BoseConfig.struct), buf);
   }
   /** Чтение данных */
   get() {
-    return this._get(this, API_VARIABLE_BOSE_EXEC, API_VARIABLE_BOSE_SIZE + 1, struct);
+    return this._get(this, API_VARIABLE_BOSE_EXEC, BoseConfig.size + 1, new bluetooth/* BluetoothStruct */.GD(BoseConfig.struct));
   }
 }
-// EXTERNAL MODULE: ./src/models/pjcan/view/index.ts + 3 modules
-var view = __webpack_require__(7037);
-;// CONCATENATED MODULE: ./src/models/pjcan/variables/bose/StructBoseView.ts
-
-
-const API_VARIABLE_BOSE_VIEW_SIZE = view/* API_VIEWS_SIZE */.KX;
-/** Структура данных */
-const StructBoseView = {
-  view: bluetooth/* BluetoothStruct.struct */.GD.struct(view/* StructViewConfig */.hQ)
-};
+(0,defineProperty/* default */.Z)(BoseConfig, "struct", {
+  enabled: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+  audioPLT: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+  radioFM: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+  wow: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+  balance: bluetooth/* BluetoothStruct.int8 */.GD.int8(),
+  bass: bluetooth/* BluetoothStruct.int8 */.GD.int8(),
+  fade: bluetooth/* BluetoothStruct.int8 */.GD.int8(),
+  treble: bluetooth/* BluetoothStruct.int8 */.GD.int8(),
+  centerPoint: bluetooth/* BluetoothStruct.uint8 */.GD.uint8()
+});
+(0,defineProperty/* default */.Z)(BoseConfig, "size", 6);
+// EXTERNAL MODULE: ./src/models/pjcan/view/index.ts + 2 modules
+var view = __webpack_require__(7374);
 ;// CONCATENATED MODULE: ./src/models/pjcan/variables/bose/BoseView.ts
-
 
 
 
 
 const API_VARIABLE_BOSE_VIEW_EXEC = 111;
 const API_VARIABLE_BOSE_VIEW_EVENT = "VariableBoseView";
-const BoseView_struct = new bluetooth/* BluetoothStruct */.GD(StructBoseView);
 /** Модель параметров отображения данных Bose */
 class BoseView extends BaseModel/* BaseModel */.g {
   constructor(data) {
     super();
-    (0,defineProperty/* default */.Z)(this, "view", new view/* ViewConfig */.Fx());
+    (0,defineProperty/* default */.Z)(this, "view", new view/* ViewConfig */.F());
     if (data) this.set(data);
   }
   /**
@@ -22381,16 +22230,18 @@ class BoseView extends BaseModel/* BaseModel */.g {
    * @param {DataView} buf Буфер данных
    */
   set(buf) {
-    return this._set(this, API_VARIABLE_BOSE_VIEW_EXEC, API_VARIABLE_BOSE_VIEW_SIZE + 1, BoseView_struct, buf);
+    return this._set(this, API_VARIABLE_BOSE_VIEW_EXEC, BoseView.size + 1, new bluetooth/* BluetoothStruct */.GD(BoseView.struct), buf);
   }
   /** Чтение данных */
   get() {
-    return this._get(this, API_VARIABLE_BOSE_VIEW_EXEC, API_VARIABLE_BOSE_VIEW_SIZE + 1, BoseView_struct);
+    return this._get(this, API_VARIABLE_BOSE_VIEW_EXEC, BoseView.size + 1, new bluetooth/* BluetoothStruct */.GD(BoseView.struct));
   }
 }
+(0,defineProperty/* default */.Z)(BoseView, "struct", {
+  view: bluetooth/* BluetoothStruct.struct */.GD.struct(view/* ViewConfig.struct */.F.struct)
+});
+(0,defineProperty/* default */.Z)(BoseView, "size", view/* ViewConfig.size */.F.size);
 ;// CONCATENATED MODULE: ./src/models/pjcan/variables/bose/index.ts
-
-
 
 
 
@@ -22398,7 +22249,7 @@ class BoseView extends BaseModel/* BaseModel */.g {
 
 /***/ }),
 
-/***/ 3910:
+/***/ 2481:
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -22407,14 +22258,10 @@ class BoseView extends BaseModel/* BaseModel */.g {
 __webpack_require__.d(__webpack_exports__, {
   "n$": function() { return /* reexport */ API_VARIABLE_CLIMATE_EVENT; },
   "sP": function() { return /* reexport */ API_VARIABLE_CLIMATE_EXEC; },
-  "sO": function() { return /* reexport */ API_VARIABLE_CLIMATE_SIZE; },
   "j6": function() { return /* reexport */ API_VARIABLE_CLIMATE_VIEW_EVENT; },
   "EW": function() { return /* reexport */ API_VARIABLE_CLIMATE_VIEW_EXEC; },
-  "jG": function() { return /* reexport */ API_VARIABLE_CLIMATE_VIEW_SIZE; },
   "JF": function() { return /* reexport */ ClimateValue; },
   "Zv": function() { return /* reexport */ ClimateView; },
-  "dA": function() { return /* reexport */ StructClimateValue; },
-  "$M": function() { return /* reexport */ StructClimateView; },
   "T1": function() { return /* reexport */ TAir; }
 });
 
@@ -22424,33 +22271,12 @@ var defineProperty = __webpack_require__(7327);
 var bluetooth = __webpack_require__(9014);
 // EXTERNAL MODULE: ./src/models/pjcan/base/BaseModel.ts
 var BaseModel = __webpack_require__(9036);
-;// CONCATENATED MODULE: ./src/models/pjcan/variables/climate/StructClimateValue.ts
-
-const API_VARIABLE_CLIMATE_SIZE = 7;
-/** Структура данных */
-const StructClimateValue = {
-  enabled: bluetooth/* BluetoothStruct.bit */.GD.bit(),
-  automode: bluetooth/* BluetoothStruct.bit */.GD.bit(),
-  ac: bluetooth/* BluetoothStruct.bit */.GD.bit(),
-  airDLegs: bluetooth/* BluetoothStruct.bit */.GD.bit(),
-  airDBody: bluetooth/* BluetoothStruct.bit */.GD.bit(),
-  airDWindshield: bluetooth/* BluetoothStruct.bit */.GD.bit(),
-  airDBackWin: bluetooth/* BluetoothStruct.bit */.GD.bit(),
-  eco: bluetooth/* BluetoothStruct.bit */.GD.bit(),
-  airRate: bluetooth/* BluetoothStruct.uint8 */.GD.uint8(),
-  airType: bluetooth/* BluetoothStruct.uint8 */.GD.uint8(),
-  tempType: bluetooth/* BluetoothStruct.uint8 */.GD.uint8(),
-  tempDisplay: bluetooth/* BluetoothStruct.uint8 */.GD.uint8(),
-  temperature: bluetooth/* BluetoothStruct.uint16 */.GD.uint16()
-};
 ;// CONCATENATED MODULE: ./src/models/pjcan/variables/climate/ClimateValue.ts
-
 
 
 
 const API_VARIABLE_CLIMATE_EXEC = 120;
 const API_VARIABLE_CLIMATE_EVENT = "VariableClimateValue";
-const struct = new bluetooth/* BluetoothStruct */.GD(StructClimateValue);
 /** Модель значений климата */
 class ClimateValue extends BaseModel/* BaseModel */.g {
   constructor(data) {
@@ -22475,37 +22301,43 @@ class ClimateValue extends BaseModel/* BaseModel */.g {
    * @param {DataView} buf Буфер данных
    */
   set(buf) {
-    return this._set(this, API_VARIABLE_CLIMATE_EXEC, API_VARIABLE_CLIMATE_SIZE + 1, struct, buf);
+    return this._set(this, API_VARIABLE_CLIMATE_EXEC, ClimateValue.size + 1, new bluetooth/* BluetoothStruct */.GD(ClimateValue.struct), buf);
   }
   /** Чтение данных */
   get() {
-    return this._get(this, API_VARIABLE_CLIMATE_EXEC, API_VARIABLE_CLIMATE_SIZE + 1, struct);
+    return this._get(this, API_VARIABLE_CLIMATE_EXEC, ClimateValue.size + 1, new bluetooth/* BluetoothStruct */.GD(ClimateValue.struct));
   }
 }
-// EXTERNAL MODULE: ./src/models/pjcan/view/index.ts + 3 modules
-var view = __webpack_require__(7037);
-;// CONCATENATED MODULE: ./src/models/pjcan/variables/climate/StructClimateView.ts
-
-
-const API_VARIABLE_CLIMATE_VIEW_SIZE = view/* API_VIEWS_SIZE */.KX;
-/** Структура данных */
-const StructClimateView = {
-  view: bluetooth/* BluetoothStruct.struct */.GD.struct(view/* StructViewConfig */.hQ)
-};
+(0,defineProperty/* default */.Z)(ClimateValue, "struct", {
+  enabled: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+  automode: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+  ac: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+  airDLegs: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+  airDBody: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+  airDWindshield: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+  airDBackWin: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+  eco: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+  airRate: bluetooth/* BluetoothStruct.uint8 */.GD.uint8(),
+  airType: bluetooth/* BluetoothStruct.uint8 */.GD.uint8(),
+  tempType: bluetooth/* BluetoothStruct.uint8 */.GD.uint8(),
+  tempDisplay: bluetooth/* BluetoothStruct.uint8 */.GD.uint8(),
+  temperature: bluetooth/* BluetoothStruct.uint16 */.GD.uint16()
+});
+(0,defineProperty/* default */.Z)(ClimateValue, "size", 7);
+// EXTERNAL MODULE: ./src/models/pjcan/view/index.ts + 2 modules
+var view = __webpack_require__(7374);
 ;// CONCATENATED MODULE: ./src/models/pjcan/variables/climate/ClimateView.ts
-
 
 
 
 
 const API_VARIABLE_CLIMATE_VIEW_EXEC = 121;
 const API_VARIABLE_CLIMATE_VIEW_EVENT = "VariableClimateView";
-const ClimateView_struct = new bluetooth/* BluetoothStruct */.GD(StructClimateView);
 /** Модель параметров отображения данных климата */
 class ClimateView extends BaseModel/* BaseModel */.g {
   constructor(data) {
     super();
-    (0,defineProperty/* default */.Z)(this, "view", new view/* ViewConfig */.Fx());
+    (0,defineProperty/* default */.Z)(this, "view", new view/* ViewConfig */.F());
     if (data) this.set(data);
   }
   /**
@@ -22513,15 +22345,19 @@ class ClimateView extends BaseModel/* BaseModel */.g {
    * @param {DataView} buf Буфер данных
    */
   set(buf) {
-    return this._set(this, API_VARIABLE_CLIMATE_VIEW_EXEC, API_VARIABLE_CLIMATE_VIEW_SIZE + 1, ClimateView_struct, buf);
+    return this._set(this, API_VARIABLE_CLIMATE_VIEW_EXEC, ClimateView.size + 1, new bluetooth/* BluetoothStruct */.GD(ClimateView.struct), buf);
   }
   /** Чтение данных */
   get() {
-    return this._get(this, API_VARIABLE_CLIMATE_VIEW_EXEC, API_VARIABLE_CLIMATE_VIEW_SIZE + 1, ClimateView_struct);
+    return this._get(this, API_VARIABLE_CLIMATE_VIEW_EXEC, ClimateView.size + 1, new bluetooth/* BluetoothStruct */.GD(ClimateView.struct));
   }
 }
+(0,defineProperty/* default */.Z)(ClimateView, "struct", {
+  view: bluetooth/* BluetoothStruct.struct */.GD.struct(view/* ViewConfig.struct */.F.struct)
+});
+(0,defineProperty/* default */.Z)(ClimateView, "size", view/* ViewConfig.size */.F.size);
 ;// CONCATENATED MODULE: ./src/models/pjcan/variables/climate/TAir.ts
-/* eslint-disable */
+/* eslint-disable no-unused-vars */
 var TAir;
 (function (TAir) {
   TAir[TAir["AIR_NONE"] = 0] = "AIR_NONE";
@@ -22534,11 +22370,9 @@ var TAir;
 
 
 
-
-
 /***/ }),
 
-/***/ 9617:
+/***/ 1529:
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -22547,8 +22381,6 @@ var TAir;
 __webpack_require__.d(__webpack_exports__, {
   "ne": function() { return /* reexport */ API_VARIABLE_CONFIGS_EVENT; },
   "Kw": function() { return /* reexport */ API_VARIABLE_CONFIGS_EXEC; },
-  "QE": function() { return /* reexport */ API_VARIABLE_CONFIGS_SIZE; },
-  "Le": function() { return /* reexport */ StructVariableConfigs; },
   "Pk": function() { return /* reexport */ VariableConfig; }
 });
 
@@ -22558,30 +22390,15 @@ var defineProperty = __webpack_require__(7327);
 var bluetooth = __webpack_require__(9014);
 // EXTERNAL MODULE: ./src/models/pjcan/base/BaseModel.ts
 var BaseModel = __webpack_require__(9036);
-// EXTERNAL MODULE: ./src/models/pjcan/variables/bose/index.ts + 5 modules
-var bose = __webpack_require__(4547);
-// EXTERNAL MODULE: ./src/models/pjcan/variables/engine/index.ts + 6 modules
-var engine = __webpack_require__(7925);
-// EXTERNAL MODULE: ./src/models/pjcan/variables/fuel/index.ts + 6 modules
-var fuel = __webpack_require__(4873);
-// EXTERNAL MODULE: ./src/models/pjcan/variables/volume/index.ts + 6 modules
-var volume = __webpack_require__(3057);
-;// CONCATENATED MODULE: ./src/models/pjcan/variables/configs/StructVariableConfigs.ts
-
-
-
-
-
-const API_VARIABLE_CONFIGS_SIZE = bose/* API_VARIABLE_BOSE_SIZE */.rQ + engine/* API_VARIABLE_ENGINE_CONFIG_SIZE */.TP + fuel/* API_VARIABLE_FUEL_CONFIG_SIZE */.OT + volume/* API_VARIABLE_VOLUME_CONFIG_SIZE */.t7;
-/** Структура данных */
-const StructVariableConfigs = {
-  bose: bluetooth/* BluetoothStruct.struct */.GD.struct(bose/* StructBoseConfig */.XM),
-  engine: bluetooth/* BluetoothStruct.struct */.GD.struct(engine/* StructEngineConfig */.Xy),
-  fuel: bluetooth/* BluetoothStruct.struct */.GD.struct(fuel/* StructFuelConfig */.sD),
-  volume: bluetooth/* BluetoothStruct.struct */.GD.struct(volume/* StructVolumeConfig */.RW)
-};
+// EXTERNAL MODULE: ./src/models/pjcan/variables/bose/index.ts + 3 modules
+var bose = __webpack_require__(9217);
+// EXTERNAL MODULE: ./src/models/pjcan/variables/engine/index.ts + 3 modules
+var engine = __webpack_require__(2658);
+// EXTERNAL MODULE: ./src/models/pjcan/variables/fuel/index.ts + 3 modules
+var fuel = __webpack_require__(9422);
+// EXTERNAL MODULE: ./src/models/pjcan/variables/volume/index.ts + 3 modules
+var volume = __webpack_require__(139);
 ;// CONCATENATED MODULE: ./src/models/pjcan/variables/configs/VariablesConfigs.ts
-
 
 
 
@@ -22591,9 +22408,22 @@ const StructVariableConfigs = {
 
 const API_VARIABLE_CONFIGS_EXEC = 100;
 const API_VARIABLE_CONFIGS_EVENT = "VariableConfigs";
-const struct = new bluetooth/* BluetoothStruct */.GD(StructVariableConfigs);
 /** Модель конфигурации переменных */
 class VariableConfig extends BaseModel/* BaseModel */.g {
+  /**
+   * Обновить версию структуры
+   * @param {IVersion} version Версия протокола
+   */
+  static update(version) {
+    engine/* EngineConfig.update */.EJ.update(version);
+    VariableConfig.struct = {
+      bose: bluetooth/* BluetoothStruct.struct */.GD.struct(bose/* BoseConfig.struct */.jp.struct),
+      engine: bluetooth/* BluetoothStruct.struct */.GD.struct(engine/* EngineConfig.struct */.EJ.struct),
+      fuel: bluetooth/* BluetoothStruct.struct */.GD.struct(fuel/* FuelConfig.struct */.wi.struct),
+      volume: bluetooth/* BluetoothStruct.struct */.GD.struct(volume/* VolumeConfig.struct */.Rf.struct)
+    };
+    VariableConfig.size = bose/* BoseConfig.size */.jp.size + engine/* EngineConfig.size */.EJ.size + fuel/* FuelConfig.size */.wi.size + volume/* VolumeConfig.size */.Rf.size;
+  }
   constructor(data) {
     super();
     (0,defineProperty/* default */.Z)(this, "bose", new bose/* BoseConfig */.jp());
@@ -22607,7 +22437,7 @@ class VariableConfig extends BaseModel/* BaseModel */.g {
    * @param {DataView} buf Буфер данных
    */
   set(buf) {
-    const result = this._set(this, API_VARIABLE_CONFIGS_EXEC, API_VARIABLE_CONFIGS_SIZE + 1, struct, buf);
+    const result = this._set(this, API_VARIABLE_CONFIGS_EXEC, VariableConfig.size + 1, new bluetooth/* BluetoothStruct */.GD(VariableConfig.struct), buf);
     if (result) {
       this.bose.isData = true;
       this.engine.isData = true;
@@ -22621,14 +22451,15 @@ class VariableConfig extends BaseModel/* BaseModel */.g {
     return this._get(this, API_VARIABLE_CONFIGS_EXEC, 1);
   }
 }
+(0,defineProperty/* default */.Z)(VariableConfig, "struct", void 0);
+(0,defineProperty/* default */.Z)(VariableConfig, "size", void 0);
 ;// CONCATENATED MODULE: ./src/models/pjcan/variables/configs/index.ts
-
 
 
 
 /***/ }),
 
-/***/ 1971:
+/***/ 3558:
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -22637,14 +22468,10 @@ class VariableConfig extends BaseModel/* BaseModel */.g {
 __webpack_require__.d(__webpack_exports__, {
   "bI": function() { return /* reexport */ API_VARIABLE_DOORS_EVENT; },
   "b7": function() { return /* reexport */ API_VARIABLE_DOORS_EXEC; },
-  "dC": function() { return /* reexport */ API_VARIABLE_DOORS_SIZE; },
   "Xl": function() { return /* reexport */ API_VARIABLE_DOORS_VIEW_EVENT; },
   "EJ": function() { return /* reexport */ API_VARIABLE_DOORS_VIEW_EXEC; },
-  "dr": function() { return /* reexport */ API_VARIABLE_DOORS_VIEW_SIZE; },
   "Uv": function() { return /* reexport */ DoorsValue; },
-  "mF": function() { return /* reexport */ DoorsView; },
-  "cP": function() { return /* reexport */ StructDoorsValue; },
-  "mG": function() { return /* reexport */ StructDoorsView; }
+  "mF": function() { return /* reexport */ DoorsView; }
 });
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/defineProperty.js + 3 modules
@@ -22653,25 +22480,12 @@ var defineProperty = __webpack_require__(7327);
 var bluetooth = __webpack_require__(9014);
 // EXTERNAL MODULE: ./src/models/pjcan/base/BaseModel.ts
 var BaseModel = __webpack_require__(9036);
-;// CONCATENATED MODULE: ./src/models/pjcan/variables/doors/StructDoorsValue.ts
-
-const API_VARIABLE_DOORS_SIZE = 1;
-/** Структура данных */
-const StructDoorsValue = {
-  frontLeft: bluetooth/* BluetoothStruct.bit */.GD.bit(),
-  frontRight: bluetooth/* BluetoothStruct.bit */.GD.bit(),
-  backLeft: bluetooth/* BluetoothStruct.bit */.GD.bit(),
-  backRight: bluetooth/* BluetoothStruct.bit */.GD.bit(),
-  trunk: bluetooth/* BluetoothStruct.bit */.GD.bit()
-};
 ;// CONCATENATED MODULE: ./src/models/pjcan/variables/doors/DoorsValue.ts
-
 
 
 
 const API_VARIABLE_DOORS_EXEC = 130;
 const API_VARIABLE_DOORS_EVENT = "VariableDoorsValue";
-const struct = new bluetooth/* BluetoothStruct */.GD(StructDoorsValue);
 /** Модель значений дверей */
 class DoorsValue extends BaseModel/* BaseModel */.g {
   constructor(data) {
@@ -22688,37 +22502,35 @@ class DoorsValue extends BaseModel/* BaseModel */.g {
    * @param {DataView} buf Буфер данных
    */
   set(buf) {
-    return this._set(this, API_VARIABLE_DOORS_EXEC, API_VARIABLE_DOORS_SIZE + 1, struct, buf);
+    return this._set(this, API_VARIABLE_DOORS_EXEC, DoorsValue.size + 1, new bluetooth/* BluetoothStruct */.GD(DoorsValue.struct), buf);
   }
   /** Чтение данных */
   get() {
-    return this._get(this, API_VARIABLE_DOORS_EXEC, API_VARIABLE_DOORS_SIZE + 1, struct);
+    return this._get(this, API_VARIABLE_DOORS_EXEC, DoorsValue.size + 1, new bluetooth/* BluetoothStruct */.GD(DoorsValue.struct));
   }
 }
-// EXTERNAL MODULE: ./src/models/pjcan/view/index.ts + 3 modules
-var view = __webpack_require__(7037);
-;// CONCATENATED MODULE: ./src/models/pjcan/variables/doors/StructDoorsView.ts
-
-
-const API_VARIABLE_DOORS_VIEW_SIZE = view/* API_VIEWS_SIZE */.KX;
-/** Структура данных */
-const StructDoorsView = {
-  view: bluetooth/* BluetoothStruct.struct */.GD.struct(view/* StructViewConfig */.hQ)
-};
+(0,defineProperty/* default */.Z)(DoorsValue, "struct", {
+  frontLeft: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+  frontRight: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+  backLeft: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+  backRight: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+  trunk: bluetooth/* BluetoothStruct.bit */.GD.bit()
+});
+(0,defineProperty/* default */.Z)(DoorsValue, "size", 1);
+// EXTERNAL MODULE: ./src/models/pjcan/view/index.ts + 2 modules
+var view = __webpack_require__(7374);
 ;// CONCATENATED MODULE: ./src/models/pjcan/variables/doors/DoorsView.ts
-
 
 
 
 
 const API_VARIABLE_DOORS_VIEW_EXEC = 131;
 const API_VARIABLE_DOORS_VIEW_EVENT = "VariableDoorsView";
-const DoorsView_struct = new bluetooth/* BluetoothStruct */.GD(StructDoorsView);
 /** Модель параметров отображения данных дверей */
 class DoorsView extends BaseModel/* BaseModel */.g {
   constructor(data) {
     super();
-    (0,defineProperty/* default */.Z)(this, "view", new view/* ViewConfig */.Fx());
+    (0,defineProperty/* default */.Z)(this, "view", new view/* ViewConfig */.F());
     if (data) this.set(data);
   }
   /**
@@ -22726,23 +22538,25 @@ class DoorsView extends BaseModel/* BaseModel */.g {
    * @param {DataView} buf Буфер данных
    */
   set(buf) {
-    return this._set(this, API_VARIABLE_DOORS_VIEW_EXEC, API_VARIABLE_DOORS_VIEW_SIZE + 1, DoorsView_struct, buf);
+    return this._set(this, API_VARIABLE_DOORS_VIEW_EXEC, DoorsView.size + 1, new bluetooth/* BluetoothStruct */.GD(DoorsView.struct), buf);
   }
   /** Чтение данных */
   get() {
-    return this._get(this, API_VARIABLE_DOORS_VIEW_EXEC, API_VARIABLE_DOORS_VIEW_SIZE + 1, DoorsView_struct);
+    return this._get(this, API_VARIABLE_DOORS_VIEW_EXEC, DoorsView.size + 1, new bluetooth/* BluetoothStruct */.GD(DoorsView.struct));
   }
 }
+(0,defineProperty/* default */.Z)(DoorsView, "struct", {
+  view: bluetooth/* BluetoothStruct.struct */.GD.struct(view/* ViewConfig.struct */.F.struct)
+});
+(0,defineProperty/* default */.Z)(DoorsView, "size", view/* ViewConfig.size */.F.size);
 ;// CONCATENATED MODULE: ./src/models/pjcan/variables/doors/index.ts
-
-
 
 
 
 
 /***/ }),
 
-/***/ 7925:
+/***/ 2658:
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -22751,19 +22565,13 @@ class DoorsView extends BaseModel/* BaseModel */.g {
 __webpack_require__.d(__webpack_exports__, {
   "f2": function() { return /* reexport */ API_VARIABLE_ENGINE_CONFIG_EVENT; },
   "LH": function() { return /* reexport */ API_VARIABLE_ENGINE_CONFIG_EXEC; },
-  "TP": function() { return /* reexport */ API_VARIABLE_ENGINE_CONFIG_SIZE; },
   "tk": function() { return /* reexport */ API_VARIABLE_ENGINE_EVENT; },
   "g$": function() { return /* reexport */ API_VARIABLE_ENGINE_EXEC; },
-  "OO": function() { return /* reexport */ API_VARIABLE_ENGINE_SIZE; },
   "P8": function() { return /* reexport */ API_VARIABLE_ENGINE_VIEW_EVENT; },
   "_L": function() { return /* reexport */ API_VARIABLE_ENGINE_VIEW_EXEC; },
-  "vN": function() { return /* reexport */ API_VARIABLE_ENGINE_VIEW_SIZE; },
   "EJ": function() { return /* reexport */ EngineConfig; },
   "E_": function() { return /* reexport */ EngineValue; },
-  "wS": function() { return /* reexport */ EngineView; },
-  "Xy": function() { return /* reexport */ StructEngineConfig; },
-  "BD": function() { return /* reexport */ StructEngineValue; },
-  "gR": function() { return /* reexport */ StructEngineView; }
+  "wS": function() { return /* reexport */ EngineView; }
 });
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/defineProperty.js + 3 modules
@@ -22772,25 +22580,35 @@ var defineProperty = __webpack_require__(7327);
 var bluetooth = __webpack_require__(9014);
 // EXTERNAL MODULE: ./src/models/pjcan/base/BaseModel.ts
 var BaseModel = __webpack_require__(9036);
-;// CONCATENATED MODULE: ./src/models/pjcan/variables/engine/StructEngineConfig.ts
-
-const API_VARIABLE_ENGINE_CONFIG_SIZE = 17;
-/** Структура данных */
-const StructEngineConfig = {
-  showDays: bluetooth/* BluetoothStruct.bit */.GD.bit(),
-  totalSeconds: bluetooth/* BluetoothStruct.uint64 */.GD.uint64(),
-  totalCountRPM: bluetooth/* BluetoothStruct.uint64 */.GD.uint64()
-};
 ;// CONCATENATED MODULE: ./src/models/pjcan/variables/engine/EngineConfig.ts
-
 
 
 
 const API_VARIABLE_ENGINE_CONFIG_EXEC = 141;
 const API_VARIABLE_ENGINE_CONFIG_EVENT = "VariableEngineConfig";
-const struct = new bluetooth/* BluetoothStruct */.GD(StructEngineConfig);
 /** Модель конфигурации ДВС */
 class EngineConfig extends BaseModel/* BaseModel */.g {
+  /**
+   * Обновить версию структуры
+   * @param {IVersion} version Версия протокола
+   */
+  static update(version) {
+    if (!version || version.compareString("4.0.2") !== 1) {
+      EngineConfig.struct = {
+        showDays: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+        totalSeconds: bluetooth/* BluetoothStruct.uint64 */.GD.uint64(),
+        totalCountRPM: bluetooth/* BluetoothStruct.uint64 */.GD.uint64()
+      };
+      EngineConfig.size = 17;
+    } else {
+      EngineConfig.struct = {
+        showDays: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+        totalSeconds: bluetooth/* BluetoothStruct.uint32 */.GD.uint32(),
+        totalCountRPM: bluetooth/* BluetoothStruct.uint32 */.GD.uint32()
+      };
+      EngineConfig.size = 9;
+    }
+  }
   constructor(data) {
     super();
     (0,defineProperty/* default */.Z)(this, "showDays", false);
@@ -22803,41 +22621,59 @@ class EngineConfig extends BaseModel/* BaseModel */.g {
    * @param {DataView} buf Буфер данных
    */
   set(buf) {
-    return this._set(this, API_VARIABLE_ENGINE_CONFIG_EXEC, API_VARIABLE_ENGINE_CONFIG_SIZE + 1, struct, buf);
+    return this._set(this, API_VARIABLE_ENGINE_CONFIG_EXEC, EngineConfig.size + 1, new bluetooth/* BluetoothStruct */.GD(EngineConfig.struct), buf);
   }
   /** Чтение данных */
   get() {
-    return this._get(this, API_VARIABLE_ENGINE_CONFIG_EXEC, API_VARIABLE_ENGINE_CONFIG_SIZE + 1, struct);
+    return this._get(this, API_VARIABLE_ENGINE_CONFIG_EXEC, EngineConfig.size + 1, new bluetooth/* BluetoothStruct */.GD(EngineConfig.struct));
   }
 }
-;// CONCATENATED MODULE: ./src/models/pjcan/variables/engine/StructEngineValue.ts
-
-const API_VARIABLE_ENGINE_SIZE = 25;
-/** Структура данных */
-const StructEngineValue = {
-  enabled: bluetooth/* BluetoothStruct.bit */.GD.bit(),
-  coolant: bluetooth/* BluetoothStruct.int8 */.GD.int8(),
-  rpm: bluetooth/* BluetoothStruct.uint16 */.GD.uint16(),
-  worktime: bluetooth/* BluetoothStruct.uint32 */.GD.uint32(),
-  countRPM: bluetooth/* BluetoothStruct.uint32 */.GD.uint32(),
-  load: bluetooth/* BluetoothStruct.uint16 */.GD.uint16(),
-  throttle: bluetooth/* BluetoothStruct.uint16 */.GD.uint16(),
-  viewDays: bluetooth/* BluetoothStruct.uint16 */.GD.uint16(),
-  viewHours: bluetooth/* BluetoothStruct.uint8 */.GD.uint8(),
-  viewMinutes: bluetooth/* BluetoothStruct.uint8 */.GD.uint8(),
-  viewSeconds: bluetooth/* BluetoothStruct.uint8 */.GD.uint8(),
-  viewCountRPM: bluetooth/* BluetoothStruct.uint32 */.GD.uint32()
-};
+(0,defineProperty/* default */.Z)(EngineConfig, "struct", void 0);
+(0,defineProperty/* default */.Z)(EngineConfig, "size", void 0);
 ;// CONCATENATED MODULE: ./src/models/pjcan/variables/engine/EngineValue.ts
-
 
 
 
 const API_VARIABLE_ENGINE_EXEC = 140;
 const API_VARIABLE_ENGINE_EVENT = "VariableEngineValue";
-const EngineValue_struct = new bluetooth/* BluetoothStruct */.GD(StructEngineValue);
 /** Модель значений ДВС */
 class EngineValue extends BaseModel/* BaseModel */.g {
+  /**
+   * Обновить версию структуры
+   * @param {IVersion} version Версия протокола
+   */
+  static update(version) {
+    if (!version || version.compareString("4.0.2") !== 1) {
+      EngineValue.struct = {
+        enabled: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+        coolant: bluetooth/* BluetoothStruct.int8 */.GD.int8(),
+        rpm: bluetooth/* BluetoothStruct.uint16 */.GD.uint16(),
+        worktime: bluetooth/* BluetoothStruct.uint32 */.GD.uint32(),
+        countRPM: bluetooth/* BluetoothStruct.uint32 */.GD.uint32(),
+        load: bluetooth/* BluetoothStruct.uint16 */.GD.uint16(),
+        throttle: bluetooth/* BluetoothStruct.uint16 */.GD.uint16(),
+        viewDays: bluetooth/* BluetoothStruct.uint16 */.GD.uint16(),
+        viewHours: bluetooth/* BluetoothStruct.uint8 */.GD.uint8(),
+        viewMinutes: bluetooth/* BluetoothStruct.uint8 */.GD.uint8(),
+        viewSeconds: bluetooth/* BluetoothStruct.uint8 */.GD.uint8(),
+        viewCountRPM: bluetooth/* BluetoothStruct.uint32 */.GD.uint32()
+      };
+      EngineValue.size = 25;
+    } else {
+      EngineValue.struct = {
+        enabled: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+        coolant: bluetooth/* BluetoothStruct.int8 */.GD.int8(),
+        rpm: bluetooth/* BluetoothStruct.uint16 */.GD.uint16(),
+        mseconds: bluetooth/* BluetoothStruct.uint32 */.GD.uint32(),
+        totalSeconds: bluetooth/* BluetoothStruct.uint32 */.GD.uint32(),
+        totalCountRPM: bluetooth/* BluetoothStruct.uint32 */.GD.uint32(),
+        countRPM: bluetooth/* BluetoothStruct.uint32 */.GD.uint32(),
+        load: bluetooth/* BluetoothStruct.uint16 */.GD.uint16(),
+        throttle: bluetooth/* BluetoothStruct.uint16 */.GD.uint16()
+      };
+      EngineValue.size = 24;
+    }
+  }
   constructor(data) {
     super();
     (0,defineProperty/* default */.Z)(this, "enabled", false);
@@ -22859,49 +22695,35 @@ class EngineValue extends BaseModel/* BaseModel */.g {
    * @param {DataView} buf Буфер данных
    */
   set(buf) {
-    return this._set(this, API_VARIABLE_ENGINE_EXEC, API_VARIABLE_ENGINE_SIZE + 1, EngineValue_struct, buf);
+    return this._set(this, API_VARIABLE_ENGINE_EXEC, EngineValue.size + 1, new bluetooth/* BluetoothStruct */.GD(EngineValue.struct), buf);
   }
   /** Чтение данных */
   get() {
-    return this._get(this, API_VARIABLE_ENGINE_EXEC, API_VARIABLE_ENGINE_SIZE + 1, EngineValue_struct);
+    return this._get(this, API_VARIABLE_ENGINE_EXEC, EngineValue.size + 1, new bluetooth/* BluetoothStruct */.GD(EngineValue.struct));
   }
 }
-// EXTERNAL MODULE: ./src/models/pjcan/view/index.ts + 3 modules
-var view = __webpack_require__(7037);
-;// CONCATENATED MODULE: ./src/models/pjcan/variables/engine/StructEngineView.ts
-
-
-const API_VARIABLE_ENGINE_VIEW_SIZE = view/* API_VIEWS_SIZE */.KX * 7;
-/** Структура данных */
-const StructEngineView = {
-  enabled: bluetooth/* BluetoothStruct.struct */.GD.struct(view/* StructViewConfig */.hQ),
-  totalSeconds: bluetooth/* BluetoothStruct.struct */.GD.struct(view/* StructViewConfig */.hQ),
-  totalCountRPM: bluetooth/* BluetoothStruct.struct */.GD.struct(view/* StructViewConfig */.hQ),
-  coolant: bluetooth/* BluetoothStruct.struct */.GD.struct(view/* StructViewConfig */.hQ),
-  rpm: bluetooth/* BluetoothStruct.struct */.GD.struct(view/* StructViewConfig */.hQ),
-  load: bluetooth/* BluetoothStruct.struct */.GD.struct(view/* StructViewConfig */.hQ),
-  throttle: bluetooth/* BluetoothStruct.struct */.GD.struct(view/* StructViewConfig */.hQ)
-};
+(0,defineProperty/* default */.Z)(EngineValue, "struct", void 0);
+(0,defineProperty/* default */.Z)(EngineValue, "size", void 0);
+// EXTERNAL MODULE: ./src/models/pjcan/view/index.ts + 2 modules
+var view = __webpack_require__(7374);
 ;// CONCATENATED MODULE: ./src/models/pjcan/variables/engine/EngineView.ts
-
 
 
 
 
 const API_VARIABLE_ENGINE_VIEW_EXEC = 142;
 const API_VARIABLE_ENGINE_VIEW_EVENT = "VariableEngineView";
-const EngineView_struct = new bluetooth/* BluetoothStruct */.GD(StructEngineView);
 /** Модель параметров отображения данных ДВС */
 class EngineView extends BaseModel/* BaseModel */.g {
   constructor(data) {
     super();
-    (0,defineProperty/* default */.Z)(this, "enabled", new view/* ViewConfig */.Fx());
-    (0,defineProperty/* default */.Z)(this, "totalSeconds", new view/* ViewConfig */.Fx());
-    (0,defineProperty/* default */.Z)(this, "totalCountRPM", new view/* ViewConfig */.Fx());
-    (0,defineProperty/* default */.Z)(this, "coolant", new view/* ViewConfig */.Fx());
-    (0,defineProperty/* default */.Z)(this, "rpm", new view/* ViewConfig */.Fx());
-    (0,defineProperty/* default */.Z)(this, "load", new view/* ViewConfig */.Fx());
-    (0,defineProperty/* default */.Z)(this, "throttle", new view/* ViewConfig */.Fx());
+    (0,defineProperty/* default */.Z)(this, "enabled", new view/* ViewConfig */.F());
+    (0,defineProperty/* default */.Z)(this, "totalSeconds", new view/* ViewConfig */.F());
+    (0,defineProperty/* default */.Z)(this, "totalCountRPM", new view/* ViewConfig */.F());
+    (0,defineProperty/* default */.Z)(this, "coolant", new view/* ViewConfig */.F());
+    (0,defineProperty/* default */.Z)(this, "rpm", new view/* ViewConfig */.F());
+    (0,defineProperty/* default */.Z)(this, "load", new view/* ViewConfig */.F());
+    (0,defineProperty/* default */.Z)(this, "throttle", new view/* ViewConfig */.F());
     if (data) this.set(data);
   }
   /**
@@ -22909,17 +22731,24 @@ class EngineView extends BaseModel/* BaseModel */.g {
    * @param {DataView} buf Буфер данных
    */
   set(buf) {
-    return this._set(this, API_VARIABLE_ENGINE_VIEW_EXEC, API_VARIABLE_ENGINE_VIEW_SIZE + 1, EngineView_struct, buf);
+    return this._set(this, API_VARIABLE_ENGINE_VIEW_EXEC, EngineView.size + 1, new bluetooth/* BluetoothStruct */.GD(EngineView.struct), buf);
   }
   /** Чтение данных */
   get() {
-    return this._get(this, API_VARIABLE_ENGINE_VIEW_EXEC, API_VARIABLE_ENGINE_VIEW_SIZE + 1, EngineView_struct);
+    return this._get(this, API_VARIABLE_ENGINE_VIEW_EXEC, EngineView.size + 1, new bluetooth/* BluetoothStruct */.GD(EngineView.struct));
   }
 }
+(0,defineProperty/* default */.Z)(EngineView, "struct", {
+  enabled: bluetooth/* BluetoothStruct.struct */.GD.struct(view/* ViewConfig.struct */.F.struct),
+  totalSeconds: bluetooth/* BluetoothStruct.struct */.GD.struct(view/* ViewConfig.struct */.F.struct),
+  totalCountRPM: bluetooth/* BluetoothStruct.struct */.GD.struct(view/* ViewConfig.struct */.F.struct),
+  coolant: bluetooth/* BluetoothStruct.struct */.GD.struct(view/* ViewConfig.struct */.F.struct),
+  rpm: bluetooth/* BluetoothStruct.struct */.GD.struct(view/* ViewConfig.struct */.F.struct),
+  load: bluetooth/* BluetoothStruct.struct */.GD.struct(view/* ViewConfig.struct */.F.struct),
+  throttle: bluetooth/* BluetoothStruct.struct */.GD.struct(view/* ViewConfig.struct */.F.struct)
+});
+(0,defineProperty/* default */.Z)(EngineView, "size", view/* ViewConfig.size */.F.size * 7);
 ;// CONCATENATED MODULE: ./src/models/pjcan/variables/engine/index.ts
-
-
-
 
 
 
@@ -22927,7 +22756,7 @@ class EngineView extends BaseModel/* BaseModel */.g {
 
 /***/ }),
 
-/***/ 4873:
+/***/ 9422:
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -22936,19 +22765,13 @@ class EngineView extends BaseModel/* BaseModel */.g {
 __webpack_require__.d(__webpack_exports__, {
   "Lw": function() { return /* reexport */ API_VARIABLE_FUEL_CONFIG_EVENT; },
   "Wm": function() { return /* reexport */ API_VARIABLE_FUEL_CONFIG_EXEC; },
-  "OT": function() { return /* reexport */ API_VARIABLE_FUEL_CONFIG_SIZE; },
   "Je": function() { return /* reexport */ API_VARIABLE_FUEL_EVENT; },
   "tM": function() { return /* reexport */ API_VARIABLE_FUEL_EXEC; },
-  "y2": function() { return /* reexport */ API_VARIABLE_FUEL_SIZE; },
   "S": function() { return /* reexport */ API_VARIABLE_FUEL_VIEW_EVENT; },
   "ES": function() { return /* reexport */ API_VARIABLE_FUEL_VIEW_EXEC; },
-  "P5": function() { return /* reexport */ API_VARIABLE_FUEL_VIEW_SIZE; },
   "wi": function() { return /* reexport */ FuelConfig; },
   "Kh": function() { return /* reexport */ FuelValue; },
-  "c_": function() { return /* reexport */ FuelView; },
-  "sD": function() { return /* reexport */ StructFuelConfig; },
-  "IN": function() { return /* reexport */ StructFuelValue; },
-  "ij": function() { return /* reexport */ StructFuelView; }
+  "c_": function() { return /* reexport */ FuelView; }
 });
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/defineProperty.js + 3 modules
@@ -22957,20 +22780,12 @@ var defineProperty = __webpack_require__(7327);
 var bluetooth = __webpack_require__(9014);
 // EXTERNAL MODULE: ./src/models/pjcan/base/BaseModel.ts
 var BaseModel = __webpack_require__(9036);
-;// CONCATENATED MODULE: ./src/models/pjcan/variables/fuel/StructFuelConfig.ts
-
-const API_VARIABLE_FUEL_CONFIG_SIZE = 2;
-const StructFuelConfig = {
-  ratio: bluetooth/* BluetoothStruct.uint16 */.GD.uint16()
-};
 ;// CONCATENATED MODULE: ./src/models/pjcan/variables/fuel/FuelConfig.ts
-
 
 
 
 const API_VARIABLE_FUEL_CONFIG_EXEC = 151;
 const API_VARIABLE_FUEL_CONFIG_EVENT = "VariableFuelConfig";
-const struct = new bluetooth/* BluetoothStruct */.GD(StructFuelConfig);
 /** Модель конфигурации расхода топлива */
 class FuelConfig extends BaseModel/* BaseModel */.g {
   constructor(data) {
@@ -22983,31 +22798,23 @@ class FuelConfig extends BaseModel/* BaseModel */.g {
    * @param {DataView} buf Буфер данных
    */
   set(buf) {
-    return this._set(this, API_VARIABLE_FUEL_CONFIG_EXEC, API_VARIABLE_FUEL_CONFIG_SIZE + 1, struct, buf);
+    return this._set(this, API_VARIABLE_FUEL_CONFIG_EXEC, FuelConfig.size + 1, new bluetooth/* BluetoothStruct */.GD(FuelConfig.struct), buf);
   }
   /** Чтение данных */
   get() {
-    return this._get(this, API_VARIABLE_FUEL_CONFIG_EXEC, API_VARIABLE_FUEL_CONFIG_SIZE + 1, struct);
+    return this._get(this, API_VARIABLE_FUEL_CONFIG_EXEC, FuelConfig.size + 1, new bluetooth/* BluetoothStruct */.GD(FuelConfig.struct));
   }
 }
-;// CONCATENATED MODULE: ./src/models/pjcan/variables/fuel/StructFuelValue.ts
-
-const API_VARIABLE_FUEL_SIZE = 12;
-/** Структура данных */
-const StructFuelValue = {
-  consumption: bluetooth/* BluetoothStruct.uint32 */.GD.uint32(),
-  current: bluetooth/* BluetoothStruct.uint16 */.GD.uint16(),
-  avg: bluetooth/* BluetoothStruct.uint16 */.GD.uint16(),
-  total: bluetooth/* BluetoothStruct.uint32 */.GD.uint32()
-};
+(0,defineProperty/* default */.Z)(FuelConfig, "struct", {
+  ratio: bluetooth/* BluetoothStruct.uint16 */.GD.uint16()
+});
+(0,defineProperty/* default */.Z)(FuelConfig, "size", 2);
 ;// CONCATENATED MODULE: ./src/models/pjcan/variables/fuel/FuelValue.ts
-
 
 
 
 const API_VARIABLE_FUEL_EXEC = 150;
 const API_VARIABLE_FUEL_EVENT = "VariableFuelValue";
-const FuelValue_struct = new bluetooth/* BluetoothStruct */.GD(StructFuelValue);
 /** Модель значений расхода топлива */
 class FuelValue extends BaseModel/* BaseModel */.g {
   constructor(data) {
@@ -23023,43 +22830,37 @@ class FuelValue extends BaseModel/* BaseModel */.g {
    * @param {DataView} buf Буфер данных
    */
   set(buf) {
-    return this._set(this, API_VARIABLE_FUEL_EXEC, API_VARIABLE_FUEL_SIZE + 1, FuelValue_struct, buf);
+    return this._set(this, API_VARIABLE_FUEL_EXEC, FuelValue.size + 1, new bluetooth/* BluetoothStruct */.GD(FuelValue.struct), buf);
   }
   /** Чтение данных */
   get() {
-    return this._get(this, API_VARIABLE_FUEL_EXEC, API_VARIABLE_FUEL_SIZE + 1, FuelValue_struct);
+    return this._get(this, API_VARIABLE_FUEL_EXEC, FuelValue.size + 1, new bluetooth/* BluetoothStruct */.GD(FuelValue.struct));
   }
 }
-// EXTERNAL MODULE: ./src/models/pjcan/view/index.ts + 3 modules
-var view = __webpack_require__(7037);
-;// CONCATENATED MODULE: ./src/models/pjcan/variables/fuel/StructFuelView.ts
-
-
-const API_VARIABLE_FUEL_VIEW_SIZE = view/* API_VIEWS_SIZE */.KX * 4;
-/** Структура данных */
-const StructFuelView = {
-  consumption: bluetooth/* BluetoothStruct.struct */.GD.struct(view/* StructViewConfig */.hQ),
-  current: bluetooth/* BluetoothStruct.struct */.GD.struct(view/* StructViewConfig */.hQ),
-  avg: bluetooth/* BluetoothStruct.struct */.GD.struct(view/* StructViewConfig */.hQ),
-  total: bluetooth/* BluetoothStruct.struct */.GD.struct(view/* StructViewConfig */.hQ)
-};
+(0,defineProperty/* default */.Z)(FuelValue, "struct", {
+  consumption: bluetooth/* BluetoothStruct.uint32 */.GD.uint32(),
+  current: bluetooth/* BluetoothStruct.uint16 */.GD.uint16(),
+  avg: bluetooth/* BluetoothStruct.uint16 */.GD.uint16(),
+  total: bluetooth/* BluetoothStruct.uint32 */.GD.uint32()
+});
+(0,defineProperty/* default */.Z)(FuelValue, "size", 12);
+// EXTERNAL MODULE: ./src/models/pjcan/view/index.ts + 2 modules
+var view = __webpack_require__(7374);
 ;// CONCATENATED MODULE: ./src/models/pjcan/variables/fuel/FuelView.ts
-
 
 
 
 
 const API_VARIABLE_FUEL_VIEW_EXEC = 152;
 const API_VARIABLE_FUEL_VIEW_EVENT = "VariableFuelView";
-const FuelView_struct = new bluetooth/* BluetoothStruct */.GD(StructFuelView);
 /** Модель параметров отображения данных расхода топлива */
 class FuelView extends BaseModel/* BaseModel */.g {
   constructor(data) {
     super();
-    (0,defineProperty/* default */.Z)(this, "consumption", new view/* ViewConfig */.Fx());
-    (0,defineProperty/* default */.Z)(this, "current", new view/* ViewConfig */.Fx());
-    (0,defineProperty/* default */.Z)(this, "avg", new view/* ViewConfig */.Fx());
-    (0,defineProperty/* default */.Z)(this, "total", new view/* ViewConfig */.Fx());
+    (0,defineProperty/* default */.Z)(this, "consumption", new view/* ViewConfig */.F());
+    (0,defineProperty/* default */.Z)(this, "current", new view/* ViewConfig */.F());
+    (0,defineProperty/* default */.Z)(this, "avg", new view/* ViewConfig */.F());
+    (0,defineProperty/* default */.Z)(this, "total", new view/* ViewConfig */.F());
     if (data) this.set(data);
   }
   /**
@@ -23067,17 +22868,21 @@ class FuelView extends BaseModel/* BaseModel */.g {
    * @param {DataView} buf Буфер данных
    */
   set(buf) {
-    return this._set(this, API_VARIABLE_FUEL_VIEW_EXEC, API_VARIABLE_FUEL_VIEW_SIZE + 1, FuelView_struct, buf);
+    return this._set(this, API_VARIABLE_FUEL_VIEW_EXEC, FuelView.size + 1, new bluetooth/* BluetoothStruct */.GD(FuelView.struct), buf);
   }
   /** Чтение данных */
   get() {
-    return this._get(this, API_VARIABLE_FUEL_VIEW_EXEC, API_VARIABLE_FUEL_VIEW_SIZE + 1, FuelView_struct);
+    return this._get(this, API_VARIABLE_FUEL_VIEW_EXEC, FuelView.size + 1, new bluetooth/* BluetoothStruct */.GD(FuelView.struct));
   }
 }
+(0,defineProperty/* default */.Z)(FuelView, "struct", {
+  consumption: bluetooth/* BluetoothStruct.struct */.GD.struct(view/* ViewConfig.struct */.F.struct),
+  current: bluetooth/* BluetoothStruct.struct */.GD.struct(view/* ViewConfig.struct */.F.struct),
+  avg: bluetooth/* BluetoothStruct.struct */.GD.struct(view/* ViewConfig.struct */.F.struct),
+  total: bluetooth/* BluetoothStruct.struct */.GD.struct(view/* ViewConfig.struct */.F.struct)
+});
+(0,defineProperty/* default */.Z)(FuelView, "size", view/* ViewConfig.size */.F.size * 4);
 ;// CONCATENATED MODULE: ./src/models/pjcan/variables/fuel/index.ts
-
-
-
 
 
 
@@ -23085,7 +22890,7 @@ class FuelView extends BaseModel/* BaseModel */.g {
 
 /***/ }),
 
-/***/ 8229:
+/***/ 6297:
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -23094,14 +22899,10 @@ class FuelView extends BaseModel/* BaseModel */.g {
 __webpack_require__.d(__webpack_exports__, {
   "Ju": function() { return /* reexport */ API_VARIABLE_MOVEMENT_EVENT; },
   "Kq": function() { return /* reexport */ API_VARIABLE_MOVEMENT_EXEC; },
-  "HR": function() { return /* reexport */ API_VARIABLE_MOVEMENT_SIZE; },
   "YT": function() { return /* reexport */ API_VARIABLE_MOVEMENT_VIEW_EVENT; },
   "hQ": function() { return /* reexport */ API_VARIABLE_MOVEMENT_VIEW_EXEC; },
-  "XW": function() { return /* reexport */ API_VARIABLE_MOVEMENT_VIEW_SIZE; },
   "bt": function() { return /* reexport */ MovementValue; },
-  "Zd": function() { return /* reexport */ MovementView; },
-  "LU": function() { return /* reexport */ StructMovementValue; },
-  "QT": function() { return /* reexport */ StructMovementView; }
+  "Zd": function() { return /* reexport */ MovementView; }
 });
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/defineProperty.js + 3 modules
@@ -23110,23 +22911,12 @@ var defineProperty = __webpack_require__(7327);
 var bluetooth = __webpack_require__(9014);
 // EXTERNAL MODULE: ./src/models/pjcan/base/BaseModel.ts
 var BaseModel = __webpack_require__(9036);
-;// CONCATENATED MODULE: ./src/models/pjcan/variables/movement/StructMovementValue.ts
-
-const API_VARIABLE_MOVEMENT_SIZE = 10;
-/** Структура данных */
-const StructMovementValue = {
-  speed: bluetooth/* BluetoothStruct.uint32 */.GD.uint32(),
-  speedAVG: bluetooth/* BluetoothStruct.uint16 */.GD.uint16(),
-  restWay: bluetooth/* BluetoothStruct.uint32 */.GD.uint32()
-};
 ;// CONCATENATED MODULE: ./src/models/pjcan/variables/movement/MovementValue.ts
-
 
 
 
 const API_VARIABLE_MOVEMENT_EXEC = 160;
 const API_VARIABLE_MOVEMENT_EVENT = "VariableMovementValue";
-const struct = new bluetooth/* BluetoothStruct */.GD(StructMovementValue);
 /** Модель значений движения */
 class MovementValue extends BaseModel/* BaseModel */.g {
   constructor(data) {
@@ -23141,41 +22931,35 @@ class MovementValue extends BaseModel/* BaseModel */.g {
    * @param {DataView} buf Буфер данных
    */
   set(buf) {
-    return this._set(this, API_VARIABLE_MOVEMENT_EXEC, API_VARIABLE_MOVEMENT_SIZE + 1, struct, buf);
+    return this._set(this, API_VARIABLE_MOVEMENT_EXEC, MovementValue.size + 1, new bluetooth/* BluetoothStruct */.GD(MovementValue.struct), buf);
   }
   /** Чтение данных */
   get() {
-    return this._get(this, API_VARIABLE_MOVEMENT_EXEC, API_VARIABLE_MOVEMENT_SIZE + 1, struct);
+    return this._get(this, API_VARIABLE_MOVEMENT_EXEC, MovementValue.size + 1, new bluetooth/* BluetoothStruct */.GD(MovementValue.struct));
   }
 }
-// EXTERNAL MODULE: ./src/models/pjcan/view/index.ts + 3 modules
-var view = __webpack_require__(7037);
-;// CONCATENATED MODULE: ./src/models/pjcan/variables/movement/StructMovementView.ts
-
-
-const API_VARIABLE_MOVEMENT_VIEW_SIZE = view/* API_VIEWS_SIZE */.KX * 3;
-/** Структура данных */
-const StructMovementView = {
-  speed: bluetooth/* BluetoothStruct.struct */.GD.struct(view/* StructViewConfig */.hQ),
-  speedAVG: bluetooth/* BluetoothStruct.struct */.GD.struct(view/* StructViewConfig */.hQ),
-  restWay: bluetooth/* BluetoothStruct.struct */.GD.struct(view/* StructViewConfig */.hQ)
-};
+(0,defineProperty/* default */.Z)(MovementValue, "struct", {
+  speed: bluetooth/* BluetoothStruct.uint32 */.GD.uint32(),
+  speedAVG: bluetooth/* BluetoothStruct.uint16 */.GD.uint16(),
+  restWay: bluetooth/* BluetoothStruct.uint32 */.GD.uint32()
+});
+(0,defineProperty/* default */.Z)(MovementValue, "size", 10);
+// EXTERNAL MODULE: ./src/models/pjcan/view/index.ts + 2 modules
+var view = __webpack_require__(7374);
 ;// CONCATENATED MODULE: ./src/models/pjcan/variables/movement/MovementView.ts
-
 
 
 
 
 const API_VARIABLE_MOVEMENT_VIEW_EXEC = 161;
 const API_VARIABLE_MOVEMENT_VIEW_EVENT = "VariableMovementView";
-const MovementView_struct = new bluetooth/* BluetoothStruct */.GD(StructMovementView);
 /** Модель параметров отображения данных движения */
 class MovementView extends BaseModel/* BaseModel */.g {
   constructor(data) {
     super();
-    (0,defineProperty/* default */.Z)(this, "speed", new view/* ViewConfig */.Fx());
-    (0,defineProperty/* default */.Z)(this, "speedAVG", new view/* ViewConfig */.Fx());
-    (0,defineProperty/* default */.Z)(this, "restWay", new view/* ViewConfig */.Fx());
+    (0,defineProperty/* default */.Z)(this, "speed", new view/* ViewConfig */.F());
+    (0,defineProperty/* default */.Z)(this, "speedAVG", new view/* ViewConfig */.F());
+    (0,defineProperty/* default */.Z)(this, "restWay", new view/* ViewConfig */.F());
     if (data) this.set(data);
   }
   /**
@@ -23183,23 +22967,27 @@ class MovementView extends BaseModel/* BaseModel */.g {
    * @param {DataView} buf Буфер данных
    */
   set(buf) {
-    return this._set(this, API_VARIABLE_MOVEMENT_VIEW_EXEC, API_VARIABLE_MOVEMENT_VIEW_SIZE + 1, MovementView_struct, buf);
+    return this._set(this, API_VARIABLE_MOVEMENT_VIEW_EXEC, MovementView.size + 1, new bluetooth/* BluetoothStruct */.GD(MovementView.struct), buf);
   }
   /** Чтение данных */
   get() {
-    return this._get(this, API_VARIABLE_MOVEMENT_VIEW_EXEC, API_VARIABLE_MOVEMENT_VIEW_SIZE + 1, MovementView_struct);
+    return this._get(this, API_VARIABLE_MOVEMENT_VIEW_EXEC, MovementView.size + 1, new bluetooth/* BluetoothStruct */.GD(MovementView.struct));
   }
 }
+(0,defineProperty/* default */.Z)(MovementView, "struct", {
+  speed: bluetooth/* BluetoothStruct.struct */.GD.struct(view/* ViewConfig.struct */.F.struct),
+  speedAVG: bluetooth/* BluetoothStruct.struct */.GD.struct(view/* ViewConfig.struct */.F.struct),
+  restWay: bluetooth/* BluetoothStruct.struct */.GD.struct(view/* ViewConfig.struct */.F.struct)
+});
+(0,defineProperty/* default */.Z)(MovementView, "size", view/* ViewConfig.size */.F.size * 3);
 ;// CONCATENATED MODULE: ./src/models/pjcan/variables/movement/index.ts
-
-
 
 
 
 
 /***/ }),
 
-/***/ 2775:
+/***/ 2343:
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -23208,14 +22996,10 @@ class MovementView extends BaseModel/* BaseModel */.g {
 __webpack_require__.d(__webpack_exports__, {
   "bs": function() { return /* reexport */ API_VARIABLE_SENSORS_EVENT; },
   "XV": function() { return /* reexport */ API_VARIABLE_SENSORS_EXEC; },
-  "$": function() { return /* reexport */ API_VARIABLE_SENSORS_SIZE; },
   "Ht": function() { return /* reexport */ API_VARIABLE_SENSORS_VIEW_EVENT; },
   "Sw": function() { return /* reexport */ API_VARIABLE_SENSORS_VIEW_EXEC; },
-  "m_": function() { return /* reexport */ API_VARIABLE_SENSORS_VIEW_SIZE; },
   "I8": function() { return /* reexport */ SensorsValue; },
   "e1": function() { return /* reexport */ SensorsView; },
-  "Xs": function() { return /* reexport */ StructSensorsValue; },
-  "qP": function() { return /* reexport */ StructSensorsView; },
   "Mq": function() { return /* reexport */ TSensorsSignal; }
 });
 
@@ -23225,18 +23009,6 @@ var defineProperty = __webpack_require__(7327);
 var bluetooth = __webpack_require__(9014);
 // EXTERNAL MODULE: ./src/models/pjcan/base/BaseModel.ts
 var BaseModel = __webpack_require__(9036);
-;// CONCATENATED MODULE: ./src/models/pjcan/variables/sensors/StructSensorsValue.ts
-
-const API_VARIABLE_SENSORS_SIZE = 2;
-/** Структура данных */
-const StructSensorsValue = {
-  acc: bluetooth/* BluetoothStruct.bit */.GD.bit(),
-  handbrake: bluetooth/* BluetoothStruct.bit */.GD.bit(),
-  reverse: bluetooth/* BluetoothStruct.bit */.GD.bit(),
-  seatbeltDriver: bluetooth/* BluetoothStruct.bit */.GD.bit(),
-  seatbeltPassenger: bluetooth/* BluetoothStruct.bit */.GD.bit(),
-  signal: bluetooth/* BluetoothStruct.uint8 */.GD.uint8()
-};
 ;// CONCATENATED MODULE: ./src/models/pjcan/variables/sensors/TSensorsSignal.ts
 /* eslint-disable */
 var TSensorsSignal;
@@ -23251,10 +23023,8 @@ var TSensorsSignal;
 
 
 
-
 const API_VARIABLE_SENSORS_EXEC = 170;
 const API_VARIABLE_SENSORS_EVENT = "VariableSensorsValue";
-const struct = new bluetooth/* BluetoothStruct */.GD(StructSensorsValue);
 /** Модель значений датчиков */
 class SensorsValue extends BaseModel/* BaseModel */.g {
   constructor(data) {
@@ -23272,43 +23042,39 @@ class SensorsValue extends BaseModel/* BaseModel */.g {
    * @param {DataView} buf Буфер данных
    */
   set(buf) {
-    return this._set(this, API_VARIABLE_SENSORS_EXEC, API_VARIABLE_SENSORS_SIZE + 1, struct, buf);
+    return this._set(this, API_VARIABLE_SENSORS_EXEC, SensorsValue.size + 1, new bluetooth/* BluetoothStruct */.GD(SensorsValue.struct), buf);
   }
   /** Чтение данных */
   get() {
-    return this._get(this, API_VARIABLE_SENSORS_EXEC, API_VARIABLE_SENSORS_SIZE + 1, struct);
+    return this._get(this, API_VARIABLE_SENSORS_EXEC, SensorsValue.size + 1, new bluetooth/* BluetoothStruct */.GD(SensorsValue.struct));
   }
 }
-// EXTERNAL MODULE: ./src/models/pjcan/view/index.ts + 3 modules
-var view = __webpack_require__(7037);
-;// CONCATENATED MODULE: ./src/models/pjcan/variables/sensors/StructSensorsView.ts
-
-
-const API_VARIABLE_SENSORS_VIEW_SIZE = view/* API_VIEWS_SIZE */.KX * 4;
-/** Структура данных */
-const StructSensorsView = {
-  handbrake: bluetooth/* BluetoothStruct.struct */.GD.struct(view/* StructViewConfig */.hQ),
-  reverse: bluetooth/* BluetoothStruct.struct */.GD.struct(view/* StructViewConfig */.hQ),
-  seatbelt: bluetooth/* BluetoothStruct.struct */.GD.struct(view/* StructViewConfig */.hQ),
-  signal: bluetooth/* BluetoothStruct.struct */.GD.struct(view/* StructViewConfig */.hQ)
-};
+(0,defineProperty/* default */.Z)(SensorsValue, "struct", {
+  acc: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+  handbrake: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+  reverse: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+  seatbeltDriver: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+  seatbeltPassenger: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+  signal: bluetooth/* BluetoothStruct.uint8 */.GD.uint8()
+});
+(0,defineProperty/* default */.Z)(SensorsValue, "size", 2);
+// EXTERNAL MODULE: ./src/models/pjcan/view/index.ts + 2 modules
+var view = __webpack_require__(7374);
 ;// CONCATENATED MODULE: ./src/models/pjcan/variables/sensors/SensorsView.ts
-
 
 
 
 
 const API_VARIABLE_SENSORS_VIEW_EXEC = 171;
 const API_VARIABLE_SENSORS_VIEW_EVENT = "VariableSensorsView";
-const SensorsView_struct = new bluetooth/* BluetoothStruct */.GD(StructSensorsView);
 /** Модель параметров отображения данных датчиков */
 class SensorsView extends BaseModel/* BaseModel */.g {
   constructor(data) {
     super();
-    (0,defineProperty/* default */.Z)(this, "handbrake", new view/* ViewConfig */.Fx());
-    (0,defineProperty/* default */.Z)(this, "reverse", new view/* ViewConfig */.Fx());
-    (0,defineProperty/* default */.Z)(this, "seatbelt", new view/* ViewConfig */.Fx());
-    (0,defineProperty/* default */.Z)(this, "signal", new view/* ViewConfig */.Fx());
+    (0,defineProperty/* default */.Z)(this, "handbrake", new view/* ViewConfig */.F());
+    (0,defineProperty/* default */.Z)(this, "reverse", new view/* ViewConfig */.F());
+    (0,defineProperty/* default */.Z)(this, "seatbelt", new view/* ViewConfig */.F());
+    (0,defineProperty/* default */.Z)(this, "signal", new view/* ViewConfig */.F());
     if (data) this.set(data);
   }
   /**
@@ -23316,16 +23082,21 @@ class SensorsView extends BaseModel/* BaseModel */.g {
    * @param {DataView} buf Буфер данных
    */
   set(buf) {
-    return this._set(this, API_VARIABLE_SENSORS_VIEW_EXEC, API_VARIABLE_SENSORS_VIEW_SIZE + 1, SensorsView_struct, buf);
+    return this._set(this, API_VARIABLE_SENSORS_VIEW_EXEC, SensorsView.size + 1, new bluetooth/* BluetoothStruct */.GD(SensorsView.struct), buf);
   }
   /** Чтение данных */
   get() {
-    return this._get(this, API_VARIABLE_SENSORS_VIEW_EXEC, API_VARIABLE_SENSORS_VIEW_SIZE + 1, SensorsView_struct);
+    return this._get(this, API_VARIABLE_SENSORS_VIEW_EXEC, SensorsView.size + 1, new bluetooth/* BluetoothStruct */.GD(SensorsView.struct));
   }
 }
+(0,defineProperty/* default */.Z)(SensorsView, "struct", {
+  handbrake: bluetooth/* BluetoothStruct.struct */.GD.struct(view/* ViewConfig.struct */.F.struct),
+  reverse: bluetooth/* BluetoothStruct.struct */.GD.struct(view/* ViewConfig.struct */.F.struct),
+  seatbelt: bluetooth/* BluetoothStruct.struct */.GD.struct(view/* ViewConfig.struct */.F.struct),
+  signal: bluetooth/* BluetoothStruct.struct */.GD.struct(view/* ViewConfig.struct */.F.struct)
+});
+(0,defineProperty/* default */.Z)(SensorsView, "size", view/* ViewConfig.size */.F.size * 4);
 ;// CONCATENATED MODULE: ./src/models/pjcan/variables/sensors/index.ts
-
-
 
 
 
@@ -23333,7 +23104,7 @@ class SensorsView extends BaseModel/* BaseModel */.g {
 
 /***/ }),
 
-/***/ 1044:
+/***/ 8951:
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -23342,12 +23113,8 @@ class SensorsView extends BaseModel/* BaseModel */.g {
 __webpack_require__.d(__webpack_exports__, {
   "Yk": function() { return /* reexport */ API_VARIABLE_TEMPERATURE_EVENT; },
   "Sg": function() { return /* reexport */ API_VARIABLE_TEMPERATURE_EXEC; },
-  "u8": function() { return /* reexport */ API_VARIABLE_TEMPERATURE_SIZE; },
   "LN": function() { return /* reexport */ API_VARIABLE_TEMPERATURE_VIEW_EVENT; },
   "kh": function() { return /* reexport */ API_VARIABLE_TEMPERATURE_VIEW_EXEC; },
-  "xz": function() { return /* reexport */ API_VARIABLE_TEMPERATURE_VIEW_SIZE; },
-  "Ew": function() { return /* reexport */ StructTemperatureValue; },
-  "cb": function() { return /* reexport */ StructTemperatureView; },
   "j3": function() { return /* reexport */ TemperatureValue; },
   "v7": function() { return /* reexport */ TemperatureView; }
 });
@@ -23358,22 +23125,12 @@ var defineProperty = __webpack_require__(7327);
 var bluetooth = __webpack_require__(9014);
 // EXTERNAL MODULE: ./src/models/pjcan/base/BaseModel.ts
 var BaseModel = __webpack_require__(9036);
-;// CONCATENATED MODULE: ./src/models/pjcan/variables/temperature/StructTemperatureValue.ts
-
-const API_VARIABLE_TEMPERATURE_SIZE = 4;
-/** Структура данных */
-const StructTemperatureValue = {
-  in: bluetooth/* BluetoothStruct.uint16 */.GD.uint16(),
-  out: bluetooth/* BluetoothStruct.uint16 */.GD.uint16()
-};
 ;// CONCATENATED MODULE: ./src/models/pjcan/variables/temperature/TemperatureValue.ts
-
 
 
 
 const API_VARIABLE_TEMPERATURE_EXEC = 180;
 const API_VARIABLE_TEMPERATURE_EVENT = "VariableTemperatureValue";
-const struct = new bluetooth/* BluetoothStruct */.GD(StructTemperatureValue);
 /** Модель значений температуры */
 class TemperatureValue extends BaseModel/* BaseModel */.g {
   constructor(data) {
@@ -23387,37 +23144,32 @@ class TemperatureValue extends BaseModel/* BaseModel */.g {
    * @param {DataView} buf Буфер данных
    */
   set(buf) {
-    return this._set(this, API_VARIABLE_TEMPERATURE_EXEC, API_VARIABLE_TEMPERATURE_SIZE + 1, struct, buf);
+    return this._set(this, API_VARIABLE_TEMPERATURE_EXEC, TemperatureValue.size + 1, new bluetooth/* BluetoothStruct */.GD(TemperatureValue.struct), buf);
   }
   /** Чтение данных */
   get() {
-    return this._get(this, API_VARIABLE_TEMPERATURE_EXEC, API_VARIABLE_TEMPERATURE_SIZE + 1, struct);
+    return this._get(this, API_VARIABLE_TEMPERATURE_EXEC, TemperatureValue.size + 1, new bluetooth/* BluetoothStruct */.GD(TemperatureValue.struct));
   }
 }
-// EXTERNAL MODULE: ./src/models/pjcan/view/index.ts + 3 modules
-var view = __webpack_require__(7037);
-;// CONCATENATED MODULE: ./src/models/pjcan/variables/temperature/StructTemperatureView.ts
-
-
-const API_VARIABLE_TEMPERATURE_VIEW_SIZE = view/* API_VIEWS_SIZE */.KX;
-/** Структура данных */
-const StructTemperatureView = {
-  view: bluetooth/* BluetoothStruct.struct */.GD.struct(view/* StructViewConfig */.hQ)
-};
+(0,defineProperty/* default */.Z)(TemperatureValue, "struct", {
+  in: bluetooth/* BluetoothStruct.uint16 */.GD.uint16(),
+  out: bluetooth/* BluetoothStruct.uint16 */.GD.uint16()
+});
+(0,defineProperty/* default */.Z)(TemperatureValue, "size", 4);
+// EXTERNAL MODULE: ./src/models/pjcan/view/index.ts + 2 modules
+var view = __webpack_require__(7374);
 ;// CONCATENATED MODULE: ./src/models/pjcan/variables/temperature/TemperatureView.ts
-
 
 
 
 
 const API_VARIABLE_TEMPERATURE_VIEW_EXEC = 181;
 const API_VARIABLE_TEMPERATURE_VIEW_EVENT = "VariableTemperatureView";
-const TemperatureView_struct = new bluetooth/* BluetoothStruct */.GD(StructTemperatureView);
 /** Модель параметров отображения данных температуры */
 class TemperatureView extends BaseModel/* BaseModel */.g {
   constructor(data) {
     super();
-    (0,defineProperty/* default */.Z)(this, "view", new view/* ViewConfig */.Fx());
+    (0,defineProperty/* default */.Z)(this, "view", new view/* ViewConfig */.F());
     if (data) this.set(data);
   }
   /**
@@ -23425,34 +23177,34 @@ class TemperatureView extends BaseModel/* BaseModel */.g {
    * @param {DataView} buf Буфер данных
    */
   set(buf) {
-    return this._set(this, API_VARIABLE_TEMPERATURE_VIEW_EXEC, API_VARIABLE_TEMPERATURE_VIEW_SIZE + 1, TemperatureView_struct, buf);
+    return this._set(this, API_VARIABLE_TEMPERATURE_VIEW_EXEC, TemperatureView.size + 1, new bluetooth/* BluetoothStruct */.GD(TemperatureView.struct), buf);
   }
   /** Чтение данных */
   get() {
-    return this._get(this, API_VARIABLE_TEMPERATURE_VIEW_EXEC, API_VARIABLE_TEMPERATURE_VIEW_SIZE + 1, TemperatureView_struct);
+    return this._get(this, API_VARIABLE_TEMPERATURE_VIEW_EXEC, TemperatureView.size + 1, new bluetooth/* BluetoothStruct */.GD(TemperatureView.struct));
   }
 }
+(0,defineProperty/* default */.Z)(TemperatureView, "struct", {
+  view: bluetooth/* BluetoothStruct.struct */.GD.struct(view/* ViewConfig.struct */.F.struct)
+});
+(0,defineProperty/* default */.Z)(TemperatureView, "size", view/* ViewConfig.size */.F.size);
 ;// CONCATENATED MODULE: ./src/models/pjcan/variables/temperature/index.ts
-
-
 
 
 
 
 /***/ }),
 
-/***/ 6045:
+/***/ 6181:
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, {
-  "Ez": function() { return /* reexport */ API_VARIABLE_TEST_EXEC; },
-  "bv": function() { return /* reexport */ TestValue; }
+  "E": function() { return /* reexport */ API_VARIABLE_TEST_EXEC; },
+  "b": function() { return /* reexport */ TestValue; }
 });
-
-// UNUSED EXPORTS: API_VARIABLE_TEST_SIZE, StructTestValue
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/defineProperty.js + 3 modules
 var defineProperty = __webpack_require__(7327);
@@ -23460,31 +23212,20 @@ var defineProperty = __webpack_require__(7327);
 var bluetooth = __webpack_require__(9014);
 // EXTERNAL MODULE: ./src/models/pjcan/base/BaseModel.ts
 var BaseModel = __webpack_require__(9036);
-// EXTERNAL MODULE: ./src/models/pjcan/view/index.ts + 3 modules
-var view = __webpack_require__(7037);
-;// CONCATENATED MODULE: ./src/models/pjcan/variables/test/StructTestValue.ts
-
-
-const API_VARIABLE_TEST_SIZE = 36;
-/** Структура данных */
-const StructTestValue = {
-  text: bluetooth/* BluetoothStruct.char */.GD.char(32),
-  view: bluetooth/* BluetoothStruct.struct */.GD.struct(view/* StructViewConfig */.hQ)
-};
+// EXTERNAL MODULE: ./src/models/pjcan/view/index.ts + 2 modules
+var view = __webpack_require__(7374);
 ;// CONCATENATED MODULE: ./src/models/pjcan/variables/test/TestValue.ts
 
 
 
 
-
 const API_VARIABLE_TEST_EXEC = 190;
-const struct = new bluetooth/* BluetoothStruct */.GD(StructTestValue);
 /** Модель значений тестирования */
 class TestValue extends BaseModel/* BaseModel */.g {
   constructor(data) {
     super();
     (0,defineProperty/* default */.Z)(this, "text", "");
-    (0,defineProperty/* default */.Z)(this, "view", new view/* ViewConfig */.Fx());
+    (0,defineProperty/* default */.Z)(this, "view", new view/* ViewConfig */.F());
     if (data) this.set(data);
   }
   /**
@@ -23492,21 +23233,25 @@ class TestValue extends BaseModel/* BaseModel */.g {
    * @param {DataView} buf Буфер данных
    */
   set(buf) {
-    return this._set(this, API_VARIABLE_TEST_EXEC, API_VARIABLE_TEST_SIZE + 1, struct, buf);
+    return this._set(this, API_VARIABLE_TEST_EXEC, TestValue.size + 1, new bluetooth/* BluetoothStruct */.GD(TestValue.struct), buf);
   }
   /** Чтение данных */
   get() {
-    return this._get(this, API_VARIABLE_TEST_EXEC, API_VARIABLE_TEST_SIZE + 1, struct);
+    return this._get(this, API_VARIABLE_TEST_EXEC, TestValue.size + 1, new bluetooth/* BluetoothStruct */.GD(TestValue.struct));
   }
 }
+(0,defineProperty/* default */.Z)(TestValue, "struct", {
+  text: bluetooth/* BluetoothStruct.char */.GD.char(32),
+  view: bluetooth/* BluetoothStruct.struct */.GD.struct(view/* ViewConfig.struct */.F.struct)
+});
+(0,defineProperty/* default */.Z)(TestValue, "size", 36);
 ;// CONCATENATED MODULE: ./src/models/pjcan/variables/test/index.ts
-
 
 
 
 /***/ }),
 
-/***/ 3057:
+/***/ 139:
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -23515,16 +23260,10 @@ class TestValue extends BaseModel/* BaseModel */.g {
 __webpack_require__.d(__webpack_exports__, {
   "Vy": function() { return /* reexport */ API_VARIABLE_VOLUME_CONFIG_EVENT; },
   "U0": function() { return /* reexport */ API_VARIABLE_VOLUME_CONFIG_EXEC; },
-  "t7": function() { return /* reexport */ API_VARIABLE_VOLUME_CONFIG_SIZE; },
   "FN": function() { return /* reexport */ API_VARIABLE_VOLUME_EVENT; },
   "pf": function() { return /* reexport */ API_VARIABLE_VOLUME_EXEC; },
-  "ER": function() { return /* reexport */ API_VARIABLE_VOLUME_SIZE; },
   "H7": function() { return /* reexport */ API_VARIABLE_VOLUME_VIEW_EVENT; },
   "Ge": function() { return /* reexport */ API_VARIABLE_VOLUME_VIEW_EXEC; },
-  "Ac": function() { return /* reexport */ API_VARIABLE_VOLUME_VIEW_SIZE; },
-  "RW": function() { return /* reexport */ StructVolumeConfig; },
-  "ME": function() { return /* reexport */ StructVolumeValue; },
-  "rb": function() { return /* reexport */ StructVolumeView; },
   "Rf": function() { return /* reexport */ VolumeConfig; },
   "RD": function() { return /* reexport */ VolumeValue; },
   "Cw": function() { return /* reexport */ VolumeView; }
@@ -23536,23 +23275,12 @@ var defineProperty = __webpack_require__(7327);
 var bluetooth = __webpack_require__(9014);
 // EXTERNAL MODULE: ./src/models/pjcan/base/BaseModel.ts
 var BaseModel = __webpack_require__(9036);
-;// CONCATENATED MODULE: ./src/models/pjcan/variables/volume/StructVolumeConfig.ts
-
-const API_VARIABLE_VOLUME_CONFIG_SIZE = 3;
-/** Структура данных */
-const StructVolumeConfig = {
-  mute: bluetooth/* BluetoothStruct.bit */.GD.bit(),
-  volume: bluetooth/* BluetoothStruct.uint8 */.GD.uint8(),
-  max: bluetooth/* BluetoothStruct.uint8 */.GD.uint8()
-};
 ;// CONCATENATED MODULE: ./src/models/pjcan/variables/volume/VolumeConfig.ts
-
 
 
 
 const API_VARIABLE_VOLUME_CONFIG_EXEC = 201;
 const API_VARIABLE_VOLUME_CONFIG_EVENT = "VariableVolumeConfig";
-const struct = new bluetooth/* BluetoothStruct */.GD(StructVolumeConfig);
 /** Модель конфигурации уровня звука */
 class VolumeConfig extends BaseModel/* BaseModel */.g {
   constructor(data) {
@@ -23567,29 +23295,25 @@ class VolumeConfig extends BaseModel/* BaseModel */.g {
    * @param {DataView} buf Буфер данных
    */
   set(buf) {
-    return this._set(this, API_VARIABLE_VOLUME_CONFIG_EXEC, API_VARIABLE_VOLUME_CONFIG_SIZE + 1, struct, buf);
+    return this._set(this, API_VARIABLE_VOLUME_CONFIG_EXEC, VolumeConfig.size + 1, new bluetooth/* BluetoothStruct */.GD(VolumeConfig.struct), buf);
   }
   /** Чтение данных */
   get() {
-    return this._get(this, API_VARIABLE_VOLUME_CONFIG_EXEC, API_VARIABLE_VOLUME_CONFIG_SIZE + 1, struct);
+    return this._get(this, API_VARIABLE_VOLUME_CONFIG_EXEC, VolumeConfig.size + 1, new bluetooth/* BluetoothStruct */.GD(VolumeConfig.struct));
   }
 }
-;// CONCATENATED MODULE: ./src/models/pjcan/variables/volume/StructVolumeValue.ts
-
-const API_VARIABLE_VOLUME_SIZE = 2;
-/** Структура данных */
-const StructVolumeValue = {
+(0,defineProperty/* default */.Z)(VolumeConfig, "struct", {
   mute: bluetooth/* BluetoothStruct.bit */.GD.bit(),
-  volume: bluetooth/* BluetoothStruct.uint8 */.GD.uint8()
-};
+  volume: bluetooth/* BluetoothStruct.uint8 */.GD.uint8(),
+  max: bluetooth/* BluetoothStruct.uint8 */.GD.uint8()
+});
+(0,defineProperty/* default */.Z)(VolumeConfig, "size", 3);
 ;// CONCATENATED MODULE: ./src/models/pjcan/variables/volume/VolumeValue.ts
-
 
 
 
 const API_VARIABLE_VOLUME_EXEC = 200;
 const API_VARIABLE_VOLUME_EVENT = "VariableVolumeValue";
-const VolumeValue_struct = new bluetooth/* BluetoothStruct */.GD(StructVolumeValue);
 /** Модель конфигурации уровня звука */
 class VolumeValue extends BaseModel/* BaseModel */.g {
   constructor(data) {
@@ -23603,37 +23327,32 @@ class VolumeValue extends BaseModel/* BaseModel */.g {
    * @param {DataView} buf Буфер данных
    */
   set(buf) {
-    return this._set(this, API_VARIABLE_VOLUME_EXEC, API_VARIABLE_VOLUME_SIZE + 1, VolumeValue_struct, buf);
+    return this._set(this, API_VARIABLE_VOLUME_EXEC, VolumeValue.size + 1, new bluetooth/* BluetoothStruct */.GD(VolumeValue.struct), buf);
   }
   /** Чтение данных */
   get() {
-    return this._get(this, API_VARIABLE_VOLUME_EXEC, API_VARIABLE_VOLUME_SIZE + 1, VolumeValue_struct);
+    return this._get(this, API_VARIABLE_VOLUME_EXEC, VolumeValue.size + 1, new bluetooth/* BluetoothStruct */.GD(VolumeValue.struct));
   }
 }
-// EXTERNAL MODULE: ./src/models/pjcan/view/index.ts + 3 modules
-var view = __webpack_require__(7037);
-;// CONCATENATED MODULE: ./src/models/pjcan/variables/volume/StructVolumeView.ts
-
-
-const API_VARIABLE_VOLUME_VIEW_SIZE = 4;
-/** Структура данных */
-const StructVolumeView = {
-  view: bluetooth/* BluetoothStruct.struct */.GD.struct(view/* StructViewConfig */.hQ)
-};
+(0,defineProperty/* default */.Z)(VolumeValue, "struct", {
+  mute: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+  volume: bluetooth/* BluetoothStruct.uint8 */.GD.uint8()
+});
+(0,defineProperty/* default */.Z)(VolumeValue, "size", 2);
+// EXTERNAL MODULE: ./src/models/pjcan/view/index.ts + 2 modules
+var view = __webpack_require__(7374);
 ;// CONCATENATED MODULE: ./src/models/pjcan/variables/volume/VolumeView.ts
-
 
 
 
 
 const API_VARIABLE_VOLUME_VIEW_EXEC = 202;
 const API_VARIABLE_VOLUME_VIEW_EVENT = "VariableVolumeView";
-const VolumeView_struct = new bluetooth/* BluetoothStruct */.GD(StructVolumeView);
 /** Модель параметров отображения данных уровня звука */
 class VolumeView extends BaseModel/* BaseModel */.g {
   constructor(data) {
     super();
-    (0,defineProperty/* default */.Z)(this, "view", new view/* ViewConfig */.Fx());
+    (0,defineProperty/* default */.Z)(this, "view", new view/* ViewConfig */.F());
     if (data) this.set(data);
   }
   /**
@@ -23641,17 +23360,18 @@ class VolumeView extends BaseModel/* BaseModel */.g {
    * @param {DataView} buf Буфер данных
    */
   set(buf) {
-    return this._set(this, API_VARIABLE_VOLUME_VIEW_EXEC, API_VARIABLE_VOLUME_VIEW_SIZE + 1, VolumeView_struct, buf);
+    return this._set(this, API_VARIABLE_VOLUME_VIEW_EXEC, VolumeView.size + 1, new bluetooth/* BluetoothStruct */.GD(VolumeView.struct), buf);
   }
   /** Чтение данных */
   get() {
-    return this._get(this, API_VARIABLE_VOLUME_VIEW_EXEC, API_VARIABLE_VOLUME_VIEW_SIZE + 1, VolumeView_struct);
+    return this._get(this, API_VARIABLE_VOLUME_VIEW_EXEC, VolumeView.size + 1, new bluetooth/* BluetoothStruct */.GD(VolumeView.struct));
   }
 }
+(0,defineProperty/* default */.Z)(VolumeView, "struct", {
+  view: bluetooth/* BluetoothStruct.struct */.GD.struct(view/* ViewConfig.struct */.F.struct)
+});
+(0,defineProperty/* default */.Z)(VolumeView, "size", view/* ViewConfig.size */.F.size);
 ;// CONCATENATED MODULE: ./src/models/pjcan/variables/volume/index.ts
-
-
-
 
 
 
@@ -23659,7 +23379,7 @@ class VolumeView extends BaseModel/* BaseModel */.g {
 
 /***/ }),
 
-/***/ 5717:
+/***/ 6351:
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -23668,8 +23388,6 @@ class VolumeView extends BaseModel/* BaseModel */.g {
 __webpack_require__.d(__webpack_exports__, {
   "MK": function() { return /* reexport */ API_VERSION_EVENT; },
   "_u": function() { return /* reexport */ API_VERSION_EXEC; },
-  "Q8": function() { return /* reexport */ API_VERSION_SIZE; },
-  "BB": function() { return /* reexport */ StructVersion; },
   "Gf": function() { return /* reexport */ Version; }
 });
 
@@ -23679,24 +23397,12 @@ var defineProperty = __webpack_require__(7327);
 var bluetooth = __webpack_require__(9014);
 // EXTERNAL MODULE: ./src/models/pjcan/base/BaseModel.ts
 var BaseModel = __webpack_require__(9036);
-;// CONCATENATED MODULE: ./src/models/pjcan/version/StructVersion.ts
-
-const API_VERSION_SIZE = 4;
-/** Структура данных */
-const StructVersion = {
-  major: bluetooth/* BluetoothStruct.uint8 */.GD.uint8(),
-  minor: bluetooth/* BluetoothStruct.uint8 */.GD.uint8(),
-  build: bluetooth/* BluetoothStruct.uint8 */.GD.uint8(),
-  revision: bluetooth/* BluetoothStruct.uint8 */.GD.uint8()
-};
 ;// CONCATENATED MODULE: ./src/models/pjcan/version/Version.ts
-
 
 
 
 const API_VERSION_EXEC = 6;
 const API_VERSION_EVENT = "Version";
-const struct = new bluetooth/* BluetoothStruct */.GD(StructVersion);
 /** Модель версии */
 class Version extends BaseModel/* BaseModel */.g {
   /** Наличие версии */
@@ -23767,30 +23473,34 @@ class Version extends BaseModel/* BaseModel */.g {
    * @param {DataView} buf Буфер данных
    */
   set(buf) {
-    return this._set(this, API_VERSION_EXEC, API_VERSION_SIZE + 1, struct, buf);
+    return this._set(this, API_VERSION_EXEC, Version.size + 1, new bluetooth/* BluetoothStruct */.GD(Version.struct), buf);
   }
   /** Чтение данных */
   get() {
     return this._get(this, API_VERSION_EXEC, 1);
   }
 }
+(0,defineProperty/* default */.Z)(Version, "struct", {
+  major: bluetooth/* BluetoothStruct.uint8 */.GD.uint8(),
+  minor: bluetooth/* BluetoothStruct.uint8 */.GD.uint8(),
+  build: bluetooth/* BluetoothStruct.uint8 */.GD.uint8(),
+  revision: bluetooth/* BluetoothStruct.uint8 */.GD.uint8()
+});
+(0,defineProperty/* default */.Z)(Version, "size", 4);
 ;// CONCATENATED MODULE: ./src/models/pjcan/version/index.ts
-
 
 
 
 /***/ }),
 
-/***/ 7037:
+/***/ 7374:
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, {
-  "KX": function() { return /* reexport */ API_VIEWS_SIZE; },
-  "hQ": function() { return /* reexport */ StructViewConfig; },
-  "Fx": function() { return /* reexport */ ViewConfig; }
+  "F": function() { return /* reexport */ ViewConfig; }
 });
 
 // UNUSED EXPORTS: TViewType
@@ -23806,7 +23516,10 @@ var TViewType;
   TViewType[TViewType["VIEW_TEXT_FLICKERING"] = 1] = "VIEW_TEXT_FLICKERING";
   TViewType[TViewType["VIEW_TEXT_TICKER"] = 2] = "VIEW_TEXT_TICKER"; // бегущая строка
 })(TViewType || (TViewType = {}));
+// EXTERNAL MODULE: ./src/components/bluetooth/index.ts + 4 modules
+var bluetooth = __webpack_require__(9014);
 ;// CONCATENATED MODULE: ./src/models/pjcan/view/ViewConfig.ts
+
 
 
 /** Модель параметров отображения */
@@ -23817,19 +23530,13 @@ class ViewConfig {
     (0,defineProperty/* default */.Z)(this, "time", 0);
   }
 }
-// EXTERNAL MODULE: ./src/components/bluetooth/index.ts + 4 modules
-var bluetooth = __webpack_require__(9014);
-;// CONCATENATED MODULE: ./src/models/pjcan/view/StructViewConfig.ts
-
-const API_VIEWS_SIZE = 4;
-/** Структура данных */
-const StructViewConfig = {
+(0,defineProperty/* default */.Z)(ViewConfig, "struct", {
   enabled: bluetooth/* BluetoothStruct.bit */.GD.bit(),
   type: bluetooth/* BluetoothStruct.uint8 */.GD.uint8(),
   time: bluetooth/* BluetoothStruct.uint16 */.GD.uint16()
-};
+});
+(0,defineProperty/* default */.Z)(ViewConfig, "size", 4);
 ;// CONCATENATED MODULE: ./src/models/pjcan/view/index.ts
-
 
 
 
@@ -81766,7 +81473,7 @@ function useRender(render) {
 /***/ (function(module) {
 
 "use strict";
-module.exports = JSON.parse('{"name":"pjcan","version":"0.3.9","private":true,"description":"CanBus project for Mazda 3","author":"PJ82. Spiridonov Vladislav","scripts":{"serve":"vue-cli-service serve","build":"vue-cli-service build","build test":"vue-cli-service build --mode test"},"dependencies":{"@egjs/vue3-flicking":"^4.10.2","@mdi/font":"7.0.96","axios":"^1.1.3","bitset":"^5.1.1","core-js":"^3.26.0","eventemitter3":"^4.0.7","moment":"^2.29.4","register-service-worker":"^1.7.2","roboto-fontface":"*","screenfull":"^6.0.2","vue":"^3.2.41","vue-i18n":"^9.2.2","vue-router":"^4.1.6","vue3-toastify":"^0.0.3","vuedraggable":"^4.1.0","vuetify":"^3.1.5","vuex":"^4.1.0","webfontloader":"^1.6.28"},"devDependencies":{"@types/node":"^12.0.2","@types/webfontloader":"^1.6.29","@typescript-eslint/eslint-plugin":"^5.42.0","@typescript-eslint/parser":"^5.42.0","@vue/cli-plugin-babel":"~5.0.8","@vue/cli-plugin-eslint":"~5.0.8","@vue/cli-plugin-pwa":"~5.0.8","@vue/cli-plugin-router":"~5.0.8","@vue/cli-plugin-typescript":"~5.0.8","@vue/cli-plugin-vuex":"~5.0.8","@vue/cli-service":"~5.0.8","@vue/eslint-config-typescript":"^11.0.2","@vueuse/core":"^9.4.0","eslint":"^8.26.0","eslint-config-prettier":"^8.5.0","eslint-plugin-prettier":"^4.2.1","eslint-plugin-vue":"^9.7.0","prettier":"^2.7.1","sass":"^1.56.0","sass-loader":"^13.1.0","script-ext-html-webpack-plugin":"^2.1.5","typescript":"~4.8.4","vue-cli-plugin-vuetify":"~2.5.8","webpack-plugin-vuetify":"^2.0.0"},"eslintConfig":{"root":true,"env":{"node":true},"extends":["plugin:vue/vue3-essential","eslint:recommended","@vue/typescript/recommended","plugin:prettier/recommended"],"parserOptions":{"ecmaVersion":2020},"rules":{}},"browserslist":["> 1%","last 2 versions","not dead","not ie 11"],"productName":"PJCan App"}');
+module.exports = JSON.parse('{"name":"pjcan","version":"0.3.10","private":true,"description":"CanBus project for Mazda 3","author":"PJ82. Spiridonov Vladislav","scripts":{"serve":"vue-cli-service serve","build":"vue-cli-service build","build test":"vue-cli-service build --mode test"},"dependencies":{"@egjs/vue3-flicking":"^4.10.2","@mdi/font":"7.0.96","axios":"^1.1.3","bitset":"^5.1.1","core-js":"^3.26.0","eventemitter3":"^4.0.7","moment":"^2.29.4","register-service-worker":"^1.7.2","roboto-fontface":"*","screenfull":"^6.0.2","vue":"^3.2.41","vue-i18n":"^9.2.2","vue-router":"^4.1.6","vue3-toastify":"^0.0.3","vuedraggable":"^4.1.0","vuetify":"^3.1.5","vuex":"^4.1.0","webfontloader":"^1.6.28"},"devDependencies":{"@types/node":"^12.0.2","@types/webfontloader":"^1.6.29","@typescript-eslint/eslint-plugin":"^5.42.0","@typescript-eslint/parser":"^5.42.0","@vue/cli-plugin-babel":"~5.0.8","@vue/cli-plugin-eslint":"~5.0.8","@vue/cli-plugin-pwa":"~5.0.8","@vue/cli-plugin-router":"~5.0.8","@vue/cli-plugin-typescript":"~5.0.8","@vue/cli-plugin-vuex":"~5.0.8","@vue/cli-service":"~5.0.8","@vue/eslint-config-typescript":"^11.0.2","@vueuse/core":"^9.4.0","eslint":"^8.26.0","eslint-config-prettier":"^8.5.0","eslint-plugin-prettier":"^4.2.1","eslint-plugin-vue":"^9.7.0","prettier":"^2.7.1","sass":"^1.56.0","sass-loader":"^13.1.0","script-ext-html-webpack-plugin":"^2.1.5","typescript":"~4.8.4","vue-cli-plugin-vuetify":"~2.5.8","webpack-plugin-vuetify":"^2.0.0"},"eslintConfig":{"root":true,"env":{"node":true},"extends":["plugin:vue/vue3-essential","eslint:recommended","@vue/typescript/recommended","plugin:prettier/recommended"],"parserOptions":{"ecmaVersion":2020},"rules":{}},"browserslist":["> 1%","last 2 versions","not dead","not ie 11"],"productName":"PJCan App"}');
 
 /***/ })
 
