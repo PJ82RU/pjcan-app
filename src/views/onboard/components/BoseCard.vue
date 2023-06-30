@@ -10,6 +10,7 @@
 						:icon-name="['bose']"
 						:nodata="!isLoadedBoseConfig"
 						:disabled="!isLoadedBoseView"
+						@change="onApplyBoseConfig"
 					/>
 				</v-col>
 				<v-col cols="12" class="pb-0">
@@ -18,8 +19,9 @@
 						:title="$t('onboard.volume.level.title')"
 						:description="$t('onboard.volume.level.description')"
 						:max="max"
-						:nodata="!isLoadedVolumeValue"
-						:disabled="!isLoadedVolumeView"
+						:nodata="!isLoadedVolumeConfig"
+						:disabled="!isLoadedVolumeView || !enabled[0]"
+                        @change="onApplyVolumeConfig"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0 pb-0">
@@ -28,8 +30,9 @@
 						:title="$t('onboard.volume.mute.title')"
 						:description="$t('onboard.volume.mute.description')"
 						color="warning"
-						:nodata="!isLoadedVolumeValue"
-						:disabled="!isLoadedVolumeView"
+						:nodata="!isLoadedVolumeConfig"
+						:disabled="!isLoadedVolumeView || !enabled[0]"
+                        @change="onApplyVolumeConfig"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0">
@@ -39,7 +42,8 @@
 						:description="$t('onboard.bose.audioPLT.description')"
 						color="success"
 						:nodata="!isLoadedBoseConfig"
-						:disabled="!isLoadedBoseView"
+						:disabled="!isLoadedBoseView || !enabled[0]"
+						@change="onApplyBoseConfig"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0">
@@ -48,7 +52,8 @@
 						:title="$t('onboard.bose.centerPoint.title')"
 						:description="$t('onboard.bose.centerPoint.description')"
 						:items="centerPointList"
-						:disabled="!isLoadedBoseView"
+						:disabled="!isLoadedBoseView || !enabled[0]"
+						@change="onApplyBoseConfig"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0">
@@ -60,7 +65,8 @@
 						:max="8"
 						prepend-icon="volume-l"
 						append-icon="volume-r"
-						:disabled="!isLoadedBoseView"
+						:disabled="!isLoadedBoseView || !enabled[0]"
+						@change="onApplyBoseConfig"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0">
@@ -72,7 +78,8 @@
 						:max="8"
 						prepend-icon="volume-fade-r"
 						append-icon="volume-fade-f"
-						:disabled="!isLoadedBoseView"
+						:disabled="!isLoadedBoseView || !enabled[0]"
+						@change="onApplyBoseConfig"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0">
@@ -84,7 +91,8 @@
 						:max="6"
 						prepend-icon-mdi="mdi-volume-medium"
 						append-icon-mdi="mdi-volume-high"
-						:disabled="!isLoadedBoseView"
+						:disabled="!isLoadedBoseView || !enabled[0]"
+						@change="onApplyBoseConfig"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0 pb-0">
@@ -96,7 +104,8 @@
 						:max="6"
 						prepend-icon-mdi="mdi-volume-medium"
 						append-icon-mdi="mdi-volume-high"
-						:disabled="!isLoadedBoseView"
+						:disabled="!isLoadedBoseView || !enabled[0]"
+						@change="onApplyBoseConfig"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0">
@@ -106,7 +115,8 @@
 						:description="$t('onboard.bose.wow.description')"
 						color="success"
 						:nodata="!isLoadedBoseConfig"
-						:disabled="!isLoadedBoseView"
+						:disabled="!isLoadedBoseView || !enabled[0]"
+						@change="onApplyBoseConfig"
 					/>
 				</v-col>
 			</v-row>
@@ -125,7 +135,7 @@
 </template>
 
 <script lang="ts">
-import { computed, nextTick, onMounted, onUnmounted, ref, watch } from "vue";
+import { computed, onMounted, onUnmounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
 import Card from "@/components/cards/Card.vue";
@@ -151,6 +161,7 @@ import { IMenuItem } from "@/components/MenuDots.vue";
 import canbus from "@/api/canbus";
 import {
 	API_VARIABLE_VOLUME_CONFIG_EVENT,
+	API_VARIABLE_VOLUME_CONFIG_EXEC,
 	API_VARIABLE_VOLUME_VIEW_EVENT,
 	IVolumeConfig,
 	IVolumeView
@@ -171,10 +182,10 @@ export default {
 	{
 		const { t } = useI18n();
 
+		// Bose
+
 		const isLoadedBoseConfig = ref(false);
 		const isLoadedBoseView = ref(false);
-		const isLoadedVolumeValue = ref(false);
-		const isLoadedVolumeView = ref(false);
 
 		const enabled = ref([false]);
 		const audioPLT = ref(false);
@@ -186,10 +197,6 @@ export default {
 		const treble = ref(0);
 		const centerPoint = ref(TCenterPoint.CENTERPOINT_OFF);
 
-		const mute = ref(false);
-		const volume = ref(0);
-		const max = ref(0);
-
 		const centerPointList = computed(() => [
 			{ title: "OFF", value: TCenterPoint.CENTERPOINT_OFF },
 			{ title: "MIN", value: TCenterPoint.CENTERPOINT_MIN },
@@ -198,16 +205,6 @@ export default {
 			{ title: "HI", value: TCenterPoint.CENTERPOINT_HI },
 			{ title: "MAX", value: TCenterPoint.CENTERPOINT_MAX }
 		]);
-
-		watch(enabled, () => nextTick(() => onApplyBoseConfig()));
-		watch(audioPLT, () => nextTick(() => onApplyBoseConfig()));
-		watch(radioFM, () => nextTick(() => onApplyBoseConfig()));
-		watch(wow, () => nextTick(() => onApplyBoseConfig()));
-		watch(balance, () => nextTick(() => onApplyBoseConfig()));
-		watch(bass, () => nextTick(() => onApplyBoseConfig()));
-		watch(fade, () => nextTick(() => onApplyBoseConfig()));
-		watch(treble, () => nextTick(() => onApplyBoseConfig()));
-		watch(centerPoint, () => nextTick(() => onApplyBoseConfig()));
 
 		/** Входящие значения Bose */
 		const onReceiveBoseConfig = (res: IBoseConfig): void =>
@@ -231,21 +228,7 @@ export default {
 		{
 			isLoadedBoseView.value = res.isData;
 		};
-
-		/** Входящие конфигурация звука */
-		const onReceiveVolumeConfig = (res: IVolumeConfig): void =>
-		{
-			if (res.isData)
-			{
-				max.value = res.max;
-			}
-		};
-		/** Входящие значения отображения звука */
-		const onReceiveVolumeView = (res: IVolumeView): void =>
-		{
-			isLoadedVolumeView.value = res.isData;
-		};
-
+		/** Применить значения Bose */
 		const onApplyBoseConfig = (): void =>
 		{
 			if (isLoadedBoseConfig.value)
@@ -260,6 +243,42 @@ export default {
 				canbus.configs.variable.bose.treble = treble.value;
 				canbus.configs.variable.bose.centerPoint = centerPoint.value;
 				canbus.queryConfig(API_VARIABLE_BOSE_EXEC);
+			}
+		};
+
+		// Volume
+
+		const isLoadedVolumeConfig = ref(false);
+		const isLoadedVolumeView = ref(false);
+
+		const mute = ref(false);
+		const volume = ref(0);
+		const max = ref(0);
+
+		/** Входящие конфигурация звука */
+		const onReceiveVolumeConfig = (res: IVolumeConfig): void =>
+		{
+			isLoadedVolumeConfig.value = res.isData;
+			if (res.isData)
+			{
+				mute.value = res.mute;
+				volume.value = res.volume;
+				max.value = res.max;
+			}
+		};
+		/** Входящие значения отображения звука */
+		const onReceiveVolumeView = (res: IVolumeView): void =>
+		{
+			isLoadedVolumeView.value = res.isData;
+		};
+		/** Применить значения звука */
+		const onApplyVolumeConfig = (): void =>
+		{
+			if (isLoadedVolumeConfig.value)
+			{
+				canbus.configs.variable.volume.mute = mute.value;
+				canbus.configs.variable.volume.volume = volume.value;
+				canbus.queryConfig(API_VARIABLE_VOLUME_CONFIG_EXEC);
 			}
 		};
 
@@ -315,7 +334,7 @@ export default {
 		return {
 			isLoadedBoseConfig,
 			isLoadedBoseView,
-			isLoadedVolumeValue,
+			isLoadedVolumeConfig,
 			isLoadedVolumeView,
 			enabled,
 			audioPLT,
@@ -334,6 +353,8 @@ export default {
 			menuVisible,
 			menuSelected,
 			menuViewConfig,
+			onApplyBoseConfig,
+			onApplyVolumeConfig,
 			onMenuClick,
 			onViewSettingApply
 		};

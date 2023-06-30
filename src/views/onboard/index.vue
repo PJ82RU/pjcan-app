@@ -43,7 +43,7 @@ export default {
 		const flicking = ref(null);
 		provide("flicking", flicking);
 
-		const carModel = ref(0);
+		const carModel = ref(canbus.configs.car.carModel);
 		const cardList = computed(() =>
 		{
 			return store.getters["app/onboardCardList"]?.filter(
@@ -52,9 +52,7 @@ export default {
 		});
 		const onReceiveCarConfig = (res: ICarConfig): void =>
 		{
-			// ВРЕМЕННО
-			carModel.value = 2;
-			// if (res.isData) carModel.value = res.carModel;
+			if (res.isData) carModel.value = res.carModel;
 		};
 
 		onMounted(() =>
