@@ -107,8 +107,6 @@ import {
 import {
 	API_VARIABLE_VOLUME_CONFIG_EXEC,
 	API_VARIABLE_VOLUME_CONFIG_EVENT,
-	API_VARIABLE_VOLUME_EXEC,
-	API_VARIABLE_VOLUME_EVENT,
 	API_VARIABLE_VOLUME_VIEW_EXEC,
 	API_VARIABLE_VOLUME_VIEW_EVENT
 } from "@/models/pjcan/variables/volume";
@@ -381,9 +379,6 @@ export class Canbus extends EventEmitter
 			case API_VARIABLE_TEMPERATURE_EXEC:
 				return this.query(this.values.variable.temperature);
 
-			case API_VARIABLE_VOLUME_EXEC:
-				return this.query(this.values.variable.volume);
-
 			case API_VARIABLE_TEST_EXEC:
 				return !!value && this.query(value);
 
@@ -466,7 +461,6 @@ export class Canbus extends EventEmitter
 		this.emit(API_VARIABLE_MOVEMENT_EVENT, value.movement);
 		this.emit(API_VARIABLE_SENSORS_EVENT, value.sensors);
 		this.emit(API_VARIABLE_TEMPERATURE_EVENT, value.temperature);
-		this.emit(API_VARIABLE_VOLUME_EVENT, value.volume);
 	}
 
 	/**
@@ -672,10 +666,6 @@ export class Canbus extends EventEmitter
 				this.emit(API_VARIABLE_TEMPERATURE_VIEW_EVENT, this.views.variable.temperature);
 				break;
 
-			case API_VARIABLE_VOLUME_EXEC: // Значения уровня звука
-				this.values.variable.volume.set(data);
-				this.emit(API_VARIABLE_VOLUME_EVENT, this.values.variable.volume);
-				break;
 			case API_VARIABLE_VOLUME_CONFIG_EXEC: // Конфигурация уровня звука
 				this.configs.variable.volume.set(data);
 				this.emit(API_VARIABLE_VOLUME_CONFIG_EVENT, this.configs.variable.volume);
