@@ -1,21 +1,38 @@
 import { BluetoothStruct } from "@/components/bluetooth";
 import { BaseModel } from "../base";
 import { CarView } from "../car";
-import { VariableView } from "../variables/views";
+import { VariableViews } from "../variables/views";
 import { TeyesView } from "../teyes";
-import { API_VIEWS_SIZE, StructViews } from "./StructViews";
 import { IViews } from "./IViews";
+import { IVersion } from "../version";
 
 export const API_VIEWS_EXEC = 2;
 export const API_VIEWS_EVENT = "Views";
 
-const struct = new BluetoothStruct(StructViews);
-
 export class Views extends BaseModel implements IViews
 {
+	static struct: any;
+	static size: number;
+
+	/**
+	 * Обновить версию структуры
+	 * @param {IVersion} version Версия протокола
+	 */
+	static update(version?: IVersion): void
+	{
+		VariableViews.update(version);
+
+		Views.struct = {
+			car: BluetoothStruct.struct(CarView.struct),
+			teyes: BluetoothStruct.struct(TeyesView.struct),
+			variable: BluetoothStruct.struct(VariableViews.struct)
+		};
+		Views.size = CarView.size + TeyesView.size + VariableViews.size;
+	}
+
 	car = new CarView();
 	teyes = new TeyesView();
-	variable = new VariableView();
+	variable = new VariableViews();
 
 	constructor(data?: DataView)
 	{
@@ -29,7 +46,7 @@ export class Views extends BaseModel implements IViews
 	 */
 	set(buf: DataView): boolean
 	{
-		const result = this._set(this, API_VIEWS_EXEC, API_VIEWS_SIZE + 1, struct, buf);
+		const result = this._set(this, API_VIEWS_EXEC, Views.size + 1, new BluetoothStruct(Views.struct), buf);
 		if (result)
 		{
 			this.car.isData = true;
@@ -53,3 +70,5 @@ export class Views extends BaseModel implements IViews
 		return this._get(this, API_VIEWS_EXEC, 1);
 	}
 }
+
+Views.update();

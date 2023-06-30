@@ -1,16 +1,24 @@
 import { BluetoothStruct } from "@/components/bluetooth";
 import { BaseModel } from "../base";
-import { API_DEVICE_VALUE_SIZE, StructDeviceValue } from "./StructDeviceValue";
 import { IDeviceValue } from "./IDeviceValue";
 
 export const API_DEVICE_VALUE_EXEC = 11;
 export const API_DEVICE_EVENT = "DeviceValue";
 
-const struct = new BluetoothStruct(StructDeviceValue);
-
 /** Модель значений устройства */
 export class DeviceValue extends BaseModel implements IDeviceValue
 {
+	static struct: any = {
+		reboot: BluetoothStruct.bit(),
+		resetConfig: BluetoothStruct.bit(),
+		resetView: BluetoothStruct.bit(),
+		activation: BluetoothStruct.bit(),
+		save: BluetoothStruct.bit(),
+		led: BluetoothStruct.uint8(),
+		worktime: BluetoothStruct.uint64()
+	};
+	static size: number = 10;
+
 	reboot = false;
 	resetConfig = false;
 	resetView = false;
@@ -31,12 +39,18 @@ export class DeviceValue extends BaseModel implements IDeviceValue
 	 */
 	set(buf: DataView): boolean
 	{
-		return this._set(this, API_DEVICE_VALUE_EXEC, API_DEVICE_VALUE_SIZE + 1, struct, buf);
+		return this._set(
+			this,
+			API_DEVICE_VALUE_EXEC,
+			DeviceValue.size + 1,
+			new BluetoothStruct(DeviceValue.struct),
+			buf
+		);
 	}
 
 	/** Чтение данных */
 	get(): DataView | undefined
 	{
-		return this._get(this, API_DEVICE_VALUE_EXEC, API_DEVICE_VALUE_SIZE + 1, struct);
+		return this._get(this, API_DEVICE_VALUE_EXEC, DeviceValue.size + 1, new BluetoothStruct(DeviceValue.struct));
 	}
 }

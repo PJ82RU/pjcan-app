@@ -1,22 +1,35 @@
 import { BluetoothStruct } from "@/components/bluetooth";
 import { BaseModel } from "../base";
-import {
-	StructButtonsConfig,
-	BUTTON_NUMBER,
-	BUTTON_PRESS_TYPE_NUMBER,
-	API_BUTTONS_CONFIG_SIZE
-} from "./StructButtonsConfig";
 import { IButtonsConfig } from "./IButtonsConfig";
 import { IButtonsConfigItem } from "./IButtonsConfigItem";
 
 export const API_BUTTONS_CONFIG_EXEC = 20;
 export const API_BUTTONS_CONFIG_EVENT = "ButtonsConfig";
-
-const struct = new BluetoothStruct(StructButtonsConfig);
+export const BUTTON_NUMBER = 6; // количество кнопок
+export const BUTTON_PRESS_TYPE_NUMBER = 5; // количество типов кнопок
 
 /** Модель конфигурации кнопок */
 export class ButtonsConfig extends BaseModel implements IButtonsConfig
 {
+	static struct: any = {
+		enabled: BluetoothStruct.bit(),
+		out: BluetoothStruct.bit(),
+		reset: BluetoothStruct.bit(),
+		sendValue: BluetoothStruct.bit(),
+		range: BluetoothStruct.uint16(),
+		items: BluetoothStruct.struct(
+			{
+				delayExec: BluetoothStruct.bit(),
+				hold: BluetoothStruct.uint8(),
+				inR: BluetoothStruct.uint16(),
+				outR: BluetoothStruct.uint16(),
+				exec: BluetoothStruct.uint8(BUTTON_PRESS_TYPE_NUMBER)
+			},
+			BUTTON_NUMBER
+		)
+	};
+	static size: number = 69;
+
 	enabled = false;
 	out = false;
 	reset = false;
@@ -29,7 +42,13 @@ export class ButtonsConfig extends BaseModel implements IButtonsConfig
 		super();
 		for (let i = 0; i < BUTTON_NUMBER; i++)
 		{
-			const item: IButtonsConfigItem = { delayExec: false, hold: 0, inR: 0, outR: 0, exec: [] } as IButtonsConfigItem;
+			const item: IButtonsConfigItem = {
+				delayExec: false,
+				hold: 0,
+				inR: 0,
+				outR: 0,
+				exec: []
+			} as IButtonsConfigItem;
 			for (let j = 0; j < BUTTON_PRESS_TYPE_NUMBER; j++) item.exec.push(0);
 			this.items.push(item);
 		}
@@ -42,12 +61,23 @@ export class ButtonsConfig extends BaseModel implements IButtonsConfig
 	 */
 	set(buf: DataView): boolean
 	{
-		return this._set(this, API_BUTTONS_CONFIG_EXEC, API_BUTTONS_CONFIG_SIZE + 1, struct, buf);
+		return this._set(
+			this,
+			API_BUTTONS_CONFIG_EXEC,
+			ButtonsConfig.size + 1,
+			new BluetoothStruct(ButtonsConfig.struct),
+			buf
+		);
 	}
 
 	/** Чтение данных */
 	get(): DataView | undefined
 	{
-		return this._get(this, API_BUTTONS_CONFIG_EXEC, API_BUTTONS_CONFIG_SIZE + 1, struct);
+		return this._get(
+			this,
+			API_BUTTONS_CONFIG_EXEC,
+			ButtonsConfig.size + 1,
+			new BluetoothStruct(ButtonsConfig.struct)
+		);
 	}
 }

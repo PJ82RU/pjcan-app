@@ -1,15 +1,19 @@
 import { BluetoothStruct } from "@/components/bluetooth";
 import { BaseModel } from "@/models/pjcan/base";
 import { IScannerConfig } from "./IScannerConfig";
-import { API_SCANNER_CONFIG_SIZE, StructScannerConfig } from "./StructScannerConfig";
 
 export const API_SCANNER_CONFIG_EXEC = 60;
 export const API_SCANNER_CONFIG_EVENT = "ScannerConfig";
 
-const struct = new BluetoothStruct(StructScannerConfig);
-
 export class ScannerConfig extends BaseModel implements IScannerConfig
 {
+	static struct: any = {
+		enabled: BluetoothStruct.bit(),
+		addSend: BluetoothStruct.bit(),
+		timeoutOff: BluetoothStruct.uint8()
+	};
+	static size: number = 2;
+
 	enabled = false;
 	addSend = false;
 	timeoutOff = 5;
@@ -26,12 +30,23 @@ export class ScannerConfig extends BaseModel implements IScannerConfig
 	 */
 	set(buf: DataView): boolean
 	{
-		return this._set(this, API_SCANNER_CONFIG_EXEC, API_SCANNER_CONFIG_SIZE + 1, struct, buf);
+		return this._set(
+			this,
+			API_SCANNER_CONFIG_EXEC,
+			ScannerConfig.size + 1,
+			new BluetoothStruct(ScannerConfig.struct),
+			buf
+		);
 	}
 
 	/** Чтение данных */
 	get(): DataView | undefined
 	{
-		return this._get(this, API_SCANNER_CONFIG_EXEC, API_SCANNER_CONFIG_SIZE + 1, struct);
+		return this._get(
+			this,
+			API_SCANNER_CONFIG_EXEC,
+			ScannerConfig.size + 1,
+			new BluetoothStruct(ScannerConfig.struct)
+		);
 	}
 }

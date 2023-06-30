@@ -1,16 +1,19 @@
 import { BluetoothStruct } from "@/components/bluetooth";
 import { BaseModel } from "../base";
-import { API_DEVICE_CONFIG_SIZE, StructDeviceConfig } from "./StructDeviceConfig";
 import { IDeviceConfig } from "./IDeviceConfig";
 
 export const API_DEVICE_CONFIG_EXEC = 10;
 export const API_DEVICE_CONFIG_EVENT = "DeviceConfig";
-
-const struct = new BluetoothStruct(StructDeviceConfig);
+export const API_DEVICE_SERIAL_SIZE = 64;
 
 /** Модель параметров устройства */
 export class DeviceConfig extends BaseModel implements IDeviceConfig
 {
+	static struct: any = {
+		serial: BluetoothStruct.char(API_DEVICE_SERIAL_SIZE)
+	};
+	static size: number = API_DEVICE_SERIAL_SIZE;
+
 	serial = "";
 
 	constructor(data?: DataView)
@@ -25,12 +28,18 @@ export class DeviceConfig extends BaseModel implements IDeviceConfig
 	 */
 	set(buf: DataView): boolean
 	{
-		return this._set(this, API_DEVICE_CONFIG_EXEC, API_DEVICE_CONFIG_SIZE + 1, struct, buf);
+		return this._set(
+			this,
+			API_DEVICE_CONFIG_EXEC,
+			DeviceConfig.size + 1,
+			new BluetoothStruct(DeviceConfig.struct),
+			buf
+		);
 	}
 
 	/** Чтение данных */
 	get(): DataView | undefined
 	{
-		return this._get(this, API_DEVICE_CONFIG_EXEC, API_DEVICE_CONFIG_SIZE + 1, struct);
+		return this._get(this, API_DEVICE_CONFIG_EXEC, DeviceConfig.size + 1, new BluetoothStruct(DeviceConfig.struct));
 	}
 }

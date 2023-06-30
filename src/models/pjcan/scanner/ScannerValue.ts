@@ -2,16 +2,30 @@ import { BluetoothStruct } from "@/components/bluetooth";
 import { BaseModel } from "@/models/pjcan/base";
 import { IScannerValue } from "./IScannerValue";
 import { IScannerFrame } from "./IScannerFrame";
-import { API_SCANNER_VALUE_SIZE, StructScannerValue } from "./StructScannerValue";
-import { API_SCANNER_FRAME_SIZE } from "@/models/pjcan/scanner/StructScannerFrame";
 
 export const API_SCANNER_VALUE_EXEC = 61;
 export const API_SCANNER_VALUE_EVENT = "ScannerValue";
-
-const struct = new BluetoothStruct(StructScannerValue);
+export const API_SCANNER_FRAME_COUNT = 16;
+export const API_SCANNER_FRAME_SIZE = 22;
 
 export class ScannerValue extends BaseModel implements IScannerValue
 {
+	static struct: any = {
+		count: BluetoothStruct.uint8(),
+		frames: BluetoothStruct.struct(
+			{
+				receive: BluetoothStruct.bit(),
+				send: BluetoothStruct.bit(),
+				id: BluetoothStruct.uint32(),
+				data: BluetoothStruct.uint8(8),
+				length: BluetoothStruct.uint8(),
+				timestamp: BluetoothStruct.uint64()
+			},
+			API_SCANNER_FRAME_COUNT
+		)
+	};
+	static size: number = API_SCANNER_FRAME_SIZE * API_SCANNER_FRAME_COUNT + 1;
+
 	count = 0;
 	frames = [] as IScannerFrame[];
 
@@ -40,7 +54,13 @@ export class ScannerValue extends BaseModel implements IScannerValue
 	 */
 	set(buf: DataView): boolean
 	{
-		return this._set(this, API_SCANNER_VALUE_EXEC, API_SCANNER_VALUE_SIZE + 1, struct, buf);
+		return this._set(
+			this,
+			API_SCANNER_VALUE_EXEC,
+			ScannerValue.size + 1,
+			new BluetoothStruct(ScannerValue.struct),
+			buf
+		);
 	}
 
 	/** Чтение данных */

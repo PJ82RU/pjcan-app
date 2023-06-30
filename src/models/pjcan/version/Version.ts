@@ -1,16 +1,21 @@
 import { BluetoothStruct } from "@/components/bluetooth";
 import { BaseModel } from "../base";
 import { IVersion } from "./IVersion";
-import { API_VERSION_SIZE, StructVersion } from "./StructVersion";
 
 export const API_VERSION_EXEC = 6;
 export const API_VERSION_EVENT = "Version";
 
-const struct = new BluetoothStruct(StructVersion);
-
 /** Модель версии */
 export class Version extends BaseModel implements IVersion
 {
+	static struct: any = {
+		major: BluetoothStruct.uint8(),
+		minor: BluetoothStruct.uint8(),
+		build: BluetoothStruct.uint8(),
+		revision: BluetoothStruct.uint8()
+	};
+	static size: number = 4;
+
 	major = 0;
 	minor = 0;
 	build = 0;
@@ -106,7 +111,7 @@ export class Version extends BaseModel implements IVersion
 	 */
 	set(buf: DataView): boolean
 	{
-		return this._set(this, API_VERSION_EXEC, API_VERSION_SIZE + 1, struct, buf);
+		return this._set(this, API_VERSION_EXEC, Version.size + 1, new BluetoothStruct(Version.struct), buf);
 	}
 
 	/** Чтение данных */

@@ -1,17 +1,26 @@
 import EventEmitter from "eventemitter3";
 import { IUpdate } from "./IUpdate";
 import { BluetoothStruct } from "@/components/bluetooth";
-import { API_UPDATE_SIZE, StructUpdate, UPDATE_VALUE_DATA_SIZE } from "./StructUpdate";
 
 export const API_UPDATE_EXEC = 90;
 export const API_UPDATE_EVENT = "Update";
 export const API_UPDATE_EVENT_ERROR = "ErrorUpdate";
-
-const struct = new BluetoothStruct(StructUpdate);
+export const UPDATE_VALUE_DATA_SIZE = 496;
 
 /** Модель обновления прошивки */
 export class Update extends EventEmitter implements IUpdate
 {
+	static struct: any = {
+		begin: BluetoothStruct.bit(),
+		end: BluetoothStruct.bit(),
+		abort: BluetoothStruct.bit(),
+		encrypt: BluetoothStruct.bit(),
+		iv: BluetoothStruct.bit(),
+		total: BluetoothStruct.uint32(),
+		size: BluetoothStruct.uint16()
+	};
+	static size: number = 503;
+
 	firmwareUrl = "";
 	firmwareData = new Uint8Array(0);
 	offset = 0;
@@ -89,7 +98,7 @@ export class Update extends EventEmitter implements IUpdate
 	{
 		try
 		{
-			const buf: DataView = new DataView(new ArrayBuffer(API_UPDATE_SIZE + 1));
+			const buf: DataView = new DataView(new ArrayBuffer(Update.size + 1));
 			buf.setUint8(0, API_UPDATE_EXEC);
 
 			this.begin = !this.begin && this.offset === 0;
@@ -115,7 +124,7 @@ export class Update extends EventEmitter implements IUpdate
 			}
 
 			this.end = this.offset >= this.total;
-			struct?.encode(buf, this, 1);
+			new BluetoothStruct(Update.struct)?.encode(buf, this, 1);
 			return buf;
 		}
 		catch (e)

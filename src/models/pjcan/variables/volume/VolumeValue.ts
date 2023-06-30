@@ -1,16 +1,19 @@
 import { BluetoothStruct } from "@/components/bluetooth";
 import { BaseModel } from "../../base";
-import { API_VARIABLE_VOLUME_SIZE, StructVolumeValue } from "./StructVolumeValue";
 import { IVolumeValue } from "./IVolumeValue";
 
 export const API_VARIABLE_VOLUME_EXEC = 200;
 export const API_VARIABLE_VOLUME_EVENT = "VariableVolumeValue";
 
-const struct = new BluetoothStruct(StructVolumeValue);
-
 /** Модель конфигурации уровня звука */
 export class VolumeValue extends BaseModel implements IVolumeValue
 {
+	static struct: any = {
+		mute: BluetoothStruct.bit(),
+		volume: BluetoothStruct.uint8()
+	};
+	static size: number = 2;
+
 	mute = false;
 	volume = 0;
 
@@ -26,12 +29,18 @@ export class VolumeValue extends BaseModel implements IVolumeValue
 	 */
 	set(buf: DataView): boolean
 	{
-		return this._set(this, API_VARIABLE_VOLUME_EXEC, API_VARIABLE_VOLUME_SIZE + 1, struct, buf);
+		return this._set(
+			this,
+			API_VARIABLE_VOLUME_EXEC,
+			VolumeValue.size + 1,
+			new BluetoothStruct(VolumeValue.struct),
+			buf
+		);
 	}
 
 	/** Чтение данных */
 	get(): DataView | undefined
 	{
-		return this._get(this, API_VARIABLE_VOLUME_EXEC, API_VARIABLE_VOLUME_SIZE + 1, struct);
+		return this._get(this, API_VARIABLE_VOLUME_EXEC, VolumeValue.size + 1, new BluetoothStruct(VolumeValue.struct));
 	}
 }

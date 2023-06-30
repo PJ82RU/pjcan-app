@@ -1,17 +1,19 @@
 import { BluetoothStruct } from "@/components/bluetooth";
 import { ViewConfig } from "../view";
 import { BaseModel } from "../base";
-import { API_TEYES_VIEW_SIZE, StructTeyesView } from "./StructTeyesView";
 import { ITeyesView } from "./ITeyesView";
 
 export const API_TEYES_VIEW_EXEC = 32;
 export const API_TEYES_VIEW_EVENT = "TeyesView";
 
-const struct = new BluetoothStruct(StructTeyesView);
-
 /** Модель параметров отображения данных Teyes */
 export class TeyesView extends BaseModel implements ITeyesView
 {
+	static struct: any = {
+		view: BluetoothStruct.struct(ViewConfig.struct)
+	};
+	static size: number = ViewConfig.size;
+
 	view = new ViewConfig();
 
 	constructor(data?: DataView)
@@ -26,12 +28,12 @@ export class TeyesView extends BaseModel implements ITeyesView
 	 */
 	set(buf: DataView): boolean
 	{
-		return this._set(this, API_TEYES_VIEW_EXEC, API_TEYES_VIEW_SIZE + 1, struct, buf);
+		return this._set(this, API_TEYES_VIEW_EXEC, TeyesView.size + 1, new BluetoothStruct(TeyesView.struct), buf);
 	}
 
 	/** Чтение данных */
 	get(): DataView | undefined
 	{
-		return this._get(this, API_TEYES_VIEW_EXEC, API_TEYES_VIEW_SIZE + 1, struct);
+		return this._get(this, API_TEYES_VIEW_EXEC, TeyesView.size + 1, new BluetoothStruct(TeyesView.struct));
 	}
 }

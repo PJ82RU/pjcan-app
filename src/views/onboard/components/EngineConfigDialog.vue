@@ -99,8 +99,16 @@ export default {
 			if (res.isData)
 			{
 				showDays.value = res.showDays;
-				worktime.value = res.totalSeconds > 0 ? Math.round(Number(res.totalSeconds / BigInt(60))) : 0;
-				totalCountRPM.value = Math.round(Number(res.totalCountRPM / BigInt(1000)));
+				worktime.value =
+					res.totalSeconds > 0
+						? typeof res.totalSeconds === "number"
+							? Math.round(res.totalSeconds / 60)
+							: Math.round(Number(res.totalSeconds / BigInt(60)))
+						: 0;
+				totalCountRPM.value =
+					typeof res.totalCountRPM === "number"
+						? Math.round(res.totalCountRPM / 1000)
+						: Math.round(Number(res.totalCountRPM / BigInt(1000)));
 			}
 		};
 

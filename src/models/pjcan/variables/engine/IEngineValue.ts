@@ -14,4 +14,8 @@ export interface IEngineValue extends IBaseModel {
 	viewMinutes: number;
 	viewSeconds: number;
 	viewCountRPM: number;
+
+	mseconds?: number;			// <-- 4.0.1.96
+	totalSeconds?: number;		// <-- 4.0.1.96
+	totalCountRPM?: number;		// <-- 4.0.1.96
 }

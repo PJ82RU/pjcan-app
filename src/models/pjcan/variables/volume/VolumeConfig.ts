@@ -1,16 +1,20 @@
 import { BluetoothStruct } from "@/components/bluetooth";
 import { BaseModel } from "../../base";
-import { API_VARIABLE_VOLUME_CONFIG_SIZE, StructVolumeConfig } from "./StructVolumeConfig";
 import { IVolumeConfig } from "./IVolumeConfig";
 
 export const API_VARIABLE_VOLUME_CONFIG_EXEC = 201;
 export const API_VARIABLE_VOLUME_CONFIG_EVENT = "VariableVolumeConfig";
 
-const struct = new BluetoothStruct(StructVolumeConfig);
-
 /** Модель конфигурации уровня звука */
 export class VolumeConfig extends BaseModel implements IVolumeConfig
 {
+	static struct: any = {
+		mute: BluetoothStruct.bit(),
+		volume: BluetoothStruct.uint8(),
+		max: BluetoothStruct.uint8()
+	};
+	static size: number = 3;
+
 	mute = false;
 	volume = 0;
 	max = 0;
@@ -27,12 +31,23 @@ export class VolumeConfig extends BaseModel implements IVolumeConfig
 	 */
 	set(buf: DataView): boolean
 	{
-		return this._set(this, API_VARIABLE_VOLUME_CONFIG_EXEC, API_VARIABLE_VOLUME_CONFIG_SIZE + 1, struct, buf);
+		return this._set(
+			this,
+			API_VARIABLE_VOLUME_CONFIG_EXEC,
+			VolumeConfig.size + 1,
+			new BluetoothStruct(VolumeConfig.struct),
+			buf
+		);
 	}
 
 	/** Чтение данных */
 	get(): DataView | undefined
 	{
-		return this._get(this, API_VARIABLE_VOLUME_CONFIG_EXEC, API_VARIABLE_VOLUME_CONFIG_SIZE + 1, struct);
+		return this._get(
+			this,
+			API_VARIABLE_VOLUME_CONFIG_EXEC,
+			VolumeConfig.size + 1,
+			new BluetoothStruct(VolumeConfig.struct)
+		);
 	}
 }

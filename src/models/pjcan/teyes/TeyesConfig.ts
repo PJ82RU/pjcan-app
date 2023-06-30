@@ -1,8 +1,6 @@
-import { BluetoothStruct, IBluetoothStruct } from "@/components/bluetooth";
+import { BluetoothStruct } from "@/components/bluetooth";
 import { BaseModel } from "../base";
 import { IVersion } from "../version";
-import { API_TEYES_CONFIG_SIZE, StructTeyesConfig } from "./StructTeyesConfig";
-import { API_TEYES_CONFIG_SIZE_401, StructTeyesConfig_401 } from "./StructTeyesConfig_401";
 import { ITeyesConfig } from "./ITeyesConfig";
 
 export const API_TEYES_CONFIG_EXEC = 30;
@@ -11,17 +9,7 @@ export const API_TEYES_CONFIG_EVENT = "TeyesConfig";
 /** Модель параметров Teyes */
 export class TeyesConfig extends BaseModel implements ITeyesConfig
 {
-	receiveClock = false;
-	receiveButtons = false;
-	receiveText = false;
-	sendButton = false;
-	sendClimate = false;
-	sendDoors = false;
-	parseVolume = false;
-	lcdShow = false;
-
 	static struct: any;
-	static bleStruct: IBluetoothStruct;
 	static size: number;
 
 	/**
@@ -32,23 +20,43 @@ export class TeyesConfig extends BaseModel implements ITeyesConfig
 	{
 		if (!version || version.compareString("4.0.2") !== 1)
 		{
-			if (TeyesConfig.struct !== StructTeyesConfig)
-			{
-				TeyesConfig.struct = StructTeyesConfig;
-				TeyesConfig.bleStruct = new BluetoothStruct(StructTeyesConfig);
-				TeyesConfig.size = API_TEYES_CONFIG_SIZE;
-			}
+			TeyesConfig.struct = {
+				receiveClock: BluetoothStruct.bit(),
+				receiveButtons: BluetoothStruct.bit(),
+				receiveText: BluetoothStruct.bit(),
+				sendButton: BluetoothStruct.bit(),
+				sendClimate: BluetoothStruct.bit(),
+				sendDoors: BluetoothStruct.bit(),
+				parseVolume: BluetoothStruct.bit(),
+				lcdShow: BluetoothStruct.bit(),
+				uartBaud: BluetoothStruct.uint8()
+			};
+			TeyesConfig.size = 2;
 		}
 		else
 		{
-			if (TeyesConfig.struct !== StructTeyesConfig_401)
-			{
-				TeyesConfig.struct = StructTeyesConfig_401;
-				TeyesConfig.bleStruct = new BluetoothStruct(StructTeyesConfig_401);
-				TeyesConfig.size = API_TEYES_CONFIG_SIZE_401;
-			}
+			TeyesConfig.struct = {
+				receiveClock: BluetoothStruct.bit(),
+				receiveButtons: BluetoothStruct.bit(),
+				receiveText: BluetoothStruct.bit(),
+				sendButton: BluetoothStruct.bit(),
+				sendClimate: BluetoothStruct.bit(),
+				sendDoors: BluetoothStruct.bit(),
+				parseVolume: BluetoothStruct.bit(),
+				lcdShow: BluetoothStruct.bit()
+			};
+			TeyesConfig.size = 1;
 		}
 	}
+
+	receiveClock = false;
+	receiveButtons = false;
+	receiveText = false;
+	sendButton = false;
+	sendClimate = false;
+	sendDoors = false;
+	parseVolume = false;
+	lcdShow = false;
 
 	constructor(data?: DataView)
 	{
@@ -62,12 +70,18 @@ export class TeyesConfig extends BaseModel implements ITeyesConfig
 	 */
 	set(buf: DataView): boolean
 	{
-		return this._set(this, API_TEYES_CONFIG_EXEC, TeyesConfig.size + 1, TeyesConfig.bleStruct, buf);
+		return this._set(
+			this,
+			API_TEYES_CONFIG_EXEC,
+			TeyesConfig.size + 1,
+			new BluetoothStruct(TeyesConfig.struct),
+			buf
+		);
 	}
 
 	/** Чтение данных */
 	get(): DataView | undefined
 	{
-		return this._get(this, API_TEYES_CONFIG_EXEC, TeyesConfig.size + 1, TeyesConfig.bleStruct);
+		return this._get(this, API_TEYES_CONFIG_EXEC, TeyesConfig.size + 1, new BluetoothStruct(TeyesConfig.struct));
 	}
 }

@@ -1,6 +1,6 @@
 import { BluetoothStruct } from "@/components/bluetooth";
 import { BaseModel } from "../../base";
-import { ViewConfig } from "@/models/pjcan/view";
+import { ViewConfig } from "../../view";
 import { BoseView } from "../bose";
 import { ClimateView } from "../climate";
 import { DoorsView } from "../doors";
@@ -10,17 +10,49 @@ import { MovementView } from "../movement";
 import { SensorsView } from "../sensors";
 import { TemperatureView } from "../temperature";
 import { VolumeView } from "../volume";
-import { API_VARIABLE_VIEWS_SIZE, StructVariableViews } from "./StructVariableViews";
 import { IVariableViews } from "./IVariableViews";
+import { IVersion } from "../../version";
 
 export const API_VARIABLE_VIEWS_EXEC = 101;
 export const API_VARIABLE_VIEWS_EVENT = "VariableViews";
 
-const struct = new BluetoothStruct(StructVariableViews);
-
 /** Модель параметров отображения данных переменных */
-export class VariableView extends BaseModel implements IVariableViews
+export class VariableViews extends BaseModel implements IVariableViews
 {
+	static struct: any;
+	static size: number;
+
+	/**
+	 * Обновить версию структуры
+	 * @param {IVersion} version Версия протокола
+	 */
+	static update(version?: IVersion): void
+	{
+		VariableViews.struct = {
+			bose: BluetoothStruct.struct(BoseView.struct),
+			climate: BluetoothStruct.struct(ClimateView.struct),
+			clock: BluetoothStruct.struct(ViewConfig.struct),
+			doors: BluetoothStruct.struct(DoorsView.struct),
+			engine: BluetoothStruct.struct(EngineView.struct),
+			fuel: BluetoothStruct.struct(FuelView.struct),
+			movement: BluetoothStruct.struct(MovementView.struct),
+			sensors: BluetoothStruct.struct(SensorsView.struct),
+			temperature: BluetoothStruct.struct(TemperatureView.struct),
+			volume: BluetoothStruct.struct(VolumeView.struct)
+		};
+		VariableViews.size =
+			BoseView.size +
+			ClimateView.size +
+			ViewConfig.size +
+			DoorsView.size +
+			EngineView.size +
+			FuelView.size +
+			MovementView.size +
+			SensorsView.size +
+			TemperatureView.size +
+			VolumeView.size;
+	}
+
 	bose = new BoseView();
 	climate = new ClimateView();
 	clock = new ViewConfig();
@@ -44,7 +76,13 @@ export class VariableView extends BaseModel implements IVariableViews
 	 */
 	set(buf: DataView): boolean
 	{
-		const result = this._set(this, API_VARIABLE_VIEWS_EXEC, API_VARIABLE_VIEWS_SIZE + 1, struct, buf);
+		const result = this._set(
+			this,
+			API_VARIABLE_VIEWS_EXEC,
+			VariableViews.size + 1,
+			new BluetoothStruct(VariableViews.struct),
+			buf
+		);
 		if (result)
 		{
 			this.bose.isData = true;

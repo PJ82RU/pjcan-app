@@ -4,17 +4,35 @@ import { BoseConfig } from "../bose";
 import { EngineConfig } from "../engine";
 import { FuelConfig } from "../fuel";
 import { VolumeConfig } from "../volume";
-import { API_VARIABLE_CONFIGS_SIZE, StructVariableConfigs } from "./StructVariableConfigs";
 import { IVariableConfigs } from "./IVariableConfigs";
+import { IVersion } from "../../version";
 
 export const API_VARIABLE_CONFIGS_EXEC = 100;
 export const API_VARIABLE_CONFIGS_EVENT = "VariableConfigs";
 
-const struct = new BluetoothStruct(StructVariableConfigs);
-
 /** Модель конфигурации переменных */
 export class VariableConfig extends BaseModel implements IVariableConfigs
 {
+	static struct: any;
+	static size: number;
+
+	/**
+	 * Обновить версию структуры
+	 * @param {IVersion} version Версия протокола
+	 */
+	static update(version?: IVersion): void
+	{
+		EngineConfig.update(version);
+
+		VariableConfig.struct = {
+			bose: BluetoothStruct.struct(BoseConfig.struct),
+			engine: BluetoothStruct.struct(EngineConfig.struct),
+			fuel: BluetoothStruct.struct(FuelConfig.struct),
+			volume: BluetoothStruct.struct(VolumeConfig.struct)
+		};
+		VariableConfig.size = BoseConfig.size + EngineConfig.size + FuelConfig.size + VolumeConfig.size;
+	}
+
 	bose = new BoseConfig();
 	engine = new EngineConfig();
 	fuel = new FuelConfig();
@@ -32,7 +50,13 @@ export class VariableConfig extends BaseModel implements IVariableConfigs
 	 */
 	set(buf: DataView): boolean
 	{
-		const result = this._set(this, API_VARIABLE_CONFIGS_EXEC, API_VARIABLE_CONFIGS_SIZE + 1, struct, buf);
+		const result = this._set(
+			this,
+			API_VARIABLE_CONFIGS_EXEC,
+			VariableConfig.size + 1,
+			new BluetoothStruct(VariableConfig.struct),
+			buf
+		);
 		if (result)
 		{
 			this.bose.isData = true;
