@@ -1,6 +1,7 @@
 # PJCAN App
-CANBUS project for Mazda 3
+Проект CANBUS адаптера для Mazda 3 BK / CX-7 / CX-9 
 
+Группа в телеграм: https://t.me/pjcan
 
 
 # API 4.0.2
