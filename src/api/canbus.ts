@@ -3,8 +3,8 @@ import { toast } from "vue3-toastify";
 import { t } from "@/lang";
 import { getFirmware, getFirmwareVersion } from "@/api/firmware";
 import { getSerial } from "@/api/hash";
+import { createDebounce } from "@/utils/debounce";
 
-import { clearDebounce, debounce } from "@/utils/debounce";
 import {
 	BLUETOOTH_EVENT_CONNECTED,
 	BLUETOOTH_EVENT_RECEIVE,
@@ -167,6 +167,7 @@ export class Canbus extends EventEmitter
 	private queue: Promise<void>[] = [];
 	/** Таймер */
 	private debounceFetchValue: number | undefined = undefined;
+	private debounce = createDebounce();
 
 	/** Статус циклического запроса значений */
 	get startedFetchValue(): number | undefined
@@ -399,7 +400,7 @@ export class Canbus extends EventEmitter
 	startFetchValue(type: number = 0, value: IBaseModel | undefined = undefined, timeout: number = 500)
 	{
 		this.debounceFetchValue = type;
-		debounce(async () =>
+		this.debounce(() =>
 		{
 			this.queryValue(type, value);
 			if (this.debounceFetchValue !== undefined)
@@ -413,7 +414,7 @@ export class Canbus extends EventEmitter
 	stopFetchValue()
 	{
 		this.debounceFetchValue = undefined;
-		clearDebounce();
+		this.debounce(() => {}, 1);
 	}
 
 	/**
@@ -719,11 +720,11 @@ export class Canbus extends EventEmitter
 
 		if (this.update.end)
 		{
-			debounce(() => this.emit(API_UPDATE_EVENT_ERROR, t("update.notify.errorWaitUpdate")), 60000);
+			this.debounce(() => this.emit(API_UPDATE_EVENT_ERROR, t("update.notify.errorWaitUpdate")), 60000);
 		}
 		else
 		{
-			debounce(() => this.emit(API_UPDATE_EVENT_ERROR, t("update.notify.errorUpload")), 5000);
+			this.debounce(() => this.emit(API_UPDATE_EVENT_ERROR, t("update.notify.errorUpload")), 5000);
 		}
 	}
 

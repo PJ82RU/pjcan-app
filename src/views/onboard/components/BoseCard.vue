@@ -167,6 +167,8 @@ import {
 	IVolumeView
 } from "@/models/pjcan/variables/volume";
 
+import { createDebounce } from "@/utils/debounce";
+
 export default {
 	name: "BoseCard",
 	components: {
@@ -206,6 +208,9 @@ export default {
 			{ title: "MAX", value: TCenterPoint.CENTERPOINT_MAX }
 		]);
 
+		let disabledBoseConfig = false;
+		const debounceBoseConfig = createDebounce();
+
 		/** Входящие значения Bose */
 		const onReceiveBoseConfig = (res: IBoseConfig): void =>
 		{
@@ -221,6 +226,8 @@ export default {
 				fade.value = res.fade;
 				treble.value = res.treble;
 				centerPoint.value = res.centerPoint as TCenterPoint;
+
+				disabledBoseConfig = false;
 			}
 		};
 		/** Входящие значения отображения климат-контроля */
@@ -231,8 +238,11 @@ export default {
 		/** Применить значения Bose */
 		const onApplyBoseConfig = (): void =>
 		{
-			if (isLoadedBoseConfig.value)
+			if (isLoadedBoseConfig.value && !disabledBoseConfig)
 			{
+				disabledBoseConfig = true;
+				debounceBoseConfig(() => (disabledBoseConfig = false), 1000);
+
 				canbus.configs.variable.bose.enabled = enabled.value[0];
 				canbus.configs.variable.bose.audioPLT = audioPLT.value;
 				canbus.configs.variable.bose.radioFM = radioFM.value;
@@ -255,6 +265,9 @@ export default {
 		const volume = ref(0);
 		const max = ref(0);
 
+		let disabledVolumeConfig = false;
+		const debounceVolumeConfig = createDebounce();
+
 		/** Входящие конфигурация звука */
 		const onReceiveVolumeConfig = (res: IVolumeConfig): void =>
 		{
@@ -264,6 +277,8 @@ export default {
 				mute.value = res.mute;
 				volume.value = res.volume;
 				max.value = res.max;
+
+				disabledVolumeConfig = false;
 			}
 		};
 		/** Входящие значения отображения звука */
@@ -274,8 +289,11 @@ export default {
 		/** Применить значения звука */
 		const onApplyVolumeConfig = (): void =>
 		{
-			if (isLoadedVolumeConfig.value)
+			if (isLoadedVolumeConfig.value && !disabledVolumeConfig)
 			{
+				disabledVolumeConfig = true;
+				debounceVolumeConfig(() => (disabledVolumeConfig = false), 1000);
+
 				canbus.configs.variable.volume.mute = mute.value;
 				canbus.configs.variable.volume.volume = volume.value;
 				canbus.queryConfig(API_VARIABLE_VOLUME_CONFIG_EXEC);
