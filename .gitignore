@@ -2,6 +2,7 @@
 node_modules
 /dist
 public/firmware/firmware*
+/docs_*
 
 # local env files
 .env.local
