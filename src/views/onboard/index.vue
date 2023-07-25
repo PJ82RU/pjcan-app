@@ -1,7 +1,7 @@
 <template>
 	<flicking ref="flicking" class="onboard" :options="{ bound: true, align: 'prev' }">
 		<div v-for="item in cardList" :key="item.name" class="mr-4" :class="`flicking-${display}`">
-			<component :is="`${item.name}-card`" />
+			<component :is="`${item.name}-card`" :car-model="carModel" />
 		</div>
 	</flicking>
 </template>
@@ -69,6 +69,7 @@ export default {
 
 		return {
 			flicking,
+			carModel,
 			cardList,
 			display
 		};

@@ -79,6 +79,12 @@ import canbus from "@/api/canbus";
 export default {
 	name: "FuelCard",
 	components: { Card, InputCardItem, ViewSettingDialog, FuelConfigDialog },
+	props: {
+		carModel: {
+			type: Number,
+			default: 0
+		}
+	},
 	setup()
 	{
 		const { t } = useI18n();

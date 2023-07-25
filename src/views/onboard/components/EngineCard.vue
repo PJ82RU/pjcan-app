@@ -110,6 +110,12 @@ import canbus from "@/api/canbus";
 export default {
 	name: "EngineCard",
 	components: { Card, InputCardItem, IconCardItem, ProgressCardItem, ViewSettingDialog, EngineConfigDialog },
+	props: {
+		carModel: {
+			type: Number,
+			default: 0
+		}
+	},
 	setup()
 	{
 		const { t } = useI18n();

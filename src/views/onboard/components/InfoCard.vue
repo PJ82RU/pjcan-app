@@ -22,7 +22,7 @@
 						:disabled="!isLoadedSensorView"
 					/>
 				</v-col>
-				<v-col cols="12" class="pt-0 pb-0">
+				<v-col v-if="carModel === 1" cols="12" class="pt-0 pb-0">
 					<input-card-item
 						:value="temperature"
 						:title="$t('onboard.info.temperature.title')"
@@ -32,7 +32,7 @@
 						:disabled="!isLoadedTemperatureView"
 					/>
 				</v-col>
-				<v-col cols="12" class="pt-0 pb-0">
+				<v-col v-if="carModel === 1" cols="12" class="pt-0 pb-0">
 					<switch-card-item
 						:model-value="handbrake"
 						:title="$t('onboard.info.handbrake.title')"
@@ -52,7 +52,7 @@
 						:disabled="!isLoadedSensorView"
 					/>
 				</v-col>
-				<v-col cols="12" class="pt-0 pb-0">
+				<v-col v-if="carModel === 1" cols="12" class="pt-0 pb-0">
 					<icon-card-item
 						:model-value="[seatbeltPassenger, seatbeltDriver]"
 						:title="$t('onboard.info.safetyBelt.title')"
@@ -64,7 +64,7 @@
 						:disabled="!isLoadedSensorView"
 					/>
 				</v-col>
-				<v-col cols="12" class="pt-0 pb-0">
+				<v-col v-if="carModel === 1" cols="12" class="pt-0 pb-0">
 					<icon-card-item
 						:model-value="[signalRight, signalLeft]"
 						:title="$t('onboard.info.signal.title')"
@@ -91,7 +91,7 @@
 </template>
 
 <script lang="ts">
-import { computed, onMounted, onUnmounted, ref } from "vue";
+import { computed, onMounted, onUnmounted, ref, toRefs } from "vue";
 import { useI18n } from "vue-i18n";
 
 import Card from "@/components/cards/Card.vue";
@@ -124,8 +124,15 @@ import canbus from "@/api/canbus";
 export default {
 	name: "InfoCard",
 	components: { Card, InputCardItem, SwitchCardItem, IconCardItem, ViewSettingDialog },
-	setup()
+	props: {
+		carModel: {
+			type: Number,
+			default: 0
+		}
+	},
+	setup(props: any)
 	{
+		const { carModel } = toRefs(props);
 		const { t } = useI18n();
 
 		const isLoadedDeviceValue = ref(false);
@@ -234,12 +241,14 @@ export default {
 
 		// МЕНЮ ОТОБРАЖЕНИЯ
 
-		const menu = computed((): IMenuItem[] => [
+		const menu = computed((): IMenuItem[] => carModel.value === 1 ? [
 			{ id: 0, title: t("onboard.info.temperature.menu") },
 			{ id: 1, title: t("onboard.info.handbrake.menu") },
 			{ id: 2, title: t("onboard.info.reverse.menu") },
 			{ id: 3, title: t("onboard.info.safetyBelt.menu") },
 			{ id: 4, title: t("onboard.info.signal.menu") }
+		] : [
+			{ id: 2, title: t("onboard.info.reverse.menu") }
 		]);
 		const menuVisible = ref(false);
 		const menuSelected = ref({} as IMenuItem);

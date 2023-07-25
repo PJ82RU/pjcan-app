@@ -102,7 +102,7 @@ export default {
 						carSupport.value = "Mazda 3 BK";
 						break;
 					case 2:
-						carSupport.value = "Mazda CX7";
+						carSupport.value = "Mazda CX-7";
 						break;
 					default:
 						carSupport.value = "Mazda";

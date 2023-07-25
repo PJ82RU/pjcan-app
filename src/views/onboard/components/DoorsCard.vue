@@ -90,6 +90,12 @@ import canbus from "@/api/canbus";
 export default {
 	name: "DoorsCard",
 	components: { Card, SwitchCardItem, ViewSettingDialog },
+	props: {
+		carModel: {
+			type: Number,
+			default: 0
+		}
+	},
 	setup()
 	{
 		const { t } = useI18n();
