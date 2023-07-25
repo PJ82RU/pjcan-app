@@ -91,9 +91,9 @@ export default {
 					canbus.startFetchValue(API_SCANNER_VALUE_EXEC, scannerValue);
 					canbus.addListener(API_SCANNER_VALUE_EVENT, onReceiveValue);
 					// запускаем диалог
+					store.commit("app/clearMessages");
 					steps();
 				}
-				store.commit("app/clearMessages");
 			}
 			else
 			{

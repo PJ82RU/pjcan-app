@@ -1,6 +1,9 @@
 import store from "@/store";
 import { IMessage } from "@/models/interfaces/message/IMessage";
 import { IOnboardCard } from "@/models/interfaces/IOnboardCard";
+import { createDebounce } from "@/utils/debounce";
+
+const debounce = createDebounce();
 
 /**
  * Записать новое сообщение
@@ -18,7 +21,7 @@ export const setVisibleMessage = (state: any, value: boolean) =>
 	state.visibleMessage = value;
 	if (!value)
 	{
-		setTimeout(() => store.commit("app/freeMessage"), 400);
+		debounce(() => store.commit("app/freeMessage"), 400);
 	}
 };
 
@@ -38,7 +41,11 @@ export const freeMessage = (state: any) =>
  * Очистить очередь сообщений
  * @param state
  */
-export const clearMessages = (state: any) => (state.messages = []);
+export const clearMessages = (state: any) =>
+{
+	debounce(() => {}, 0);
+	state.messages = [];
+};
 
 /**
  * Изменить список карточек бортового компьютера

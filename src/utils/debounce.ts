@@ -5,7 +5,7 @@ const createDebounce = () =>
 	return (fn: () => void, delay: number): void =>
 	{
 		clearTimeout(timeout);
-		timeout = setTimeout(() => fn(), delay || 500);
+		if (delay > 0) timeout = setTimeout(() => fn(), delay);
 	};
 };
 

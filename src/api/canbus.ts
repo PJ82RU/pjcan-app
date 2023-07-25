@@ -414,7 +414,7 @@ export class Canbus extends EventEmitter
 	stopFetchValue()
 	{
 		this.debounceFetchValue = undefined;
-		this.debounce(() => {}, 1);
+		this.debounce(() => {}, 0);
 	}
 
 	/**
