@@ -23,6 +23,7 @@ export class VariableConfig extends BaseModel implements IVariableConfigs
 	static update(version?: IVersion): void
 	{
 		EngineConfig.update(version);
+		VolumeConfig.update(version);
 
 		VariableConfig.struct = {
 			bose: BluetoothStruct.struct(BoseConfig.struct),

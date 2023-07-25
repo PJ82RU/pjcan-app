@@ -18,7 +18,7 @@
 						v-model="volume"
 						:title="$t('onboard.volume.level.title')"
 						:description="$t('onboard.volume.level.description')"
-						:max="max"
+						:max="63"
 						:nodata="!isLoadedVolumeConfig"
 						:disabled="!isLoadedVolumeView || !enabled[0]"
                         @change="onApplyVolumeConfig"
@@ -269,7 +269,6 @@ export default {
 
 		const mute = ref(false);
 		const volume = ref(0);
-		const max = ref(0);
 
 		let disabledVolumeConfig = false;
 		const debounceVolumeConfig = createDebounce();
@@ -280,9 +279,8 @@ export default {
 			isLoadedVolumeConfig.value = res.isData;
 			if (res.isData)
 			{
-				mute.value = res.mute;
-				volume.value = res.volume;
-				max.value = res.max;
+				mute.value = res.muteBose;
+				volume.value = res.volumeBose;
 
 				disabledVolumeConfig = false;
 			}
@@ -300,8 +298,8 @@ export default {
 				disabledVolumeConfig = true;
 				debounceVolumeConfig(() => (disabledVolumeConfig = false), 1000);
 
-				canbus.configs.variable.volume.mute = mute.value;
-				canbus.configs.variable.volume.volume = volume.value;
+				canbus.configs.variable.volume.muteBose = mute.value;
+				canbus.configs.variable.volume.volumeBose = volume.value;
 				canbus.queryConfig(API_VARIABLE_VOLUME_CONFIG_EXEC);
 			}
 		};
@@ -372,7 +370,6 @@ export default {
 			centerPointList,
 			mute,
 			volume,
-			max,
 			menu,
 			menuVisible,
 			menuSelected,
