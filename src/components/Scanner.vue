@@ -133,6 +133,13 @@ export default {
 				width: "800px"
 			} as IMessage;
 
+			scannerBuffer.push({
+				datetime: message.title,
+				time: "",
+				hexId: "",
+				hexData: ""
+			} as IScanCanRow);
+
 			if (index < 4)
 			{
 				message.btns?.push({
@@ -174,16 +181,26 @@ export default {
 			if (res.isData && res.count > 0)
 			{
 				scannerBuffer.push(
-					...res.frames.slice(0, res.count).map(
-						(x: IScannerFrame) =>
-							({
-								datetime: moment().format("YYYY.MM.DD HH:mm:ss"),
-								time: moment(Math.trunc(Number(x.timestamp / BigInt(1000)))).format("HH:mm:ss"),
-								timestamp: Number(x.timestamp),
-								hexId: "0x" + toHex(x.id),
-								hexData: "0x" + x.data.map((x) => toHex(x)).join(":")
-							} as IScanCanRow)
-					)
+					...res.frames.slice(0, res.count).map((x: IScannerFrame) =>
+					{
+						const mm = moment.duration(Number(x.timestamp), "milliseconds");
+						const mm_time = {
+							hours: mm.hours(),
+							minutes: mm.minutes(),
+							seconds: mm.seconds(),
+							milliseconds: mm.milliseconds()
+						};
+						return {
+							datetime: moment().format("YYYY.MM.DD HH:mm:ss"),
+							time:
+								mm_time.hours + ":" +
+								(mm_time.minutes < 10 ? "0" : "") + mm.minutes() + ":" +
+								(mm_time.seconds < 10 ? "0" : "") + mm.seconds() + "." +
+								(mm_time.milliseconds < 10 ? "00" : mm_time.milliseconds < 100 ? "0" : "") + mm.milliseconds(),
+							hexId: "0x" + toHex(x.id),
+							hexData: "0x" + x.data.map((x) => toHex(x)).join(":")
+						} as IScanCanRow;
+					})
 				);
 				sendScannerBuffer();
 			}
@@ -202,7 +219,7 @@ export default {
 
 			scanUploading = true;
 			leftUploading.value = scannerBuffer.length;
-			setScanCan({ mac: efuseMac, rows: scannerBuffer.splice(0, 32) })
+			setScanCan({ mac: efuseMac, rows: scannerBuffer.splice(0, 30) })
 				.then((res: any) =>
 				{
 					if (res?.success && !scanClose) setTimeout(() => sendScannerBuffer(), 100);
