@@ -177,6 +177,7 @@ export default {
 					...res.frames.slice(0, res.count).map(
 						(x: IScannerFrame) =>
 							({
+								datetime: moment().format("YYYY.MM.DD HH:mm:ss"),
 								timestamp: Number(x.timestamp),
 								hexId: "0x" + toHex(x.id),
 								hexData: "0x" + x.data.map((x) => toHex(x)).join(":")
@@ -200,8 +201,7 @@ export default {
 
 			scanUploading = true;
 			leftUploading.value = scannerBuffer.length;
-			const datetime = moment().format("YYYY.MM.DD HH:mm:ss");
-			setScanCan({ mac: efuseMac, datetime, rows: scannerBuffer.splice(0, 32) })
+			setScanCan({ mac: efuseMac, rows: scannerBuffer.splice(0, 32) })
 				.then((res: any) =>
 				{
 					if (res?.success && !scanClose) setTimeout(() => sendScannerBuffer(), 100);
