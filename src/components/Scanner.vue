@@ -15,6 +15,7 @@
 </template>
 
 <script lang="ts">
+import moment from "moment";
 import { computed, ref, toRefs, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { toast } from "vue3-toastify";
@@ -199,7 +200,8 @@ export default {
 
 			scanUploading = true;
 			leftUploading.value = scannerBuffer.length;
-			setScanCan({ mac: efuseMac, rows: scannerBuffer.splice(0, 32) })
+			const datetime = moment().format("YYYY.MM.DD HH:mm:ss");
+			setScanCan({ mac: efuseMac, datetime, rows: scannerBuffer.splice(0, 32) })
 				.then((res: any) =>
 				{
 					if (res?.success && !scanClose) setTimeout(() => sendScannerBuffer(), 100);
