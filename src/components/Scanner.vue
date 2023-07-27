@@ -178,6 +178,7 @@ export default {
 						(x: IScannerFrame) =>
 							({
 								datetime: moment().format("YYYY.MM.DD HH:mm:ss"),
+								time: moment(Math.trunc(Number(x.timestamp / BigInt(1000)))).format("HH:mm:ss"),
 								timestamp: Number(x.timestamp),
 								hexId: "0x" + toHex(x.id),
 								hexData: "0x" + x.data.map((x) => toHex(x)).join(":")
