@@ -44,7 +44,7 @@ import DeviceInfoDialog from "@/components/dialogs/DeviceInfoDialog.vue";
 
 import { ILooseObject } from "@/models/interfaces/ILooseObject";
 import { API_CONFIGS_EVENT, IConfigs } from "@/models/pjcan/configs";
-import { API_CAR_CONFIG_EVENT, ICarConfig } from "@/models/pjcan/car";
+import { API_CAR_CONFIG_EVENT, ECarModel, ICarConfig } from "@/models/pjcan/car";
 
 import canbus from "@/api/canbus";
 
@@ -98,10 +98,10 @@ export default {
 			{
 				switch (res.carModel)
 				{
-					case 1:
+					case ECarModel.CAR_MODEL_MAZDA3:
 						carSupport.value = "Mazda 3 BK";
 						break;
-					case 2:
+					case ECarModel.CAR_MODEL_MAZDA_CX7:
 						carSupport.value = "Mazda CX-7";
 						break;
 					default:

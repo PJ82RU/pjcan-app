@@ -22,7 +22,7 @@
 						:disabled="!isLoadedSensorView"
 					/>
 				</v-col>
-				<v-col v-if="carModel === 1" cols="12" class="pt-0 pb-0">
+				<v-col v-if="carModel === ECarModel.CAR_MODEL_MAZDA3" cols="12" class="pt-0 pb-0">
 					<input-card-item
 						:value="temperature"
 						:title="$t('onboard.info.temperature.title')"
@@ -32,7 +32,7 @@
 						:disabled="!isLoadedTemperatureView"
 					/>
 				</v-col>
-				<v-col v-if="carModel === 1" cols="12" class="pt-0 pb-0">
+				<v-col v-if="carModel === ECarModel.CAR_MODEL_MAZDA3" cols="12" class="pt-0 pb-0">
 					<switch-card-item
 						:model-value="handbrake"
 						:title="$t('onboard.info.handbrake.title')"
@@ -42,7 +42,7 @@
 						:disabled="!isLoadedSensorView"
 					/>
 				</v-col>
-				<v-col cols="12" class="pt-0 pb-0">
+				<v-col v-if="carModel === ECarModel.CAR_MODEL_MAZDA3" cols="12" class="pt-0 pb-0">
 					<switch-card-item
 						:model-value="reverse"
 						:title="$t('onboard.info.reverse.title')"
@@ -52,7 +52,7 @@
 						:disabled="!isLoadedSensorView"
 					/>
 				</v-col>
-				<v-col v-if="carModel === 1" cols="12" class="pt-0 pb-0">
+				<v-col v-if="carModel === ECarModel.CAR_MODEL_MAZDA3" cols="12" class="pt-0 pb-0">
 					<icon-card-item
 						:model-value="[seatbeltPassenger, seatbeltDriver]"
 						:title="$t('onboard.info.safetyBelt.title')"
@@ -64,7 +64,7 @@
 						:disabled="!isLoadedSensorView"
 					/>
 				</v-col>
-				<v-col v-if="carModel === 1" cols="12" class="pt-0 pb-0">
+				<v-col v-if="carModel === ECarModel.CAR_MODEL_MAZDA3" cols="12" class="pt-0 pb-0">
 					<icon-card-item
 						:model-value="[signalRight, signalLeft]"
 						:title="$t('onboard.info.signal.title')"
@@ -120,9 +120,16 @@ import { IViewConfig } from "@/models/pjcan/view";
 import { API_DEVICE_EVENT, IDeviceValue } from "@/models/pjcan/device";
 
 import canbus from "@/api/canbus";
+import { ECarModel } from "@/models/pjcan/car";
 
 export default {
 	name: "InfoCard",
+	computed: {
+		ECarModel()
+		{
+			return ECarModel;
+		}
+	},
 	components: { Card, InputCardItem, SwitchCardItem, IconCardItem, ViewSettingDialog },
 	props: {
 		carModel: {
@@ -241,15 +248,13 @@ export default {
 
 		// МЕНЮ ОТОБРАЖЕНИЯ
 
-		const menu = computed((): IMenuItem[] => carModel.value === 1 ? [
+		const menu = computed((): IMenuItem[] => carModel.value === ECarModel.CAR_MODEL_MAZDA3 ? [
 			{ id: 0, title: t("onboard.info.temperature.menu") },
 			{ id: 1, title: t("onboard.info.handbrake.menu") },
 			{ id: 2, title: t("onboard.info.reverse.menu") },
 			{ id: 3, title: t("onboard.info.safetyBelt.menu") },
 			{ id: 4, title: t("onboard.info.signal.menu") }
-		] : [
-			{ id: 2, title: t("onboard.info.reverse.menu") }
-		]);
+		] : []);
 		const menuVisible = ref(false);
 		const menuSelected = ref({} as IMenuItem);
 		const menuViewConfig = ref({} as IViewConfig);
