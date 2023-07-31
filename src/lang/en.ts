@@ -218,7 +218,7 @@ export default {
 			},
 			throttle: {
 				title: "Throttle position",
-				description: "That's how they put it, and it lies",
+				description: "Relative throttle position",
 				menu: "LCD: Throttle position"
 			},
 			coolant: {
