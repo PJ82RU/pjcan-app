@@ -43,13 +43,20 @@ export default {
 		/** Выкл. */
 		disabled: Boolean
 	},
-	emits: ["update:modelValue"],
+	emits: ["update:modelValue", "change"],
 	setup(props: any, { emit }: { emit: any })
 	{
-		const { modelValue } = toRefs(props);
+		const { modelValue, disabled } = toRefs(props);
 		const modelSwitch = computed({
 			get: () => modelValue.value,
-			set: (val) => emit("update:modelValue", val)
+			set: (val: boolean) =>
+			{
+				if (!disabled.value)
+				{
+					emit("update:modelValue", val);
+					emit("change", val);
+				}
+			}
 		});
 
 		return {

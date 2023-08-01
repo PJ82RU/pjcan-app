@@ -1,6 +1,7 @@
 import { BluetoothStruct } from "@/components/bluetooth";
 import { BaseModel } from "../base";
 import { ICarConfig } from "./ICarConfig";
+import { ECarModel } from "./ECarModel";
 
 export const API_CAR_CONFIG_EXEC = 50;
 export const API_CAR_CONFIG_EVENT = "CarConfig";
@@ -17,7 +18,7 @@ export class CarConfig extends BaseModel implements ICarConfig
 	static size: number = 48;
 
 	lcd = false;
-	carModel = 0;
+	carModel = ECarModel.CAR_MODEL_NONE;
 	logo = "";
 	hello = "";
 

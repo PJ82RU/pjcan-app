@@ -18,7 +18,7 @@
 			:name="item.name"
 			:colors="item.colors"
 			:size="size"
-			@click="modelSwitch[index] = !modelSwitch[index]"
+			@click="onChange(index)"
 		/>
 	</div>
 </template>
@@ -62,20 +62,30 @@ export default {
 		/** Выкл. */
 		disabled: Boolean
 	},
-	emits: ["update:modelValue"],
+	emits: ["update:modelValue", "change"],
 	setup(props: any, { emit }: { emit: any })
 	{
 		const { modelValue, iconName, colorsTrue, colorsFalse, nodata, disabled } = toRefs(props);
-		const modelSwitch = computed({
-			get: () => modelValue.value,
-			set: (val) => emit("update:modelValue", val)
-		});
+
+		/**
+         * Изменение состояния
+         * @param {number} index
+         */
+		const onChange = (index: number): void =>
+		{
+			if (!disabled.value)
+			{
+				modelValue.value[index] = !modelValue.value[index];
+				emit("update:modelValue", modelValue.value);
+				emit("change", modelValue.value);
+			}
+		};
 
 		/** Список параметров иконок */
 		const iconList = computed((): any[] =>
 		{
 			const result: any[] = [];
-			modelSwitch.value?.forEach((x: boolean, i: number) =>
+			modelValue.value?.forEach((x: boolean, i: number) =>
 			{
 				result.push({
 					name: iconName.value[i],
@@ -86,8 +96,8 @@ export default {
 		});
 
 		return {
-			modelSwitch,
-			iconList
+			iconList,
+			onChange
 		};
 	}
 };

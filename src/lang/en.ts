@@ -218,7 +218,7 @@ export default {
 			},
 			throttle: {
 				title: "Throttle position",
-				description: "That's how they put it, and it lies",
+				description: "Relative throttle position",
 				menu: "LCD: Throttle position"
 			},
 			coolant: {
@@ -368,7 +368,45 @@ export default {
 		},
 
 		bose: {
-			title: "Bose"
+			title: "Bose",
+			menu: "LCD: Bose",
+
+			enabled: {
+				title: "Enabling Bose",
+				description: "Turning on/off the Bose sound amplifier"
+			},
+			audioPLT: {
+				title: "Audio PLT",
+				description: "It is a noise suppression system that continuously adjusts the sound to compensate for background noise and vehicle speed"
+			},
+			radioFM: {
+				title: "Radio FM",
+				description: "Turning on/off the FM radio"
+			},
+			wow: {
+				title: "Wow",
+				description: "Sound signal when changing parameters"
+			},
+			balance: {
+				title: "Balance",
+				description: "Shifting the sound balance to the right or left"
+			},
+			bass: {
+				title: "Bass",
+				description: "Amplification of low frequencies"
+			},
+			fade: {
+				title: "Fade",
+				description: "Shifting the sound balance forward or backward"
+			},
+			treble: {
+				title: "Treble",
+				description: "Amplification of high frequencies"
+			},
+			centerPoint: {
+				title: "CenterPoint",
+				description: "CenterPoint technology converts stereo signals into multi-channel audio and simultaneously creates a wider/surround sound area"
+			}
 		}
 	},
 

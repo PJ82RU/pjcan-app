@@ -234,7 +234,7 @@ export default {
 			},
 			throttle: {
 				title: "Положение дрос. заслонки",
-				description: "Вот как ее положили, так и лежит",
+				description: "Относительное положение дроссельной заслонки",
 				menu: "LCD: Положение дроссельной заслонки"
 			},
 			coolant: {
@@ -345,8 +345,8 @@ export default {
 			menu: "LCD: Звук",
 
 			mute: {
-				title: "Включить звук",
-				description: "Временное включение/выключение звука без изменения текущего уровня"
+				title: "Выключить звук",
+				description: "Временное выключение звука без изменения текущего уровня"
 			},
 			level: {
 				title: "Уровень звука",
@@ -385,7 +385,45 @@ export default {
 		},
 
 		bose: {
-			title: "Bose"
+			title: "Bose",
+			menu: "LCD: Bose",
+
+			enabled: {
+				title: "Включение Bose",
+				description: "Включение/выключение усилителя звука Bose"
+			},
+			audioPLT: {
+				title: "Audio PLT",
+				description: "Представляет собой систему подавления шумов, которая непрерывно регулирует звучание для компенсации фонового шума и скорости автомобиля"
+			},
+			radioFM: {
+				title: "Radio FM",
+				description: "Включение/выключение радио FM"
+			},
+			wow: {
+				title: "Wow",
+				description: "Звуковой сигнал при изменении параметров"
+			},
+			balance: {
+				title: "Balance",
+				description: "Смещение звукового баланса вправо или влево"
+			},
+			bass: {
+				title: "Bass",
+				description: "Усиление низких частот"
+			},
+			fade: {
+				title: "Fade",
+				description: "Смещение звукового баланса вперед или назад"
+			},
+			treble: {
+				title: "Treble",
+				description: "Усиление высоких частот"
+			},
+			centerPoint: {
+				title: "CenterPoint",
+				description: "Технология CenterPoint преобразует стерео-сигналы в многоканальное аудио и одновременно создает более широкую/объемную звуковую область"
+			}
 		}
 	},
 

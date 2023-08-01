@@ -1,7 +1,7 @@
 <template>
 	<flicking ref="flicking" class="onboard" :options="{ bound: true, align: 'prev' }">
 		<div v-for="item in cardList" :key="item.name" class="mr-4" :class="`flicking-${display}`">
-			<component :is="`${item.name}-card`" />
+			<component :is="`${item.name}-card`" :car-model="carModel" />
 		</div>
 	</flicking>
 </template>
@@ -17,8 +17,8 @@ import EngineCard from "./components/EngineCard.vue";
 import FuelCard from "./components/FuelCard.vue";
 import MovementCard from "./components/MovementCard.vue";
 import DoorsCard from "./components/DoorsCard.vue";
-import VolumeCard from "./components/VolumeCard.vue";
 import ClimateCard from "./components/ClimateCard.vue";
+import BoseCard from "./components/BoseCard.vue";
 
 import { IOnboardCard } from "@/models/interfaces/IOnboardCard";
 import { API_CAR_CONFIG_EVENT, ICarConfig } from "@/models/pjcan/car";
@@ -27,14 +27,23 @@ import canbus from "@/api/canbus";
 
 export default {
 	name: "onboard",
-	components: { Flicking, InfoCard, EngineCard, FuelCard, MovementCard, DoorsCard, VolumeCard, ClimateCard },
+	components: {
+		Flicking,
+		InfoCard,
+		EngineCard,
+		FuelCard,
+		MovementCard,
+		DoorsCard,
+		ClimateCard,
+		BoseCard
+	},
 	setup()
 	{
 		const { name: display } = useDisplay();
 		const flicking = ref(null);
 		provide("flicking", flicking);
 
-		const carModel = ref(0);
+		const carModel = ref(canbus.configs.car.carModel);
 		const cardList = computed(() =>
 		{
 			return store.getters["app/onboardCardList"]?.filter(
@@ -60,6 +69,7 @@ export default {
 
 		return {
 			flicking,
+			carModel,
 			cardList,
 			display
 		};

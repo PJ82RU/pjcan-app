@@ -1,21 +1,12 @@
-let debounceTimer: number | undefined;
-
-/**
- * Установить таймер
- * @param {Function} handler Функция обратного вызова
- * @param {number} timeout Таймаут, мс
- */
-const debounce = (handler: Function, timeout: number): void =>
+/** Создать debounce */
+const createDebounce = () =>
 {
-	clearTimeout(debounceTimer);
-	debounceTimer = setTimeout(handler, timeout);
+	let timeout: string | number | NodeJS.Timeout | undefined;
+	return (fn: () => void, delay: number): void =>
+	{
+		clearTimeout(timeout);
+		if (delay > 0) timeout = setTimeout(() => fn(), delay);
+	};
 };
 
-/** Остановить таймер */
-const clearDebounce = (): void =>
-{
-	clearTimeout(debounceTimer);
-	debounceTimer = undefined;
-};
-
-export { debounce, clearDebounce };
+export { createDebounce };

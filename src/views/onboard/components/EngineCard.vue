@@ -39,7 +39,7 @@
 						:disabled="!isLoadedView"
 					/>
 				</v-col>
-				<v-col cols="12" class="pt-0 pb-0">
+				<v-col v-if="carModel === ECarModel.CAR_MODEL_MAZDA3" cols="12" class="pt-0 pb-0">
 					<progress-card-item
 						:value="load"
 						:title="$t('onboard.engine.load.title')"
@@ -104,12 +104,25 @@ import {
 	IEngineValue,
 	IEngineView
 } from "@/models/pjcan/variables/engine";
+import { ECarModel } from "@/models/pjcan/car";
 
 import canbus from "@/api/canbus";
 
 export default {
 	name: "EngineCard",
+	computed: {
+		ECarModel()
+		{
+			return ECarModel;
+		}
+	},
 	components: { Card, InputCardItem, IconCardItem, ProgressCardItem, ViewSettingDialog, EngineConfigDialog },
+	props: {
+		carModel: {
+			type: Number,
+			default: 0
+		}
+	},
 	setup()
 	{
 		const { t } = useI18n();

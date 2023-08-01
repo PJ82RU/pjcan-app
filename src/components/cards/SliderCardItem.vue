@@ -1,20 +1,28 @@
 <template>
 	<div class="slider-card-item">
-		<div class="text-h4">
+		<div class="text-h4" :class="{ 'slider-card-item__disabled': disabled }">
 			{{ title }}
 		</div>
 		<v-slider
 			v-model="modelSlider"
 			:min="min"
 			:max="max"
-			:prepend-icon="prependIconMdi"
-			:append-icon="appendIconMdi"
+			:prepend-icon="!prependIcon ? prependIconMdi : undefined"
+			:append-icon="!appendIcon ? appendIconMdi : undefined"
 			:color="color()"
 			:step="1"
+			:disabled="disabled"
 			hide-details
 			@update:focused="onFocusedUpdate"
-		/>
-		<div class="mt-1 slider-card-item__description">
+		>
+			<template #prepend v-if="prependIcon">
+				<icon-custom :name="prependIcon" :size="sizeIcon" :color="colorIcon" />
+			</template>
+			<template #append v-if="appendIcon">
+				<icon-custom :name="appendIcon" :size="sizeIcon" :color="colorIcon" />
+			</template>
+		</v-slider>
+		<div class="mt-1 slider-card-item__description" :class="{ 'slider-card-item__disabled': disabled }">
 			{{ description }}
 		</div>
 	</div>
@@ -22,9 +30,11 @@
 
 <script lang="ts">
 import { computed, inject, toRefs } from "vue";
+import IconCustom from "@/components/common/icon-custom/IconCustom.vue";
 
 export default {
 	name: "SliderCardItem",
+	components: { IconCustom },
 	props: {
 		/** Значение slider */
 		modelValue: Number,
@@ -52,6 +62,20 @@ export default {
 			type: String,
 			default: "mdi-volume-plus"
 		},
+		/** Имя иконки в начале */
+		prependIcon: String,
+		/** Имя иконки в конце */
+		appendIcon: String,
+		/** Размер иконки */
+		sizeIcon: {
+			type: [String, Number],
+			default: 24
+		},
+		/** Цвет иконки */
+		colorIcon: {
+			type: String,
+			default: "#939597"
+		},
 		/** Точки */
 		points: {
 			type: Array as () => number[],
@@ -61,17 +85,26 @@ export default {
 		pointColors: {
 			type: Array as () => string[],
 			default: () => ["primary", "success", "warning", "error"]
-		}
+		},
+		/** Выкл. */
+		disabled: Boolean
 	},
-	emits: ["update:modelValue"],
+	emits: ["update:modelValue", "change"],
 	setup(props: any, { emit }: { emit: any })
 	{
-		const { modelValue, points, pointColors } = toRefs(props);
+		const { modelValue, points, pointColors, disabled } = toRefs(props);
 		const flicking = inject("flicking") as any;
 
 		const modelSlider = computed({
 			get: (): number => modelValue.value,
-			set: (val: number) => emit("update:modelValue", val)
+			set: (val: number) =>
+			{
+				if (!disabled.value)
+				{
+					emit("update:modelValue", val);
+					emit("change", val);
+				}
+			}
 		});
 
 		/**
@@ -104,10 +137,13 @@ export default {
 <style lang="scss" scoped>
 .slider-card-item {
 	&__description {
+		font-size: 0.875rem;
+		line-height: 0.875rem;
 		font-weight: 300;
-		font-size: 0.75rem;
-		line-height: 0.75rem;
 		opacity: var(--v-medium-emphasis-opacity);
+	}
+	&__disabled {
+		opacity: 0.35;
 	}
 }
 </style>

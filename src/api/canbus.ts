@@ -3,8 +3,8 @@ import { toast } from "vue3-toastify";
 import { t } from "@/lang";
 import { getFirmware, getFirmwareVersion } from "@/api/firmware";
 import { getSerial } from "@/api/hash";
+import { createDebounce } from "@/utils/debounce";
 
-import { clearDebounce, debounce } from "@/utils/debounce";
 import {
 	BLUETOOTH_EVENT_CONNECTED,
 	BLUETOOTH_EVENT_RECEIVE,
@@ -107,8 +107,6 @@ import {
 import {
 	API_VARIABLE_VOLUME_CONFIG_EXEC,
 	API_VARIABLE_VOLUME_CONFIG_EVENT,
-	API_VARIABLE_VOLUME_EXEC,
-	API_VARIABLE_VOLUME_EVENT,
 	API_VARIABLE_VOLUME_VIEW_EXEC,
 	API_VARIABLE_VOLUME_VIEW_EVENT
 } from "@/models/pjcan/variables/volume";
@@ -169,6 +167,7 @@ export class Canbus extends EventEmitter
 	private queue: Promise<void>[] = [];
 	/** Таймер */
 	private debounceFetchValue: number | undefined = undefined;
+	private debounce = createDebounce();
 
 	/** Статус циклического запроса значений */
 	get startedFetchValue(): number | undefined
@@ -381,9 +380,6 @@ export class Canbus extends EventEmitter
 			case API_VARIABLE_TEMPERATURE_EXEC:
 				return this.query(this.values.variable.temperature);
 
-			case API_VARIABLE_VOLUME_EXEC:
-				return this.query(this.values.variable.volume);
-
 			case API_VARIABLE_TEST_EXEC:
 				return !!value && this.query(value);
 
@@ -404,7 +400,7 @@ export class Canbus extends EventEmitter
 	startFetchValue(type: number = 0, value: IBaseModel | undefined = undefined, timeout: number = 500)
 	{
 		this.debounceFetchValue = type;
-		debounce(async () =>
+		this.debounce(() =>
 		{
 			this.queryValue(type, value);
 			if (this.debounceFetchValue !== undefined)
@@ -418,7 +414,7 @@ export class Canbus extends EventEmitter
 	stopFetchValue()
 	{
 		this.debounceFetchValue = undefined;
-		clearDebounce();
+		this.debounce(() => {}, 0);
 	}
 
 	/**
@@ -466,7 +462,6 @@ export class Canbus extends EventEmitter
 		this.emit(API_VARIABLE_MOVEMENT_EVENT, value.movement);
 		this.emit(API_VARIABLE_SENSORS_EVENT, value.sensors);
 		this.emit(API_VARIABLE_TEMPERATURE_EVENT, value.temperature);
-		this.emit(API_VARIABLE_VOLUME_EVENT, value.volume);
 	}
 
 	/**
@@ -672,10 +667,6 @@ export class Canbus extends EventEmitter
 				this.emit(API_VARIABLE_TEMPERATURE_VIEW_EVENT, this.views.variable.temperature);
 				break;
 
-			case API_VARIABLE_VOLUME_EXEC: // Значения уровня звука
-				this.values.variable.volume.set(data);
-				this.emit(API_VARIABLE_VOLUME_EVENT, this.values.variable.volume);
-				break;
 			case API_VARIABLE_VOLUME_CONFIG_EXEC: // Конфигурация уровня звука
 				this.configs.variable.volume.set(data);
 				this.emit(API_VARIABLE_VOLUME_CONFIG_EVENT, this.configs.variable.volume);
@@ -729,11 +720,11 @@ export class Canbus extends EventEmitter
 
 		if (this.update.end)
 		{
-			debounce(() => this.emit(API_UPDATE_EVENT_ERROR, t("update.notify.errorWaitUpdate")), 60000);
+			this.debounce(() => this.emit(API_UPDATE_EVENT_ERROR, t("update.notify.errorWaitUpdate")), 60000);
 		}
 		else
 		{
-			debounce(() => this.emit(API_UPDATE_EVENT_ERROR, t("update.notify.errorUpload")), 5000);
+			this.debounce(() => this.emit(API_UPDATE_EVENT_ERROR, t("update.notify.errorUpload")), 5000);
 		}
 	}
 
