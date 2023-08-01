@@ -2681,7 +2681,7 @@ webpackContext.id = 6700;
 
 /***/ }),
 
-/***/ 4077:
+/***/ 4225:
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2738,31 +2738,16 @@ const getSerial = sha => {
     method: "GET"
   });
 };
-;// CONCATENATED MODULE: ./src/utils/debounce.ts
-let debounceTimer;
-/**
- * Установить таймер
- * @param {Function} handler Функция обратного вызова
- * @param {number} timeout Таймаут, мс
- */
-const debounce = (handler, timeout) => {
-  clearTimeout(debounceTimer);
-  debounceTimer = setTimeout(handler, timeout);
-};
-/** Остановить таймер */
-const clearDebounce = () => {
-  clearTimeout(debounceTimer);
-  debounceTimer = undefined;
-};
-
+// EXTERNAL MODULE: ./src/utils/debounce.ts
+var debounce = __webpack_require__(9545);
 // EXTERNAL MODULE: ./src/components/bluetooth/index.ts + 4 modules
 var bluetooth = __webpack_require__(9014);
 // EXTERNAL MODULE: ./src/models/pjcan/configs/index.ts + 1 modules
 var configs = __webpack_require__(1303);
 // EXTERNAL MODULE: ./src/models/pjcan/base/BaseModel.ts
 var BaseModel = __webpack_require__(9036);
-// EXTERNAL MODULE: ./src/models/pjcan/car/index.ts + 2 modules
-var car = __webpack_require__(5178);
+// EXTERNAL MODULE: ./src/models/pjcan/car/index.ts + 3 modules
+var car = __webpack_require__(3053);
 // EXTERNAL MODULE: ./src/models/pjcan/view/index.ts + 2 modules
 var view = __webpack_require__(7374);
 // EXTERNAL MODULE: ./src/models/pjcan/variables/bose/index.ts + 3 modules
@@ -2981,18 +2966,32 @@ class VariablesValue extends BaseModel/* BaseModel */.g {
    */
   static update(version) {
     engine/* EngineValue.update */.E_.update(version);
-    VariablesValue.struct = {
-      climate: bluetooth/* BluetoothStruct.struct */.GD.struct(climate/* ClimateValue.struct */.JF.struct),
-      clock: bluetooth/* BluetoothStruct.struct */.GD.struct(ClockValue.struct),
-      doors: bluetooth/* BluetoothStruct.struct */.GD.struct(doors/* DoorsValue.struct */.Uv.struct),
-      engine: bluetooth/* BluetoothStruct.struct */.GD.struct(engine/* EngineValue.struct */.E_.struct),
-      fuel: bluetooth/* BluetoothStruct.struct */.GD.struct(fuel/* FuelValue.struct */.Kh.struct),
-      movement: bluetooth/* BluetoothStruct.struct */.GD.struct(movement/* MovementValue.struct */.bt.struct),
-      sensors: bluetooth/* BluetoothStruct.struct */.GD.struct(sensors/* SensorsValue.struct */.I8.struct),
-      temperature: bluetooth/* BluetoothStruct.struct */.GD.struct(temperature/* TemperatureValue.struct */.j3.struct),
-      volume: bluetooth/* BluetoothStruct.struct */.GD.struct(volume/* VolumeValue.struct */.RD.struct)
-    };
-    VariablesValue.size = climate/* ClimateValue.size */.JF.size + ClockValue.size + doors/* DoorsValue.size */.Uv.size + engine/* EngineValue.size */.E_.size + fuel/* FuelValue.size */.Kh.size + movement/* MovementValue.size */.bt.size + sensors/* SensorsValue.size */.I8.size + temperature/* TemperatureValue.size */.j3.size + volume/* VolumeValue.size */.RD.size;
+    if (!version || version.compareString("4.0.3") !== 1) {
+      VariablesValue.struct = {
+        climate: bluetooth/* BluetoothStruct.struct */.GD.struct(climate/* ClimateValue.struct */.JF.struct),
+        clock: bluetooth/* BluetoothStruct.struct */.GD.struct(ClockValue.struct),
+        doors: bluetooth/* BluetoothStruct.struct */.GD.struct(doors/* DoorsValue.struct */.Uv.struct),
+        engine: bluetooth/* BluetoothStruct.struct */.GD.struct(engine/* EngineValue.struct */.E_.struct),
+        fuel: bluetooth/* BluetoothStruct.struct */.GD.struct(fuel/* FuelValue.struct */.Kh.struct),
+        movement: bluetooth/* BluetoothStruct.struct */.GD.struct(movement/* MovementValue.struct */.bt.struct),
+        sensors: bluetooth/* BluetoothStruct.struct */.GD.struct(sensors/* SensorsValue.struct */.I8.struct),
+        temperature: bluetooth/* BluetoothStruct.struct */.GD.struct(temperature/* TemperatureValue.struct */.j3.struct)
+      };
+      VariablesValue.size = climate/* ClimateValue.size */.JF.size + ClockValue.size + doors/* DoorsValue.size */.Uv.size + engine/* EngineValue.size */.E_.size + fuel/* FuelValue.size */.Kh.size + movement/* MovementValue.size */.bt.size + sensors/* SensorsValue.size */.I8.size + temperature/* TemperatureValue.size */.j3.size;
+    } else {
+      VariablesValue.struct = {
+        climate: bluetooth/* BluetoothStruct.struct */.GD.struct(climate/* ClimateValue.struct */.JF.struct),
+        clock: bluetooth/* BluetoothStruct.struct */.GD.struct(ClockValue.struct),
+        doors: bluetooth/* BluetoothStruct.struct */.GD.struct(doors/* DoorsValue.struct */.Uv.struct),
+        engine: bluetooth/* BluetoothStruct.struct */.GD.struct(engine/* EngineValue.struct */.E_.struct),
+        fuel: bluetooth/* BluetoothStruct.struct */.GD.struct(fuel/* FuelValue.struct */.Kh.struct),
+        movement: bluetooth/* BluetoothStruct.struct */.GD.struct(movement/* MovementValue.struct */.bt.struct),
+        sensors: bluetooth/* BluetoothStruct.struct */.GD.struct(sensors/* SensorsValue.struct */.I8.struct),
+        temperature: bluetooth/* BluetoothStruct.struct */.GD.struct(temperature/* TemperatureValue.struct */.j3.struct),
+        volume: bluetooth/* BluetoothStruct.struct */.GD.struct(volume/* VolumeValue.struct */.RD.struct)
+      };
+      VariablesValue.size = climate/* ClimateValue.size */.JF.size + ClockValue.size + doors/* DoorsValue.size */.Uv.size + engine/* EngineValue.size */.E_.size + fuel/* FuelValue.size */.Kh.size + movement/* MovementValue.size */.bt.size + sensors/* SensorsValue.size */.I8.size + temperature/* TemperatureValue.size */.j3.size + volume/* VolumeValue.size */.RD.size;
+    }
   }
   constructor(data) {
     super();
@@ -3180,6 +3179,7 @@ class Canbus extends (eventemitter3_default()) {
     (0,defineProperty/* default */.Z)(this, "queue", []);
     /** Таймер */
     (0,defineProperty/* default */.Z)(this, "debounceFetchValue", undefined);
+    (0,defineProperty/* default */.Z)(this, "debounce", (0,debounce/* createDebounce */.c)());
     this.bluetooth.addListener(bluetooth/* BLUETOOTH_EVENT_CONNECTED */.Dx, ev => this.onConnected(ev));
     this.bluetooth.addListener(bluetooth/* BLUETOOTH_EVENT_RECEIVE */.j9, ev => this.onReceive(ev));
     this.addListener(version/* API_VERSION_EVENT */.MK, () => this.begin());
@@ -3321,8 +3321,6 @@ class Canbus extends (eventemitter3_default()) {
         return this.query(this.values.variable.sensors);
       case temperature/* API_VARIABLE_TEMPERATURE_EXEC */.Sg:
         return this.query(this.values.variable.temperature);
-      case volume/* API_VARIABLE_VOLUME_EXEC */.pf:
-        return this.query(this.values.variable.volume);
       case test/* API_VARIABLE_TEST_EXEC */.E:
         return !!value && this.query(value);
       case scanner/* API_SCANNER_VALUE_EXEC */.v3:
@@ -3339,7 +3337,7 @@ class Canbus extends (eventemitter3_default()) {
    */
   startFetchValue(type = 0, value = undefined, timeout = 500) {
     this.debounceFetchValue = type;
-    debounce(async () => {
+    this.debounce(() => {
       this.queryValue(type, value);
       if (this.debounceFetchValue !== undefined) {
         this.startFetchValue(type, value, timeout);
@@ -3349,7 +3347,7 @@ class Canbus extends (eventemitter3_default()) {
   /** Остановить циклический запрос значений */
   stopFetchValue() {
     this.debounceFetchValue = undefined;
-    clearDebounce();
+    this.debounce(() => {}, 0);
   }
   /**
    * Событие входящих значений конфигурации
@@ -3391,7 +3389,6 @@ class Canbus extends (eventemitter3_default()) {
     this.emit(movement/* API_VARIABLE_MOVEMENT_EVENT */.Ju, value.movement);
     this.emit(sensors/* API_VARIABLE_SENSORS_EVENT */.bs, value.sensors);
     this.emit(temperature/* API_VARIABLE_TEMPERATURE_EVENT */.Yk, value.temperature);
-    this.emit(volume/* API_VARIABLE_VOLUME_EVENT */.FN, value.volume);
   }
   /**
    * Входящие данные
@@ -3605,11 +3602,6 @@ class Canbus extends (eventemitter3_default()) {
         this.views.variable.temperature.set(data);
         this.emit(temperature/* API_VARIABLE_TEMPERATURE_VIEW_EVENT */.LN, this.views.variable.temperature);
         break;
-      case volume/* API_VARIABLE_VOLUME_EXEC */.pf:
-        // Значения уровня звука
-        this.values.variable.volume.set(data);
-        this.emit(volume/* API_VARIABLE_VOLUME_EVENT */.FN, this.values.variable.volume);
-        break;
       case volume/* API_VARIABLE_VOLUME_CONFIG_EXEC */.U0:
         // Конфигурация уровня звука
         this.configs.variable.volume.set(data);
@@ -3653,9 +3645,9 @@ class Canbus extends (eventemitter3_default()) {
       this.queryDisabled = false;
     }
     if (this.update.end) {
-      debounce(() => this.emit(update/* API_UPDATE_EVENT_ERROR */.rX, (0,lang.t)("update.notify.errorWaitUpdate")), 60000);
+      this.debounce(() => this.emit(update/* API_UPDATE_EVENT_ERROR */.rX, (0,lang.t)("update.notify.errorWaitUpdate")), 60000);
     } else {
-      debounce(() => this.emit(update/* API_UPDATE_EVENT_ERROR */.rX, (0,lang.t)("update.notify.errorUpload")), 5000);
+      this.debounce(() => this.emit(update/* API_UPDATE_EVENT_ERROR */.rX, (0,lang.t)("update.notify.errorUpload")), 5000);
     }
   }
   /** Обновление структур */
@@ -4649,7 +4641,7 @@ var vue_i18n_esm_bundler = __webpack_require__(5658);
       },
       throttle: {
         title: "Положение дрос. заслонки",
-        description: "Вот как ее положили, так и лежит",
+        description: "Относительное положение дроссельной заслонки",
         menu: "LCD: Положение дроссельной заслонки"
       },
       coolant: {
@@ -4752,8 +4744,8 @@ var vue_i18n_esm_bundler = __webpack_require__(5658);
       title: "Звук",
       menu: "LCD: Звук",
       mute: {
-        title: "Включить звук",
-        description: "Временное включение/выключение звука без изменения текущего уровня"
+        title: "Выключить звук",
+        description: "Временное выключение звука без изменения текущего уровня"
       },
       level: {
         title: "Уровень звука",
@@ -4789,7 +4781,44 @@ var vue_i18n_esm_bundler = __webpack_require__(5658);
       }
     },
     bose: {
-      title: "Bose"
+      title: "Bose",
+      menu: "LCD: Bose",
+      enabled: {
+        title: "Включение Bose",
+        description: "Включение/выключение усилителя звука Bose"
+      },
+      audioPLT: {
+        title: "Audio PLT",
+        description: "Представляет собой систему подавления шумов, которая непрерывно регулирует звучание для компенсации фонового шума и скорости автомобиля"
+      },
+      radioFM: {
+        title: "Radio FM",
+        description: "Включение/выключение радио FM"
+      },
+      wow: {
+        title: "Wow",
+        description: "Звуковой сигнал при изменении параметров"
+      },
+      balance: {
+        title: "Balance",
+        description: "Смещение звукового баланса вправо или влево"
+      },
+      bass: {
+        title: "Bass",
+        description: "Усиление низких частот"
+      },
+      fade: {
+        title: "Fade",
+        description: "Смещение звукового баланса вперед или назад"
+      },
+      treble: {
+        title: "Treble",
+        description: "Усиление высоких частот"
+      },
+      centerPoint: {
+        title: "CenterPoint",
+        description: "Технология CenterPoint преобразует стерео-сигналы в многоканальное аудио и одновременно создает более широкую/объемную звуковую область"
+      }
     }
   },
   buttons: {
@@ -5187,7 +5216,7 @@ var vue_i18n_esm_bundler = __webpack_require__(5658);
       },
       throttle: {
         title: "Throttle position",
-        description: "That's how they put it, and it lies",
+        description: "Relative throttle position",
         menu: "LCD: Throttle position"
       },
       coolant: {
@@ -5326,7 +5355,44 @@ var vue_i18n_esm_bundler = __webpack_require__(5658);
       }
     },
     bose: {
-      title: "Bose"
+      title: "Bose",
+      menu: "LCD: Bose",
+      enabled: {
+        title: "Enabling Bose",
+        description: "Turning on/off the Bose sound amplifier"
+      },
+      audioPLT: {
+        title: "Audio PLT",
+        description: "It is a noise suppression system that continuously adjusts the sound to compensate for background noise and vehicle speed"
+      },
+      radioFM: {
+        title: "Radio FM",
+        description: "Turning on/off the FM radio"
+      },
+      wow: {
+        title: "Wow",
+        description: "Sound signal when changing parameters"
+      },
+      balance: {
+        title: "Balance",
+        description: "Shifting the sound balance to the right or left"
+      },
+      bass: {
+        title: "Bass",
+        description: "Amplification of low frequencies"
+      },
+      fade: {
+        title: "Fade",
+        description: "Shifting the sound balance forward or backward"
+      },
+      treble: {
+        title: "Treble",
+        description: "Amplification of high frequencies"
+      },
+      centerPoint: {
+        title: "CenterPoint",
+        description: "CenterPoint technology converts stereo signals into multi-channel audio and simultaneously creates a wider/surround sound area"
+      }
     }
   },
   buttons: {
@@ -5567,7 +5633,7 @@ const t = i18n.global.t;
 
 /***/ }),
 
-/***/ 4638:
+/***/ 5119:
 /***/ (function(__unused_webpack_module, __unused_webpack___webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -10072,8 +10138,8 @@ function BluetoothBtnvue_type_template_id_7c336fc0_scoped_true_ts_true_render(_c
 var DialogTemplate = __webpack_require__(2196);
 // EXTERNAL MODULE: ./src/components/bluetooth/index.ts + 4 modules
 var bluetooth = __webpack_require__(9014);
-// EXTERNAL MODULE: ./src/api/canbus.ts + 13 modules
-var canbus = __webpack_require__(4077);
+// EXTERNAL MODULE: ./src/api/canbus.ts + 12 modules
+var canbus = __webpack_require__(4225);
 ;// CONCATENATED MODULE: ./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/BluetoothBtn.vue?vue&type=script&lang=ts
 
 
@@ -10395,9 +10461,9 @@ var VRow = __webpack_require__(6824);
 var VCol = __webpack_require__(8521);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/components/VTextField/VTextField.mjs
 var VTextField = __webpack_require__(165);
-;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/dialogs/AboutDialog.vue?vue&type=template&id=4a3032e0&ts=true
+;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/dialogs/AboutDialog.vue?vue&type=template&id=0b2e9ae8&ts=true
 
-function AboutDialogvue_type_template_id_4a3032e0_ts_true_render(_ctx, _cache, $props, $setup, $data, $options) {
+function AboutDialogvue_type_template_id_0b2e9ae8_ts_true_render(_ctx, _cache, $props, $setup, $data, $options) {
                                                                     
                                                       
                                                       
@@ -10735,12 +10801,12 @@ function DeviceResetDialogvue_type_template_id_a9e57686_ts_true_render(_ctx, _ca
 const DeviceResetDialog_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(DeviceResetDialogvue_type_script_lang_ts, [['render',DeviceResetDialogvue_type_template_id_a9e57686_ts_true_render]])
 
 /* harmony default export */ var DeviceResetDialog = (DeviceResetDialog_exports_);
-;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/Scanner.vue?vue&type=template&id=43cc2344&ts=true
+;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/Scanner.vue?vue&type=template&id=e7f766a4&ts=true
 
-const Scannervue_type_template_id_43cc2344_ts_true_hoisted_1 = {
+const Scannervue_type_template_id_e7f766a4_ts_true_hoisted_1 = {
   class: "mb-2"
 };
-function Scannervue_type_template_id_43cc2344_ts_true_render(_ctx, _cache, $props, $setup, $data, $options) {
+function Scannervue_type_template_id_e7f766a4_ts_true_render(_ctx, _cache, $props, $setup, $data, $options) {
                                                                               
   const _component_dialog_template = (0,runtime_core_esm_bundler/* resolveComponent */.up)("dialog-template");
   return (0,runtime_core_esm_bundler/* openBlock */.wg)(), (0,runtime_core_esm_bundler/* createBlock */.j4)(_component_dialog_template, {
@@ -10750,7 +10816,7 @@ function Scannervue_type_template_id_43cc2344_ts_true_render(_ctx, _cache, $prop
     title: _ctx.$t('scanner.upload.title'),
     text: ""
   }, {
-    body: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createElementVNode */._)("div", null, (0,shared_esm_bundler/* toDisplayString */.zw)(_ctx.$t("scanner.upload.text")), 1), (0,runtime_core_esm_bundler/* createElementVNode */._)("div", Scannervue_type_template_id_43cc2344_ts_true_hoisted_1, (0,shared_esm_bundler/* toDisplayString */.zw)(_ctx.$t("scanner.upload.leftToLoad", {
+    body: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createElementVNode */._)("div", null, (0,shared_esm_bundler/* toDisplayString */.zw)(_ctx.$t("scanner.upload.text")), 1), (0,runtime_core_esm_bundler/* createElementVNode */._)("div", Scannervue_type_template_id_e7f766a4_ts_true_hoisted_1, (0,shared_esm_bundler/* toDisplayString */.zw)(_ctx.$t("scanner.upload.leftToLoad", {
       n: $setup.leftUploading
     })), 1), (0,runtime_core_esm_bundler/* createVNode */.Wm)(VProgressLinear/* VProgressLinear */.K, {
       color: "primary",
@@ -10767,7 +10833,7 @@ function Scannervue_type_template_id_43cc2344_ts_true_render(_ctx, _cache, $prop
 
 
 
-;// CONCATENATED MODULE: ./src/components/Scanner.vue?vue&type=template&id=43cc2344&ts=true
+;// CONCATENATED MODULE: ./src/components/Scanner.vue?vue&type=template&id=e7f766a4&ts=true
 
 // EXTERNAL MODULE: ./src/models/pjcan/scanner/index.ts + 2 modules
 var scanner = __webpack_require__(577);
@@ -10776,7 +10842,7 @@ var request = __webpack_require__(1312);
 ;// CONCATENATED MODULE: ./src/api/google.ts
 
 const setScanCan = data => {
-  const id = "AKfycbzdZEVlgW2XW2me2f69Ua88UBdBZ6cP34MY7-37q5J6LiWScRx9wxSuXt6kKN0AGSmC2w";
+  const id = "AKfycbwGEW3y_jz8MwL4h7ffem_Bdrojoo-Wmd1tQ9Ot_Sg-8vt7jjjJNhyqgXHsjT323K4l5w";
   return (0,request/* default */.Z)({
     url: `https://script.google.com/macros/s/${id}/exec`,
     method: "POST",
@@ -10806,6 +10872,7 @@ const toMac = value => {
 };
 
 ;// CONCATENATED MODULE: ./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/Scanner.vue?vue&type=script&lang=ts
+
 
 
 
@@ -10865,9 +10932,9 @@ const toMac = value => {
           canbus["default"].startFetchValue(scanner/* API_SCANNER_VALUE_EXEC */.v3, scannerValue);
           canbus["default"].addListener(scanner/* API_SCANNER_VALUE_EVENT */.sn, onReceiveValue);
           // запускаем диалог
+          store/* default.commit */.Z.commit("app/clearMessages");
           steps();
         }
-        store/* default.commit */.Z.commit("app/clearMessages");
       } else {
         if (scannerValue) {
           // останавливаем циклический запрос значений сканирования
@@ -10898,6 +10965,12 @@ const toMac = value => {
         btns: [],
         width: "800px"
       };
+      scannerBuffer.push({
+        datetime: message.title,
+        time: "",
+        hexId: "",
+        hexData: ""
+      });
       if (index < 4) {
         message.btns?.push({
           title: t("scanner.btn.next"),
@@ -10928,11 +11001,21 @@ const toMac = value => {
     /** Входящие значения сканирования */
     const onReceiveValue = res => {
       if (res.isData && res.count > 0) {
-        scannerBuffer.push(...res.frames.slice(0, res.count).map(x => ({
-          timestamp: Number(x.timestamp),
-          hexId: "0x" + toHex(x.id),
-          hexData: "0x" + x.data.map(x => toHex(x)).join(":")
-        })));
+        scannerBuffer.push(...res.frames.slice(0, res.count).map(x => {
+          const mm = moment_default().duration(Number(x.timestamp), "milliseconds");
+          const mm_time = {
+            hours: mm.hours(),
+            minutes: mm.minutes(),
+            seconds: mm.seconds(),
+            milliseconds: mm.milliseconds()
+          };
+          return {
+            datetime: moment_default()().format("YYYY.MM.DD HH:mm:ss"),
+            time: mm_time.hours + ":" + (mm_time.minutes < 10 ? "0" : "") + mm.minutes() + ":" + (mm_time.seconds < 10 ? "0" : "") + mm.seconds() + "." + (mm_time.milliseconds < 10 ? "00" : mm_time.milliseconds < 100 ? "0" : "") + mm.milliseconds(),
+            hexId: "0x" + toHex(x.id),
+            hexData: "0x" + x.data.map(x => toHex(x)).join(":")
+          };
+        }));
         sendScannerBuffer();
       }
     };
@@ -10948,7 +11031,7 @@ const toMac = value => {
       leftUploading.value = scannerBuffer.length;
       setScanCan({
         mac: efuseMac,
-        rows: scannerBuffer.splice(0, 32)
+        rows: scannerBuffer.splice(0, 30)
       }).then(res => {
         if (res?.success && !scanClose) setTimeout(() => sendScannerBuffer(), 100);else if (res?.error) esm/* toast.error */.Am.error(res?.message);
       }).catch(() => esm/* toast.error */.Am.error(t("scanner.notify.errorSend"))).finally(() => {
@@ -10970,7 +11053,7 @@ const toMac = value => {
 
 
 ;
-const Scanner_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(Scannervue_type_script_lang_ts, [['render',Scannervue_type_template_id_43cc2344_ts_true_render]])
+const Scanner_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(Scannervue_type_script_lang_ts, [['render',Scannervue_type_template_id_e7f766a4_ts_true_render]])
 
 /* harmony default export */ var Scanner = (Scanner_exports_);
 // EXTERNAL MODULE: ./src/models/pjcan/device/index.ts + 3 modules
@@ -11104,8 +11187,8 @@ const DeviceInfoDialog_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(D
 /* harmony default export */ var DeviceInfoDialog = (DeviceInfoDialog_exports_);
 // EXTERNAL MODULE: ./src/models/pjcan/configs/index.ts + 1 modules
 var configs = __webpack_require__(1303);
-// EXTERNAL MODULE: ./src/models/pjcan/car/index.ts + 2 modules
-var car = __webpack_require__(5178);
+// EXTERNAL MODULE: ./src/models/pjcan/car/index.ts + 3 modules
+var car = __webpack_require__(3053);
 ;// CONCATENATED MODULE: ./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/dialogs/AboutDialog.vue?vue&type=script&lang=ts
 
 
@@ -11160,11 +11243,11 @@ const pkg = __webpack_require__(4147);
     const onReceiveCarConfig = res => {
       if (res.isData) {
         switch (res.carModel) {
-          case 1:
+          case car/* ECarModel.CAR_MODEL_MAZDA3 */.qZ.CAR_MODEL_MAZDA3:
             carSupport.value = "Mazda 3 BK";
             break;
-          case 2:
-            carSupport.value = "Mazda CX7";
+          case car/* ECarModel.CAR_MODEL_MAZDA_CX7 */.qZ.CAR_MODEL_MAZDA_CX7:
+            carSupport.value = "Mazda CX-7";
             break;
           default:
             carSupport.value = "Mazda";
@@ -11202,7 +11285,7 @@ const pkg = __webpack_require__(4147);
 
 
 ;
-const AboutDialog_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(AboutDialogvue_type_script_lang_ts, [['render',AboutDialogvue_type_template_id_4a3032e0_ts_true_render]])
+const AboutDialog_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(AboutDialogvue_type_script_lang_ts, [['render',AboutDialogvue_type_template_id_0b2e9ae8_ts_true_render]])
 
 /* harmony default export */ var AboutDialog = (AboutDialog_exports_);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/components/VBtnGroup/VBtnGroup.mjs + 1 modules
@@ -21244,7 +21327,7 @@ var TButtonPress;
 
 /***/ }),
 
-/***/ 5178:
+/***/ 3053:
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -21256,7 +21339,8 @@ __webpack_require__.d(__webpack_exports__, {
   "Or": function() { return /* reexport */ API_CAR_VIEW_EVENT; },
   "kn": function() { return /* reexport */ API_CAR_VIEW_EXEC; },
   "XK": function() { return /* reexport */ CarConfig; },
-  "bs": function() { return /* reexport */ CarView; }
+  "bs": function() { return /* reexport */ CarView; },
+  "qZ": function() { return /* reexport */ ECarModel; }
 });
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/defineProperty.js + 3 modules
@@ -21265,7 +21349,15 @@ var defineProperty = __webpack_require__(7327);
 var bluetooth = __webpack_require__(9014);
 // EXTERNAL MODULE: ./src/models/pjcan/base/BaseModel.ts
 var BaseModel = __webpack_require__(9036);
+;// CONCATENATED MODULE: ./src/models/pjcan/car/ECarModel.ts
+var ECarModel;
+(function (ECarModel) {
+  ECarModel[ECarModel["CAR_MODEL_NONE"] = 0] = "CAR_MODEL_NONE";
+  ECarModel[ECarModel["CAR_MODEL_MAZDA3"] = 1] = "CAR_MODEL_MAZDA3";
+  ECarModel[ECarModel["CAR_MODEL_MAZDA_CX7"] = 2] = "CAR_MODEL_MAZDA_CX7";
+})(ECarModel || (ECarModel = {}));
 ;// CONCATENATED MODULE: ./src/models/pjcan/car/CarConfig.ts
+
 
 
 
@@ -21276,7 +21368,7 @@ class CarConfig extends BaseModel/* BaseModel */.g {
   constructor(data) {
     super();
     (0,defineProperty/* default */.Z)(this, "lcd", false);
-    (0,defineProperty/* default */.Z)(this, "carModel", 0);
+    (0,defineProperty/* default */.Z)(this, "carModel", ECarModel.CAR_MODEL_NONE);
     (0,defineProperty/* default */.Z)(this, "logo", "");
     (0,defineProperty/* default */.Z)(this, "hello", "");
     if (data) this.set(data);
@@ -21339,6 +21431,7 @@ class CarView extends BaseModel/* BaseModel */.g {
 
 
 
+
 /***/ }),
 
 /***/ 1303:
@@ -21365,8 +21458,8 @@ var pjcan_version = __webpack_require__(6351);
 var device = __webpack_require__(9065);
 // EXTERNAL MODULE: ./src/models/pjcan/button/index.ts + 5 modules
 var pjcan_button = __webpack_require__(6841);
-// EXTERNAL MODULE: ./src/models/pjcan/car/index.ts + 2 modules
-var car = __webpack_require__(5178);
+// EXTERNAL MODULE: ./src/models/pjcan/car/index.ts + 3 modules
+var car = __webpack_require__(3053);
 // EXTERNAL MODULE: ./src/models/pjcan/teyes/index.ts + 3 modules
 var teyes = __webpack_require__(2754);
 // EXTERNAL MODULE: ./src/models/pjcan/variables/configs/index.ts + 1 modules
@@ -22141,10 +22234,9 @@ __webpack_require__.d(__webpack_exports__, {
   "sO": function() { return /* reexport */ API_VARIABLE_BOSE_VIEW_EVENT; },
   "qT": function() { return /* reexport */ API_VARIABLE_BOSE_VIEW_EXEC; },
   "jp": function() { return /* reexport */ BoseConfig; },
-  "Jn": function() { return /* reexport */ BoseView; }
+  "Jn": function() { return /* reexport */ BoseView; },
+  "XY": function() { return /* reexport */ TCenterPoint; }
 });
-
-// UNUSED EXPORTS: TCenterPoint
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/defineProperty.js + 3 modules
 var defineProperty = __webpack_require__(7327);
@@ -22416,6 +22508,7 @@ class VariableConfig extends BaseModel/* BaseModel */.g {
    */
   static update(version) {
     engine/* EngineConfig.update */.EJ.update(version);
+    volume/* VolumeConfig.update */.Rf.update(version);
     VariableConfig.struct = {
       bose: bluetooth/* BluetoothStruct.struct */.GD.struct(bose/* BoseConfig.struct */.jp.struct),
       engine: bluetooth/* BluetoothStruct.struct */.GD.struct(engine/* EngineConfig.struct */.EJ.struct),
@@ -23260,8 +23353,6 @@ class TestValue extends BaseModel/* BaseModel */.g {
 __webpack_require__.d(__webpack_exports__, {
   "Vy": function() { return /* reexport */ API_VARIABLE_VOLUME_CONFIG_EVENT; },
   "U0": function() { return /* reexport */ API_VARIABLE_VOLUME_CONFIG_EXEC; },
-  "FN": function() { return /* reexport */ API_VARIABLE_VOLUME_EVENT; },
-  "pf": function() { return /* reexport */ API_VARIABLE_VOLUME_EXEC; },
   "H7": function() { return /* reexport */ API_VARIABLE_VOLUME_VIEW_EVENT; },
   "Ge": function() { return /* reexport */ API_VARIABLE_VOLUME_VIEW_EXEC; },
   "Rf": function() { return /* reexport */ VolumeConfig; },
@@ -23269,13 +23360,18 @@ __webpack_require__.d(__webpack_exports__, {
   "Cw": function() { return /* reexport */ VolumeView; }
 });
 
+// UNUSED EXPORTS: API_VARIABLE_VOLUME_EVENT, API_VARIABLE_VOLUME_EXEC
+
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/defineProperty.js + 3 modules
 var defineProperty = __webpack_require__(7327);
 // EXTERNAL MODULE: ./src/components/bluetooth/index.ts + 4 modules
 var bluetooth = __webpack_require__(9014);
 // EXTERNAL MODULE: ./src/models/pjcan/base/BaseModel.ts
 var BaseModel = __webpack_require__(9036);
+// EXTERNAL MODULE: ./src/models/pjcan/variables/engine/index.ts + 3 modules
+var engine = __webpack_require__(2658);
 ;// CONCATENATED MODULE: ./src/models/pjcan/variables/volume/VolumeConfig.ts
+
 
 
 
@@ -23283,10 +23379,35 @@ const API_VARIABLE_VOLUME_CONFIG_EXEC = 201;
 const API_VARIABLE_VOLUME_CONFIG_EVENT = "VariableVolumeConfig";
 /** Модель конфигурации уровня звука */
 class VolumeConfig extends BaseModel/* BaseModel */.g {
+  /**
+   * Обновить версию структуры
+   * @param {IVersion} version Версия протокола
+   */
+  static update(version) {
+    engine/* EngineValue.update */.E_.update(version);
+    if (!version || version.compareString("4.0.3") !== 1) {
+      VolumeConfig.struct = {
+        mute: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+        muteBose: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+        volume: bluetooth/* BluetoothStruct.uint8 */.GD.uint8(),
+        volumeBose: bluetooth/* BluetoothStruct.uint8 */.GD.uint8()
+      };
+      VolumeConfig.size = 3;
+    } else {
+      VolumeConfig.struct = {
+        mute: bluetooth/* BluetoothStruct.bit */.GD.bit(),
+        volume: bluetooth/* BluetoothStruct.uint8 */.GD.uint8(),
+        max: bluetooth/* BluetoothStruct.uint8 */.GD.uint8()
+      };
+      VolumeConfig.size = 3;
+    }
+  }
   constructor(data) {
     super();
     (0,defineProperty/* default */.Z)(this, "mute", false);
+    (0,defineProperty/* default */.Z)(this, "muteBose", false);
     (0,defineProperty/* default */.Z)(this, "volume", 0);
+    (0,defineProperty/* default */.Z)(this, "volumeBose", 0);
     (0,defineProperty/* default */.Z)(this, "max", 0);
     if (data) this.set(data);
   }
@@ -23302,12 +23423,8 @@ class VolumeConfig extends BaseModel/* BaseModel */.g {
     return this._get(this, API_VARIABLE_VOLUME_CONFIG_EXEC, VolumeConfig.size + 1, new bluetooth/* BluetoothStruct */.GD(VolumeConfig.struct));
   }
 }
-(0,defineProperty/* default */.Z)(VolumeConfig, "struct", {
-  mute: bluetooth/* BluetoothStruct.bit */.GD.bit(),
-  volume: bluetooth/* BluetoothStruct.uint8 */.GD.uint8(),
-  max: bluetooth/* BluetoothStruct.uint8 */.GD.uint8()
-});
-(0,defineProperty/* default */.Z)(VolumeConfig, "size", 3);
+(0,defineProperty/* default */.Z)(VolumeConfig, "struct", void 0);
+(0,defineProperty/* default */.Z)(VolumeConfig, "size", void 0);
 ;// CONCATENATED MODULE: ./src/models/pjcan/variables/volume/VolumeValue.ts
 
 
@@ -25092,31 +25209,31 @@ var index = {
 /* harmony default export */ var onboard_card_list_default = ([{
   name: "info",
   enabled: true,
-  car: [0, 1, 2]
+  car: [1, 2]
 }, {
   name: "bose",
-  enabled: false,
+  enabled: true,
   car: [2]
 }, {
   name: "engine",
   enabled: true,
-  car: [0, 1, 2]
+  car: [1, 2]
 }, {
   name: "fuel",
   enabled: true,
-  car: [0, 1, 2]
+  car: [1, 2]
 }, {
   name: "movement",
   enabled: true,
-  car: [0, 1, 2]
+  car: [1, 2]
 }, {
   name: "doors",
   enabled: true,
-  car: [0, 1]
+  car: [1]
 }, {
   name: "climate",
   enabled: true,
-  car: [0, 1, 2]
+  car: [1, 2]
 }]);
 ;// CONCATENATED MODULE: ./src/store/modules/app/state.ts
 
@@ -25142,9 +25259,13 @@ const visibleMessage = state => state.visibleMessage;
  * @param state
  */
 const onboardCardList = state => state.onboardCardList;
+// EXTERNAL MODULE: ./src/utils/debounce.ts
+var debounce = __webpack_require__(9545);
 ;// CONCATENATED MODULE: ./src/store/modules/app/mutations.ts
 
 
+
+const mutations_debounce = (0,debounce/* createDebounce */.c)();
 /**
  * Записать новое сообщение
  * @param state
@@ -25157,7 +25278,7 @@ const setMessage = (state, msg) => {
 const setVisibleMessage = (state, value) => {
   state.visibleMessage = value;
   if (!value) {
-    setTimeout(() => src_store.commit("app/freeMessage"), 400);
+    mutations_debounce(() => src_store.commit("app/freeMessage"), 400);
   }
 };
 /**
@@ -25173,7 +25294,10 @@ const freeMessage = state => {
  * Очистить очередь сообщений
  * @param state
  */
-const clearMessages = state => state.messages = [];
+const clearMessages = state => {
+  mutations_debounce(() => {}, 0);
+  state.messages = [];
+};
 /**
  * Изменить список карточек бортового компьютера
  * @param {any} state
@@ -25249,6 +25373,25 @@ const store = createStore({
   strict: "production" === "development"
 });
 /* harmony default export */ var src_store = (store);
+
+/***/ }),
+
+/***/ 9545:
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "c": function() { return /* binding */ createDebounce; }
+/* harmony export */ });
+/** Создать debounce */
+const createDebounce = () => {
+  let timeout;
+  return (fn, delay) => {
+    clearTimeout(timeout);
+    if (delay > 0) timeout = setTimeout(() => fn(), delay);
+  };
+};
+
 
 /***/ }),
 
@@ -66904,7 +67047,12 @@ var theme = __webpack_require__(7041);
   "blow-none": '<svg xmlns="http://www.w3.org/2000/svg" width="{size}" height="{size}" viewBox="0 0 500 466.69"><circle cx="438.87" cy="72.31" r="61.13" style="fill:{secondary}"/><path d="M403.07,144.88a58.18,58.18,0,0,0-46.56,27.5v.33L297.94,270l-14.68-3.1L196.45,246a42.16,42.16,0,0,0-43.12,16L53,397.38a43.43,43.43,0,0,0,9,60.77c.48.35,1,.7,1.45,1,19,12.9,45.11,8.9,59-9.33l75.37-98.71L312.29,395.9c.34.11.8.34,1.24.45a57,57,0,0,0,16,3.45H336c6,0,14.67-2.45,14.67-2.45,1.56-.45,3.12-1,4.56-1.56.22-.11.32-.11.54-.22a56.46,56.46,0,0,0,28.64-25.3l73.36-134.38.34-.35c18.79-30.56,5.55-71.35-26.46-85.47a63,63,0,0,0-20.45-5.23C408.52,144.77,405.74,144.77,403.07,144.88Z" style="fill:{secondary}"/><polygon points="222.3 0 222.3 44.46 133.38 44.46 133.38 88.92 222.3 88.92 222.3 133.38 288.99 66.69 222.3 0" style="fill:#676b6d"/><polygon points="44.46 122.26 44.46 200.07 0 200.07 66.69 266.76 133.38 200.07 88.92 200.07 88.92 122.26 44.46 122.26" style="fill:#676b6d"/></svg>',
   "ass": '<svg xmlns="http://www.w3.org/2000/svg" width="{size}" height="{size}" viewBox="0 0 500 467.5"><path d="M163.14,397.82c30.2,7.6,59,11.28,89,6.88-.66,3.64-.85,6.64-1.76,9.4-3,9.06-6.66,17.9-9.28,27a258,258,0,0,0-6.64,29.17c-.85,5.18,1.51,10,6.09,13.27,10.77,7.66,25.57,8.54,36.13.57a79.81,79.81,0,0,0,18.35-19c8.24-12.45,14.9-25.94,22.32-38.94.93-1.63,2.16-3.63,3.73-4.23,5.47-2.13,11.15-3.71,16.94-5.57.39,3.84.75,7.76,1.19,11.67,1.09,9.71,2.89,19.25,8.14,27.7,8.57,13.84,25,17.63,38.13,8.93,11.12-7.36,12.78-20.23,3.11-29.38-3.9-3.69-4.45-7.12-3.24-11.74,6.74-25.6,13.37-51.23,20.23-76.8.3-1.13,2.34-2.22,3.75-2.56,8.29-2,16.85-3,24.92-5.65a80.27,80.27,0,0,0,34.64-22.36c6.64,4.94,12.93,9.68,19.28,14.33,2.05,1.51,4.71,3.05,6.14-.17.52-1.17-1.13-4-2.54-5.19-5.94-4.88-12.16-9.41-18.47-14.22l3.75-5.54c1.55.67,2.74,1.2,3.95,1.7,6.37,2.66,12.67,5.52,19.18,7.82,1.62.57,3.9-.7,5.87-1.12a31.39,31.39,0,0,0-3.66-4.88c-1-.94-2.7-1.13-4.06-1.71l-18.14-7.75c.71-2,1.2-3.4,1.68-4.78.54-1.56,1.15-3.09,1.57-4.68,7.19-26.73,2-51.88-12-74.85-5.62-9.22-6.24-17.49-3.92-27,1.17-4.79,2.53-9.54,3.6-14.35,1.77-8,3.92-16,4.94-24.13,1.3-10.5-3.64-15.31-13.91-13-8.09,1.84-15.9,5.2-23.59,8.47-6.75,2.87-13.16,6.55-20.5,10.27,0-3.26.13-5.82,0-8.38-.54-9.52-.79-19.08-1.88-28.54-.85-7.34-3.27-8.88-10.53-8.71-8.19.18-15.31,3.56-22.11,7.69-12.54,7.62-22.94,17.72-32.24,28.89-6.79,8.16-12.91,16.88-19.34,25.37a4.89,4.89,0,0,1-.84-.39c-.67-.48-1.3-1-1.95-1.52-27-21.48-57.89-32.64-92.15-32.89-14.65-.11-29.38,3-44,5.28-15.72,2.42-26-2.45-32.79-17a57.82,57.82,0,0,1-4.77-14c-2.12-11.81-2.75-23.93-5.51-35.55-6.49-27.28-24.35-44.53-51-51.75-26.87-7.28-64.36,8-80.62,31.78C7,72.43,4.5,91.12,6.75,110.65c.78,6.82,3.13,13.18,8,18.2,6.22,6.36,13.91,9.08,22.51,6.69,8.32-2.3,10.13-9.84,11.06-17.13.89-7,.94-14.12,1.25-21.19a27.16,27.16,0,0,1,12.24-22C81.43,61.56,107.36,72.08,112.49,96,114.37,104.85,115,114,115.7,123c1.69,21.08,10,38,29.34,48.29a10.77,10.77,0,0,1,1.67,1.46c-1,1.08-1.75,2.09-2.65,3-23.21,22.69-39.33,49.84-48.91,80.63-12.81,41.21-12.49,83.06-3.55,125,6.25,29.27,16.8,56.76,35.14,80.8,6,7.92,13,15,22.2,19.21,9.66,4.44,19.54,2.06,26.12-6.24a21.57,21.57,0,0,0,4.35-18.2c-2.4-11.39-5.58-22.62-8.67-33.86C168.53,415,165.94,407.06,163.14,397.82Z" transform="translate(-6 -22.25)" style="fill:{primary}"/><path d="M163.14,397.82c2.8,9.24,5.39,17.17,7.6,25.19,3.09,11.24,6.27,22.47,8.67,33.86a21.57,21.57,0,0,1-4.35,18.2c-6.58,8.3-16.46,10.68-26.12,6.24-9.22-4.25-16.15-11.29-22.2-19.21-18.34-24-28.89-51.53-35.14-80.8-8.94-41.91-9.26-83.76,3.55-125,9.58-30.79,25.7-57.94,48.91-80.63.9-.89,1.69-1.9,2.65-3a10.77,10.77,0,0,0-1.67-1.46C125.69,161,117.39,144.05,115.7,123c-.72-9-1.33-18.12-3.21-26.93-5.13-24-31.06-34.48-50.64-20.85a27.16,27.16,0,0,0-12.24,22c-.31,7.07-.36,14.18-1.25,21.19-.93,7.29-2.74,14.83-11.06,17.13-8.6,2.39-16.29-.33-22.51-6.69-4.91-5-7.26-11.38-8-18.2C4.5,91.12,7,72.43,18.33,55.86,34.59,32.06,72.08,16.8,99,24.08c26.62,7.22,44.48,24.47,51,51.75,2.76,11.62,3.39,23.74,5.51,35.55a57.82,57.82,0,0,0,4.77,14c6.8,14.51,17.07,19.38,32.79,17,14.61-2.25,29.34-5.39,44-5.28,34.26.25,65.19,11.41,92.15,32.89.65.51,1.28,1,1.95,1.52a4.89,4.89,0,0,0,.84.39c6.43-8.49,12.55-17.21,19.34-25.37,9.3-11.17,19.7-21.27,32.24-28.89,6.8-4.13,13.92-7.51,22.11-7.69,7.26-.17,9.68,1.37,10.53,8.71,1.09,9.46,1.34,19,1.88,28.54.15,2.56,0,5.12,0,8.38,7.34-3.72,13.75-7.4,20.5-10.27,7.69-3.27,15.5-6.63,23.59-8.47,10.27-2.33,15.21,2.48,13.91,13-1,8.12-3.17,16.11-4.94,24.13-1.07,4.81-2.43,9.56-3.6,14.35-2.32,9.52-1.7,17.79,3.92,27,14,23,19.16,48.12,12,74.85-.42,1.59-1,3.12-1.57,4.68-.48,1.38-1,2.76-1.68,4.78l18.14,7.75c1.36.58,3.05.77,4.06,1.71a31.39,31.39,0,0,1,3.66,4.88c-2,.42-4.25,1.69-5.87,1.12-6.51-2.3-12.81-5.16-19.18-7.82-1.21-.5-2.4-1-3.95-1.7L473.25,311c6.31,4.81,12.53,9.34,18.47,14.22,1.41,1.16,3.06,4,2.54,5.19-1.43,3.22-4.09,1.68-6.14.17-6.35-4.65-12.64-9.39-19.28-14.33a80.27,80.27,0,0,1-34.64,22.36c-8.07,2.62-16.63,3.69-24.92,5.65-1.41.34-3.45,1.43-3.75,2.56C398.67,372.4,392,398,385.3,423.63c-1.21,4.62-.66,8.05,3.24,11.74,9.67,9.15,8,22-3.11,29.38-13.13,8.7-29.56,4.91-38.13-8.93-5.25-8.45-7.05-18-8.14-27.7-.44-3.91-.8-7.83-1.19-11.67-5.79,1.86-11.47,3.44-16.94,5.57-1.57.6-2.8,2.6-3.73,4.23-7.42,13-14.08,26.49-22.32,38.94a79.81,79.81,0,0,1-18.35,19c-10.56,8-25.36,7.09-36.13-.57-4.58-3.26-6.94-8.09-6.09-13.27a258,258,0,0,1,6.64-29.17c2.62-9.15,6.29-18,9.28-27,.91-2.76,1.1-5.76,1.76-9.4C222.15,409.1,193.34,405.42,163.14,397.82Zm243.2-60.24c10.47.18,19.52-2.76,28.43-6.21,33-12.78,49.79-42.43,44-77.21-6.43-38.51-30.89-63.14-62.86-82.11a8.19,8.19,0,0,1-3.71-5,151.13,151.13,0,0,1-1.1-16.23c-.35-9.7-.55-19.41-.83-29.12-.1-3.61-1.73-5.85-5.53-4.69-6.06,1.85-12.63,3.1-17.86,6.39-20.17,12.71-35.05,30.68-47.61,50.68a4.58,4.58,0,0,0,.36,4.1c8.85,12.24,18.84,23.77,26.56,36.67,8.06,13.48,14.08,28.19,20.67,42.51.64,1.38-1,3.8-1.55,5.74-1.56-1.27-3.79-2.22-4.57-3.86-4.21-8.9-7.49-18.3-12.17-26.93-10.59-19.53-21.18-39.15-38.9-53.57-35.24-28.69-74.9-40.91-120.16-32.56Q199.78,148,190,149.4c-15.59,2.25-30.23-6.2-36.37-22.54-3.85-10.23-5.91-21.18-8.17-31.93-1.68-8-1-16.77-3.78-24.27C130.57,41.14,100.22,22,68.12,31.19,29.78,42.17,11,65.86,13,103.49c.48,8.66,2.35,17.18,9.87,22.83,9.17,6.91,17.29,3.51,18.62-7.79.77-6.53.94-13.13,1.2-19.71C43.19,86.5,48,76.49,58.35,69.54,81.57,54,112,65.46,118.47,92.79c2.54,10.65,3.19,21.79,4.21,32.75,1.71,18.58,10.36,32.53,27.19,40.64,18.42,8.86,37.7,11.13,57.61,5.39,2.32-.67,5.1-2,6.25,1.38s-1.81,4.09-4.12,4.92a48.3,48.3,0,0,1-4.74,1.34c-15.83,3.93-31.4,2.11-46.77-2.42-3-.9-5-.57-7.42,1.69a178.42,178.42,0,0,0-47.44,74.71C85.71,306.44,89,359.61,107.47,412.06c6.88,19.53,16,38,30.79,52.93a51.2,51.2,0,0,0,16.16,10.8c7.28,3.06,15.84-1.94,17.73-9.67a27.7,27.7,0,0,0,.26-12.15c-1.8-8.17-4.63-16.1-6.81-24.19-3-10.92-5.62-21.93-8.62-32.84A8.35,8.35,0,0,0,153.9,393c-5.1-3.87-10.46-7.41-15.51-11.35-2-1.52-4.56-3.7-1.77-6.52,2.57-2.59,4.35-.09,6.18,1.55,9.06,8.17,19.2,14.43,31.29,16.91,8.21,1.69,16.45,3.35,24.76,4.44,16.53,2.18,33.1,2.86,49.73.56,4.16-.58,5.95-2.07,6.2-6.32q.71-12.07,2.26-24.08c.21-1.57,2.24-2.9,3.44-4.34,1,1.57,3,3.18,2.92,4.69-1.33,25.75-4.74,51-15.4,75-3.32,7.44-5.22,15.56-7.17,23.52-1.1,4.48,0,8.86,4.39,11.67,9.51,6.05,21.78,5.74,30.45-1.49,4.25-3.55,8.44-7.6,11.36-12.23,13.49-21.44,27.07-43,35.62-66.94,9-25.16,15.11-50.86,8.06-77.84-.33-1.25,1.12-3,1.74-4.48,1.51.88,4.06,1.51,4.35,2.7,1.45,5.88,2.93,11.88,3.25,17.89,1.32,25.34-5,49.26-14.23,72.58-.63,1.6-1.2,3.22-2.13,5.69,23.12-9.76,39.78-24.84,50.11-46.65,1.19-2.51,1.55-5.44,2.9-7.83.84-1.49,2.81-2.34,4.28-3.48.62,1.77,1.76,3.55,1.72,5.31,0,2.06-1,4.14-1.75,6.13-6.17,16-16.95,28.56-30.4,38.73-4.67,3.52-6.75,6.92-5.51,12.61,2.09,9.59,3.24,19.43,6.07,28.78,2.3,7.62,8.35,12.5,16.4,14.24,7.83,1.69,16.73-2,19.68-8.07,2.67-5.49.9-11.21-6.12-17.13-3.36-2.83-3.78-6-2.9-9.68,3.91-16.48,7.34-33.09,12-49.35,6.82-23.73,12.27-47.48,9.46-72.43-.31-2.76-1.91-7.31,2.64-7.71,5.05-.43,3.9,4.49,4,7.4C406.48,315.93,406.34,326.43,406.34,337.58ZM459.09,197.8c.47-2.81.72-5,1.23-7.21,2.89-12.48,6.09-24.9,8.71-37.44,2.14-10.28-.21-12.66-10-8.8-13.12,5.15-25.74,11.57-38.5,17.58-3.65,1.72-2.43,3.33.28,5.2,8,5.51,15.93,11,23.53,17C449.43,188.13,453.9,192.93,459.09,197.8Z" transform="translate(-6 -22.25)"/><path d="M406.34,337.58c0-11.15.14-21.65-.1-32.14-.06-2.91,1.09-7.83-4-7.4-4.55.4-2.95,4.95-2.64,7.71,2.81,24.95-2.64,48.7-9.46,72.43-4.67,16.26-8.1,32.87-12,49.35-.88,3.69-.46,6.85,2.9,9.68,7,5.92,8.79,11.64,6.12,17.13-2.95,6.07-11.85,9.76-19.68,8.07-8.05-1.74-14.1-6.62-16.4-14.24-2.83-9.35-4-19.19-6.07-28.78-1.24-5.69.84-9.09,5.51-12.61,13.45-10.17,24.23-22.73,30.4-38.73.77-2,1.71-4.07,1.75-6.13,0-1.76-1.1-3.54-1.72-5.31-1.47,1.14-3.44,2-4.28,3.48-1.35,2.39-1.71,5.32-2.9,7.83-10.33,21.81-27,36.89-50.11,46.65.93-2.47,1.5-4.09,2.13-5.69,9.22-23.32,15.55-47.24,14.23-72.58-.32-6-1.8-12-3.25-17.89-.29-1.19-2.84-1.82-4.35-2.7-.62,1.5-2.07,3.23-1.74,4.48,7.05,27,.92,52.68-8.06,77.84C314.1,422,300.52,443.53,287,465c-2.92,4.63-7.11,8.68-11.36,12.23-8.67,7.23-20.94,7.54-30.45,1.49-4.42-2.81-5.49-7.19-4.39-11.67,1.95-8,3.85-16.08,7.17-23.52,10.66-23.92,14.07-49.21,15.4-75,.08-1.51-1.9-3.12-2.92-4.69-1.2,1.44-3.23,2.77-3.44,4.34q-1.56,12-2.26,24.08c-.25,4.25-2,5.74-6.2,6.32-16.63,2.3-33.2,1.62-49.73-.56-8.31-1.09-16.55-2.75-24.76-4.44-12.09-2.48-22.23-8.74-31.29-16.91-1.83-1.64-3.61-4.14-6.18-1.55-2.79,2.82-.19,5,1.77,6.52,5.05,3.94,10.41,7.48,15.51,11.35a8.35,8.35,0,0,1,3.08,3.94c3,10.91,5.66,21.92,8.62,32.84,2.18,8.09,5,16,6.81,24.19a27.7,27.7,0,0,1-.26,12.15c-1.89,7.73-10.45,12.73-17.73,9.67A51.2,51.2,0,0,1,138.26,465c-14.78-14.89-23.91-33.4-30.79-52.93C89,359.61,85.71,306.44,103.24,253.19a178.42,178.42,0,0,1,47.44-74.71c2.39-2.26,4.38-2.59,7.42-1.69,15.37,4.53,30.94,6.35,46.77,2.42a48.3,48.3,0,0,0,4.74-1.34c2.31-.83,5.26-1.53,4.12-4.92s-3.93-2-6.25-1.38c-19.91,5.74-39.19,3.47-57.61-5.39-16.83-8.11-25.48-22.06-27.19-40.64-1-11-1.67-22.1-4.21-32.75C112,65.46,81.57,54,58.35,69.54,48,76.49,43.19,86.5,42.71,98.82c-.26,6.58-.43,13.18-1.2,19.71-1.33,11.3-9.45,14.7-18.62,7.79-7.52-5.65-9.39-14.17-9.87-22.83C11,65.86,29.78,42.17,68.12,31.19c32.1-9.18,62.45,10,73.57,39.47,2.82,7.5,2.1,16.26,3.78,24.27,2.26,10.75,4.32,21.7,8.17,31.93,6.14,16.34,20.78,24.79,36.37,22.54q9.78-1.41,19.49-3.21c45.26-8.35,84.92,3.87,120.16,32.56,17.72,14.42,28.31,34,38.9,53.57,4.68,8.63,8,18,12.17,26.93.78,1.64,3,2.59,4.57,3.86.57-1.94,2.19-4.36,1.55-5.74-6.59-14.32-12.61-29-20.67-42.51-7.72-12.9-17.71-24.43-26.56-36.67a4.58,4.58,0,0,1-.36-4.1c12.56-20,27.44-38,47.61-50.68,5.23-3.29,11.8-4.54,17.86-6.39,3.8-1.16,5.43,1.08,5.53,4.69.28,9.71.48,19.42.83,29.12a151.13,151.13,0,0,0,1.1,16.23,8.19,8.19,0,0,0,3.71,5c32,19,56.43,43.6,62.86,82.11,5.8,34.78-11,64.43-44,77.21C425.86,334.82,416.81,337.76,406.34,337.58Zm-214-112.45c-1.23-2.23-1.89-4.22-3.2-5.58s-3.73-3.42-5-3c-3.3,1.07-2,3.89-.87,6.14,1.24,2.47,2.65,4.86,4.14,7.55-3.69,1.57-7.29,2.8-10.53,4.65-1.13.65-1.37,2.85-2,4.35,1.51.52,3.15,1.71,4.5,1.44,2.62-.53,5.09-1.88,8.27-3.15-.86,3.73-2,6.71-2.09,9.73-.08,1.63,1.5,3.34,2.33,5,1.33-1.15,3.25-2,3.86-3.49,1.21-2.89,1.7-6.09,2.64-9.75,3.72,3.54,6.8,6.47,9.87,9.41,1.85,1.78,4.1,3.79,6.12,1.05.75-1-.28-4.3-1.5-5.63-2.91-3.17-6.42-5.8-9.69-8.66l1.12-1.62A106.54,106.54,0,0,0,212,232.51c1.66-.31,3-2.11,4.53-3.23-1.56-1.1-3-3-4.67-3.13-3.7-.32-7.47.23-12.19.47,1.81-2.83,3.53-4.85,4.45-7.18.59-1.49,0-3.45,0-5.19-1.71.41-4,.27-5,1.35C196.65,218.24,194.88,221.43,192.36,225.13Zm241,50.36c6-.1,9.62-3.55,8.84-8-1.4-8-14.43-14-21.32-9.88-3.59,2.14-4.62,5.08-2.34,8.68C422,271.9,427.11,275.14,433.31,275.49Zm-34.5-45.09c0-5.08-3.68-9.49-8-9.64-4.58-.15-8.35,4.23-8.35,9.71,0,5.26,3.49,9.47,7.94,9.61C395,240.22,398.83,235.85,398.81,230.4ZM467,255c0-5.21-3.56-9.46-8-9.45s-8.11,4.47-8,9.5,3.65,9.06,7.83,9.16C463.36,264.31,467,260.21,467,255Z" transform="translate(-6 -22.25)" style="fill:{primary}"/><path d="M459.09,197.8c-5.19-4.87-9.66-9.67-14.76-13.67-7.6-6-15.57-11.49-23.53-17-2.71-1.87-3.93-3.48-.28-5.2,12.76-6,25.38-12.43,38.5-17.58,9.8-3.86,12.15-1.48,10,8.8-2.62,12.54-5.82,25-8.71,37.44C459.81,192.76,459.56,195,459.09,197.8Z" transform="translate(-6 -22.25)" style="fill:{primary}"/><path d="M192.36,225.13c2.52-3.7,4.29-6.89,6.68-9.53,1-1.08,3.29-.94,5-1.35.05,1.74.63,3.7,0,5.19-.92,2.33-2.64,4.35-4.45,7.18,4.72-.24,8.49-.79,12.19-.47,1.63.14,3.11,2,4.67,3.13-1.5,1.12-2.87,2.92-4.53,3.23a106.54,106.54,0,0,1-11.61,1.05l-1.12,1.62c3.27,2.86,6.78,5.49,9.69,8.66,1.22,1.33,2.25,4.61,1.5,5.63-2,2.74-4.27.73-6.12-1.05-3.07-2.94-6.15-5.87-9.87-9.41-.94,3.66-1.43,6.86-2.64,9.75-.61,1.45-2.53,2.34-3.86,3.49-.83-1.67-2.41-3.38-2.33-5,.13-3,1.23-6,2.09-9.73-3.18,1.27-5.65,2.62-8.27,3.15-1.35.27-3-.92-4.5-1.44.64-1.5.88-3.7,2-4.35,3.24-1.85,6.84-3.08,10.53-4.65-1.49-2.69-2.9-5.08-4.14-7.55-1.13-2.25-2.43-5.07.87-6.14,1.24-.4,3.62,1.61,5,3S191.13,222.9,192.36,225.13Z" transform="translate(-6 -22.25)"/><path d="M433.31,275.49c-6.2-.35-11.27-3.59-14.82-9.2-2.28-3.6-1.25-6.54,2.34-8.68,6.89-4.12,19.92,1.91,21.32,9.88C442.93,271.94,439.35,275.39,433.31,275.49Z" transform="translate(-6 -22.25)"/><path d="M398.81,230.4c0,5.45-3.78,9.82-8.41,9.68-4.45-.14-7.93-4.35-7.94-9.61,0-5.48,3.77-9.86,8.35-9.71C395.13,220.91,398.79,225.32,398.81,230.4Z" transform="translate(-6 -22.25)"/><path d="M467,255c0,5.23-3.66,9.33-8.17,9.21-4.18-.1-7.73-4.26-7.83-9.16s3.66-9.5,8-9.5S467.05,249.77,467,255Z" transform="translate(-6 -22.25)"/></svg>',
   "steering-wheel": '<svg xmlns="http://www.w3.org/2000/svg" width="{size}" height="{size}" viewBox="0 0 500 500"><path d="M250,266.22a27,27,0,1,0,27,27A27,27,0,0,0,250,266.22Zm196.27-76c-66.84,44.72-132.61,59.85-190.8,59.85-102.78,0-181.91-46.87-201.78-59.8a206,206,0,0,0-9.8,57c64.24,0,113,18.87,145,56C239.36,362,231.08,445.7,229.38,459.11q10.17,1,20.63,1a208.37,208.37,0,0,0,24.84-1.55c-2.11-19.35-7.11-97.47,40.78-153.11,31.23-36.29,78.6-55,140.62-55.86a204.85,204.85,0,0,0-10-59.38ZM133.48,254,68.15,225.87l3.41-8L136.88,246ZM250,328.9a35.67,35.67,0,1,1,35.67-35.68A35.67,35.67,0,0,1,250,328.9ZM371.06,254l-3.43-8L433,217.92l3.42,8Z" fill="{primary}" fill-rule="evenodd"/><path d="M250,0C112.16,0,0,112.15,0,250S112.16,500,250,500,500,387.84,500,250,387.84,0,250,0Zm0,468.78c-118.55,0-215-96.43-215-215s96.46-215,215-215,215,96.44,215,215S368.54,468.78,250,468.78Z" fill="{secondary}"/></svg>',
-  "engine-statistic": '<svg xmlns="http://www.w3.org/2000/svg" width="{size}" height="{size}" viewBox="0 0 500 500"><path d="M456.59,202.81,309.19,55.41a4.86,4.86,0,0,0-6.85,0l-96,96a4.86,4.86,0,0,0,0,6.85l52,52-53.18,53.18C180.47,288,127.26,328.94,93.59,295.27a7,7,0,0,0-9.94,0L46.89,332l6.91,6.91-2.46,2.46-6.91-6.91L8.05,370.87a7.06,7.06,0,0,0,0,9.94l14.72,14.72a84.7,84.7,0,0,0,93.7,93.7L131.19,504a7.06,7.06,0,0,0,9.94,0l36.39-36.38-6.88-6.88,2.46-2.46,6.88,6.88,36.76-36.76a7,7,0,0,0,0-9.94c-33.67-33.67,7.23-86.89,31.88-111.54l53.19-53.18,52,51.95a4.85,4.85,0,0,0,6.85,0l96-96A4.86,4.86,0,0,0,456.59,202.81ZM142.06,429.93a42.42,42.42,0,1,1,0-60A42.42,42.42,0,0,1,142.06,429.93ZM337,215.26A28.47,28.47,0,1,1,337,175,28.46,28.46,0,0,1,337,215.26Z" transform="translate(-6 -6)" fill="{secondary}" fill-rule="evenodd"/><path d="M141.13,504h-9.94A7.06,7.06,0,0,0,141.13,504ZM504.59,154.82,357.18,7.41a4.86,4.86,0,0,0-6.85,0L336.62,21.13a4.86,4.86,0,0,0,0,6.85L484,175.38a4.85,4.85,0,0,0,6.85,0l13.72-13.71A4.86,4.86,0,0,0,504.59,154.82Zm-174.83-120a4.85,4.85,0,0,0-6.85,0l-6.86,6.85a4.86,4.86,0,0,0,0,6.86L463.45,196a4.86,4.86,0,0,0,6.85,0l6.86-6.86a4.85,4.85,0,0,0,0-6.85Z" transform="translate(-6 -6)" fill="{primary}" fill-rule="evenodd"/></svg>'
+  "engine-statistic": '<svg xmlns="http://www.w3.org/2000/svg" width="{size}" height="{size}" viewBox="0 0 500 500"><path d="M456.59,202.81,309.19,55.41a4.86,4.86,0,0,0-6.85,0l-96,96a4.86,4.86,0,0,0,0,6.85l52,52-53.18,53.18C180.47,288,127.26,328.94,93.59,295.27a7,7,0,0,0-9.94,0L46.89,332l6.91,6.91-2.46,2.46-6.91-6.91L8.05,370.87a7.06,7.06,0,0,0,0,9.94l14.72,14.72a84.7,84.7,0,0,0,93.7,93.7L131.19,504a7.06,7.06,0,0,0,9.94,0l36.39-36.38-6.88-6.88,2.46-2.46,6.88,6.88,36.76-36.76a7,7,0,0,0,0-9.94c-33.67-33.67,7.23-86.89,31.88-111.54l53.19-53.18,52,51.95a4.85,4.85,0,0,0,6.85,0l96-96A4.86,4.86,0,0,0,456.59,202.81ZM142.06,429.93a42.42,42.42,0,1,1,0-60A42.42,42.42,0,0,1,142.06,429.93ZM337,215.26A28.47,28.47,0,1,1,337,175,28.46,28.46,0,0,1,337,215.26Z" transform="translate(-6 -6)" fill="{secondary}" fill-rule="evenodd"/><path d="M141.13,504h-9.94A7.06,7.06,0,0,0,141.13,504ZM504.59,154.82,357.18,7.41a4.86,4.86,0,0,0-6.85,0L336.62,21.13a4.86,4.86,0,0,0,0,6.85L484,175.38a4.85,4.85,0,0,0,6.85,0l13.72-13.71A4.86,4.86,0,0,0,504.59,154.82Zm-174.83-120a4.85,4.85,0,0,0-6.85,0l-6.86,6.85a4.86,4.86,0,0,0,0,6.86L463.45,196a4.86,4.86,0,0,0,6.85,0l6.86-6.86a4.85,4.85,0,0,0,0-6.85Z" transform="translate(-6 -6)" fill="{primary}" fill-rule="evenodd"/></svg>',
+  "bose": '<svg xmlns="http://www.w3.org/2000/svg" width="{size}" height="{size}" viewBox="0 0 500 500.02"><path d="M500,250A249.92,249.92,0,0,0,440.91,88.71a34.71,34.71,0,0,0-50.61-45.6,249.78,249.78,0,0,0-283.37,1.94A34.68,34.68,0,0,0,56.26,92a249.89,249.89,0,0,0,4.81,321.64A34.71,34.71,0,1,0,112.77,459a249.92,249.92,0,0,0,270.94,2.22,34.7,34.7,0,1,0,54.86-42.51c-.62-.8-1.28-1.57-2-2.32A249.39,249.39,0,0,0,500,250ZM416.26,54.41A11.55,11.55,0,1,1,404.71,66a11.55,11.55,0,0,1,11.55-11.59Zm-334.82,0A11.55,11.55,0,1,1,69.89,66,11.55,11.55,0,0,1,81.44,54.41ZM79.81,457.12a11.55,11.55,0,1,1,11.54-11.56h0A11.56,11.56,0,0,1,79.81,457.12Zm334.81,0a11.55,11.55,0,1,1,11.55-11.55h0A11.55,11.55,0,0,1,414.62,457.12ZM250,463.76C132,463.76,36.24,368.05,36.24,250S132,36.24,250,36.24,463.77,131.92,463.77,250,368.05,463.76,250,463.76ZM58.08,225.58H50.42a3.78,3.78,0,0,0-3.56,3.95v19.62a3.77,3.77,0,0,0,3.56,3.93h7.66a3.76,3.76,0,0,0,3.55-3.93V229.53A3.78,3.78,0,0,0,58.08,225.58ZM258.59,47H239a3.79,3.79,0,0,0-4,3.55v7.71a3.77,3.77,0,0,0,4,3.53h19.64a3.77,3.77,0,0,0,4-3.53V50.58a3.79,3.79,0,0,0-4-3.59Zm0,391.16H238.94A3.79,3.79,0,0,0,235,441.7v7.69a3.76,3.76,0,0,0,3.95,3.53h19.63a3.76,3.76,0,0,0,3.95-3.53V441.7a3.78,3.78,0,0,0-3.95-3.51Zm-153.07-312a3.77,3.77,0,0,0,5.29-.28l13-13v-.07l.83-.81a3.78,3.78,0,0,0,.28-5.29l-5.42-5.42a3.76,3.76,0,0,0-5.29.26l-13,13-.89.88a3.77,3.77,0,0,0-.27,5.29ZM392,373.8a3.8,3.8,0,0,0-5.31.27l-13,13-.89.88a3.76,3.76,0,0,0-.29,5.27l5.45,5.43a3.77,3.77,0,0,0,5.29-.27l13-13h0l.86-.84a3.76,3.76,0,0,0,.26-5.29ZM123.8,387.13h0l-13-13a3.77,3.77,0,0,0-5.29-.27l-5.42,5.43a3.75,3.75,0,0,0,.26,5.27l13,13,.88.88a3.79,3.79,0,0,0,5.3.27l5.41-5.43a3.76,3.76,0,0,0-.28-5.27ZM373.72,112.89h0l13,13a3.78,3.78,0,0,0,5.3.28l5.4-5.44a3.73,3.73,0,0,0-.27-5.27l-.85-.85h0l-13-13a3.78,3.78,0,0,0-5.31-.26l-5.43,5.42a3.79,3.79,0,0,0,.28,5.29Zm75.53,112.69h-7.69a3.77,3.77,0,0,0-3.53,3.95v19.62a3.75,3.75,0,0,0,3.53,3.93h7.69a3.76,3.76,0,0,0,3.54-3.93V229.53A3.79,3.79,0,0,0,449.25,225.58Z" transform="translate(0 0)" fill="{secondary}" fill-rule="evenodd"/><path d="M250,73.81A176.19,176.19,0,1,0,426.17,250v0A176.19,176.19,0,0,0,250,73.81Zm0,268.87A92.68,92.68,0,1,1,342.68,250h0A92.79,92.79,0,0,1,250,342.68Z" transform="translate(0 0)" fill="{primary}"/></svg>',
+  "volume-r": '<svg xmlns="http://www.w3.org/2000/svg" width="{size}" height="{size}" viewBox="0 0 20.68 19.57"><defs><style>.cls-1,.cls-2{fill:{primary};}.cls-2{font-size:14px;font-family:"Roboto", MyriadPro-Regular, Myriad Pro;}</style></defs><path class="cls-1" d="M2,9v6H6l5,5V4L6,9Z" transform="translate(-2 -2.22)"/><text class="cls-2" transform="translate(11 15.07)">R</text></svg>',
+  "volume-l": '<svg xmlns="http://www.w3.org/2000/svg" width="{size}" height="{size}" viewBox="0 0 20.68 19.57"><defs><style>.cls-1,.cls-2{fill:{primary};}.cls-2{font-size:14px;font-family:"Roboto", MyriadPro-Regular, Myriad Pro;}</style></defs><path class="cls-1" d="M22.68,15V9h-4l-5-5V20l5-5Z" transform="translate(-3 -2.22)"/><text class="cls-2" transform="translate(0 15.07)">L</text></svg>',
+  "volume-fade-f": '<svg xmlns="http://www.w3.org/2000/svg" width="{size}" height="{size}" viewBox="0 0 20.68 19.57"><defs><style>.cls-1,.cls-2{fill:{primary};}.cls-2{font-size:14px;font-family:"Roboto", MyriadPro-Regular, Myriad Pro;}</style></defs><path class="cls-1" d="M2,9v6H6l5,5V4L6,9Z" transform="translate(-2 -2.22)"/><text class="cls-2" transform="translate(11 15.07)">F</text></svg>',
+  "volume-fade-r": '<svg xmlns="http://www.w3.org/2000/svg" width="{size}" height="{size}" viewBox="0 0 20.68 19.57"><defs><style>.cls-1,.cls-2{fill:{primary};}.cls-2{font-size:14px;font-family:"Roboto", MyriadPro-Regular, Myriad Pro;}</style></defs><path class="cls-1" d="M22.68,15V9h-4l-5-5V20l5-5Z" transform="translate(-3 -2.22)"/><text class="cls-2" transform="translate(0 15.07)">R</text></svg>'
 });
 ;// CONCATENATED MODULE: ./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/common/icon-custom/IconCustom.vue?vue&type=script&lang=ts
 
@@ -81473,13 +81621,13 @@ function useRender(render) {
 /***/ (function(module) {
 
 "use strict";
-module.exports = JSON.parse('{"name":"pjcan","version":"0.3.10","private":true,"description":"CanBus project for Mazda 3","author":"PJ82. Spiridonov Vladislav","scripts":{"serve":"vue-cli-service serve","build":"vue-cli-service build","build test":"vue-cli-service build --mode test"},"dependencies":{"@egjs/vue3-flicking":"^4.10.2","@mdi/font":"7.0.96","axios":"^1.1.3","bitset":"^5.1.1","core-js":"^3.26.0","eventemitter3":"^4.0.7","moment":"^2.29.4","register-service-worker":"^1.7.2","roboto-fontface":"*","screenfull":"^6.0.2","vue":"^3.2.41","vue-i18n":"^9.2.2","vue-router":"^4.1.6","vue3-toastify":"^0.0.3","vuedraggable":"^4.1.0","vuetify":"^3.1.5","vuex":"^4.1.0","webfontloader":"^1.6.28"},"devDependencies":{"@types/node":"^12.0.2","@types/webfontloader":"^1.6.29","@typescript-eslint/eslint-plugin":"^5.42.0","@typescript-eslint/parser":"^5.42.0","@vue/cli-plugin-babel":"~5.0.8","@vue/cli-plugin-eslint":"~5.0.8","@vue/cli-plugin-pwa":"~5.0.8","@vue/cli-plugin-router":"~5.0.8","@vue/cli-plugin-typescript":"~5.0.8","@vue/cli-plugin-vuex":"~5.0.8","@vue/cli-service":"~5.0.8","@vue/eslint-config-typescript":"^11.0.2","@vueuse/core":"^9.4.0","eslint":"^8.26.0","eslint-config-prettier":"^8.5.0","eslint-plugin-prettier":"^4.2.1","eslint-plugin-vue":"^9.7.0","prettier":"^2.7.1","sass":"^1.56.0","sass-loader":"^13.1.0","script-ext-html-webpack-plugin":"^2.1.5","typescript":"~4.8.4","vue-cli-plugin-vuetify":"~2.5.8","webpack-plugin-vuetify":"^2.0.0"},"eslintConfig":{"root":true,"env":{"node":true},"extends":["plugin:vue/vue3-essential","eslint:recommended","@vue/typescript/recommended","plugin:prettier/recommended"],"parserOptions":{"ecmaVersion":2020},"rules":{}},"browserslist":["> 1%","last 2 versions","not dead","not ie 11"],"productName":"PJCan App"}');
+module.exports = JSON.parse('{"name":"pjcan","version":"0.4.2","private":true,"description":"CanBus project for Mazda 3","author":"PJ82. Spiridonov Vladislav","scripts":{"serve":"vue-cli-service serve","build":"vue-cli-service build","build test":"vue-cli-service build --mode test"},"dependencies":{"@egjs/vue3-flicking":"^4.10.2","@mdi/font":"7.0.96","axios":"^1.1.3","bitset":"^5.1.1","core-js":"^3.26.0","eventemitter3":"^4.0.7","moment":"^2.29.4","register-service-worker":"^1.7.2","roboto-fontface":"*","screenfull":"^6.0.2","vue":"^3.2.41","vue-i18n":"^9.2.2","vue-router":"^4.1.6","vue3-toastify":"^0.0.3","vuedraggable":"^4.1.0","vuetify":"^3.1.5","vuex":"^4.1.0","webfontloader":"^1.6.28"},"devDependencies":{"@types/node":"^12.0.2","@types/webfontloader":"^1.6.29","@typescript-eslint/eslint-plugin":"^5.42.0","@typescript-eslint/parser":"^5.42.0","@vue/cli-plugin-babel":"~5.0.8","@vue/cli-plugin-eslint":"~5.0.8","@vue/cli-plugin-pwa":"~5.0.8","@vue/cli-plugin-router":"~5.0.8","@vue/cli-plugin-typescript":"~5.0.8","@vue/cli-plugin-vuex":"~5.0.8","@vue/cli-service":"~5.0.8","@vue/eslint-config-typescript":"^11.0.2","@vueuse/core":"^9.4.0","eslint":"^8.26.0","eslint-config-prettier":"^8.5.0","eslint-plugin-prettier":"^4.2.1","eslint-plugin-vue":"^9.7.0","prettier":"^2.7.1","sass":"^1.56.0","sass-loader":"^13.1.0","script-ext-html-webpack-plugin":"^2.1.5","typescript":"~4.8.4","vue-cli-plugin-vuetify":"~2.5.8","webpack-plugin-vuetify":"^2.0.0"},"eslintConfig":{"root":true,"env":{"node":true},"extends":["plugin:vue/vue3-essential","eslint:recommended","@vue/typescript/recommended","plugin:prettier/recommended"],"parserOptions":{"ecmaVersion":2020},"rules":{}},"browserslist":["> 1%","last 2 versions","not dead","not ie 11"],"productName":"PJCan App"}');
 
 /***/ })
 
 },
 /******/ function(__webpack_require__) { // webpackRuntimeModules
 /******/ var __webpack_exec__ = function(moduleId) { return __webpack_require__(__webpack_require__.s = moduleId); }
-/******/ var __webpack_exports__ = (__webpack_exec__(4638));
+/******/ var __webpack_exports__ = (__webpack_exec__(5119));
 /******/ }
 ]);
