@@ -633,5 +633,17 @@ export default {
 			text: "Uploading scanned values to the server.",
 			leftToLoad: "No packages to download | Left to download {n} package | Left to download {n} package | There are {n} packages left to download"
 		}
+	},
+
+	choosingCarModel: {
+		title: "Choosing a car model",
+		label: "Car model",
+		description: "The ability to change the car model supported by the PJCAN adapter",
+		carModels: {
+			0: "Mazda",
+			1: "Mazda 3 BK",
+			2: "Mazda CX-7",
+			3: "Mazda CX-9"
+		}
 	}
 };
