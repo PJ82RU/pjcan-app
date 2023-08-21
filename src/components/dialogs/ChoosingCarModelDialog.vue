@@ -63,7 +63,7 @@ export default {
 		{
 			const list: any = tm("choosingCarModel.carModels");
 			const result = [];
-			for (const key in list) if (key !== "0") result.push({ label: list[key], value: Number(key) });
+			for (const key in list) result.push({ label: list[key], value: Number(key) });
 			return result;
 		});
 
