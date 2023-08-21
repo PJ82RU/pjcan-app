@@ -5008,6 +5008,17 @@ var vue_i18n_esm_bundler = __webpack_require__(5658);
       text: "Загрузка отсканированных значений на сервер.",
       leftToLoad: "Нет пакетов для загрузки | Осталось загрузить {n} пакет | Осталось загрузить {n} пакета | Осталось загрузить {n} пакетов"
     }
+  },
+  choosingCarModel: {
+    title: "Выбор модели автомобиля",
+    label: "Модель автомобиля",
+    description: "Возможность изменить модель автомобиля поддерживаемое адаптером PJCAN",
+    carModels: {
+      0: "Mazda",
+      1: "Mazda 3 BK",
+      2: "Mazda CX-7",
+      3: "Mazda CX-9"
+    }
   }
 });
 ;// CONCATENATED MODULE: ./src/lang/en.ts
@@ -5582,6 +5593,17 @@ var vue_i18n_esm_bundler = __webpack_require__(5658);
       text: "Uploading scanned values to the server.",
       leftToLoad: "No packages to download | Left to download {n} package | Left to download {n} package | There are {n} packages left to download"
     }
+  },
+  choosingCarModel: {
+    title: "Choosing a car model",
+    label: "Car model",
+    description: "The ability to change the car model supported by the PJCAN adapter",
+    carModels: {
+      0: "Mazda",
+      1: "Mazda 3 BK",
+      2: "Mazda CX-7",
+      3: "Mazda CX-9"
+    }
   }
 });
 // EXTERNAL MODULE: ./node_modules/moment/moment.js
@@ -5633,7 +5655,7 @@ const t = i18n.global.t;
 
 /***/ }),
 
-/***/ 5119:
+/***/ 9774:
 /***/ (function(__unused_webpack_module, __unused_webpack___webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -10461,15 +10483,16 @@ var VRow = __webpack_require__(6824);
 var VCol = __webpack_require__(8521);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/components/VTextField/VTextField.mjs
 var VTextField = __webpack_require__(165);
-;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/dialogs/AboutDialog.vue?vue&type=template&id=0b2e9ae8&ts=true
+;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/dialogs/AboutDialog.vue?vue&type=template&id=540d834a&scoped=true&ts=true
 
-function AboutDialogvue_type_template_id_0b2e9ae8_ts_true_render(_ctx, _cache, $props, $setup, $data, $options) {
+function AboutDialogvue_type_template_id_540d834a_scoped_true_ts_true_render(_ctx, _cache, $props, $setup, $data, $options) {
                                                                     
                                                       
                                                       
                                                       
   const _component_dialog_template = (0,runtime_core_esm_bundler/* resolveComponent */.up)("dialog-template");
   const _component_device_info_dialog = (0,runtime_core_esm_bundler/* resolveComponent */.up)("device-info-dialog");
+  const _component_choosing_car_model_dialog = (0,runtime_core_esm_bundler/* resolveComponent */.up)("choosing-car-model-dialog");
   return (0,runtime_core_esm_bundler/* openBlock */.wg)(), (0,runtime_core_esm_bundler/* createElementBlock */.iD)(runtime_core_esm_bundler/* Fragment */.HY, null, [(0,runtime_core_esm_bundler/* createVNode */.Wm)(_component_dialog_template, {
     "content-class": "about",
     modelValue: $setup.visible,
@@ -10491,12 +10514,15 @@ function AboutDialogvue_type_template_id_0b2e9ae8_ts_true_render(_ctx, _cache, $
         }, {
           default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VTextField/* VTextField */.h, {
             "model-value": item,
+            class: "about__text-field",
             label: _ctx.$t('about.' + key),
             variant: "underlined",
             disabled: item.length === 0,
+            "append-icon": key === 'carSupport' ? 'mdi-pen' : undefined,
             readonly: "",
-            dense: ""
-          }, null, 8, ["model-value", "label", "disabled"])]),
+            dense: "",
+            "onClick:append": $event => $setup.onEditClick(key)
+          }, null, 8, ["model-value", "label", "disabled", "append-icon", "onClick:append"])]),
           _: 2
         }, 1024);
       }), 128))]),
@@ -10520,7 +10546,12 @@ function AboutDialogvue_type_template_id_0b2e9ae8_ts_true_render(_ctx, _cache, $
   }, 8, ["modelValue", "title"]), (0,runtime_core_esm_bundler/* createVNode */.Wm)(_component_device_info_dialog, {
     modelValue: $setup.visibleDeviceInfo,
     "onUpdate:modelValue": _cache[2] || (_cache[2] = $event => $setup.visibleDeviceInfo = $event)
-  }, null, 8, ["modelValue"])], 64);
+  }, null, 8, ["modelValue"]), (0,runtime_core_esm_bundler/* createVNode */.Wm)(_component_choosing_car_model_dialog, {
+    modelValue: $setup.visibleCarModel,
+    "onUpdate:modelValue": _cache[3] || (_cache[3] = $event => $setup.visibleCarModel = $event),
+    "car-model": $setup.carModel,
+    "onClick:apply": $setup.onCarModelApplyClick
+  }, null, 8, ["modelValue", "car-model", "onClick:apply"])], 64);
 }
 
 /* Vuetify */
@@ -11185,6 +11216,132 @@ var device = __webpack_require__(9065);
 const DeviceInfoDialog_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(DeviceInfoDialogvue_type_script_lang_ts, [['render',DeviceInfoDialogvue_type_template_id_c86c42d4_ts_true_render]])
 
 /* harmony default export */ var DeviceInfoDialog = (DeviceInfoDialog_exports_);
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/components/VSelect/VSelect.mjs + 1 modules
+var VSelect = __webpack_require__(240);
+;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/dialogs/ChoosingCarModelDialog.vue?vue&type=template&id=2be5e04b&ts=true
+
+function ChoosingCarModelDialogvue_type_template_id_2be5e04b_ts_true_render(_ctx, _cache, $props, $setup, $data, $options) {
+                                                            
+                                                      
+                                                      
+                                                      
+  const _component_dialog_template = (0,runtime_core_esm_bundler/* resolveComponent */.up)("dialog-template");
+  return (0,runtime_core_esm_bundler/* openBlock */.wg)(), (0,runtime_core_esm_bundler/* createBlock */.j4)(_component_dialog_template, {
+    "content-class": "choosing-car-model",
+    modelValue: $setup.visible,
+    "onUpdate:modelValue": _cache[3] || (_cache[3] = $event => $setup.visible = $event),
+    title: _ctx.$t('choosingCarModel.title'),
+    icon: "on-board",
+    width: "480px",
+    text: "",
+    actions: ""
+  }, {
+    body: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VRow/* VRow */.o, {
+      class: "pb-2"
+    }, {
+      default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VCol/* VCol */.D, {
+        cols: "12"
+      }, {
+        default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VSelect/* VSelect */.r, {
+          modelValue: $setup.modelCarModel,
+          "onUpdate:modelValue": _cache[0] || (_cache[0] = $event => $setup.modelCarModel = $event),
+          label: _ctx.$t('choosingCarModel.label'),
+          items: $setup.carModels,
+          hint: _ctx.$t('choosingCarModel.description'),
+          variant: "underlined",
+          "item-title": "label",
+          "item-value": "value",
+          "persistent-hint": ""
+        }, null, 8, ["modelValue", "label", "items", "hint"])]),
+        _: 1
+      })]),
+      _: 1
+    })]),
+    btns: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VBtn/* VBtn */.T, {
+      color: "primary",
+      onClick: _cache[1] || (_cache[1] = $event => _ctx.$emit('click:apply', $setup.modelCarModel))
+    }, {
+      default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createTextVNode */.Uk)((0,shared_esm_bundler/* toDisplayString */.zw)(_ctx.$t("btn.apply")), 1)]),
+      _: 1
+    }), (0,runtime_core_esm_bundler/* createVNode */.Wm)(VBtn/* VBtn */.T, {
+      color: "primary",
+      "prepend-icon": "mdi-close",
+      onClick: _cache[2] || (_cache[2] = $event => $setup.visible = false)
+    }, {
+      default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createTextVNode */.Uk)((0,shared_esm_bundler/* toDisplayString */.zw)(_ctx.$t("btn.close")), 1)]),
+      _: 1
+    })]),
+    _: 1
+  }, 8, ["modelValue", "title"]);
+}
+
+/* Vuetify */
+
+
+
+
+
+;// CONCATENATED MODULE: ./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/dialogs/ChoosingCarModelDialog.vue?vue&type=script&lang=ts
+
+
+
+
+/* harmony default export */ var ChoosingCarModelDialogvue_type_script_lang_ts = ({
+  name: "ChoosingCarModelDialog",
+  components: {
+    DialogTemplate: DialogTemplate/* default */.Z
+  },
+  props: {
+    modelValue: Boolean,
+    carModel: Number
+  },
+  emits: ["update:modelValue", "click:apply"],
+  setup(props, {
+    emit
+  }) {
+    const {
+      modelValue,
+      carModel
+    } = (0,reactivity_esm_bundler/* toRefs */.BK)(props);
+    const {
+      tm
+    } = (0,vue_i18n_esm_bundler/* useI18n */.QT)();
+    const visible = (0,runtime_core_esm_bundler/* computed */.Fl)({
+      get: () => modelValue.value,
+      set: val => emit("update:modelValue", val)
+    });
+    const carModels = (0,runtime_core_esm_bundler/* computed */.Fl)(() => {
+      const list = tm("choosingCarModel.carModels");
+      const result = [];
+      for (const key in list) if (key !== "0") result.push({
+        label: list[key],
+        value: Number(key)
+      });
+      return result;
+    });
+    const modelCarModel = (0,reactivity_esm_bundler/* ref */.iH)(carModel.value);
+    (0,runtime_core_esm_bundler/* watch */.YP)(modelValue, () => {
+      if (modelValue.value) modelCarModel.value = carModel.value;
+    });
+    (0,runtime_core_esm_bundler/* watch */.YP)(carModel, () => modelCarModel.value = carModel.value);
+    return {
+      visible,
+      carModels,
+      modelCarModel
+    };
+  }
+});
+;// CONCATENATED MODULE: ./src/components/dialogs/ChoosingCarModelDialog.vue?vue&type=script&lang=ts
+ 
+;// CONCATENATED MODULE: ./src/components/dialogs/ChoosingCarModelDialog.vue
+
+
+
+
+;
+const ChoosingCarModelDialog_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(ChoosingCarModelDialogvue_type_script_lang_ts, [['render',ChoosingCarModelDialogvue_type_template_id_2be5e04b_ts_true_render]])
+
+/* harmony default export */ var ChoosingCarModelDialog = (ChoosingCarModelDialog_exports_);
 // EXTERNAL MODULE: ./src/models/pjcan/configs/index.ts + 1 modules
 var configs = __webpack_require__(1303);
 // EXTERNAL MODULE: ./src/models/pjcan/car/index.ts + 3 modules
@@ -11196,10 +11353,13 @@ var car = __webpack_require__(3053);
 
 
 
+
+
 const pkg = __webpack_require__(4147);
 /* harmony default export */ var AboutDialogvue_type_script_lang_ts = ({
   name: "AboutDialog",
   components: {
+    ChoosingCarModelDialog: ChoosingCarModelDialog,
     DialogTemplate: DialogTemplate/* default */.Z,
     DeviceInfoDialog: DeviceInfoDialog
   },
@@ -11213,6 +11373,10 @@ const pkg = __webpack_require__(4147);
     const {
       modelValue
     } = (0,reactivity_esm_bundler/* toRefs */.BK)(props);
+    const {
+      tm,
+      te
+    } = (0,vue_i18n_esm_bundler/* useI18n */.QT)();
     const visible = (0,runtime_core_esm_bundler/* computed */.Fl)({
       get: () => modelValue.value,
       set: val => emit("update:modelValue", val)
@@ -11220,6 +11384,7 @@ const pkg = __webpack_require__(4147);
     const visibleDeviceInfo = (0,reactivity_esm_bundler/* ref */.iH)(false);
     const versionFirmware = (0,reactivity_esm_bundler/* ref */.iH)("");
     const carSupport = (0,reactivity_esm_bundler/* ref */.iH)("Mazda");
+    const carModel = (0,reactivity_esm_bundler/* ref */.iH)(0);
     const modelInfo = (0,runtime_core_esm_bundler/* computed */.Fl)(() => {
       const result = {
         version: pkg.version,
@@ -11229,6 +11394,7 @@ const pkg = __webpack_require__(4147);
       };
       return result;
     });
+    const visibleCarModel = (0,reactivity_esm_bundler/* ref */.iH)(false);
     /**
      * Обновление версии
      * @param {IConfigs} res Общая конфигурация
@@ -11242,17 +11408,9 @@ const pkg = __webpack_require__(4147);
      */
     const onReceiveCarConfig = res => {
       if (res.isData) {
-        switch (res.carModel) {
-          case car/* ECarModel.CAR_MODEL_MAZDA3 */.qZ.CAR_MODEL_MAZDA3:
-            carSupport.value = "Mazda 3 BK";
-            break;
-          case car/* ECarModel.CAR_MODEL_MAZDA_CX7 */.qZ.CAR_MODEL_MAZDA_CX7:
-            carSupport.value = "Mazda CX-7";
-            break;
-          default:
-            carSupport.value = "Mazda";
-            break;
-        }
+        const key = "choosingCarModel.carModels." + res.carModel;
+        carSupport.value = te(key) ? tm(key) : tm("choosingCarModel.carModels.0");
+        carModel.value = res.carModel;
       }
     };
     /** Открыть попап технической информации */
@@ -11269,23 +11427,44 @@ const pkg = __webpack_require__(4147);
       canbus["default"].removeListener(configs/* API_CONFIGS_EVENT */.cF, onReceiveConfigs);
       canbus["default"].removeListener(car/* API_CAR_CONFIG_EVENT */.Gd, onReceiveCarConfig);
     });
+    const onEditClick = key => {
+      if (key === "carSupport") visibleCarModel.value = true;
+    };
+    const onCarModelApplyClick = carModel => {
+      visibleCarModel.value = false;
+      if (canbus["default"].configs.car.carModel !== carModel) {
+        canbus["default"].configs.car.carModel = carModel;
+        canbus["default"].queryConfig(car/* API_CAR_CONFIG_EXEC */.j6);
+      }
+    };
     return {
       visible,
       visibleDeviceInfo,
+      visibleCarModel,
+      carModel,
       modelInfo,
-      onDeviceInfoClick
+      onDeviceInfoClick,
+      onEditClick,
+      onCarModelApplyClick
     };
   }
 });
 ;// CONCATENATED MODULE: ./src/components/dialogs/AboutDialog.vue?vue&type=script&lang=ts
  
+;// CONCATENATED MODULE: ./node_modules/mini-css-extract-plugin/dist/loader.js??clonedRuleSet-22.use[0]!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/dialogs/AboutDialog.vue?vue&type=style&index=0&id=540d834a&lang=scss&scoped=true
+// extracted by mini-css-extract-plugin
+
+;// CONCATENATED MODULE: ./src/components/dialogs/AboutDialog.vue?vue&type=style&index=0&id=540d834a&lang=scss&scoped=true
+
 ;// CONCATENATED MODULE: ./src/components/dialogs/AboutDialog.vue
 
 
 
 
 ;
-const AboutDialog_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(AboutDialogvue_type_script_lang_ts, [['render',AboutDialogvue_type_template_id_0b2e9ae8_ts_true_render]])
+
+
+const AboutDialog_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(AboutDialogvue_type_script_lang_ts, [['render',AboutDialogvue_type_template_id_540d834a_scoped_true_ts_true_render],['__scopeId',"data-v-540d834a"]])
 
 /* harmony default export */ var AboutDialog = (AboutDialog_exports_);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/components/VBtnGroup/VBtnGroup.mjs + 1 modules
@@ -11507,8 +11686,6 @@ var lcd = __webpack_require__(6026);
 const OnboardButtonsDialog_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(OnboardButtonsDialogvue_type_script_lang_ts, [['render',OnboardButtonsDialogvue_type_template_id_202e5ccc_scoped_true_ts_true_render],['__scopeId',"data-v-202e5ccc"]])
 
 /* harmony default export */ var OnboardButtonsDialog = (OnboardButtonsDialog_exports_);
-// EXTERNAL MODULE: ./node_modules/vuetify/lib/components/VSelect/VSelect.mjs + 1 modules
-var VSelect = __webpack_require__(240);
 ;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/dialogs/TestDialog.vue?vue&type=template&id=3bcd2b05&scoped=true&ts=true
 
 function TestDialogvue_type_template_id_3bcd2b05_scoped_true_ts_true_render(_ctx, _cache, $props, $setup, $data, $options) {
@@ -21355,6 +21532,7 @@ var ECarModel;
   ECarModel[ECarModel["CAR_MODEL_NONE"] = 0] = "CAR_MODEL_NONE";
   ECarModel[ECarModel["CAR_MODEL_MAZDA3"] = 1] = "CAR_MODEL_MAZDA3";
   ECarModel[ECarModel["CAR_MODEL_MAZDA_CX7"] = 2] = "CAR_MODEL_MAZDA_CX7";
+  ECarModel[ECarModel["CAR_MODEL_MAZDA_CX9"] = 3] = "CAR_MODEL_MAZDA_CX9";
 })(ECarModel || (ECarModel = {}));
 ;// CONCATENATED MODULE: ./src/models/pjcan/car/CarConfig.ts
 
@@ -25209,23 +25387,23 @@ var index = {
 /* harmony default export */ var onboard_card_list_default = ([{
   name: "info",
   enabled: true,
-  car: [1, 2]
+  car: [1, 2, 3]
 }, {
   name: "bose",
   enabled: true,
-  car: [2]
+  car: [2, 3]
 }, {
   name: "engine",
   enabled: true,
-  car: [1, 2]
+  car: [1, 2, 3]
 }, {
   name: "fuel",
   enabled: true,
-  car: [1, 2]
+  car: [1, 2, 3]
 }, {
   name: "movement",
   enabled: true,
-  car: [1, 2]
+  car: [1, 2, 3]
 }, {
   name: "doors",
   enabled: true,
@@ -81628,6 +81806,6 @@ module.exports = JSON.parse('{"name":"pjcan","version":"0.4.2","private":true,"d
 },
 /******/ function(__webpack_require__) { // webpackRuntimeModules
 /******/ var __webpack_exec__ = function(moduleId) { return __webpack_require__(__webpack_require__.s = moduleId); }
-/******/ var __webpack_exports__ = (__webpack_exec__(5119));
+/******/ var __webpack_exports__ = (__webpack_exec__(9774));
 /******/ }
 ]);
