@@ -100,6 +100,7 @@ import SwitchCardItem from "@/components/cards/SwitchCardItem.vue";
 import IconCardItem from "@/components/cards/IconCardItem.vue";
 import ViewSettingDialog from "./ViewSettingDialog.vue";
 import { IMenuItem } from "@/components/MenuDots.vue";
+import { ECarModel } from "@/models/pjcan/car";
 
 import {
 	API_VARIABLE_SENSORS_EVENT,
@@ -120,7 +121,6 @@ import { IViewConfig } from "@/models/pjcan/view";
 import { API_DEVICE_EVENT, IDeviceValue } from "@/models/pjcan/device";
 
 import canbus from "@/api/canbus";
-import { ECarModel } from "@/models/pjcan/car";
 
 export default {
 	name: "InfoCard",

@@ -65,6 +65,7 @@ import {
 	API_CAR_CONFIG_EXEC,
 	API_CAR_VIEW_EVENT,
 	API_CAR_VIEW_EXEC,
+	ECarModel,
 	ICarConfig,
 	ICarView
 } from "@/models/pjcan/car";
@@ -74,7 +75,19 @@ import canbus from "@/api/canbus";
 
 export default {
 	name: "LcdCard",
+	computed: {
+		ECarModel()
+		{
+			return ECarModel;
+		}
+	},
 	components: { Card, SwitchCardItem, ViewSettingDialog },
+	props: {
+		carModel: {
+			type: Number,
+			default: 0
+		}
+	},
 	setup()
 	{
 		const { t } = useI18n();

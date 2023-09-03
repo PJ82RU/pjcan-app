@@ -1,5 +1,10 @@
 <template>
-	<card class="movement-card" :title="$t('onboard.movement.title')" :menu="menu" @click:menu="onMenuClick">
+	<card
+		class="movement-card"
+		:title="$t('onboard.movement.title')"
+		:menu="carModel !== ECarModel.CAR_MODEL_MAZDA_CX9_GEN2 ? menu : undefined"
+		@click:menu="onMenuClick"
+	>
 		<template #body>
 			<v-row>
 				<v-col cols="12" class="pb-0">
@@ -34,6 +39,7 @@
 	</card>
 
 	<view-setting-dialog
+        v-if="carModel !== ECarModel.CAR_MODEL_MAZDA_CX9_GEN2"
 		v-model="menuVisible"
 		:title="menuSelected.title"
 		:enabled="menuViewConfig.enabled"
@@ -52,6 +58,7 @@ import Card from "@/components/cards/Card.vue";
 import InputCardItem from "@/components/cards/InputCardItem.vue";
 import ViewSettingDialog from "./ViewSettingDialog.vue";
 import { IMenuItem } from "@/components/MenuDots.vue";
+import { ECarModel } from "@/models/pjcan/car";
 
 import { IViewConfig } from "@/models/pjcan/view";
 import {
@@ -66,6 +73,12 @@ import canbus from "@/api/canbus";
 
 export default {
 	name: "MovementCard",
+	computed: {
+		ECarModel()
+		{
+			return ECarModel;
+		}
+	},
 	components: { Card, InputCardItem, ViewSettingDialog },
 	props: {
 		carModel: {

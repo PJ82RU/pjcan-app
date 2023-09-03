@@ -69,6 +69,7 @@ import { Timeout } from "@/models/types/Timeout";
 import { API_VERSION_EVENT } from "@/models/pjcan/version";
 
 import canbus from "@/api/canbus";
+import { API_CAR_CONFIG_EVENT, ECarModel, ICarConfig } from "@/models/pjcan/car";
 
 export default {
 	name: "BaseLayout",
@@ -92,6 +93,13 @@ export default {
 			return "PJCAN: " + (result?.length > 0 ? t(result) : "");
 		});
 		const newVersionFirmware = ref(false as string | boolean);
+
+		const carModel = ref(canbus.configs.car.carModel);
+		const onReceiveCarConfig = (res: ICarConfig): void =>
+		{
+			if (res.isData) carModel.value = res.carModel;
+		};
+
 		const menu = computed((): IMenuItem[] =>
 		{
 			const result = [] as IMenuItem[];
@@ -102,9 +110,14 @@ export default {
 				{ id: 1, title: t("menu.settings.buttons"), disabled: name === "Buttons" },
 				{ id: 6, title: t("menu.settings.options"), disabled: name === "Options" },
 				{ id: 4, title: t("menu.onboardButtons") },
-				{ id: 5, title: t("menu.test") },
-				{} as IMenuItem,
-				{ id: 2, title: t("menu.language." + (locale.value !== "ru" ? "russian" : "english")) }
+			);
+			if (carModel.value !== ECarModel.CAR_MODEL_MAZDA_CX9_GEN2)
+			{
+				result.push({ id: 5, title: t("menu.test") });
+			}
+			result.push(
+                {} as IMenuItem,
+                { id: 2, title: t("menu.language." + (locale.value !== "ru" ? "russian" : "english")) }
 			);
 			if (typeof newVersionFirmware.value === "string")
 			{
@@ -165,11 +178,14 @@ export default {
 			window.addEventListener("resize", windowSize);
 			windowSize();
 			canbus.addListener(API_VERSION_EVENT, onCheckVersion);
+			canbus.addListener(API_CAR_CONFIG_EVENT, onReceiveCarConfig);
+			onReceiveCarConfig(canbus.configs.car);
 		});
 		onUnmounted(() =>
 		{
 			window.removeEventListener("resize", windowSize);
 			canbus.removeListener(API_VERSION_EVENT, onCheckVersion);
+			canbus.removeListener(API_CAR_CONFIG_EVENT, onReceiveCarConfig);
 		});
 
 		/** Переключение полноэкранного режима */
