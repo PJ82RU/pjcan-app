@@ -24,7 +24,7 @@
 
 			<menu-dots :menu="menu" @click:item="onMenuClick" />
 			<about-dialog v-model="visibleAbout" />
-			<onboard-buttons-dialog v-model="visibleOnboardButtons" />
+			<onboard-buttons-dialog v-model="visibleOnboardButtons" :car-model="carModel" />
 			<test-dialog v-model="visibleTest" />
 		</v-app-bar>
 		<v-main>
@@ -252,6 +252,7 @@ export default {
 		return {
 			title,
 			menu,
+			carModel,
 			newVersionFirmware,
 			visibleAbout,
 			visibleOnboardButtons,
