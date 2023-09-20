@@ -462,11 +462,18 @@ export default {
 			8: "Clock H button on LCD",
 			9: "Clock M button on LCD",
 			10: "Info button on LCD",
-			11: "Show engine values button",
-			12: "Show consumption values button",
-			13: "Show motion values button",
-			14: "Button to show temperature values",
-			15: "Clock 12/24 button on LCD"
+			11: "Show engine values",
+			12: "Show consumption values",
+			13: "Show motion values",
+			14: "Show temperature values",
+			15: "Clock 12/24 button on LCD",
+			16: "Voice control",
+			17: "Radio",
+			18: "Camera",
+			19: "Radio: search",
+			20: "Equalizer",
+			21: "On/off display",
+			22: "Phone"
 		},
 
 		definition: {
