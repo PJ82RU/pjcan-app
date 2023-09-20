@@ -15,7 +15,7 @@
 						:disabled="!loadedTeyesConfig || typeof uartBaud !== 'number'"
 					/>
 				</v-col>
-				<v-col v-if="carModel !== ECarModel.CAR_MODEL_MAZDA_CX9_GEN2" cols="12" class="pt-0 pb-0">
+				<v-col v-if="carModel !== ECarModel.CAR_MODEL_MAZDA_CX9_REST" cols="12" class="pt-0 pb-0">
 					<switch-card-item
 						v-model="lcdShow"
 						:title="$t('options.teyes.lcdShow.title')"
@@ -38,7 +38,7 @@
 					/>
 				</v-col>
 				<v-col
-					v-if="carModel !== ECarModel.CAR_MODEL_MAZDA_CX9 && carModel !== ECarModel.CAR_MODEL_MAZDA_CX9_GEN2"
+					v-if="carModel !== ECarModel.CAR_MODEL_MAZDA_CX9 && carModel !== ECarModel.CAR_MODEL_MAZDA_CX9_REST"
 					cols="12"
 					class="pt-0 pb-0"
 				>

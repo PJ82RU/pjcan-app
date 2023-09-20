@@ -2,7 +2,7 @@
 	<card
 		class="movement-card"
 		:title="$t('onboard.movement.title')"
-		:menu="carModel !== ECarModel.CAR_MODEL_MAZDA_CX9_GEN2 ? menu : undefined"
+		:menu="carModel !== ECarModel.CAR_MODEL_MAZDA_CX9_REST ? menu : undefined"
 		@click:menu="onMenuClick"
 	>
 		<template #body>
@@ -39,7 +39,7 @@
 	</card>
 
 	<view-setting-dialog
-        v-if="carModel !== ECarModel.CAR_MODEL_MAZDA_CX9_GEN2"
+        v-if="carModel !== ECarModel.CAR_MODEL_MAZDA_CX9_REST"
 		v-model="menuVisible"
 		:title="menuSelected.title"
 		:enabled="menuViewConfig.enabled"

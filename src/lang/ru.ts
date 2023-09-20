@@ -660,7 +660,7 @@ export default {
 			1: "Mazda 3 BK",
 			2: "Mazda CX-7",
 			3: "Mazda CX-9",
-			4: "Mazda CX-9 Gen.2"
+			4: "Mazda CX-9 Rest"
 		}
 	}
 };

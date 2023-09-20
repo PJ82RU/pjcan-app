@@ -111,7 +111,7 @@ export default {
 				{ id: 6, title: t("menu.settings.options"), disabled: name === "Options" },
 				{ id: 4, title: t("menu.onboardButtons") },
 			);
-			if (carModel.value !== ECarModel.CAR_MODEL_MAZDA_CX9_GEN2)
+			if (carModel.value !== ECarModel.CAR_MODEL_MAZDA_CX9_REST)
 			{
 				result.push({ id: 5, title: t("menu.test") });
 			}

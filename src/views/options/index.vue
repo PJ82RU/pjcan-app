@@ -28,7 +28,7 @@ export default {
 
 		const carModel = ref(canbus.configs.car.carModel);
 		const cards = computed(() =>
-			carModel.value !== ECarModel.CAR_MODEL_MAZDA_CX9_GEN2 ? ["lcd", "teyes", "onboard"] : ["teyes", "onboard"]
+			carModel.value !== ECarModel.CAR_MODEL_MAZDA_CX9_REST ? ["lcd", "teyes", "onboard"] : ["teyes", "onboard"]
 		);
 
 		const onReceiveCarConfig = (res: ICarConfig): void =>

@@ -78,7 +78,7 @@
 							RM
 						</v-btn>
 						<v-btn
-							v-if="carModel === ECarModel.CAR_MODEL_MAZDA_CX9_GEN2"
+							v-if="carModel === ECarModel.CAR_MODEL_MAZDA_CX9_REST"
 							color="secondary"
 							size="x-large"
 							@mousedown="onPress('flgClock24')"
