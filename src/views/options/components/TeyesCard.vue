@@ -2,20 +2,20 @@
 	<card class="teyes-card" :title="$t('options.teyes.title')" :menu="menu" @click:menu="onMenuClick">
 		<template #body>
 			<v-row>
-                <v-col cols="12" class="pt-0 pb-0">
-                    <v-select
-                        v-model="uartBaud"
-                        :label="$t('options.teyes.uartBaud.title')"
-                        :items="listUartBaud"
-                        :hint="$t('options.teyes.uartBaud.description')"
-                        variant="underlined"
-                        item-title="label"
-                        item-value="value"
-                        persistent-hint
-                        :disabled="!loadedTeyesConfig || typeof uartBaud !== 'number'"
-                    />
-                </v-col>
 				<v-col cols="12" class="pt-0 pb-0">
+					<v-select
+						v-model="uartBaud"
+						:label="$t('options.teyes.uartBaud.title')"
+						:items="listUartBaud"
+						:hint="$t('options.teyes.uartBaud.description')"
+						variant="underlined"
+						item-title="label"
+						item-value="value"
+						persistent-hint
+						:disabled="!loadedTeyesConfig || typeof uartBaud !== 'number'"
+					/>
+				</v-col>
+				<v-col v-if="carModel !== ECarModel.CAR_MODEL_MAZDA_CX9_GEN2" cols="12" class="pt-0 pb-0">
 					<switch-card-item
 						v-model="lcdShow"
 						:title="$t('options.teyes.lcdShow.title')"
@@ -37,7 +37,11 @@
 						@change="onApplyTeyesConfig"
 					/>
 				</v-col>
-				<v-col cols="12" class="pt-0 pb-0">
+				<v-col
+					v-if="carModel !== ECarModel.CAR_MODEL_MAZDA_CX9 && carModel !== ECarModel.CAR_MODEL_MAZDA_CX9_GEN2"
+					cols="12"
+					class="pt-0 pb-0"
+				>
 					<switch-card-item
 						v-model="sendClimate"
 						:title="$t('options.teyes.sendClimate.title')"
@@ -48,7 +52,7 @@
 						@change="onApplyTeyesConfig"
 					/>
 				</v-col>
-				<v-col cols="12" class="pt-0 pb-0">
+				<v-col v-if="carModel === ECarModel.CAR_MODEL_MAZDA3" cols="12" class="pt-0 pb-0">
 					<switch-card-item
 						v-model="sendDoors"
 						:title="$t('options.teyes.sendDoors.title')"
@@ -126,6 +130,7 @@ import Card from "@/components/cards/Card.vue";
 import SwitchCardItem from "@/components/cards/SwitchCardItem.vue";
 import ViewSettingDialog from "@/views/onboard/components/ViewSettingDialog.vue";
 import { IMenuItem } from "@/components/MenuDots.vue";
+import { ECarModel } from "@/models/pjcan/car";
 
 import {
 	API_TEYES_CONFIG_EVENT,
@@ -141,7 +146,19 @@ import canbus from "@/api/canbus";
 
 export default {
 	name: "TeyesCard",
+	computed: {
+		ECarModel()
+		{
+			return ECarModel;
+		}
+	},
 	components: { Card, SwitchCardItem, ViewSettingDialog },
+	props: {
+		carModel: {
+			type: Number,
+			default: 0
+		}
+	},
 	setup()
 	{
 		const { t, tm } = useI18n();

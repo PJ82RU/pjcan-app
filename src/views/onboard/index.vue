@@ -1,6 +1,6 @@
 <template>
 	<flicking ref="flicking" class="onboard" :options="{ bound: true, align: 'prev' }">
-		<div v-for="item in cardList" :key="item.name" class="mr-4" :class="`flicking-${display}`">
+		<div v-for="item in cards" :key="item.name" class="mr-4" :class="`flicking-${display}`">
 			<component :is="`${item.name}-card`" :car-model="carModel" />
 		</div>
 	</flicking>
@@ -44,16 +44,17 @@ export default {
 		provide("flicking", flicking);
 
 		const carModel = ref(canbus.configs.car.carModel);
-		const cardList = computed(() =>
+		const onReceiveCarConfig = (res: ICarConfig): void =>
+		{
+			if (res.isData) carModel.value = res.carModel;
+		};
+
+		const cards = computed(() =>
 		{
 			return store.getters["app/onboardCardList"]?.filter(
 				(x: IOnboardCard) => x.enabled && x.car?.indexOf(carModel.value) >= 0
 			);
 		});
-		const onReceiveCarConfig = (res: ICarConfig): void =>
-		{
-			if (res.isData) carModel.value = res.carModel;
-		};
 
 		onMounted(() =>
 		{
@@ -70,7 +71,7 @@ export default {
 		return {
 			flicking,
 			carModel,
-			cardList,
+			cards,
 			display
 		};
 	}

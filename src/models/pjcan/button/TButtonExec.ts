@@ -16,5 +16,6 @@ export enum TButtonExec {
 	VARIABLE_ENGINE = 11, // кнопка показать значения ДВС
 	VARIABLE_FUEL = 12, // кнопка показать значения расхода
 	VARIABLE_MOVEMENT = 13, // кнопка показать значения движения
-	VARIABLE_TEMPERATURE = 14 // кнопка показать значения температуру
+	VARIABLE_TEMPERATURE = 14, // кнопка показать значения температуру
+	LCD_CLOCK_24 = 15, // кнопка Clock 24/12 на LCD (нажата)
 }

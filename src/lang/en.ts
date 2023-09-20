@@ -465,7 +465,8 @@ export default {
 			11: "Show engine values button",
 			12: "Show consumption values button",
 			13: "Show motion values button",
-			14: "Button to show temperature values"
+			14: "Button to show temperature values",
+			15: "Clock 12/24 button on LCD"
 		},
 
 		definition: {
@@ -643,7 +644,8 @@ export default {
 			0: "Mazda",
 			1: "Mazda 3 BK",
 			2: "Mazda CX-7",
-			3: "Mazda CX-9"
+			3: "Mazda CX-9",
+			4: "Mazda CX-9 Gen.2"
 		}
 	}
 };

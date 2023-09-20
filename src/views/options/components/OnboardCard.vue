@@ -63,6 +63,12 @@ import canbus from "@/api/canbus";
 export default {
 	name: "OnboardCard",
 	components: { IconCustom, Card, draggable },
+	props: {
+		carModel: {
+			type: Number,
+			default: 0
+		}
+	},
 	setup()
 	{
 		const { t } = useI18n();
