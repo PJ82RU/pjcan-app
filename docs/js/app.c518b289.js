@@ -4869,10 +4869,18 @@ var vue_i18n_esm_bundler = __webpack_require__(5658);
       8: "Кнопка Clock H на LCD",
       9: "Кнопка Clock M на LCD",
       10: "Кнопка Info на LCD",
-      11: "Кнопка показать значения ДВС",
-      12: "Кнопка показать значения расхода",
-      13: "Кнопка показать значения движения",
-      14: "Кнопка показать значения температуры"
+      11: "Показать значения ДВС",
+      12: "Показать значения расхода",
+      13: "Показать значения движения",
+      14: "Показать значения температуры",
+      15: "Кнопка Clock 12/24 на LCD",
+      16: "Голосовое управление",
+      17: "Радио",
+      18: "Камера",
+      19: "Радио: поиск",
+      20: "Эквалайзер",
+      21: "Вкл/выкл дисплея",
+      22: "Телефон"
     },
     definition: {
       title: "Обнаружено нажатие кнопки",
@@ -5017,7 +5025,8 @@ var vue_i18n_esm_bundler = __webpack_require__(5658);
       0: "Mazda",
       1: "Mazda 3 BK",
       2: "Mazda CX-7",
-      3: "Mazda CX-9"
+      3: "Mazda CX-9",
+      4: "Mazda CX-9 Rest"
     }
   }
 });
@@ -5454,10 +5463,18 @@ var vue_i18n_esm_bundler = __webpack_require__(5658);
       8: "Clock H button on LCD",
       9: "Clock M button on LCD",
       10: "Info button on LCD",
-      11: "Show engine values button",
-      12: "Show consumption values button",
-      13: "Show motion values button",
-      14: "Button to show temperature values"
+      11: "Show engine values",
+      12: "Show consumption values",
+      13: "Show motion values",
+      14: "Show temperature values",
+      15: "Clock 12/24 button on LCD",
+      16: "Voice control",
+      17: "Radio",
+      18: "Camera",
+      19: "Radio: search",
+      20: "Equalizer",
+      21: "On/off display",
+      22: "Phone"
     },
     definition: {
       title: "Button press detected",
@@ -5602,7 +5619,8 @@ var vue_i18n_esm_bundler = __webpack_require__(5658);
       0: "Mazda",
       1: "Mazda 3 BK",
       2: "Mazda CX-7",
-      3: "Mazda CX-9"
+      3: "Mazda CX-9",
+      4: "Mazda CX-9 Rest"
     }
   }
 });
@@ -5655,7 +5673,7 @@ const t = i18n.global.t;
 
 /***/ }),
 
-/***/ 5634:
+/***/ 7650:
 /***/ (function(__unused_webpack_module, __unused_webpack___webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -6669,9 +6687,9 @@ const VMain = (0,defineComponent/* genericComponent */.ev)()({
     return {};
   }
 });
-;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/layout/BaseLayout.vue?vue&type=template&id=7d20b89d&scoped=true&ts=true
+;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/layout/BaseLayout.vue?vue&type=template&id=073ef137&scoped=true&ts=true
 
-const _withScopeId = n => ((0,runtime_core_esm_bundler/* pushScopeId */.dD)("data-v-7d20b89d"), n = n(), (0,runtime_core_esm_bundler/* popScopeId */.Cn)(), n);
+const _withScopeId = n => ((0,runtime_core_esm_bundler/* pushScopeId */.dD)("data-v-073ef137"), n = n(), (0,runtime_core_esm_bundler/* popScopeId */.Cn)(), n);
 const _hoisted_1 = {
   class: "text-h4"
 };
@@ -6681,7 +6699,7 @@ const _hoisted_2 = /*#__PURE__*/_withScopeId(() => /*#__PURE__*/(0,runtime_core_
 const _hoisted_3 = /*#__PURE__*/_withScopeId(() => /*#__PURE__*/(0,runtime_core_esm_bundler/* createElementVNode */._)("div", {
   class: "base-layout__bg"
 }, null, -1));
-function BaseLayoutvue_type_template_id_7d20b89d_scoped_true_ts_true_render(_ctx, _cache, $props, $setup, $data, $options) {
+function BaseLayoutvue_type_template_id_073ef137_scoped_true_ts_true_render(_ctx, _cache, $props, $setup, $data, $options) {
                                                                           
                                                             
   const _component_icon_custom = (0,runtime_core_esm_bundler/* resolveComponent */.up)("icon-custom");
@@ -6737,8 +6755,9 @@ function BaseLayoutvue_type_template_id_7d20b89d_scoped_true_ts_true_render(_ctx
         "onUpdate:modelValue": _cache[2] || (_cache[2] = $event => $setup.visibleAbout = $event)
       }, null, 8, ["modelValue"]), (0,runtime_core_esm_bundler/* createVNode */.Wm)(_component_onboard_buttons_dialog, {
         modelValue: $setup.visibleOnboardButtons,
-        "onUpdate:modelValue": _cache[3] || (_cache[3] = $event => $setup.visibleOnboardButtons = $event)
-      }, null, 8, ["modelValue"]), (0,runtime_core_esm_bundler/* createVNode */.Wm)(_component_test_dialog, {
+        "onUpdate:modelValue": _cache[3] || (_cache[3] = $event => $setup.visibleOnboardButtons = $event),
+        "car-model": $setup.carModel
+      }, null, 8, ["modelValue", "car-model"]), (0,runtime_core_esm_bundler/* createVNode */.Wm)(_component_test_dialog, {
         modelValue: $setup.visibleTest,
         "onUpdate:modelValue": _cache[4] || (_cache[4] = $event => $setup.visibleTest = $event)
       }, null, 8, ["modelValue"])]),
@@ -6775,7 +6794,7 @@ function BaseLayoutvue_type_template_id_7d20b89d_scoped_true_ts_true_render(_ctx
 
 
 
-;// CONCATENATED MODULE: ./src/layout/BaseLayout.vue?vue&type=template&id=7d20b89d&scoped=true&ts=true
+;// CONCATENATED MODULE: ./src/layout/BaseLayout.vue?vue&type=template&id=073ef137&scoped=true&ts=true
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.unshift.js
 var es_array_unshift = __webpack_require__(541);
@@ -11469,9 +11488,9 @@ const AboutDialog_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(AboutD
 /* harmony default export */ var AboutDialog = (AboutDialog_exports_);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/components/VBtnGroup/VBtnGroup.mjs + 1 modules
 var VBtnGroup = __webpack_require__(401);
-;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/dialogs/OnboardButtonsDialog.vue?vue&type=template&id=202e5ccc&scoped=true&ts=true
+;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/dialogs/OnboardButtonsDialog.vue?vue&type=template&id=e1b89ccc&scoped=true&ts=true
 
-function OnboardButtonsDialogvue_type_template_id_202e5ccc_scoped_true_ts_true_render(_ctx, _cache, $props, $setup, $data, $options) {
+function OnboardButtonsDialogvue_type_template_id_e1b89ccc_scoped_true_ts_true_render(_ctx, _cache, $props, $setup, $data, $options) {
                                                       
                                                                   
                                                       
@@ -11480,7 +11499,7 @@ function OnboardButtonsDialogvue_type_template_id_202e5ccc_scoped_true_ts_true_r
   return (0,runtime_core_esm_bundler/* openBlock */.wg)(), (0,runtime_core_esm_bundler/* createBlock */.j4)(_component_dialog_template, {
     "content-class": "onboard-buttons",
     modelValue: $setup.visible,
-    "onUpdate:modelValue": _cache[33] || (_cache[33] = $event => $setup.visible = $event),
+    "onUpdate:modelValue": _cache[39] || (_cache[39] = $event => $setup.visible = $event),
     title: _ctx.$t('onboardButtons.title'),
     info: _ctx.$t('onboardButtons.description'),
     icon: "steering-wheel",
@@ -11501,9 +11520,9 @@ function OnboardButtonsDialogvue_type_template_id_202e5ccc_scoped_true_ts_true_r
           default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VBtn/* VBtn */.T, {
             color: "primary",
             size: "x-large",
-            onMousedown: _cache[0] || (_cache[0] = $event => $setup.onTouchPress('btnClock')),
-            onMouseup: _cache[1] || (_cache[1] = $event => $setup.onTouchRelease('btnClock')),
-            onMouseleave: _cache[2] || (_cache[2] = $event => $setup.onTouchRelease('btnClock')),
+            onMousedown: _cache[0] || (_cache[0] = $event => $setup.onPress('btnClock')),
+            onMouseup: _cache[1] || (_cache[1] = $event => $setup.onRelease('btnClock')),
+            onMouseleave: _cache[2] || (_cache[2] = $event => $setup.onRelease('btnClock')),
             onTouchstart: _cache[3] || (_cache[3] = $event => $setup.onTouchPress('btnClock')),
             onTouchend: _cache[4] || (_cache[4] = $event => $setup.onTouchRelease('btnClock')),
             onTouchcancel: _cache[5] || (_cache[5] = $event => $setup.onTouchRelease('btnClock'))
@@ -11513,9 +11532,9 @@ function OnboardButtonsDialogvue_type_template_id_202e5ccc_scoped_true_ts_true_r
           }), (0,runtime_core_esm_bundler/* createVNode */.Wm)(VBtn/* VBtn */.T, {
             color: "primary",
             size: "x-large",
-            onMousedown: _cache[6] || (_cache[6] = $event => $setup.onTouchPress('btnInfo')),
-            onMouseup: _cache[7] || (_cache[7] = $event => $setup.onTouchRelease('btnInfo')),
-            onMouseleave: _cache[8] || (_cache[8] = $event => $setup.onTouchRelease('btnInfo')),
+            onMousedown: _cache[6] || (_cache[6] = $event => $setup.onPress('btnInfo')),
+            onMouseup: _cache[7] || (_cache[7] = $event => $setup.onRelease('btnInfo')),
+            onMouseleave: _cache[8] || (_cache[8] = $event => $setup.onRelease('btnInfo')),
             onTouchstart: _cache[9] || (_cache[9] = $event => $setup.onTouchPress('btnInfo')),
             onTouchend: _cache[10] || (_cache[10] = $event => $setup.onTouchRelease('btnInfo')),
             onTouchcancel: _cache[11] || (_cache[11] = $event => $setup.onTouchRelease('btnInfo'))
@@ -11536,9 +11555,9 @@ function OnboardButtonsDialogvue_type_template_id_202e5ccc_scoped_true_ts_true_r
           default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VBtn/* VBtn */.T, {
             color: "secondary",
             size: "x-large",
-            onMousedown: _cache[12] || (_cache[12] = $event => $setup.onTouchPress('btnClockH')),
-            onMouseup: _cache[13] || (_cache[13] = $event => $setup.onTouchRelease('btnClockH')),
-            onMouseleave: _cache[14] || (_cache[14] = $event => $setup.onTouchRelease('btnClockH')),
+            onMousedown: _cache[12] || (_cache[12] = $event => $setup.onPress('btnClockH')),
+            onMouseup: _cache[13] || (_cache[13] = $event => $setup.onRelease('btnClockH')),
+            onMouseleave: _cache[14] || (_cache[14] = $event => $setup.onRelease('btnClockH')),
             onTouchstart: _cache[15] || (_cache[15] = $event => $setup.onTouchPress('btnClockH')),
             onTouchend: _cache[16] || (_cache[16] = $event => $setup.onTouchRelease('btnClockH')),
             onTouchcancel: _cache[17] || (_cache[17] = $event => $setup.onTouchRelease('btnClockH'))
@@ -11548,9 +11567,9 @@ function OnboardButtonsDialogvue_type_template_id_202e5ccc_scoped_true_ts_true_r
           }), (0,runtime_core_esm_bundler/* createVNode */.Wm)(VBtn/* VBtn */.T, {
             color: "secondary",
             size: "x-large",
-            onMousedown: _cache[18] || (_cache[18] = $event => $setup.onTouchPress('btnClockM')),
-            onMouseup: _cache[19] || (_cache[19] = $event => $setup.onTouchRelease('btnClockM')),
-            onMouseleave: _cache[20] || (_cache[20] = $event => $setup.onTouchRelease('btnClockM')),
+            onMousedown: _cache[18] || (_cache[18] = $event => $setup.onPress('btnClockM')),
+            onMouseup: _cache[19] || (_cache[19] = $event => $setup.onRelease('btnClockM')),
+            onMouseleave: _cache[20] || (_cache[20] = $event => $setup.onRelease('btnClockM')),
             onTouchstart: _cache[21] || (_cache[21] = $event => $setup.onTouchPress('btnClockM')),
             onTouchend: _cache[22] || (_cache[22] = $event => $setup.onTouchRelease('btnClockM')),
             onTouchcancel: _cache[23] || (_cache[23] = $event => $setup.onTouchRelease('btnClockM'))
@@ -11560,24 +11579,38 @@ function OnboardButtonsDialogvue_type_template_id_202e5ccc_scoped_true_ts_true_r
           }), (0,runtime_core_esm_bundler/* createVNode */.Wm)(VBtn/* VBtn */.T, {
             color: "secondary",
             size: "x-large",
-            onMousedown: _cache[24] || (_cache[24] = $event => $setup.onTouchPress('btnClockRM')),
-            onMouseup: _cache[25] || (_cache[25] = $event => $setup.onTouchRelease('btnClockRM')),
-            onMouseleave: _cache[26] || (_cache[26] = $event => $setup.onTouchRelease('btnClockRM')),
+            onMousedown: _cache[24] || (_cache[24] = $event => $setup.onPress('btnClockRM')),
+            onMouseup: _cache[25] || (_cache[25] = $event => $setup.onRelease('btnClockRM')),
+            onMouseleave: _cache[26] || (_cache[26] = $event => $setup.onRelease('btnClockRM')),
             onTouchstart: _cache[27] || (_cache[27] = $event => $setup.onTouchPress('btnClockRM')),
             onTouchend: _cache[28] || (_cache[28] = $event => $setup.onTouchRelease('btnClockRM')),
             onTouchcancel: _cache[29] || (_cache[29] = $event => $setup.onTouchRelease('btnClockRM'))
           }, {
             default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createTextVNode */.Uk)(" RM ")]),
             _: 1
-          }), (0,runtime_core_esm_bundler/* createVNode */.Wm)(VBtn/* VBtn */.T, {
+          }), $props.carModel === $options.ECarModel.CAR_MODEL_MAZDA_CX9_REST ? ((0,runtime_core_esm_bundler/* openBlock */.wg)(), (0,runtime_core_esm_bundler/* createBlock */.j4)(VBtn/* VBtn */.T, {
+            key: 0,
             color: "secondary",
             size: "x-large",
-            onMousedown: _cache[30] || (_cache[30] = $event => $setup.onTouchPress('flgClock24', true)),
-            onTouchstart: _cache[31] || (_cache[31] = $event => $setup.onTouchPress('flgClock24', true))
+            onMousedown: _cache[30] || (_cache[30] = $event => $setup.onPress('flgClock24')),
+            onMouseup: _cache[31] || (_cache[31] = $event => $setup.onRelease('flgClock24')),
+            onMouseleave: _cache[32] || (_cache[32] = $event => $setup.onRelease('flgClock24')),
+            onTouchstart: _cache[33] || (_cache[33] = $event => $setup.onTouchPress('flgClock24')),
+            onTouchend: _cache[34] || (_cache[34] = $event => $setup.onTouchRelease('flgClock24')),
+            onTouchcancel: _cache[35] || (_cache[35] = $event => $setup.onTouchRelease('flgClock24'))
           }, {
             default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createTextVNode */.Uk)(" 24/12 ")]),
             _: 1
-          })]),
+          })) : ((0,runtime_core_esm_bundler/* openBlock */.wg)(), (0,runtime_core_esm_bundler/* createBlock */.j4)(VBtn/* VBtn */.T, {
+            key: 1,
+            color: "secondary",
+            size: "x-large",
+            onMousedown: _cache[36] || (_cache[36] = $event => $setup.onPress('flgClock24', true)),
+            onTouchstart: _cache[37] || (_cache[37] = $event => $setup.onTouchPress('flgClock24', true))
+          }, {
+            default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createTextVNode */.Uk)(" 24/12 ")]),
+            _: 1
+          }))]),
           _: 1
         })]),
         _: 1
@@ -11587,7 +11620,7 @@ function OnboardButtonsDialogvue_type_template_id_202e5ccc_scoped_true_ts_true_r
     btns: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VBtn/* VBtn */.T, {
       color: "primary",
       "prepend-icon": "mdi-close",
-      onClick: _cache[32] || (_cache[32] = $event => $setup.visible = false)
+      onClick: _cache[38] || (_cache[38] = $event => $setup.visible = false)
     }, {
       default: (0,runtime_core_esm_bundler/* withCtx */.w5)(() => [(0,runtime_core_esm_bundler/* createTextVNode */.Uk)((0,shared_esm_bundler/* toDisplayString */.zw)(_ctx.$t("btn.close")), 1)]),
       _: 1
@@ -11609,13 +11642,23 @@ var lcd = __webpack_require__(6026);
 
 
 
+
 /* harmony default export */ var OnboardButtonsDialogvue_type_script_lang_ts = ({
   name: "OnboardButtonsDialog",
+  computed: {
+    ECarModel() {
+      return car/* ECarModel */.qZ;
+    }
+  },
   components: {
     DialogTemplate: DialogTemplate/* default */.Z
   },
   props: {
-    modelValue: Boolean
+    modelValue: Boolean,
+    carModel: {
+      type: Number,
+      default: 0
+    }
   },
   emits: ["update:modelValue"],
   setup(props, {
@@ -11628,12 +11671,46 @@ var lcd = __webpack_require__(6026);
       get: () => modelValue.value,
       set: val => emit("update:modelValue", val)
     });
+    const isTouchDevice = () => {
+      // @ts-ignore
+      return "ontouchstart" in window || navigator?.maxTouchPoints > 0 || navigator?.msMaxTouchPoints > 0;
+    };
     const timeouts = {
-      btnInfo: 0,
-      btnClock: 0,
-      btnClockH: 0,
-      btnClockM: 0,
-      btnClockRM: 0
+      btnInfo: null,
+      btnClock: null,
+      btnClockH: null,
+      btnClockM: null,
+      btnClockRM: null,
+      flgClock24: null
+    };
+    const press = (name, toggle) => {
+      if (timeouts?.[name] === null) {
+        canbus["default"].values.lcd[name] = !toggle ? true : !canbus["default"].values.lcd[name];
+        canbus["default"].queryValue(lcd/* API_LCD_VALUE_EXEC */.Q0);
+        navigator.vibrate(30);
+      } else {
+        clearTimeout(timeouts[name]);
+      }
+      if (!toggle) {
+        timeouts[name] = setTimeout(release, 60000, name);
+      }
+    };
+    const release = name => {
+      if (timeouts?.[name] !== null) {
+        canbus["default"].values.lcd[name] = false;
+        canbus["default"].queryValue(lcd/* API_LCD_VALUE_EXEC */.Q0);
+        navigator.vibrate(20);
+        clearTimeout(timeouts[name]);
+        timeouts[name] = null;
+      }
+    };
+    /**
+     * Событие нажатия на кнопку
+     * @param {string} name Имя кнопки
+     * @param {boolean} toggle Переключатель
+     */
+    const onPress = (name, toggle = false) => {
+      if (!isTouchDevice()) press(name, toggle);
     };
     /**
      * Событие нажатия на кнопку
@@ -11641,39 +11718,37 @@ var lcd = __webpack_require__(6026);
      * @param {boolean} toggle Переключатель
      */
     const onTouchPress = (name, toggle = false) => {
-      canbus["default"].values.lcd[name] = !toggle ? true : !canbus["default"].values.lcd[name];
-      canbus["default"].queryValue(lcd/* API_LCD_VALUE_EXEC */.Q0);
-      navigator.vibrate(30);
-      if (timeouts?.[name]) {
-        clearTimeout(timeouts[name]);
-        timeouts[name] = setTimeout(onTouchRelease, 60000, name);
-      }
+      if (isTouchDevice()) press(name, toggle);
+    };
+    /**
+     * Событие отпуска кнопки
+     * @param {string} name Имя кнопки
+     */
+    const onRelease = name => {
+      if (!isTouchDevice()) release(name);
     };
     /**
      * Событие отпуска кнопки
      * @param {string} name Имя кнопки
      */
     const onTouchRelease = name => {
-      if (canbus["default"].values.lcd[name]) {
-        canbus["default"].values.lcd[name] = false;
-        canbus["default"].queryValue(lcd/* API_LCD_VALUE_EXEC */.Q0);
-        navigator.vibrate(20);
-      }
-      if (timeouts?.[name]) clearTimeout(timeouts[name]);
+      if (isTouchDevice()) release(name);
     };
     return {
       visible,
+      onPress,
       onTouchPress,
+      onRelease,
       onTouchRelease
     };
   }
 });
 ;// CONCATENATED MODULE: ./src/components/dialogs/OnboardButtonsDialog.vue?vue&type=script&lang=ts
  
-;// CONCATENATED MODULE: ./node_modules/mini-css-extract-plugin/dist/loader.js??clonedRuleSet-22.use[0]!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/dialogs/OnboardButtonsDialog.vue?vue&type=style&index=0&id=202e5ccc&lang=scss&scoped=true
+;// CONCATENATED MODULE: ./node_modules/mini-css-extract-plugin/dist/loader.js??clonedRuleSet-22.use[0]!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/dialogs/OnboardButtonsDialog.vue?vue&type=style&index=0&id=e1b89ccc&lang=scss&scoped=true
 // extracted by mini-css-extract-plugin
 
-;// CONCATENATED MODULE: ./src/components/dialogs/OnboardButtonsDialog.vue?vue&type=style&index=0&id=202e5ccc&lang=scss&scoped=true
+;// CONCATENATED MODULE: ./src/components/dialogs/OnboardButtonsDialog.vue?vue&type=style&index=0&id=e1b89ccc&lang=scss&scoped=true
 
 ;// CONCATENATED MODULE: ./src/components/dialogs/OnboardButtonsDialog.vue
 
@@ -11683,7 +11758,7 @@ var lcd = __webpack_require__(6026);
 ;
 
 
-const OnboardButtonsDialog_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(OnboardButtonsDialogvue_type_script_lang_ts, [['render',OnboardButtonsDialogvue_type_template_id_202e5ccc_scoped_true_ts_true_render],['__scopeId',"data-v-202e5ccc"]])
+const OnboardButtonsDialog_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(OnboardButtonsDialogvue_type_script_lang_ts, [['render',OnboardButtonsDialogvue_type_template_id_e1b89ccc_scoped_true_ts_true_render],['__scopeId',"data-v-e1b89ccc"]])
 
 /* harmony default export */ var OnboardButtonsDialog = (OnboardButtonsDialog_exports_);
 ;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/dialogs/TestDialog.vue?vue&type=template&id=3bcd2b05&scoped=true&ts=true
@@ -11988,6 +12063,7 @@ var IconCustom = __webpack_require__(1776);
 
 
 
+
 /* harmony default export */ var BaseLayoutvue_type_script_lang_ts = ({
   name: "BaseLayout",
   components: {
@@ -12010,6 +12086,10 @@ var IconCustom = __webpack_require__(1776);
       return "PJCAN: " + (result?.length > 0 ? t(result) : "");
     });
     const newVersionFirmware = (0,reactivity_esm_bundler/* ref */.iH)(false);
+    const carModel = (0,reactivity_esm_bundler/* ref */.iH)(canbus["default"].configs.car.carModel);
+    const onReceiveCarConfig = res => {
+      if (res.isData) carModel.value = res.carModel;
+    };
     const menu = (0,runtime_core_esm_bundler/* computed */.Fl)(() => {
       const result = [];
       const {
@@ -12030,10 +12110,14 @@ var IconCustom = __webpack_require__(1776);
       }, {
         id: 4,
         title: t("menu.onboardButtons")
-      }, {
-        id: 5,
-        title: t("menu.test")
-      }, {}, {
+      });
+      if (carModel.value !== car/* ECarModel.CAR_MODEL_MAZDA_CX9_REST */.qZ.CAR_MODEL_MAZDA_CX9_REST) {
+        result.push({
+          id: 5,
+          title: t("menu.test")
+        });
+      }
+      result.push({}, {
         id: 2,
         title: t("menu.language." + (locale.value !== "ru" ? "russian" : "english"))
       });
@@ -12101,10 +12185,13 @@ var IconCustom = __webpack_require__(1776);
       window.addEventListener("resize", windowSize);
       windowSize();
       canbus["default"].addListener(pjcan_version/* API_VERSION_EVENT */.MK, onCheckVersion);
+      canbus["default"].addListener(car/* API_CAR_CONFIG_EVENT */.Gd, onReceiveCarConfig);
+      onReceiveCarConfig(canbus["default"].configs.car);
     });
     (0,runtime_core_esm_bundler/* onUnmounted */.Ah)(() => {
       window.removeEventListener("resize", windowSize);
       canbus["default"].removeListener(pjcan_version/* API_VERSION_EVENT */.MK, onCheckVersion);
+      canbus["default"].removeListener(car/* API_CAR_CONFIG_EVENT */.Gd, onReceiveCarConfig);
     });
     /** Переключение полноэкранного режима */
     const toggleFullscreen = () => {
@@ -12155,6 +12242,7 @@ var IconCustom = __webpack_require__(1776);
     return {
       title,
       menu,
+      carModel,
       newVersionFirmware,
       visibleAbout,
       visibleOnboardButtons,
@@ -12171,10 +12259,10 @@ var IconCustom = __webpack_require__(1776);
 });
 ;// CONCATENATED MODULE: ./src/layout/BaseLayout.vue?vue&type=script&lang=ts
  
-;// CONCATENATED MODULE: ./node_modules/mini-css-extract-plugin/dist/loader.js??clonedRuleSet-22.use[0]!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/layout/BaseLayout.vue?vue&type=style&index=0&id=7d20b89d&lang=scss&scoped=true
+;// CONCATENATED MODULE: ./node_modules/mini-css-extract-plugin/dist/loader.js??clonedRuleSet-22.use[0]!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/layout/BaseLayout.vue?vue&type=style&index=0&id=073ef137&lang=scss&scoped=true
 // extracted by mini-css-extract-plugin
 
-;// CONCATENATED MODULE: ./src/layout/BaseLayout.vue?vue&type=style&index=0&id=7d20b89d&lang=scss&scoped=true
+;// CONCATENATED MODULE: ./src/layout/BaseLayout.vue?vue&type=style&index=0&id=073ef137&lang=scss&scoped=true
 
 ;// CONCATENATED MODULE: ./src/layout/BaseLayout.vue
 
@@ -12184,7 +12272,7 @@ var IconCustom = __webpack_require__(1776);
 ;
 
 
-const BaseLayout_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(BaseLayoutvue_type_script_lang_ts, [['render',BaseLayoutvue_type_template_id_7d20b89d_scoped_true_ts_true_render],['__scopeId',"data-v-7d20b89d"]])
+const BaseLayout_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(BaseLayoutvue_type_script_lang_ts, [['render',BaseLayoutvue_type_template_id_073ef137_scoped_true_ts_true_render],['__scopeId',"data-v-073ef137"]])
 
 /* harmony default export */ var BaseLayout = (BaseLayout_exports_);
 ;// CONCATENATED MODULE: ./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/App.vue?vue&type=script&lang=ts
@@ -21481,7 +21569,8 @@ var TButtonExec;
   TButtonExec[TButtonExec["VARIABLE_ENGINE"] = 11] = "VARIABLE_ENGINE";
   TButtonExec[TButtonExec["VARIABLE_FUEL"] = 12] = "VARIABLE_FUEL";
   TButtonExec[TButtonExec["VARIABLE_MOVEMENT"] = 13] = "VARIABLE_MOVEMENT";
-  TButtonExec[TButtonExec["VARIABLE_TEMPERATURE"] = 14] = "VARIABLE_TEMPERATURE"; // кнопка показать значения температуру
+  TButtonExec[TButtonExec["VARIABLE_TEMPERATURE"] = 14] = "VARIABLE_TEMPERATURE";
+  TButtonExec[TButtonExec["LCD_CLOCK_24"] = 15] = "LCD_CLOCK_24";
 })(TButtonExec || (TButtonExec = {}));
 ;// CONCATENATED MODULE: ./src/models/pjcan/button/TButtonPress.ts
 /* eslint-disable */
@@ -21527,12 +21616,14 @@ var bluetooth = __webpack_require__(9014);
 // EXTERNAL MODULE: ./src/models/pjcan/base/BaseModel.ts
 var BaseModel = __webpack_require__(9036);
 ;// CONCATENATED MODULE: ./src/models/pjcan/car/ECarModel.ts
+/* eslint-disable no-unused-vars */
 var ECarModel;
 (function (ECarModel) {
   ECarModel[ECarModel["CAR_MODEL_NONE"] = 0] = "CAR_MODEL_NONE";
   ECarModel[ECarModel["CAR_MODEL_MAZDA3"] = 1] = "CAR_MODEL_MAZDA3";
   ECarModel[ECarModel["CAR_MODEL_MAZDA_CX7"] = 2] = "CAR_MODEL_MAZDA_CX7";
   ECarModel[ECarModel["CAR_MODEL_MAZDA_CX9"] = 3] = "CAR_MODEL_MAZDA_CX9";
+  ECarModel[ECarModel["CAR_MODEL_MAZDA_CX9_REST"] = 4] = "CAR_MODEL_MAZDA_CX9_REST";
 })(ECarModel || (ECarModel = {}));
 ;// CONCATENATED MODULE: ./src/models/pjcan/car/CarConfig.ts
 
@@ -25387,7 +25478,7 @@ var index = {
 /* harmony default export */ var onboard_card_list_default = ([{
   name: "info",
   enabled: true,
-  car: [1, 2, 3]
+  car: [1, 2, 3, 4]
 }, {
   name: "bose",
   enabled: true,
@@ -25395,15 +25486,15 @@ var index = {
 }, {
   name: "engine",
   enabled: true,
-  car: [1, 2, 3]
+  car: [1, 2]
 }, {
   name: "fuel",
   enabled: true,
-  car: [1, 2, 3]
+  car: [1, 2, 3, 4]
 }, {
   name: "movement",
   enabled: true,
-  car: [1, 2, 3]
+  car: [1, 2, 3, 4]
 }, {
   name: "doors",
   enabled: true,
@@ -81799,13 +81890,13 @@ function useRender(render) {
 /***/ (function(module) {
 
 "use strict";
-module.exports = JSON.parse('{"name":"pjcan","version":"0.4.3","private":true,"description":"CanBus project for Mazda 3","author":"PJ82. Spiridonov Vladislav","scripts":{"serve":"vue-cli-service serve","build":"vue-cli-service build","build test":"vue-cli-service build --mode test"},"dependencies":{"@egjs/vue3-flicking":"^4.10.2","@mdi/font":"7.0.96","axios":"^1.1.3","bitset":"^5.1.1","core-js":"^3.26.0","eventemitter3":"^4.0.7","moment":"^2.29.4","register-service-worker":"^1.7.2","roboto-fontface":"*","screenfull":"^6.0.2","vue":"^3.2.41","vue-i18n":"^9.2.2","vue-router":"^4.1.6","vue3-toastify":"^0.0.3","vuedraggable":"^4.1.0","vuetify":"^3.1.5","vuex":"^4.1.0","webfontloader":"^1.6.28"},"devDependencies":{"@types/node":"^12.0.2","@types/webfontloader":"^1.6.29","@typescript-eslint/eslint-plugin":"^5.42.0","@typescript-eslint/parser":"^5.42.0","@vue/cli-plugin-babel":"~5.0.8","@vue/cli-plugin-eslint":"~5.0.8","@vue/cli-plugin-pwa":"~5.0.8","@vue/cli-plugin-router":"~5.0.8","@vue/cli-plugin-typescript":"~5.0.8","@vue/cli-plugin-vuex":"~5.0.8","@vue/cli-service":"~5.0.8","@vue/eslint-config-typescript":"^11.0.2","@vueuse/core":"^9.4.0","eslint":"^8.26.0","eslint-config-prettier":"^8.5.0","eslint-plugin-prettier":"^4.2.1","eslint-plugin-vue":"^9.7.0","prettier":"^2.7.1","sass":"^1.56.0","sass-loader":"^13.1.0","script-ext-html-webpack-plugin":"^2.1.5","typescript":"~4.8.4","vue-cli-plugin-vuetify":"~2.5.8","webpack-plugin-vuetify":"^2.0.0"},"eslintConfig":{"root":true,"env":{"node":true},"extends":["plugin:vue/vue3-essential","eslint:recommended","@vue/typescript/recommended","plugin:prettier/recommended"],"parserOptions":{"ecmaVersion":2020},"rules":{}},"browserslist":["> 1%","last 2 versions","not dead","not ie 11"],"productName":"PJCan App"}');
+module.exports = JSON.parse('{"name":"pjcan","version":"0.4.4","private":true,"description":"CanBus project for Mazda 3","author":"PJ82. Spiridonov Vladislav","scripts":{"serve":"vue-cli-service serve","build":"vue-cli-service build","build test":"vue-cli-service build --mode test"},"dependencies":{"@egjs/vue3-flicking":"^4.10.2","@mdi/font":"7.0.96","axios":"^1.1.3","bitset":"^5.1.1","core-js":"^3.26.0","eventemitter3":"^4.0.7","moment":"^2.29.4","register-service-worker":"^1.7.2","roboto-fontface":"*","screenfull":"^6.0.2","vue":"^3.2.41","vue-i18n":"^9.2.2","vue-router":"^4.1.6","vue3-toastify":"^0.0.3","vuedraggable":"^4.1.0","vuetify":"^3.1.5","vuex":"^4.1.0","webfontloader":"^1.6.28"},"devDependencies":{"@types/node":"^12.0.2","@types/webfontloader":"^1.6.29","@typescript-eslint/eslint-plugin":"^5.42.0","@typescript-eslint/parser":"^5.42.0","@vue/cli-plugin-babel":"~5.0.8","@vue/cli-plugin-eslint":"~5.0.8","@vue/cli-plugin-pwa":"~5.0.8","@vue/cli-plugin-router":"~5.0.8","@vue/cli-plugin-typescript":"~5.0.8","@vue/cli-plugin-vuex":"~5.0.8","@vue/cli-service":"~5.0.8","@vue/eslint-config-typescript":"^11.0.2","@vueuse/core":"^9.4.0","eslint":"^8.26.0","eslint-config-prettier":"^8.5.0","eslint-plugin-prettier":"^4.2.1","eslint-plugin-vue":"^9.7.0","prettier":"^2.7.1","sass":"^1.56.0","sass-loader":"^13.1.0","script-ext-html-webpack-plugin":"^2.1.5","typescript":"~4.8.4","vue-cli-plugin-vuetify":"~2.5.8","webpack-plugin-vuetify":"^2.0.0"},"eslintConfig":{"root":true,"env":{"node":true},"extends":["plugin:vue/vue3-essential","eslint:recommended","@vue/typescript/recommended","plugin:prettier/recommended"],"parserOptions":{"ecmaVersion":2020},"rules":{}},"browserslist":["> 1%","last 2 versions","not dead","not ie 11"],"productName":"PJCan App"}');
 
 /***/ })
 
 },
 /******/ function(__webpack_require__) { // webpackRuntimeModules
 /******/ var __webpack_exec__ = function(moduleId) { return __webpack_require__(__webpack_require__.s = moduleId); }
-/******/ var __webpack_exports__ = (__webpack_exec__(5634));
+/******/ var __webpack_exports__ = (__webpack_exec__(7650));
 /******/ }
 ]);
