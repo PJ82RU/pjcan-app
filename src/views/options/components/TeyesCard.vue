@@ -15,6 +15,17 @@
 						:disabled="!loadedTeyesConfig || typeof uartBaud !== 'number'"
 					/>
 				</v-col>
+                <v-col cols="12" class="pt-0 pb-0">
+                    <switch-card-item
+                        v-model="reverseUart"
+                        :title="$t('options.teyes.reverseUart.title')"
+                        :description="$t('options.teyes.reverseUart.description')"
+                        color="success"
+                        :nodata="!loadedTeyesConfig"
+                        :disabled="!loadedTeyesConfig"
+                        @change="onApplyTeyesConfig"
+                    />
+                </v-col>
 				<v-col v-if="carModel !== ECarModel.CAR_MODEL_MAZDA_CX9_REST" cols="12" class="pt-0 pb-0">
 					<switch-card-item
 						v-model="lcdShow"
@@ -174,6 +185,7 @@ export default {
 		const parseVolume = ref(false);
 		const lcdShow = ref(false);
 		const uartBaud = ref(undefined as number | undefined);
+		const reverseUart = ref(false as boolean | undefined);
 
 		/** Список Uart Baud */
 		const listUartBaud = computed((): object[] =>
@@ -211,6 +223,7 @@ export default {
 				parseVolume.value = res.parseVolume;
 				lcdShow.value = res.lcdShow;
 				uartBaud.value = res.uartBaud;
+				reverseUart.value = res.reverseUart;
 			}
 		};
 
@@ -227,6 +240,7 @@ export default {
 			teyes.parseVolume = parseVolume.value;
 			teyes.lcdShow = lcdShow.value;
 			teyes.uartBaud = uartBaud.value;
+			teyes.reverseUart = reverseUart.value;
 			canbus.queryConfig(API_TEYES_CONFIG_EXEC);
 		};
 
@@ -292,6 +306,7 @@ export default {
 			lcdShow,
 			uartBaud,
 			listUartBaud,
+			reverseUart,
 			menu,
 			menuVisible,
 			menuSelected,

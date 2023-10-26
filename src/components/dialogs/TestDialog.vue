@@ -94,7 +94,7 @@ export default {
 
 		const text = ref(" -- TEST -- ");
 		const style = ref(0);
-		const time = ref(3);
+		const time = ref(6);
 		const styleList = computed(() =>
 			(tm("onboard.viewSetting.type.items") as string[])?.map((x, i) => ({
 				label: x,

@@ -18,7 +18,23 @@ export class TeyesConfig extends BaseModel implements ITeyesConfig
 	 */
 	static update(version?: IVersion): void
 	{
-		if (!version || version.compareString("4.0.2") !== 1)
+		if (!version || version.compareString("4.1") !== 1)
+		{
+			TeyesConfig.struct = {
+				receiveClock: BluetoothStruct.bit(),
+				receiveButtons: BluetoothStruct.bit(),
+				receiveText: BluetoothStruct.bit(),
+				sendButton: BluetoothStruct.bit(),
+				sendClimate: BluetoothStruct.bit(),
+				sendDoors: BluetoothStruct.bit(),
+				parseVolume: BluetoothStruct.bit(),
+				lcdShow: BluetoothStruct.bit(),
+				reverseUart: BluetoothStruct.bit(),
+				uartBaud: BluetoothStruct.uint8()
+			};
+			TeyesConfig.size = 3;
+		}
+		else if (version.compareString("4.0.2") !== 1)
 		{
 			TeyesConfig.struct = {
 				receiveClock: BluetoothStruct.bit(),
@@ -57,6 +73,7 @@ export class TeyesConfig extends BaseModel implements ITeyesConfig
 	sendDoors = false;
 	parseVolume = false;
 	lcdShow = false;
+	reverseUart = false;
 
 	constructor(data?: DataView)
 	{
