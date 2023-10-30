@@ -790,7 +790,7 @@ export class Canbus extends EventEmitter
 		this.values.device.resetConfig = resetConfig;
 		this.values.device.resetView = resetView;
 		this.sha = undefined;
-		this.rebootDevice();
+		this.rebootDevice(!resetConfig && !resetView);
 	}
 
 	private getSHA(): void

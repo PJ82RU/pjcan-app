@@ -525,32 +525,32 @@ export default {
 		teyes: {
 			title: "Teyes",
 			receiveClock: {
-				title: "Take time",
-				description: "Take the incoming time value from Teyes"
+				title: "Teyes time",
+				description: "Accept incoming time value from Teyes (if the protocol supports this functionality)"
 			},
 			receiveButtons: {
-				title: "Take the buttons",
-				description: "Take the incoming value of the Teyes buttons: CLOCK, HOUR, MIN"
+				title: "Teyes Buttons",
+				description: "Support for Teyes buttons: CLOCK, HOUR, MIN (if the protocol supports this functionality)"
 			},
 			receiveText: {
-				title: "Take the text",
-				description: "Take the incoming value of the text of the Teyes: name of radio stations, etc."
+				title: "Accept Teyes information",
+				description: "Accept incoming Teyes values: name of radio stations, etc."
 			},
 			sendButton: {
-				title: "Send buttons press",
-				description: "Send Teyes pressing buttons on the steering wheel"
+				title: "Steering wheel buttons",
+				description: "Control of Teyes by buttons on the steering wheel"
 			},
 			sendClimate: {
-				title: "Send climate values",
-				description: "Send the climate values obtained from CAN"
+				title: "Show climate on Teyes",
+				description: "Show climate control values on Teyes (if the protocol supports this functionality)"
 			},
 			sendDoors: {
-				title: "Send the statuses of doors",
-				description: "Send Teyes the statuses of the car door received from CAN"
+				title: "Show the status of doors on Teyes",
+				description: "Show the status of the car doors on Teyes (if the protocol supports this functionality)"
 			},
 			parseVolume: {
-				title: "Take sound levels",
-				description: "Take Teyes sound levels"
+				title: "Control the sound level on Teyes",
+				description: "It is recommended to turn off this parameter to directly control the sound of the Bose amplifier"
 			},
 			lcdShow: {
 				title: "Show the text Teyes",
@@ -559,12 +559,18 @@ export default {
 				menu: "LCD: Show the text Teyes"
 			},
 			uartBaud: {
-				title: "Serial protocol",
-				description: "Serial protocol for PJCAN communication with the head unit",
+				title: "UART Protocol",
+				description: "UART protocol for PJCAN communication with Teyes",
 				list: {
-					0xFD: "Raise HM_ND01 2019.06.21 (38400)",
-					0xFC: "Raise HM_ND00 2017.12.11 (19200)"
+					1: "Raise HM_ND00 2017.12.11 (19200)",
+					2: "Raise HM_ND01 2019.06.21 (38400)",
+					3: "SimpleSoft MZ_SS_07A (38400)",
+					4: "SimpleSoft RP5_MZ_002 (38400)"
 				}
+			},
+			reverseUart: {
+				title: "Change UART contacts",
+				description: "Enable if there is no PJCAN connection with multimedia"
 			}
 		},
 		onboard: {
