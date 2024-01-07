@@ -9,8 +9,8 @@ export const API_VARIABLE_TEMPERATURE_EVENT = "VariableTemperatureValue";
 export class TemperatureValue extends BaseModel implements ITemperatureValue
 {
 	static struct: any = {
-		in: BluetoothStruct.uint16(),
-		out: BluetoothStruct.uint16()
+		in: BluetoothStruct.int16(),
+		out: BluetoothStruct.int16()
 	};
 	static size: number = 4;
 
