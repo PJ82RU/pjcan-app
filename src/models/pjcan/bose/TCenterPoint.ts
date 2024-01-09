@@ -1,0 +1,10 @@
+/* eslint-disable */
+
+export enum TCenterPoint {
+	CENTERPOINT_OFF,
+	CENTERPOINT_MIN,
+	CENTERPOINT_LOW,
+	CENTERPOINT_MID,
+	CENTERPOINT_HI,
+	CENTERPOINT_MAX
+}
