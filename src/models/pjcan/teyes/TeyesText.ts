@@ -2,8 +2,11 @@ import { BluetoothStruct } from "@/components/bluetooth";
 import { BaseModel } from "../base";
 import { ITeyesText } from "./ITeyesText";
 
-export const API_TEYES_TEXT_EXEC = 31;
+export const API_TEYES_TEXT_EXEC = 0x51;
 export const API_TEYES_TEXT_EVENT = "TeyesText";
+
+export const API_TEYES_TEXT_VIEW_EXEC = 0x53;
+export const API_TEYES_TEXT_VIEW_EVENT = "TeyesTextView";
 
 /** Модель значения текста Teyes */
 export class TeyesText extends BaseModel implements ITeyesText
@@ -27,12 +30,17 @@ export class TeyesText extends BaseModel implements ITeyesText
 	 */
 	set(buf: DataView): boolean
 	{
-		return this._set(this, API_TEYES_TEXT_EXEC, TeyesText.size + 1, new BluetoothStruct(TeyesText.struct), buf);
+		return this._set(this, API_TEYES_TEXT_EXEC, TeyesText.size, new BluetoothStruct(TeyesText.struct), buf);
 	}
 
-	/** Чтение данных */
-	get(): DataView | undefined
+	/**
+	 * Чтение данных
+	 * @param {boolean} request Только запрос
+	 */
+	get(request?: boolean): DataView
 	{
-		return this._get(this, API_TEYES_TEXT_EXEC, TeyesText.size + 1, new BluetoothStruct(TeyesText.struct));
+		return request
+			? this._get(this, API_TEYES_TEXT_EXEC)
+			: this._get(this, API_TEYES_TEXT_EXEC, TeyesText.size, new BluetoothStruct(TeyesText.struct));
 	}
 }

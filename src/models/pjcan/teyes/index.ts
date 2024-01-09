@@ -1,11 +1,11 @@
 import { API_TEYES_CONFIG_EXEC, API_TEYES_CONFIG_EVENT, TeyesConfig } from "./TeyesConfig";
 import { ITeyesConfig } from "./ITeyesConfig";
 
-import { API_TEYES_TEXT_EXEC, API_TEYES_TEXT_EVENT, TeyesText } from "./TeyesText";
+import { API_TEYES_TEXT_EXEC, API_TEYES_TEXT_EVENT, API_TEYES_TEXT_VIEW_EXEC, API_TEYES_TEXT_VIEW_EVENT, TeyesText } from "./TeyesText";
 import { ITeyesText } from "./ITeyesText";
 
-import { API_TEYES_VIEW_EXEC, API_TEYES_VIEW_EVENT, TeyesView } from "./TeyesView";
-import { ITeyesView } from "./ITeyesView";
+import { TProtocol } from "./TProtocol";
+import { ITeyes } from "./ITeyes";
 
 export {
 	API_TEYES_CONFIG_EXEC,
@@ -13,9 +13,9 @@ export {
 	TeyesConfig,
 	API_TEYES_TEXT_EXEC,
 	API_TEYES_TEXT_EVENT,
+	API_TEYES_TEXT_VIEW_EXEC,
+	API_TEYES_TEXT_VIEW_EVENT,
 	TeyesText,
-	API_TEYES_VIEW_EXEC,
-	API_TEYES_VIEW_EVENT,
-	TeyesView
+	TProtocol
 };
-export type { ITeyesConfig, ITeyesText, ITeyesView };
+export type { ITeyesConfig, ITeyesText, ITeyes };
