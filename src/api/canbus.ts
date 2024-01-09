@@ -254,23 +254,23 @@ export class Canbus extends EventEmitter
 	engine: IEngine = {
 		config: new EngineConfig(),
 		value: new EngineValue(),
-		view: new EngineView()
+		views: new EngineView()
 	};
 	/** Расход топлива */
 	fuel: IFuel = {
 		config: new FuelConfig(),
 		value: new FuelValue(),
-		view: new FuelView()
+		views: new FuelView()
 	};
 	/** Движение автомобиля */
 	movement: IMovement = {
 		value: new MovementValue(),
-		view: new MovementView()
+		views: new MovementView()
 	};
 	/** Датчики */
 	sensors: ISensors = {
 		value: new SensorsValue(),
-		view: new SensorsView()
+		views: new SensorsView()
 	};
 	/** Температура */
 	temperature: ITemperature = {
@@ -394,11 +394,11 @@ export class Canbus extends EventEmitter
 		this.query(this.climate.view, true);
 		this.query(this.doors.view, true);
 		this.query(this.engine.config, true);
-		this.query(this.engine.view, true);
+		this.query(this.engine.views, true);
 		this.query(this.fuel.config, true);
-		this.query(this.fuel.view, true);
-		this.query(this.movement.view, true);
-		this.query(this.sensors.view, true);
+		this.query(this.fuel.views, true);
+		this.query(this.movement.views, true);
+		this.query(this.sensors.views, true);
 		this.query(this.temperature.view, true);
 		this.query(this.volume.config, true);
 		this.query(this.volume.view, true);
@@ -528,36 +528,36 @@ export class Canbus extends EventEmitter
 					this.emit(API_ENGINE_VALUE_EVENT, this.engine.value);
 					break;
 				case API_ENGINE_VIEW_EXEC: // Параметры отображения ДВС
-					this.engine.view.set(data);
-					this.emit(API_ENGINE_VIEW_EVENT, this.engine.view);
+					this.engine.views.set(data);
+					this.emit(API_ENGINE_VIEW_EVENT, this.engine.views);
 					break;
 				case API_ENGINE_VIEW_ENABLED_EXEC:
-					this.engine.view.enabled.set(data);
-					this.emit(API_ENGINE_VIEW_ENABLED_EVENT, this.engine.view.enabled);
+					this.engine.views.enabled.set(data);
+					this.emit(API_ENGINE_VIEW_ENABLED_EVENT, this.engine.views.enabled);
 					break;
 				case API_ENGINE_VIEW_TOTAL_WORKTIME_EXEC:
-					this.engine.view.totalWorktime.set(data);
-					this.emit(API_ENGINE_VIEW_TOTAL_WORKTIME_EVENT, this.engine.view.totalWorktime);
+					this.engine.views.totalWorktime.set(data);
+					this.emit(API_ENGINE_VIEW_TOTAL_WORKTIME_EVENT, this.engine.views.totalWorktime);
 					break;
 				case API_ENGINE_VIEW_TOTAL_COUNT_RPM_EXEC:
-					this.engine.view.totalCountRPM.set(data);
-					this.emit(API_ENGINE_VIEW_TOTAL_COUNT_RPM_EVENT, this.engine.view.totalCountRPM);
+					this.engine.views.totalCountRPM.set(data);
+					this.emit(API_ENGINE_VIEW_TOTAL_COUNT_RPM_EVENT, this.engine.views.totalCountRPM);
 					break;
 				case API_ENGINE_VIEW_COOLANT_EXEC:
-					this.engine.view.coolant.set(data);
-					this.emit(API_ENGINE_VIEW_COOLANT_EVENT, this.engine.view.coolant);
+					this.engine.views.coolant.set(data);
+					this.emit(API_ENGINE_VIEW_COOLANT_EVENT, this.engine.views.coolant);
 					break;
 				case API_ENGINE_VIEW_RPM_EXEC:
-					this.engine.view.rpm.set(data);
-					this.emit(API_ENGINE_VIEW_RPM_EVENT, this.engine.view.rpm);
+					this.engine.views.rpm.set(data);
+					this.emit(API_ENGINE_VIEW_RPM_EVENT, this.engine.views.rpm);
 					break;
 				case API_ENGINE_VIEW_LOAD_EXEC:
-					this.engine.view.load.set(data);
-					this.emit(API_ENGINE_VIEW_LOAD_EVENT, this.engine.view.load);
+					this.engine.views.load.set(data);
+					this.emit(API_ENGINE_VIEW_LOAD_EVENT, this.engine.views.load);
 					break;
 				case API_ENGINE_VIEW_THROTTLE_EXEC:
-					this.engine.view.throttle.set(data);
-					this.emit(API_ENGINE_VIEW_THROTTLE_EVENT, this.engine.view.throttle);
+					this.engine.views.throttle.set(data);
+					this.emit(API_ENGINE_VIEW_THROTTLE_EVENT, this.engine.views.throttle);
 					break;
 
 				case API_FUEL_CONFIG_EXEC: // Конфигурация расхода
@@ -569,16 +569,16 @@ export class Canbus extends EventEmitter
 					this.emit(API_FUEL_VALUE_EVENT, this.fuel.value);
 					break;
 				case API_FUEL_VIEW_EXEC: // Параметры отображения расхода
-					this.fuel.view.set(data);
-					this.emit(API_FUEL_VIEW_EVENT, this.fuel.view);
+					this.fuel.views.set(data);
+					this.emit(API_FUEL_VIEW_EVENT, this.fuel.views);
 					break;
 				case API_FUEL_VIEW_CURRENT_EXEC:
-					this.fuel.view.current.set(data);
-					this.emit(API_FUEL_VIEW_CURRENT_EVENT, this.fuel.view.current);
+					this.fuel.views.current.set(data);
+					this.emit(API_FUEL_VIEW_CURRENT_EVENT, this.fuel.views.current);
 					break;
 				case API_FUEL_VIEW_AVG_EXEC:
-					this.fuel.view.avg.set(data);
-					this.emit(API_FUEL_VIEW_AVG_EVENT, this.fuel.view.avg);
+					this.fuel.views.avg.set(data);
+					this.emit(API_FUEL_VIEW_AVG_EVENT, this.fuel.views.avg);
 					break;
 
 				case API_MOVEMENT_VALUE_EXEC: // Значения движения
@@ -586,20 +586,20 @@ export class Canbus extends EventEmitter
 					this.emit(API_MOVEMENT_VALUE_EVENT, this.movement.value);
 					break;
 				case API_MOVEMENT_VIEW_EXEC: // Параметры отображения движения
-					this.movement.view.set(data);
-					this.emit(API_MOVEMENT_VIEW_EVENT, this.movement.view);
+					this.movement.views.set(data);
+					this.emit(API_MOVEMENT_VIEW_EVENT, this.movement.views);
 					break;
 				case API_MOVEMENT_VIEW_SPEED_EXEC:
-					this.movement.view.speed.set(data);
-					this.emit(API_MOVEMENT_VIEW_SPEED_EVENT, this.movement.view.speed);
+					this.movement.views.speed.set(data);
+					this.emit(API_MOVEMENT_VIEW_SPEED_EVENT, this.movement.views.speed);
 					break;
 				case API_MOVEMENT_VIEW_SPEED_AVG_EXEC:
-					this.movement.view.speedAVG.set(data);
-					this.emit(API_MOVEMENT_VIEW_SPEED_AVG_EVENT, this.movement.view.speedAVG);
+					this.movement.views.speedAVG.set(data);
+					this.emit(API_MOVEMENT_VIEW_SPEED_AVG_EVENT, this.movement.views.speedAVG);
 					break;
 				case API_MOVEMENT_VIEW_REST_WAY_EXEC:
-					this.movement.view.restWay.set(data);
-					this.emit(API_MOVEMENT_VIEW_REST_WAY_EVENT, this.movement.view.restWay);
+					this.movement.views.restWay.set(data);
+					this.emit(API_MOVEMENT_VIEW_REST_WAY_EVENT, this.movement.views.restWay);
 					break;
 
 				case API_SENSORS_VALUE_EXEC: // Значения датчиков
@@ -607,24 +607,24 @@ export class Canbus extends EventEmitter
 					this.emit(API_SENSORS_VALUE_EVENT, this.sensors.value);
 					break;
 				case API_SENSORS_VIEW_EXEC: // Параметры отображения датчиков
-					this.sensors.view.set(data);
-					this.emit(API_SENSORS_VIEW_EVENT, this.sensors.view);
+					this.sensors.views.set(data);
+					this.emit(API_SENSORS_VIEW_EVENT, this.sensors.views);
 					break;
 				case API_SENSORS_VIEW_HANDBRAKE_EXEC:
-					this.sensors.view.handbrake.set(data);
-					this.emit(API_SENSORS_VIEW_HANDBRAKE_EVENT, this.sensors.view.handbrake);
+					this.sensors.views.handbrake.set(data);
+					this.emit(API_SENSORS_VIEW_HANDBRAKE_EVENT, this.sensors.views.handbrake);
 					break;
 				case API_SENSORS_VIEW_REVERSE_EXEC:
-					this.sensors.view.reverse.set(data);
-					this.emit(API_SENSORS_VIEW_REVERSE_EVENT, this.sensors.view.reverse);
+					this.sensors.views.reverse.set(data);
+					this.emit(API_SENSORS_VIEW_REVERSE_EVENT, this.sensors.views.reverse);
 					break;
 				case API_SENSORS_VIEW_SEATBELT_EXEC:
-					this.sensors.view.seatbelt.set(data);
-					this.emit(API_SENSORS_VIEW_SEATBELT_EVENT, this.sensors.view.seatbelt);
+					this.sensors.views.seatbelt.set(data);
+					this.emit(API_SENSORS_VIEW_SEATBELT_EVENT, this.sensors.views.seatbelt);
 					break;
 				case API_SENSORS_VIEW_TURN_SIGNAL_EXEC:
-					this.sensors.view.turnSignal.set(data);
-					this.emit(API_SENSORS_VIEW_TURN_SIGNAL_EVENT, this.sensors.view.turnSignal);
+					this.sensors.views.turnSignal.set(data);
+					this.emit(API_SENSORS_VIEW_TURN_SIGNAL_EVENT, this.sensors.views.turnSignal);
 					break;
 
 				case API_TEMPERATURE_VALUE_EXEC: // Значения температуры

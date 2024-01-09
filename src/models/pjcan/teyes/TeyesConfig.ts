@@ -55,6 +55,8 @@ export class TeyesConfig extends BaseModel implements ITeyesConfig
 	 */
 	get(request?: boolean): DataView
 	{
-		return request ? this._get(this, API_TEYES_CONFIG_EXEC) : this._get(this, API_TEYES_CONFIG_EXEC, TeyesConfig.size, new BluetoothStruct(TeyesConfig.struct));
+		return request
+			? this._get(this, API_TEYES_CONFIG_EXEC)
+			: this._get(this, API_TEYES_CONFIG_EXEC, TeyesConfig.size, new BluetoothStruct(TeyesConfig.struct));
 	}
 }

@@ -5,5 +5,5 @@ import { IFuelView } from "./IFuelView";
 export interface IFuel {
 	config: IFuelConfig;
 	value: IFuelValue;
-	view: IFuelView;
+	views: IFuelView;
 }

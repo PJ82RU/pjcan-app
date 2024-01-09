@@ -5,5 +5,5 @@ import { IEngineView } from "./IEngineView";
 export interface IEngine {
 	config: IEngineConfig;
 	value: IEngineValue;
-	view: IEngineView;
+	views: IEngineView;
 }

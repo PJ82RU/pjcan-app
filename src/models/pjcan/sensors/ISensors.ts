@@ -3,5 +3,5 @@ import { ISensorsView } from "./ISensorsView";
 
 export interface ISensors {
 	value: ISensorsValue;
-	view: ISensorsView;
+	views: ISensorsView;
 }

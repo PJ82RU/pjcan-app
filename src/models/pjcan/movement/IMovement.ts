@@ -3,5 +3,5 @@ import { IMovementView } from "./IMovementView";
 
 export interface IMovement {
 	value: IMovementValue;
-	view: IMovementView;
+	views: IMovementView;
 }
