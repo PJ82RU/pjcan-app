@@ -24,21 +24,20 @@ import store from "@/store";
 import canbus from "@/api/canbus";
 
 import { IMessage } from "@/models/interfaces/message/IMessage";
-import { IScannerFrame } from "@/models/pjcan/scanner/IScannerFrame";
+import { IDeviceScannerFrame } from "@/models/pjcan/device/IDeviceScannerFrame";
 import { IScanCanRow } from "@/models/interfaces/IScanCanRow";
-
 import {
-	API_SCANNER_CONFIG_EXEC,
-	API_SCANNER_VALUE_EVENT,
-	API_SCANNER_VALUE_EXEC,
-	IScannerValue,
-	ScannerValue
-} from "@/models/pjcan/scanner";
+	API_DEVICE_SCANNER_VALUE_EVENT,
+	DeviceScannerAction,
+	DeviceScannerValue,
+	IDeviceScannerValue
+} from "@/models/pjcan/device";
 
 import { setScanCan } from "@/api/google";
 
 import { toHex, toMac } from "@/utils/conversion";
 import DialogTemplate from "@/layout/components/DialogTemplate.vue";
+import { Timeout } from "@/models/types/Timeout";
 
 export default {
 	name: "Scanner",
@@ -52,8 +51,9 @@ export default {
 		const { modelValue } = toRefs(props);
 		const { t } = useI18n();
 
-		let startedFetchValue: number | undefined;
-		let scannerValue: IScannerValue | undefined;
+		const scannerAction = new DeviceScannerAction();
+		const scannerValue: IDeviceScannerValue = new DeviceScannerValue();
+		let scannerInterval: Timeout;
 		const scannerBuffer: IScanCanRow[] = [];
 		let efuseMac: string = "";
 		let scanUploading = false;
@@ -76,44 +76,36 @@ export default {
 					return;
 				}
 
-				// запоминаем состояние FetchValue
-				startedFetchValue = canbus.startedFetchValue;
-				canbus.stopFetchValue();
-
 				// включаем сканирование
-				canbus.scanner.enabled = true;
-				if (canbus.queryConfig(API_SCANNER_CONFIG_EXEC))
+				canbus.queueDisabled = true;
+				scannerAction.enabled = true;
+				canbus.query(scannerAction, false, (success) =>
 				{
-					efuseMac = toMac(canbus.deviceInfo.efuseMac);
-					scanClose = false;
+					if (success)
+					{
+						efuseMac = toMac(canbus.device.info.efuseMac);
+						scanClose = false;
 
-					// запускаем циклический запрос значений сканирования
-					scannerValue = new ScannerValue();
-					canbus.startFetchValue(API_SCANNER_VALUE_EXEC, scannerValue);
-					canbus.addListener(API_SCANNER_VALUE_EVENT, onReceiveValue);
-					// запускаем диалог
-					store.commit("app/clearMessages");
-					steps();
-				}
+						// запускаем циклический запрос значений сканирования
+						scannerInterval = setInterval(() => canbus.query(scannerValue), 500);
+						canbus.addListener(API_DEVICE_SCANNER_VALUE_EVENT, onReceiveValue);
+						// запускаем диалог
+						store.commit("app/clearMessages");
+						steps();
+					}
+				});
 			}
 			else
 			{
 				if (scannerValue)
 				{
 					// останавливаем циклический запрос значений сканирования
-					canbus.removeListener(API_SCANNER_VALUE_EVENT, onReceiveValue);
-					canbus.stopFetchValue();
-					scannerValue = undefined;
+					canbus.removeListener(API_DEVICE_SCANNER_VALUE_EVENT, onReceiveValue);
+					clearInterval(scannerInterval);
 					// выключаем сканирование
-					canbus.scanner.enabled = false;
-					canbus.queryConfig(API_SCANNER_CONFIG_EXEC);
-				}
-
-				if (startedFetchValue !== undefined)
-				{
-					// восстанавливаем состояние FetchValue
-					canbus.startFetchValue(startedFetchValue);
-					startedFetchValue = undefined;
+					scannerAction.enabled = false;
+					canbus.query(scannerAction);
+					canbus.queueDisabled = false;
 				}
 			}
 		});
@@ -176,12 +168,12 @@ export default {
 		};
 
 		/** Входящие значения сканирования */
-		const onReceiveValue = (res: IScannerValue): void =>
+		const onReceiveValue = (res: IDeviceScannerValue): void =>
 		{
 			if (res.isData && res.count > 0)
 			{
 				scannerBuffer.push(
-					...res.frames.slice(0, res.count).map((x: IScannerFrame) =>
+					...res.frames.slice(0, res.count).map((x: IDeviceScannerFrame) =>
 					{
 						const mm = moment.duration(Number(x.timestamp), "milliseconds");
 						const mm_time = {

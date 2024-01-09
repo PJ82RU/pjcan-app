@@ -1,6 +1,4 @@
-export interface IScannerFrame {
-	receive: boolean; // Входящий пакет
-	send: boolean; // Исходящий пакет
+export interface IDeviceScannerFrame {
 	id: number; // Идентификатор
 	data: number[]; // Данные
 	length: number; // Размер данных

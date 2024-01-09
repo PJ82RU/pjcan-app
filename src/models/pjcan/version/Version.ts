@@ -2,7 +2,7 @@ import { BluetoothStruct } from "@/components/bluetooth";
 import { BaseModel } from "../base";
 import { IVersion } from "./IVersion";
 
-export const API_VERSION_EXEC = 6;
+export const API_VERSION_EXEC = 0x00;
 export const API_VERSION_EVENT = "Version";
 
 /** Модель версии */
@@ -111,12 +111,12 @@ export class Version extends BaseModel implements IVersion
 	 */
 	set(buf: DataView): boolean
 	{
-		return this._set(this, API_VERSION_EXEC, Version.size + 1, new BluetoothStruct(Version.struct), buf);
+		return this._set(this, API_VERSION_EXEC, Version.size, new BluetoothStruct(Version.struct), buf);
 	}
 
 	/** Чтение данных */
-	get(): DataView | undefined
+	get(): DataView
 	{
-		return this._get(this, API_VERSION_EXEC, 1);
+		return this._get(this, API_VERSION_EXEC);
 	}
 }

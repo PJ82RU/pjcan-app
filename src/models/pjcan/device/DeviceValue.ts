@@ -2,30 +2,22 @@ import { BluetoothStruct } from "@/components/bluetooth";
 import { BaseModel } from "../base";
 import { IDeviceValue } from "./IDeviceValue";
 
-export const API_DEVICE_VALUE_EXEC = 11;
+export const API_DEVICE_VALUE_EXEC = 0x03;
 export const API_DEVICE_EVENT = "DeviceValue";
 
 /** Модель значений устройства */
 export class DeviceValue extends BaseModel implements IDeviceValue
 {
 	static struct: any = {
-		reboot: BluetoothStruct.bit(),
-		resetConfig: BluetoothStruct.bit(),
-		resetView: BluetoothStruct.bit(),
 		activation: BluetoothStruct.bit(),
-		save: BluetoothStruct.bit(),
 		led: BluetoothStruct.uint8(),
-		worktime: BluetoothStruct.uint64()
+		worktime: BluetoothStruct.uint32()
 	};
-	static size: number = 10;
+	static size: number = 6;
 
-	reboot = false;
-	resetConfig = false;
-	resetView = false;
-	led = 0;
 	activation = false;
-	save = false;
-	worktime = BigInt(0);
+	led = 0;
+	worktime = 0;
 
 	constructor(data?: DataView)
 	{
@@ -42,15 +34,15 @@ export class DeviceValue extends BaseModel implements IDeviceValue
 		return this._set(
 			this,
 			API_DEVICE_VALUE_EXEC,
-			DeviceValue.size + 1,
+			DeviceValue.size,
 			new BluetoothStruct(DeviceValue.struct),
 			buf
 		);
 	}
 
 	/** Чтение данных */
-	get(): DataView | undefined
+	get(): DataView
 	{
-		return this._get(this, API_DEVICE_VALUE_EXEC, DeviceValue.size + 1, new BluetoothStruct(DeviceValue.struct));
+		return this._get(this, API_DEVICE_VALUE_EXEC, DeviceValue.size, new BluetoothStruct(DeviceValue.struct));
 	}
 }

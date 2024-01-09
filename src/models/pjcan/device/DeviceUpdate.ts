@@ -1,14 +1,13 @@
 import EventEmitter from "eventemitter3";
-import { IUpdate } from "./IUpdate";
+import { IDeviceUpdate } from "./IDeviceUpdate";
 import { BluetoothStruct } from "@/components/bluetooth";
 
-export const API_UPDATE_EXEC = 90;
-export const API_UPDATE_EVENT = "Update";
-export const API_UPDATE_EVENT_ERROR = "ErrorUpdate";
-export const UPDATE_VALUE_DATA_SIZE = 496;
+export const API_DEVICE_UPDATE_EXEC = 0x05;
+export const API_DEVICE_UPDATE_EVENT = "DeviceUpdate";
+export const API_DEVICE_UPDATE_EVENT_ERROR = "DeviceUpdateError";
 
 /** Модель обновления прошивки */
-export class Update extends EventEmitter implements IUpdate
+export class DeviceUpdate extends EventEmitter implements IDeviceUpdate
 {
 	static struct: any = {
 		begin: BluetoothStruct.bit(),
@@ -39,6 +38,8 @@ export class Update extends EventEmitter implements IUpdate
 	abort = false;
 	total = 0;
 	size = 0;
+
+	requestPriority = true;
 
 	constructor(data?: DataView)
 	{
@@ -86,50 +87,53 @@ export class Update extends EventEmitter implements IUpdate
 	 */
 	set(buf: DataView): void
 	{
-		if (buf.getUint8(0) === API_UPDATE_EXEC && buf.byteLength === 2)
+		const id = buf.getUint8(0);
+		const sizeData = buf.byteLength >= 3 ? buf.getUint16(1, true) : 0;
+		const result = id === API_DEVICE_UPDATE_EXEC && sizeData === 1;
+		if (result)
 		{
-			this.error = buf.getUint8(1);
-			this.emit(API_UPDATE_EVENT, this.error);
+			this.error = buf.getUint8(3);
+			this.emit(API_DEVICE_UPDATE_EVENT, this.error);
 		}
 	}
 
 	/** Чтение данных */
-	get(): DataView | undefined
+	get(): DataView
 	{
+		const buf: DataView = new DataView(new ArrayBuffer(DeviceUpdate.size + 3));
+		buf.setUint8(0, API_DEVICE_UPDATE_EXEC);
+		buf.setUint16(1, DeviceUpdate.size, true);
 		try
 		{
-			const buf: DataView = new DataView(new ArrayBuffer(Update.size + 1));
-			buf.setUint8(0, API_UPDATE_EXEC);
-
 			this.begin = !this.begin && this.offset === 0;
 			if (this.begin && this.encrypt && this.iv)
 			{
 				this.size = this.ivData.length;
 				for (let i = 0; i < this.size; i++)
 				{
-					buf.setUint8(8 + i, this.ivData[i]);
+					buf.setUint8(10 + i, this.ivData[i]);
 				}
 			}
 			else
 			{
 				this.size = this.total - this.offset;
-				if (this.size > UPDATE_VALUE_DATA_SIZE) this.size = UPDATE_VALUE_DATA_SIZE;
+				if (this.size > 496) this.size = 496;
 				else if (this.size < 0) this.size = 0;
 
 				for (let i = 0; i < this.size; i++)
 				{
-					buf.setUint8(8 + i, this.firmwareData[this.offset]);
+					buf.setUint8(10 + i, this.firmwareData[this.offset]);
 					this.offset++;
 				}
 			}
-
 			this.end = this.offset >= this.total;
-			new BluetoothStruct(Update.struct)?.encode(buf, this, 1);
-			return buf;
+			new BluetoothStruct(DeviceUpdate.struct)?.encode(buf, this, 3);
 		}
 		catch (e)
 		{
 			console.log(e);
+			buf.setUint16(1, 0, true);
 		}
+		return buf;
 	}
 }

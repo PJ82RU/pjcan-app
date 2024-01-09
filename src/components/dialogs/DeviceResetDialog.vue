@@ -58,7 +58,7 @@ export default {
 		/** Применить */
 		const onApply = (): void =>
 		{
-			canbus.resetDevice(resetConfig.value, resetView.value);
+			canbus.rebootDevice(true, resetConfig.value, resetView.value);
 			visible.value = false;
 			setTimeout(() =>
 			{

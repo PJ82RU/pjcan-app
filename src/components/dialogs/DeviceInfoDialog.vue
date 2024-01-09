@@ -52,7 +52,7 @@ import Scanner from "@/components/Scanner.vue";
 
 import { toMac } from "@/utils/conversion";
 
-import { API_INFO_EVENT, API_INFO_EXEC, IDeviceInfo } from "@/models/pjcan/device";
+import { API_DEVICE_INFO_EVENT, API_DEVICE_INFO_EXEC, IDeviceInfo } from "@/models/pjcan/device";
 import { IMessage } from "@/models/interfaces/message/IMessage";
 
 import canbus from "@/api/canbus";
@@ -97,35 +97,35 @@ export default {
 			if (res.isData)
 			{
 				const { value } = modelDeviceInfo;
-				// value.chipCores = canbus.deviceInfo.chipCores.toString();
-				// value.chipRevision = canbus.deviceInfo.chipRevision.toString();
-				value.cpuFreqMHz = canbus.deviceInfo.cpuFreqMHz.toString();
-				value.efuseMac = toMac(canbus.deviceInfo.efuseMac);
-				// value.flashChipMode = canbus.deviceInfo.flashChipMode.toString();
-				// value.flashChipSize = canbus.deviceInfo.flashChipSize.toString();
-				// value.flashChipSpeed = canbus.deviceInfo.flashChipSpeed.toString();
-				value.freeSketchSpace = canbus.deviceInfo.freeSketchSpace.toString();
-				value.sdkVersion = canbus.deviceInfo.sdkVersion;
-				value.sketchMD5 = canbus.deviceInfo.sketchMD5;
-				value.sketchSize = canbus.deviceInfo.sketchSize.toString();
-				value.temperatureChip = (canbus.deviceInfo.temperatureChip / 100).toFixed(2) + "°C";
+				// value.chipCores = canbus.device.info.chipCores.toString();
+				// value.chipRevision = canbus.device.info.chipRevision.toString();
+				value.cpuFreqMHz = canbus.device.info.cpuFreqMHz.toString();
+				value.efuseMac = toMac(canbus.device.info.efuseMac);
+				// value.flashChipMode = canbus.device.info.flashChipMode.toString();
+				// value.flashChipSize = canbus.device.info.flashChipSize.toString();
+				// value.flashChipSpeed = canbus.device.info.flashChipSpeed.toString();
+				value.freeSketchSpace = canbus.device.info.freeSketchSpace.toString();
+				value.sdkVersion = canbus.device.info.sdkVersion;
+				value.sketchMD5 = canbus.device.info.sketchMD5;
+				value.sketchSize = canbus.device.info.sketchSize.toString();
+				value.temperatureChip = (canbus.device.info.temperatureChip / 100).toFixed(2) + "°C";
 				value.sha = canbus.sha ?? "";
 			}
 		};
 
 		onMounted(() =>
 		{
-			canbus.addListener(API_INFO_EVENT, onReceiveInfo);
-			onReceiveInfo(canbus.deviceInfo);
+			canbus.addListener(API_DEVICE_INFO_EVENT, onReceiveInfo);
+			onReceiveInfo(canbus.device.info);
 		});
 		onUnmounted(() =>
 		{
-			canbus.removeListener(API_INFO_EVENT, onReceiveInfo);
+			canbus.removeListener(API_DEVICE_INFO_EVENT, onReceiveInfo);
 		});
 
 		watch(modelValue, (val: boolean): void =>
 		{
-			if (val) canbus.queryValue(API_INFO_EXEC);
+			if (val) canbus.queryValue(API_DEVICE_INFO_EXEC);
 		});
 
 		const visibleReset = ref(false);

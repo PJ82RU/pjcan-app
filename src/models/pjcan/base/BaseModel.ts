@@ -4,66 +4,61 @@ import { IBluetoothStruct } from "@/components/bluetooth/IBluetoothStruct";
 export class BaseModel
 {
 	isData: boolean = false;
+	requestPriority: boolean = false;
 
 	/**
 	 * Запись данных
 	 * @param {any} th Объект модели
 	 * @param {number} exec Команда API
-	 * @param {number} len Длина данных API
+	 * @param {number} size Размер данных
 	 * @param {IBluetoothStruct} struct Структура данных
 	 * @param {DataView} buf Буфер данных
 	 * @protected
 	 */
-	protected _set(th: any, exec: number, len: number, struct: IBluetoothStruct, buf: DataView): boolean
+	protected _set(th: any, exec: number, size: number, struct: IBluetoothStruct, buf: DataView): boolean
 	{
-		try
+		const id = buf.getUint8(0);
+		const sizeData = buf.byteLength >= 3 ? buf.getUint16(1, true) : 0;
+		const result = id === exec && sizeData === size;
+		if (result)
 		{
-			if (buf.getUint8(0) === exec && buf.byteLength === len)
+			try
 			{
-				struct.decode(buf, th, 1);
+				struct.decode(buf, th, 3);
 				this.isData = true;
-				return true;
+			}
+			catch (e)
+			{
+				console.log(e);
 			}
 		}
-		catch (e)
-		{
-			console.log(e);
-		}
-		return false;
+		return result;
 	}
 
 	/**
 	 * Чтение данных
 	 * @param {any} th Объект модели
 	 * @param {number} exec Команда API
-	 * @param {number} len Длина данных API
+	 * @param {number} size Длина данных
 	 * @param {IBluetoothStruct} struct Структура данных
 	 */
-	protected _get(th: any, exec: number, len: number, struct?: IBluetoothStruct): DataView | undefined
+	protected _get(th: any, exec: number, size: number = 0, struct?: IBluetoothStruct): DataView
 	{
-		try
+		const buf: DataView = new DataView(new ArrayBuffer(size + 3));
+		buf.setUint8(0, exec);
+		buf.setUint16(1, size, true);
+		if (size > 0)
 		{
-			const buf: DataView = new DataView(new ArrayBuffer(len));
-			struct?.encode(buf, th, 1);
-			buf.setUint8(0, exec);
-			return buf;
+			try
+			{
+				struct?.encode(buf, th, 3);
+			}
+			catch (e)
+			{
+				console.log(e);
+				buf.setUint16(1, 0, true);
+			}
 		}
-		catch (e)
-		{
-			console.log(e);
-		}
-	}
-
-	/**
-	 * Копирование значений объекта на базе IBaseModel
-	 * @param res
-	 */
-	setModel<T>(res: T): void
-	{
-		for (const key in res)
-		{
-			// @ts-ignore
-			if (this[key] !== undefined) this[key] = res[key];
-		}
+		return buf;
 	}
 }

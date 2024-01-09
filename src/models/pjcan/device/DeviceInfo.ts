@@ -2,9 +2,8 @@ import { BluetoothStruct } from "@/components/bluetooth";
 import { BaseModel } from "../base";
 import { IDeviceInfo } from "./IDeviceInfo";
 
-export const API_INFO_EXEC = 5;
-export const API_INFO_EVENT = "Info";
-export const API_DEVICE_SHA_SIZE = 32;
+export const API_DEVICE_INFO_EXEC = 0x01;
+export const API_DEVICE_INFO_EVENT = "DeviceInfo";
 
 /** Модель характеристик устройства */
 export class DeviceInfo extends BaseModel implements IDeviceInfo
@@ -32,9 +31,9 @@ export class DeviceInfo extends BaseModel implements IDeviceInfo
 		sketchMD5: BluetoothStruct.char(16),
 		sketchSize: BluetoothStruct.uint32(),
 		temperatureChip: BluetoothStruct.uint32(),
-		sha: BluetoothStruct.uint8(API_DEVICE_SHA_SIZE)
+		sha: BluetoothStruct.uint8(32)
 	};
-	static size: number = 111 + API_DEVICE_SHA_SIZE;
+	static size: number = 143;
 
 	chipCores = 0;
 	chipModel = "";
@@ -72,12 +71,12 @@ export class DeviceInfo extends BaseModel implements IDeviceInfo
 	 */
 	set(buf: DataView): boolean
 	{
-		return this._set(this, API_INFO_EXEC, DeviceInfo.size + 1, new BluetoothStruct(DeviceInfo.struct), buf);
+		return this._set(this, API_DEVICE_INFO_EXEC, DeviceInfo.size, new BluetoothStruct(DeviceInfo.struct), buf);
 	}
 
 	/** Чтение данных */
-	get(): DataView | undefined
+	get(): DataView
 	{
-		return this._get(this, API_INFO_EXEC, 1);
+		return this._get(this, API_DEVICE_INFO_EXEC);
 	}
 }

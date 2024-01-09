@@ -5,7 +5,7 @@ export interface IBaseModel {
 	lastSend?: number;
 	timeout?: Timeout;
 	set: (buf: DataView) => boolean;
-	get: () => DataView | undefined;
-	setModel: <T>(res: T) => void;
+	get: () => DataView;
 	isData: boolean;
+	requestPriority: boolean;
 }

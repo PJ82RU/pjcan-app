@@ -1,7 +1,7 @@
 import EventEmitter from "eventemitter3";
 
 /** Интерфейс загрузки данных прошивки */
-export interface IUpdate extends EventEmitter {
+export interface IDeviceUpdate extends EventEmitter {
 	firmwareUrl: string;		// Путь к файлу прошивки
 	firmwareData: Uint8Array;	// Данные прошивки
 	offset: number;				// Позиция чтения данных прошивки
@@ -21,5 +21,5 @@ export interface IUpdate extends EventEmitter {
 	clear: () => void;
 	setIV: (res: string) => boolean;
 	set: (buf: DataView) => void;
-	get: () => DataView | undefined;
+	get: () => DataView;
 }
