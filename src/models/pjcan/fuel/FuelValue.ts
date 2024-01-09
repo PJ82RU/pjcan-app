@@ -1,25 +1,21 @@
 import { BluetoothStruct } from "@/components/bluetooth";
-import { BaseModel } from "../../base";
+import { BaseModel } from "../base";
 import { IFuelValue } from "./IFuelValue";
 
-export const API_VARIABLE_FUEL_EXEC = 150;
-export const API_VARIABLE_FUEL_EVENT = "VariableFuelValue";
+export const API_FUEL_VALUE_EXEC = 0xa1;
+export const API_FUEL_VALUE_EVENT = "FuelValue";
 
 /** Модель значений расхода топлива */
 export class FuelValue extends BaseModel implements IFuelValue
 {
 	static struct: any = {
-		consumption: BluetoothStruct.uint32(),
 		current: BluetoothStruct.uint16(),
-		avg: BluetoothStruct.uint16(),
-		total: BluetoothStruct.uint32()
+		avg: BluetoothStruct.uint16()
 	};
-	static size: number = 12;
+	static size: number = 4;
 
-	consumption = 0;
 	current = 0;
 	avg = 0;
-	total = 0;
 
 	constructor(data?: DataView)
 	{
@@ -33,12 +29,12 @@ export class FuelValue extends BaseModel implements IFuelValue
 	 */
 	set(buf: DataView): boolean
 	{
-		return this._set(this, API_VARIABLE_FUEL_EXEC, FuelValue.size + 1, new BluetoothStruct(FuelValue.struct), buf);
+		return this._set(this, API_FUEL_VALUE_EXEC, FuelValue.size, new BluetoothStruct(FuelValue.struct), buf);
 	}
 
 	/** Чтение данных */
-	get(): DataView | undefined
+	get(): DataView
 	{
-		return this._get(this, API_VARIABLE_FUEL_EXEC, FuelValue.size + 1, new BluetoothStruct(FuelValue.struct));
+		return this._get(this, API_FUEL_VALUE_EXEC);
 	}
 }

@@ -1,26 +1,28 @@
 import { BluetoothStruct } from "@/components/bluetooth";
-import { BaseModel } from "../../base";
-import { ViewConfig } from "../../view";
+import { BaseModel } from "../base";
+import { ViewConfig } from "../view";
 import { IFuelView } from "./IFuelView";
 
-export const API_VARIABLE_FUEL_VIEW_EXEC = 152;
-export const API_VARIABLE_FUEL_VIEW_EVENT = "VariableFuelView";
+export const API_FUEL_VIEW_EXEC = 0xa3;
+export const API_FUEL_VIEW_EVENT = "FuelView";
+
+export const API_FUEL_VIEW_CURRENT_EXEC = 0xa4;
+export const API_FUEL_VIEW_CURRENT_EVENT = "FuelViewCurrent";
+
+export const API_FUEL_VIEW_AVG_EXEC = 0xa5;
+export const API_FUEL_VIEW_AVG_EVENT = "FuelViewAVG";
 
 /** Модель параметров отображения данных расхода топлива */
 export class FuelView extends BaseModel implements IFuelView
 {
 	static struct: any = {
-		consumption: BluetoothStruct.struct(ViewConfig.struct),
 		current: BluetoothStruct.struct(ViewConfig.struct),
-		avg: BluetoothStruct.struct(ViewConfig.struct),
-		total: BluetoothStruct.struct(ViewConfig.struct)
+		avg: BluetoothStruct.struct(ViewConfig.struct)
 	};
 	static size: number = ViewConfig.size * 4;
 
-	consumption = new ViewConfig();
-	current = new ViewConfig();
-	avg = new ViewConfig();
-	total = new ViewConfig();
+	current = new ViewConfig(API_FUEL_VIEW_CURRENT_EXEC);
+	avg = new ViewConfig(API_FUEL_VIEW_AVG_EXEC);
 
 	constructor(data?: DataView)
 	{
@@ -36,16 +38,16 @@ export class FuelView extends BaseModel implements IFuelView
 	{
 		return this._set(
 			this,
-			API_VARIABLE_FUEL_VIEW_EXEC,
-			FuelView.size + 1,
+			API_FUEL_VIEW_EXEC,
+			FuelView.size,
 			new BluetoothStruct(FuelView.struct),
 			buf
 		);
 	}
 
 	/** Чтение данных */
-	get(): DataView | undefined
+	get(): DataView
 	{
-		return this._get(this, API_VARIABLE_FUEL_VIEW_EXEC, FuelView.size + 1, new BluetoothStruct(FuelView.struct));
+		return this._get(this, API_FUEL_VIEW_EXEC);
 	}
 }

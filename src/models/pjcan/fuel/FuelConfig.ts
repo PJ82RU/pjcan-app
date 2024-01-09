@@ -1,9 +1,9 @@
 import { BluetoothStruct } from "@/components/bluetooth";
-import { BaseModel } from "../../base";
+import { BaseModel } from "../base";
 import { IFuelConfig } from "./IFuelConfig";
 
-export const API_VARIABLE_FUEL_CONFIG_EXEC = 151;
-export const API_VARIABLE_FUEL_CONFIG_EVENT = "VariableFuelConfig";
+export const API_FUEL_CONFIG_EXEC = 0xa0;
+export const API_FUEL_CONFIG_EVENT = "FuelConfig";
 
 /** Модель конфигурации расхода топлива */
 export class FuelConfig extends BaseModel implements IFuelConfig
@@ -27,23 +27,17 @@ export class FuelConfig extends BaseModel implements IFuelConfig
 	 */
 	set(buf: DataView): boolean
 	{
-		return this._set(
-			this,
-			API_VARIABLE_FUEL_CONFIG_EXEC,
-			FuelConfig.size + 1,
-			new BluetoothStruct(FuelConfig.struct),
-			buf
-		);
+		return this._set(this, API_FUEL_CONFIG_EXEC, FuelConfig.size, new BluetoothStruct(FuelConfig.struct), buf);
 	}
 
-	/** Чтение данных */
-	get(): DataView | undefined
+	/**
+	 * Чтение данных
+	 * @param {boolean} request Только запрос
+	 */
+	get(request?: boolean): DataView
 	{
-		return this._get(
-			this,
-			API_VARIABLE_FUEL_CONFIG_EXEC,
-			FuelConfig.size + 1,
-			new BluetoothStruct(FuelConfig.struct)
-		);
+		return request
+			? this._get(this, API_FUEL_CONFIG_EXEC)
+			: this._get(this, API_FUEL_CONFIG_EXEC, FuelConfig.size, new BluetoothStruct(FuelConfig.struct));
 	}
 }

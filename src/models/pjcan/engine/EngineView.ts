@@ -2,6 +2,7 @@ import { BluetoothStruct } from "@/components/bluetooth";
 import { BaseModel } from "../base";
 import { ViewConfig } from "../view";
 import { IEngineView } from "./IEngineView";
+import { API_FUEL_VIEW_EXEC } from "@/models/pjcan/fuel";
 
 export const API_ENGINE_VIEW_EXEC = 0x93;
 export const API_ENGINE_VIEW_EVENT = "EngineView";
@@ -64,14 +65,9 @@ export class EngineView extends BaseModel implements IEngineView
 		return this._set(this, API_ENGINE_VIEW_EXEC, EngineView.size, new BluetoothStruct(EngineView.struct), buf);
 	}
 
-	/**
-	 * Чтение данных
-	 * @param {boolean} request Только запрос
-	 */
-	get(request?: boolean): DataView
+	/** Чтение данных */
+	get(): DataView
 	{
-		return request
-			? this._get(this, API_ENGINE_VIEW_EXEC)
-			: this._get(this, API_ENGINE_VIEW_EXEC, EngineView.size, new BluetoothStruct(EngineView.struct));
+		return this._get(this, API_ENGINE_VIEW_EXEC);
 	}
 }
