@@ -1,9 +1,9 @@
 import { BluetoothStruct } from "@/components/bluetooth";
-import { BaseModel } from "../../base";
+import { BaseModel } from "../base";
 import { IMovementValue } from "./IMovementValue";
 
-export const API_VARIABLE_MOVEMENT_EXEC = 160;
-export const API_VARIABLE_MOVEMENT_EVENT = "VariableMovementValue";
+export const API_MOVEMENT_VALUE_EXEC = 0xb1;
+export const API_MOVEMENT_VALUE_EVENT = "MovementValue";
 
 /** Модель значений движения */
 export class MovementValue extends BaseModel implements IMovementValue
@@ -33,21 +33,16 @@ export class MovementValue extends BaseModel implements IMovementValue
 	{
 		return this._set(
 			this,
-			API_VARIABLE_MOVEMENT_EXEC,
-			MovementValue.size + 1,
+			API_MOVEMENT_VALUE_EXEC,
+			MovementValue.size,
 			new BluetoothStruct(MovementValue.struct),
 			buf
 		);
 	}
 
 	/** Чтение данных */
-	get(): DataView | undefined
+	get(): DataView
 	{
-		return this._get(
-			this,
-			API_VARIABLE_MOVEMENT_EXEC,
-			MovementValue.size + 1,
-			new BluetoothStruct(MovementValue.struct)
-		);
+		return this._get(this, API_MOVEMENT_VALUE_EXEC);
 	}
 }
