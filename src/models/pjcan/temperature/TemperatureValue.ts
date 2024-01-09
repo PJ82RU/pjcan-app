@@ -1,9 +1,12 @@
 import { BluetoothStruct } from "@/components/bluetooth";
-import { BaseModel } from "../../base";
+import { BaseModel } from "../base";
 import { ITemperatureValue } from "./ITemperatureValue";
 
-export const API_VARIABLE_TEMPERATURE_EXEC = 180;
-export const API_VARIABLE_TEMPERATURE_EVENT = "VariableTemperatureValue";
+export const API_TEMPERATURE_VALUE_EXEC = 0xd1;
+export const API_TEMPERATURE_VALUE_EVENT = "TemperatureValue";
+
+export const API_TEMPERATURE_VIEW_EXEC = 0xd3;
+export const API_TEMPERATURE_VIEW_EVENT = "TemperatureView";
 
 /** Модель значений температуры */
 export class TemperatureValue extends BaseModel implements ITemperatureValue
@@ -31,21 +34,16 @@ export class TemperatureValue extends BaseModel implements ITemperatureValue
 	{
 		return this._set(
 			this,
-			API_VARIABLE_TEMPERATURE_EXEC,
-			TemperatureValue.size + 1,
+			API_TEMPERATURE_VALUE_EXEC,
+			TemperatureValue.size,
 			new BluetoothStruct(TemperatureValue.struct),
 			buf
 		);
 	}
 
 	/** Чтение данных */
-	get(): DataView | undefined
+	get(): DataView
 	{
-		return this._get(
-			this,
-			API_VARIABLE_TEMPERATURE_EXEC,
-			TemperatureValue.size + 1,
-			new BluetoothStruct(TemperatureValue.struct)
-		);
+		return this._get(this, API_TEMPERATURE_VALUE_EXEC);
 	}
 }
