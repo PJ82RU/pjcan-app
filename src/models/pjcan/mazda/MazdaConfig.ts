@@ -40,9 +40,14 @@ export class MazdaConfig extends BaseModel implements IMazdaConfig
 		return this._set(this, API_MAZDA_CONFIG_EXEC, MazdaConfig.size, new BluetoothStruct(MazdaConfig.struct), buf);
 	}
 
-	/** Чтение данных */
-	get(): DataView
+	/**
+	 * Чтение данных
+	 * @param {boolean} request Только запрос
+	 */
+	get(request?: boolean): DataView
 	{
-		return this._get(this, API_MAZDA_CONFIG_EXEC, MazdaConfig.size, new BluetoothStruct(MazdaConfig.struct));
+		return request
+			? this._get(this, API_MAZDA_CONFIG_EXEC)
+			: this._get(this, API_MAZDA_CONFIG_EXEC, MazdaConfig.size, new BluetoothStruct(MazdaConfig.struct));
 	}
 }

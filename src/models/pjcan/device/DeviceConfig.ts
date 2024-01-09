@@ -36,9 +36,14 @@ export class DeviceConfig extends BaseModel implements IDeviceConfig
 		);
 	}
 
-	/** Чтение данных */
-	get(): DataView
+	/**
+	 * Чтение данных
+	 * @param {boolean} request Только запрос
+	 */
+	get(request?: boolean): DataView
 	{
-		return this._get(this, API_DEVICE_CONFIG_EXEC, DeviceConfig.size, new BluetoothStruct(DeviceConfig.struct));
+		return request
+			? this._get(this, API_DEVICE_CONFIG_EXEC)
+			: this._get(this, API_DEVICE_CONFIG_EXEC, DeviceConfig.size, new BluetoothStruct(DeviceConfig.struct));
 	}
 }

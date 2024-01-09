@@ -43,6 +43,6 @@ export class DeviceValue extends BaseModel implements IDeviceValue
 	/** Чтение данных */
 	get(): DataView
 	{
-		return this._get(this, API_DEVICE_VALUE_EXEC, DeviceValue.size, new BluetoothStruct(DeviceValue.struct));
+		return this._get(this, API_DEVICE_VALUE_EXEC);
 	}
 }

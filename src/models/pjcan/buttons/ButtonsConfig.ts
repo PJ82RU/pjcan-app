@@ -64,9 +64,14 @@ export class ButtonsConfig extends BaseModel implements IButtonsConfig
 		return this._set(this, this.api_exec, ButtonsConfig.size, new BluetoothStruct(ButtonsConfig.struct), buf);
 	}
 
-	/** Чтение данных */
-	get(): DataView
+	/**
+	 * Чтение данных
+	 * @param {boolean} request Только запрос
+	 */
+	get(request?: boolean): DataView
 	{
-		return this._get(this, this.api_exec, ButtonsConfig.size, new BluetoothStruct(ButtonsConfig.struct));
+		return request
+			? this._get(this, this.api_exec)
+			: this._get(this, this.api_exec, ButtonsConfig.size, new BluetoothStruct(ButtonsConfig.struct));
 	}
 }
