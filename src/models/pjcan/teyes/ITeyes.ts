@@ -3,7 +3,7 @@ import { ITeyesText } from "./ITeyesText";
 import { IViewConfig } from "../view";
 
 export interface ITeyes {
-	config: ITeyesConfig,
-	text: ITeyesText,
-	textView: IViewConfig
+	config: ITeyesConfig;
+	text: ITeyesText;
+	textView: IViewConfig;
 }
