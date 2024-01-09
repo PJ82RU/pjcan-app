@@ -1,21 +1,22 @@
 import { BluetoothStruct } from "@/components/bluetooth";
-import { BaseModel } from "../../base";
-import { ViewConfig } from "../../view";
+import { BaseModel } from "../base";
 import { ITestValue } from "./ITestValue";
 
-export const API_VARIABLE_TEST_EXEC = 190;
+export const API_TEST_VALUE_EXEC = 0xf0;
+export const API_TEST_VALUE_EVENT = "TestValue";
+
+export const API_TEST_VIEW_EXEC = 0xf3;
+export const API_TEST_VIEW_EVENT = "TestView";
 
 /** Модель значений тестирования */
 export class TestValue extends BaseModel implements ITestValue
 {
 	static struct: any = {
-		text: BluetoothStruct.char(32),
-		view: BluetoothStruct.struct(ViewConfig.struct)
+		text: BluetoothStruct.char(32)
 	};
-	static size: number = 36;
+	static size: number = 32;
 
 	text = "";
-	view = new ViewConfig();
 
 	constructor(data?: DataView)
 	{
@@ -29,12 +30,12 @@ export class TestValue extends BaseModel implements ITestValue
 	 */
 	set(buf: DataView): boolean
 	{
-		return this._set(this, API_VARIABLE_TEST_EXEC, TestValue.size + 1, new BluetoothStruct(TestValue.struct), buf);
+		return this._set(this, API_TEST_VALUE_EXEC, TestValue.size, new BluetoothStruct(TestValue.struct), buf);
 	}
 
 	/** Чтение данных */
-	get(): DataView | undefined
+	get(): DataView
 	{
-		return this._get(this, API_VARIABLE_TEST_EXEC, TestValue.size + 1, new BluetoothStruct(TestValue.struct));
+		return this._get(this, API_TEST_VALUE_EXEC, TestValue.size, new BluetoothStruct(TestValue.struct));
 	}
 }
