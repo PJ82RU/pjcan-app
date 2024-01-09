@@ -3,7 +3,7 @@ import { BaseModel } from "../base";
 import { IDeviceValue } from "./IDeviceValue";
 
 export const API_DEVICE_VALUE_EXEC = 0x03;
-export const API_DEVICE_EVENT = "DeviceValue";
+export const API_DEVICE_VALUE_EVENT = "DeviceValue";
 
 /** Модель значений устройства */
 export class DeviceValue extends BaseModel implements IDeviceValue

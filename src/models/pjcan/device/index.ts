@@ -4,7 +4,7 @@ import { IDeviceConfig } from "./IDeviceConfig";
 import { API_DEVICE_INFO_EXEC, API_DEVICE_INFO_EVENT, DeviceInfo } from "./DeviceInfo";
 import { IDeviceInfo } from "./IDeviceInfo";
 
-import { API_DEVICE_VALUE_EXEC, API_DEVICE_EVENT, DeviceValue } from "./DeviceValue";
+import { API_DEVICE_VALUE_EXEC, API_DEVICE_VALUE_EVENT, DeviceValue } from "./DeviceValue";
 import { IDeviceValue } from "./IDeviceValue";
 
 import { API_DEVICE_ACTION_EXEC, API_DEVICE_ACTION_EVENT, DeviceAction } from "./DeviceAction";
@@ -42,7 +42,7 @@ export {
 	API_DEVICE_INFO_EVENT,
 	DeviceInfo,
 	API_DEVICE_VALUE_EXEC,
-	API_DEVICE_EVENT,
+	API_DEVICE_VALUE_EVENT,
 	DeviceValue,
 	API_DEVICE_ACTION_EXEC,
 	API_DEVICE_ACTION_EVENT,
