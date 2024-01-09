@@ -28,6 +28,7 @@ import { IButtonsAction } from "./IButtonsAction";
 import { TButtonItem } from "./TButtonItem";
 import { TButtonExec } from "./TButtonExec";
 import { TButtonPress } from "./TButtonPress";
+import { TButtonType } from "./TButtonType";
 import { IButtonConfigItem } from "./IButtonConfigItem";
 
 import { IButtons } from "./IButtons";
@@ -50,6 +51,7 @@ export {
 	ButtonsAction,
 	TButtonItem,
 	TButtonPress,
-	TButtonExec
+	TButtonExec,
+	TButtonType
 };
 export type { IButtonConfigItem, IButtonsConfig, IButtonValue, IButtonsAction, IButtons };

@@ -1,6 +1,8 @@
 import { BluetoothStruct } from "@/components/bluetooth";
 import { BaseModel } from "../base";
 import { IButtonValue } from "./IButtonValue";
+import { TButtonType } from "@/models/pjcan/buttons/TButtonType";
+import { TButtonExec } from "@/models/pjcan/buttons/TButtonExec";
 
 export const API_BUTTON_SW1_VALUE_EXEC = 0x31;
 export const API_BUTTON_SW1_VALUE_EVENT = "ButtonSW1Value";
@@ -22,10 +24,10 @@ export class ButtonValue extends BaseModel implements IButtonValue
 	static size: number = 7;
 
 	index = -1;
-	exec = 0;
-	execMode = 0;
+	exec = TButtonExec.BUTTON_EXEC_NONE;
+	execMode = TButtonExec.BUTTON_EXEC_NONE;
 	count = 0;
-	type = 0;
+	type = TButtonType.PRESS_RELEASE;
 	resistance = 0;
 
 	api_exec = 0;

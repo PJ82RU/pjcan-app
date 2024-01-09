@@ -1,6 +1,7 @@
 import { BluetoothStruct } from "@/components/bluetooth";
 import { BaseModel } from "../base";
 import { ITeyesConfig } from "./ITeyesConfig";
+import { TProtocol } from "@/models/pjcan/teyes/TProtocol";
 
 export const API_TEYES_CONFIG_EXEC = 0x50;
 export const API_TEYES_CONFIG_EVENT = "TeyesConfig";
@@ -31,7 +32,7 @@ export class TeyesConfig extends BaseModel implements ITeyesConfig
 	parseVolume = false;
 	lcdShow = false;
 	reverseUart = false;
-	protocol = 0;
+	protocol = TProtocol.PROTOCOL_RAISE_HM_ND01;
 
 	constructor(data?: DataView)
 	{

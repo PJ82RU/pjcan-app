@@ -1,11 +1,13 @@
 import { IBaseModel } from "../base";
+import { TButtonExec } from "./TButtonExec";
+import { TButtonType } from "./TButtonType";
 
 /** Интерфейс значений кнопки */
 export interface IButtonValue extends IBaseModel {
 	index: number; // Индекс кнопки (-1 если кнопка не определена)
-	exec: number; // ID функции кнопки
-	execMode: number; // ID функции кнопки в режиме mode
+	exec: TButtonExec; // ID функции кнопки
+	execMode: TButtonExec; // ID функции кнопки в режиме mode
 	count: number; // Счетчик нажатий кнопки
-	type: number; // Тип действия
+	type: TButtonType; // Тип действия
 	resistance: number; // Значение сопротивления кнопки
 }

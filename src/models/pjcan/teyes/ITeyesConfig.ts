@@ -1,4 +1,5 @@
 import { IBaseModel } from "../base";
+import { TProtocol } from "./TProtocol";
 
 /** Интерфейс параметров Teyes */
 export interface ITeyesConfig extends IBaseModel {
@@ -11,5 +12,5 @@ export interface ITeyesConfig extends IBaseModel {
 	parseVolume: boolean; // Парсинг значения уровня звука ГУ
 	lcdShow: boolean; // Показать текст ГУ на LCD экране
 	reverseUart: boolean; // Поменять местами контакты RX и TX
-	protocol: number; // Протокол
+	protocol: TProtocol; // Протокол
 }
