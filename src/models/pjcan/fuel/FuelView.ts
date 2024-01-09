@@ -19,7 +19,7 @@ export class FuelView extends BaseModel implements IFuelView
 		current: BluetoothStruct.struct(ViewConfig.struct),
 		avg: BluetoothStruct.struct(ViewConfig.struct)
 	};
-	static size: number = ViewConfig.size * 4;
+	static size: number = 8;
 
 	current = new ViewConfig(API_FUEL_VIEW_CURRENT_EXEC);
 	avg = new ViewConfig(API_FUEL_VIEW_AVG_EXEC);

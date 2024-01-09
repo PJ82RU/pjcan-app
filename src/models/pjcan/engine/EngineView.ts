@@ -40,7 +40,7 @@ export class EngineView extends BaseModel implements IEngineView
 		load: BluetoothStruct.struct(ViewConfig.struct),
 		throttle: BluetoothStruct.struct(ViewConfig.struct)
 	};
-	static size: number = ViewConfig.size * 7;
+	static size: number = 28;
 
 	enabled = new ViewConfig(API_ENGINE_VIEW_ENABLED_EXEC);
 	totalWorktime = new ViewConfig(API_ENGINE_VIEW_TOTAL_WORKTIME_EXEC);

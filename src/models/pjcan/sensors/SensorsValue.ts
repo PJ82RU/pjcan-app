@@ -1,10 +1,9 @@
 import { BluetoothStruct } from "@/components/bluetooth";
-import { BaseModel } from "../../base";
+import { BaseModel } from "../base";
 import { ISensorsValue } from "./ISensorsValue";
-import { TSensorsSignal } from "./TSensorsSignal";
 
-export const API_VARIABLE_SENSORS_EXEC = 170;
-export const API_VARIABLE_SENSORS_EVENT = "VariableSensorsValue";
+export const API_SENSORS_VALUE_EXEC = 0xc1;
+export const API_SENSORS_VALUE_EVENT = "SensorsValue";
 
 /** Модель значений датчиков */
 export class SensorsValue extends BaseModel implements ISensorsValue
@@ -15,16 +14,20 @@ export class SensorsValue extends BaseModel implements ISensorsValue
 		reverse: BluetoothStruct.bit(),
 		seatbeltDriver: BluetoothStruct.bit(),
 		seatbeltPassenger: BluetoothStruct.bit(),
-		signal: BluetoothStruct.uint8()
+		turnSignalLeft: BluetoothStruct.bit(),
+		turnSignalRight: BluetoothStruct.bit(),
+		highBeam: BluetoothStruct.bit()
 	};
-	static size: number = 2;
+	static size: number = 1;
 
 	acc = false;
 	handbrake = false;
 	reverse = false;
 	seatbeltDriver = false;
 	seatbeltPassenger = false;
-	signal = TSensorsSignal.SIGNAL_NONE;
+	turnSignalLeft = false;
+	turnSignalRight = false;
+	highBeam = false;
 
 	constructor(data?: DataView)
 	{
@@ -40,21 +43,16 @@ export class SensorsValue extends BaseModel implements ISensorsValue
 	{
 		return this._set(
 			this,
-			API_VARIABLE_SENSORS_EXEC,
-			SensorsValue.size + 1,
+			API_SENSORS_VALUE_EXEC,
+			SensorsValue.size,
 			new BluetoothStruct(SensorsValue.struct),
 			buf
 		);
 	}
 
 	/** Чтение данных */
-	get(): DataView | undefined
+	get(): DataView
 	{
-		return this._get(
-			this,
-			API_VARIABLE_SENSORS_EXEC,
-			SensorsValue.size + 1,
-			new BluetoothStruct(SensorsValue.struct)
-		);
+		return this._get(this, API_SENSORS_VALUE_EXEC);
 	}
 }
