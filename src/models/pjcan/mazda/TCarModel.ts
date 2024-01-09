@@ -1,0 +1,12 @@
+/* eslint-disable no-unused-vars */
+export enum TCarModel {
+    CAR_MODEL_UNKNOWN,
+    CAR_MODEL_MAZDA_3_BK,
+    CAR_MODEL_MAZDA_3_BL,
+    CAR_MODEL_MAZDA_6_GG,
+    CAR_MODEL_MAZDA_6_GH,
+    CAR_MODEL_MAZDA_CX7,
+    CAR_MODEL_MAZDA_CX7_REST,
+    CAR_MODEL_MAZDA_CX9,
+    CAR_MODEL_MAZDA_CX9_REST
+}
