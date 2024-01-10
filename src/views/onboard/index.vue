@@ -10,6 +10,7 @@
 import { computed, onMounted, onUnmounted, provide, ref } from "vue";
 import { useDisplay } from "vuetify";
 import store from "@/store";
+import canbus from "@/api/canbus";
 
 import Flicking from "@egjs/vue3-flicking";
 import InfoCard from "./components/InfoCard.vue";
@@ -21,9 +22,19 @@ import ClimateCard from "./components/ClimateCard.vue";
 import BoseCard from "./components/BoseCard.vue";
 
 import { IOnboardCard } from "@/models/interfaces/IOnboardCard";
-import { API_CAR_CONFIG_EVENT, ICarConfig } from "@/models/pjcan/car";
-
-import canbus from "@/api/canbus";
+import { ChoiceValue } from "@/models/pjcan/choice";
+import { Timeout } from "@/models/types/Timeout";
+import { API_MAZDA_CONFIG_EVENT, IMazdaConfig, MazdaConfig, TCarModel } from "@/models/pjcan/mazda";
+import { API_DEVICE_VALUE_EXEC } from "@/models/pjcan/device";
+import { API_SENSORS_VALUE_EXEC } from "@/models/pjcan/sensors";
+import { API_TEMPERATURE_VALUE_EXEC } from "@/models/pjcan/temperature";
+import { API_BOSE_CONFIG_EXEC } from "@/models/pjcan/bose";
+import { API_VOLUME_CONFIG_EXEC } from "@/models/pjcan/volume";
+import { API_ENGINE_VALUE_EXEC } from "@/models/pjcan/engine";
+import { API_FUEL_VALUE_EXEC } from "@/models/pjcan/fuel";
+import { API_MOVEMENT_VALUE_EXEC } from "@/models/pjcan/movement";
+import { API_DOORS_VALUE_EXEC } from "@/models/pjcan/doors";
+import { API_CLIMATE_VALUE_EXEC } from "@/models/pjcan/climate";
 
 export default {
 	name: "onboard",
@@ -43,12 +54,7 @@ export default {
 		const flicking = ref(null);
 		provide("flicking", flicking);
 
-		const carModel = ref(canbus.configs.car.carModel);
-		const onReceiveCarConfig = (res: ICarConfig): void =>
-		{
-			if (res.isData) carModel.value = res.carModel;
-		};
-
+		/** Карточки */
 		const cards = computed(() =>
 		{
 			return store.getters["app/onboardCardList"]?.filter(
@@ -56,16 +62,76 @@ export default {
 			);
 		});
 
+		// КОНФИГУРАЦИЯ АВТОМОБИЛЯ
+
+		/** Модель автомобиля */
+		const carModel = ref(TCarModel.CAR_MODEL_UNKNOWN);
+
+		const onReceiveMazdaConfig = (res: IMazdaConfig): void =>
+		{
+			if (res.isData) carModel.value = res.carModel;
+		};
+		canbus.addListener(API_MAZDA_CONFIG_EVENT, onReceiveMazdaConfig);
+		canbus.query(new MazdaConfig());
+
+		// ЦИКЛИЧЕСКИЙ ЗАПРОС ЗНАЧЕНИЙ
+
+		/** Список ID значений */
+		const listExec = computed(() =>
+		{
+			const result: number[] = [];
+			cards.value?.forEach((card: IOnboardCard) =>
+			{
+				switch (card.name)
+				{
+					case "info":
+						result.push(API_DEVICE_VALUE_EXEC);
+						result.push(API_SENSORS_VALUE_EXEC);
+						result.push(API_TEMPERATURE_VALUE_EXEC);
+						break;
+					case "bose":
+						result.push(API_BOSE_CONFIG_EXEC);
+						result.push(API_VOLUME_CONFIG_EXEC);
+						break;
+					case "engine":
+						result.push(API_ENGINE_VALUE_EXEC);
+						break;
+					case "fuel":
+						result.push(API_FUEL_VALUE_EXEC);
+						break;
+					case "movement":
+						result.push(API_MOVEMENT_VALUE_EXEC);
+						break;
+					case "doors":
+						result.push(API_DOORS_VALUE_EXEC);
+						break;
+					case "climate":
+						result.push(API_CLIMATE_VALUE_EXEC);
+						break;
+				}
+			});
+			return result;
+		});
+
+		const onQueryListExec = (): void =>
+		{
+			if (listExec.value?.length)
+			{
+				const choice = new ChoiceValue();
+				choice.listID = listExec.value;
+				canbus.query(choice, true);
+			}
+		};
+
+		let loop: Timeout;
 		onMounted(() =>
 		{
-			canbus.startFetchValue();
-			canbus.addListener(API_CAR_CONFIG_EVENT, onReceiveCarConfig);
-			onReceiveCarConfig(canbus.configs.car);
+			loop = setInterval(() => onQueryListExec(), 500);
+			onQueryListExec();
 		});
 		onUnmounted(() =>
 		{
-			canbus.stopFetchValue();
-			canbus.removeListener(API_CAR_CONFIG_EVENT, onReceiveCarConfig);
+			clearInterval(loop);
 		});
 
 		return {
