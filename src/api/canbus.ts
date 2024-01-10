@@ -174,11 +174,10 @@ import {
 	VolumeConfig
 } from "@/models/pjcan/volume";
 import { API_VERSION_EVENT, IVersion, Version } from "@/models/pjcan/version";
+import { API_CHOICE_EXEC, ChoiceValue } from "@/models/pjcan/choice";
 
 import { IQuery } from "@/models/interfaces/IQuery";
 import { ViewConfig } from "@/models/pjcan/view";
-
-export const API_CHOICE_EXEC = 0x10;
 
 const dev = process.env.NODE_ENV === "development";
 
@@ -287,26 +286,6 @@ export class Canbus extends EventEmitter
 	}
 
 	/**
-	 * Выборочные данные
-	 * @param data Данные
-	 */
-	private choiceData(data: DataView): void
-	{
-		const data_size = data.getUint16(1, true);
-		if (data_size === 0 || data_size + 3 > data.byteLength) return;
-
-		let offset = 3;
-		while (offset < data_size)
-		{
-			const size = data.getUint16(offset + 1, true);
-			if (offset + size + 3 > data.byteLength) break;
-
-			this.onReceive(new DataView(data.buffer.slice(offset, size + 3)));
-			offset += size + 3;
-		}
-	};
-
-	/**
 	 * Входящие данные
 	 * @param data Данные
 	 */
@@ -355,8 +334,8 @@ export class Canbus extends EventEmitter
 					this.emit(API_DEVICE_SCANNER_VALUE_EVENT, new DeviceScannerValue(data));
 					break;
 
-				case API_CHOICE_EXEC: // Выборочный запрос данных
-					this.choiceData(data);
+				case API_CHOICE_EXEC: // Выборочные данные
+					new ChoiceValue(data, this.onReceive);
 					break;
 
 				case API_BUTTONS_SW1_CONFIG_EXEC: // Конфигурация кнопок SW1
