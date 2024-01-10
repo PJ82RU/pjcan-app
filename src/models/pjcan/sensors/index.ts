@@ -12,11 +12,9 @@ import {
 	API_SENSORS_VIEW_SEATBELT_EVENT,
 	API_SENSORS_VIEW_TURN_SIGNAL_EXEC,
 	API_SENSORS_VIEW_TURN_SIGNAL_EVENT,
-	SensorsView
-} from "./SensorsView";
-import { ISensorsView } from "./ISensorsView";
-
-import { ISensors } from "./ISensors";
+	SensorsViews
+} from "./SensorsViews";
+import { ISensorsViews } from "./ISensorsViews";
 
 export {
 	API_SENSORS_VALUE_EXEC,
@@ -32,6 +30,6 @@ export {
 	API_SENSORS_VIEW_SEATBELT_EVENT,
 	API_SENSORS_VIEW_TURN_SIGNAL_EXEC,
 	API_SENSORS_VIEW_TURN_SIGNAL_EVENT,
-	SensorsView
+	SensorsViews
 };
-export type { ISensorsValue, ISensorsView, ISensors };
+export type { ISensorsValue, ISensorsViews };

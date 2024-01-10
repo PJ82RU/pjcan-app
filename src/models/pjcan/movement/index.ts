@@ -10,11 +10,9 @@ import {
 	API_MOVEMENT_VIEW_SPEED_AVG_EVENT,
 	API_MOVEMENT_VIEW_REST_WAY_EXEC,
 	API_MOVEMENT_VIEW_REST_WAY_EVENT,
-	MovementView
-} from "./MovementView";
-import { IMovementView } from "./IMovementView";
-
-import { IMovement } from "./IMovement";
+	MovementViews
+} from "./MovementViews";
+import { IMovementViews } from "./IMovementViews";
 
 export {
 	API_MOVEMENT_VALUE_EXEC,
@@ -28,6 +26,6 @@ export {
 	API_MOVEMENT_VIEW_SPEED_AVG_EVENT,
 	API_MOVEMENT_VIEW_REST_WAY_EXEC,
 	API_MOVEMENT_VIEW_REST_WAY_EVENT,
-	MovementView
+	MovementViews
 };
-export type { IMovementValue, IMovementView, IMovement };
+export type { IMovementValue, IMovementViews };

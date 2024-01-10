@@ -1,7 +1,7 @@
 import { BluetoothStruct } from "@/components/bluetooth";
 import { BaseModel } from "../base";
 import { ViewConfig } from "../view";
-import { IFuelView } from "./IFuelView";
+import { IFuelViews } from "./IFuelViews";
 
 export const API_FUEL_VIEW_EXEC = 0xa3;
 export const API_FUEL_VIEW_EVENT = "FuelView";
@@ -13,7 +13,7 @@ export const API_FUEL_VIEW_AVG_EXEC = 0xa5;
 export const API_FUEL_VIEW_AVG_EVENT = "FuelViewAVG";
 
 /** Модель параметров отображения данных расхода топлива */
-export class FuelView extends BaseModel implements IFuelView
+export class FuelViews extends BaseModel implements IFuelViews
 {
 	static struct: any = {
 		current: BluetoothStruct.struct(ViewConfig.struct),
@@ -39,8 +39,8 @@ export class FuelView extends BaseModel implements IFuelView
 		return this._set(
 			this,
 			API_FUEL_VIEW_EXEC,
-			FuelView.size,
-			new BluetoothStruct(FuelView.struct),
+			FuelViews.size,
+			new BluetoothStruct(FuelViews.struct),
 			buf
 		);
 	}

@@ -1,7 +1,7 @@
 import { BluetoothStruct } from "@/components/bluetooth";
 import { BaseModel } from "../base";
 import { ViewConfig } from "../view";
-import { ISensorsView } from "./ISensorsView";
+import { ISensorsViews } from "./ISensorsViews";
 
 export const API_SENSORS_VIEW_EXEC = 0xc3;
 export const API_SENSORS_VIEW_EVENT = "SensorsView";
@@ -19,7 +19,7 @@ export const API_SENSORS_VIEW_TURN_SIGNAL_EXEC = 0xc7;
 export const API_SENSORS_VIEW_TURN_SIGNAL_EVENT = "SensorsViewTurnSignal";
 
 /** Модель параметров отображения данных датчиков */
-export class SensorsView extends BaseModel implements ISensorsView
+export class SensorsViews extends BaseModel implements ISensorsViews
 {
 	static struct: any = {
 		handbrake: BluetoothStruct.struct(ViewConfig.struct),
@@ -46,7 +46,7 @@ export class SensorsView extends BaseModel implements ISensorsView
 	 */
 	set(buf: DataView): boolean
 	{
-		return this._set(this, API_SENSORS_VIEW_EXEC, SensorsView.size, new BluetoothStruct(SensorsView.struct), buf);
+		return this._set(this, API_SENSORS_VIEW_EXEC, SensorsViews.size, new BluetoothStruct(SensorsViews.struct), buf);
 	}
 
 	/** Чтение данных */

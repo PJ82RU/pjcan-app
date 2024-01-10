@@ -11,11 +11,9 @@ import {
 	API_FUEL_VIEW_CURRENT_EVENT,
 	API_FUEL_VIEW_AVG_EXEC,
 	API_FUEL_VIEW_AVG_EVENT,
-	FuelView
-} from "./FuelView";
-import { IFuelView } from "./IFuelView";
-
-import { IFuel } from "./IFuel";
+	FuelViews
+} from "./FuelViews";
+import { IFuelViews } from "./IFuelViews";
 
 export {
 	API_FUEL_CONFIG_EXEC,
@@ -30,6 +28,6 @@ export {
 	API_FUEL_VIEW_CURRENT_EVENT,
 	API_FUEL_VIEW_AVG_EXEC,
 	API_FUEL_VIEW_AVG_EVENT,
-	FuelView
+	FuelViews
 };
-export type { IFuelConfig, IFuelValue, IFuelView, IFuel };
+export type { IFuelConfig, IFuelValue, IFuelViews };

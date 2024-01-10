@@ -31,8 +31,6 @@ import { TButtonPress } from "./TButtonPress";
 import { TButtonType } from "./TButtonType";
 import { IButtonConfigItem } from "./IButtonConfigItem";
 
-import { IButtons } from "./IButtons";
-
 export {
 	API_BUTTONS_SW1_CONFIG_EXEC,
 	API_BUTTONS_SW1_CONFIG_EVENT,
@@ -54,4 +52,4 @@ export {
 	TButtonExec,
 	TButtonType
 };
-export type { IButtonConfigItem, IButtonsConfig, IButtonValue, IButtonsAction, IButtons };
+export type { IButtonConfigItem, IButtonsConfig, IButtonValue, IButtonsAction };

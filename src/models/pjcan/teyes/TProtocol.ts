@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 export enum TProtocol {
 	PROTOCOL_PJCAN,
 	PROTOCOL_RAISE_HM_ND00,

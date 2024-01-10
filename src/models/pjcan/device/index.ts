@@ -32,8 +32,6 @@ import {
 } from "./DeviceScannerValue";
 import { IDeviceScannerValue } from "../device/IDeviceScannerValue";
 
-import { IDevice } from "./IDevice";
-
 export {
 	API_DEVICE_CONFIG_EXEC,
 	API_DEVICE_CONFIG_EVENT,
@@ -65,6 +63,5 @@ export type {
 	IDeviceInfo,
 	IDeviceUpdate,
 	IDeviceScannerAction,
-	IDeviceScannerValue,
-	IDevice
+	IDeviceScannerValue
 };

@@ -3,8 +3,6 @@ import { IBoseConfig } from "./IBoseConfig";
 
 import { TCenterPoint } from "./TCenterPoint";
 
-import { IBose } from "./IBose";
-
 export {
 	API_BOSE_CONFIG_EXEC,
 	API_BOSE_CONFIG_EVENT,
@@ -13,4 +11,4 @@ export {
 	BoseConfig,
 	TCenterPoint
 };
-export type { IBoseConfig, IBose };
+export type { IBoseConfig };

@@ -23,11 +23,6 @@ export class DeviceAction extends BaseModel implements IDeviceAction
 	save = false;
 	format = false;
 
-	constructor(data?: DataView)
-	{
-		super();
-	}
-
 	/**
 	 * Запись данных
 	 * @param {DataView} buf Буфер данных

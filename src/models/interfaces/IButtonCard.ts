@@ -1,4 +1,4 @@
-import { TButtonItem } from "../pjcan/button";
+import { TButtonItem } from "../pjcan/buttons";
 
 export interface IButtonCard {
 	title: string;

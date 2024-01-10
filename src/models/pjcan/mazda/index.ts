@@ -8,8 +8,6 @@ import {
 import { IMazdaConfig } from "./IMazdaConfig";
 import { TCarModel } from "./TCarModel";
 
-import { IMazda } from "./IMazda";
-
 export {
 	API_MAZDA_CONFIG_EXEC,
 	API_MAZDA_CONFIG_EVENT,
@@ -18,4 +16,4 @@ export {
 	TCarModel,
 	MazdaConfig
 };
-export type { IMazdaConfig, IMazda };
+export type { IMazdaConfig };

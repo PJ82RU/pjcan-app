@@ -24,6 +24,7 @@ export class ViewConfig extends BaseModel implements IViewConfig
 	constructor(exec: number, data?: DataView)
 	{
 		super();
+		this.api_exec = exec;
 		if (data) this.set(data);
 	}
 

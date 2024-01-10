@@ -1,8 +1,7 @@
 import { BluetoothStruct } from "@/components/bluetooth";
 import { BaseModel } from "../base";
 import { ViewConfig } from "../view";
-import { IEngineView } from "./IEngineView";
-import { API_FUEL_VIEW_EXEC } from "@/models/pjcan/fuel";
+import { IEngineViews } from "./IEngineViews";
 
 export const API_ENGINE_VIEW_EXEC = 0x93;
 export const API_ENGINE_VIEW_EVENT = "EngineView";
@@ -29,7 +28,7 @@ export const API_ENGINE_VIEW_THROTTLE_EXEC = 0x9a;
 export const API_ENGINE_VIEW_THROTTLE_EVENT = "EngineViewThrottle";
 
 /** Модель параметров отображения данных ДВС */
-export class EngineView extends BaseModel implements IEngineView
+export class EngineViews extends BaseModel implements IEngineViews
 {
 	static struct: any = {
 		enabled: BluetoothStruct.struct(ViewConfig.struct),
@@ -62,7 +61,7 @@ export class EngineView extends BaseModel implements IEngineView
 	 */
 	set(buf: DataView): boolean
 	{
-		return this._set(this, API_ENGINE_VIEW_EXEC, EngineView.size, new BluetoothStruct(EngineView.struct), buf);
+		return this._set(this, API_ENGINE_VIEW_EXEC, EngineViews.size, new BluetoothStruct(EngineViews.struct), buf);
 	}
 
 	/** Чтение данных */

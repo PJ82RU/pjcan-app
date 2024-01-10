@@ -21,11 +21,9 @@ import {
 	API_ENGINE_VIEW_LOAD_EVENT,
 	API_ENGINE_VIEW_THROTTLE_EXEC,
 	API_ENGINE_VIEW_THROTTLE_EVENT,
-	EngineView
-} from "./EngineView";
-import { IEngineView } from "./IEngineView";
-
-import { IEngine } from "./IEngine";
+	EngineViews
+} from "./EngineViews";
+import { IEngineViews } from "./IEngineViews";
 
 export {
 	API_ENGINE_CONFIG_EXEC,
@@ -50,6 +48,6 @@ export {
 	API_ENGINE_VIEW_LOAD_EVENT,
 	API_ENGINE_VIEW_THROTTLE_EXEC,
 	API_ENGINE_VIEW_THROTTLE_EVENT,
-	EngineView
+	EngineViews
 };
-export type { IEngineConfig, IEngineValue, IEngineView, IEngine };
+export type { IEngineConfig, IEngineValue, IEngineViews };

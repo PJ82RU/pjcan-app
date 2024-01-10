@@ -5,7 +5,6 @@ import { IDeviceScannerFrame } from "./IDeviceScannerFrame";
 
 export const API_DEVICE_SCANNER_VALUE_EXEC = 0x06;
 export const API_DEVICE_SCANNER_VALUE_EVENT = "DeviceScannerValue";
-export const API_DEVICE_SCANNER_FRAME_COUNT = 16;
 
 export class DeviceScannerValue extends BaseModel implements IDeviceScannerValue
 {
@@ -18,7 +17,7 @@ export class DeviceScannerValue extends BaseModel implements IDeviceScannerValue
 				length: BluetoothStruct.uint8(),
 				timestamp: BluetoothStruct.uint64()
 			},
-			API_DEVICE_SCANNER_FRAME_COUNT
+			16
 		)
 	};
 	static size: number = 337;
@@ -32,7 +31,7 @@ export class DeviceScannerValue extends BaseModel implements IDeviceScannerValue
 	{
 		super();
 
-		for (let i = 0; i < API_DEVICE_SCANNER_FRAME_COUNT; i++)
+		for (let i = 0; i < 16; i++)
 		{
 			this.frames.push({
 				receive: false,

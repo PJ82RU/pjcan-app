@@ -7,8 +7,6 @@ import {
 } from "./DatetimeConfig";
 import { IDatetimeConfig } from "./IDatetimeConfig";
 
-import { IDatetime } from "./IDatetime";
-
 export {
 	API_DATETIME_CONFIG_EXEC,
 	API_DATETIME_CONFIG_EVENT,
@@ -16,4 +14,4 @@ export {
 	API_DATETIME_VIEW_EVENT,
 	DatetimeConfig
 };
-export type { IDatetimeConfig, IDatetime };
+export type { IDatetimeConfig };

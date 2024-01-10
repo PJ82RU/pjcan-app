@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 export enum TButtonType {
 	PRESS_RELEASE,
 	PRESS_SINGLE,
