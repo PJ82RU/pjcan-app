@@ -6,7 +6,7 @@ export const API_CHOICE_EXEC = 0x10;
 /** Модель выборочного запроса данных */
 export class ChoiceValue extends BaseModel implements IChoiceValue
 {
-	listID = [];
+	listID: number[] = [];
 
 	constructor(data?: DataView, fn?: (res: DataView) => void)
 	{
@@ -35,6 +35,11 @@ export class ChoiceValue extends BaseModel implements IChoiceValue
 			if (id !== this.exec) fn(new DataView(data.buffer.slice(offset, frame_size)));
 			offset += frame_size;
 		}
+	}
+
+	set(buf: DataView): boolean
+	{
+		return false;
 	}
 
 	/** Чтение данных */
