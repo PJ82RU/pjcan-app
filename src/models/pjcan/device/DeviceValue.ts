@@ -21,7 +21,7 @@ export class DeviceValue extends BaseModel implements IDeviceValue
 
 	constructor(data?: DataView)
 	{
-		super();
+		super(API_DEVICE_VALUE_EXEC);
 		if (data) this.set(data);
 	}
 
@@ -31,18 +31,12 @@ export class DeviceValue extends BaseModel implements IDeviceValue
 	 */
 	set(buf: DataView): boolean
 	{
-		return this._set(
-			this,
-			API_DEVICE_VALUE_EXEC,
-			DeviceValue.size,
-			new BluetoothStruct(DeviceValue.struct),
-			buf
-		);
+		return this._set(this, this.exec, DeviceValue.size, new BluetoothStruct(DeviceValue.struct), buf);
 	}
 
 	/** Чтение данных */
 	get(): DataView
 	{
-		return this._get(this, API_DEVICE_VALUE_EXEC);
+		return this._get(this, this.exec);
 	}
 }

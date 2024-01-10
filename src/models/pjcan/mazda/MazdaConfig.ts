@@ -27,7 +27,7 @@ export class MazdaConfig extends BaseModel implements IMazdaConfig
 
 	constructor(data?: DataView)
 	{
-		super();
+		super(API_MAZDA_CONFIG_EXEC);
 		if (data) this.set(data);
 	}
 
@@ -37,7 +37,7 @@ export class MazdaConfig extends BaseModel implements IMazdaConfig
 	 */
 	set(buf: DataView): boolean
 	{
-		return this._set(this, API_MAZDA_CONFIG_EXEC, MazdaConfig.size, new BluetoothStruct(MazdaConfig.struct), buf);
+		return this._set(this, this.exec, MazdaConfig.size, new BluetoothStruct(MazdaConfig.struct), buf);
 	}
 
 	/**
@@ -47,7 +47,7 @@ export class MazdaConfig extends BaseModel implements IMazdaConfig
 	get(request?: boolean): DataView
 	{
 		return request
-			? this._get(this, API_MAZDA_CONFIG_EXEC)
-			: this._get(this, API_MAZDA_CONFIG_EXEC, MazdaConfig.size, new BluetoothStruct(MazdaConfig.struct));
+			? this._get(this, this.exec)
+			: this._get(this, this.exec, MazdaConfig.size, new BluetoothStruct(MazdaConfig.struct));
 	}
 }

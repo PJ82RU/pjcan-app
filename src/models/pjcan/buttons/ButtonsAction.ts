@@ -22,12 +22,9 @@ export class ButtonsAction extends BaseModel implements IButtonsAction
 	defaultMazda3 = false;
 	defaultMazdaCX7 = false;
 
-	api_exec = 0;
-
-	constructor(exec: number)
+	constructor(exec: number = API_BUTTONS_SW1_ACTION_EXEC)
 	{
-		super();
-		this.api_exec = exec;
+		super(exec);
 	}
 
 	/**
@@ -42,6 +39,6 @@ export class ButtonsAction extends BaseModel implements IButtonsAction
 	/** Чтение данных */
 	get(): DataView
 	{
-		return this._get(this, this.api_exec, ButtonsAction.size, new BluetoothStruct(ButtonsAction.struct));
+		return this._get(this, this.exec, ButtonsAction.size, new BluetoothStruct(ButtonsAction.struct));
 	}
 }

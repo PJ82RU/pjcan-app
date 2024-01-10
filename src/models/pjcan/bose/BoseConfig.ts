@@ -39,7 +39,7 @@ export class BoseConfig extends BaseModel implements IBoseConfig
 
 	constructor(data?: DataView)
 	{
-		super();
+		super(API_BOSE_CONFIG_EXEC);
 		if (data) this.set(data);
 	}
 
@@ -49,7 +49,7 @@ export class BoseConfig extends BaseModel implements IBoseConfig
 	 */
 	set(buf: DataView): boolean
 	{
-		return this._set(this, API_BOSE_CONFIG_EXEC, BoseConfig.size, new BluetoothStruct(BoseConfig.struct), buf);
+		return this._set(this, this.exec, BoseConfig.size, new BluetoothStruct(BoseConfig.struct), buf);
 	}
 
 	/**
@@ -59,7 +59,7 @@ export class BoseConfig extends BaseModel implements IBoseConfig
 	get(request?: boolean): DataView
 	{
 		return request
-			? this._get(this, API_BOSE_CONFIG_EXEC)
-			: this._get(this, API_BOSE_CONFIG_EXEC, BoseConfig.size, new BluetoothStruct(BoseConfig.struct));
+			? this._get(this, this.exec)
+			: this._get(this, this.exec, BoseConfig.size, new BluetoothStruct(BoseConfig.struct));
 	}
 }

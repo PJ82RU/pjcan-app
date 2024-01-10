@@ -34,7 +34,7 @@ export class DatetimeConfig extends BaseModel implements IDatetimeConfig
 
 	constructor(data?: DataView)
 	{
-		super();
+		super(API_DATETIME_CONFIG_EXEC);
 		if (data) this.set(data);
 	}
 
@@ -44,13 +44,7 @@ export class DatetimeConfig extends BaseModel implements IDatetimeConfig
 	 */
 	set(buf: DataView): boolean
 	{
-		return this._set(
-			this,
-			API_DATETIME_CONFIG_EXEC,
-			DatetimeConfig.size,
-			new BluetoothStruct(DatetimeConfig.struct),
-			buf
-		);
+		return this._set(this, this.exec, DatetimeConfig.size, new BluetoothStruct(DatetimeConfig.struct), buf);
 	}
 
 	/**
@@ -60,7 +54,7 @@ export class DatetimeConfig extends BaseModel implements IDatetimeConfig
 	get(request?: boolean): DataView
 	{
 		return request
-			? this._get(this, API_DATETIME_CONFIG_EXEC)
-			: this._get(this, API_DATETIME_CONFIG_EXEC, DatetimeConfig.size, new BluetoothStruct(DatetimeConfig.struct));
+			? this._get(this, this.exec)
+			: this._get(this, this.exec, DatetimeConfig.size, new BluetoothStruct(DatetimeConfig.struct));
 	}
 }

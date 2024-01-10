@@ -26,7 +26,7 @@ export class VolumeConfig extends BaseModel implements IVolumeConfig
 
 	constructor(data?: DataView)
 	{
-		super();
+		super(API_VOLUME_CONFIG_EXEC, true);
 		if (data) this.set(data);
 	}
 
@@ -36,13 +36,7 @@ export class VolumeConfig extends BaseModel implements IVolumeConfig
 	 */
 	set(buf: DataView): boolean
 	{
-		return this._set(
-			this,
-			API_VOLUME_CONFIG_EXEC,
-			VolumeConfig.size,
-			new BluetoothStruct(VolumeConfig.struct),
-			buf
-		);
+		return this._set(this, this.exec, VolumeConfig.size, new BluetoothStruct(VolumeConfig.struct), buf);
 	}
 
 	/**
@@ -52,7 +46,7 @@ export class VolumeConfig extends BaseModel implements IVolumeConfig
 	get(request?: boolean): DataView
 	{
 		return request
-			? this._get(this, API_VOLUME_CONFIG_EXEC)
-			: this._get(this, API_VOLUME_CONFIG_EXEC, VolumeConfig.size, new BluetoothStruct(VolumeConfig.struct));
+			? this._get(this, this.exec)
+			: this._get(this, this.exec, VolumeConfig.size, new BluetoothStruct(VolumeConfig.struct));
 	}
 }

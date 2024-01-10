@@ -30,12 +30,9 @@ export class ButtonValue extends BaseModel implements IButtonValue
 	type = TButtonType.PRESS_RELEASE;
 	resistance = 0;
 
-	api_exec = 0;
-
-	constructor(exec: number, data?: DataView)
+	constructor(exec: number = API_BUTTON_SW1_VALUE_EXEC, data?: DataView)
 	{
-		super();
-		this.api_exec = exec;
+		super(exec);
 		if (data) this.set(data);
 	}
 
@@ -45,12 +42,12 @@ export class ButtonValue extends BaseModel implements IButtonValue
 	 */
 	set(buf: DataView): boolean
 	{
-		return this._set(this, this.api_exec, ButtonValue.size, new BluetoothStruct(ButtonValue.struct), buf);
+		return this._set(this, this.exec, ButtonValue.size, new BluetoothStruct(ButtonValue.struct), buf);
 	}
 
 	/** Чтение данных */
 	get(): DataView
 	{
-		return this._get(this, this.api_exec);
+		return this._get(this, this.exec);
 	}
 }

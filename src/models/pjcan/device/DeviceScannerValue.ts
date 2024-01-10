@@ -25,11 +25,9 @@ export class DeviceScannerValue extends BaseModel implements IDeviceScannerValue
 	count = 0;
 	frames = [] as IDeviceScannerFrame[];
 
-	requestPriority = true;
-
 	constructor(data?: DataView)
 	{
-		super();
+		super(API_DEVICE_SCANNER_VALUE_EXEC, true);
 
 		for (let i = 0; i < 16; i++)
 		{
@@ -52,20 +50,14 @@ export class DeviceScannerValue extends BaseModel implements IDeviceScannerValue
 	 */
 	set(buf: DataView): boolean
 	{
-		return this._set(
-			this,
-			API_DEVICE_SCANNER_VALUE_EXEC,
-			DeviceScannerValue.size,
-			new BluetoothStruct(DeviceScannerValue.struct),
-			buf
-		);
+		return this._set(this, this.exec, DeviceScannerValue.size, new BluetoothStruct(DeviceScannerValue.struct), buf);
 	}
 
 	/** Чтение данных */
 	get(): DataView
 	{
 		const buf: DataView = new DataView(new ArrayBuffer(3));
-		buf.setUint8(0, API_DEVICE_SCANNER_VALUE_EXEC);
+		buf.setUint8(0, this.exec);
 		buf.setUint16(1, 0, true);
 		return buf;
 	}

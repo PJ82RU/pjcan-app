@@ -34,12 +34,9 @@ export class ButtonsConfig extends BaseModel implements IButtonsConfig
 	sendValue = false;
 	items = [] as IButtonConfigItem[];
 
-	api_exec = 0;
-
-	constructor(exec: number, data?: DataView)
+	constructor(exec: number = API_BUTTONS_SW1_CONFIG_EXEC, data?: DataView)
 	{
-		super();
-		this.api_exec = exec;
+		super(exec);
 		for (let i = 0; i < 7; i++)
 		{
 			const item: IButtonConfigItem = {
@@ -61,7 +58,7 @@ export class ButtonsConfig extends BaseModel implements IButtonsConfig
 	 */
 	set(buf: DataView): boolean
 	{
-		return this._set(this, this.api_exec, ButtonsConfig.size, new BluetoothStruct(ButtonsConfig.struct), buf);
+		return this._set(this, this.exec, ButtonsConfig.size, new BluetoothStruct(ButtonsConfig.struct), buf);
 	}
 
 	/**
@@ -71,7 +68,7 @@ export class ButtonsConfig extends BaseModel implements IButtonsConfig
 	get(request?: boolean): DataView
 	{
 		return request
-			? this._get(this, this.api_exec)
-			: this._get(this, this.api_exec, ButtonsConfig.size, new BluetoothStruct(ButtonsConfig.struct));
+			? this._get(this, this.exec)
+			: this._get(this, this.exec, ButtonsConfig.size, new BluetoothStruct(ButtonsConfig.struct));
 	}
 }

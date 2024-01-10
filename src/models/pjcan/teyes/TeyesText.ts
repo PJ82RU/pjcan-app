@@ -20,7 +20,7 @@ export class TeyesText extends BaseModel implements ITeyesText
 
 	constructor(data?: DataView)
 	{
-		super();
+		super(API_TEYES_TEXT_EXEC);
 		if (data) this.set(data);
 	}
 
@@ -30,7 +30,7 @@ export class TeyesText extends BaseModel implements ITeyesText
 	 */
 	set(buf: DataView): boolean
 	{
-		return this._set(this, API_TEYES_TEXT_EXEC, TeyesText.size, new BluetoothStruct(TeyesText.struct), buf);
+		return this._set(this, this.exec, TeyesText.size, new BluetoothStruct(TeyesText.struct), buf);
 	}
 
 	/**
@@ -40,7 +40,7 @@ export class TeyesText extends BaseModel implements ITeyesText
 	get(request?: boolean): DataView
 	{
 		return request
-			? this._get(this, API_TEYES_TEXT_EXEC)
-			: this._get(this, API_TEYES_TEXT_EXEC, TeyesText.size, new BluetoothStruct(TeyesText.struct));
+			? this._get(this, this.exec)
+			: this._get(this, this.exec, TeyesText.size, new BluetoothStruct(TeyesText.struct));
 	}
 }

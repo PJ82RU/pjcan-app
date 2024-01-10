@@ -223,7 +223,7 @@ export class Canbus extends EventEmitter
 			{
 				const next = this.queue[0];
 				this.queue.shift();
-				if (!this.queueDisabled || (this.queueDisabled && next.requestPriority))
+				if (!this.queueDisabled || (this.queueDisabled && next.highPriority))
 				{
 					this.bluetooth
 						.send(next.data)
@@ -262,9 +262,24 @@ export class Canbus extends EventEmitter
 	query(obj: IBaseModel, request?: boolean, clear?: boolean, fn?: (success: boolean) => void)
 	{
 		if (clear) this.queue = [];
+		else if (this.queue.length)
+		{
+			const item = this.queue.find((x: IQuery) => x.exec === obj.exec);
+			if (item)
+			{
+				if (!request)
+				{
+					item.data = obj.get();
+					item.fn = fn;
+				}
+				return;
+			}
+		}
+
 		this.queue.push({
+			exec: obj.exec,
+			highPriority: obj.highPriority,
 			data: obj.get(request),
-			requestPriority: obj.requestPriority,
 			fn
 		});
 		this.sendBluetoothQueue();

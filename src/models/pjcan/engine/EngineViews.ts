@@ -51,7 +51,7 @@ export class EngineViews extends BaseModel implements IEngineViews
 
 	constructor(data?: DataView)
 	{
-		super();
+		super(API_ENGINE_VIEW_EXEC);
 		if (data) this.set(data);
 	}
 
@@ -61,12 +61,12 @@ export class EngineViews extends BaseModel implements IEngineViews
 	 */
 	set(buf: DataView): boolean
 	{
-		return this._set(this, API_ENGINE_VIEW_EXEC, EngineViews.size, new BluetoothStruct(EngineViews.struct), buf);
+		return this._set(this, this.exec, EngineViews.size, new BluetoothStruct(EngineViews.struct), buf);
 	}
 
 	/** Чтение данных */
 	get(): DataView
 	{
-		return this._get(this, API_ENGINE_VIEW_EXEC);
+		return this._get(this, this.exec);
 	}
 }

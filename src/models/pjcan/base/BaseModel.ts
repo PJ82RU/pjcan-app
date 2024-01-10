@@ -3,8 +3,15 @@ import { IBluetoothStruct } from "@/components/bluetooth/IBluetoothStruct";
 /** Базовая модель */
 export class BaseModel
 {
+	readonly exec: number;
+	readonly highPriority: boolean;
 	isData: boolean = false;
-	requestPriority: boolean = false;
+
+	constructor(exec: number, highPriority: boolean = false)
+	{
+		this.exec = exec;
+		this.highPriority = highPriority;
+	}
 
 	/**
 	 * Запись данных

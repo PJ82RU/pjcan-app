@@ -17,9 +17,14 @@ export class EngineAction extends BaseModel implements IEngineAction
 	resetWorktime = false;
 	resetCountRPM = false;
 
+	constructor()
+	{
+		super(API_ENGINE_ACTION_EXEC);
+	}
+
 	/** Чтение данных */
 	get(): DataView
 	{
-		return this._get(this, API_ENGINE_ACTION_EXEC, EngineAction.size, new BluetoothStruct(EngineAction.struct));
+		return this._get(this, this.exec, EngineAction.size, new BluetoothStruct(EngineAction.struct));
 	}
 }

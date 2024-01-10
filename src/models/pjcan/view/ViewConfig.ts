@@ -19,12 +19,9 @@ export class ViewConfig extends BaseModel implements IViewConfig
 	};
 	static size: number = 4;
 
-	api_exec = 0;
-
-	constructor(exec: number, data?: DataView)
+	constructor(exec: number = 0, data?: DataView)
 	{
-		super();
-		this.api_exec = exec;
+		super(exec);
 		if (data) this.set(data);
 	}
 
@@ -34,12 +31,17 @@ export class ViewConfig extends BaseModel implements IViewConfig
 	 */
 	set(buf: DataView): boolean
 	{
-		return this._set(this, this.api_exec, ViewConfig.size, new BluetoothStruct(ViewConfig.struct), buf);
+		return this._set(this, this.exec, ViewConfig.size, new BluetoothStruct(ViewConfig.struct), buf);
 	}
 
-	/** Чтение данных */
-	get(): DataView
+	/**
+	 * Чтение данных
+	 * @param {boolean} request Только запрос
+	 */
+	get(request?: boolean): DataView
 	{
-		return this._get(this, this.api_exec, ViewConfig.size, new BluetoothStruct(ViewConfig.struct));
+		return request
+			? this._get(this, this.exec)
+			: this._get(this, this.exec, ViewConfig.size, new BluetoothStruct(ViewConfig.struct));
 	}
 }

@@ -30,7 +30,7 @@ export class DoorsValue extends BaseModel implements IDoorsValue
 
 	constructor(data?: DataView)
 	{
-		super();
+		super(API_DOORS_VALUE_EXEC);
 		if (data) this.set(data);
 	}
 
@@ -40,18 +40,12 @@ export class DoorsValue extends BaseModel implements IDoorsValue
 	 */
 	set(buf: DataView): boolean
 	{
-		return this._set(
-			this,
-			API_DOORS_VALUE_EXEC,
-			DoorsValue.size,
-			new BluetoothStruct(DoorsValue.struct),
-			buf
-		);
+		return this._set(this, this.exec, DoorsValue.size, new BluetoothStruct(DoorsValue.struct), buf);
 	}
 
 	/** Чтение данных */
 	get(): DataView
 	{
-		return this._get(this, API_DOORS_VALUE_EXEC);
+		return this._get(this, this.exec);
 	}
 }

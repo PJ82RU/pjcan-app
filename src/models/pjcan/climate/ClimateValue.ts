@@ -50,7 +50,7 @@ export class ClimateValue extends BaseModel implements IClimateValue
 
 	constructor(data?: DataView)
 	{
-		super();
+		super(API_CLIMATE_VALUE_EXEC);
 		if (data) this.set(data);
 	}
 
@@ -60,18 +60,12 @@ export class ClimateValue extends BaseModel implements IClimateValue
 	 */
 	set(buf: DataView): boolean
 	{
-		return this._set(
-			this,
-			API_CLIMATE_VALUE_EXEC,
-			ClimateValue.size,
-			new BluetoothStruct(ClimateValue.struct),
-			buf
-		);
+		return this._set(this, this.exec, ClimateValue.size, new BluetoothStruct(ClimateValue.struct), buf);
 	}
 
 	/** Чтение данных */
 	get(): DataView
 	{
-		return this._get(this, API_CLIMATE_VALUE_EXEC);
+		return this._get(this, this.exec);
 	}
 }

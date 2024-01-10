@@ -20,7 +20,7 @@ export class TestValue extends BaseModel implements ITestValue
 
 	constructor(data?: DataView)
 	{
-		super();
+		super(API_TEST_VALUE_EXEC);
 		if (data) this.set(data);
 	}
 
@@ -30,12 +30,12 @@ export class TestValue extends BaseModel implements ITestValue
 	 */
 	set(buf: DataView): boolean
 	{
-		return this._set(this, API_TEST_VALUE_EXEC, TestValue.size, new BluetoothStruct(TestValue.struct), buf);
+		return this._set(this, this.exec, TestValue.size, new BluetoothStruct(TestValue.struct), buf);
 	}
 
 	/** Чтение данных */
 	get(): DataView
 	{
-		return this._get(this, API_TEST_VALUE_EXEC, TestValue.size, new BluetoothStruct(TestValue.struct));
+		return this._get(this, this.exec, TestValue.size, new BluetoothStruct(TestValue.struct));
 	}
 }

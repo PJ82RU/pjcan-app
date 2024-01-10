@@ -17,7 +17,7 @@ export class FuelConfig extends BaseModel implements IFuelConfig
 
 	constructor(data?: DataView)
 	{
-		super();
+		super(API_FUEL_CONFIG_EXEC);
 		if (data) this.set(data);
 	}
 
@@ -27,7 +27,7 @@ export class FuelConfig extends BaseModel implements IFuelConfig
 	 */
 	set(buf: DataView): boolean
 	{
-		return this._set(this, API_FUEL_CONFIG_EXEC, FuelConfig.size, new BluetoothStruct(FuelConfig.struct), buf);
+		return this._set(this, this.exec, FuelConfig.size, new BluetoothStruct(FuelConfig.struct), buf);
 	}
 
 	/**
@@ -37,7 +37,7 @@ export class FuelConfig extends BaseModel implements IFuelConfig
 	get(request?: boolean): DataView
 	{
 		return request
-			? this._get(this, API_FUEL_CONFIG_EXEC)
-			: this._get(this, API_FUEL_CONFIG_EXEC, FuelConfig.size, new BluetoothStruct(FuelConfig.struct));
+			? this._get(this, this.exec)
+			: this._get(this, this.exec, FuelConfig.size, new BluetoothStruct(FuelConfig.struct));
 	}
 }

@@ -10,7 +10,7 @@ export class ChoiceValue extends BaseModel implements IChoiceValue
 
 	constructor(data?: DataView, fn?: (res: DataView) => void)
 	{
-		super();
+		super(API_CHOICE_EXEC);
 		if (data && fn) this.parse(data, fn);
 	}
 
@@ -32,7 +32,7 @@ export class ChoiceValue extends BaseModel implements IChoiceValue
 			const frame_size = size + 3;
 			if (offset + frame_size > data.byteLength) break;
 
-			if (id !== API_CHOICE_EXEC) fn(new DataView(data.buffer.slice(offset, frame_size)));
+			if (id !== this.exec) fn(new DataView(data.buffer.slice(offset, frame_size)));
 			offset += frame_size;
 		}
 	}
@@ -41,7 +41,7 @@ export class ChoiceValue extends BaseModel implements IChoiceValue
 	get(): DataView
 	{
 		const buf: DataView = new DataView(new ArrayBuffer(this.listID.length + 3));
-		buf.setUint8(0, API_CHOICE_EXEC);
+		buf.setUint8(0, this.exec);
 		buf.setUint16(1, this.listID.length, true);
 		this.listID.forEach((id: number, index: number) => buf.setUint8(3 + index, id));
 		return buf;

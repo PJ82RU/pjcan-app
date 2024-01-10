@@ -21,7 +21,7 @@ export class MovementValue extends BaseModel implements IMovementValue
 
 	constructor(data?: DataView)
 	{
-		super();
+		super(API_MOVEMENT_VALUE_EXEC);
 		if (data) this.set(data);
 	}
 
@@ -31,18 +31,12 @@ export class MovementValue extends BaseModel implements IMovementValue
 	 */
 	set(buf: DataView): boolean
 	{
-		return this._set(
-			this,
-			API_MOVEMENT_VALUE_EXEC,
-			MovementValue.size,
-			new BluetoothStruct(MovementValue.struct),
-			buf
-		);
+		return this._set(this, this.exec, MovementValue.size, new BluetoothStruct(MovementValue.struct), buf);
 	}
 
 	/** Чтение данных */
 	get(): DataView
 	{
-		return this._get(this, API_MOVEMENT_VALUE_EXEC);
+		return this._get(this, this.exec);
 	}
 }

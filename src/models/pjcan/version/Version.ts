@@ -35,7 +35,7 @@ export class Version extends BaseModel implements IVersion
 
 	constructor(data?: DataView)
 	{
-		super();
+		super(API_VERSION_EXEC, true);
 		if (data) this.set(data);
 	}
 
@@ -64,7 +64,7 @@ export class Version extends BaseModel implements IVersion
 		if (ver?.length > 0)
 		{
 			const verA = [this.major, this.minor, this.build, this.revision];
-			const verB = ver.split(".")?.map(x => parseInt(x));
+			const verB = ver.split(".")?.map((x) => parseInt(x));
 
 			if (verB?.length > 0)
 			{
@@ -111,12 +111,12 @@ export class Version extends BaseModel implements IVersion
 	 */
 	set(buf: DataView): boolean
 	{
-		return this._set(this, API_VERSION_EXEC, Version.size, new BluetoothStruct(Version.struct), buf);
+		return this._set(this, this.exec, Version.size, new BluetoothStruct(Version.struct), buf);
 	}
 
 	/** Чтение данных */
 	get(): DataView
 	{
-		return this._get(this, API_VERSION_EXEC);
+		return this._get(this, this.exec);
 	}
 }

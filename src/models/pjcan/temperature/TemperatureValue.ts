@@ -22,7 +22,7 @@ export class TemperatureValue extends BaseModel implements ITemperatureValue
 
 	constructor(data?: DataView)
 	{
-		super();
+		super(API_TEMPERATURE_VALUE_EXEC);
 		if (data) this.set(data);
 	}
 
@@ -32,18 +32,12 @@ export class TemperatureValue extends BaseModel implements ITemperatureValue
 	 */
 	set(buf: DataView): boolean
 	{
-		return this._set(
-			this,
-			API_TEMPERATURE_VALUE_EXEC,
-			TemperatureValue.size,
-			new BluetoothStruct(TemperatureValue.struct),
-			buf
-		);
+		return this._set(this, this.exec, TemperatureValue.size, new BluetoothStruct(TemperatureValue.struct), buf);
 	}
 
 	/** Чтение данных */
 	get(): DataView
 	{
-		return this._get(this, API_TEMPERATURE_VALUE_EXEC);
+		return this._get(this, this.exec);
 	}
 }

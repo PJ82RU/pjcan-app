@@ -39,7 +39,7 @@ export class DeviceUpdate extends EventEmitter implements IDeviceUpdate
 	total = 0;
 	size = 0;
 
-	requestPriority = true;
+	highPriority = true;
 
 	constructor(data?: DataView)
 	{

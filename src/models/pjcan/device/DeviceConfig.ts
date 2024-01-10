@@ -17,7 +17,7 @@ export class DeviceConfig extends BaseModel implements IDeviceConfig
 
 	constructor(data?: DataView)
 	{
-		super();
+		super(API_DEVICE_CONFIG_EXEC);
 		if (data) this.set(data);
 	}
 
@@ -27,13 +27,7 @@ export class DeviceConfig extends BaseModel implements IDeviceConfig
 	 */
 	set(buf: DataView): boolean
 	{
-		return this._set(
-			this,
-			API_DEVICE_CONFIG_EXEC,
-			DeviceConfig.size,
-			new BluetoothStruct(DeviceConfig.struct),
-			buf
-		);
+		return this._set(this, this.exec, DeviceConfig.size, new BluetoothStruct(DeviceConfig.struct), buf);
 	}
 
 	/**
@@ -43,7 +37,7 @@ export class DeviceConfig extends BaseModel implements IDeviceConfig
 	get(request?: boolean): DataView
 	{
 		return request
-			? this._get(this, API_DEVICE_CONFIG_EXEC)
-			: this._get(this, API_DEVICE_CONFIG_EXEC, DeviceConfig.size, new BluetoothStruct(DeviceConfig.struct));
+			? this._get(this, this.exec)
+			: this._get(this, this.exec, DeviceConfig.size, new BluetoothStruct(DeviceConfig.struct));
 	}
 }

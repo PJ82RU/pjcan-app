@@ -21,7 +21,7 @@ export class EngineConfig extends BaseModel implements IEngineConfig
 
 	constructor(data?: DataView)
 	{
-		super();
+		super(API_ENGINE_CONFIG_EXEC);
 		if (data) this.set(data);
 	}
 
@@ -31,13 +31,7 @@ export class EngineConfig extends BaseModel implements IEngineConfig
 	 */
 	set(buf: DataView): boolean
 	{
-		return this._set(
-			this,
-			API_ENGINE_CONFIG_EXEC,
-			EngineConfig.size,
-			new BluetoothStruct(EngineConfig.struct),
-			buf
-		);
+		return this._set(this, this.exec, EngineConfig.size, new BluetoothStruct(EngineConfig.struct), buf);
 	}
 
 	/**
@@ -47,7 +41,7 @@ export class EngineConfig extends BaseModel implements IEngineConfig
 	get(request?: boolean): DataView
 	{
 		return request
-			? this._get(this, API_ENGINE_CONFIG_EXEC)
-			: this._get(this, API_ENGINE_CONFIG_EXEC, EngineConfig.size, new BluetoothStruct(EngineConfig.struct));
+			? this._get(this, this.exec)
+			: this._get(this, this.exec, EngineConfig.size, new BluetoothStruct(EngineConfig.struct));
 	}
 }

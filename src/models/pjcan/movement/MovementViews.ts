@@ -31,7 +31,7 @@ export class MovementViews extends BaseModel implements IMovementViews
 
 	constructor(data?: DataView)
 	{
-		super();
+		super(API_MOVEMENT_VIEW_EXEC);
 		if (data) this.set(data);
 	}
 
@@ -41,18 +41,12 @@ export class MovementViews extends BaseModel implements IMovementViews
 	 */
 	set(buf: DataView): boolean
 	{
-		return this._set(
-			this,
-			API_MOVEMENT_VIEW_EXEC,
-			MovementViews.size,
-			new BluetoothStruct(MovementViews.struct),
-			buf
-		);
+		return this._set(this, this.exec, MovementViews.size, new BluetoothStruct(MovementViews.struct), buf);
 	}
 
 	/** Чтение данных */
 	get(): DataView
 	{
-		return this._get(this, API_MOVEMENT_VIEW_EXEC);
+		return this._get(this, this.exec);
 	}
 }

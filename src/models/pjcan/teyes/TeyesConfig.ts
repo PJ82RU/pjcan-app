@@ -36,7 +36,7 @@ export class TeyesConfig extends BaseModel implements ITeyesConfig
 
 	constructor(data?: DataView)
 	{
-		super();
+		super(API_TEYES_CONFIG_EXEC);
 		if (data) this.set(data);
 	}
 
@@ -46,7 +46,7 @@ export class TeyesConfig extends BaseModel implements ITeyesConfig
 	 */
 	set(buf: DataView): boolean
 	{
-		return this._set(this, API_TEYES_CONFIG_EXEC, TeyesConfig.size, new BluetoothStruct(TeyesConfig.struct), buf);
+		return this._set(this, this.exec, TeyesConfig.size, new BluetoothStruct(TeyesConfig.struct), buf);
 	}
 
 	/**
@@ -56,7 +56,7 @@ export class TeyesConfig extends BaseModel implements ITeyesConfig
 	get(request?: boolean): DataView
 	{
 		return request
-			? this._get(this, API_TEYES_CONFIG_EXEC)
-			: this._get(this, API_TEYES_CONFIG_EXEC, TeyesConfig.size, new BluetoothStruct(TeyesConfig.struct));
+			? this._get(this, this.exec)
+			: this._get(this, this.exec, TeyesConfig.size, new BluetoothStruct(TeyesConfig.struct));
 	}
 }

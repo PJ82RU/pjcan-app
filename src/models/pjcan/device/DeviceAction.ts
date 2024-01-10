@@ -23,6 +23,11 @@ export class DeviceAction extends BaseModel implements IDeviceAction
 	save = false;
 	format = false;
 
+	constructor()
+	{
+		super(API_DEVICE_ACTION_EXEC);
+	}
+
 	/**
 	 * Запись данных
 	 * @param {DataView} buf Буфер данных
@@ -35,6 +40,6 @@ export class DeviceAction extends BaseModel implements IDeviceAction
 	/** Чтение данных */
 	get(): DataView
 	{
-		return this._get(this, API_DEVICE_ACTION_EXEC, DeviceAction.size, new BluetoothStruct(DeviceAction.struct));
+		return this._get(this, this.exec, DeviceAction.size, new BluetoothStruct(DeviceAction.struct));
 	}
 }

@@ -16,11 +16,9 @@ export class DeviceScannerAction extends BaseModel implements IDeviceScannerActi
 	enabled = false;
 	shutdown = 5;
 
-	requestPriority = true;
-
 	constructor(data?: DataView)
 	{
-		super();
+		super(API_DEVICE_SCANNER_CONFIG_EXEC, true);
 	}
 
 	/**
@@ -35,11 +33,6 @@ export class DeviceScannerAction extends BaseModel implements IDeviceScannerActi
 	/** Чтение данных */
 	get(): DataView
 	{
-		return this._get(
-			this,
-			API_DEVICE_SCANNER_CONFIG_EXEC,
-			DeviceScannerAction.size,
-			new BluetoothStruct(DeviceScannerAction.struct)
-		);
+		return this._get(this, this.exec, DeviceScannerAction.size, new BluetoothStruct(DeviceScannerAction.struct));
 	}
 }

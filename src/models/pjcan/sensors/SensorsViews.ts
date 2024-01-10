@@ -36,7 +36,7 @@ export class SensorsViews extends BaseModel implements ISensorsViews
 
 	constructor(data?: DataView)
 	{
-		super();
+		super(API_SENSORS_VIEW_EXEC);
 		if (data) this.set(data);
 	}
 
@@ -46,12 +46,12 @@ export class SensorsViews extends BaseModel implements ISensorsViews
 	 */
 	set(buf: DataView): boolean
 	{
-		return this._set(this, API_SENSORS_VIEW_EXEC, SensorsViews.size, new BluetoothStruct(SensorsViews.struct), buf);
+		return this._set(this, this.exec, SensorsViews.size, new BluetoothStruct(SensorsViews.struct), buf);
 	}
 
 	/** Чтение данных */
 	get(): DataView
 	{
-		return this._get(this, API_SENSORS_VIEW_EXEC);
+		return this._get(this, this.exec);
 	}
 }

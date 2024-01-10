@@ -19,7 +19,7 @@ export class FuelValue extends BaseModel implements IFuelValue
 
 	constructor(data?: DataView)
 	{
-		super();
+		super(API_FUEL_VALUE_EXEC);
 		if (data) this.set(data);
 	}
 
@@ -29,12 +29,12 @@ export class FuelValue extends BaseModel implements IFuelValue
 	 */
 	set(buf: DataView): boolean
 	{
-		return this._set(this, API_FUEL_VALUE_EXEC, FuelValue.size, new BluetoothStruct(FuelValue.struct), buf);
+		return this._set(this, this.exec, FuelValue.size, new BluetoothStruct(FuelValue.struct), buf);
 	}
 
 	/** Чтение данных */
 	get(): DataView
 	{
-		return this._get(this, API_FUEL_VALUE_EXEC);
+		return this._get(this, this.exec);
 	}
 }

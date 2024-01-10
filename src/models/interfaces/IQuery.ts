@@ -1,5 +1,6 @@
 export interface IQuery {
+	exec: number;
+	highPriority: boolean;
 	data: DataView;
-	requestPriority: boolean;
 	fn?: (success: boolean) => void;
 }

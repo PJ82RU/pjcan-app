@@ -61,7 +61,7 @@ export class DeviceInfo extends BaseModel implements IDeviceInfo
 
 	constructor(data?: DataView)
 	{
-		super();
+		super(API_DEVICE_INFO_EXEC);
 		if (data) this.set(data);
 	}
 
@@ -71,12 +71,12 @@ export class DeviceInfo extends BaseModel implements IDeviceInfo
 	 */
 	set(buf: DataView): boolean
 	{
-		return this._set(this, API_DEVICE_INFO_EXEC, DeviceInfo.size, new BluetoothStruct(DeviceInfo.struct), buf);
+		return this._set(this, this.exec, DeviceInfo.size, new BluetoothStruct(DeviceInfo.struct), buf);
 	}
 
 	/** Чтение данных */
 	get(): DataView
 	{
-		return this._get(this, API_DEVICE_INFO_EXEC);
+		return this._get(this, this.exec);
 	}
 }

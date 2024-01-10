@@ -39,7 +39,7 @@ export class EngineValue extends BaseModel implements IEngineValue
 
 	constructor(data?: DataView)
 	{
-		super();
+		super(API_ENGINE_VALUE_EXEC);
 		if (data) this.set(data);
 	}
 
@@ -49,18 +49,12 @@ export class EngineValue extends BaseModel implements IEngineValue
 	 */
 	set(buf: DataView): boolean
 	{
-		return this._set(
-			this,
-			API_ENGINE_VALUE_EXEC,
-			EngineValue.size,
-			new BluetoothStruct(EngineValue.struct),
-			buf
-		);
+		return this._set(this, this.exec, EngineValue.size, new BluetoothStruct(EngineValue.struct), buf);
 	}
 
 	/** Чтение данных */
 	get(): DataView
 	{
-		return this._get(this, API_ENGINE_VALUE_EXEC);
+		return this._get(this, this.exec);
 	}
 }
