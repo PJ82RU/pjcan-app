@@ -1,7 +1,7 @@
 <template>
 	<flicking ref="flicking" class="onboard" :options="{ bound: true, align: 'prev' }">
 		<div v-for="item in cards" :key="item.name" class="mr-4" :class="`flicking-${display}`">
-			<component :is="`${item.name}-card`" :car-model="carModel" />
+			<component :is="`${item.name}-card`" />
 		</div>
 	</flicking>
 </template>
@@ -24,7 +24,6 @@ import BoseCard from "./components/BoseCard.vue";
 import { IOnboardCard } from "@/models/interfaces/IOnboardCard";
 import { ChoiceValue } from "@/models/pjcan/choice";
 import { Timeout } from "@/models/types/Timeout";
-import { API_MAZDA_CONFIG_EVENT, IMazdaConfig, MazdaConfig, TCarModel } from "@/models/pjcan/mazda";
 import { API_DEVICE_VALUE_EXEC } from "@/models/pjcan/device";
 import { API_SENSORS_VALUE_EXEC } from "@/models/pjcan/sensors";
 import { API_TEMPERATURE_VALUE_EXEC } from "@/models/pjcan/temperature";
@@ -55,11 +54,10 @@ export default {
 		const flicking = ref(null);
 		provide("flicking", flicking);
 
-		const carModel = ref(TCarModel.CAR_MODEL_UNKNOWN);
 		const cards = computed(() =>
 		{
 			return store.getters["app/onboardCardList"]?.filter(
-				(x: IOnboardCard) => x.enabled && x.car?.indexOf(carModel.value) >= 0
+				(x: IOnboardCard) => x.enabled && x.car?.indexOf(store.getters["app/carModel"]) >= 0
 			);
 		});
 		const listExec = computed(() =>
@@ -98,29 +96,23 @@ export default {
 			return result;
 		});
 
-		const onReceiveMazdaConfig = (res: IMazdaConfig): void =>
-		{
-			if (res.isData) carModel.value = res.carModel;
-		};
-
 		let loop: Timeout;
 		const onBegin = (status: boolean): void =>
 		{
 			if (status)
 			{
-				if (loop) return;
-				if (!canbus.mazda.isData) canbus.query(new MazdaConfig(), true);
-				else onReceiveMazdaConfig(canbus.mazda);
-
-				loop = setInterval(() =>
+				if (!loop)
 				{
-					if (listExec.value?.length)
+					loop = setInterval(() =>
 					{
-						const choice = new ChoiceValue();
-						choice.listID = listExec.value;
-						canbus.query(choice, true);
-					}
-				}, 500);
+						if (listExec.value?.length)
+						{
+							const choice = new ChoiceValue();
+							choice.listID = listExec.value;
+							canbus.query(choice, true);
+						}
+					}, 500);
+				}
 			}
 			else
 			{
@@ -131,19 +123,16 @@ export default {
 		onMounted(() =>
 		{
 			canbus.addListener(API_CANBUS_EVENT, onBegin);
-			canbus.addListener(API_MAZDA_CONFIG_EVENT, onReceiveMazdaConfig);
 			onBegin(canbus.begin);
 		});
 		onUnmounted(() =>
 		{
 			canbus.removeListener(API_CANBUS_EVENT, onBegin);
-			canbus.removeListener(API_MAZDA_CONFIG_EVENT, onReceiveMazdaConfig);
 			onBegin(false);
 		});
 
 		return {
 			flicking,
-			carModel,
 			cards,
 			display
 		};

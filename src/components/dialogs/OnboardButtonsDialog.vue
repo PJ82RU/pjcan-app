@@ -78,7 +78,7 @@
 							RM
 						</v-btn>
 						<v-btn
-							v-if="carModel === ECarModel.CAR_MODEL_MAZDA_CX9_REST"
+							v-if="carModel === TCarModel.CAR_MODEL_MAZDA_CX9_REST"
 							color="secondary"
 							size="x-large"
 							@mousedown="onPress('flgClock24')"
@@ -114,28 +114,17 @@
 
 <script lang="ts">
 import { computed, toRefs } from "vue";
-import canbus from "@/api/canbus";
 
 import DialogTemplate from "@/layout/components/DialogTemplate.vue";
 
-import { API_LCD_VALUE_EXEC } from "@/models/pjcan/lcd";
-import { ECarModel } from "@/models/pjcan/car";
+import { TCarModel } from "@/models/pjcan/mazda";
+import store from "@/store";
 
 export default {
 	name: "OnboardButtonsDialog",
-	computed: {
-		ECarModel()
-		{
-			return ECarModel;
-		}
-	},
 	components: { DialogTemplate },
 	props: {
-		modelValue: Boolean,
-		carModel: {
-			type: Number,
-			default: 0
-		}
+		modelValue: Boolean
 	},
 	emits: ["update:modelValue"],
 	setup(props: any, { emit }: { emit: any })
@@ -145,6 +134,8 @@ export default {
 			get: (): boolean => modelValue.value,
 			set: (val: boolean): void => emit("update:modelValue", val)
 		});
+		const carModel = computed((): TCarModel => store.getters["app/carModel"]);
+		const TCarModel = computed((): any => TCarModel);
 
 		const isTouchDevice = (): boolean =>
 		{
@@ -165,29 +156,20 @@ export default {
 		{
 			if (timeouts?.[name] === null)
 			{
-				canbus.values.lcd[name] = !toggle ? true : !canbus.values.lcd[name];
-				canbus.queryValue(API_LCD_VALUE_EXEC);
+				// ... отправляем нажатие кнопки
 				navigator.vibrate(30);
 			}
-			else
-			{
-				clearTimeout(timeouts[name]);
-			}
+			else clearTimeout(timeouts[name]);
 
-			if (!toggle)
-			{
-				timeouts[name] = setTimeout(release, 60000, name);
-			}
+			if (!toggle) timeouts[name] = setTimeout(release, 60000, name);
 		};
 
 		const release = (name: string): void =>
 		{
 			if (timeouts?.[name] !== null)
 			{
-				canbus.values.lcd[name] = false;
-				canbus.queryValue(API_LCD_VALUE_EXEC);
+				// ... отправляем отпуск кнопки
 				navigator.vibrate(20);
-
 				clearTimeout(timeouts[name]);
 				timeouts[name] = null;
 			}
@@ -233,6 +215,8 @@ export default {
 
 		return {
 			visible,
+			carModel,
+			TCarModel,
 			onPress,
 			onTouchPress,
 			onRelease,

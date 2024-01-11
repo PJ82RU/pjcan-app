@@ -24,7 +24,7 @@
 
 			<menu-dots :menu="menu" @click:item="onMenuClick" />
 			<about-dialog v-model="visibleAbout" />
-			<onboard-buttons-dialog v-model="visibleOnboardButtons" :car-model="carModel" />
+			<onboard-buttons-dialog v-model="visibleOnboardButtons" />
 			<test-dialog v-model="visibleTest" />
 		</v-app-bar>
 		<v-main>
@@ -52,8 +52,9 @@ import router from "@/router";
 import store from "@/store";
 import { useI18n } from "vue-i18n";
 import { toast } from "vue3-toastify";
-import moment from "moment/moment";
 import ScreenFull from "screenfull";
+import moment from "moment/moment";
+import canbus from "@/api/canbus";
 
 import BluetoothBtn from "../components/BluetoothBtn.vue";
 import UpdateFirmwareDialog from "../components/dialogs/UpdateFirmwareDialog.vue";
@@ -67,9 +68,7 @@ import IconCustom from "@/components/common/icon-custom/IconCustom.vue";
 import { IMessage } from "@/models/interfaces/message/IMessage";
 import { Timeout } from "@/models/types/Timeout";
 import { API_VERSION_EVENT } from "@/models/pjcan/version";
-
-import canbus from "@/api/canbus";
-import { API_CAR_CONFIG_EVENT, ECarModel, ICarConfig } from "@/models/pjcan/car";
+import { API_MAZDA_CONFIG_EVENT, TCarModel, IMazdaConfig } from "@/models/pjcan/mazda";
 
 export default {
 	name: "BaseLayout",
@@ -87,19 +86,17 @@ export default {
 	{
 		const { t, locale } = useI18n();
 
+		const visibleAbout = ref(false);
+		const visibleOnboardButtons = ref(false);
+		const visibleTest = ref(false);
+		const visibleUpdate = ref(false);
+
 		const title = computed((): string =>
 		{
 			const result = router.currentRoute.value.meta?.title as string;
 			return "PJCAN: " + (result?.length > 0 ? t(result) : "");
 		});
 		const newVersionFirmware = ref(false as string | boolean);
-
-		const carModel = ref(canbus.configs.car.carModel);
-		const onReceiveCarConfig = (res: ICarConfig): void =>
-		{
-			if (res.isData) carModel.value = res.carModel;
-		};
-
 		const menu = computed((): IMenuItem[] =>
 		{
 			const result = [] as IMenuItem[];
@@ -109,16 +106,16 @@ export default {
 				{ id: 0, title: t("menu.onboard"), disabled: name === "Onboard" },
 				{ id: 1, title: t("menu.settings.buttons"), disabled: name === "Buttons" },
 				{ id: 6, title: t("menu.settings.options"), disabled: name === "Options" },
-				{ id: 4, title: t("menu.onboardButtons") },
+				{ id: 4, title: t("menu.onboardButtons") }
 			);
-			if (carModel.value !== ECarModel.CAR_MODEL_MAZDA_CX9_REST)
+			if (store.getters["app/carModel"] !== TCarModel.CAR_MODEL_MAZDA_CX9_REST)
 			{
 				result.push({ id: 5, title: t("menu.test") });
 			}
-			result.push(
-                {} as IMenuItem,
-                { id: 2, title: t("menu.language." + (locale.value !== "ru" ? "russian" : "english")) }
-			);
+			result.push({} as IMenuItem, {
+				id: 2,
+				title: t("menu.language." + (locale.value !== "ru" ? "russian" : "english"))
+			});
 			if (typeof newVersionFirmware.value === "string")
 			{
 				result.push({ id: 7, title: t("menu.update", { version: newVersionFirmware.value }) });
@@ -127,10 +124,6 @@ export default {
 
 			return result;
 		});
-		const visibleAbout = ref(false);
-		const visibleOnboardButtons = ref(false);
-		const visibleTest = ref(false);
-		const visibleUpdate = ref(false);
 
 		/** Событие выбора пункта меню */
 		const onMenuClick = (data: any) =>
@@ -165,36 +158,13 @@ export default {
 			}
 		};
 
-		const pageWidth = ref(0);
-		const pageHeight = ref(0);
-		const windowSize = () =>
-		{
-			pageWidth.value = document.documentElement.clientWidth;
-			pageHeight.value = document.documentElement.clientHeight;
-		};
-
-		onMounted(() =>
-		{
-			window.addEventListener("resize", windowSize);
-			windowSize();
-			canbus.addListener(API_VERSION_EVENT, onCheckVersion);
-			canbus.addListener(API_CAR_CONFIG_EVENT, onReceiveCarConfig);
-			onReceiveCarConfig(canbus.configs.car);
-		});
-		onUnmounted(() =>
-		{
-			window.removeEventListener("resize", windowSize);
-			canbus.removeListener(API_VERSION_EVENT, onCheckVersion);
-			canbus.removeListener(API_CAR_CONFIG_EVENT, onReceiveCarConfig);
-		});
-
 		/** Переключение полноэкранного режима */
 		const toggleFullscreen = () =>
 		{
 			if (ScreenFull.isEnabled) ScreenFull.toggle();
 		};
 
-		// Вывод сообщений //
+		// Вывод сообщений ---
 
 		const visibleMessage = computed({
 			get: (): boolean => store.getters["app/visibleMessage"],
@@ -215,6 +185,8 @@ export default {
 				}, msg.timeout);
 			}
 		});
+
+		// ---
 
 		/** Проверка версии прошивки */
 		const onCheckVersion = (): void =>
@@ -249,10 +221,42 @@ export default {
 			}
 		};
 
+		const pageWidth = ref(0);
+		const pageHeight = ref(0);
+		const windowSize = () =>
+		{
+			pageWidth.value = document.documentElement.clientWidth;
+			pageHeight.value = document.documentElement.clientHeight;
+		};
+
+		const onReceiveMazdaConfig = (res: IMazdaConfig): void =>
+		{
+			if (res.isData) store.commit("app/setCarModel", res.carModel);
+		};
+		onMounted(() =>
+		{
+			window.addEventListener("resize", windowSize);
+			windowSize();
+
+			canbus.addListener(API_VERSION_EVENT, onCheckVersion);
+			canbus.addListener(API_MAZDA_CONFIG_EVENT, onReceiveMazdaConfig);
+			if (canbus.begin)
+			{
+				onCheckVersion();
+				onReceiveMazdaConfig(canbus.mazda);
+			}
+		});
+		onUnmounted(() =>
+		{
+			window.removeEventListener("resize", windowSize);
+
+			canbus.removeListener(API_VERSION_EVENT, onCheckVersion);
+			canbus.removeListener(API_MAZDA_CONFIG_EVENT, onReceiveMazdaConfig);
+		});
+
 		return {
 			title,
 			menu,
-			carModel,
 			newVersionFirmware,
 			visibleAbout,
 			visibleOnboardButtons,

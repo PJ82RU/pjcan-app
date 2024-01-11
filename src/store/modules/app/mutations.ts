@@ -1,8 +1,9 @@
 import store from "@/store";
 import { IMessage } from "@/models/interfaces/message/IMessage";
 import { IOnboardCard } from "@/models/interfaces/IOnboardCard";
-import { createDebounce } from "@/utils/debounce";
+import { TCarModel } from "@/models/pjcan/mazda";
 
+import { createDebounce } from "@/utils/debounce";
 const debounce = createDebounce();
 
 /**
@@ -55,4 +56,14 @@ export const clearMessages = (state: any) =>
 export const setOnboardCardList = (state: any, value: IOnboardCard[]) =>
 {
 	state.onboardCardList = [...value].map((x: IOnboardCard) => ({ ...x }));
+};
+
+/**
+ * Изменить модель автомобиля
+ * @param {any} state
+ * @param {TCarModel} value Новое значение
+ */
+export const setCarModel = (state: any, value: TCarModel) =>
+{
+	state.carModel = value;
 };

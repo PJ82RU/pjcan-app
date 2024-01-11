@@ -43,6 +43,7 @@
 <script lang="ts">
 import { computed, onMounted, onUnmounted, ref, toRefs } from "vue";
 import { useI18n } from "vue-i18n";
+import store from "@/store";
 import canbus from "@/api/canbus";
 
 import DialogTemplate from "@/layout/components/DialogTemplate.vue";
@@ -50,7 +51,7 @@ import DeviceInfoDialog from "@/components/dialogs/DeviceInfoDialog.vue";
 import ChoosingCarModelDialog from "@/components/dialogs/ChoosingCarModelDialog.vue";
 
 import { ILooseObject } from "@/models/interfaces/ILooseObject";
-import { API_MAZDA_CONFIG_EVENT, IMazdaConfig, MazdaConfig, TCarModel } from "@/models/pjcan/mazda";
+import { TCarModel } from "@/models/pjcan/mazda";
 import { API_CANBUS_EVENT } from "@/models/pjcan/base/BaseModel";
 
 const pkg = require("/package.json");
@@ -74,8 +75,12 @@ export default {
 		const visibleDeviceInfo = ref(false);
 		const visibleCarModel = ref(false);
 		const versionFirmware = ref("");
-		const carSupport = ref("Mazda");
-		const carModel = ref(TCarModel.CAR_MODEL_UNKNOWN);
+		const carModel = computed((): TCarModel => store.getters["app/carModel"]);
+		const carSupport = computed((): string =>
+		{
+			const key = "choosingCarModel.carModels." + carModel.value;
+			return te(key) ? tm(key) : tm("choosingCarModel.carModels.0");
+		});
 		const modelInfo = computed(() =>
 		{
 			const result: ILooseObject = {
@@ -116,39 +121,18 @@ export default {
 			}
 		};
 
-		/**
-		 * Входящие конфигурации автомобиля
-		 * @param {IMazdaConfig} res
-		 */
-		const onReceiveMazdaConfig = (res: IMazdaConfig): void =>
-		{
-			if (res.isData)
-			{
-				const key = "choosingCarModel.carModels." + res.carModel;
-				carSupport.value = te(key) ? tm(key) : tm("choosingCarModel.carModels.0");
-				carModel.value = res.carModel;
-			}
-		};
-
 		const onBegin = (status: boolean): void =>
 		{
-			if (status)
-			{
-				versionFirmware.value = canbus.version.toString;
-				if (!canbus.mazda.isData) canbus.query(new MazdaConfig(), true);
-				else onReceiveMazdaConfig(canbus.mazda);
-			}
+			if (status) versionFirmware.value = canbus.version.toString;
 		};
 		onMounted(() =>
 		{
 			canbus.addListener(API_CANBUS_EVENT, onBegin);
-			canbus.addListener(API_MAZDA_CONFIG_EVENT, onReceiveMazdaConfig);
 			onBegin(canbus.begin);
 		});
 		onUnmounted(() =>
 		{
 			canbus.removeListener(API_CANBUS_EVENT, onBegin);
-			canbus.removeListener(API_MAZDA_CONFIG_EVENT, onReceiveMazdaConfig);
 		});
 
 		return {
