@@ -573,7 +573,7 @@ export default {
 				description: "Показывать текст ГУ на информационном экране в момент отсутствия данных отображения",
 				menu: "LCD: Показывать текст ГУ"
 			},
-			uartBaud: {
+			protocol: {
 				title: "Протокол UART",
 				description: "Протокол UART для связи PJCAN с ГУ",
 				list: {
@@ -671,9 +671,13 @@ export default {
 		carModels: {
 			0: "Mazda",
 			1: "Mazda 3 BK",
-			2: "Mazda CX-7",
-			3: "Mazda CX-9",
-			4: "Mazda CX-9 Rest"
+			2: "Mazda 3 BL (не поддерживается)",
+			3: "Mazda 6 GG",
+			4: "Mazda 6 GH (не поддерживается)",
+			5: "Mazda CX-7",
+			6: "Mazda CX-7 rest",
+			7: "Mazda CX-9",
+			8: "Mazda CX-9 rest"
 		}
 	}
 };

@@ -220,7 +220,7 @@ export class Bluetooth extends EventEmitter
 		const { value } = ev.target;
 		if (value?.byteLength > 0)
 		{
-			if (dev) console.log(t("BLE.server.receive", { n: value.getUint8(0) }), value);
+			if (dev) console.log(t("BLE.server.receive", { n: "0x" + value.getUint8(0).toString(16) }), value);
 			this.emit(BLUETOOTH_EVENT_RECEIVE, value);
 		}
 	}
@@ -242,7 +242,7 @@ export class Bluetooth extends EventEmitter
 			return Promise.reject("No data available");
 		}
 
-		if (dev) console.log(t("BLE.server.send", { n: data?.getUint8(0) ?? "..." }), data);
+		if (dev) console.log(t("BLE.server.send", { n: "0x" + data.getUint8(0).toString(16) }), data);
 
 		return (
 			this._characteristic

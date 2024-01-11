@@ -27,12 +27,12 @@ export class ChoiceValue extends BaseModel implements IChoiceValue
 		let offset = 3;
 		while (offset < data_size)
 		{
-			const id = data.getUint8(0);
+			const id = data.getUint8(offset);
 			const size = data.getUint16(offset + 1, true);
 			const frame_size = size + 3;
 			if (offset + frame_size > data.byteLength) break;
 
-			if (id !== this.exec) fn(new DataView(data.buffer.slice(offset, frame_size)));
+			if (id !== this.exec) fn(new DataView(data.buffer.slice(offset, offset + frame_size)));
 			offset += frame_size;
 		}
 	}

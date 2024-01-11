@@ -558,7 +558,7 @@ export default {
 					"Show the text of the Teyes on the information screen at the time of the absence of data display",
 				menu: "LCD: Show the text Teyes"
 			},
-			uartBaud: {
+			protocol: {
 				title: "UART Protocol",
 				description: "UART protocol for PJCAN communication with Teyes",
 				list: {
@@ -656,9 +656,13 @@ export default {
 		carModels: {
 			0: "Mazda",
 			1: "Mazda 3 BK",
-			2: "Mazda CX-7",
-			3: "Mazda CX-9",
-			4: "Mazda CX-9 Rest"
+			2: "Mazda 3 BL (not supported)",
+			3: "Mazda 6 GG",
+			4: "Mazda 6 GH (not supported)",
+			5: "Mazda CX-7",
+			6: "Mazda CX-7 rest",
+			7: "Mazda CX-9",
+			8: "Mazda CX-9 rest"
 		}
 	}
 };
