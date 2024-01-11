@@ -43,16 +43,15 @@
 <script lang="ts">
 import { computed, onMounted, onUnmounted, ref, toRefs } from "vue";
 import { useI18n } from "vue-i18n";
+import canbus from "@/api/canbus";
 
 import DialogTemplate from "@/layout/components/DialogTemplate.vue";
 import DeviceInfoDialog from "@/components/dialogs/DeviceInfoDialog.vue";
 import ChoosingCarModelDialog from "@/components/dialogs/ChoosingCarModelDialog.vue";
 
 import { ILooseObject } from "@/models/interfaces/ILooseObject";
-import { API_CONFIGS_EVENT, IConfigs } from "@/models/pjcan/configs";
-import { API_CAR_CONFIG_EVENT, API_CAR_CONFIG_EXEC, ICarConfig } from "@/models/pjcan/car";
-
-import canbus from "@/api/canbus";
+import { API_MAZDA_CONFIG_EVENT, IMazdaConfig, MazdaConfig, TCarModel } from "@/models/pjcan/mazda";
+import { API_VERSION_EVENT, IVersion } from "@/models/pjcan/version";
 
 const pkg = require("/package.json");
 
@@ -73,9 +72,10 @@ export default {
 			set: (val: boolean): void => emit("update:modelValue", val)
 		});
 		const visibleDeviceInfo = ref(false);
+		const visibleCarModel = ref(false);
 		const versionFirmware = ref("");
 		const carSupport = ref("Mazda");
-		const carModel = ref(0);
+		const carModel = ref(TCarModel.CAR_MODEL_UNKNOWN);
 		const modelInfo = computed(() =>
 		{
 			const result: ILooseObject = {
@@ -86,22 +86,50 @@ export default {
 			};
 			return result;
 		});
-		const visibleCarModel = ref(false);
+
+		/** Открыть попап технической информации */
+		const onDeviceInfoClick = (): void =>
+		{
+			visible.value = false;
+			visibleDeviceInfo.value = true;
+		};
+
+		/**
+		 * Выбор модели автомобиля
+		 * @param {string} key Ключ
+		 */
+		const onEditClick = (key: string): void =>
+		{
+			if (key === "carSupport") visibleCarModel.value = true;
+		};
+		/**
+		 * Применить выбранную модель автомобиля
+		 * @param {number} id ID модели
+		 */
+		const onCarModelApplyClick = (id: number): void =>
+		{
+			visibleCarModel.value = false;
+			if (canbus.mazda.carModel !== id)
+			{
+				canbus.mazda.carModel = id;
+				canbus.query(canbus.mazda);
+			}
+		};
 
 		/**
 		 * Обновление версии
-		 * @param {IConfigs} res Общая конфигурация
+		 * @param {IVersion} res Версия
 		 */
-		const onReceiveConfigs = (res: IConfigs): void =>
+		const onReceiveVersionConfigs = (res: IVersion): void =>
 		{
-			versionFirmware.value = res.version.toString;
+			versionFirmware.value = res.toString;
 		};
 
 		/**
 		 * Входящие конфигурации автомобиля
-		 * @param {ICarConfig} res
+		 * @param {IMazdaConfig} res
 		 */
-		const onReceiveCarConfig = (res: ICarConfig): void =>
+		const onReceiveMazdaConfig = (res: IMazdaConfig): void =>
 		{
 			if (res.isData)
 			{
@@ -111,38 +139,27 @@ export default {
 			}
 		};
 
-		/** Открыть попап технической информации */
-		const onDeviceInfoClick = (): void =>
+		const onStart = (): void =>
 		{
-			visible.value = false;
-			visibleDeviceInfo.value = true;
+			if (canbus.version.is)
+			{
+				onReceiveVersionConfigs(canbus.version);
+				if (!canbus.mazda.isData) canbus.query(new MazdaConfig(), true);
+				else onReceiveMazdaConfig(canbus.mazda);
+			}
 		};
 
 		onMounted(() =>
 		{
-			canbus.addListener(API_CONFIGS_EVENT, onReceiveConfigs);
-			canbus.addListener(API_CAR_CONFIG_EVENT, onReceiveCarConfig);
-			onReceiveCarConfig(canbus.configs.car);
+			canbus.addListener(API_VERSION_EVENT, onStart);
+			canbus.addListener(API_MAZDA_CONFIG_EVENT, onReceiveMazdaConfig);
+			onStart();
 		});
 		onUnmounted(() =>
 		{
-			canbus.removeListener(API_CONFIGS_EVENT, onReceiveConfigs);
-			canbus.removeListener(API_CAR_CONFIG_EVENT, onReceiveCarConfig);
+			canbus.removeListener(API_VERSION_EVENT, onStart);
+			canbus.removeListener(API_MAZDA_CONFIG_EVENT, onReceiveMazdaConfig);
 		});
-
-		const onEditClick = (key: string): void =>
-		{
-			if (key === "carSupport") visibleCarModel.value = true;
-		};
-		const onCarModelApplyClick = (carModel: number): void =>
-		{
-			visibleCarModel.value = false;
-			if (canbus.configs.car.carModel !== carModel)
-			{
-				canbus.configs.car.carModel = carModel;
-				canbus.queryConfig(API_CAR_CONFIG_EXEC);
-			}
-		};
 
 		return {
 			visible,

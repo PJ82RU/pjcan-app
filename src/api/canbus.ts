@@ -30,7 +30,8 @@ import {
 	DeviceConfig,
 	DeviceValue,
 	DeviceUpdate,
-	DeviceScannerValue, IDeviceInfo
+	DeviceScannerValue,
+	IDeviceInfo
 } from "@/models/pjcan/device";
 import {
 	API_BUTTONS_SW1_CONFIG_EXEC,
@@ -59,7 +60,8 @@ import {
 	API_MAZDA_CONFIG_EVENT,
 	API_MAZDA_VIEW_EXEC,
 	API_MAZDA_VIEW_EVENT,
-	MazdaConfig
+	MazdaConfig,
+	IMazdaConfig
 } from "@/models/pjcan/mazda";
 import {
 	API_DATETIME_CONFIG_EVENT,
@@ -191,6 +193,9 @@ export class Canbus extends EventEmitter
 	activation: boolean = false;
 	/** SHA */
 	sha: string | undefined;
+
+	/** Параметры автомобиля */
+	mazda: IMazdaConfig = new MazdaConfig();
 
 	/** Очередь */
 	private queue: IQuery[] = [];
@@ -367,7 +372,8 @@ export class Canbus extends EventEmitter
 					break;
 
 				case API_MAZDA_CONFIG_EXEC: // Конфигурация автомобиля
-					this.emit(API_MAZDA_CONFIG_EVENT, new MazdaConfig(data));
+					this.mazda.set(data);
+					this.emit(API_MAZDA_CONFIG_EVENT, this.mazda);
 					break;
 				case API_MAZDA_VIEW_EXEC: // Конфигурация отображения текста приветствия
 					this.emit(API_MAZDA_VIEW_EVENT, new ViewConfig(API_MAZDA_VIEW_EXEC, data));
@@ -424,10 +430,16 @@ export class Canbus extends EventEmitter
 					this.emit(API_ENGINE_VIEW_ENABLED_EVENT, new ViewConfig(API_ENGINE_VIEW_ENABLED_EXEC, data));
 					break;
 				case API_ENGINE_VIEW_TOTAL_WORKTIME_EXEC:
-					this.emit(API_ENGINE_VIEW_TOTAL_WORKTIME_EVENT, new ViewConfig(API_ENGINE_VIEW_TOTAL_WORKTIME_EXEC, data));
+					this.emit(
+						API_ENGINE_VIEW_TOTAL_WORKTIME_EVENT,
+						new ViewConfig(API_ENGINE_VIEW_TOTAL_WORKTIME_EXEC, data)
+					);
 					break;
 				case API_ENGINE_VIEW_TOTAL_COUNT_RPM_EXEC:
-					this.emit(API_ENGINE_VIEW_TOTAL_COUNT_RPM_EVENT, new ViewConfig(API_ENGINE_VIEW_TOTAL_COUNT_RPM_EXEC, data));
+					this.emit(
+						API_ENGINE_VIEW_TOTAL_COUNT_RPM_EVENT,
+						new ViewConfig(API_ENGINE_VIEW_TOTAL_COUNT_RPM_EXEC, data)
+					);
 					break;
 				case API_ENGINE_VIEW_COOLANT_EXEC:
 					this.emit(API_ENGINE_VIEW_COOLANT_EVENT, new ViewConfig(API_ENGINE_VIEW_COOLANT_EXEC, data));
@@ -468,7 +480,10 @@ export class Canbus extends EventEmitter
 					this.emit(API_MOVEMENT_VIEW_SPEED_EVENT, new ViewConfig(API_MOVEMENT_VIEW_SPEED_EXEC, data));
 					break;
 				case API_MOVEMENT_VIEW_SPEED_AVG_EXEC:
-					this.emit(API_MOVEMENT_VIEW_SPEED_AVG_EVENT, new ViewConfig(API_MOVEMENT_VIEW_SPEED_AVG_EXEC, data));
+					this.emit(
+						API_MOVEMENT_VIEW_SPEED_AVG_EVENT,
+						new ViewConfig(API_MOVEMENT_VIEW_SPEED_AVG_EXEC, data)
+					);
 					break;
 				case API_MOVEMENT_VIEW_REST_WAY_EXEC:
 					this.emit(API_MOVEMENT_VIEW_REST_WAY_EVENT, new ViewConfig(API_MOVEMENT_VIEW_REST_WAY_EXEC, data));
@@ -490,7 +505,10 @@ export class Canbus extends EventEmitter
 					this.emit(API_SENSORS_VIEW_SEATBELT_EVENT, new ViewConfig(API_SENSORS_VIEW_SEATBELT_EXEC, data));
 					break;
 				case API_SENSORS_VIEW_TURN_SIGNAL_EXEC:
-					this.emit(API_SENSORS_VIEW_TURN_SIGNAL_EVENT, new ViewConfig(API_SENSORS_VIEW_TURN_SIGNAL_EXEC, data));
+					this.emit(
+						API_SENSORS_VIEW_TURN_SIGNAL_EVENT,
+						new ViewConfig(API_SENSORS_VIEW_TURN_SIGNAL_EXEC, data)
+					);
 					break;
 
 				case API_TEMPERATURE_VALUE_EXEC: // Значения температуры
@@ -532,11 +550,7 @@ export class Canbus extends EventEmitter
 	/** Пишем данные файла прошивки в устройство PJCAN */
 	async updateUpload()
 	{
-		if (
-			this.bluetooth.connected &&
-			this.update.error === 0 &&
-			this.update.offset <= this.update.total
-		)
+		if (this.bluetooth.connected && this.update.error === 0 && this.update.offset <= this.update.total)
 		{
 			this.queueDisabled = true;
 			await this.bluetooth.send(this.update.get());

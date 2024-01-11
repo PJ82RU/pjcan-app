@@ -55,27 +55,13 @@ export default {
 		const flicking = ref(null);
 		provide("flicking", flicking);
 
-		/** Карточки */
+		const carModel = ref(TCarModel.CAR_MODEL_UNKNOWN);
 		const cards = computed(() =>
 		{
 			return store.getters["app/onboardCardList"]?.filter(
 				(x: IOnboardCard) => x.enabled && x.car?.indexOf(carModel.value) >= 0
 			);
 		});
-
-		// КОНФИГУРАЦИЯ АВТОМОБИЛЯ
-
-		/** Модель автомобиля */
-		const carModel = ref(TCarModel.CAR_MODEL_UNKNOWN);
-
-		const onReceiveMazdaConfig = (res: IMazdaConfig): void =>
-		{
-			if (res.isData) carModel.value = res.carModel;
-		};
-
-		// ЦИКЛИЧЕСКИЙ ЗАПРОС ЗНАЧЕНИЙ
-
-		/** Список ID значений */
 		const listExec = computed(() =>
 		{
 			const result: number[] = [];
@@ -112,43 +98,47 @@ export default {
 			return result;
 		});
 
-		/** Выборочный запрос данных */
-		const onQueryListExec = (): void =>
+		const onReceiveMazdaConfig = (res: IMazdaConfig): void =>
 		{
-			if (listExec.value?.length)
-			{
-				const choice = new ChoiceValue();
-				choice.listID = listExec.value;
-				canbus.query(choice, true);
-			}
+			if (res.isData) carModel.value = res.carModel;
 		};
 
 		let loop: Timeout;
-
-		/** Запустить циклический запрос данных */
 		const onStart = (): void =>
 		{
-			canbus.removeListener(API_VERSION_EVENT, onStart);
-			canbus.addListener(API_MAZDA_CONFIG_EVENT, onReceiveMazdaConfig);
-			canbus.query(new MazdaConfig(), true);
-			loop = setInterval(() => onQueryListExec(), 500);
+			if (!loop && canbus.version.is)
+			{
+				if (!canbus.mazda.isData) canbus.query(new MazdaConfig(), true);
+				else onReceiveMazdaConfig(canbus.mazda);
+
+				loop = setInterval(() =>
+				{
+					if (listExec.value?.length)
+					{
+						const choice = new ChoiceValue();
+						choice.listID = listExec.value;
+						canbus.query(choice, true);
+					}
+				}, 500);
+			}
 		};
 
-		/** Остановить циклический запрос данных */
 		const onStop = (): void =>
 		{
-			canbus.removeListener(API_VERSION_EVENT, onStart);
-			canbus.removeListener(API_MAZDA_CONFIG_EVENT, onReceiveMazdaConfig);
 			clearInterval(loop);
+			loop = undefined;
 		};
 
 		onMounted(() =>
 		{
-			if (!canbus.version.is) canbus.addListener(API_VERSION_EVENT, onStart);
-			else onStart();
+			canbus.addListener(API_VERSION_EVENT, onStart);
+			canbus.addListener(API_MAZDA_CONFIG_EVENT, onReceiveMazdaConfig);
+			onStart();
 		});
 		onUnmounted(() =>
 		{
+			canbus.removeListener(API_VERSION_EVENT, onStart);
+			canbus.removeListener(API_MAZDA_CONFIG_EVENT, onReceiveMazdaConfig);
 			onStop();
 		});
 
