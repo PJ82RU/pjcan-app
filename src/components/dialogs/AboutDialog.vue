@@ -51,7 +51,7 @@ import ChoosingCarModelDialog from "@/components/dialogs/ChoosingCarModelDialog.
 
 import { ILooseObject } from "@/models/interfaces/ILooseObject";
 import { API_MAZDA_CONFIG_EVENT, IMazdaConfig, MazdaConfig, TCarModel } from "@/models/pjcan/mazda";
-import { API_VERSION_EVENT, IVersion } from "@/models/pjcan/version";
+import { API_CANBUS_EVENT } from "@/models/pjcan/base/BaseModel";
 
 const pkg = require("/package.json");
 
@@ -117,15 +117,6 @@ export default {
 		};
 
 		/**
-		 * Обновление версии
-		 * @param {IVersion} res Версия
-		 */
-		const onReceiveVersionConfigs = (res: IVersion): void =>
-		{
-			versionFirmware.value = res.toString;
-		};
-
-		/**
 		 * Входящие конфигурации автомобиля
 		 * @param {IMazdaConfig} res
 		 */
@@ -139,25 +130,24 @@ export default {
 			}
 		};
 
-		const onStart = (): void =>
+		const onBegin = (status: boolean): void =>
 		{
-			if (canbus.version.is)
+			if (status)
 			{
-				onReceiveVersionConfigs(canbus.version);
+				versionFirmware.value = canbus.version.toString;
 				if (!canbus.mazda.isData) canbus.query(new MazdaConfig(), true);
 				else onReceiveMazdaConfig(canbus.mazda);
 			}
 		};
-
 		onMounted(() =>
 		{
-			canbus.addListener(API_VERSION_EVENT, onStart);
+			canbus.addListener(API_CANBUS_EVENT, onBegin);
 			canbus.addListener(API_MAZDA_CONFIG_EVENT, onReceiveMazdaConfig);
-			onStart();
+			onBegin(canbus.begin);
 		});
 		onUnmounted(() =>
 		{
-			canbus.removeListener(API_VERSION_EVENT, onStart);
+			canbus.removeListener(API_CANBUS_EVENT, onBegin);
 			canbus.removeListener(API_MAZDA_CONFIG_EVENT, onReceiveMazdaConfig);
 		});
 

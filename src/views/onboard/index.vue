@@ -35,7 +35,7 @@ import { API_FUEL_VALUE_EXEC } from "@/models/pjcan/fuel";
 import { API_MOVEMENT_VALUE_EXEC } from "@/models/pjcan/movement";
 import { API_DOORS_VALUE_EXEC } from "@/models/pjcan/doors";
 import { API_CLIMATE_VALUE_EXEC } from "@/models/pjcan/climate";
-import { API_VERSION_EVENT } from "@/models/pjcan/version";
+import { API_CANBUS_EVENT } from "@/models/pjcan/base/BaseModel";
 
 export default {
 	name: "onboard",
@@ -104,10 +104,11 @@ export default {
 		};
 
 		let loop: Timeout;
-		const onStart = (): void =>
+		const onBegin = (status: boolean): void =>
 		{
-			if (!loop && canbus.version.is)
+			if (status)
 			{
+				if (loop) return;
 				if (!canbus.mazda.isData) canbus.query(new MazdaConfig(), true);
 				else onReceiveMazdaConfig(canbus.mazda);
 
@@ -121,25 +122,23 @@ export default {
 					}
 				}, 500);
 			}
+			else
+			{
+				clearInterval(loop);
+				loop = undefined;
+			}
 		};
-
-		const onStop = (): void =>
-		{
-			clearInterval(loop);
-			loop = undefined;
-		};
-
 		onMounted(() =>
 		{
-			canbus.addListener(API_VERSION_EVENT, onStart);
+			canbus.addListener(API_CANBUS_EVENT, onBegin);
 			canbus.addListener(API_MAZDA_CONFIG_EVENT, onReceiveMazdaConfig);
-			onStart();
+			onBegin(canbus.begin);
 		});
 		onUnmounted(() =>
 		{
-			canbus.removeListener(API_VERSION_EVENT, onStart);
+			canbus.removeListener(API_CANBUS_EVENT, onBegin);
 			canbus.removeListener(API_MAZDA_CONFIG_EVENT, onReceiveMazdaConfig);
-			onStop();
+			onBegin(false);
 		});
 
 		return {
