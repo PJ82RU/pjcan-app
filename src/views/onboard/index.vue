@@ -35,6 +35,7 @@ import { API_FUEL_VALUE_EXEC } from "@/models/pjcan/fuel";
 import { API_MOVEMENT_VALUE_EXEC } from "@/models/pjcan/movement";
 import { API_DOORS_VALUE_EXEC } from "@/models/pjcan/doors";
 import { API_CLIMATE_VALUE_EXEC } from "@/models/pjcan/climate";
+import { API_VERSION_EVENT } from "@/models/pjcan/version";
 
 export default {
 	name: "onboard",
@@ -71,8 +72,6 @@ export default {
 		{
 			if (res.isData) carModel.value = res.carModel;
 		};
-		canbus.addListener(API_MAZDA_CONFIG_EVENT, onReceiveMazdaConfig);
-		canbus.query(new MazdaConfig());
 
 		// ЦИКЛИЧЕСКИЙ ЗАПРОС ЗНАЧЕНИЙ
 
@@ -113,6 +112,7 @@ export default {
 			return result;
 		});
 
+		/** Выборочный запрос данных */
 		const onQueryListExec = (): void =>
 		{
 			if (listExec.value?.length)
@@ -124,14 +124,32 @@ export default {
 		};
 
 		let loop: Timeout;
+
+		/** Запустить циклический запрос данных */
+		const onStart = (): void =>
+		{
+			canbus.removeListener(API_VERSION_EVENT, onStart);
+			canbus.addListener(API_MAZDA_CONFIG_EVENT, onReceiveMazdaConfig);
+			canbus.query(new MazdaConfig(), true);
+			loop = setInterval(() => onQueryListExec(), 500);
+		};
+
+		/** Остановить циклический запрос данных */
+		const onStop = (): void =>
+		{
+			canbus.removeListener(API_VERSION_EVENT, onStart);
+			canbus.removeListener(API_MAZDA_CONFIG_EVENT, onReceiveMazdaConfig);
+			clearInterval(loop);
+		};
+
 		onMounted(() =>
 		{
-			loop = setInterval(() => onQueryListExec(), 500);
-			onQueryListExec();
+			if (!canbus.version.is) canbus.addListener(API_VERSION_EVENT, onStart);
+			else onStart();
 		});
 		onUnmounted(() =>
 		{
-			clearInterval(loop);
+			onStop();
 		});
 
 		return {
