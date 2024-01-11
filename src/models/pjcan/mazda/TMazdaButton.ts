@@ -1,0 +1,11 @@
+/* eslint-disable no-unused-vars */
+
+export enum TMazdaButton {
+	MAZDA_BUTTON_NONE,
+	MAZDA_BUTTON_CLOCK,
+	MAZDA_BUTTON_INFO,
+	MAZDA_BUTTON_H,
+	MAZDA_BUTTON_M,
+	MAZDA_BUTTON_RM,
+	MAZDA_BUTTON_24
+}
