@@ -16,24 +16,24 @@
 						<v-btn
 							color="primary"
 							size="x-large"
-							@mousedown="onPress('btnClock')"
-							@mouseup="onRelease('btnClock')"
-							@mouseleave="onRelease('btnClock')"
-							@touchstart="onTouchPress('btnClock')"
-							@touchend="onTouchRelease('btnClock')"
-							@touchcancel="onTouchRelease('btnClock')"
+							@mousedown="onPress(TMazdaButton.MAZDA_BUTTON_CLOCK)"
+							@mouseup="onRelease(TMazdaButton.MAZDA_BUTTON_CLOCK)"
+							@mouseleave="onRelease(TMazdaButton.MAZDA_BUTTON_CLOCK)"
+							@touchstart="onTouchPress(TMazdaButton.MAZDA_BUTTON_CLOCK)"
+							@touchend="onTouchRelease(TMazdaButton.MAZDA_BUTTON_CLOCK)"
+							@touchcancel="onTouchRelease(TMazdaButton.MAZDA_BUTTON_CLOCK)"
 						>
 							CLOCK
 						</v-btn>
 						<v-btn
 							color="primary"
 							size="x-large"
-							@mousedown="onPress('btnInfo')"
-							@mouseup="onRelease('btnInfo')"
-							@mouseleave="onRelease('btnInfo')"
-							@touchstart="onTouchPress('btnInfo')"
-							@touchend="onTouchRelease('btnInfo')"
-							@touchcancel="onTouchRelease('btnInfo')"
+							@mousedown="onPress(TMazdaButton.MAZDA_BUTTON_INFO)"
+							@mouseup="onRelease(TMazdaButton.MAZDA_BUTTON_INFO)"
+							@mouseleave="onRelease(TMazdaButton.MAZDA_BUTTON_INFO)"
+							@touchstart="onTouchPress(TMazdaButton.MAZDA_BUTTON_INFO)"
+							@touchend="onTouchRelease(TMazdaButton.MAZDA_BUTTON_INFO)"
+							@touchcancel="onTouchRelease(TMazdaButton.MAZDA_BUTTON_INFO)"
 						>
 							INFO
 						</v-btn>
@@ -44,36 +44,36 @@
 						<v-btn
 							color="secondary"
 							size="x-large"
-							@mousedown="onPress('btnClockH')"
-							@mouseup="onRelease('btnClockH')"
-							@mouseleave="onRelease('btnClockH')"
-							@touchstart="onTouchPress('btnClockH')"
-							@touchend="onTouchRelease('btnClockH')"
-							@touchcancel="onTouchRelease('btnClockH')"
+							@mousedown="onPress(TMazdaButton.MAZDA_BUTTON_CLOCK_H)"
+							@mouseup="onRelease(TMazdaButton.MAZDA_BUTTON_CLOCK_H)"
+							@mouseleave="onRelease(TMazdaButton.MAZDA_BUTTON_CLOCK_H)"
+							@touchstart="onTouchPress(TMazdaButton.MAZDA_BUTTON_CLOCK_H)"
+							@touchend="onTouchRelease(TMazdaButton.MAZDA_BUTTON_CLOCK_H)"
+							@touchcancel="onTouchRelease(TMazdaButton.MAZDA_BUTTON_CLOCK_H)"
 						>
 							H
 						</v-btn>
 						<v-btn
 							color="secondary"
 							size="x-large"
-							@mousedown="onPress('btnClockM')"
-							@mouseup="onRelease('btnClockM')"
-							@mouseleave="onRelease('btnClockM')"
-							@touchstart="onTouchPress('btnClockM')"
-							@touchend="onTouchRelease('btnClockM')"
-							@touchcancel="onTouchRelease('btnClockM')"
+							@mousedown="onPress(TMazdaButton.MAZDA_BUTTON_CLOCK_M)"
+							@mouseup="onRelease(TMazdaButton.MAZDA_BUTTON_CLOCK_M)"
+							@mouseleave="onRelease(TMazdaButton.MAZDA_BUTTON_CLOCK_M)"
+							@touchstart="onTouchPress(TMazdaButton.MAZDA_BUTTON_CLOCK_M)"
+							@touchend="onTouchRelease(TMazdaButton.MAZDA_BUTTON_CLOCK_M)"
+							@touchcancel="onTouchRelease(TMazdaButton.MAZDA_BUTTON_CLOCK_M)"
 						>
 							M
 						</v-btn>
 						<v-btn
 							color="secondary"
 							size="x-large"
-							@mousedown="onPress('btnClockRM')"
-							@mouseup="onRelease('btnClockRM')"
-							@mouseleave="onRelease('btnClockRM')"
-							@touchstart="onTouchPress('btnClockRM')"
-							@touchend="onTouchRelease('btnClockRM')"
-							@touchcancel="onTouchRelease('btnClockRM')"
+							@mousedown="onPress(TMazdaButton.MAZDA_BUTTON_CLOCK_RM)"
+							@mouseup="onRelease(TMazdaButton.MAZDA_BUTTON_CLOCK_RM)"
+							@mouseleave="onRelease(TMazdaButton.MAZDA_BUTTON_CLOCK_RM)"
+							@touchstart="onTouchPress(TMazdaButton.MAZDA_BUTTON_CLOCK_RM)"
+							@touchend="onTouchRelease(TMazdaButton.MAZDA_BUTTON_CLOCK_RM)"
+							@touchcancel="onTouchRelease(TMazdaButton.MAZDA_BUTTON_CLOCK_RM)"
 						>
 							RM
 						</v-btn>
@@ -81,12 +81,12 @@
 							v-if="carModel === TCarModel.CAR_MODEL_MAZDA_CX9_REST"
 							color="secondary"
 							size="x-large"
-							@mousedown="onPress('flgClock24')"
-							@mouseup="onRelease('flgClock24')"
-							@mouseleave="onRelease('flgClock24')"
-							@touchstart="onTouchPress('flgClock24')"
-							@touchend="onTouchRelease('flgClock24')"
-							@touchcancel="onTouchRelease('flgClock24')"
+							@mousedown="onPress(TMazdaButton.MAZDA_BUTTON_CLOCK_24)"
+							@mouseup="onRelease(TMazdaButton.MAZDA_BUTTON_CLOCK_24)"
+							@mouseleave="onRelease(TMazdaButton.MAZDA_BUTTON_CLOCK_24)"
+							@touchstart="onTouchPress(TMazdaButton.MAZDA_BUTTON_CLOCK_24)"
+							@touchend="onTouchRelease(TMazdaButton.MAZDA_BUTTON_CLOCK_24)"
+							@touchcancel="onTouchRelease(TMazdaButton.MAZDA_BUTTON_CLOCK_24)"
 						>
 							24/12
 						</v-btn>
@@ -94,8 +94,8 @@
 							v-else
 							color="secondary"
 							size="x-large"
-							@mousedown="onPress('flgClock24', true)"
-							@touchstart="onTouchPress('flgClock24', true)"
+							@mousedown="onPress(TMazdaButton.MAZDA_BUTTON_CLOCK_24, true)"
+							@touchstart="onTouchPress(TMazdaButton.MAZDA_BUTTON_CLOCK_24, true)"
 						>
 							24/12
 						</v-btn>
@@ -114,14 +114,21 @@
 
 <script lang="ts">
 import { computed, toRefs } from "vue";
+import store from "@/store";
+import canbus from "@/api/canbus";
 
 import DialogTemplate from "@/layout/components/DialogTemplate.vue";
 
-import { TCarModel } from "@/models/pjcan/mazda";
-import store from "@/store";
+import { MazdaAction, TCarModel, TMazdaButton } from "@/models/pjcan/mazda";
 
 export default {
 	name: "OnboardButtonsDialog",
+	computed: {
+		TMazdaButton()
+		{
+			return TMazdaButton;
+		}
+	},
 	components: { DialogTemplate },
 	props: {
 		modelValue: Boolean
@@ -143,74 +150,71 @@ export default {
 			return "ontouchstart" in window || navigator?.maxTouchPoints > 0 || navigator?.msMaxTouchPoints > 0;
 		};
 
-		const timeouts = {
-			btnInfo: null,
-			btnClock: null,
-			btnClockH: null,
-			btnClockM: null,
-			btnClockRM: null,
-			flgClock24: null
-		} as any;
-
-		const press = (name: string, toggle: boolean): void =>
+		const timeouts: number[] = [-1, -1, -1, -1, -1, -1];
+		const press = (btn: TMazdaButton, toggle: boolean): void =>
 		{
-			if (timeouts?.[name] === null)
+			if (timeouts[btn] === -1)
 			{
-				// ... отправляем нажатие кнопки
+				const action = new MazdaAction();
+				action.btnType = btn;
+				action.btnPress = true;
+				canbus.query(action);
 				navigator.vibrate(30);
 			}
-			else clearTimeout(timeouts[name]);
+			else clearTimeout(timeouts[btn]);
 
-			if (!toggle) timeouts[name] = setTimeout(release, 60000, name);
+			if (!toggle) timeouts[btn] = setTimeout(release, 60000, btn);
 		};
 
-		const release = (name: string): void =>
+		const release = (btn: TMazdaButton): void =>
 		{
-			if (timeouts?.[name] !== null)
+			if (timeouts[btn] !== -1)
 			{
-				// ... отправляем отпуск кнопки
+				const action = new MazdaAction();
+				action.btnType = btn;
+				canbus.query(action);
 				navigator.vibrate(20);
-				clearTimeout(timeouts[name]);
-				timeouts[name] = null;
+				clearTimeout(timeouts[btn]);
+				timeouts[btn] = -1;
 			}
 		};
 
 		/**
          * Событие нажатия на кнопку
-         * @param {string} name Имя кнопки
+         * @param {TMazdaButton} btn Кнопка
          * @param {boolean} toggle Переключатель
          */
-		const onPress = (name: string, toggle: boolean = false): void =>
+		const onPress = (btn: TMazdaButton, toggle: boolean = false): void =>
 		{
-			if (!isTouchDevice()) press(name, toggle);
+			if (!isTouchDevice()) press(btn, toggle);
 		};
 
 		/**
 		 * Событие нажатия на кнопку
-		 * @param {string} name Имя кнопки
+		 * @param {TMazdaButton} btn Кнопка
 		 * @param {boolean} toggle Переключатель
 		 */
-		const onTouchPress = (name: string, toggle: boolean = false): void =>
+		const onTouchPress = (btn: TMazdaButton, toggle: boolean = false): void =>
 		{
-			if (isTouchDevice()) press(name, toggle);
+			if (isTouchDevice()) press(btn, toggle);
 		};
 
 		/**
          * Событие отпуска кнопки
-         * @param {string} name Имя кнопки
+		 * @param {TMazdaButton} btn Кнопка
          */
-		const onRelease = (name: string): void =>
+		const onRelease = (btn: TMazdaButton): void =>
 		{
-			if (!isTouchDevice()) release(name);
+			if (!isTouchDevice()) release(btn);
 		};
 
 		/**
 		 * Событие отпуска кнопки
-		 * @param {string} name Имя кнопки
+		 * @param {TMazdaButton} btn Кнопка
 		 */
-		const onTouchRelease = (name: string): void =>
+		const onTouchRelease = (btn: TMazdaButton): void =>
 		{
-			if (isTouchDevice()) release(name);
+			if (isTouchDevice()) release(btn);
 		};
 
 		return {
