@@ -180,6 +180,7 @@ import { API_CHOICE_EXEC, ChoiceValue } from "@/models/pjcan/choice";
 
 import { IQuery } from "@/models/interfaces/IQuery";
 import { ViewConfig } from "@/models/pjcan/view";
+import { API_CANBUS_EVENT } from "@/models/pjcan/base/BaseModel";
 
 const dev = process.env.NODE_ENV === "development";
 
@@ -290,6 +291,12 @@ export class Canbus extends EventEmitter
 		this.sendBluetoothQueue();
 	}
 
+	/** Статус работы Canbus */
+	get begin(): boolean
+	{
+		return this.bluetooth.connected && this.version.is;
+	}
+
 	/**
 	 * Событие подключения Bluetooth
 	 * @param {TConnectedStatus} status Статус подключения
@@ -298,11 +305,16 @@ export class Canbus extends EventEmitter
 	{
 		if (status === TConnectedStatus.CONNECT)
 		{
-			// с начало получаем версию прошивки
-			this.query(this.version, true, true);
-			// далее получаем статус активации устройства
-			this.query(new DeviceValue());
+			if (!this.version.is)
+			{
+				// с начало получаем версию прошивки
+				this.query(this.version, true, true);
+				// далее получаем статус активации устройства
+				this.query(new DeviceValue());
+			}
+			else this.emit(API_CANBUS_EVENT, this.begin);
 		}
+		else this.emit(API_CANBUS_EVENT, this.begin);
 	}
 
 	/**
@@ -315,10 +327,12 @@ export class Canbus extends EventEmitter
 		if (id === 0)
 		{
 			// Версия прошивки
+			const is = this.version.is;
 			this.version.set(data);
 			const { major, minor, build, revision } = this.version;
 			console.log(t("BLE.server.versionProtocol", { mj: major, mn: minor, bl: build, rv: revision }));
 			this.emit(API_VERSION_EVENT, this.version);
+			if (!is) this.emit(API_CANBUS_EVENT, this.begin);
 		}
 		else if (this.version.is)
 		{

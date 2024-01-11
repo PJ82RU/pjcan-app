@@ -1,5 +1,7 @@
 import { IBluetoothStruct } from "@/components/bluetooth/IBluetoothStruct";
 
+export const API_CANBUS_EVENT = "Canbus";
+
 /** Базовая модель */
 export class BaseModel
 {
