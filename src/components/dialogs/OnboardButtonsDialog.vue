@@ -124,6 +124,10 @@ import { MazdaAction, TCarModel, TMazdaButton } from "@/models/pjcan/mazda";
 export default {
 	name: "OnboardButtonsDialog",
 	computed: {
+		TCarModel()
+		{
+			return TCarModel;
+		},
 		TMazdaButton()
 		{
 			return TMazdaButton;
@@ -142,7 +146,6 @@ export default {
 			set: (val: boolean): void => emit("update:modelValue", val)
 		});
 		const carModel = computed((): TCarModel => store.getters["app/carModel"]);
-		const TCarModel = computed((): any => TCarModel);
 
 		const isTouchDevice = (): boolean =>
 		{
@@ -220,7 +223,6 @@ export default {
 		return {
 			visible,
 			carModel,
-			TCarModel,
 			onPress,
 			onTouchPress,
 			onRelease,
