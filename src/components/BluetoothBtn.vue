@@ -10,11 +10,11 @@ import { onMounted, onUnmounted, ref } from "vue";
 import { toast } from "vue3-toastify";
 import { useI18n } from "vue-i18n";
 import store from "@/store";
+import canbus from "@/api/canbus";
 
 import DialogTemplate from "@/layout/components/DialogTemplate.vue";
-import { BLUETOOTH_EVENT_CONNECTED, BLUETOOTH_EVENT_SEND, TConnectedStatus } from "@/components/bluetooth";
 
-import canbus from "@/api/canbus";
+import { BLUETOOTH_EVENT_CONNECTED, BLUETOOTH_EVENT_SEND, TConnectedStatus } from "@/components/bluetooth";
 
 import { IMessage } from "@/models/interfaces/message/IMessage";
 
@@ -53,7 +53,7 @@ export default {
 		{
 			connected.value = status === TConnectedStatus.CONNECT;
 			// Не выводим сообщения об отключении/подключении Bluetooth в момент прошивки устройства
-			if (canbus.device.update.total > 0)
+			if (canbus.update.total > 0)
 			{
 				// Если устройство отключилось, значит возникли проблемы с восстановлением соединения.
 				// Просим подключить устройство
