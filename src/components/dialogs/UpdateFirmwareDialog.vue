@@ -41,6 +41,7 @@ import { computed, onMounted, onUnmounted, ref, toRefs } from "vue";
 import { toast } from "vue3-toastify";
 import { useI18n } from "vue-i18n";
 import router from "@/router";
+import canbus from "@/api/canbus";
 
 import DialogTemplate from "@/layout/components/DialogTemplate.vue";
 
@@ -48,8 +49,6 @@ import { API_DEVICE_UPDATE_EVENT, API_DEVICE_UPDATE_EVENT_ERROR } from "@/models
 import { API_VERSION_EVENT } from "@/models/pjcan/version";
 
 import { RemainingTime } from "@/utils/time";
-
-import canbus from "@/api/canbus";
 
 export default {
 	name: "UpdateFirmwareDialog",
@@ -85,13 +84,13 @@ export default {
 			visibleProcess.value = false;
 
 			canbus.removeListener(API_DEVICE_UPDATE_EVENT_ERROR, onErrorUpdate);
-			canbus.device.update.clear();
+			canbus.update.clear();
 		};
 
 		/** Завершение прошивки */
 		const onCompletingFirmware = () =>
 		{
-			if (canbus.device.update.total > 0)
+			if (canbus.update.total > 0)
 			{
 				if (canbus.version.is)
 				{
@@ -130,21 +129,21 @@ export default {
 		{
 			if (error === 0)
 			{
-				if (canbus.device.update.offset < canbus.device.update.total)
+				if (canbus.update.offset < canbus.update.total)
 				{
 					message.value = t("update.process.upload");
-					progress.value = canbus.device.update.uploading * 100;
+					progress.value = canbus.update.uploading * 100;
 					uploading.value = progress.value.toFixed(2) + "%";
 					canbus.updateUpload();
 
 					// подсчет оставшегося времени
 					if (!remainingTime)
 					{
-						remainingTime = new RemainingTime(canbus.device.update.total);
+						remainingTime = new RemainingTime(canbus.update.total);
 					}
 					else
 					{
-						remainingTime.offset = canbus.device.update.offset;
+						remainingTime.offset = canbus.update.offset;
 						timeLeft.value = remainingTime.get();
 					}
 				}
@@ -176,13 +175,13 @@ export default {
 		onMounted(() =>
 		{
 			canbus.addListener(API_VERSION_EVENT, onCompletingFirmware);
-			canbus.device.update.addListener(API_DEVICE_UPDATE_EVENT, onUpdate);
+			canbus.update.addListener(API_DEVICE_UPDATE_EVENT, onUpdate);
 		});
 
 		onUnmounted(() =>
 		{
 			canbus.removeListener(API_VERSION_EVENT, onCompletingFirmware);
-			canbus.device.update.removeListener(API_DEVICE_UPDATE_EVENT, onUpdate);
+			canbus.update.removeListener(API_DEVICE_UPDATE_EVENT, onUpdate);
 			canbus.removeListener(API_DEVICE_UPDATE_EVENT_ERROR, onErrorUpdate);
 		});
 
