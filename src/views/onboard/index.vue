@@ -111,7 +111,7 @@ export default {
 							choice.listID = listExec.value;
 							canbus.query(choice, true);
 						}
-					}, 500);
+					}, 250);
 				}
 			}
 			else
