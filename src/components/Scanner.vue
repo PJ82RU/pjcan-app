@@ -20,8 +20,10 @@ import { computed, ref, toRefs, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { toast } from "vue3-toastify";
 import store from "@/store";
-
 import canbus from "@/api/canbus";
+import { setScanCan } from "@/api/google";
+
+import DialogTemplate from "@/layout/components/DialogTemplate.vue";
 
 import { IMessage } from "@/models/interfaces/message/IMessage";
 import { IDeviceScannerFrame } from "@/models/pjcan/device/IDeviceScannerFrame";
@@ -32,12 +34,9 @@ import {
 	DeviceScannerValue,
 	IDeviceScannerValue
 } from "@/models/pjcan/device";
-
-import { setScanCan } from "@/api/google";
-
-import { toHex, toMac } from "@/utils/conversion";
-import DialogTemplate from "@/layout/components/DialogTemplate.vue";
 import { Timeout } from "@/models/types/Timeout";
+
+import { toHex } from "@/utils/conversion";
 
 export default {
 	name: "Scanner",
@@ -159,7 +158,8 @@ export default {
 					on: () =>
 					{
 						started.value = false;
-						setTimeout(() => (visibleUploading.value = true), 400);
+						if (leftUploading.value) setTimeout(() => (visibleUploading.value = true), 400);
+						else toast.warning(t("scanner.notify.warningSend"));
 					}
 				});
 			}
