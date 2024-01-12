@@ -62,12 +62,14 @@
 <script lang="ts">
 import { computed, ref, toRefs } from "vue";
 import { useI18n } from "vue-i18n";
+import canbus from "@/api/canbus";
 
 import DialogTemplate from "@/layout/components/DialogTemplate.vue";
 import InputCardItem from "@/components/cards/InputCardItem.vue";
 import NumberField from "@/components/common/NumberField.vue";
-import canbus from "@/api/canbus";
-import { API_VARIABLE_TEST_EXEC, TestValue } from "@/models/pjcan/variables/test";
+
+import { API_TEST_VIEW_EXEC, TestValue } from "@/models/pjcan/test";
+import { ViewConfig } from "@/models/pjcan/view";
 
 export default {
 	name: "TestDialog",
@@ -86,10 +88,10 @@ export default {
 			set: (val: boolean): void => emit("update:modelValue", val)
 		});
 		const rules = computed(() => ({
-			required: (value: string): any => (!!value || t("rules.required")),
+			required: (value: string): any => !!value || t("rules.required"),
 			// @ts-ignore
-			counter: (value: string): any => (value.length <= 32 || t("rules.counter", 32, { n: 32 })),
-			english: (value: string): any => (/^[^а-яА-Я]+$/.test(value) || t("rules.english"))
+			counter: (value: string): any => value.length <= 32 || t("rules.counter", 32, { n: 32 }),
+			english: (value: string): any => /^[^а-яА-Я]+$/.test(value) || t("rules.english")
 		}));
 
 		const text = ref(" -- TEST -- ");
@@ -105,12 +107,16 @@ export default {
 		/** Кнопка: "Показать" */
 		const onShowClick = (): void =>
 		{
+			const testView = new ViewConfig(API_TEST_VIEW_EXEC);
+			testView.enabled = true;
+			testView.type = style.value;
+			testView.time = time.value;
+			canbus.query(testView);
+
 			const test = new TestValue();
 			test.text = text.value;
-			test.view.enabled = true;
-			test.view.type = style.value;
-			test.view.time = time.value;
-			canbus.queryValue(API_VARIABLE_TEST_EXEC, test);
+			canbus.query(test);
+
 			visible.value = false;
 		};
 
