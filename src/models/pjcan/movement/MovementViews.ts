@@ -41,7 +41,14 @@ export class MovementViews extends BaseModel implements IMovementViews
 	 */
 	set(buf: DataView): boolean
 	{
-		return this._set(this, this.exec, MovementViews.size, new BluetoothStruct(MovementViews.struct), buf);
+		const result = this._set(this, this.exec, MovementViews.size, new BluetoothStruct(MovementViews.struct), buf);
+		if (result)
+		{
+			this.speed.isData = true;
+			this.speedAVG.isData = true;
+			this.restWay.isData = true;
+		}
+		return result;
 	}
 
 	/** Чтение данных */

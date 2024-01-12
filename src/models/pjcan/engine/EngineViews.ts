@@ -61,7 +61,18 @@ export class EngineViews extends BaseModel implements IEngineViews
 	 */
 	set(buf: DataView): boolean
 	{
-		return this._set(this, this.exec, EngineViews.size, new BluetoothStruct(EngineViews.struct), buf);
+		const result = this._set(this, this.exec, EngineViews.size, new BluetoothStruct(EngineViews.struct), buf);
+		if (result)
+		{
+			this.enabled.isData = true;
+			this.totalWorktime.isData = true;
+			this.totalCountRPM.isData = true;
+			this.coolant.isData = true;
+			this.rpm.isData = true;
+			this.load.isData = true;
+			this.throttle.isData = true;
+		}
+		return result;
 	}
 
 	/** Чтение данных */

@@ -46,7 +46,15 @@ export class SensorsViews extends BaseModel implements ISensorsViews
 	 */
 	set(buf: DataView): boolean
 	{
-		return this._set(this, this.exec, SensorsViews.size, new BluetoothStruct(SensorsViews.struct), buf);
+		const result = this._set(this, this.exec, SensorsViews.size, new BluetoothStruct(SensorsViews.struct), buf);
+		if (result)
+		{
+			this.handbrake.isData = true;
+			this.reverse.isData = true;
+			this.seatbelt.isData = true;
+			this.turnSignal.isData = true;
+		}
+		return result;
 	}
 
 	/** Чтение данных */

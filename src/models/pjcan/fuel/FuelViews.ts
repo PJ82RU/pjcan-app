@@ -36,7 +36,13 @@ export class FuelViews extends BaseModel implements IFuelViews
 	 */
 	set(buf: DataView): boolean
 	{
-		return this._set(this, this.exec, FuelViews.size, new BluetoothStruct(FuelViews.struct), buf);
+		const result = this._set(this, this.exec, FuelViews.size, new BluetoothStruct(FuelViews.struct), buf);
+		if (result)
+		{
+			this.current.isData = true;
+			this.avg.isData = true;
+		}
+		return result;
 	}
 
 	/** Чтение данных */

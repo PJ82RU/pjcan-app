@@ -4,5 +4,5 @@ import { IBaseModel } from "../base";
 export interface IDeviceValue extends IBaseModel {
 	activation: boolean; // Статус активации
 	led: number; // Состояние мигания светодиода
-	worktime: Number; // Время работы устройства, сек
+	worktime: number; // Время работы устройства, сек
 }
