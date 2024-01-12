@@ -1,9 +1,12 @@
 import EventEmitter from "eventemitter3";
 import { toast } from "vue3-toastify";
 import { t } from "@/lang";
+
 import { getFirmware, getFirmwareVersion } from "@/api/firmware";
 import { getSerial } from "@/api/hash";
+
 import { createDebounce } from "@/utils/debounce";
+import { toMac } from "@/utils/conversion";
 
 import {
 	BLUETOOTH_EVENT_CONNECTED,
@@ -194,6 +197,8 @@ export class Canbus extends EventEmitter
 	activation: boolean = false;
 	/** SHA */
 	sha: string | undefined;
+	/** MAC */
+	efuseMac: string | undefined;
 
 	/** Параметры автомобиля */
 	mazda: IMazdaConfig = new MazdaConfig();
@@ -337,7 +342,11 @@ export class Canbus extends EventEmitter
 			case API_DEVICE_INFO_EXEC: {
 				// Информация об устройстве
 				const res = new DeviceInfo(data);
-				if (res.isData && this.sha === undefined) this.getSHA(res);
+				if (res.isData)
+				{
+					if (this.sha === undefined) this.getSHA(res);
+					if (this.efuseMac === undefined) this.efuseMac = toMac(res.efuseMac);
+				}
 				this.emit(API_DEVICE_INFO_EVENT, res);
 				break;
 			}

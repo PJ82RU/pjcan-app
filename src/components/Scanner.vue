@@ -83,7 +83,7 @@ export default {
 				{
 					if (success)
 					{
-						efuseMac = toMac(canbus.device.info.efuseMac);
+						if (canbus.efuseMac) efuseMac = canbus.efuseMac;
 						scanClose = false;
 
 						// запускаем циклический запрос значений сканирования
