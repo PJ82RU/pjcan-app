@@ -8,8 +8,8 @@
 						:title="$t('onboard.engine.enabled.title')"
 						:description="$t('onboard.engine.enabled.description')"
 						:icon-name="['start-stop']"
-						:nodata="!isLoadedValue"
-						:disabled="!isLoadedView"
+						:nodata="!isLoadedValueEngine"
+						:disabled="!isLoadedViewEngine"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0 pb-0">
@@ -18,7 +18,7 @@
 						:title="$t('onboard.engine.RPM.title')"
 						:description="$t('onboard.engine.RPM.description')"
 						:nodata="!enabled"
-						:disabled="!isLoadedView"
+						:disabled="!isLoadedViewEngine"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0 pb-0">
@@ -27,7 +27,7 @@
 						:title="$t('onboard.engine.countRPM.title')"
 						:description="$t('onboard.engine.countRPM.description')"
 						:nodata="!enabled"
-						:disabled="!isLoadedView"
+						:disabled="!isLoadedViewEngine"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0 pb-0">
@@ -36,16 +36,16 @@
 						:title="$t('onboard.engine.worktime.title')"
 						:description="$t('onboard.engine.worktime.description')"
 						:nodata="!enabled"
-						:disabled="!isLoadedView"
+						:disabled="!isLoadedViewEngine"
 					/>
 				</v-col>
-				<v-col v-if="carModel === ECarModel.CAR_MODEL_MAZDA3" cols="12" class="pt-0 pb-0">
+				<v-col v-if="carModel === TCarModel.CAR_MODEL_MAZDA_3_BK" cols="12" class="pt-0 pb-0">
 					<progress-card-item
 						:value="load"
 						:title="$t('onboard.engine.load.title')"
 						:description="$t('onboard.engine.load.description')"
 						:nodata="!enabled"
-						:disabled="!isLoadedView"
+						:disabled="!isLoadedViewEngine"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0 pb-0">
@@ -54,7 +54,7 @@
 						:title="$t('onboard.engine.throttle.title')"
 						:description="$t('onboard.engine.throttle.description')"
 						:nodata="!enabled"
-						:disabled="!isLoadedView"
+						:disabled="!isLoadedViewEngine"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0 pb-0">
@@ -64,7 +64,7 @@
 						:description="$t('onboard.engine.coolant.description')"
 						type="temperature"
 						:nodata="!enabled"
-						:disabled="!isLoadedView"
+						:disabled="!isLoadedViewEngine"
 					/>
 				</v-col>
 			</v-row>
@@ -74,19 +74,28 @@
 	<view-setting-dialog
 		v-model="menuVisible"
 		:title="menuSelected.title"
-		:enabled="menuViewConfig.enabled"
-		:type="menuViewConfig.type"
-		:time="menuViewConfig.time"
-		:disabled="!isLoadedView"
-		@click:apply="onViewSettingApply"
+		:enabled="menuSelected.view?.enabled"
+		:type="menuSelected.view?.type"
+		:time="menuSelected.view?.time"
+		:disabled="menuSelected.disabled"
+		@click:apply="onEngineViewApply"
 	/>
 
-	<engine-config-dialog v-model="settingsVisible" />
+	<engine-config-dialog
+		v-model="engineConfigVisible"
+		v-model:show-days="showDays"
+		v-model:total-worktime="totalWorktime"
+		v-model:total-count-r-p-m="totalCountRPM"
+		:disabled="!isLoaderConfigEngine"
+		@apply="onEngineConfigApply"
+	/>
 </template>
 
 <script lang="ts">
 import { computed, onMounted, onUnmounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
+import store from "@/store";
+import canbus from "@/api/canbus";
 
 import Card from "@/components/cards/Card.vue";
 import InputCardItem from "@/components/cards/InputCardItem.vue";
@@ -98,37 +107,36 @@ import { IMenuItem } from "@/components/MenuDots.vue";
 
 import { IViewConfig } from "@/models/pjcan/view";
 import {
-	API_VARIABLE_ENGINE_EVENT,
-	API_VARIABLE_ENGINE_VIEW_EXEC,
-	API_VARIABLE_ENGINE_VIEW_EVENT,
+	API_ENGINE_CONFIG_EVENT,
+	API_ENGINE_CONFIG_EXEC,
+	API_ENGINE_VALUE_EVENT,
+	API_ENGINE_VIEW_EVENT,
+	API_ENGINE_VIEW_EXEC,
+	EngineConfig,
+	IEngineConfig,
 	IEngineValue,
-	IEngineView
-} from "@/models/pjcan/variables/engine";
-import { ECarModel } from "@/models/pjcan/car";
-
-import canbus from "@/api/canbus";
+	IEngineViews
+} from "@/models/pjcan/engine";
+import { API_CANBUS_EVENT } from "@/models/pjcan/base/BaseModel";
+import { TCarModel } from "@/models/pjcan/mazda";
+import { ChoiceValue } from "@/models/pjcan/choice";
 
 export default {
 	name: "EngineCard",
 	computed: {
-		ECarModel()
+		TCarModel()
 		{
-			return ECarModel;
+			return TCarModel;
 		}
 	},
 	components: { Card, InputCardItem, IconCardItem, ProgressCardItem, ViewSettingDialog, EngineConfigDialog },
-	props: {
-		carModel: {
-			type: Number,
-			default: 0
-		}
-	},
 	setup()
 	{
 		const { t } = useI18n();
 
-		const isLoadedValue = ref(false);
-		const isLoadedView = ref(false);
+		const isLoadedValueEngine = ref(false);
+		const isLoadedViewEngine = ref(false);
+		const isLoaderConfigEngine = ref(false);
 
 		const enabled = ref(false);
 		const rpm = ref("");
@@ -137,14 +145,83 @@ export default {
 		const worktime = ref("");
 		const throttle = ref(0);
 		const coolant = ref(0);
+		const showDays = ref(false);
+		const totalWorktime = ref(0);
+		const totalCountRPM = ref(0);
+		const carModel = computed((): TCarModel => store.getters["app/carModel"]);
+
+		let engineViews: IEngineViews;
+
+		const menu = computed((): IMenuItem[] => [
+			{ title: t("onboard.engine.settings.menu") },
+			{
+				title: t("onboard.engine.enabled.menu"),
+				view: engineViews?.enabled,
+				disabled: !isLoadedViewEngine.value
+			},
+			{ title: t("onboard.engine.RPM.menu"), view: engineViews?.rpm, disabled: !isLoadedViewEngine.value },
+			{
+				title: t("onboard.engine.countRPM.menu"),
+				view: engineViews?.totalCountRPM,
+				disabled: !isLoadedViewEngine.value
+			},
+			{ title: t("onboard.engine.load.menu"), view: engineViews?.load, disabled: !isLoadedViewEngine.value },
+			{
+				title: t("onboard.engine.worktime.menu"),
+				view: engineViews?.totalWorktime,
+				disabled: !isLoadedViewEngine.value
+			},
+			{
+				title: t("onboard.engine.throttle.menu"),
+				view: engineViews?.throttle,
+				disabled: !isLoadedViewEngine.value
+			},
+			{ title: t("onboard.engine.coolant.menu"), view: engineViews?.coolant, disabled: !isLoadedViewEngine.value }
+		]);
+		const menuVisible = ref(false);
+		const menuSelected = ref({} as IMenuItem);
+		const engineConfigVisible = ref(false);
+
+		/**
+		 * Выбор пункта меню отображения на информационном экране
+		 * @param {IMenuItem} item Элемент меню
+		 */
+		const onMenuClick = (item: IMenuItem): void =>
+		{
+			if (item.view)
+			{
+				menuVisible.value = true;
+				menuSelected.value = item;
+			}
+			else engineConfigVisible.value = true;
+		};
+
+		/**
+		 * Применить параметры отображения на информационном экране
+		 * @param {IViewConfig} data Новые параметры отображения
+		 */
+		const onEngineViewApply = (data: IViewConfig): void =>
+		{
+			canbus.query(data);
+		};
+
+		/** Применить конфигурацию ДВС */
+		const onEngineConfigApply = (): void =>
+		{
+			const config = new EngineConfig();
+			config.showDays = showDays.value;
+			config.totalWorktime = BigInt(worktime.value) * 60n;
+			config.totalCountRPM = BigInt(totalCountRPM.value) * 1000n;
+			canbus.query(config);
+		};
 
 		/** Входящие значения ДВС */
-		const onReceiveValue = (res: IEngineValue): void =>
+		const onReceiveValueEngine = (res: IEngineValue): void =>
 		{
-			isLoadedValue.value = res.isData;
+			isLoadedValueEngine.value = res.isData;
 			if (res.isData)
 			{
-				enabled.value = res.enabled;
+				enabled.value = true; // res.on;
 				rpm.value = res.rpm.toFixed();
 				countRPM.value = res.viewCountRPM.toString();
 				load.value = res.load / 1000;
@@ -159,137 +236,55 @@ export default {
 				coolant.value = res.coolant;
 			}
 		};
+		const onReceiveConfigEngine = (res: IEngineConfig): void =>
+		{
+			isLoaderConfigEngine.value = res.isData;
+			if (res.isData)
+			{
+				showDays.value = res.showDays;
+				totalWorktime.value = res.totalWorktime > 0 ? Math.round(Number(res.totalWorktime / 60n)) : 0;
+				totalCountRPM.value = res.totalCountRPM > 0 ? Math.round(Number(res.totalCountRPM / 1000n)) : 0;
+			}
+		};
 
 		/** Входящие значения отображения ДВС */
-		const onReceiveView = (res: IEngineView): void =>
+		const onReceiveEngineView = (res: IEngineViews): void =>
 		{
-			isLoadedView.value = res.isData;
+			isLoadedViewEngine.value = res.isData;
+			engineViews = res;
 		};
 
-		// регистрируем события
+		const choiceId = Math.round(Math.random() * 1000000);
+		const onBegin = (status: boolean): void =>
+		{
+			if (status)
+			{
+				const choice = new ChoiceValue();
+				choice.id = choiceId;
+				choice.listID = [API_ENGINE_CONFIG_EXEC, API_ENGINE_VIEW_EXEC];
+				canbus.query(choice, true);
+			}
+		};
 		onMounted(() =>
 		{
-			canbus.addListener(API_VARIABLE_ENGINE_EVENT, onReceiveValue);
-			canbus.addListener(API_VARIABLE_ENGINE_VIEW_EVENT, onReceiveView);
-			onReceiveValue(canbus.values.variable.engine);
-			onReceiveView(canbus.views.variable.engine);
+			canbus.addListener(API_ENGINE_CONFIG_EVENT, onReceiveConfigEngine);
+			canbus.addListener(API_ENGINE_VALUE_EVENT, onReceiveValueEngine);
+			canbus.addListener(API_ENGINE_VIEW_EVENT, onReceiveEngineView);
+			canbus.addListener(API_CANBUS_EVENT, onBegin);
+			onBegin(canbus.begin);
 		});
-		// удаляем события
 		onUnmounted(() =>
 		{
-			canbus.removeListener(API_VARIABLE_ENGINE_EVENT, onReceiveValue);
-			canbus.removeListener(API_VARIABLE_ENGINE_VIEW_EVENT, onReceiveView);
+			canbus.removeListener(API_ENGINE_CONFIG_EVENT, onReceiveConfigEngine);
+			canbus.removeListener(API_ENGINE_VALUE_EVENT, onReceiveValueEngine);
+			canbus.removeListener(API_ENGINE_VIEW_EVENT, onReceiveEngineView);
+			canbus.removeListener(API_CANBUS_EVENT, onBegin);
 		});
 
-		// МЕНЮ ОТОБРАЖЕНИЯ
-
-		const menu = computed((): IMenuItem[] => [
-			{ id: 10, title: t("onboard.engine.settings.menu") },
-			{ id: 0, title: t("onboard.engine.enabled.menu") },
-			{ id: 1, title: t("onboard.engine.RPM.menu") },
-			{ id: 2, title: t("onboard.engine.countRPM.menu") },
-			{ id: 3, title: t("onboard.engine.load.menu") },
-			{ id: 4, title: t("onboard.engine.worktime.menu") },
-			{ id: 5, title: t("onboard.engine.throttle.menu") },
-			{ id: 6, title: t("onboard.engine.coolant.menu") }
-		]);
-		const menuVisible = ref(false);
-		const menuSelected = ref({} as IMenuItem);
-		const menuViewConfig = ref({} as IViewConfig);
-		const settingsVisible = ref(false);
-
-		/**
-		 * Выбор пункта меню отображения на информационном экране
-		 * @param {IMenuItem} item Элемент меню
-		 */
-		const onMenuClick = (item: IMenuItem): void =>
-		{
-			if (item.id < 10)
-			{
-				menuVisible.value = true;
-				menuSelected.value = item;
-
-				const { engine } = canbus.views.variable;
-				switch (item.id)
-				{
-					case 0:
-						menuViewConfig.value = engine.enabled;
-						return;
-
-					case 1:
-						menuViewConfig.value = engine.rpm;
-						break;
-
-					case 2:
-						menuViewConfig.value = engine.totalCountRPM;
-						break;
-
-					case 3:
-						menuViewConfig.value = engine.load;
-						break;
-
-					case 4:
-						menuViewConfig.value = engine.totalSeconds;
-						break;
-
-					case 5:
-						menuViewConfig.value = engine.throttle;
-						break;
-
-					case 6:
-						menuViewConfig.value = engine.coolant;
-						break;
-				}
-			}
-			else
-			{
-				settingsVisible.value = true;
-			}
-		};
-
-		/**
-		 * Применить параметры отображения на информационном экране
-		 * @param {IViewConfig} data Новые параметры отображения
-		 */
-		const onViewSettingApply = (data: IViewConfig): void =>
-		{
-			const { engine } = canbus.views.variable;
-			switch (menuSelected.value.id)
-			{
-				case 0:
-					engine.enabled = data;
-					break;
-
-				case 1:
-					engine.rpm = data;
-					break;
-
-				case 2:
-					engine.totalCountRPM = data;
-					break;
-
-				case 3:
-					engine.load = data;
-					break;
-
-				case 4:
-					engine.totalSeconds = data;
-					break;
-
-				case 5:
-					engine.throttle = data;
-					break;
-
-				case 6:
-					engine.coolant = data;
-					break;
-			}
-			canbus.queryView(API_VARIABLE_ENGINE_VIEW_EXEC);
-		};
-
 		return {
-			isLoadedValue,
-			isLoadedView,
+			isLoaderConfigEngine,
+			isLoadedValueEngine,
+			isLoadedViewEngine,
 			enabled,
 			rpm,
 			countRPM,
@@ -297,13 +292,17 @@ export default {
 			worktime,
 			throttle,
 			coolant,
+			showDays,
+			totalWorktime,
+			totalCountRPM,
+			carModel,
 			menu,
 			menuVisible,
 			menuSelected,
-			menuViewConfig,
-			settingsVisible,
+			engineConfigVisible,
 			onMenuClick,
-			onViewSettingApply
+			onEngineViewApply,
+			onEngineConfigApply
 		};
 	}
 };
