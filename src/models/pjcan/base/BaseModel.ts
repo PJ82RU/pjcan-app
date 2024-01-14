@@ -5,9 +5,10 @@ export const API_CANBUS_EVENT = "Canbus";
 /** Базовая модель */
 export class BaseModel
 {
-	readonly exec: number;
-	readonly highPriority: boolean;
-	isData: boolean = false;
+	readonly exec;
+	readonly highPriority;
+	id = 0;
+	isData = false;
 
 	constructor(exec: number, highPriority: boolean = false)
 	{

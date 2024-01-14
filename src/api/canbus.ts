@@ -273,7 +273,7 @@ export class Canbus extends EventEmitter
 	{
 		if (this.queue.length)
 		{
-			const item = this.queue.find((x: IQuery) => x.exec === obj.exec);
+			const item = this.queue.find((x: IQuery) => x.exec === obj.exec && x.id === obj.id);
 			if (item)
 			{
 				if (!request)
@@ -288,6 +288,7 @@ export class Canbus extends EventEmitter
 		this.queue.push({
 			exec: obj.exec,
 			highPriority: obj.highPriority,
+			id: obj.id,
 			data: obj.get(request),
 			fn
 		});

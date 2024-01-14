@@ -6,7 +6,7 @@ export const API_CHOICE_EXEC = 0x10;
 /** Модель выборочного запроса данных */
 export class ChoiceValue extends BaseModel implements IChoiceValue
 {
-	listID: number[] = [];
+	listID = [] as number[];
 
 	constructor(data?: DataView, fn?: (res: DataView) => void)
 	{
