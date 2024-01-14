@@ -267,11 +267,13 @@ export default {
 			temperatureView = res;
 		};
 
+		const choiceId = Math.round(Math.random() * 1000000);
 		const onBegin = (status: boolean): void =>
 		{
 			if (status)
 			{
 				const choice = new ChoiceValue();
+				choice.id = choiceId;
 				choice.listID = [API_SENSORS_VIEW_EXEC, API_TEMPERATURE_VIEW_EXEC];
 				canbus.query(choice, true);
 			}
