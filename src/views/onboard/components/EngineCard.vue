@@ -217,7 +217,7 @@ export default {
 		};
 
 		/** Входящие значения ДВС */
-		const onReceiveValueEngine = (res: IEngineValue): void =>
+		const onEngineValueReceive = (res: IEngineValue): void =>
 		{
 			isLoadedValueEngine.value = res.isData;
 			if (res.isData)
@@ -242,7 +242,7 @@ export default {
 				coolant.value = res.coolant;
 			}
 		};
-		const onReceiveConfigEngine = (res: IEngineConfig): void =>
+		const onEngineConfigReceive = (res: IEngineConfig): void =>
 		{
 			isLoaderConfigEngine.value = res.isData;
 			if (res.isData)
@@ -254,7 +254,7 @@ export default {
 		};
 
 		/** Входящие значения отображения ДВС */
-		const onReceiveEngineView = (res: IEngineViews): void =>
+		const onEngineViewReceive = (res: IEngineViews): void =>
 		{
 			isLoadedViewEngine.value = res.isData;
 			engineViews = res;
@@ -273,17 +273,17 @@ export default {
 		};
 		onMounted(() =>
 		{
-			canbus.addListener(API_ENGINE_CONFIG_EVENT, onReceiveConfigEngine);
-			canbus.addListener(API_ENGINE_VALUE_EVENT, onReceiveValueEngine);
-			canbus.addListener(API_ENGINE_VIEW_EVENT, onReceiveEngineView);
+			canbus.addListener(API_ENGINE_CONFIG_EVENT, onEngineConfigReceive);
+			canbus.addListener(API_ENGINE_VALUE_EVENT, onEngineValueReceive);
+			canbus.addListener(API_ENGINE_VIEW_EVENT, onEngineViewReceive);
 			canbus.addListener(API_CANBUS_EVENT, onBegin);
 			onBegin(canbus.begin);
 		});
 		onUnmounted(() =>
 		{
-			canbus.removeListener(API_ENGINE_CONFIG_EVENT, onReceiveConfigEngine);
-			canbus.removeListener(API_ENGINE_VALUE_EVENT, onReceiveValueEngine);
-			canbus.removeListener(API_ENGINE_VIEW_EVENT, onReceiveEngineView);
+			canbus.removeListener(API_ENGINE_CONFIG_EVENT, onEngineConfigReceive);
+			canbus.removeListener(API_ENGINE_VALUE_EVENT, onEngineValueReceive);
+			canbus.removeListener(API_ENGINE_VIEW_EVENT, onEngineViewReceive);
 			canbus.removeListener(API_CANBUS_EVENT, onBegin);
 		});
 
