@@ -8,8 +8,8 @@
 						:title="$t('onboard.doors.doorFL.title')"
 						:description="$t('onboard.doors.doorFL.description')"
 						color="error"
-						:nodata="!isLoadedValue"
-						:disabled="!isLoadedView"
+						:nodata="!doorsValueLoaded"
+						:disabled="!doorsViewLoaded"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0 pb-0">
@@ -18,8 +18,8 @@
 						:title="$t('onboard.doors.doorFR.title')"
 						:description="$t('onboard.doors.doorFR.description')"
 						color="error"
-						:nodata="!isLoadedValue"
-						:disabled="!isLoadedView"
+						:nodata="!doorsValueLoaded"
+						:disabled="!doorsViewLoaded"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0 pb-0">
@@ -28,8 +28,8 @@
 						:title="$t('onboard.doors.doorBL.title')"
 						:description="$t('onboard.doors.doorBL.description')"
 						color="error"
-						:nodata="!isLoadedValue"
-						:disabled="!isLoadedView"
+						:nodata="!doorsValueLoaded"
+						:disabled="!doorsViewLoaded"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0 pb-0">
@@ -38,8 +38,8 @@
 						:title="$t('onboard.doors.doorBR.title')"
 						:description="$t('onboard.doors.doorBR.description')"
 						color="error"
-						:nodata="!isLoadedValue"
-						:disabled="!isLoadedView"
+						:nodata="!doorsValueLoaded"
+						:disabled="!doorsViewLoaded"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0 pb-0">
@@ -48,8 +48,8 @@
 						:title="$t('onboard.doors.trunk.title')"
 						:description="$t('onboard.doors.trunk.description')"
 						color="error"
-						:nodata="!isLoadedValue"
-						:disabled="!isLoadedView"
+						:nodata="!doorsValueLoaded"
+						:disabled="!doorsViewLoaded"
 					/>
 				</v-col>
 			</v-row>
@@ -59,49 +59,35 @@
 	<view-setting-dialog
 		v-model="menuVisible"
 		:title="menuSelected.title"
-		:enabled="menuViewConfig.enabled"
-		:type="menuViewConfig.type"
-		:time="menuViewConfig.time"
-		:disabled="!isLoadedView"
-		@click:apply="onViewSettingApply"
+		:view="menuSelected.view"
+		:disabled="menuSelected.disabled"
+		@click:apply="onDoorsViewApply"
 	/>
 </template>
 
 <script lang="ts">
 import { computed, onMounted, onUnmounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
+import canbus from "@/api/canbus";
 
 import Card from "@/components/cards/Card.vue";
 import SwitchCardItem from "@/components/cards/SwitchCardItem.vue";
 import ViewSettingDialog from "./ViewSettingDialog.vue";
 import { IMenuItem } from "@/components/MenuDots.vue";
 
-import { IViewConfig } from "@/models/pjcan/view";
-import {
-	API_VARIABLE_DOORS_EVENT,
-	API_VARIABLE_DOORS_VIEW_EXEC,
-	API_VARIABLE_DOORS_VIEW_EVENT,
-	IDoorsValue,
-	IDoorsView
-} from "@/models/pjcan/variables/doors";
-
-import canbus from "@/api/canbus";
+import { IViewConfig, ViewConfig } from "@/models/pjcan/view";
+import { API_DOORS_VALUE_EVENT, API_DOORS_VIEW_EVENT, API_DOORS_VIEW_EXEC, IDoorsValue } from "@/models/pjcan/doors";
+import { API_CANBUS_EVENT } from "@/models/pjcan/base/BaseModel";
 
 export default {
 	name: "DoorsCard",
 	components: { Card, SwitchCardItem, ViewSettingDialog },
-	props: {
-		carModel: {
-			type: Number,
-			default: 0
-		}
-	},
 	setup()
 	{
 		const { t } = useI18n();
 
-		const isLoadedView = ref(false);
-		const isLoadedValue = ref(false);
+		const doorsValueLoaded = ref(false);
+		const doorsViewLoaded = ref(false);
 
 		const doorFL = ref(false);
 		const doorFR = ref(false);
@@ -109,10 +95,37 @@ export default {
 		const doorBR = ref(false);
 		const trunk = ref(false);
 
-		/** Входящие значения открытых дверей */
-		const onReceiveValue = (res: IDoorsValue): void =>
+		let doorsView: IViewConfig;
+
+		const menu = computed((): IMenuItem[] => [
+			{ id: 0, title: t("onboard.doors.menu"), view: doorsView, disabled: !doorsViewLoaded.value }
+		]);
+		const menuVisible = ref(false);
+		const menuSelected = ref({} as IMenuItem);
+
+		/**
+		 * Выбор пункта меню отображения на информационном экране
+		 * @param {IMenuItem} item Элемент меню
+		 */
+		const onMenuClick = (item: IMenuItem): void =>
 		{
-			isLoadedValue.value = res.isData;
+			menuVisible.value = true;
+			menuSelected.value = item;
+		};
+
+		/**
+		 * Применить параметры отображения на информационном экране
+		 * @param {IViewConfig} data Новые параметры отображения
+		 */
+		const onDoorsViewApply = (data: IViewConfig): void =>
+		{
+			canbus.query(data);
+		};
+
+		/** Входящие значения открытых дверей */
+		const onDoorsValueReceive = (res: IDoorsValue): void =>
+		{
+			doorsValueLoaded.value = res.isData;
 			if (res.isData)
 			{
 				doorFL.value = res.frontLeft;
@@ -123,57 +136,36 @@ export default {
 			}
 		};
 		/** Входящие значения отображения открытых дверей */
-		const onReceiveView = (res: IDoorsView): void =>
+		const onDoorsViewReceive = (res: IViewConfig): void =>
 		{
-			isLoadedView.value = res.isData;
+			doorsViewLoaded.value = res.isData;
+			doorsView = res;
 		};
 
-		// регистрируем события
+		const onBegin = (status: boolean): void =>
+		{
+			if (status)
+			{
+				if (status) canbus.query(new ViewConfig(API_DOORS_VIEW_EXEC), true);
+			}
+		};
 		onMounted(() =>
 		{
-			canbus.addListener(API_VARIABLE_DOORS_EVENT, onReceiveValue);
-			canbus.addListener(API_VARIABLE_DOORS_VIEW_EVENT, onReceiveView);
-			onReceiveValue(canbus.values.variable.doors);
-			onReceiveView(canbus.views.variable.doors);
+			canbus.addListener(API_DOORS_VALUE_EVENT, onDoorsValueReceive);
+			canbus.addListener(API_DOORS_VIEW_EVENT, onDoorsViewReceive);
+			canbus.addListener(API_CANBUS_EVENT, onBegin);
+			onBegin(canbus.begin);
 		});
-		// удаляем события
 		onUnmounted(() =>
 		{
-			canbus.removeListener(API_VARIABLE_DOORS_EVENT, onReceiveValue);
-			canbus.removeListener(API_VARIABLE_DOORS_VIEW_EVENT, onReceiveView);
+			canbus.removeListener(API_DOORS_VALUE_EVENT, onDoorsValueReceive);
+			canbus.removeListener(API_DOORS_VIEW_EVENT, onDoorsViewReceive);
+			canbus.removeListener(API_CANBUS_EVENT, onBegin);
 		});
 
-		// МЕНЮ ОТОБРАЖЕНИЯ
-
-		const menu = computed((): IMenuItem[] => [{ id: 0, title: t("onboard.doors.menu") }]);
-		const menuVisible = ref(false);
-		const menuSelected = ref({} as IMenuItem);
-		const menuViewConfig = ref({} as IViewConfig);
-
-		/**
-		 * Выбор пункта меню отображения на информационном экране
-		 * @param {IMenuItem} item Элемент меню
-		 */
-		const onMenuClick = (item: IMenuItem): void =>
-		{
-			menuVisible.value = true;
-			menuSelected.value = item;
-			menuViewConfig.value = canbus.views.variable.doors.view;
-		};
-
-		/**
-		 * Применить параметры отображения на информационном экране
-		 * @param {IViewConfig} data Новые параметры отображения
-		 */
-		const onViewSettingApply = (data: IViewConfig): void =>
-		{
-			canbus.views.variable.doors.view = data;
-			canbus.queryView(API_VARIABLE_DOORS_VIEW_EXEC);
-		};
-
 		return {
-			isLoadedView,
-			isLoadedValue,
+			doorsViewLoaded,
+			doorsValueLoaded,
 			doorFL,
 			doorFR,
 			doorBL,
@@ -182,9 +174,8 @@ export default {
 			menu,
 			menuVisible,
 			menuSelected,
-			menuViewConfig,
 			onMenuClick,
-			onViewSettingApply
+			onDoorsViewApply
 		};
 	}
 };
