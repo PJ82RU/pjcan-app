@@ -8,8 +8,9 @@
 						:title="$t('onboard.climate.enabled.title')"
 						:description="$t('onboard.climate.enabled.description')"
 						:icon-name="['climate']"
-						:nodata="!isLoadedValue"
-						:disabled="!isLoadedView"
+						:rotation="rotation"
+						:nodata="!climateValueLoaded"
+						:disabled="!climateViewLoaded"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0 pb-0">
@@ -18,8 +19,8 @@
 						:title="$t('onboard.climate.autoMode.title')"
 						:description="$t('onboard.climate.autoMode.description')"
 						color="success"
-						:nodata="!isLoadedValue"
-						:disabled="!isLoadedView"
+						:nodata="!climateValueLoaded"
+						:disabled="!climateViewLoaded"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0 pb-0">
@@ -28,8 +29,8 @@
 						:title="$t('onboard.climate.ac.title')"
 						:description="$t('onboard.climate.ac.description')"
 						color="success"
-						:nodata="!isLoadedValue"
-						:disabled="!isLoadedView"
+						:nodata="!climateValueLoaded"
+						:disabled="!climateViewLoaded"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0 pb-0">
@@ -38,8 +39,8 @@
 						:title="$t('onboard.climate.temperature.title')"
 						:description="$t('onboard.climate.temperature.description')"
 						type="temperature"
-						:nodata="!isLoadedValue"
-						:disabled="!isLoadedView"
+						:nodata="!climateValueLoaded || temperature <= 0"
+						:disabled="!climateViewLoaded"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0 pb-0">
@@ -47,9 +48,9 @@
 						:model-value="[airEnabled]"
 						:title="$t('onboard.climate.air.title')"
 						:description="$t('onboard.climate.air.description')"
-						:icon-name="[airName]"
-						:nodata="!isLoadedValue"
-						:disabled="!isLoadedView"
+						:icon-name="[airIconName]"
+						:nodata="!climateValueLoaded"
+						:disabled="!climateViewLoaded"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0 pb-0">
@@ -59,8 +60,8 @@
 						:description="$t('onboard.climate.blow.description')"
 						:icon-name="['blow-windshield', blowName]"
 						:margin="10"
-						:nodata="!isLoadedValue"
-						:disabled="!isLoadedView"
+						:nodata="!climateValueLoaded"
+						:disabled="!climateViewLoaded"
 					/>
 				</v-col>
 			</v-row>
@@ -70,10 +71,8 @@
 	<view-setting-dialog
 		v-model="menuVisible"
 		:title="menuSelected.title"
-		:enabled="menuViewConfig.enabled"
-		:type="menuViewConfig.type"
-		:time="menuViewConfig.time"
-		:disabled="!isLoadedView"
+		:view="menuSelected.view"
+		:disabled="menuSelected.disabled"
 		@click:apply="onViewSettingApply"
 	/>
 </template>
@@ -81,6 +80,7 @@
 <script lang="ts">
 import { computed, onMounted, onUnmounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
+import canbus from "@/api/canbus";
 
 import Card from "@/components/cards/Card.vue";
 import InputCardItem from "@/components/cards/InputCardItem.vue";
@@ -89,57 +89,76 @@ import SwitchCardItem from "@/components/cards/SwitchCardItem.vue";
 import ViewSettingDialog from "./ViewSettingDialog.vue";
 import { IMenuItem } from "@/components/MenuDots.vue";
 
-import { IViewConfig } from "@/models/pjcan/view";
+import { IViewConfig, ViewConfig } from "@/models/pjcan/view";
 import {
-	API_VARIABLE_CLIMATE_EVENT,
-	API_VARIABLE_CLIMATE_VIEW_EXEC,
-	API_VARIABLE_CLIMATE_VIEW_EVENT,
+	API_CLIMATE_VIEW_EXEC,
+	API_CLIMATE_VIEW_EVENT,
 	IClimateValue,
-	IClimateView,
-	TAir
-} from "@/models/pjcan/variables/climate";
-
-import canbus from "@/api/canbus";
+	API_CLIMATE_VALUE_EVENT
+} from "@/models/pjcan/climate";
+import { API_CANBUS_EVENT } from "@/models/pjcan/base/BaseModel";
 
 export default {
 	name: "ClimateCard",
 	components: { Card, InputCardItem, IconCardItem, SwitchCardItem, ViewSettingDialog },
-	props: {
-		carModel: {
-			type: Number,
-			default: 0
-		}
-	},
 	setup()
 	{
 		const { t } = useI18n();
 
-		const isLoadedValue = ref(false);
-		const isLoadedView = ref(false);
+		const climateValueLoaded = ref(false);
+		const climateViewLoaded = ref(false);
 
 		const enabled = ref(false);
+		const rotation = ref(0);
 		const autoMode = ref(false);
 		const ac = ref(false);
 		const temperature = ref(0);
 		const airEnabled = ref(false);
-		const airName = ref("");
+		const airIconName = ref("");
 		const blowEnabled = ref(false);
 		const blowName = ref("");
 		const blowWindshield = ref(false);
-		const speedRotation = ref(0);
+
+		let climateView: IViewConfig;
+
+		const menu = computed((): IMenuItem[] => [
+			{ title: t("onboard.climate.menu"), view: climateView, disabled: !climateViewLoaded.value }
+		]);
+		const menuVisible = ref(false);
+		const menuSelected = ref({} as IMenuItem);
+
+		/**
+		 * Выбор пункта меню отображения на информационном экране
+		 * @param {IMenuItem} item Элемент меню
+		 */
+		const onMenuClick = (item: IMenuItem): void =>
+		{
+			menuVisible.value = true;
+			menuSelected.value = item;
+		};
+
+		/**
+		 * Применить параметры отображения на информационном экране
+		 * @param {IViewConfig} data Новые параметры отображения
+		 */
+		const onViewSettingApply = (data: IViewConfig): void =>
+		{
+			canbus.query(data);
+		};
 
 		/** Входящие значения климат-контроля */
-		const onReceiveValue = (res: IClimateValue): void =>
+		const onClimateValueReceive = (res: IClimateValue): void =>
 		{
-			isLoadedValue.value = res.isData;
+			climateValueLoaded.value = res.isData;
 			if (res.isData)
 			{
-				enabled.value = res.enabled;
+				enabled.value = res.on;
+				rotation.value = res.airRate > 0 && res.airRate < 8 ? 7 - res.airRate : 0;
 				autoMode.value = res.automode;
 				ac.value = res.ac;
-				temperature.value = res.temperature / 10;
-				airEnabled.value = res.airType !== TAir.AIR_NONE;
-				airName.value = res.airType === TAir.AIR_STREET ? "air-fresh" : "air-cabin";
+				temperature.value = res.temperature > 0 ? res.temperature / 10 : 0;
+				airEnabled.value = res.airInside || res.airOutside;
+				airIconName.value = res.airInside ? "air-inside" : "air-outside";
 				blowEnabled.value = res.airDBody || res.airDLegs;
 				blowName.value =
 					res.airDLegs && res.airDBody
@@ -150,76 +169,49 @@ export default {
 								? "blow-body"
 								: "blow-none";
 				blowWindshield.value = res.airDWindshield;
-				speedRotation.value = res.airRate > 0 ? res.airRate + 2 : 0;
 			}
 		};
-
 		/** Входящие значения отображения климат-контроля */
-		const onReceiveView = (res: IClimateView): void =>
+		const onClimateViewReceive = (res: IViewConfig): void =>
 		{
-			isLoadedView.value = res.isData;
+			climateViewLoaded.value = res.isData;
+			climateView = res;
 		};
 
-		// регистрируем события
+		const onBegin = (status: boolean): void =>
+		{
+			if (status) canbus.query(new ViewConfig(API_CLIMATE_VIEW_EXEC), true);
+		};
 		onMounted(() =>
 		{
-			canbus.addListener(API_VARIABLE_CLIMATE_EVENT, onReceiveValue);
-			canbus.addListener(API_VARIABLE_CLIMATE_VIEW_EVENT, onReceiveView);
-			onReceiveValue(canbus.values.variable.climate);
-			onReceiveView(canbus.views.variable.climate);
+			canbus.addListener(API_CLIMATE_VALUE_EVENT, onClimateValueReceive);
+			canbus.addListener(API_CLIMATE_VIEW_EVENT, onClimateViewReceive);
+			canbus.addListener(API_CANBUS_EVENT, onBegin);
+			onBegin(canbus.begin);
 		});
-		// удаляем события
 		onUnmounted(() =>
 		{
-			canbus.removeListener(API_VARIABLE_CLIMATE_EVENT, onReceiveValue);
-			canbus.removeListener(API_VARIABLE_CLIMATE_VIEW_EVENT, onReceiveView);
+			canbus.removeListener(API_CLIMATE_VALUE_EVENT, onClimateValueReceive);
+			canbus.removeListener(API_CLIMATE_VIEW_EVENT, onClimateViewReceive);
+			canbus.removeListener(API_CANBUS_EVENT, onBegin);
 		});
 
-		// МЕНЮ ОТОБРАЖЕНИЯ
-
-		const menu = computed((): IMenuItem[] => [{ id: 0, title: t("onboard.climate.menu") }]);
-		const menuVisible = ref(false);
-		const menuSelected = ref({} as IMenuItem);
-		const menuViewConfig = ref({} as IViewConfig);
-
-		/**
-		 * Выбор пункта меню отображения на информационном экране
-		 * @param {IMenuItem} item Элемент меню
-		 */
-		const onMenuClick = (item: IMenuItem): void =>
-		{
-			menuVisible.value = true;
-			menuSelected.value = item;
-			menuViewConfig.value = canbus.views.variable.climate.view;
-		};
-
-		/**
-		 * Применить параметры отображения на информационном экране
-		 * @param {IViewConfig} data Новые параметры отображения
-		 */
-		const onViewSettingApply = (data: IViewConfig): void =>
-		{
-			canbus.views.variable.climate.view = data;
-			canbus.queryView(API_VARIABLE_CLIMATE_VIEW_EXEC);
-		};
-
 		return {
-			isLoadedValue,
-			isLoadedView,
+			climateValueLoaded,
+			climateViewLoaded,
 			enabled,
+			rotation,
 			autoMode,
 			ac,
 			temperature,
 			airEnabled,
-			airName,
+			airIconName,
 			blowEnabled,
 			blowName,
 			blowWindshield,
-			speedRotation,
 			menu,
 			menuVisible,
 			menuSelected,
-			menuViewConfig,
 			onMenuClick,
 			onViewSettingApply
 		};
