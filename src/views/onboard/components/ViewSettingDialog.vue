@@ -71,6 +71,7 @@ import { useI18n } from "vue-i18n";
 import DialogTemplate from "@/layout/components/DialogTemplate.vue";
 import SwitchCardItem from "@/components/cards/SwitchCardItem.vue";
 import NumberField from "@/components/common/NumberField.vue";
+import { IViewConfig } from "@/models/pjcan/view";
 
 export default {
 	name: "ViewSettingDialog",
@@ -86,21 +87,15 @@ export default {
 			type: String,
 			require: true
 		},
-		/** Вкл/выкл. отображения на LCD */
-		enabled: Boolean,
-		/** Тип вывода текста на LCD */
-		type: Number,
-		/** Время отображения текста на LCD, сек */
-		time: Number,
-		/** Время паузы отображения на LCD, сек. */
-		delay: Number,
+		/** Параметры отображения */
+		view: Object as () => IViewConfig,
 		/** Выкл. */
 		disabled: Boolean
 	},
 	emits: ["update:modelValue", "click:apply"],
 	setup(props: any, { emit }: { emit: any })
 	{
-		const { modelValue, enabled, type, time, delay } = toRefs(props);
+		const { modelValue, view } = toRefs(props);
 		const { tm } = useI18n();
 
 		const visible = computed({
@@ -122,10 +117,10 @@ export default {
 		{
 			if (val)
 			{
-				viewEnabled.value = enabled.value ?? false;
-				viewType.value = type.value ?? 0;
-				viewTime.value = time.value ?? 3;
-				viewDelay.value = delay.value ?? 3;
+				viewEnabled.value = view.value?.enabled ?? false;
+				viewType.value = view.value?.type ?? 0;
+				viewTime.value = view.value?.time ?? 3;
+				viewDelay.value = view.value?.delay ?? 3;
 			}
 		});
 
@@ -133,12 +128,14 @@ export default {
 		const onApplyClick = (): void =>
 		{
 			visible.value = false;
-			emit("click:apply", {
-				enabled: viewEnabled.value,
-				type: viewType.value,
-				time: viewTime.value,
-				delay: viewDelay.value
-			});
+			if (view.value?.isData)
+			{
+				view.value.enabled = viewEnabled.value;
+				view.value.type = viewType.value;
+				view.value.time = viewTime.value;
+				view.value.delay = viewDelay.value;
+				emit("click:apply", view.value);
+			}
 		};
 
 		return {

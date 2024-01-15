@@ -33,10 +33,7 @@
 		v-if="carModel !== TCarModel.CAR_MODEL_MAZDA_CX9_REST"
 		v-model="menuVisible"
 		:title="menuSelected.title"
-		:enabled="menuSelected.view?.enabled"
-		:type="menuSelected.view?.type"
-		:time="menuSelected.view?.time"
-		:delay="menuSelected.view?.delay"
+		:view="menuSelected.view"
 		:disabled="menuSelected.disabled"
 		@click:apply="onFuelViewApply"
 	/>
