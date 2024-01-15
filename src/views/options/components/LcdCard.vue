@@ -8,8 +8,8 @@
 						:title="$t('options.lcd.enabled.title')"
 						:description="$t('options.lcd.enabled.description')"
 						color="success"
-						:nodata="!loadedCarConfig"
-						:disabled="!loadedCarConfig"
+						:nodata="!mazdaConfigLoaded"
+						:disabled="!mazdaConfigLoaded"
 					/>
 				</v-col>
 				<v-col cols="12" class="pb-0">
@@ -18,10 +18,10 @@
 						:label="$t('options.lcd.logo.title')"
 						:hint="$t('options.lcd.logo.description')"
 						variant="underlined"
-						:disabled="!loadedCarConfig"
+						:disabled="!mazdaConfigLoaded"
 						persistent-hint
 						dense
-						@blur="onApplyCarConfig"
+						@blur="onMazdaConfigApply"
 					/>
 				</v-col>
 				<v-col cols="12" class="pb-0">
@@ -30,10 +30,10 @@
 						:label="$t('options.lcd.hello.title')"
 						:hint="$t('options.lcd.hello.description')"
 						variant="underlined"
-						:disabled="!loadedCarConfig"
+						:disabled="!mazdaConfigLoaded"
 						persistent-hint
 						dense
-						@blur="onApplyCarConfig"
+						@blur="onMazdaConfigApply"
 					/>
 				</v-col>
 			</v-row>
@@ -43,17 +43,16 @@
 	<view-setting-dialog
 		v-model="menuVisible"
 		:title="menuSelected.title"
-		:enabled="menuViewConfig.enabled"
-		:type="menuViewConfig.type"
-		:time="menuViewConfig.time"
-		:disabled="!loadedCarView"
-		@click:apply="onViewSettingApply"
+		:view="menuSelected.view"
+		:disabled="menuSelected.disabled"
+		@click:apply="onMazdaViewApply"
 	/>
 </template>
 
 <script lang="ts">
 import { computed, nextTick, onMounted, onUnmounted, Ref, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
+import canbus from "@/api/canbus";
 
 import Card from "@/components/cards/Card.vue";
 import SwitchCardItem from "@/components/cards/SwitchCardItem.vue";
@@ -61,24 +60,21 @@ import ViewSettingDialog from "@/views/onboard/components/ViewSettingDialog.vue"
 import { IMenuItem } from "@/components/MenuDots.vue";
 
 import {
-	API_CAR_CONFIG_EVENT,
-	API_CAR_CONFIG_EXEC,
-	API_CAR_VIEW_EVENT,
-	API_CAR_VIEW_EXEC,
-	ECarModel,
-	ICarConfig,
-	ICarView
-} from "@/models/pjcan/car";
-import { IViewConfig } from "@/models/pjcan/view";
-
-import canbus from "@/api/canbus";
+	API_MAZDA_CONFIG_EVENT,
+	API_MAZDA_VIEW_EVENT,
+	TCarModel,
+	IMazdaConfig,
+	API_MAZDA_VIEW_EXEC
+} from "@/models/pjcan/mazda";
+import { IViewConfig, ViewConfig } from "@/models/pjcan/view";
+import { API_CANBUS_EVENT } from "@/models/pjcan/base/BaseModel";
 
 export default {
 	name: "LcdCard",
 	computed: {
-		ECarModel()
+		TCarModel()
 		{
-			return ECarModel;
+			return TCarModel;
 		}
 	},
 	components: { Card, SwitchCardItem, ViewSettingDialog },
@@ -92,14 +88,31 @@ export default {
 	{
 		const { t } = useI18n();
 
-		const loadedCarConfig = ref(false);
-		const loadedCarView = ref(false);
+		const mazdaConfigLoaded = ref(false);
+		const mazdaViewLoaded = ref(false);
+
 		const enabled = ref(false);
 		const logo = ref("");
 		const hello = ref("");
 		const menuVisible = ref(false);
 		const menuSelected = ref({} as IMenuItem);
 		const menuViewConfig = ref({} as IViewConfig);
+
+		let mazdaView: IViewConfig;
+
+		const menu = computed((): IMenuItem[] => [
+			{ title: t("options.lcd.hello.menu"), view: mazdaView, disabled: !mazdaViewLoaded }
+		]);
+
+		/**
+		 * Выбор пункта меню отображения на информационном экране
+		 * @param {IMenuItem} item Элемент меню
+		 */
+		const onMenuClick = (item: IMenuItem): void =>
+		{
+			menuVisible.value = true;
+			menuSelected.value = item;
+		};
 
 		/**
 		 * Проверка ввода
@@ -116,7 +129,7 @@ export default {
 
 		watch(enabled, (): void =>
 		{
-			nextTick(() => onApplyCarConfig());
+			nextTick(() => onMazdaConfigApply());
 		});
 		watch(logo, (): void =>
 		{
@@ -127,13 +140,38 @@ export default {
 			nextTick(() => onInput(hello, 32));
 		});
 
+		/** Применить новые значения конфигурации автомобиля */
+		const onMazdaConfigApply = (): void =>
+		{
+			if (
+				canbus.mazda.lcd !== enabled.value ||
+				canbus.mazda.logo !== logo.value ||
+				canbus.mazda.hello !== hello.value
+			)
+			{
+				canbus.mazda.lcd = enabled.value;
+				canbus.mazda.logo = logo.value;
+				canbus.mazda.hello = hello.value;
+				canbus.query(canbus.mazda);
+			}
+		};
+
+		/**
+		 * Применить параметры отображения на информационном экране
+		 * @param {IViewConfig} data Новые параметры отображения
+		 */
+		const onMazdaViewApply = (data: IViewConfig): void =>
+		{
+			canbus.query(data);
+		};
+
 		/**
 		 * Входящие настройки автомобиля
-		 * @param {ICarConfig} res
+		 * @param {IMazdaConfig} res
 		 */
-		const onReceiveCarConfig = (res: ICarConfig): void =>
+		const onMazdaConfigReceive = (res: IMazdaConfig): void =>
 		{
-			loadedCarConfig.value = res.isData;
+			mazdaConfigLoaded.value = res.isData;
 			if (res.isData)
 			{
 				enabled.value = res.lcd;
@@ -142,92 +180,41 @@ export default {
 			}
 		};
 
-		/** Применить новые значения конфигурации автомобиля */
-		const onApplyCarConfig = (): void =>
-		{
-			const { car } = canbus.configs;
-			car.lcd = enabled.value;
-			car.logo = logo.value;
-			car.hello = hello.value;
-			canbus.queryConfig(API_CAR_CONFIG_EXEC);
-		};
-
 		/**
 		 * Входящие значения отображения
-		 * @param {ICarView} res
+		 * @param {IViewConfig} res
 		 */
-		const onReceiveCarView = (res: ICarView): void =>
+		const onMazdaViewReceive = (res: IViewConfig): void =>
 		{
-			loadedCarView.value = res.isData;
+			mazdaViewLoaded.value = res.isData;
+			mazdaView = res;
 		};
 
-		// регистрируем события
+		const onBegin = (status: boolean): void =>
+		{
+			if (status)
+			{
+				onMazdaConfigReceive(canbus.mazda);
+				canbus.query(new ViewConfig(API_MAZDA_VIEW_EXEC));
+			}
+		};
 		onMounted(() =>
 		{
-			canbus.addListener(API_CAR_CONFIG_EVENT, onReceiveCarConfig);
-			canbus.addListener(API_CAR_VIEW_EVENT, onReceiveCarView);
-			onReceiveCarConfig(canbus.configs.car);
-			onReceiveCarView(canbus.views.car);
+			canbus.addListener(API_MAZDA_CONFIG_EVENT, onMazdaConfigReceive);
+			canbus.addListener(API_MAZDA_VIEW_EVENT, onMazdaViewReceive);
+			canbus.addListener(API_CANBUS_EVENT, onBegin);
+			onBegin(canbus.begin);
 		});
-		// удаляем события
 		onUnmounted(() =>
 		{
-			canbus.removeListener(API_CAR_CONFIG_EVENT, onReceiveCarConfig);
-			canbus.removeListener(API_CAR_VIEW_EVENT, onReceiveCarView);
+			canbus.removeListener(API_MAZDA_CONFIG_EVENT, onMazdaConfigReceive);
+			canbus.removeListener(API_MAZDA_VIEW_EVENT, onMazdaViewReceive);
+			canbus.removeListener(API_CANBUS_EVENT, onBegin);
 		});
 
-		// МЕНЮ ОТОБРАЖЕНИЯ
-
-		const menu = computed((): IMenuItem[] => [
-			{ id: 0, title: t("options.lcd.logo.menu") },
-			{ id: 1, title: t("options.lcd.hello.menu") }
-		]);
-
-		/**
-		 * Выбор пункта меню отображения на информационном экране
-		 * @param {IMenuItem} item Элемент меню
-		 */
-		const onMenuClick = (item: IMenuItem): void =>
-		{
-			menuVisible.value = true;
-			menuSelected.value = item;
-
-			const { car } = canbus.views;
-			switch (item.id)
-			{
-				case 0:
-					menuViewConfig.value = car.logo;
-					return;
-
-				case 1:
-					menuViewConfig.value = car.hello;
-					break;
-			}
-		};
-
-		/**
-		 * Применить параметры отображения на информационном экране
-		 * @param {IViewConfig} data Новые параметры отображения
-		 */
-		const onViewSettingApply = (data: IViewConfig): void =>
-		{
-			const { car } = canbus.views;
-			switch (menuSelected.value.id)
-			{
-				case 0:
-					car.logo = data;
-					break;
-
-				case 1:
-					car.hello = data;
-					break;
-			}
-			canbus.queryView(API_CAR_VIEW_EXEC);
-		};
-
 		return {
-			loadedCarConfig,
-			loadedCarView,
+			mazdaConfigLoaded,
+			mazdaViewLoaded,
 			enabled,
 			logo,
 			hello,
@@ -236,9 +223,9 @@ export default {
 			menuSelected,
 			menuViewConfig,
 			onInput,
-			onApplyCarConfig,
+			onMazdaConfigApply,
 			onMenuClick,
-			onViewSettingApply
+			onMazdaViewApply
 		};
 	}
 };

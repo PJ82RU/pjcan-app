@@ -27,8 +27,6 @@ import { Timeout } from "@/models/types/Timeout";
 import { API_DEVICE_VALUE_EXEC } from "@/models/pjcan/device";
 import { API_SENSORS_VALUE_EXEC } from "@/models/pjcan/sensors";
 import { API_TEMPERATURE_VALUE_EXEC } from "@/models/pjcan/temperature";
-import { API_BOSE_CONFIG_EXEC } from "@/models/pjcan/bose";
-import { API_VOLUME_CONFIG_EXEC } from "@/models/pjcan/volume";
 import { API_ENGINE_VALUE_EXEC } from "@/models/pjcan/engine";
 import { API_FUEL_VALUE_EXEC } from "@/models/pjcan/fuel";
 import { API_MOVEMENT_VALUE_EXEC } from "@/models/pjcan/movement";
@@ -71,10 +69,6 @@ export default {
 						result.push(API_DEVICE_VALUE_EXEC);
 						result.push(API_SENSORS_VALUE_EXEC);
 						result.push(API_TEMPERATURE_VALUE_EXEC);
-						break;
-					case "bose":
-						result.push(API_BOSE_CONFIG_EXEC);
-						result.push(API_VOLUME_CONFIG_EXEC);
 						break;
 					case "engine":
 						result.push(API_ENGINE_VALUE_EXEC);
