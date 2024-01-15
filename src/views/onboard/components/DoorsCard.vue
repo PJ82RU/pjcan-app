@@ -98,7 +98,7 @@ export default {
 		let doorsView: IViewConfig;
 
 		const menu = computed((): IMenuItem[] => [
-			{ id: 0, title: t("onboard.doors.menu"), view: doorsView, disabled: !doorsViewLoaded.value }
+			{ title: t("onboard.doors.menu"), view: doorsView, disabled: !doorsViewLoaded.value }
 		]);
 		const menuVisible = ref(false);
 		const menuSelected = ref({} as IMenuItem);
