@@ -261,16 +261,6 @@ export default {
 				description: "The value of the on-board, l/100 km",
 				menu: "LCD: Average consumption"
 			},
-			total: {
-				title: "Fuel quantity",
-				description: "Experimental value (calculated), l",
-				menu: "LCD: Fuel quantity (calc)"
-			},
-			consumption: {
-				title: "Fuel consumption",
-				description: "Experimental value (calculated), l/h",
-				menu: "LCD: Fuel consumption (calc)"
-			},
 			settings: {
 				title: "Fuel consumption settings",
 				menu: "Consumption settings",

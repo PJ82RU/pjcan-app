@@ -2,7 +2,7 @@
 	<card
 		class="fuel-card"
 		:title="$t('onboard.fuel.title')"
-		:menu="carModel !== ECarModel.CAR_MODEL_MAZDA_CX9_REST ? menu : undefined"
+		:menu="carModel !== TCarModel.CAR_MODEL_MAZDA_CX9_REST ? menu : undefined"
 		@click:menu="onMenuClick"
 	>
 		<template #body>
@@ -12,8 +12,8 @@
 						:value="current"
 						:title="$t('onboard.fuel.current.title')"
 						:description="$t('onboard.fuel.current.description')"
-						:nodata="!isLoadedValue || Number(current) <= 0"
-						:disabled="!isLoadedView"
+						:nodata="!fuelValueLoaded || Number(current) <= 0"
+						:disabled="!fuelViewLoaded"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0 pb-0">
@@ -21,26 +21,8 @@
 						:value="avg"
 						:title="$t('onboard.fuel.avg.title')"
 						:description="$t('onboard.fuel.avg.description')"
-						:nodata="!isLoadedValue || Number(avg) <= 0"
-						:disabled="!isLoadedView"
-					/>
-				</v-col>
-				<!--<v-col cols="12" class="pt-0 pb-0">-->
-				<!--	<input-card-item-->
-				<!--		:value="total"-->
-				<!--		:title="$t('onboard.fuel.total.title')"-->
-				<!--		:description="$t('onboard.fuel.total.description')"-->
-				<!--		:nodata="!isLoadedValue"-->
-				<!--		:disabled="!isLoadedView"-->
-				<!--	/>-->
-				<!--</v-col>-->
-				<v-col cols="12" class="pt-0 pb-0">
-					<input-card-item
-						:value="consumption"
-						:title="$t('onboard.fuel.consumption.title')"
-						:description="$t('onboard.fuel.consumption.description')"
-						:nodata="!isLoadedValue || Number(consumption) <= 0"
-						:disabled="!isLoadedView"
+						:nodata="!fuelValueLoaded || Number(avg) <= 0"
+						:disabled="!fuelViewLoaded"
 					/>
 				</v-col>
 			</v-row>
@@ -48,115 +30,85 @@
 	</card>
 
 	<view-setting-dialog
-        v-if="carModel !== ECarModel.CAR_MODEL_MAZDA_CX9_REST"
+		v-if="carModel !== TCarModel.CAR_MODEL_MAZDA_CX9_REST"
 		v-model="menuVisible"
 		:title="menuSelected.title"
-		:enabled="menuViewConfig.enabled"
-		:type="menuViewConfig.type"
-		:time="menuViewConfig.time"
-		:disabled="!isLoadedView"
-		@click:apply="onViewSettingApply"
+		:enabled="menuSelected.view?.enabled"
+		:type="menuSelected.view?.type"
+		:time="menuSelected.view?.time"
+		:delay="menuSelected.view?.delay"
+		:disabled="menuSelected.disabled"
+		@click:apply="onFuelViewApply"
 	/>
 
-	<fuel-config-dialog v-model="settingsVisible" />
+	<fuel-config-dialog
+		v-model="fuelConfigVisible"
+		:ratio="ratio"
+		:disabled="!fuelConfigLoaded"
+		@click:apply="onFuelConfigApply"
+	/>
 </template>
 
 <script lang="ts">
 import { computed, onMounted, onUnmounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
+import store from "@/store";
+import canbus from "@/api/canbus";
 
 import Card from "@/components/cards/Card.vue";
 import InputCardItem from "@/components/cards/InputCardItem.vue";
 import ViewSettingDialog from "./ViewSettingDialog.vue";
 import FuelConfigDialog from "./FuelConfigDialog.vue";
 import { IMenuItem } from "@/components/MenuDots.vue";
-import { ECarModel } from "@/models/pjcan/car";
 
+import { TCarModel } from "@/models/pjcan/mazda";
 import { IViewConfig } from "@/models/pjcan/view";
 import {
-	API_VARIABLE_FUEL_EVENT,
-	API_VARIABLE_FUEL_VIEW_EXEC,
-	API_VARIABLE_FUEL_VIEW_EVENT,
+	API_FUEL_CONFIG_EVENT,
+	API_FUEL_CONFIG_EXEC,
+	API_FUEL_VALUE_EVENT,
+	API_FUEL_VIEW_EVENT,
+	API_FUEL_VIEW_EXEC,
+	FuelConfig,
+	IFuelConfig,
 	IFuelValue,
-	IFuelView
-} from "@/models/pjcan/variables/fuel";
-
-import canbus from "@/api/canbus";
+	IFuelViews
+} from "@/models/pjcan/fuel";
+import { API_CANBUS_EVENT } from "@/models/pjcan/base/BaseModel";
+import { ChoiceValue } from "@/models/pjcan/choice";
 
 export default {
 	name: "FuelCard",
 	computed: {
-		ECarModel()
+		TCarModel()
 		{
-			return ECarModel;
+			return TCarModel;
 		}
 	},
 	components: { Card, InputCardItem, ViewSettingDialog, FuelConfigDialog },
-	props: {
-		carModel: {
-			type: Number,
-			default: 0
-		}
-	},
 	setup()
 	{
 		const { t } = useI18n();
 
-		const isLoadedValue = ref(false);
-		const isLoadedView = ref(false);
+		const fuelConfigLoaded = ref(false);
+		const fuelValueLoaded = ref(false);
+		const fuelViewLoaded = ref(false);
 
 		const current = ref("");
 		const avg = ref("");
-		// const total = ref("");
-		const consumption = ref("");
+		const ratio = ref(1);
+		const carModel = computed((): TCarModel => store.getters["app/carModel"]);
 
-		/** Входящие значения расхода топлива */
-		const onReceiveValue = (res: IFuelValue): void =>
-		{
-			isLoadedValue.value = res.isData;
-			if (res.isData)
-			{
-				current.value = (res.current / 10).toFixed(1);
-				avg.value = (res.avg / 10).toFixed(1);
-				// total.value = (res.total / 100).toFixed(2);
-				consumption.value = (res.consumption / 100).toFixed(2);
-			}
-		};
-
-		/** Входящие значения отображения расхода топлива */
-		const onReceiveView = (res: IFuelView): void =>
-		{
-			isLoadedView.value = res.isData;
-		};
-
-		// регистрируем события
-		onMounted(() =>
-		{
-			canbus.addListener(API_VARIABLE_FUEL_EVENT, onReceiveValue);
-			canbus.addListener(API_VARIABLE_FUEL_VIEW_EVENT, onReceiveView);
-			onReceiveValue(canbus.values.variable.fuel);
-			onReceiveView(canbus.views.variable.fuel);
-		});
-		// удаляем события
-		onUnmounted(() =>
-		{
-			canbus.removeListener(API_VARIABLE_FUEL_EVENT, onReceiveValue);
-			canbus.removeListener(API_VARIABLE_FUEL_VIEW_EVENT, onReceiveView);
-		});
-
-		// МЕНЮ ОТОБРАЖЕНИЯ
+		let fuelViews: IFuelViews;
 
 		const menu = computed((): IMenuItem[] => [
-			{ id: 10, title: t("onboard.fuel.settings.menu") },
-			{ id: 0, title: t("onboard.fuel.current.menu") },
-			{ id: 1, title: t("onboard.fuel.avg.menu") },
-			// { id: 2, title: t("onboard.fuel.total.menu") },
-			{ id: 3, title: t("onboard.fuel.consumption.menu") }
+			{ title: t("onboard.fuel.settings.menu"), disabled: !fuelConfigLoaded.value },
+			{ title: t("onboard.fuel.current.menu"), view: fuelViews?.current, disabled: !fuelViewLoaded.value },
+			{ title: t("onboard.fuel.avg.menu"), view: fuelViews?.avg, disabled: !fuelViewLoaded.value }
 		]);
 		const menuVisible = ref(false);
 		const menuSelected = ref({} as IMenuItem);
-		const menuViewConfig = ref({} as IViewConfig);
-		const settingsVisible = ref(false);
+		const fuelConfigVisible = ref(false);
 
 		/**
 		 * Выбор пункта меню отображения на информационном экране
@@ -164,79 +116,96 @@ export default {
 		 */
 		const onMenuClick = (item: IMenuItem): void =>
 		{
-			if (item.id < 10)
+			if (item.view)
 			{
 				menuVisible.value = true;
 				menuSelected.value = item;
-
-				const { fuel } = canbus.views.variable;
-				switch (item.id)
-				{
-					case 0:
-						menuViewConfig.value = fuel.current;
-						return;
-
-					case 1:
-						menuViewConfig.value = fuel.avg;
-						break;
-
-						// case 2:
-						// 	menuViewConfig.value = fuel.total;
-						// 	break;
-
-					case 3:
-						menuViewConfig.value = fuel.consumption;
-						break;
-				}
 			}
-			else
-			{
-				settingsVisible.value = true;
-			}
+			else fuelConfigVisible.value = true;
 		};
 
 		/**
 		 * Применить параметры отображения на информационном экране
 		 * @param {IViewConfig} data Новые параметры отображения
 		 */
-		const onViewSettingApply = (data: IViewConfig): void =>
+		const onFuelViewApply = (data: IViewConfig): void =>
 		{
-			const { fuel } = canbus.views.variable;
-			switch (menuSelected.value.id)
-			{
-				case 0:
-					fuel.current = data;
-					break;
-
-				case 1:
-					fuel.avg = data;
-					break;
-
-					// case 2:
-					// 	fuel.total = data;
-					// 	break;
-
-				case 3:
-					fuel.consumption = data;
-					break;
-			}
-			canbus.queryView(API_VARIABLE_FUEL_VIEW_EXEC);
+			canbus.query(data);
 		};
 
+		/** Применить конфигурацию расхода */
+		const onFuelConfigApply = (res: any): void =>
+		{
+			const config = new FuelConfig();
+			config.ratio = (res?.ratio ?? ratio.value) * 1000;
+			canbus.query(config);
+		};
+
+		/** Входящие конфигурации расхода топлива */
+		const onFuelConfigReceive = (res: IFuelConfig): void =>
+		{
+			fuelConfigLoaded.value = res.isData;
+			if (res.isData) ratio.value = res.ratio / 1000;
+		};
+		/** Входящие значения расхода топлива */
+		const onFuelValueReceive = (res: IFuelValue): void =>
+		{
+			fuelValueLoaded.value = res.isData;
+			if (res.isData)
+			{
+				current.value = (res.current / 10).toFixed(1);
+				avg.value = (res.avg / 10).toFixed(1);
+			}
+		};
+		/** Входящие значения отображения расхода топлива */
+		const onFuelViewReceive = (res: IFuelViews): void =>
+		{
+			fuelViewLoaded.value = res.isData;
+			fuelViews = res;
+		};
+
+		const choiceId = Math.round(Math.random() * 1000000);
+		const onBegin = (status: boolean): void =>
+		{
+			if (status)
+			{
+				const choice = new ChoiceValue();
+				choice.id = choiceId;
+				choice.listID = [API_FUEL_CONFIG_EXEC, API_FUEL_VIEW_EXEC];
+				canbus.query(choice, true);
+			}
+		};
+		onMounted(() =>
+		{
+			canbus.addListener(API_FUEL_CONFIG_EVENT, onFuelConfigReceive);
+			canbus.addListener(API_FUEL_VALUE_EVENT, onFuelValueReceive);
+			canbus.addListener(API_FUEL_VIEW_EVENT, onFuelViewReceive);
+			canbus.addListener(API_CANBUS_EVENT, onBegin);
+			onBegin(canbus.begin);
+		});
+		onUnmounted(() =>
+		{
+			canbus.removeListener(API_FUEL_CONFIG_EVENT, onFuelConfigReceive);
+			canbus.removeListener(API_FUEL_VALUE_EVENT, onFuelValueReceive);
+			canbus.removeListener(API_FUEL_VIEW_EVENT, onFuelViewReceive);
+			canbus.removeListener(API_CANBUS_EVENT, onBegin);
+		});
+
 		return {
-			isLoadedView,
-			isLoadedValue,
+			fuelConfigLoaded,
+			fuelViewLoaded,
+			fuelValueLoaded,
 			current,
 			avg,
-			// total,
-			consumption,
+			ratio,
+			carModel,
 			menu,
 			menuVisible,
 			menuSelected,
-			menuViewConfig,
-			settingsVisible,
+			fuelConfigVisible,
 			onMenuClick,
-			onViewSettingApply
+			onFuelViewApply,
+			onFuelConfigApply
 		};
 	}
 };

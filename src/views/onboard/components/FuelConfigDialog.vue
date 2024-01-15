@@ -12,23 +12,23 @@
 			<v-row class="pb-2">
 				<v-col cols="12" class="pb-0">
 					<number-field
-						v-model="ratio"
+						v-model="configRatio"
 						:label="$t('onboard.fuel.settings.ratio.title')"
 						:hint="$t('onboard.fuel.settings.ratio.description')"
 						:min="0"
 						:max="1"
-						:disabled="!loaderConfigFuel"
+						:disabled="disabled"
 					/>
 				</v-col>
 			</v-row>
 		</template>
 
 		<template #btns>
-			<v-btn color="secondary" @click="onReset">
+			<v-btn color="secondary" @click="onResetClick">
 				<v-icon v-if="$vuetify.display.xs">mdi-restart</v-icon>
 				<span v-else> {{ $t("btn.reset") }} </span>
 			</v-btn>
-			<v-btn color="primary" @click="onApply">
+			<v-btn color="primary" @click="onApplyClick">
 				<v-icon v-if="$vuetify.display.xs">mdi-check</v-icon>
 				<span v-else> {{ $t("btn.apply") }} </span>
 			</v-btn>
@@ -41,79 +41,60 @@
 </template>
 
 <script lang="ts">
-import { computed, onMounted, onUnmounted, ref, toRefs } from "vue";
+import { computed, ref, toRefs, watch } from "vue";
 
 import DialogTemplate from "@/layout/components/DialogTemplate.vue";
 import SwitchCardItem from "@/components/cards/SwitchCardItem.vue";
 import NumberField from "@/components/common/NumberField.vue";
 
-import {
-	API_VARIABLE_FUEL_CONFIG_EXEC,
-	API_VARIABLE_FUEL_CONFIG_EVENT,
-	IFuelConfig
-} from "@/models/pjcan/variables/fuel";
-
-import canbus from "@/api/canbus";
-
 export default {
 	name: "FuelConfigDialog",
 	components: { DialogTemplate, SwitchCardItem, NumberField },
 	props: {
-		modelValue: Boolean
+		/** Отображение диалога */
+		modelValue: {
+			type: Boolean,
+			default: false
+		},
+		/** Коэффициент 0.001 до 1 */
+		ratio: Number,
+		/** Выкл. */
+		disabled: Boolean
 	},
-	emits: ["update:modelValue"],
+	emits: ["update:modelValue", "click:apply"],
 	setup(props: any, context: any)
 	{
-		const { modelValue } = toRefs(props);
+		const { modelValue, ratio } = toRefs(props);
 		const visible = computed({
 			get: (): boolean => modelValue.value,
 			set: (val: boolean): void => context.emit("update:modelValue", val)
 		});
+		const configRatio = ref(0);
 
-		const loaderConfigFuel = ref(false);
-		const ratio = ref(0);
-
-		const onReceiveConfigFuel = (res: IFuelConfig): void =>
+		watch(visible, val =>
 		{
-			loaderConfigFuel.value = res.isData;
-			if (res.isData)
-			{
-				ratio.value = res.ratio / 1000;
-			}
-		};
+			if (val) configRatio.value = ratio.value ?? 1;
+		});
 
 		/** Сбросить */
-		const onReset = (): void =>
+		const onResetClick = (): void =>
 		{
-			canbus.configs.variable.fuel.ratio = 1000;
-			canbus.queryConfig(API_VARIABLE_FUEL_CONFIG_EXEC);
-			visible.value = false;
+			configRatio.value = 1;
 		};
-
-		/** Применить */
-		const onApply = (): void =>
+		/** Применить изменения и закрыть диалог */
+		const onApplyClick = (): void =>
 		{
-			canbus.configs.variable.fuel.ratio = ratio.value * 1000;
-			canbus.queryConfig(API_VARIABLE_FUEL_CONFIG_EXEC);
 			visible.value = false;
+			context.emit("click:apply", {
+				ratio: configRatio.value
+			});
 		};
-
-		onMounted(() =>
-		{
-			canbus.addListener(API_VARIABLE_FUEL_CONFIG_EVENT, onReceiveConfigFuel);
-			onReceiveConfigFuel(canbus.configs.variable.fuel);
-		});
-		onUnmounted(() =>
-		{
-			canbus.removeListener(API_VARIABLE_FUEL_CONFIG_EVENT, onReceiveConfigFuel);
-		});
 
 		return {
 			visible,
-			loaderConfigFuel,
-			ratio,
-			onReset,
-			onApply
+			configRatio,
+			onResetClick,
+			onApplyClick
 		};
 	}
 };
