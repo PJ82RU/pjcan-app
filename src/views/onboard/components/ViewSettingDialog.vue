@@ -4,7 +4,7 @@
 		content-class="view-setting-dialog"
 		icon="lcd"
 		:title="title"
-		width="550px"
+		width="440px"
 		text
 		actions
 	>
@@ -12,7 +12,7 @@
 			<v-row>
 				<v-col cols="12" class="pt-0">
 					<switch-card-item
-						v-model="modelEnabled"
+						v-model="viewEnabled"
 						:title="$t('onboard.viewSetting.enabled.title')"
 						:description="$t('onboard.viewSetting.enabled.description')"
 						:disabled="disabled"
@@ -20,7 +20,7 @@
 				</v-col>
 				<v-col cols="12" class="pt-0">
 					<v-select
-						v-model="modelType"
+						v-model="viewType"
 						:label="$t('onboard.viewSetting.type.title')"
 						:items="typeItems"
 						:hint="$t('onboard.viewSetting.type.description')"
@@ -33,9 +33,19 @@
 				</v-col>
 				<v-col cols="12" class="pt-0">
 					<number-field
-						v-model="modelTime"
+						v-model="viewTime"
 						:label="$t('onboard.viewSetting.time.title')"
 						:hint="$t('onboard.viewSetting.time.description')"
+						:disabled="disabled"
+						:min="1"
+						:max="300"
+					/>
+				</v-col>
+				<v-col cols="12" class="pt-0">
+					<number-field
+						v-model="viewDelay"
+						:label="$t('onboard.viewSetting.delay.title')"
+						:hint="$t('onboard.viewSetting.delay.description')"
 						:disabled="disabled"
 						:min="1"
 						:max="300"
@@ -61,7 +71,6 @@ import { useI18n } from "vue-i18n";
 import DialogTemplate from "@/layout/components/DialogTemplate.vue";
 import SwitchCardItem from "@/components/cards/SwitchCardItem.vue";
 import NumberField from "@/components/common/NumberField.vue";
-import { IViewConfig } from "@/models/pjcan/view";
 
 export default {
 	name: "ViewSettingDialog",
@@ -83,36 +92,40 @@ export default {
 		type: Number,
 		/** Время отображения текста на LCD, сек */
 		time: Number,
+		/** Время паузы отображения на LCD, сек. */
+		delay: Number,
 		/** Выкл. */
 		disabled: Boolean
 	},
 	emits: ["update:modelValue", "click:apply"],
 	setup(props: any, { emit }: { emit: any })
 	{
-		const { modelValue, enabled, type, time } = toRefs(props);
+		const { modelValue, enabled, type, time, delay } = toRefs(props);
 		const { tm } = useI18n();
 
 		const visible = computed({
 			get: (): boolean => modelValue.value,
 			set: (val: boolean): void => emit("update:modelValue", val)
 		});
-		const modelEnabled = ref(false);
-		const modelType = ref(0);
+		const viewEnabled = ref(false);
+		const viewType = ref(0);
 		const typeItems = computed(() =>
 			(tm("onboard.viewSetting.type.items") as string[])?.map((x, i) => ({
 				label: x,
 				value: i
 			}))
 		);
-		const modelTime = ref(3);
+		const viewTime = ref(3);
+		const viewDelay = ref(3);
 
 		watch(visible, val =>
 		{
 			if (val)
 			{
-				modelEnabled.value = enabled.value ?? false;
-				modelType.value = type.value ?? 0;
-				modelTime.value = time.value ?? 3;
+				viewEnabled.value = enabled.value ?? false;
+				viewType.value = type.value ?? 0;
+				viewTime.value = time.value ?? 3;
+				viewDelay.value = delay.value ?? 3;
 			}
 		});
 
@@ -121,18 +134,20 @@ export default {
 		{
 			visible.value = false;
 			emit("click:apply", {
-				enabled: modelEnabled.value,
-				type: modelType.value,
-				time: modelTime.value
-			} as IViewConfig);
+				enabled: viewEnabled.value,
+				type: viewType.value,
+				time: viewTime.value,
+				delay: viewDelay.value
+			});
 		};
 
 		return {
 			visible,
-			modelEnabled,
-			modelType,
+			viewEnabled,
+			viewType,
 			typeItems,
-			modelTime,
+			viewTime,
+			viewDelay,
 			onApplyClick
 		};
 	}

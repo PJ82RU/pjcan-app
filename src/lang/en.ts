@@ -147,6 +147,10 @@ export default {
 			time: {
 				title: "Display time, sec.",
 				description: "Show the specified number of seconds on the information screen"
+			},
+			delay: {
+				title: "Display pause time, sec.",
+				description: "Pause the information display for the specified number of seconds"
 			}
 		},
 
