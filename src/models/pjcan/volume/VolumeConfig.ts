@@ -2,7 +2,7 @@ import { BluetoothStruct } from "@/components/bluetooth";
 import { BaseModel } from "../base";
 import { IVolumeConfig } from "./IVolumeConfig";
 
-export const API_VOLUME_CONFIG_EXEC = 0xe1;
+export const API_VOLUME_CONFIG_EXEC = 0xe0;
 export const API_VOLUME_CONFIG_EVENT = "VolumeConfig";
 
 export const API_VOLUME_VIEW_EXEC = 0xe3;

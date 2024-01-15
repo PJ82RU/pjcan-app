@@ -8,8 +8,8 @@
 						:title="$t('onboard.bose.enabled.title')"
 						:description="$t('onboard.bose.enabled.description')"
 						:icon-name="['bose']"
-						:nodata="!isLoadedBoseConfig"
-						:disabled="!isLoadedBoseView"
+						:nodata="!boseConfigLoaded"
+						:disabled="!boseViewLoaded"
 						@change="onApplyBoseConfig"
 					/>
 				</v-col>
@@ -19,9 +19,9 @@
 						:title="$t('onboard.volume.level.title')"
 						:description="$t('onboard.volume.level.description')"
 						:max="63"
-						:nodata="!isLoadedVolumeConfig"
-						:disabled="!isLoadedVolumeView || !enabled[0]"
-                        @change="onApplyVolumeConfig"
+						:nodata="!volumeConfigLoaded"
+						:disabled="!enabled[0]"
+						@change="onApplyVolumeConfig"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0 pb-0">
@@ -30,9 +30,9 @@
 						:title="$t('onboard.volume.mute.title')"
 						:description="$t('onboard.volume.mute.description')"
 						color="warning"
-						:nodata="!isLoadedVolumeConfig"
-						:disabled="!isLoadedVolumeView || !enabled[0]"
-                        @change="onApplyVolumeConfig"
+						:nodata="!volumeConfigLoaded"
+						:disabled="!enabled[0]"
+						@change="onApplyVolumeConfig"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0">
@@ -41,8 +41,8 @@
 						:title="$t('onboard.bose.audioPLT.title')"
 						:description="$t('onboard.bose.audioPLT.description')"
 						color="success"
-						:nodata="!isLoadedBoseConfig"
-						:disabled="!isLoadedBoseView || !enabled[0]"
+						:nodata="!boseConfigLoaded"
+						:disabled="!boseViewLoaded || !enabled[0]"
 						@change="onApplyBoseConfig"
 					/>
 				</v-col>
@@ -52,7 +52,7 @@
 						:title="$t('onboard.bose.centerPoint.title')"
 						:description="$t('onboard.bose.centerPoint.description')"
 						:items="centerPointList"
-						:disabled="!isLoadedBoseView || !enabled[0]"
+						:disabled="!boseViewLoaded || !enabled[0]"
 						@change="onApplyBoseConfig"
 					/>
 				</v-col>
@@ -65,7 +65,7 @@
 						:max="8"
 						prepend-icon="volume-l"
 						append-icon="volume-r"
-						:disabled="!isLoadedBoseView || !enabled[0]"
+						:disabled="!boseViewLoaded || !enabled[0]"
 						@change="onApplyBoseConfig"
 					/>
 				</v-col>
@@ -78,7 +78,7 @@
 						:max="8"
 						prepend-icon="volume-fade-r"
 						append-icon="volume-fade-f"
-						:disabled="!isLoadedBoseView || !enabled[0]"
+						:disabled="!boseViewLoaded || !enabled[0]"
 						@change="onApplyBoseConfig"
 					/>
 				</v-col>
@@ -91,7 +91,7 @@
 						:max="6"
 						prepend-icon-mdi="mdi-volume-medium"
 						append-icon-mdi="mdi-volume-high"
-						:disabled="!isLoadedBoseView || !enabled[0]"
+						:disabled="!boseViewLoaded || !enabled[0]"
 						@change="onApplyBoseConfig"
 					/>
 				</v-col>
@@ -104,7 +104,7 @@
 						:max="6"
 						prepend-icon-mdi="mdi-volume-medium"
 						append-icon-mdi="mdi-volume-high"
-						:disabled="!isLoadedBoseView || !enabled[0]"
+						:disabled="!boseViewLoaded || !enabled[0]"
 						@change="onApplyBoseConfig"
 					/>
 				</v-col>
@@ -114,8 +114,8 @@
 						:title="$t('onboard.bose.wow.title')"
 						:description="$t('onboard.bose.wow.description')"
 						color="success"
-						:nodata="!isLoadedBoseConfig"
-						:disabled="!isLoadedBoseView || !enabled[0]"
+						:nodata="!boseConfigLoaded"
+						:disabled="!boseViewLoaded || !enabled[0]"
 						@change="onApplyBoseConfig"
 					/>
 				</v-col>
@@ -126,10 +126,8 @@
 	<view-setting-dialog
 		v-model="menuVisible"
 		:title="menuSelected.title"
-		:enabled="menuViewConfig.enabled"
-		:type="menuViewConfig.type"
-		:time="menuViewConfig.time"
-		:disabled="!isLoadedBoseView"
+		:view="menuSelected.view"
+		:disabled="menuSelected.disabled"
 		@click:apply="onViewSettingApply"
 	/>
 </template>
@@ -137,6 +135,8 @@
 <script lang="ts">
 import { computed, onMounted, onUnmounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
+import { createDebounce } from "@/utils/debounce";
+import canbus from "@/api/canbus";
 
 import Card from "@/components/cards/Card.vue";
 import SwitchCardItem from "@/components/cards/SwitchCardItem.vue";
@@ -145,29 +145,26 @@ import IconCardItem from "@/components/cards/IconCardItem.vue";
 import SliderCardItem from "@/components/cards/SliderCardItem.vue";
 import SelectCardItem from "@/components/cards/SelectCardItem.vue";
 import ViewSettingDialog from "@/views/onboard/components/ViewSettingDialog.vue";
-
-import {
-	API_VARIABLE_BOSE_EVENT,
-	API_VARIABLE_BOSE_EXEC,
-	API_VARIABLE_BOSE_VIEW_EVENT,
-	API_VARIABLE_BOSE_VIEW_EXEC,
-	IBoseConfig,
-	IBoseView,
-	TCenterPoint
-} from "@/models/pjcan/variables/bose";
-import { IViewConfig } from "@/models/pjcan/view";
 import { IMenuItem } from "@/components/MenuDots.vue";
 
-import canbus from "@/api/canbus";
 import {
-	API_VARIABLE_VOLUME_CONFIG_EVENT,
-	API_VARIABLE_VOLUME_CONFIG_EXEC,
-	API_VARIABLE_VOLUME_VIEW_EVENT,
+	API_BOSE_CONFIG_EVENT,
+	API_BOSE_CONFIG_EXEC,
+	API_BOSE_VIEW_EVENT,
+	API_BOSE_VIEW_EXEC,
+	BoseConfig,
+	IBoseConfig,
+	TCenterPoint
+} from "@/models/pjcan/bose";
+import {
+	API_VOLUME_CONFIG_EVENT,
+	API_VOLUME_CONFIG_EXEC,
 	IVolumeConfig,
-	IVolumeView
-} from "@/models/pjcan/variables/volume";
-
-import { createDebounce } from "@/utils/debounce";
+	VolumeConfig
+} from "@/models/pjcan/volume";
+import { IViewConfig } from "@/models/pjcan/view";
+import { API_CANBUS_EVENT } from "@/models/pjcan/base/BaseModel";
+import { ChoiceValue } from "@/models/pjcan/choice";
 
 export default {
 	name: "BoseCard",
@@ -190,10 +187,9 @@ export default {
 	{
 		const { t } = useI18n();
 
-		// Bose
-
-		const isLoadedBoseConfig = ref(false);
-		const isLoadedBoseView = ref(false);
+		const boseConfigLoaded = ref(false);
+		const boseViewLoaded = ref(false);
+		const volumeConfigLoaded = ref(false);
 
 		const enabled = ref([false]);
 		const audioPLT = ref(false);
@@ -204,7 +200,6 @@ export default {
 		const fade = ref(0);
 		const treble = ref(0);
 		const centerPoint = ref(TCenterPoint.CENTERPOINT_OFF);
-
 		const centerPointList = computed(() => [
 			{ title: "OFF", value: TCenterPoint.CENTERPOINT_OFF },
 			{ title: "MIN", value: TCenterPoint.CENTERPOINT_MIN },
@@ -213,18 +208,87 @@ export default {
 			{ title: "HI", value: TCenterPoint.CENTERPOINT_HI },
 			{ title: "MAX", value: TCenterPoint.CENTERPOINT_MAX }
 		]);
+		const mute = ref(false);
+		const volume = ref(0);
+
+		let boseView: IViewConfig;
+
+		const menu = computed((): IMenuItem[] => [
+			{ id: 0, title: t("onboard.bose.menu"), view: boseView, disabled: !boseViewLoaded.value }
+		]);
+		const menuVisible = ref(false);
+		const menuSelected = ref({} as IMenuItem);
+
+		/**
+		 * Выбор пункта меню отображения на информационном экране
+		 * @param {IMenuItem} item Элемент меню
+		 */
+		const onMenuClick = (item: IMenuItem): void =>
+		{
+			menuVisible.value = true;
+			menuSelected.value = item;
+		};
+
+		/**
+		 * Применить параметры отображения на информационном экране
+		 * @param {IViewConfig} data Новые параметры отображения
+		 */
+		const onViewSettingApply = (data: IViewConfig): void =>
+		{
+			canbus.query(data);
+		};
 
 		let disabledBoseConfig = false;
 		const debounceBoseConfig = createDebounce();
 
-		/** Входящие значения Bose */
-		const onReceiveBoseConfig = (res: IBoseConfig): void =>
+		/** Применить значения Bose */
+		const onApplyBoseConfig = (): void =>
 		{
-			isLoadedBoseConfig.value = res.isData;
+			if (boseConfigLoaded.value && !disabledBoseConfig)
+			{
+				disabledBoseConfig = true;
+				debounceBoseConfig(() => (disabledBoseConfig = false), 1000);
+
+				const config = new BoseConfig();
+				config.on = enabled.value[0];
+				config.audioPlt = audioPLT.value;
+				config.radioFM = radioFM.value;
+				config.wow = wow.value;
+				config.balance = balance.value;
+				config.bass = bass.value;
+				config.fade = fade.value;
+				config.treble = treble.value;
+				config.centerPoint = centerPoint.value;
+				canbus.query(config);
+			}
+		};
+
+		let disabledVolumeConfig = false;
+		const debounceVolumeConfig = createDebounce();
+
+		/** Применить значения звука */
+		const onApplyVolumeConfig = (): void =>
+		{
+			if (volumeConfigLoaded.value && !disabledVolumeConfig)
+			{
+				disabledVolumeConfig = true;
+				debounceVolumeConfig(() => (disabledVolumeConfig = false), 1000);
+
+				const config = new VolumeConfig();
+				config.muteBose = mute.value;
+				config.volumeBose = volume.value;
+				canbus.query(config);
+			}
+		};
+
+		/** Входящие значения Bose */
+		const onBoseConfigReceive = (res: IBoseConfig): void =>
+		{
+			boseConfigLoaded.value = res.isData;
 			if (res.isData)
 			{
-				enabled.value[0] = res.enabled;
-				audioPLT.value = res.audioPLT;
+				enabled.value[0] = res.on;
+				audioPLT.value = res.audioPlt;
 				radioFM.value = res.radioFM;
 				wow.value = res.wow;
 				balance.value = res.balance;
@@ -237,46 +301,15 @@ export default {
 			}
 		};
 		/** Входящие значения отображения климат-контроля */
-		const onReceiveBoseView = (res: IBoseView): void =>
+		const onBoseViewReceive = (res: IViewConfig): void =>
 		{
-			isLoadedBoseView.value = res.isData;
+			boseViewLoaded.value = res.isData;
+			boseView = res;
 		};
-		/** Применить значения Bose */
-		const onApplyBoseConfig = (): void =>
-		{
-			if (isLoadedBoseConfig.value && !disabledBoseConfig)
-			{
-				disabledBoseConfig = true;
-				debounceBoseConfig(() => (disabledBoseConfig = false), 1000);
-
-				canbus.configs.variable.bose.enabled = enabled.value[0];
-				canbus.configs.variable.bose.audioPLT = audioPLT.value;
-				canbus.configs.variable.bose.radioFM = radioFM.value;
-				canbus.configs.variable.bose.wow = wow.value;
-				canbus.configs.variable.bose.balance = balance.value;
-				canbus.configs.variable.bose.bass = bass.value;
-				canbus.configs.variable.bose.fade = fade.value;
-				canbus.configs.variable.bose.treble = treble.value;
-				canbus.configs.variable.bose.centerPoint = centerPoint.value;
-				canbus.queryConfig(API_VARIABLE_BOSE_EXEC);
-			}
-		};
-
-		// Volume
-
-		const isLoadedVolumeConfig = ref(false);
-		const isLoadedVolumeView = ref(false);
-
-		const mute = ref(false);
-		const volume = ref(0);
-
-		let disabledVolumeConfig = false;
-		const debounceVolumeConfig = createDebounce();
-
 		/** Входящие конфигурация звука */
-		const onReceiveVolumeConfig = (res: IVolumeConfig): void =>
+		const onVolumeConfigReceive = (res: IVolumeConfig): void =>
 		{
-			isLoadedVolumeConfig.value = res.isData;
+			volumeConfigLoaded.value = res.isData;
 			if (res.isData)
 			{
 				mute.value = res.muteBose;
@@ -285,79 +318,42 @@ export default {
 				disabledVolumeConfig = false;
 			}
 		};
-		/** Входящие значения отображения звука */
-		const onReceiveVolumeView = (res: IVolumeView): void =>
-		{
-			isLoadedVolumeView.value = res.isData;
-		};
-		/** Применить значения звука */
-		const onApplyVolumeConfig = (): void =>
-		{
-			if (isLoadedVolumeConfig.value && !disabledVolumeConfig)
-			{
-				disabledVolumeConfig = true;
-				debounceVolumeConfig(() => (disabledVolumeConfig = false), 1000);
 
-				canbus.configs.variable.volume.muteBose = mute.value;
-				canbus.configs.variable.volume.volumeBose = volume.value;
-				canbus.queryConfig(API_VARIABLE_VOLUME_CONFIG_EXEC);
+		const choiceId = Math.round(Math.random() * 1000000);
+		const onBegin = (status: boolean): void =>
+		{
+			if (status)
+			{
+				const choice = new ChoiceValue();
+				choice.id = choiceId;
+				choice.listID = [
+					API_BOSE_CONFIG_EXEC,
+					API_BOSE_VIEW_EXEC,
+					API_VOLUME_CONFIG_EXEC
+				];
+				canbus.query(choice, true);
 			}
 		};
-
-		// регистрируем события
 		onMounted(() =>
 		{
-			canbus.addListener(API_VARIABLE_BOSE_EVENT, onReceiveBoseConfig);
-			canbus.addListener(API_VARIABLE_BOSE_VIEW_EVENT, onReceiveBoseView);
-			canbus.addListener(API_VARIABLE_VOLUME_CONFIG_EVENT, onReceiveVolumeConfig);
-			canbus.addListener(API_VARIABLE_VOLUME_VIEW_EVENT, onReceiveVolumeView);
-			onReceiveBoseConfig(canbus.configs.variable.bose);
-			onReceiveBoseView(canbus.views.variable.bose);
-			onReceiveVolumeConfig(canbus.configs.variable.volume);
-			onReceiveVolumeView(canbus.views.variable.volume);
+			canbus.addListener(API_BOSE_CONFIG_EVENT, onBoseConfigReceive);
+			canbus.addListener(API_BOSE_VIEW_EVENT, onBoseViewReceive);
+			canbus.addListener(API_VOLUME_CONFIG_EVENT, onVolumeConfigReceive);
+			canbus.addListener(API_CANBUS_EVENT, onBegin);
+			onBegin(canbus.begin);
 		});
-		// удаляем события
 		onUnmounted(() =>
 		{
-			canbus.removeListener(API_VARIABLE_BOSE_EVENT, onReceiveBoseConfig);
-			canbus.removeListener(API_VARIABLE_BOSE_VIEW_EVENT, onReceiveBoseView);
-			canbus.removeListener(API_VARIABLE_VOLUME_CONFIG_EVENT, onReceiveVolumeConfig);
-			canbus.removeListener(API_VARIABLE_VOLUME_VIEW_EVENT, onReceiveVolumeView);
+			canbus.removeListener(API_BOSE_CONFIG_EVENT, onBoseConfigReceive);
+			canbus.removeListener(API_BOSE_VIEW_EVENT, onBoseViewReceive);
+			canbus.removeListener(API_VOLUME_CONFIG_EVENT, onVolumeConfigReceive);
+			canbus.removeListener(API_CANBUS_EVENT, onBegin);
 		});
 
-		// МЕНЮ ОТОБРАЖЕНИЯ
-
-		const menu = computed((): IMenuItem[] => [{ id: 0, title: t("onboard.bose.menu") }]);
-		const menuVisible = ref(false);
-		const menuSelected = ref({} as IMenuItem);
-		const menuViewConfig = ref({} as IViewConfig);
-
-		/**
-		 * Выбор пункта меню отображения на информационном экране
-		 * @param {IMenuItem} item Элемент меню
-		 */
-		const onMenuClick = (item: IMenuItem): void =>
-		{
-			menuVisible.value = true;
-			menuSelected.value = item;
-			menuViewConfig.value = canbus.views.variable.bose.view;
-		};
-
-		/**
-		 * Применить параметры отображения на информационном экране
-		 * @param {IViewConfig} data Новые параметры отображения
-		 */
-		const onViewSettingApply = (data: IViewConfig): void =>
-		{
-			canbus.views.variable.bose.view = data;
-			canbus.queryView(API_VARIABLE_BOSE_VIEW_EXEC);
-		};
-
 		return {
-			isLoadedBoseConfig,
-			isLoadedBoseView,
-			isLoadedVolumeConfig,
-			isLoadedVolumeView,
+			boseConfigLoaded,
+			boseViewLoaded,
+			volumeConfigLoaded,
 			enabled,
 			audioPLT,
 			radioFM,
@@ -373,7 +369,6 @@ export default {
 			menu,
 			menuVisible,
 			menuSelected,
-			menuViewConfig,
 			onApplyBoseConfig,
 			onApplyVolumeConfig,
 			onMenuClick,
