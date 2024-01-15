@@ -8,8 +8,8 @@
 						:title="$t('onboard.engine.enabled.title')"
 						:description="$t('onboard.engine.enabled.description')"
 						:icon-name="['start-stop']"
-						:nodata="!isLoadedValueEngine"
-						:disabled="!isLoadedViewEngine"
+						:nodata="!valueEngineLoaded"
+						:disabled="!viewEngineLoaded"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0 pb-0">
@@ -18,7 +18,7 @@
 						:title="$t('onboard.engine.RPM.title')"
 						:description="$t('onboard.engine.RPM.description')"
 						:nodata="!enabled"
-						:disabled="!isLoadedViewEngine"
+						:disabled="!viewEngineLoaded"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0 pb-0">
@@ -27,7 +27,7 @@
 						:title="$t('onboard.engine.countRPM.title')"
 						:description="$t('onboard.engine.countRPM.description')"
 						:nodata="!enabled"
-						:disabled="!isLoadedViewEngine"
+						:disabled="!viewEngineLoaded"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0 pb-0">
@@ -36,7 +36,7 @@
 						:title="$t('onboard.engine.worktime.title')"
 						:description="$t('onboard.engine.worktime.description')"
 						:nodata="!enabled"
-						:disabled="!isLoadedViewEngine"
+						:disabled="!viewEngineLoaded"
 					/>
 				</v-col>
 				<v-col v-if="carModel === TCarModel.CAR_MODEL_MAZDA_3_BK" cols="12" class="pt-0 pb-0">
@@ -45,7 +45,7 @@
 						:title="$t('onboard.engine.load.title')"
 						:description="$t('onboard.engine.load.description')"
 						:nodata="!enabled"
-						:disabled="!isLoadedViewEngine"
+						:disabled="!viewEngineLoaded"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0 pb-0">
@@ -54,7 +54,7 @@
 						:title="$t('onboard.engine.throttle.title')"
 						:description="$t('onboard.engine.throttle.description')"
 						:nodata="!enabled"
-						:disabled="!isLoadedViewEngine"
+						:disabled="!viewEngineLoaded"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0 pb-0">
@@ -64,7 +64,7 @@
 						:description="$t('onboard.engine.coolant.description')"
 						type="temperature"
 						:nodata="!enabled"
-						:disabled="!isLoadedViewEngine"
+						:disabled="!viewEngineLoaded"
 					/>
 				</v-col>
 			</v-row>
@@ -87,7 +87,7 @@
 		:show-days="showDays"
 		:total-worktime="totalWorktime"
 		:total-count-r-p-m="totalCountRPM"
-		:disabled="!isLoaderConfigEngine"
+		:disabled="!configEngineLoaded"
 		@click:apply="onEngineConfigApply"
 	/>
 </template>
@@ -135,9 +135,9 @@ export default {
 	{
 		const { t } = useI18n();
 
-		const isLoadedValueEngine = ref(false);
-		const isLoadedViewEngine = ref(false);
-		const isLoaderConfigEngine = ref(false);
+		const configEngineLoaded = ref(false);
+		const valueEngineLoaded = ref(false);
+		const viewEngineLoaded = ref(false);
 
 		const enabled = ref(false);
 		const rpm = ref("");
@@ -158,26 +158,26 @@ export default {
 			{
 				title: t("onboard.engine.enabled.menu"),
 				view: engineViews?.enabled,
-				disabled: !isLoadedViewEngine.value
+				disabled: !viewEngineLoaded.value
 			},
-			{ title: t("onboard.engine.RPM.menu"), view: engineViews?.rpm, disabled: !isLoadedViewEngine.value },
+			{ title: t("onboard.engine.RPM.menu"), view: engineViews?.rpm, disabled: !viewEngineLoaded.value },
 			{
 				title: t("onboard.engine.countRPM.menu"),
 				view: engineViews?.totalCountRPM,
-				disabled: !isLoadedViewEngine.value
+				disabled: !viewEngineLoaded.value
 			},
-			{ title: t("onboard.engine.load.menu"), view: engineViews?.load, disabled: !isLoadedViewEngine.value },
+			{ title: t("onboard.engine.load.menu"), view: engineViews?.load, disabled: !viewEngineLoaded.value },
 			{
 				title: t("onboard.engine.worktime.menu"),
 				view: engineViews?.totalWorktime,
-				disabled: !isLoadedViewEngine.value
+				disabled: !viewEngineLoaded.value
 			},
 			{
 				title: t("onboard.engine.throttle.menu"),
 				view: engineViews?.throttle,
-				disabled: !isLoadedViewEngine.value
+				disabled: !viewEngineLoaded.value
 			},
-			{ title: t("onboard.engine.coolant.menu"), view: engineViews?.coolant, disabled: !isLoadedViewEngine.value }
+			{ title: t("onboard.engine.coolant.menu"), view: engineViews?.coolant, disabled: !viewEngineLoaded.value }
 		]);
 		const menuVisible = ref(false);
 		const menuSelected = ref({} as IMenuItem);
@@ -219,7 +219,7 @@ export default {
 		/** Входящие значения ДВС */
 		const onEngineValueReceive = (res: IEngineValue): void =>
 		{
-			isLoadedValueEngine.value = res.isData;
+			valueEngineLoaded.value = res.isData;
 			if (res.isData)
 			{
 				enabled.value = true; // res.on;
@@ -244,7 +244,7 @@ export default {
 		};
 		const onEngineConfigReceive = (res: IEngineConfig): void =>
 		{
-			isLoaderConfigEngine.value = res.isData;
+			configEngineLoaded.value = res.isData;
 			if (res.isData)
 			{
 				showDays.value = res.showDays;
@@ -256,7 +256,7 @@ export default {
 		/** Входящие значения отображения ДВС */
 		const onEngineViewReceive = (res: IEngineViews): void =>
 		{
-			isLoadedViewEngine.value = res.isData;
+			viewEngineLoaded.value = res.isData;
 			engineViews = res;
 		};
 
@@ -288,9 +288,9 @@ export default {
 		});
 
 		return {
-			isLoaderConfigEngine,
-			isLoadedValueEngine,
-			isLoadedViewEngine,
+			configEngineLoaded,
+			valueEngineLoaded,
+			viewEngineLoaded,
 			enabled,
 			rpm,
 			countRPM,
