@@ -12,7 +12,7 @@
 			<v-row class="pb-2">
 				<v-col cols="12" class="pt-0 pb-0">
 					<switch-card-item
-						v-model="modelShowDays"
+						v-model="configShowDays"
 						:title="
 							$t('onboard.engine.settings.showDays.' + ($vuetify.display.xs ? 'titleShort' : 'title'))
 						"
@@ -22,7 +22,7 @@
 				</v-col>
 				<v-col cols="12" class="pb-0">
 					<number-field
-						v-model="modelTotalWorktime"
+						v-model="configTotalWorktime"
 						:label="$t('onboard.engine.settings.worktime.title')"
 						:hint="$t('onboard.engine.settings.worktime.description')"
 						:min="0"
@@ -31,7 +31,7 @@
 				</v-col>
 				<v-col cols="12" class="pb-0">
 					<number-field
-						v-model="modelTotalCountRPM"
+						v-model="configTotalCountRPM"
 						:label="$t('onboard.engine.settings.countRPM.title')"
 						:hint="$t('onboard.engine.settings.countRPM.description')"
 						:min="0"
@@ -42,11 +42,11 @@
 		</template>
 
 		<template #btns>
-			<v-btn color="secondary" @click="onReset">
+			<v-btn color="secondary" @click="onResetClick">
 				<v-icon v-if="$vuetify.display.xs">mdi-restart</v-icon>
 				<span v-else> {{ $t("btn.reset") }} </span>
 			</v-btn>
-			<v-btn color="primary" @click="$emit('apply')">
+			<v-btn color="primary" @click="onApplyClick">
 				<v-icon v-if="$vuetify.display.xs">mdi-check</v-icon>
 				<span v-else> {{ $t("btn.apply") }} </span>
 			</v-btn>
@@ -59,7 +59,7 @@
 </template>
 
 <script lang="ts">
-import { computed, toRefs } from "vue";
+import { computed, ref, toRefs, watch } from "vue";
 
 import DialogTemplate from "@/layout/components/DialogTemplate.vue";
 import SwitchCardItem from "@/components/cards/SwitchCardItem.vue";
@@ -69,28 +69,21 @@ export default {
 	name: "EngineConfig",
 	components: { DialogTemplate, SwitchCardItem, NumberField },
 	props: {
+		/** Отображение диалога */
 		modelValue: {
 			type: Boolean,
 			default: false
 		},
-		showDays: {
-			type: Boolean,
-			default: false
-		},
-		totalWorktime: {
-			type: Number,
-			default: 0
-		},
-		totalCountRPM: {
-			type: Number,
-			default: 0
-		},
-		disabled: {
-			type: Boolean,
-			default: false
-		}
+		/** Показывать дни в моточасах */
+		showDays: Boolean,
+		/** Счетчик моточасов, сек. */
+		totalWorktime: Number,
+		/** Счетчик коленчатого вала (RPM), об. */
+		totalCountRPM: Number,
+		/** Выкл. */
+		disabled: Boolean
 	},
-	emits: ["update:modelValue", "update:showDays", "update:totalWorktime", "update:totalCountRPM", "apply"],
+	emits: ["update:modelValue", "click:apply"],
 	setup(props: any, context: any)
 	{
 		const { modelValue, showDays, totalWorktime, totalCountRPM } = toRefs(props);
@@ -98,33 +91,45 @@ export default {
 			get: (): boolean => modelValue.value,
 			set: (val: boolean): void => context.emit("update:modelValue", val)
 		});
-		const modelShowDays = computed({
-			get: (): boolean => showDays.value,
-			set: (val: boolean): void => context.emit("update:showDays", val)
-		});
-		const modelTotalWorktime = computed({
-			get: (): number => totalWorktime.value,
-			set: (val: number): void => context.emit("update:totalWorktime", val)
-		});
-		const modelTotalCountRPM = computed({
-			get: (): number => totalCountRPM.value,
-			set: (val: number): void => context.emit("update:totalCountRPM", val)
+		const configShowDays = ref(true);
+		const configTotalWorktime = ref(0);
+		const configTotalCountRPM = ref(0);
+
+		watch(visible, val =>
+		{
+			if (val)
+			{
+				configShowDays.value = showDays.value ?? false;
+				configTotalWorktime.value = totalWorktime.value ?? 0;
+				configTotalCountRPM.value = totalCountRPM.value ?? 0;
+			}
 		});
 
 		/** Сбросить */
-		const onReset = (): void =>
+		const onResetClick = (): void =>
 		{
-			modelShowDays.value = true;
-			modelTotalWorktime.value = 0;
-			modelTotalCountRPM.value = 0;
+			configShowDays.value = true;
+			configTotalWorktime.value = 0;
+			configTotalCountRPM.value = 0;
+		};
+		/** Применить изменения и закрыть диалог */
+		const onApplyClick = (): void =>
+		{
+			visible.value = false;
+			context.emit("click:apply", {
+				showDays: configShowDays.value,
+				totalWorktime: configTotalWorktime.value,
+				totalCountRPM: configTotalCountRPM.value
+			});
 		};
 
 		return {
 			visible,
-			modelShowDays,
-			modelTotalWorktime,
-			modelTotalCountRPM,
-			onReset
+			configShowDays,
+			configTotalWorktime,
+			configTotalCountRPM,
+			onResetClick,
+			onApplyClick
 		};
 	}
 };

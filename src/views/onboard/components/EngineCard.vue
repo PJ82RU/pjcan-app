@@ -77,17 +77,18 @@
 		:enabled="menuSelected.view?.enabled"
 		:type="menuSelected.view?.type"
 		:time="menuSelected.view?.time"
+		:delay="menuSelected.view?.delay"
 		:disabled="menuSelected.disabled"
 		@click:apply="onEngineViewApply"
 	/>
 
 	<engine-config-dialog
 		v-model="engineConfigVisible"
-		v-model:show-days="showDays"
-		v-model:total-worktime="totalWorktime"
-		v-model:total-count-r-p-m="totalCountRPM"
+		:show-days="showDays"
+		:total-worktime="totalWorktime"
+		:total-count-r-p-m="totalCountRPM"
 		:disabled="!isLoaderConfigEngine"
-		@apply="onEngineConfigApply"
+		@click:apply="onEngineConfigApply"
 	/>
 </template>
 
@@ -206,12 +207,12 @@ export default {
 		};
 
 		/** Применить конфигурацию ДВС */
-		const onEngineConfigApply = (): void =>
+		const onEngineConfigApply = (res: any): void =>
 		{
 			const config = new EngineConfig();
-			config.showDays = showDays.value;
-			config.totalWorktime = BigInt(worktime.value) * 60n;
-			config.totalCountRPM = BigInt(totalCountRPM.value) * 1000n;
+			config.showDays = res?.showDays ?? showDays.value;
+			config.totalWorktime = BigInt(res?.totalWorktime ?? totalWorktime.value) * 60n;
+			config.totalCountRPM = BigInt(res?.totalCountRPM ?? totalCountRPM.value) * 1000n;
 			canbus.query(config);
 		};
 
@@ -226,6 +227,11 @@ export default {
 				countRPM.value = res.viewCountRPM.toString();
 				load.value = res.load / 1000;
 
+				if (!showDays.value)
+				{
+					res.viewHours += res.viewDays * 24;
+					res.viewDays = 0;
+				}
 				let wt = res.viewDays > 0 ? res.viewDays + "." : "";
 				wt += (res.viewHours < 10 ? "0" : "") + res.viewHours + ":";
 				wt += (res.viewMinutes < 10 ? "0" : "") + res.viewMinutes + ":";
