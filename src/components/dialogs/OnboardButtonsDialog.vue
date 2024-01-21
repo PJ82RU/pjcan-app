@@ -78,7 +78,10 @@
 							RM
 						</v-btn>
 						<v-btn
-							v-if="carModel === TCarModel.CAR_MODEL_MAZDA_CX9_REST"
+							v-if="
+								carModel === TCarModel.CAR_MODEL_MAZDA_CX7_REST ||
+								carModel === TCarModel.CAR_MODEL_MAZDA_CX9_REST
+							"
 							color="secondary"
 							size="x-large"
 							@mousedown="onPress(TMazdaButton.MAZDA_BUTTON_CLOCK_24)"
@@ -95,7 +98,11 @@
 							color="secondary"
 							size="x-large"
 							@mousedown="onPress(TMazdaButton.MAZDA_BUTTON_CLOCK_24, true)"
+							@mouseup="onRelease(TMazdaButton.MAZDA_BUTTON_CLOCK_24, true)"
+							@mouseleave="onRelease(TMazdaButton.MAZDA_BUTTON_CLOCK_24, true)"
 							@touchstart="onTouchPress(TMazdaButton.MAZDA_BUTTON_CLOCK_24, true)"
+							@touchend="onTouchRelease(TMazdaButton.MAZDA_BUTTON_CLOCK_24, true)"
+							@touchcancel="onTouchRelease(TMazdaButton.MAZDA_BUTTON_CLOCK_24, true)"
 						>
 							24/12
 						</v-btn>
@@ -183,10 +190,10 @@ export default {
 		};
 
 		/**
-         * Событие нажатия на кнопку
-         * @param {TMazdaButton} btn Кнопка
-         * @param {boolean} toggle Переключатель
-         */
+		 * Событие нажатия на кнопку
+		 * @param {TMazdaButton} btn Кнопка
+		 * @param {boolean} toggle Переключатель
+		 */
 		const onPress = (btn: TMazdaButton, toggle: boolean = false): void =>
 		{
 			if (!isTouchDevice()) press(btn, toggle);
@@ -203,9 +210,9 @@ export default {
 		};
 
 		/**
-         * Событие отпуска кнопки
+		 * Событие отпуска кнопки
 		 * @param {TMazdaButton} btn Кнопка
-         */
+		 */
 		const onRelease = (btn: TMazdaButton): void =>
 		{
 			if (!isTouchDevice()) release(btn);
