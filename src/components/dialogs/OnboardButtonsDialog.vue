@@ -160,7 +160,7 @@ export default {
 			return "ontouchstart" in window || navigator?.maxTouchPoints > 0 || navigator?.msMaxTouchPoints > 0;
 		};
 
-		const timeouts: number[] = [-1, -1, -1, -1, -1, -1];
+		const timeouts: number[] = [-1, -1, -1, -1, -1, -1, -1];
 		const press = (btn: TMazdaButton, toggle: boolean): void =>
 		{
 			if (timeouts[btn] === -1)
