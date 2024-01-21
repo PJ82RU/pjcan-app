@@ -98,11 +98,7 @@
 							color="secondary"
 							size="x-large"
 							@mousedown="onPress(TMazdaButton.MAZDA_BUTTON_CLOCK_24, true)"
-							@mouseup="onRelease(TMazdaButton.MAZDA_BUTTON_CLOCK_24, true)"
-							@mouseleave="onRelease(TMazdaButton.MAZDA_BUTTON_CLOCK_24, true)"
 							@touchstart="onTouchPress(TMazdaButton.MAZDA_BUTTON_CLOCK_24, true)"
-							@touchend="onTouchRelease(TMazdaButton.MAZDA_BUTTON_CLOCK_24, true)"
-							@touchcancel="onTouchRelease(TMazdaButton.MAZDA_BUTTON_CLOCK_24, true)"
 						>
 							24/12
 						</v-btn>
