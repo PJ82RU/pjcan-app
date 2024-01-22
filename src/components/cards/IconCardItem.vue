@@ -14,7 +14,10 @@
 			v-for="(item, index) in iconList"
 			:key="`icon-card-item_${index}`"
 			class="icon-card-item__icon"
-			:style="{ right: `${parseInt(size) * index + (margin ? margin * index : 0)}px` }"
+			:style="{
+				right: `${parseInt(size) * index + (margin ? margin * index : 0)}px`,
+				animation: rotation > 0 ? 'rotating ' + rotation + 's linear infinite' : undefined
+			}"
 			:name="item.name"
 			:colors="item.colors"
 			:size="size"
@@ -55,6 +58,8 @@ export default {
 			type: String,
 			default: "44px"
 		},
+		/** Скорость вращения иконки */
+		rotation: Number,
 		/** Отступ */
 		margin: Number,
 		/** Нет данных */

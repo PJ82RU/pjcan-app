@@ -8,6 +8,7 @@
 						:title="$t('onboard.climate.enabled.title')"
 						:description="$t('onboard.climate.enabled.description')"
 						:icon-name="['climate']"
+						:rotation="enabled ? 8 - speedRotation : 0"
 						:nodata="!isLoadedValue"
 						:disabled="!isLoadedView"
 					/>
@@ -150,7 +151,7 @@ export default {
 								? "blow-body"
 								: "blow-none";
 				blowWindshield.value = res.airDWindshield;
-				speedRotation.value = res.airRate > 0 ? res.airRate + 2 : 0;
+				speedRotation.value = res.airRate;
 			}
 		};
 
