@@ -1,5 +1,5 @@
 "use strict";
-(self["webpackChunkpjcan"] = self["webpackChunkpjcan"] || []).push([[370],{
+(self["webpackChunkpjcan"] = self["webpackChunkpjcan"] || []).push([[913],{
 
 /***/ 9363:
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
@@ -15824,7 +15824,7 @@ const __exports__ = /*#__PURE__*/(0,exportHelper/* default */.Z)(ViewSettingDial
 
 /***/ }),
 
-/***/ 370:
+/***/ 7913:
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 // ESM COMPAT FLAG
@@ -16026,13 +16026,13 @@ var InputCardItem = __webpack_require__(5943);
 var SwitchCardItem = __webpack_require__(2905);
 // EXTERNAL MODULE: ./node_modules/vuetify/lib/components/VTextField/VTextField.mjs
 var VTextField = __webpack_require__(165);
-;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/cards/IconCardItem.vue?vue&type=template&id=9d490c8c&scoped=true&ts=true
+;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/cards/IconCardItem.vue?vue&type=template&id=70ffe2d4&scoped=true&ts=true
 
-const _withScopeId = n => (_pushScopeId("data-v-9d490c8c"), n = n(), _popScopeId(), n);
+const _withScopeId = n => (_pushScopeId("data-v-70ffe2d4"), n = n(), _popScopeId(), n);
 const _hoisted_1 = {
   class: "icon-card-item"
 };
-function IconCardItemvue_type_template_id_9d490c8c_scoped_true_ts_true_render(_ctx, _cache, $props, $setup, $data, $options) {
+function IconCardItemvue_type_template_id_70ffe2d4_scoped_true_ts_true_render(_ctx, _cache, $props, $setup, $data, $options) {
                                                                     
   const _component_icon_custom = (0,runtime_core_esm_bundler/* resolveComponent */.up)("icon-custom");
   return (0,runtime_core_esm_bundler/* openBlock */.wg)(), (0,runtime_core_esm_bundler/* createElementBlock */.iD)("div", _hoisted_1, [(0,runtime_core_esm_bundler/* createVNode */.Wm)(VTextField/* VTextField */.h, {
@@ -16049,7 +16049,8 @@ function IconCardItemvue_type_template_id_9d490c8c_scoped_true_ts_true_render(_c
       key: `icon-card-item_${index}`,
       class: "icon-card-item__icon",
       style: (0,shared_esm_bundler/* normalizeStyle */.j5)({
-        right: `${parseInt($props.size) * index + ($props.margin ? $props.margin * index : 0)}px`
+        right: `${parseInt($props.size) * index + ($props.margin ? $props.margin * index : 0)}px`,
+        animation: $props.rotation > 0 ? 'rotating ' + $props.rotation + 's linear infinite' : undefined
       }),
       name: item.name,
       colors: item.colors,
@@ -16063,7 +16064,7 @@ function IconCardItemvue_type_template_id_9d490c8c_scoped_true_ts_true_render(_c
 
 
 
-;// CONCATENATED MODULE: ./src/components/cards/IconCardItem.vue?vue&type=template&id=9d490c8c&scoped=true&ts=true
+;// CONCATENATED MODULE: ./src/components/cards/IconCardItem.vue?vue&type=template&id=70ffe2d4&scoped=true&ts=true
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.push.js
 var es_array_push = __webpack_require__(7658);
@@ -16108,6 +16109,8 @@ var IconCustom = __webpack_require__(1776);
       type: String,
       default: "44px"
     },
+    /** Скорость вращения иконки */
+    rotation: Number,
     /** Отступ */
     margin: Number,
     /** Нет данных */
@@ -16157,10 +16160,10 @@ var IconCustom = __webpack_require__(1776);
 });
 ;// CONCATENATED MODULE: ./src/components/cards/IconCardItem.vue?vue&type=script&lang=ts
  
-;// CONCATENATED MODULE: ./node_modules/mini-css-extract-plugin/dist/loader.js??clonedRuleSet-22.use[0]!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/cards/IconCardItem.vue?vue&type=style&index=0&id=9d490c8c&lang=scss&scoped=true
+;// CONCATENATED MODULE: ./node_modules/mini-css-extract-plugin/dist/loader.js??clonedRuleSet-22.use[0]!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/cards/IconCardItem.vue?vue&type=style&index=0&id=70ffe2d4&lang=scss&scoped=true
 // extracted by mini-css-extract-plugin
 
-;// CONCATENATED MODULE: ./src/components/cards/IconCardItem.vue?vue&type=style&index=0&id=9d490c8c&lang=scss&scoped=true
+;// CONCATENATED MODULE: ./src/components/cards/IconCardItem.vue?vue&type=style&index=0&id=70ffe2d4&lang=scss&scoped=true
 
 // EXTERNAL MODULE: ./node_modules/vue-loader/dist/exportHelper.js
 var exportHelper = __webpack_require__(89);
@@ -16172,7 +16175,7 @@ var exportHelper = __webpack_require__(89);
 ;
 
 
-const __exports__ = /*#__PURE__*/(0,exportHelper/* default */.Z)(IconCardItemvue_type_script_lang_ts, [['render',IconCardItemvue_type_template_id_9d490c8c_scoped_true_ts_true_render],['__scopeId',"data-v-9d490c8c"]])
+const __exports__ = /*#__PURE__*/(0,exportHelper/* default */.Z)(IconCardItemvue_type_script_lang_ts, [['render',IconCardItemvue_type_template_id_70ffe2d4_scoped_true_ts_true_render],['__scopeId',"data-v-70ffe2d4"]])
 
 /* harmony default export */ var IconCardItem = (__exports__);
 // EXTERNAL MODULE: ./src/views/onboard/components/ViewSettingDialog.vue + 5 modules
@@ -17921,9 +17924,9 @@ var doors = __webpack_require__(3558);
 const DoorsCard_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(DoorsCardvue_type_script_lang_ts, [['render',DoorsCardvue_type_template_id_2919b1d9_ts_true_render]])
 
 /* harmony default export */ var DoorsCard = (DoorsCard_exports_);
-;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/onboard/components/ClimateCard.vue?vue&type=template&id=4e42cfa6&ts=true
+;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/onboard/components/ClimateCard.vue?vue&type=template&id=62b02ef5&ts=true
 
-function ClimateCardvue_type_template_id_4e42cfa6_ts_true_render(_ctx, _cache, $props, $setup, $data, $options) {
+function ClimateCardvue_type_template_id_62b02ef5_ts_true_render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_icon_card_item = (0,runtime_core_esm_bundler/* resolveComponent */.up)("icon-card-item");
                                                       
   const _component_switch_card_item = (0,runtime_core_esm_bundler/* resolveComponent */.up)("switch-card-item");
@@ -17947,9 +17950,10 @@ function ClimateCardvue_type_template_id_4e42cfa6_ts_true_render(_ctx, _cache, $
           title: _ctx.$t('onboard.climate.enabled.title'),
           description: _ctx.$t('onboard.climate.enabled.description'),
           "icon-name": ['climate'],
+          rotation: $setup.enabled ? 8 - $setup.speedRotation : 0,
           nodata: !$setup.isLoadedValue,
           disabled: !$setup.isLoadedView
-        }, null, 8, ["model-value", "title", "description", "nodata", "disabled"])]),
+        }, null, 8, ["model-value", "title", "description", "rotation", "nodata", "disabled"])]),
         _: 1
       }), (0,runtime_core_esm_bundler/* createVNode */.Wm)(VCol/* VCol */.D, {
         cols: "12",
@@ -18093,7 +18097,7 @@ var climate = __webpack_require__(2481);
         blowEnabled.value = res.airDBody || res.airDLegs;
         blowName.value = res.airDLegs && res.airDBody ? "blow-feet-body" : res.airDLegs ? "blow-feet" : res.airDBody ? "blow-body" : "blow-none";
         blowWindshield.value = res.airDWindshield;
-        speedRotation.value = res.airRate > 0 ? res.airRate + 2 : 0;
+        speedRotation.value = res.airRate;
       }
     };
     /** Входящие значения отображения климат-контроля */
@@ -18167,7 +18171,7 @@ var climate = __webpack_require__(2481);
 
 
 ;
-const ClimateCard_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(ClimateCardvue_type_script_lang_ts, [['render',ClimateCardvue_type_template_id_4e42cfa6_ts_true_render]])
+const ClimateCard_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(ClimateCardvue_type_script_lang_ts, [['render',ClimateCardvue_type_template_id_62b02ef5_ts_true_render]])
 
 /* harmony default export */ var ClimateCard = (ClimateCard_exports_);
 ;// CONCATENATED MODULE: ./node_modules/webpack-plugin-vuetify/dist/scriptLoader.js!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[5]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/views/onboard/components/BoseCard.vue?vue&type=template&id=4937f932&ts=true

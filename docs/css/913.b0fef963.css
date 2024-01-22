@@ -1,6 +1,6 @@
 .card[data-v-3b542480]{width:100%;height:100%;background:rgba(120,144,156,.1);box-shadow:0 4px 16px rgba(27,44,61,.18);border-radius:6px}.card__text[data-v-3b542480]{overflow-y:auto}.card[data-v-3b542480] .v-card-text{height:calc(100% - 64px);padding:16px !important}.card[data-v-3b542480] .v-btn .v-icon{color:#fff}
 .switch-card-item[data-v-737d97f3]{position:relative}.switch-card-item__switch[data-v-737d97f3]{position:absolute;top:4px;right:0}
-.icon-card-item[data-v-9d490c8c]{position:relative}.icon-card-item__icon[data-v-9d490c8c]{position:absolute;top:14px;right:0}
+.icon-card-item[data-v-70ffe2d4]{position:relative}.icon-card-item__icon[data-v-70ffe2d4]{position:absolute;top:14px;right:0}
 .view-setting-dialog[data-v-01a1127c]{max-width:400px}
 .progress-card-item[data-v-a652b4a6]{position:relative}.progress-card-item__progress[data-v-a652b4a6]{position:absolute;top:10px;right:0}.progress-card-item__progress[data-v-a652b4a6] .v-progress-circular__content{font-size:.75rem;line-height:1rem}
 .slider-card-item__description[data-v-3d48ad1c]{font-size:.875rem;line-height:.875rem;font-weight:300;opacity:var(--v-medium-emphasis-opacity)}.slider-card-item__disabled[data-v-3d48ad1c]{opacity:.35}
