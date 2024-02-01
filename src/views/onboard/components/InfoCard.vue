@@ -98,7 +98,7 @@ import Card from "@/components/cards/Card.vue";
 import InputCardItem from "@/components/cards/InputCardItem.vue";
 import SwitchCardItem from "@/components/cards/SwitchCardItem.vue";
 import IconCardItem from "@/components/cards/IconCardItem.vue";
-import ViewSettingDialog from "./ViewSettingDialog.vue";
+import ViewSettingDialog from "../../../components/ViewSettingDialog.vue";
 import { IMenuItem } from "@/components/MenuDots.vue";
 
 import {

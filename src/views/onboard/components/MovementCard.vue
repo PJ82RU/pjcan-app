@@ -54,7 +54,7 @@ import { useI18n } from "vue-i18n";
 
 import Card from "@/components/cards/Card.vue";
 import InputCardItem from "@/components/cards/InputCardItem.vue";
-import ViewSettingDialog from "./ViewSettingDialog.vue";
+import ViewSettingDialog from "../../../components/ViewSettingDialog.vue";
 import { IMenuItem } from "@/components/MenuDots.vue";
 import { TCarModel } from "@/models/pjcan/mazda";
 

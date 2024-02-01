@@ -72,7 +72,7 @@ import canbus from "@/api/canbus";
 
 import Card from "@/components/cards/Card.vue";
 import SwitchCardItem from "@/components/cards/SwitchCardItem.vue";
-import ViewSettingDialog from "./ViewSettingDialog.vue";
+import ViewSettingDialog from "../../../components/ViewSettingDialog.vue";
 import { IMenuItem } from "@/components/MenuDots.vue";
 
 import { IViewConfig, ViewConfig } from "@/models/pjcan/view";

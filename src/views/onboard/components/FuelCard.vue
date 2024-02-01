@@ -54,7 +54,7 @@ import canbus from "@/api/canbus";
 
 import Card from "@/components/cards/Card.vue";
 import InputCardItem from "@/components/cards/InputCardItem.vue";
-import ViewSettingDialog from "./ViewSettingDialog.vue";
+import ViewSettingDialog from "../../../components/ViewSettingDialog.vue";
 import FuelConfigDialog from "./FuelConfigDialog.vue";
 import { IMenuItem } from "@/components/MenuDots.vue";
 

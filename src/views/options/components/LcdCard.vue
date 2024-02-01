@@ -45,6 +45,7 @@
 		:title="menuSelected.title"
 		:view="menuSelected.view"
 		:disabled="menuSelected.disabled"
+		delay-disabled
 		@click:apply="onMazdaViewApply"
 	/>
 </template>
@@ -56,27 +57,20 @@ import canbus from "@/api/canbus";
 
 import Card from "@/components/cards/Card.vue";
 import SwitchCardItem from "@/components/cards/SwitchCardItem.vue";
-import ViewSettingDialog from "@/views/onboard/components/ViewSettingDialog.vue";
+import ViewSettingDialog from "@/components/ViewSettingDialog.vue";
 import { IMenuItem } from "@/components/MenuDots.vue";
 
 import {
 	API_MAZDA_CONFIG_EVENT,
 	API_MAZDA_VIEW_EVENT,
-	TCarModel,
-	IMazdaConfig,
-	API_MAZDA_VIEW_EXEC
+	API_MAZDA_VIEW_EXEC,
+	IMazdaConfig
 } from "@/models/pjcan/mazda";
 import { IViewConfig, ViewConfig } from "@/models/pjcan/view";
 import { API_CANBUS_EVENT } from "@/models/pjcan/base/BaseModel";
 
 export default {
 	name: "LcdCard",
-	computed: {
-		TCarModel()
-		{
-			return TCarModel;
-		}
-	},
 	components: { Card, SwitchCardItem, ViewSettingDialog },
 	props: {
 		carModel: {
@@ -94,15 +88,14 @@ export default {
 		const enabled = ref(false);
 		const logo = ref("");
 		const hello = ref("");
-		const menuVisible = ref(false);
-		const menuSelected = ref({} as IMenuItem);
-		const menuViewConfig = ref({} as IViewConfig);
 
 		let mazdaView: IViewConfig;
 
 		const menu = computed((): IMenuItem[] => [
-			{ title: t("options.lcd.hello.menu"), view: mazdaView, disabled: !mazdaViewLoaded }
+			{ title: t("options.lcd.hello.menu"), view: mazdaView, disabled: !mazdaViewLoaded.value }
 		]);
+		const menuVisible = ref(false);
+		const menuSelected = ref({} as IMenuItem);
 
 		/**
 		 * Выбор пункта меню отображения на информационном экране
@@ -195,7 +188,7 @@ export default {
 			if (status)
 			{
 				onMazdaConfigReceive(canbus.mazda);
-				canbus.query(new ViewConfig(API_MAZDA_VIEW_EXEC));
+				canbus.query(new ViewConfig(API_MAZDA_VIEW_EXEC), true);
 			}
 		};
 		onMounted(() =>
@@ -221,7 +214,6 @@ export default {
 			menu,
 			menuVisible,
 			menuSelected,
-			menuViewConfig,
 			onInput,
 			onMazdaConfigApply,
 			onMenuClick,

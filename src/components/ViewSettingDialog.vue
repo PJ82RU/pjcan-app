@@ -41,7 +41,7 @@
 						:max="300"
 					/>
 				</v-col>
-				<v-col cols="12" class="pt-0">
+				<v-col v-if="!delayDisabled" cols="12" class="pt-0">
 					<number-field
 						v-model="viewDelay"
 						:label="$t('onboard.viewSetting.delay.title')"
@@ -89,13 +89,15 @@ export default {
 		},
 		/** Параметры отображения */
 		view: Object as () => IViewConfig,
+		/** Не показывать "Время паузы отображения" */
+		delayDisabled: Boolean,
 		/** Выкл. */
 		disabled: Boolean
 	},
 	emits: ["update:modelValue", "click:apply"],
 	setup(props: any, { emit }: { emit: any })
 	{
-		const { modelValue, view } = toRefs(props);
+		const { modelValue, view, delayDisabled } = toRefs(props);
 		const { tm } = useI18n();
 
 		const visible = computed({
@@ -120,7 +122,7 @@ export default {
 				viewEnabled.value = view.value?.enabled ?? false;
 				viewType.value = view.value?.type ?? 0;
 				viewTime.value = view.value?.time ?? 3;
-				viewDelay.value = view.value?.delay ?? 3;
+				viewDelay.value = !delayDisabled.value ? view.value?.delay ?? 3 : 0;
 			}
 		});
 

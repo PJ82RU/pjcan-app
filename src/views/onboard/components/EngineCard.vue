@@ -99,7 +99,7 @@ import Card from "@/components/cards/Card.vue";
 import InputCardItem from "@/components/cards/InputCardItem.vue";
 import IconCardItem from "@/components/cards/IconCardItem.vue";
 import ProgressCardItem from "@/components/cards/ProgressCardItem.vue";
-import ViewSettingDialog from "./ViewSettingDialog.vue";
+import ViewSettingDialog from "../../../components/ViewSettingDialog.vue";
 import EngineConfigDialog from "./EngineConfigDialog.vue";
 import { IMenuItem } from "@/components/MenuDots.vue";
 

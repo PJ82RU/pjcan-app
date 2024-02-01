@@ -144,7 +144,7 @@ import InputCardItem from "@/components/cards/InputCardItem.vue";
 import IconCardItem from "@/components/cards/IconCardItem.vue";
 import SliderCardItem from "@/components/cards/SliderCardItem.vue";
 import SelectCardItem from "@/components/cards/SelectCardItem.vue";
-import ViewSettingDialog from "@/views/onboard/components/ViewSettingDialog.vue";
+import ViewSettingDialog from "@/components/ViewSettingDialog.vue";
 import { IMenuItem } from "@/components/MenuDots.vue";
 
 import {
