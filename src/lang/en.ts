@@ -481,8 +481,16 @@ export default {
 
 	onboardButtons: {
 		title: "On-board buttons",
-		description:
-			"Buttons <b>H</b>, <b>M</b>, <b>RM</b> and <b>24/12</b> only work on the restyled version of the car"
+		buttons: {
+			modeClock: "Mode CLOCK",
+			modeInfo: "Mode INFO",
+			clock: "CLOCK",
+			info: "INFO",
+			clockH: "H",
+			clockM: "M",
+			clockRM: "RM",
+			clock24: "24/12"
+		}
 	},
 
 	test: {

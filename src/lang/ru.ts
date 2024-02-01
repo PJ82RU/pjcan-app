@@ -498,8 +498,16 @@ export default {
 
 	onboardButtons: {
 		title: "Кнопки БК",
-		description:
-			"Кнопки <b>H</b>, <b>M</b>, <b>RM</b> и <b>24/12</b> работают только на рестайлинговой версии автомобиля"
+		buttons: {
+			modeClock: "Mode CLOCK",
+			modeInfo: "Mode INFO",
+			clock: "CLOCK",
+			info: "INFO",
+			clockH: "H",
+			clockM: "M",
+			clockRM: "RM",
+			clock24: "24/12"
+		}
 	},
 
 	test: {

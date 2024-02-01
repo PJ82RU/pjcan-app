@@ -12,13 +12,15 @@ export class MazdaAction extends BaseModel implements IMazdaAction
 	static struct: any = {
 		btnPress: BluetoothStruct.bit(),
 		btnSimulation: BluetoothStruct.bit(),
-		btnType: BluetoothStruct.uint8()
+		btnType: BluetoothStruct.uint8(),
+		timePress: BluetoothStruct.uint16()
 	};
-	static size: number = 2;
+	static size: number = 4;
 
 	btnPress = false;
 	btnSimulation = false;
 	btnType = TMazdaButton.MAZDA_BUTTON_NONE;
+	timePress = 0;
 
 	constructor()
 	{
