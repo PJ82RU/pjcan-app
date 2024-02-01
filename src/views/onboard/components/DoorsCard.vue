@@ -144,10 +144,7 @@ export default {
 
 		const onBegin = (status: boolean): void =>
 		{
-			if (status)
-			{
-				if (status) canbus.query(new ViewConfig(API_DOORS_VIEW_EXEC), true);
-			}
+			if (status) canbus.query(new ViewConfig(API_DOORS_VIEW_EXEC), true);
 		};
 		onMounted(() =>
 		{
