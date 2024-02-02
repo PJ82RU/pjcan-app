@@ -43,8 +43,7 @@ export default {
 		},
 		dialog: {
 			updateTo: "Update PJCAN firmware to version {version} ?",
-			browserOutdated: "Your browser version is outdated.\n" +
-				"Update it and open the web application again."
+			browserOutdated: "Your browser version is outdated.\n" + "Update it and open the web application again."
 		},
 		process: {
 			preparation: "Preparing to upload...",
@@ -371,7 +370,8 @@ export default {
 			},
 			audioPLT: {
 				title: "Audio PLT",
-				description: "It is a noise suppression system that continuously adjusts the sound to compensate for background noise and vehicle speed"
+				description:
+					"It is a noise suppression system that continuously adjusts the sound to compensate for background noise and vehicle speed"
 			},
 			radioFM: {
 				title: "Radio FM",
@@ -399,7 +399,8 @@ export default {
 			},
 			centerPoint: {
 				title: "CenterPoint",
-				description: "CenterPoint technology converts stereo signals into multi-channel audio and simultaneously creates a wider/surround sound area"
+				description:
+					"CenterPoint technology converts stereo signals into multi-channel audio and simultaneously creates a wider/surround sound area"
 			}
 		}
 	},
@@ -440,7 +441,8 @@ export default {
 		},
 		delayExec: {
 			title: "Delayed button pressing",
-			description: "Allows you to perform only one function.\n" +
+			description:
+				"Allows you to perform only one function.\n" +
 				"For example: If it is turned off, then when the button is pressed 3 times, the functions for 1, 2 and 3 clicks are performed sequentially. If enabled, then when the button is pressed 3 times, only one function of 3 clicks will be performed."
 		},
 
@@ -526,17 +528,24 @@ export default {
 		},
 		teyes: {
 			title: "Teyes",
-			receiveClock: {
-				title: "Teyes time",
-				description: "Accept incoming time value from Teyes (if the protocol supports this functionality)"
+			protocol: {
+				title: "UART Protocol",
+				description: "UART protocol for PJCAN communication with Teyes",
+				list: {
+					1: "Raise HM_ND00 2017.12.11 (19200)",
+					2: "Raise HM_ND01 2019.06.21 (38400)",
+					3: "SimpleSoft MZ_SS_07A (38400)",
+					4: "SimpleSoft RP5_MZ_002 (38400)"
+				}
 			},
-			receiveButtons: {
-				title: "Teyes Buttons",
-				description: "Support for Teyes buttons: CLOCK, HOUR, MIN (if the protocol supports this functionality)"
+			reverseUart: {
+				title: "Change UART contacts",
+				description: "Enable if there is no PJCAN connection with multimedia"
 			},
-			receiveText: {
-				title: "Accept Teyes information",
-				description: "Accept incoming Teyes values: name of radio stations, etc."
+			lcdShow: {
+				title: "Show the text Teyes",
+				description: "Show the text of the Teyes on the information screen instead of the logo",
+				menu: "LCD: Show the text Teyes"
 			},
 			sendButton: {
 				title: "Steering wheel buttons",
@@ -552,32 +561,26 @@ export default {
 			},
 			parseVolume: {
 				title: "Control the sound level on Teyes",
-				description: "It is recommended to turn off this parameter to directly control the sound of the Bose amplifier"
-			},
-			lcdShow: {
-				title: "Show the text Teyes",
 				description:
-					"Show the text of the Teyes on the information screen at the time of the absence of data display",
-				menu: "LCD: Show the text Teyes"
+					"It is recommended to turn off this parameter to directly control the sound of the Bose amplifier"
 			},
-			protocol: {
-				title: "UART Protocol",
-				description: "UART protocol for PJCAN communication with Teyes",
-				list: {
-					1: "Raise HM_ND00 2017.12.11 (19200)",
-					2: "Raise HM_ND01 2019.06.21 (38400)",
-					3: "SimpleSoft MZ_SS_07A (38400)",
-					4: "SimpleSoft RP5_MZ_002 (38400)"
-				}
+			receiveText: {
+				title: "Accept Teyes information",
+				description: "Accept incoming Teyes values: name of radio stations, etc."
 			},
-			reverseUart: {
-				title: "Change UART contacts",
-				description: "Enable if there is no PJCAN connection with multimedia"
+			receiveClock: {
+				title: "Teyes time",
+				description: "Accept incoming time value from Teyes (if the protocol supports this functionality)"
+			},
+			receiveButtons: {
+				title: "Teyes Buttons",
+				description: "Support for Teyes buttons: CLOCK, HOUR, MIN (if the protocol supports this functionality)"
 			}
 		},
 		onboard: {
 			title: "On-board",
-			description: "A list of cards displayed on the On-Board Computer screen. The order is changed by dragging the block up/down. You can also enable/disable the display on the page",
+			description:
+				"A list of cards displayed on the On-Board Computer screen. The order is changed by dragging the block up/down. You can also enable/disable the display on the page",
 			reset: {
 				menu: "Arrange by default"
 			}
@@ -587,8 +590,7 @@ export default {
 	scanner: {
 		dialog: {
 			title: "Scanning canbus",
-			text: "Start scanning can-shines?\n" +
-				"Scanning values will be automatically sent PJ82."
+			text: "Start scanning can-shines?\n" + "Scanning values will be automatically sent PJ82."
 		},
 		btn: {
 			start: "Begin",
@@ -598,56 +600,60 @@ export default {
 		step: {
 			0: {
 				title: "Scanning of engine values",
-				text: "Run the car engine and press the \"Next\" button"
+				text: 'Run the car engine and press the "Next" button'
 			},
 			1: {
 				title: "Scanning doors",
-				text: "1. Open the driver's door and close it;\n" +
+				text:
+					"1. Open the driver's door and close it;\n" +
 					"2. Open the passenger door behind the driver and close it;\n" +
 					"3. Open the trunk and close it;\n" +
 					"4. Open the passenger door behind on the right and close it;\n" +
 					"5. Open the passenger door in front on the right and close it.\n" +
 					"\n" +
-					"Return to the salon and click the \"Next\" button"
+					'Return to the salon and click the "Next" button'
 			},
 			2: {
 				title: "Scanning of signal values",
-				text: "1. Fasten the driver safety belt;\n" +
+				text:
+					"1. Fasten the driver safety belt;\n" +
 					"2. Fasten the front passenger safety belt;\n" +
 					"3. Fasten the seat belts of the rear passengers;\n" +
 					"4. Turn on the left turn signal, then the right, turn off;\n" +
 					"5. Turn on the emergency stop signal, turn it off.\n" +
 					"\n" +
-					"Click \"Next\""
+					'Click "Next"'
 			},
 			3: {
 				title: "Scanning of climate values",
-				text: "1. Turn on/off Auto;\n" +
+				text:
+					"1. Turn on/off Auto;\n" +
 					"2. Turn on/off the AC;\n" +
 					"3. Change the direction of the air flow;\n" +
 					"4. Change the speed of the air flow.\n" +
 					"\n" +
-					"Click \"Next\""
+					'Click "Next"'
 			},
 			4: {
 				title: "Scanning of movement values",
-				text: "1. Remove the car from the hand brake;\n" +
+				text:
+					"1. Remove the car from the hand brake;\n" +
 					"2. Turn on the rear gear and hand back a little;\n" +
 					"3. Turn on the automatic transmission mode or switch the PMPP transmission and start moving forward.\n" +
 					"\n" +
-					"After completing the movement of the car, drown out the engine and press the \"finish\" button"
+					'After completing the movement of the car, drown out the engine and press the "finish" button'
 			}
 		},
 		notify: {
-			errorStart: "Scanning is not running.\n" +
-				"Check the connection to the PJCAN device.",
+			errorStart: "Scanning is not running.\n" + "Check the connection to the PJCAN device.",
 			errorSend: "Error sending scan data packet.",
 			warningSend: "There is no scan data to send."
 		},
 		upload: {
 			title: "Uploading to the server",
 			text: "Uploading scanned values to the server.",
-			leftToLoad: "No packages to download | Left to download {n} package | Left to download {n} package | There are {n} packages left to download"
+			leftToLoad:
+				"No packages to download | Left to download {n} package | Left to download {n} package | There are {n} packages left to download"
 		}
 	},
 
