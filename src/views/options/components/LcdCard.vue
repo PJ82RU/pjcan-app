@@ -72,12 +72,6 @@ import { API_CANBUS_EVENT } from "@/models/pjcan/base/BaseModel";
 export default {
 	name: "LcdCard",
 	components: { Card, SwitchCardItem, ViewSettingDialog },
-	props: {
-		carModel: {
-			type: Number,
-			default: 0
-		}
-	},
 	setup()
 	{
 		const { t } = useI18n();

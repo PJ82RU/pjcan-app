@@ -8,8 +8,8 @@
 						:title="$t('onboard.info.acc.title')"
 						:description="$t('onboard.info.acc.description')"
 						:icon-name="['key']"
-						:nodata="!isLoadedSensorValue"
-						:disabled="!isLoadedSensorView"
+						:nodata="!sensorValueLoaded"
+						:disabled="!sensorViewLoaded"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0 pb-0">
@@ -18,8 +18,8 @@
 						:title="$t('onboard.info.worktime.title')"
 						:description="$t('onboard.info.worktime.description')"
 						type="time"
-						:nodata="!isLoadedDeviceValue"
-						:disabled="!isLoadedSensorView"
+						:nodata="!deviceValueLoaded"
+						:disabled="!sensorViewLoaded"
 					/>
 				</v-col>
 				<v-col v-if="carModel === TCarModel.CAR_MODEL_MAZDA_3_BK" cols="12" class="pt-0 pb-0">
@@ -28,8 +28,8 @@
 						:title="$t('onboard.info.temperature.title')"
 						:description="$t('onboard.info.temperature.description')"
 						type="temperature"
-						:nodata="!isLoadedTemperatureValue"
-						:disabled="!isLoadedTemperatureView"
+						:nodata="!temperatureValueLoaded"
+						:disabled="!temperatureViewLoaded"
 					/>
 				</v-col>
 				<v-col v-if="carModel === TCarModel.CAR_MODEL_MAZDA_3_BK" cols="12" class="pt-0 pb-0">
@@ -38,8 +38,8 @@
 						:title="$t('onboard.info.handbrake.title')"
 						:description="$t('onboard.info.handbrake.description')"
 						color="error"
-						:nodata="!isLoadedSensorValue"
-						:disabled="!isLoadedSensorView"
+						:nodata="!sensorValueLoaded"
+						:disabled="!sensorViewLoaded"
 					/>
 				</v-col>
 				<v-col v-if="carModel === TCarModel.CAR_MODEL_MAZDA_3_BK" cols="12" class="pt-0 pb-0">
@@ -48,8 +48,8 @@
 						:title="$t('onboard.info.reverse.title')"
 						:description="$t('onboard.info.reverse.description')"
 						color="warning"
-						:nodata="!isLoadedSensorValue"
-						:disabled="!isLoadedSensorView"
+						:nodata="!sensorValueLoaded"
+						:disabled="!sensorViewLoaded"
 					/>
 				</v-col>
 				<v-col v-if="carModel === TCarModel.CAR_MODEL_MAZDA_3_BK" cols="12" class="pt-0 pb-0">
@@ -60,8 +60,8 @@
 						:icon-name="['passenger', 'passenger']"
 						:colorsTrue="acc ? { primary: 'success' } : undefined"
 						:colorsFalse="acc ? { primary: 'error' } : undefined"
-						:nodata="!isLoadedSensorValue"
-						:disabled="!isLoadedSensorView"
+						:nodata="!sensorValueLoaded"
+						:disabled="!sensorViewLoaded"
 					/>
 				</v-col>
 				<v-col v-if="carModel === TCarModel.CAR_MODEL_MAZDA_3_BK" cols="12" class="pt-0 pb-0">
@@ -71,8 +71,8 @@
 						:description="$t('onboard.info.signal.description')"
 						:icon-name="['arrow-right', 'arrow-left']"
 						:colorsTrue="{ primary: 'success' }"
-						:nodata="!isLoadedSensorValue"
-						:disabled="!isLoadedSensorView"
+						:nodata="!sensorValueLoaded"
+						:disabled="!sensorViewLoaded"
 					/>
 				</v-col>
 			</v-row>
@@ -133,12 +133,11 @@ export default {
 	{
 		const { t } = useI18n();
 
-		const isLoadedDeviceValue = ref(false);
-		const isLoadedSensorValue = ref(false);
-		const isLoadedTemperatureValue = ref(false);
-
-		const isLoadedSensorView = ref(false);
-		const isLoadedTemperatureView = ref(false);
+		const deviceValueLoaded = ref(false);
+		const sensorValueLoaded = ref(false);
+		const temperatureValueLoaded = ref(false);
+		const sensorViewLoaded = ref(false);
+		const temperatureViewLoaded = ref(false);
 
 		const acc = ref(false);
 		const worktime = ref(0);
@@ -160,27 +159,27 @@ export default {
 					{
 						title: t("onboard.info.temperature.menu"),
 						view: temperatureView,
-						disabled: !isLoadedTemperatureView.value
+						disabled: !temperatureViewLoaded.value
 					},
 					{
 						title: t("onboard.info.handbrake.menu"),
 						view: sensorsViews?.handbrake,
-						disabled: !isLoadedSensorView.value
+						disabled: !sensorViewLoaded.value
 					},
 					{
 						title: t("onboard.info.reverse.menu"),
 						view: sensorsViews?.reverse,
-						disabled: !isLoadedSensorView.value
+						disabled: !sensorViewLoaded.value
 					},
 					{
 						title: t("onboard.info.safetyBelt.menu"),
 						view: sensorsViews?.seatbelt,
-						disabled: !isLoadedSensorView.value
+						disabled: !sensorViewLoaded.value
 					},
 					{
 						title: t("onboard.info.signal.menu"),
 						view: sensorsViews?.turnSignal,
-						disabled: !isLoadedSensorView.value
+						disabled: !sensorViewLoaded.value
 					}
 				]
 				: []
@@ -212,7 +211,7 @@ export default {
 		 */
 		const onReceiveDeviceValue = (res: IDeviceValue): void =>
 		{
-			isLoadedDeviceValue.value = res.isData;
+			deviceValueLoaded.value = res.isData;
 			if (res.isData) worktime.value = res.worktime;
 		};
 		/**
@@ -221,7 +220,7 @@ export default {
 		 */
 		const onReceiveSensorValue = (res: ISensorsValue): void =>
 		{
-			isLoadedSensorValue.value = res.isData;
+			sensorValueLoaded.value = res.isData;
 			if (res.isData)
 			{
 				acc.value = true;
@@ -239,7 +238,7 @@ export default {
 		 */
 		const onReceiveTemperatureValue = (res: ITemperatureValue): void =>
 		{
-			isLoadedTemperatureValue.value = res.isData;
+			temperatureValueLoaded.value = res.isData;
 			if (res.isData)
 			{
 				temperature.value = res.out / 10;
@@ -252,7 +251,7 @@ export default {
 		 */
 		const onReceiveSensorView = (res: ISensorsViews): void =>
 		{
-			isLoadedSensorView.value = res.isData;
+			sensorViewLoaded.value = res.isData;
 			sensorsViews = res;
 		};
 		/**
@@ -261,7 +260,7 @@ export default {
 		 */
 		const onReceiveTemperatureView = (res: IViewConfig): void =>
 		{
-			isLoadedTemperatureView.value = res.isData;
+			temperatureViewLoaded.value = res.isData;
 			temperatureView = res;
 		};
 
@@ -297,11 +296,11 @@ export default {
 		});
 
 		return {
-			isLoadedDeviceValue,
-			isLoadedSensorValue,
-			isLoadedSensorView,
-			isLoadedTemperatureValue,
-			isLoadedTemperatureView,
+			deviceValueLoaded,
+			sensorValueLoaded,
+			sensorViewLoaded,
+			temperatureValueLoaded,
+			temperatureViewLoaded,
 			acc,
 			worktime,
 			temperature,
