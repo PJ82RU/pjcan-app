@@ -10,12 +10,14 @@ export class DeviceValue extends BaseModel implements IDeviceValue
 {
 	static struct: any = {
 		activation: BluetoothStruct.bit(),
+		hardware: BluetoothStruct.uint8(),
 		led: BluetoothStruct.uint8(),
 		worktime: BluetoothStruct.uint32()
 	};
-	static size: number = 6;
+	static size: number = 7;
 
 	activation = false;
+	hardware = 0;
 	led = 0;
 	worktime = 0;
 

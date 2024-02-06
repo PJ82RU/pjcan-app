@@ -31,9 +31,10 @@ export class DeviceInfo extends BaseModel implements IDeviceInfo
 		sketchMD5: BluetoothStruct.char(16),
 		sketchSize: BluetoothStruct.uint32(),
 		temperatureChip: BluetoothStruct.uint32(),
-		sha: BluetoothStruct.uint8(32)
+		sha: BluetoothStruct.uint8(32),
+		hardware: BluetoothStruct.char(32)
 	};
-	static size: number = 143;
+	static size: number = 175;
 
 	chipCores = 0;
 	chipModel = "";
@@ -58,6 +59,7 @@ export class DeviceInfo extends BaseModel implements IDeviceInfo
 	sketchSize = 0;
 	temperatureChip = 0;
 	sha = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+	hardware = "";
 
 	constructor(data?: DataView)
 	{
