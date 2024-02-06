@@ -78,6 +78,7 @@ export default {
 		const visibleReset = ref(false);
 		const startedScanner = ref(false);
 		const modelDeviceInfo = ref({
+			hardware: "",
 			temperatureChip: "",
 			// chipCores: "",
 			// chipRevision: "",
@@ -147,6 +148,7 @@ export default {
 				value.sketchSize = res.sketchSize.toString();
 				value.temperatureChip = (res.temperatureChip / 100).toFixed(2) + "°C";
 				value.sha = canbus.sha ?? "";
+				value.hardware = res.hardware;
 			}
 		};
 
