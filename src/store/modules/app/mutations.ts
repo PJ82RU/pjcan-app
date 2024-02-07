@@ -4,6 +4,7 @@ import { IOnboardCard } from "@/models/interfaces/IOnboardCard";
 import { TCarModel } from "@/models/pjcan/mazda";
 
 import { createDebounce } from "@/utils/debounce";
+import { IButtonCard } from "@/models/interfaces/IButtonCard";
 const debounce = createDebounce();
 
 /**
@@ -66,4 +67,32 @@ export const setOnboardCardList = (state: any, value: IOnboardCard[]) =>
 export const setCarModel = (state: any, value: TCarModel) =>
 {
 	state.carModel = value;
+};
+
+/**
+ * Записать список кнопок SW1
+ * @param {any} state
+ * @param {IButtonCard[]} value Новый список
+ */
+export const setListButtonsSW1 = (state: any, value: IButtonCard[]) =>
+{
+	state.listButtonsSW1 = [...value].map((x: IButtonCard) => ({
+		id: x.id,
+		title: x.title,
+		icon: x.icon
+	}));
+};
+
+/**
+ * Записать список кнопок SW3
+ * @param {any} state
+ * @param {IButtonCard[]} value Новый список
+ */
+export const setListButtonsSW3 = (state: any, value: IButtonCard[]) =>
+{
+	state.listButtonsSW3 = [...value].map((x: IButtonCard) => ({
+		id: x.id,
+		title: x.title,
+		icon: x.icon
+	}));
 };

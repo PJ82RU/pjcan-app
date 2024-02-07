@@ -1,4 +1,5 @@
 import onboardCardListDefault from "./onboard-card-list-default";
+import listButtonsDefault from "./list-buttons-default";
 
 /**
  * Чтение списка onboardCardList из local storage
@@ -43,4 +44,83 @@ export const resetOnboardCardList = ({ commit, dispatch }: { commit: any, dispat
 {
 	commit("setOnboardCardList", onboardCardListDefault);
 	dispatch("writeOnboardCardList");
+};
+
+/**
+ * Чтение списка кнопок SW1 из local storage
+ * @param {any} commit
+ */
+export const readListButtonsSW1 = ({ commit }: { commit: any }) =>
+{
+	const res = window.localStorage.getItem("ListButtonsSW1");
+	if (res?.length)
+	{
+		try
+		{
+			const listButtonsSW1 = JSON.parse(res);
+			if (Array.isArray(listButtonsSW1))
+			{
+				commit("setListButtonsSW1", listButtonsSW1);
+			}
+		}
+		catch (e)
+		{
+			console.log(e);
+		}
+	}
+};
+
+/**
+ * Запись списка кнопок SW1 в local storage
+ * @param {any} commit
+ */
+export const writeListButtonsSW1 = ({ getters }: { getters: any }) =>
+{
+	const res = JSON.stringify(getters.listButtonsSW1);
+	window.localStorage.setItem("ListButtonsSW1", res);
+};
+
+/**
+ * Сбросить значения списка кнопок SW1 по умолчанию
+ * @param {any} commit
+ * @param {any} dispatch
+ */
+export const resetListButtonsSW1 = ({ commit, dispatch }: { commit: any, dispatch: any }) =>
+{
+	commit("setListButtonsSW1", listButtonsDefault);
+	dispatch("writeListButtonsSW1");
+};
+
+/**
+ * Чтение списка кнопок SW3 из local storage
+ * @param {any} commit
+ */
+export const readListButtonsSW3 = ({ commit }: { commit: any }) =>
+{
+	const res = window.localStorage.getItem("ListButtonsSW3");
+	if (res?.length)
+	{
+		try
+		{
+			const listButtonsSW3 = JSON.parse(res);
+			if (Array.isArray(listButtonsSW3))
+			{
+				commit("setListButtonsSW3", listButtonsSW3);
+			}
+		}
+		catch (e)
+		{
+			console.log(e);
+		}
+	}
+};
+
+/**
+ * Запись списка кнопок SW3 в local storage
+ * @param {any} commit
+ */
+export const writeListButtonsSW3 = ({ getters }: { getters: any }) =>
+{
+	const res = JSON.stringify(getters.listButtonsSW3);
+	window.localStorage.setItem("ListButtonsSW3", res);
 };
