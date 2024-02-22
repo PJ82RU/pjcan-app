@@ -15,8 +15,8 @@ export class ButtonValue extends BaseModel implements IButtonValue
 {
 	static struct: any = {
 		index: BluetoothStruct.int8(),
-		exec: BluetoothStruct.uint8(),
-		execMode: BluetoothStruct.uint8(),
+		btnExec: BluetoothStruct.uint8(),
+		btnExecMode: BluetoothStruct.uint8(),
 		count: BluetoothStruct.uint8(),
 		type: BluetoothStruct.uint8(),
 		resistance: BluetoothStruct.uint16()
@@ -24,8 +24,8 @@ export class ButtonValue extends BaseModel implements IButtonValue
 	static size: number = 7;
 
 	index = -1;
-	exec = TButtonExec.BUTTON_EXEC_NONE;
-	execMode = TButtonExec.BUTTON_EXEC_NONE;
+	btnExec = TButtonExec.BUTTON_EXEC_NONE;
+	btnExecMode = TButtonExec.BUTTON_EXEC_NONE;
 	count = 0;
 	type = TButtonType.PRESS_RELEASE;
 	resistance = 0;

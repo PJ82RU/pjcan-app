@@ -19,6 +19,7 @@ export class ButtonsConfig extends BaseModel implements IButtonsConfig
 		items: BluetoothStruct.struct(
 			{
 				extended: BluetoothStruct.bit(),
+				id: BluetoothStruct.uint8(),
 				hold: BluetoothStruct.uint8(),
 				resistance: BluetoothStruct.uint16(),
 				exec: BluetoothStruct.uint8(5),
@@ -27,7 +28,7 @@ export class ButtonsConfig extends BaseModel implements IButtonsConfig
 			7
 		)
 	};
-	static size: number = 101;
+	static size: number = 108;
 
 	enabled = false;
 	range = 0;
@@ -43,10 +44,9 @@ export class ButtonsConfig extends BaseModel implements IButtonsConfig
 				extended: false,
 				hold: 0,
 				resistance: 0,
-				exec: [],
-				execMode: []
+				exec: new Array(5),
+				execMode: new Array(5)
 			} as IButtonConfigItem;
-			for (let j = 0; j < 5; j++) item.exec.push(0);
 			this.items.push(item);
 		}
 		if (data) this.set(data);

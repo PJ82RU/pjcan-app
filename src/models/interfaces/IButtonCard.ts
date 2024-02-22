@@ -1,7 +1,9 @@
-import { TButtonItem } from "../pjcan/buttons";
+import { IButtonConfigItem } from "../pjcan/buttons";
 
 export interface IButtonCard {
+	id: number;
 	title: string;
-	type: TButtonItem;
 	icon: string;
+	config?: IButtonConfigItem;
+	configLoaded?: boolean;
 }
