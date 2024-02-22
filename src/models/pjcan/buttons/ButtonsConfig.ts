@@ -14,14 +14,14 @@ export class ButtonsConfig extends BaseModel implements IButtonsConfig
 {
 	static struct: any = {
 		enabled: BluetoothStruct.bit(),
-		sendValue: BluetoothStruct.bit(),
-		range: BluetoothStruct.uint16(),
+		programming: BluetoothStruct.bit(),
 		items: BluetoothStruct.struct(
 			{
 				extended: BluetoothStruct.bit(),
 				id: BluetoothStruct.uint8(),
 				hold: BluetoothStruct.uint8(),
-				resistance: BluetoothStruct.uint16(),
+				resistance_min: BluetoothStruct.uint16(),
+				resistance_max: BluetoothStruct.uint16(),
 				exec: BluetoothStruct.uint8(5),
 				execMode: BluetoothStruct.uint8(5)
 			},
@@ -31,8 +31,7 @@ export class ButtonsConfig extends BaseModel implements IButtonsConfig
 	static size: number = 108;
 
 	enabled = false;
-	range = 0;
-	sendValue = false;
+	programming = false;
 	items = [] as IButtonConfigItem[];
 
 	constructor(exec: number = API_BUTTONS_SW1_CONFIG_EXEC, data?: DataView)
@@ -43,7 +42,8 @@ export class ButtonsConfig extends BaseModel implements IButtonsConfig
 			const item: IButtonConfigItem = {
 				extended: false,
 				hold: 0,
-				resistance: 0,
+				resistance_min: 0,
+				resistance_max: 0,
 				exec: new Array(5),
 				execMode: new Array(5)
 			} as IButtonConfigItem;
