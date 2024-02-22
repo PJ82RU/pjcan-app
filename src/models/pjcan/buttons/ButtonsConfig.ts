@@ -28,7 +28,7 @@ export class ButtonsConfig extends BaseModel implements IButtonsConfig
 			7
 		)
 	};
-	static size: number = 108;
+	static size: number = 120;
 
 	enabled = false;
 	programming = false;
