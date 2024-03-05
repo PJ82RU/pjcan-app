@@ -1,7 +1,7 @@
 <template>
 	<v-menu content-class="menu-dots" location="center end" transition="slide-x-reverse-transition">
 		<template v-slot:activator="{ props }">
-			<v-btn v-bind="props" icon="mdi-dots-vertical" :color="color" />
+			<v-btn v-bind="props" :icon="icon" :color="color" />
 		</template>
 
 		<v-list class="pa-0">
@@ -40,7 +40,11 @@ export default {
 			type: Array as () => IMenuItem[],
 			required: true
 		},
-		color: String
+		color: String,
+		icon: {
+			type: String,
+			default: "mdi-dots-vertical"
+		}
 	},
 	setup()
 	{

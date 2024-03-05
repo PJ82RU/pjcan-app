@@ -13,6 +13,7 @@
 				<menu-dots
 					v-if="menu && menu.length > 0"
 					:menu="menu"
+					icon="mdi-menu"
 					color="primary"
 					@click:item="$emit('click:menu', $event)"
 				/>
