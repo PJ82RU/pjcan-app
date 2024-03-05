@@ -20,8 +20,8 @@ export class ButtonsConfig extends BaseModel implements IButtonsConfig
 				extended: BluetoothStruct.bit(),
 				id: BluetoothStruct.uint8(),
 				hold: BluetoothStruct.uint8(),
-				resistance_min: BluetoothStruct.uint16(),
-				resistance_max: BluetoothStruct.uint16(),
+				resistanceMin: BluetoothStruct.uint16(),
+				resistanceMax: BluetoothStruct.uint16(),
 				exec: BluetoothStruct.uint8(5),
 				execMode: BluetoothStruct.uint8(5)
 			},
@@ -42,8 +42,8 @@ export class ButtonsConfig extends BaseModel implements IButtonsConfig
 			const item: IButtonConfigItem = {
 				extended: false,
 				hold: 0,
-				resistance_min: 0,
-				resistance_max: 0,
+				resistanceMin: 0,
+				resistanceMax: 0,
 				exec: new Array(5),
 				execMode: new Array(5)
 			} as IButtonConfigItem;
