@@ -100,27 +100,30 @@ export default {
 		const menu = computed((): IMenuItem[] =>
 		{
 			const result = [] as IMenuItem[];
-			const { name } = router.currentRoute.value;
+			const { name, query } = router.currentRoute.value;
 
 			result.push(
 				{ id: 0, title: t("menu.onboard"), disabled: name === "Onboard" },
-				{ id: 1, title: t("menu.settings.buttons"), disabled: name === "Buttons" },
-				{ id: 6, title: t("menu.settings.options"), disabled: name === "Options" },
-				{ id: 4, title: t("menu.onboardButtons") }
+				{ id: 40, title: t("menu.onboardButtons") },
+				{ id: 60, title: t("menu.settings.options"), disabled: name === "Options" },
+				{} as IMenuItem,
+				{ id: 10, title: t("menu.settings.buttonsSW1"), disabled: name === "Buttons" && query?.type === "sw1" },
+				{ id: 11, title: t("menu.settings.buttonsSW3"), disabled: name === "Buttons" && query?.type === "sw3" },
+				{} as IMenuItem,
 			);
-			if (store.getters["app/carModel"] !== TCarModel.CAR_MODEL_MAZDA_CX9_REST)
-			{
-				result.push({ id: 5, title: t("menu.test") });
-			}
-			result.push({} as IMenuItem, {
-				id: 2,
+			result.push({
+				id: 20,
 				title: t("menu.language." + (locale.value !== "ru" ? "russian" : "english"))
 			});
 			if (typeof newVersionFirmware.value === "string")
 			{
-				result.push({ id: 7, title: t("menu.update", { version: newVersionFirmware.value }) });
+				result.push({ id: 70, title: t("menu.update", { version: newVersionFirmware.value }) });
 			}
-			result.push({ id: 3, title: t("menu.about") });
+			if (store.getters["app/carModel"] !== TCarModel.CAR_MODEL_MAZDA_CX9_REST)
+			{
+				result.push({ id: 50, title: t("menu.test") });
+			}
+			result.push({} as IMenuItem, { id: 30, title: t("menu.about") });
 
 			return result;
 		});
@@ -133,26 +136,29 @@ export default {
 				case 0:
 					router.push({ name: "Onboard" });
 					break;
-				case 1:
-					router.push({ name: "Buttons" });
+				case 10:
+					router.push({ name: "Buttons", query: { type: "sw1" } });
 					break;
-				case 2:
+				case 11:
+					router.push({ name: "Buttons", query: { type: "sw3" } });
+					break;
+				case 20:
 					locale.value = locale.value !== "ru" ? "ru" : "en";
 					moment.locale(locale.value);
 					break;
-				case 3:
+				case 30:
 					visibleAbout.value = true;
 					break;
-				case 4:
+				case 40:
 					visibleOnboardButtons.value = true;
 					break;
-				case 5:
+				case 50:
 					visibleTest.value = true;
 					break;
-				case 6:
+				case 60:
 					router.push({ name: "Options" });
 					break;
-				case 7:
+				case 70:
 					visibleUpdate.value = true;
 					break;
 			}

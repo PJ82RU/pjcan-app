@@ -1,27 +1,27 @@
 <template>
-	<flicking ref="flicking" class="buttons" :options="{ bound: true, align: 'prev' }">
-		<div v-for="(item, i) in buttons" :key="`buttons-${i}`" class="mr-4" :class="`flicking-${display}`">
+	<flicking ref="flicking" class="listSW1" :options="{ bound: true, align: 'prev' }">
+		<div
+			v-for="(item, index) in listButtons"
+			:key="`button-item_${index}`"
+			class="mr-4"
+			:class="`flicking-${display}`"
+		>
 			<settings-card
-				:class="`settings-card-${i}`"
-				:title="list[i].title"
-				v-model:in-r="item.inR"
-				v-model:press-single="item.pressSingle"
-				v-model:press-dual="item.pressDual"
-				v-model:press-triple="item.pressTriple"
-				v-model:press-hold="item.pressHold"
-				v-model:delay-exec="item.delayExec"
-				:is-loaded-config="isLoadedConfig"
-				:icon="list[i].icon"
-				@change="onButtonConfigChange"
+				:class="`settings-card-${index}`"
+				:title="item.title"
+				:icon="item.icon"
+				:config="item.config"
+				:config-loaded="item.configLoaded"
+				@update="onButtonConfigUpdate"
 			/>
 		</div>
 	</flicking>
 
 	<button-definition-dialog
-		v-model="visibleButtonDefinitionDialog"
-		:list="list"
-		:resistance="resistanceButtonDefinition"
-		:type="typeButtonDefinition"
+		v-model="buttonDefinitionVisibleDialog"
+		:list="listButtons"
+		:resistance="buttonDefinitionResistance"
+		:id="buttonDefinitionId"
 		@click:apply="onButtonDefinitionApply"
 	/>
 </template>
@@ -29,103 +29,145 @@
 <script lang="ts">
 import { computed, onMounted, onUnmounted, provide, ref, watch } from "vue";
 import { useDisplay } from "vuetify";
-import { useI18n } from "vue-i18n";
+// import { useI18n } from "vue-i18n";
+import canbus from "@/api/canbus";
 
 import Flicking from "@egjs/vue3-flicking";
 import SettingsCard from "./components/SettingsCard.vue";
 import ButtonDefinitionDialog from "./components/ButtonDefinitionDialog.vue";
 
 import {
-	API_BUTTON_EVENT,
-	API_BUTTONS_CONFIG_EXEC,
-	API_BUTTONS_CONFIG_EVENT,
+	API_BUTTON_SW1_VALUE_EVENT,
+	API_BUTTON_SW3_VALUE_EVENT,
+	API_BUTTONS_SW1_CONFIG_EVENT,
+	API_BUTTONS_SW1_CONFIG_EXEC,
+	API_BUTTONS_SW3_CONFIG_EVENT,
+	API_BUTTONS_SW3_CONFIG_EXEC,
+	ButtonsConfig,
+	IButtonConfigItem,
 	IButtonsConfig,
-	IButtonValue,
-	TButtonItem,
-	TButtonPress
-} from "@/models/pjcan/button";
-import { IButtonItem } from "@/models/interfaces/IButtonItem";
+	IButtonValue
+} from "@/models/pjcan/buttons";
+import { API_CANBUS_EVENT } from "@/models/pjcan/base/BaseModel";
 import { IButtonCard } from "@/models/interfaces/IButtonCard";
-
-import canbus from "@/api/canbus";
+import router from "@/router";
+import store from "@/store";
 
 export default {
-	name: "buttons",
+	name: "Buttons",
 	components: { Flicking, SettingsCard, ButtonDefinitionDialog },
 	setup()
 	{
 		const { name: display } = useDisplay();
-		const { t } = useI18n();
+		// const { t } = useI18n();
 		const flicking = ref(null);
 		provide("flicking", flicking);
 
-		const isLoadedConfig = ref(false);
-		const visibleButtonDefinitionDialog = ref(false);
-		const typeButtonDefinition = ref(-1);
-		const resistanceButtonDefinition = ref(0);
-		const buttons = ref([] as IButtonItem[]);
+		let buttonsConfig: IButtonsConfig;
+		let buttonsValue: IButtonValue;
 
-		/** Обновление списка конфигураций кнопок */
-		const buttonItemsUpdate = (): void =>
-		{
-			canbus.configs.buttons.items?.forEach((x, i) =>
-			{
-				if (!buttons.value?.[i]) buttons.value.push({} as IButtonItem);
-				const res = buttons.value[i];
-				res.inR = x.inR;
-				res.pressSingle = x.exec[TButtonPress.PRESS_SINGLE];
-				res.pressDual = x.exec[TButtonPress.PRESS_DUAL];
-				res.pressTriple = x.exec[TButtonPress.PRESS_TRIPLE];
-				res.pressHold = x.exec[TButtonPress.PRESS_HOLD];
-				res.delayExec = x.delayExec;
-			});
-		};
-		buttonItemsUpdate();
-
-		/** Список конфигураций кнопок */
-		const list = computed(
-			(): IButtonCard[] =>
-				[
-					{
-						title: t("buttons.mode"),
-						type: TButtonItem.BUTTON_MODE,
-						icon: "mdi-menu"
-					},
-					{
-						title: t("buttons.seekUp"),
-						type: TButtonItem.BUTTON_SEEK_UP,
-						icon: "mdi-play"
-					},
-					{
-						title: t("buttons.seekDown"),
-						type: TButtonItem.BUTTON_SEEK_DOWN,
-						icon: "mdi-play"
-					},
-					{
-						title: t("buttons.volUp"),
-						type: TButtonItem.BUTTON_VOL_UP,
-						icon: "mdi-volume-plus"
-					},
-					{
-						title: t("buttons.volDown"),
-						type: TButtonItem.BUTTON_VOL_DOWN,
-						icon: "mdi-volume-minus"
-					},
-					{
-						title: t("buttons.volMute"),
-						type: TButtonItem.BUTTON_VOL_MUTE,
-						icon: "mdi-volume-mute"
-					}
-				] as IButtonCard[]
+		const type = computed(() => router.currentRoute.value.query?.type);
+		const buttonsConfigLoaded = ref(false);
+		const buttonDefinitionVisibleDialog = ref(false);
+		const buttonDefinitionResistance = computed((): number =>
+			buttonDefinitionVisibleDialog.value ? buttonsValue.resistance : 0
 		);
+		const buttonDefinitionId = computed((): number =>
+			buttonDefinitionVisibleDialog.value ? buttonsValue.id : 0
+		);
+		const listButtons = ref([] as IButtonCard[]);
 
-		// блокируем отправку значений на время обновления list
-		let receiveConfig = false;
-		watch(list, () =>
+		/** Загрузка списка кнопок */
+		const loadListButtons = (): void =>
 		{
-			receiveConfig = true;
-			setTimeout(() => (receiveConfig = false), 500);
-		});
+			let readKey, getKey;
+
+			if (type.value === "sw1")
+			{
+				readKey = "app/readListButtonsSW1";
+				getKey = "app/listButtonsSW1";
+			}
+			else if (type.value === "sw3")
+			{
+				readKey = "app/readListButtonsSW3";
+				getKey = "app/listButtonsSW3";
+			}
+			else
+			{
+				readKey = "";
+				getKey = "";
+			}
+
+			if (readKey?.length)
+			{
+				store.dispatch(readKey);
+				listButtons.value =
+					store.getters[getKey]?.map((x: IButtonCard) => ({
+						...x,
+						config: null,
+						configLoaded: false
+					})) ?? ([] as IButtonCard[]);
+			}
+		};
+
+		/** Сохранить список кнопок */
+		const saveListButtons = (): void =>
+		{
+			let writeKey, setKey;
+
+			if (type.value === "sw1")
+			{
+				writeKey = "app/writeListButtonsSW1";
+				setKey = "app/setListButtonsSW1";
+			}
+			else if (type.value === "sw3")
+			{
+				writeKey = "app/writeListButtonsSW3";
+				setKey = "app/setListButtonsSW3";
+			}
+			else
+			{
+				writeKey = "";
+				setKey = "";
+			}
+
+			if (writeKey?.length)
+			{
+				store.commit(setKey, listButtons.value);
+				store.dispatch(writeKey);
+			}
+		};
+
+		/** Изменение значений конфигурации кнопок */
+		const onButtonConfigUpdate = (item: IButtonConfigItem): void =>
+		{
+			const button = listButtons.value.find((x) => x.id === item.id);
+			if (button && button.configLoaded)
+			{
+				button.configLoaded = false;
+				canbus.query(buttonsConfig);
+			}
+		};
+
+		/**
+		 * Применить конфигурацию определенной кнопки
+		 * @param {number | undefined} id ID кнопки
+		 * @param {number} resistanceMin Минимальное сопротивление кнопки
+		 * @param {number} resistanceMax Максимальное сопротивление кнопки
+		 */
+		const onButtonDefinitionApply = (id: number | undefined, resistanceMin: number, resistanceMax: number): void =>
+		{
+			if (id)
+			{
+				const item: IButtonConfigItem | undefined = buttonsConfig?.items?.find((x: IButtonConfigItem) => x.id === id);
+				if (item && (item.resistanceMin !== resistanceMin || item.resistanceMax !== resistanceMax))
+				{
+					item.resistanceMin = resistanceMin;
+					item.resistanceMax = resistanceMax;
+					canbus.query(buttonsConfig);
+				}
+			}
+		};
 
 		/**
 		 * Отправлять значение нажатой кнопки
@@ -133,102 +175,98 @@ export default {
 		 */
 		const enabledSendValue = (enabled: boolean): void =>
 		{
-			if (enabled !== canbus.configs.buttons.sendValue)
+			if (buttonsConfig.isData && buttonsConfig.programming !== enabled)
 			{
-				canbus.configs.buttons.sendValue = enabled;
-				canbus.queryConfig(API_BUTTONS_CONFIG_EXEC);
+				buttonsConfig.programming = enabled;
+				canbus.query(buttonsConfig);
 			}
 		};
 
-		/**
-		 * Входящие значения конфигурации кнопок
-		 * @param {IButtonsConfig} res
-		 */
-		const onReceiveConfig = (res: IButtonsConfig): void =>
+		const onButtonsConfigReceive = (res: IButtonsConfig): void =>
 		{
-			isLoadedConfig.value = res.isData;
+			buttonsConfigLoaded.value = res.isData;
+			buttonsConfig = res;
+
+			/** Список конфигураций кнопок */
 			if (res.isData)
 			{
-				buttonItemsUpdate();
-
-				// Включаем определение нажатой кнопки.
-				// Выключится автоматически, при запросе значений или ручками в onUnmounted
-				enabledSendValue(true);
+				buttonsConfig.items.forEach((item: IButtonConfigItem) =>
+				{
+					const button = listButtons.value.find((x) => x.id === item.id);
+					if (button)
+					{
+						button.config = item;
+						button.configLoaded = true;
+					}
+				});
 			}
-		};
 
-		/**
-		 * Входящие значения кнопки
-		 * @param {IButtonValue} res
-		 */
-		const onReceiveValue = (res: IButtonValue): void =>
+			// Включаем определение нажатой кнопки.
+			// Выключится автоматически, при запросе значений или ручками в onUnmounted
+			enabledSendValue(true);
+		};
+		const onButtonsValueReceive = (res: IButtonValue): void =>
 		{
-			if (res.isData && !visibleButtonDefinitionDialog.value)
+			if (res.isData && !buttonDefinitionVisibleDialog.value)
 			{
-				typeButtonDefinition.value = res.index;
-				resistanceButtonDefinition.value = res.r;
-				visibleButtonDefinitionDialog.value = true;
+				buttonsValue = res;
+				buttonDefinitionVisibleDialog.value = true;
 			}
 		};
 
-		// регистрируем события
+		const listener = (type?: any): void =>
+		{
+			canbus.removeListener(API_BUTTONS_SW1_CONFIG_EVENT, onButtonsConfigReceive);
+			canbus.removeListener(API_BUTTON_SW1_VALUE_EVENT, onButtonsValueReceive);
+			canbus.removeListener(API_BUTTONS_SW3_CONFIG_EVENT, onButtonsConfigReceive);
+			canbus.removeListener(API_BUTTON_SW3_VALUE_EVENT, onButtonsValueReceive);
+
+			buttonsConfigLoaded.value = false;
+			buttonsConfig = {} as IButtonsConfig;
+
+			if (type === "sw1")
+			{
+				canbus.addListener(API_BUTTONS_SW1_CONFIG_EVENT, onButtonsConfigReceive);
+				canbus.addListener(API_BUTTON_SW1_VALUE_EVENT, onButtonsValueReceive);
+				canbus.query(new ButtonsConfig(API_BUTTONS_SW1_CONFIG_EXEC), true);
+			}
+			else if (type === "sw3")
+			{
+				canbus.addListener(API_BUTTONS_SW3_CONFIG_EVENT, onButtonsConfigReceive);
+				canbus.addListener(API_BUTTON_SW3_VALUE_EVENT, onButtonsValueReceive);
+				canbus.query(new ButtonsConfig(API_BUTTONS_SW3_CONFIG_EXEC), true);
+			}
+		};
+		watch(type, (val: any) =>
+		{
+			if (val.name === "Buttons") listener(val);
+		});
+		const onBegin = (status: boolean): void =>
+		{
+			if (status) listener(type.value);
+		};
 		onMounted(() =>
 		{
-			canbus.addListener(API_BUTTONS_CONFIG_EVENT, onReceiveConfig);
-			canbus.addListener(API_BUTTON_EVENT, onReceiveValue);
-			onReceiveConfig(canbus.configs.buttons);
-			// onReceiveValue(canbus.buttonValue);
+			loadListButtons();
+			canbus.addListener(API_CANBUS_EVENT, onBegin);
+			onBegin(canbus.begin);
 		});
-		// удаляем события
 		onUnmounted(() =>
 		{
-			canbus.removeListener(API_BUTTONS_CONFIG_EVENT, onReceiveConfig);
-			canbus.removeListener(API_BUTTON_EVENT, onReceiveValue);
-
 			enabledSendValue(false);
+			listener();
+			canbus.removeListener(API_CANBUS_EVENT, onBegin);
 		});
-
-		/** Изменение значений конфигурации кнопок */
-		const onButtonConfigChange = (): void =>
-		{
-			if (receiveConfig) return;
-
-			const { items } = canbus.configs.buttons;
-			buttons.value.forEach((x, i) =>
-			{
-				const res = items[i];
-				res.inR = x.inR;
-				res.exec[TButtonPress.PRESS_SINGLE] = x.pressSingle;
-				res.exec[TButtonPress.PRESS_DUAL] = x.pressDual;
-				res.exec[TButtonPress.PRESS_TRIPLE] = x.pressTriple;
-				res.exec[TButtonPress.PRESS_HOLD] = x.pressHold;
-				res.exec[TButtonPress.RELEASE] = 0;
-				res.delayExec = x.delayExec;
-			});
-			canbus.queryConfig(API_BUTTONS_CONFIG_EXEC);
-		};
-
-		/**
-		 * Применить новый тип не определенной кнопки
-		 * @param {number} type Тип кнопки
-		 */
-		const onButtonDefinitionApply = (type: TButtonItem): void =>
-		{
-			canbus.configs.buttons.items[type].inR = resistanceButtonDefinition.value;
-			canbus.queryConfig(API_BUTTONS_CONFIG_EXEC);
-			onReceiveConfig(canbus.configs.buttons);
-		};
 
 		return {
 			flicking,
 			display,
-			isLoadedConfig,
-			buttons,
-			list,
-			visibleButtonDefinitionDialog,
-			resistanceButtonDefinition,
-			typeButtonDefinition,
-			onButtonConfigChange,
+			buttonsConfigLoaded,
+			listButtons,
+			buttonDefinitionVisibleDialog,
+			buttonDefinitionResistance,
+			buttonDefinitionId,
+			onButtonConfigUpdate,
 			onButtonDefinitionApply
 		};
 	}
@@ -236,7 +274,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.buttons {
+.listSW1 {
 	height: 100%;
 
 	::v-deep(.settings-card-1 .mdi-play) {

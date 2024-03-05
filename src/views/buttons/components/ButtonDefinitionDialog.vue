@@ -13,23 +13,35 @@
 				<v-col cols="12">
 					<number-field
 						:model-value="resistance"
-						:label="$t('buttons.resistance.title')"
-						:hint="$t('buttons.resistance.description')"
-						:min="1"
-						:max="3999"
+						:label="$t('buttons.resistance.cur.title')"
+						:hint="$t('buttons.resistance.cur.description')"
 						readonly
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0">
 					<v-select
-						v-model="modelType"
+						v-model="modelId"
 						:label="$t('buttons.definition.type.title')"
 						:items="list"
 						:hint="$t('buttons.definition.type.description')"
 						variant="underlined"
 						item-title="title"
-						item-value="type"
+						item-value="id"
 						persistent-hint
+					/>
+				</v-col>
+				<v-col cols="12" class="pt-0">
+					<number-field
+						v-model="resistanceMin"
+						:label="$t('buttons.resistance.min.title')"
+						:hint="$t('buttons.resistance.min.description')"
+					/>
+				</v-col>
+				<v-col cols="12" class="pt-0">
+					<number-field
+						v-model="resistanceMax"
+						:label="$t('buttons.resistance.max.title')"
+						:hint="$t('buttons.resistance.max.description')"
 					/>
 				</v-col>
 			</v-row>
@@ -51,8 +63,8 @@ import { computed, ref, toRefs, watch } from "vue";
 import DialogTemplate from "@/layout/components/DialogTemplate.vue";
 import NumberField from "@/components/common/NumberField.vue";
 
-import { TButtonItem } from "@/models/pjcan/button";
 import { IButtonCard } from "@/models/interfaces/IButtonCard";
+import { IButtonConfigItem } from "@/models/pjcan/buttons";
 
 export default {
 	name: "ButtonDefinitionDialog",
@@ -68,38 +80,58 @@ export default {
 			type: Array as () => IButtonCard[],
 			required: true
 		},
+		/** ID кнопки */
+		id: Number,
 		/** Сопротивление кнопки */
-		resistance: Number,
-		type: Number as () => TButtonItem
+		resistance: Number
 	},
 	emits: ["update:modelValue", "click:apply"],
 	setup(props: any, { emit }: { emit: any })
 	{
-		const { modelValue, type } = toRefs(props);
+		const { modelValue, list, id } = toRefs(props);
 
 		const visible = computed({
 			get: (): boolean => modelValue.value,
 			set: (val: boolean): void => emit("update:modelValue", val)
 		});
 
-		const modelType = ref(undefined);
-		const disabled = computed(() => modelType.value === undefined);
+		const modelId = ref(undefined as number | undefined);
+		const resistanceMin = ref(0);
+		const resistanceMax = ref(0);
+		const disabled = computed(() => modelId.value === undefined);
+
+		const resistanceUpdate = (id: number | undefined): void =>
+		{
+			const config = id ? list.value?.find((x: IButtonConfigItem) => x.id === modelId.value)?.config : undefined;
+			if (config)
+			{
+				resistanceMin.value = config.resistanceMin;
+				resistanceMax.value = config.resistanceMax;
+			}
+		};
 
 		watch(visible, (val) =>
 		{
-			if (val) modelType.value = type.value >= 0 ? type.value : undefined;
+			if (val)
+			{
+				modelId.value = id.value > 0 ? id.value : undefined;
+				resistanceUpdate(modelId.value);
+			}
 		});
+		watch(modelId, (val) => resistanceUpdate(val));
 
 		/** Применить */
 		const onApplyClick = () =>
 		{
 			visible.value = false;
-			emit("click:apply", modelType.value);
+			emit("click:apply", modelId.value, resistanceMin.value, resistanceMax.value);
 		};
 
 		return {
 			visible,
-			modelType,
+			modelId,
+			resistanceMin,
+			resistanceMax,
 			disabled,
 			onApplyClick
 		};

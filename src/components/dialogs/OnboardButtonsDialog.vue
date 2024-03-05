@@ -203,15 +203,7 @@ export default {
 			navigator.vibrate(30);
 		};
 
-		const timeouts: ITimeoutButton[] = [
-			{} as ITimeoutButton,
-			{} as ITimeoutButton,
-			{} as ITimeoutButton,
-			{} as ITimeoutButton,
-			{} as ITimeoutButton,
-			{} as ITimeoutButton,
-			{} as ITimeoutButton
-		];
+		const timeouts: ITimeoutButton[] = [{}, {}, {}, {}, {}, {}, {}] as ITimeoutButton[];
 		const press = (btn: TMazdaButton, timeout: number, reSend: boolean): void =>
 		{
 			const item = timeouts[btn];

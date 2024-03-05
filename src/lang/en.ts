@@ -81,7 +81,8 @@ export default {
 			english: "Английский язык"
 		},
 		settings: {
-			buttons: "Steering wheel button settings",
+			buttonsSW1: "Steering wheel buttons",
+			buttonsSW3: "SW3 buttons",
 			options: "Options"
 		},
 		update: "Upgrade to {version}",
@@ -111,7 +112,8 @@ export default {
 		sketchMD5: "Sketch MD5",
 		sketchSize: "Sketch size",
 		temperatureChip: "Temperature chip",
-		sha: "SHA"
+		sha: "SHA",
+		hardware: "Board version"
 	},
 
 	deviceReset: {
@@ -407,17 +409,35 @@ export default {
 
 	buttons: {
 		title: "Button settings",
+		extendedMode: "Advanced mode",
+		hintMode: " (advanced mode)",
 
 		mode: "MODE button",
-		seekUp: "SEEK UP button",
-		seekDown: "SEEK DOWN button",
-		volUp: "VOL UP button",
-		volDown: "VOL DOWN button",
+		seekUp: "SET UP button",
+		seekDown: "SET DOWN button",
+		volUp: "VOL + button",
+		volDown: "VOL - button",
 		volMute: "VOL MUTE button",
 
+		extended: {
+			title: "Extended mode",
+			description: "Support for double, triple button pressing and holding"
+		},
 		resistance: {
 			title: "Button resistance",
-			description: "The resistance of the button in units is allowed an error of ± 300 units."
+			description: "The resistance interval of the button in units",
+			cur: {
+				title: "Current resistance",
+				description: "The value of the resistance of the pressed button. You can't change it"
+			},
+			min: {
+				title: "Minimum resistance",
+				description: "Specify the minimum value of the button, but do not allow the values to overlap with other buttons"
+			},
+			max: {
+				title: "Maximum resistance",
+				description: "Specify the maximum value of the button, but do not allow the values to overlap with other buttons"
+			}
 		},
 		pressSingle: {
 			title: "Button pressed 1 time",
@@ -433,43 +453,41 @@ export default {
 		},
 		pressHold: {
 			title: "Button hold",
-			description: "A function that is performed when the button is pressed and held for 3 or more seconds."
-		},
-		release: {
-			title: "Button released",
-			description: "Function that is executed when the button is released"
-		},
-		delayExec: {
-			title: "Delayed button pressing",
-			description:
-				"Allows you to perform only one function.\n" +
-				"For example: If it is turned off, then when the button is pressed 3 times, the functions for 1, 2 and 3 clicks are performed sequentially. If enabled, then when the button is pressed 3 times, only one function of 3 clicks will be performed."
+			description: "A function that is performed when the button is pressed and held for 3 or more seconds.",
+			time: {
+				title: "Button holding time",
+				description: "Button holding time, sec."
+			}
 		},
 
 		functions: {
 			0: "No action",
-			1: "Teyes MODE button",
-			2: "Teyes SEEK UP button",
-			3: "Teyes SEEK DOWN button",
-			4: "Teyes VOL UP button",
-			5: "Teyes VOL DOWN button",
-			6: "Teyes VOL MUTE button",
-			7: "Clock button on LCD",
-			8: "Clock H button on LCD",
-			9: "Clock M button on LCD",
-			10: "Info button on LCD",
-			11: "Show engine values",
-			12: "Show consumption values",
-			13: "Show motion values",
-			14: "Show temperature values",
-			15: "Clock 12/24 button on LCD",
-			16: "Voice control",
-			17: "Radio",
-			18: "Camera",
-			19: "Radio: search",
-			20: "Equalizer",
-			21: "On/off display",
-			22: "Phone"
+			1: "Switch to the Mode",
+			2: "Exiting the Mode",
+			3: "Pressing the MODE button",
+			4: "Pressing the SET UP button",
+			5: "Pressing the SET DOWN button",
+			6: "Pressing the sound level + button",
+			7: "Pressing the sound level - button",
+			8: "Pressing the mute sound button",
+			9: "Holding the CLOCK button",
+			10: "Pressing the CLOCK button",
+			11: "Pressing the CLOCK H button",
+			12: "Pressing the CLOCK M button",
+			13: "Pressing the CLOCK 24/12 button",
+			14: "Holding the INFO button",
+			15: "Pressing the INFO button",
+			16: "Show the values of the engine",
+			17: "Show flow values",
+			18: "Show movement values",
+			19: "Show temperature values",
+			20: "Voice control",
+			21: "Radio",
+			22: "Camera",
+			23: "Radio: search",
+			24: "Equalizer",
+			25: "Turning off the display",
+			26: "Phone"
 		},
 
 		definition: {
