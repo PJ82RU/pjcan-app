@@ -1,6 +1,6 @@
 import { BluetoothStruct } from "@/components/bluetooth";
 import { BaseModel } from "../base";
-import { IDeviceValue } from "./IDeviceValue";
+import { IDeviceHardware, IDeviceValue } from "./IDeviceValue";
 
 export const API_DEVICE_VALUE_EXEC = 0x03;
 export const API_DEVICE_VALUE_EVENT = "DeviceValue";
@@ -8,17 +8,39 @@ export const API_DEVICE_VALUE_EVENT = "DeviceValue";
 /** Модель значений устройства */
 export class DeviceValue extends BaseModel implements IDeviceValue
 {
+	static structHardware: any = {
+		major: BluetoothStruct.uint8(),
+		minor: BluetoothStruct.uint8(),
+		build: BluetoothStruct.uint8(),
+		revision: BluetoothStruct.uint8()
+	};
+
 	static struct: any = {
 		activation: BluetoothStruct.bit(),
-		hardware: BluetoothStruct.uint8(),
+		state_led_work: BluetoothStruct.bit(),
+		state_reverse: BluetoothStruct.bit(),
+		state_r_position: BluetoothStruct.bit(),
+		state_amp_illum: BluetoothStruct.bit(),
+		hardware: BluetoothStruct.struct(this.structHardware),
 		led: BluetoothStruct.uint8(),
+		voltmeter: BluetoothStruct.uint16(),
 		worktime: BluetoothStruct.uint32()
 	};
-	static size: number = 7;
+	static size: number = 12;
 
 	activation = false;
-	hardware = 0;
+	state_led_work = false;
+	state_reverse = false;
+	state_r_position = false;
+	state_amp_illum = false;
+	hardware = {
+		major: 0,
+		minor: 0,
+		build: 0,
+		revision: 0
+	} as IDeviceHardware;
 	led = 0;
+	voltmeter = 0;
 	worktime = 0;
 
 	constructor(data?: DataView)
