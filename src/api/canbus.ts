@@ -6,7 +6,7 @@ import { getFirmware, getFirmwareVersion } from "@/api/firmware";
 import { getSerial } from "@/api/hash";
 
 import { createDebounce } from "@/utils/debounce";
-import { toMac } from "@/utils/conversion";
+import { arrayToHex } from "@/utils/conversion";
 
 import {
 	BLUETOOTH_EVENT_CONNECTED,
@@ -34,7 +34,8 @@ import {
 	DeviceValue,
 	DeviceUpdate,
 	DeviceScannerValue,
-	IDeviceInfo
+	IDeviceInfo,
+	IDeviceValue
 } from "@/models/pjcan/device";
 import {
 	API_BUTTONS_SW1_CONFIG_EXEC,
@@ -63,8 +64,7 @@ import {
 	API_MAZDA_CONFIG_EVENT,
 	API_MAZDA_VIEW_EXEC,
 	API_MAZDA_VIEW_EVENT,
-	MazdaConfig,
-	IMazdaConfig
+	MazdaConfig
 } from "@/models/pjcan/mazda";
 import {
 	API_DATETIME_CONFIG_EVENT,
@@ -178,7 +178,7 @@ import {
 	API_VOLUME_VIEW_EVENT,
 	VolumeConfig
 } from "@/models/pjcan/volume";
-import { API_VERSION_EVENT, API_VERSION_EXEC, IVersion, Version } from "@/models/pjcan/version";
+import { API_NEW_VERSION_EVENT, API_VERSION_EVENT, API_VERSION_EXEC, IVersion, Version } from "@/models/pjcan/version";
 import { API_CHOICE_EXEC, ChoiceValue } from "@/models/pjcan/choice";
 
 import { IQuery } from "@/models/interfaces/IQuery";
@@ -191,35 +191,33 @@ export class Canbus extends EventEmitter
 {
 	/** Bluetooth */
 	bluetooth: Bluetooth = new Bluetooth();
-	/** Версия прошивки PJCAN */
-	version: IVersion = new Version();
-	/** Статус активации устройства */
-	activation: boolean = false;
-	/** SHA */
-	sha: string | undefined;
-	/** MAC */
-	efuseMac: string | undefined;
-
-	/** Параметры автомобиля */
-	mazda: IMazdaConfig = new MazdaConfig();
-
 	/** Очередь */
 	private queue: IQuery[] = [];
 	/** Ожидание следующей очереди */
 	private queueWait: boolean = false;
 	/** Запрет на отправку данных */
 	queueDisabled: boolean = false;
-
 	/** Обновление прошивки */
 	update = new DeviceUpdate();
 	/** Таймер */
 	private debounce = createDebounce();
+
+	/** Версия прошивки PJCAN */
+	version: IVersion = new Version();
+	/** Статус активации устройства */
+	activation: boolean = false;
 
 	constructor()
 	{
 		super();
 		this.bluetooth.addListener(BLUETOOTH_EVENT_CONNECTED, (ev: any) => this.onConnected(ev));
 		this.bluetooth.addListener(BLUETOOTH_EVENT_RECEIVE, (ev: any) => this.onReceive(ev));
+	}
+
+	/** Статус работы Canbus */
+	get status(): boolean
+	{
+		return this.bluetooth.connected && this.version.is;
 	}
 
 	/** Отправка сообщений из очереди */
@@ -271,6 +269,7 @@ export class Canbus extends EventEmitter
 	 */
 	query(obj: IBaseModel, request?: boolean, fn?: (success: boolean) => void)
 	{
+		if (!this.activation && !obj.skipActivationCheck) return;
 		if (this.queue.length)
 		{
 			const item = this.queue.find((x: IQuery) => x.exec === obj.exec && x.id === obj.id);
@@ -295,30 +294,115 @@ export class Canbus extends EventEmitter
 		this.sendBluetoothQueue();
 	}
 
-	/** Статус работы Canbus */
-	get begin(): boolean
-	{
-		return this.bluetooth.connected && this.version.is;
-	}
-
 	/**
 	 * Событие подключения Bluetooth
 	 * @param {TConnectedStatus} status Статус подключения
 	 */
 	onConnected(status: TConnectedStatus)
 	{
+		this.queue = [];
 		if (status === TConnectedStatus.CONNECT)
 		{
 			if (!this.version.is)
 			{
-				const choice = new ChoiceValue();
-				choice.listID = [API_MAZDA_CONFIG_EXEC, API_VERSION_EXEC, API_DEVICE_VALUE_EXEC];
-				this.queue = [];
-				this.query(choice);
+				// Запрос версии прошивки
+				this.addListener(API_VERSION_EVENT, (ev: any) => this.onVersion(ev));
+				this.query(new Version());
+				return;
 			}
-			else this.emit(API_CANBUS_EVENT, this.begin);
 		}
-		else this.emit(API_CANBUS_EVENT, this.begin);
+		this.emit(API_CANBUS_EVENT, this.status);
+	}
+
+	/**
+	 * Входящее значение версии
+	 * @param {IVersion} version Версия прошивки
+	 */
+	private onVersion(version: IVersion): void
+	{
+		this.removeListener(API_VERSION_EVENT, (ev: any) => this.onVersion(ev));
+		if (version.is)
+		{
+			this.version = version;
+			const { major, minor, build, revision } = version;
+			console.log(t("BLE.server.versionProtocol", { mj: major, mn: minor, bl: build, rv: revision }));
+
+			// Запрос значения активации устройства
+			this.addListener(API_DEVICE_VALUE_EVENT, (ev: any) => this.onIsActivation(ev));
+			this.query(new DeviceValue());
+
+			// Проверка наличия новой версии прошивки
+			this.checkVersion()
+				.then((newVersion: IVersion) =>
+				{
+					this.emit(API_NEW_VERSION_EVENT, newVersion);
+				})
+				.catch(() => {});
+		}
+		else
+		{
+			this.emit(API_CANBUS_EVENT, this.status);
+			toast.error(t("error.version"));
+		}
+	}
+
+	/**
+	 * Проверка активации устройства PJCAN
+	 * @param {IDeviceValue} device Значения устройства
+	 */
+	private onIsActivation(device: IDeviceValue): void
+	{
+		if (device.isData)
+		{
+			this.removeListener(API_DEVICE_VALUE_EVENT, (ev: any) => this.onIsActivation(ev));
+			this.activation = device.activation;
+			if (!this.activation)
+			{
+				// для активации устройства получаем хеш устройства
+				this.addListener(API_DEVICE_INFO_EVENT, (ev: any) => this.onActivation(ev));
+				this.query(new DeviceInfo());
+			}
+			else this.emit(API_CANBUS_EVENT, this.status);
+		}
+	}
+
+	/**
+	 * Активация устройства PJCAN
+	 * @param {IDeviceInfo} info Информация об устройстве PJCAN
+	 */
+	private onActivation(info: IDeviceInfo): void
+	{
+		if (info.isData)
+		{
+			this.removeListener(API_DEVICE_INFO_EVENT, (ev: any) => this.onActivation(ev));
+			const sha = arrayToHex(info.sha);
+			if (sha?.length)
+			{
+				getSerial(sha)
+					.then((res: any) =>
+					{
+						if (res?.sha?.length)
+						{
+							const device = new DeviceConfig();
+							device.serial = res.sha;
+							this.query(device, false, (success) =>
+							{
+								if (success)
+								{
+									this.rebootDevice(true);
+									toast.success(t("activation.success"));
+								}
+								else toast.error(t("activation.error"));
+							});
+						}
+						else toast.error(t("activation.error"));
+					})
+					.catch(() =>
+					{
+						toast.error(t("activation.error"));
+					});
+			}
+		}
 	}
 
 	/**
@@ -332,40 +416,18 @@ export class Canbus extends EventEmitter
 		{
 			case API_VERSION_EXEC: {
 				// Версия прошивки
-				const is = this.version.is;
-				this.version.set(data);
-				const { major, minor, build, revision } = this.version;
-				console.log(t("BLE.server.versionProtocol", { mj: major, mn: minor, bl: build, rv: revision }));
-				this.emit(API_VERSION_EVENT, this.version);
-				if (!is) this.emit(API_CANBUS_EVENT, this.begin);
+				this.emit(API_VERSION_EVENT, new Version(data));
 				break;
 			}
-			case API_DEVICE_INFO_EXEC: {
-				// Информация об устройстве
-				const res = new DeviceInfo(data);
-				if (res.isData)
-				{
-					if (this.sha === undefined) this.getSHA(res);
-					if (this.efuseMac === undefined) this.efuseMac = toMac(res.efuseMac);
-				}
-				this.emit(API_DEVICE_INFO_EVENT, res);
+			case API_DEVICE_INFO_EXEC: // Информация об устройстве
+				this.emit(API_DEVICE_INFO_EVENT, new DeviceInfo(data));
 				break;
-			}
 			case API_DEVICE_CONFIG_EXEC: // Конфигурация устройства
 				this.emit(API_DEVICE_CONFIG_EVENT, new DeviceConfig(data));
 				break;
-			case API_DEVICE_VALUE_EXEC: {
-				// Значения устройства
-				const res = new DeviceValue(data);
-				if (res.isData)
-				{
-					this.activation = res.activation;
-					// для активации устройства получаем хеш устройства
-					if (!this.activation && this.sha === undefined) this.query(new DeviceInfo());
-				}
-				this.emit(API_DEVICE_VALUE_EVENT, res);
+			case API_DEVICE_VALUE_EXEC: // Значения устройства
+				this.emit(API_DEVICE_VALUE_EVENT, new DeviceValue(data));
 				break;
-			}
 			case API_DEVICE_UPDATE_EXEC: // Обновление прошивки
 				this.update.set(data);
 				this.emit(API_DEVICE_UPDATE_EVENT, this.update);
@@ -392,8 +454,7 @@ export class Canbus extends EventEmitter
 				break;
 
 			case API_MAZDA_CONFIG_EXEC: // Конфигурация автомобиля
-				this.mazda.set(data);
-				this.emit(API_MAZDA_CONFIG_EVENT, this.mazda);
+				this.emit(API_MAZDA_CONFIG_EVENT, new MazdaConfig(data));
 				break;
 			case API_MAZDA_VIEW_EXEC: // Конфигурация отображения текста приветствия
 				this.emit(API_MAZDA_VIEW_EVENT, new ViewConfig(API_MAZDA_VIEW_EXEC, data));
@@ -628,54 +689,7 @@ export class Canbus extends EventEmitter
 		action.save = save;
 		action.resetConfig = resetConfig;
 		action.resetView = resetView;
-		if (resetConfig || resetView) this.sha = undefined;
 		this.query(action);
-	}
-
-	private getSHA(info: IDeviceInfo): void
-	{
-		this.sha = "";
-		info.sha.forEach((x) =>
-		{
-			const hex = x.toString(16);
-			this.sha += (hex.length === 1 ? "0" : "") + hex;
-		});
-
-		if (!this.activation)
-		{
-			getSerial(this.sha)
-				.then((res: any) =>
-				{
-					if (res?.sha?.length)
-					{
-						const device = new DeviceConfig();
-						device.serial = res.sha;
-						this.query(device, false, (success) =>
-						{
-							if (success)
-							{
-								this.rebootDevice(true);
-								toast.success(t("activation.success"));
-							}
-							else
-							{
-								this.sha = undefined;
-								toast.error(t("activation.error"));
-							}
-						});
-					}
-					else
-					{
-						this.sha = undefined;
-						toast.error(t("activation.error"));
-					}
-				})
-				.catch(() =>
-				{
-					this.sha = undefined;
-					toast.error(t("activation.error"));
-				});
-		}
 	}
 }
 
