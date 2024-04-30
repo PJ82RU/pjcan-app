@@ -1,15 +1,13 @@
 import onboardCardListDefault from "./onboard-card-list-default";
 import listButtonsDefault from "./list-buttons-default";
-import { TCarModel } from "@/models/pjcan/mazda";
-import { IButtonCard } from "@/models/interfaces/IButtonCard";
+import { IMazdaConfig } from "@/models/pjcan/mazda";
 
 const state = {
 	messages: [],
 	visibleMessage: false,
+	mazda: null as IMazdaConfig | null,
 	onboardCardList: onboardCardListDefault,
-	carModel: TCarModel.CAR_MODEL_UNKNOWN,
-	listButtonsSW1: listButtonsDefault,
-	listButtonsSW3: [] as IButtonCard[]
+	listButtonsSW1: listButtonsDefault
 };
 
 export default state;

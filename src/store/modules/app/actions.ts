@@ -90,37 +90,3 @@ export const resetListButtonsSW1 = ({ commit, dispatch }: { commit: any, dispatc
 	commit("setListButtonsSW1", listButtonsDefault);
 	dispatch("writeListButtonsSW1");
 };
-
-/**
- * Чтение списка кнопок SW3 из local storage
- * @param {any} commit
- */
-export const readListButtonsSW3 = ({ commit }: { commit: any }) =>
-{
-	const res = window.localStorage.getItem("ListButtonsSW3");
-	if (res?.length)
-	{
-		try
-		{
-			const listButtonsSW3 = JSON.parse(res);
-			if (Array.isArray(listButtonsSW3))
-			{
-				commit("setListButtonsSW3", listButtonsSW3);
-			}
-		}
-		catch (e)
-		{
-			console.log(e);
-		}
-	}
-};
-
-/**
- * Запись списка кнопок SW3 в local storage
- * @param {any} commit
- */
-export const writeListButtonsSW3 = ({ getters }: { getters: any }) =>
-{
-	const res = JSON.stringify(getters.listButtonsSW3);
-	window.localStorage.setItem("ListButtonsSW3", res);
-};

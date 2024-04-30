@@ -60,16 +60,6 @@ export const setOnboardCardList = (state: any, value: IOnboardCard[]) =>
 };
 
 /**
- * Изменить модель автомобиля
- * @param {any} state
- * @param {TCarModel} value Новое значение
- */
-export const setCarModel = (state: any, value: TCarModel) =>
-{
-	state.carModel = value;
-};
-
-/**
  * Записать список кнопок SW1
  * @param {any} state
  * @param {IButtonCard[]} value Новый список
@@ -77,20 +67,6 @@ export const setCarModel = (state: any, value: TCarModel) =>
 export const setListButtonsSW1 = (state: any, value: IButtonCard[]) =>
 {
 	state.listButtonsSW1 = [...value].map((x: IButtonCard) => ({
-		id: x.id,
-		title: x.title,
-		icon: x.icon
-	}));
-};
-
-/**
- * Записать список кнопок SW3
- * @param {any} state
- * @param {IButtonCard[]} value Новый список
- */
-export const setListButtonsSW3 = (state: any, value: IButtonCard[]) =>
-{
-	state.listButtonsSW3 = [...value].map((x: IButtonCard) => ({
 		id: x.id,
 		title: x.title,
 		icon: x.icon
