@@ -1,31 +1,24 @@
 import canbus from "@/api/canbus";
-import { IDeviceInfo } from "@/models/pjcan/device";
-import { IMazdaConfig, TCarModel } from "@/models/pjcan/mazda";
-import { ITeyesConfig } from "@/models/pjcan/teyes";
-import { IButtonsConfig } from "@/models/pjcan/buttons";
-import { IBoseConfig } from "@/models/pjcan/bose";
-import { IEngineConfig } from "@/models/pjcan/engine";
-import { IFuelConfig } from "@/models/pjcan/fuel";
-import { IVolumeConfig } from "@/models/pjcan/volume";
+import { TCarModel } from "@/models/pjcan/mazda";
 
 /**
  * Изменить информацию об устройстве
  * @param {any} state
- * @param {IDeviceInfo} value Новое значение
+ * @param {DataView} data Данные
  */
-export const setInfo = (state: any, value: IDeviceInfo) =>
+export const setInfo = (state: any, data: DataView) =>
 {
-	state.info = value;
+	state.info.set(data);
 };
 
 /**
  * Изменить конфигурацию автомобиля
  * @param {any} state
- * @param {IMazdaConfig} value Новое значение
+ * @param {DataView} data Данные
  */
-export const setMazda = (state: any, value: IMazdaConfig) =>
+export const setMazda = (state: any, data: DataView) =>
 {
-	state.mazda = value;
+	state.mazda.set(data);
 };
 
 /**
@@ -35,7 +28,7 @@ export const setMazda = (state: any, value: IMazdaConfig) =>
  */
 export const setMazdaCarModel = (state: any, value: TCarModel) =>
 {
-	if (state.mazda)
+	if (state.mazda.isData)
 	{
 		state.mazda.carModel = value;
 		canbus.query(state.mazda);
@@ -45,59 +38,59 @@ export const setMazdaCarModel = (state: any, value: TCarModel) =>
 /**
  * Изменить конфигурацию Teyes
  * @param {any} state
- * @param {ITeyesConfig} value Новое значение
+ * @param {DataView} data Данные
  */
-export const setTeyes = (state: any, value: ITeyesConfig) =>
+export const setTeyes = (state: any, data: DataView) =>
 {
-	state.teyes = value;
+	state.teyes.set(data);
 };
 
 /**
  * Изменить конфигурацию кнопок
  * @param {any} state
- * @param {IButtonsConfig} value Новое значение
+ * @param {DataView} data Данные
  */
-export const setButtons = (state: any, value: IButtonsConfig) =>
+export const setButtons = (state: any, data: DataView) =>
 {
-	state.buttons = value;
+	state.buttons.set(data);
 };
 
 /**
  * Изменить конфигурацию Bose
  * @param {any} state
- * @param {IBoseConfig} value Новое значение
+ * @param {DataView} data Данные
  */
-export const setBose = (state: any, value: IBoseConfig) =>
+export const setBose = (state: any, data: DataView) =>
 {
-	state.bose = value;
+	state.bose.set(data);
 };
 
 /**
  * Изменить конфигурацию ДВС
  * @param {any} state
- * @param {IEngineConfig} value Новое значение
+ * @param {DataView} data Данные
  */
-export const setEngine = (state: any, value: IEngineConfig) =>
+export const setEngine = (state: any, data: DataView) =>
 {
-	state.engine = value;
+	state.engine.set(data);
 };
 
 /**
  * Изменить конфигурацию расхода
  * @param {any} state
- * @param {IFuelConfig} value Новое значение
+ * @param {DataView} data Данные
  */
-export const setFuel = (state: any, value: IFuelConfig) =>
+export const setFuel = (state: any, data: DataView) =>
 {
-	state.fuel = value;
+	state.fuel.set(data);
 };
 
 /**
  * Изменить конфигурацию уровня звука
  * @param {any} state
- * @param {IVolumeConfig} value Новое значение
+ * @param {DataView} data Данные
  */
-export const setVolume = (state: any, value: IVolumeConfig) =>
+export const setVolume = (state: any, data: DataView) =>
 {
-	state.volume = value;
+	state.volume.set(data);
 };
