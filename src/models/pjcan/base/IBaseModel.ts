@@ -4,6 +4,7 @@ import { Timeout } from "../../types/Timeout";
 export interface IBaseModel {
 	exec: number;
 	highPriority: boolean;
+	skipActivationCheck: boolean;
 	id: number;
 	isData: boolean;
 	lastSend?: number;

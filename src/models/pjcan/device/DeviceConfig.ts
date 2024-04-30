@@ -18,6 +18,7 @@ export class DeviceConfig extends BaseModel implements IDeviceConfig
 	constructor(data?: DataView)
 	{
 		super(API_DEVICE_CONFIG_EXEC);
+		this.skipActivationCheck = true;
 		if (data) this.set(data);
 	}
 

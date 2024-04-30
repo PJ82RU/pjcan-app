@@ -4,6 +4,7 @@ import { IVersion } from "./IVersion";
 
 export const API_VERSION_EXEC = 0x00;
 export const API_VERSION_EVENT = "Version";
+export const API_NEW_VERSION_EVENT = "NewVersion";
 
 /** Модель версии */
 export class Version extends BaseModel implements IVersion
@@ -36,6 +37,7 @@ export class Version extends BaseModel implements IVersion
 	constructor(data?: DataView)
 	{
 		super(API_VERSION_EXEC, true);
+		this.skipActivationCheck = true;
 		if (data) this.set(data);
 	}
 

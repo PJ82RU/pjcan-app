@@ -26,6 +26,7 @@ export class DeviceAction extends BaseModel implements IDeviceAction
 	constructor()
 	{
 		super(API_DEVICE_ACTION_EXEC);
+		this.skipActivationCheck = true;
 	}
 
 	/**

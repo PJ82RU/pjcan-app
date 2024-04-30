@@ -46,6 +46,7 @@ export class DeviceValue extends BaseModel implements IDeviceValue
 	constructor(data?: DataView)
 	{
 		super(API_DEVICE_VALUE_EXEC);
+		this.skipActivationCheck = true;
 		if (data) this.set(data);
 	}
 

@@ -64,6 +64,7 @@ export class DeviceInfo extends BaseModel implements IDeviceInfo
 	constructor(data?: DataView)
 	{
 		super(API_DEVICE_INFO_EXEC);
+		this.skipActivationCheck = true;
 		if (data) this.set(data);
 	}
 

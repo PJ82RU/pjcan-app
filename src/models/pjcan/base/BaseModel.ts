@@ -7,6 +7,7 @@ export class BaseModel
 {
 	readonly exec;
 	readonly highPriority;
+	skipActivationCheck = false;
 	id = 0;
 	isData = false;
 
