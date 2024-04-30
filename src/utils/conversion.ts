@@ -9,6 +9,17 @@ const toHex = (value: number | BigInt): string =>
 };
 
 /**
+ * Конвертирование массива чисел в HEX
+ * @param {(number|BigInt)[]} value Массив значений
+ */
+const arrayToHex = (value: (number | BigInt)[]): string =>
+{
+	let sha = "";
+	value?.forEach((x) => (sha += toHex(x)));
+	return sha;
+};
+
+/**
  * Чтение mac-адреса
  * @param {BigInt} value Значение mac-адреса в числовом формате
  */
@@ -22,4 +33,4 @@ const toMac = (value: BigInt): string =>
 	return result;
 };
 
-export { toHex, toMac };
+export { toHex, arrayToHex, toMac };
