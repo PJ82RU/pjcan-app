@@ -135,7 +135,6 @@ export default {
 			const res = store.getters["config/engine"];
 			return res.totalCountRPM > 0 ? Math.round(Number(res.totalCountRPM / 1000n)) : 0;
 		});
-
 		const enabled = computed((): boolean => store.getters["value/engine"].on);
 		const rpm = computed((): string => store.getters["value/engine"].rpm.toFixed());
 		const countRPM = computed((): string => store.getters["value/engine"].viewCountRPM.toString());

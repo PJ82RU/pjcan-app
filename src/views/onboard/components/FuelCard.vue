@@ -47,7 +47,7 @@
 </template>
 
 <script lang="ts">
-import { computed, onMounted, onUnmounted, ref } from "vue";
+import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import store from "@/store";
 import canbus from "@/api/canbus";
@@ -56,23 +56,11 @@ import Card from "@/components/cards/Card.vue";
 import InputCardItem from "@/components/cards/InputCardItem.vue";
 import ViewSettingDialog from "../../../components/ViewSettingDialog.vue";
 import FuelConfigDialog from "./FuelConfigDialog.vue";
-import { IMenuItem } from "@/components/MenuDots.vue";
 
+import { IMenuItem } from "@/components/MenuDots.vue";
 import { TCarModel } from "@/models/pjcan/mazda";
 import { IViewConfig } from "@/models/pjcan/view";
-import {
-	API_FUEL_CONFIG_EVENT,
-	API_FUEL_CONFIG_EXEC,
-	API_FUEL_VALUE_EVENT,
-	API_FUEL_VIEW_EVENT,
-	API_FUEL_VIEW_EXEC,
-	FuelConfig,
-	IFuelConfig,
-	IFuelValue,
-	IFuelViews
-} from "@/models/pjcan/fuel";
-import { API_CANBUS_EVENT } from "@/models/pjcan/base/BaseModel";
-import { ChoiceValue } from "@/models/pjcan/choice";
+import { IFuelConfig } from "@/models/pjcan/fuel";
 
 export default {
 	name: "FuelCard",
@@ -87,21 +75,23 @@ export default {
 	{
 		const { t } = useI18n();
 
-		const fuelConfigLoaded = ref(false);
-		const fuelValueLoaded = ref(false);
-		const fuelViewLoaded = ref(false);
+		const fuelConfigLoaded = computed((): boolean => store.getters["config/fuel"].isData);
+		const fuelValueLoaded = computed((): boolean => store.getters["value/fuel"].isData);
+		const fuelViewLoaded = computed((): boolean => store.getters["view/fuel"].isData);
 
-		const current = ref("");
-		const avg = ref("");
-		const ratio = ref(1);
-		const carModel = computed((): TCarModel => store.getters["app/carModel"]);
-
-		let fuelViews: IFuelViews;
+		const ratio = computed((): number => store.getters["config/fuel"].ratio / 1000);
+		const current = computed((): string => (store.getters["value/fuel"].current / 10).toFixed(1));
+		const avg = computed((): string => (store.getters["value/fuel"].avg / 10).toFixed(1));
+		const carModel = computed((): TCarModel => store.getters["config/carModel"]);
 
 		const menu = computed((): IMenuItem[] => [
 			{ title: t("onboard.fuel.settings.menu"), disabled: !fuelConfigLoaded.value },
-			{ title: t("onboard.fuel.current.menu"), view: fuelViews?.current, disabled: !fuelViewLoaded.value },
-			{ title: t("onboard.fuel.avg.menu"), view: fuelViews?.avg, disabled: !fuelViewLoaded.value }
+			{
+				title: t("onboard.fuel.current.menu"),
+				view: store.getters["view/fuel"].current,
+				disabled: !fuelViewLoaded.value
+			},
+			{ title: t("onboard.fuel.avg.menu"), view: store.getters["view/fuel"].avg, disabled: !fuelViewLoaded.value }
 		]);
 		const menuVisible = ref(false);
 		const menuSelected = ref({} as IMenuItem);
@@ -130,63 +120,13 @@ export default {
 			canbus.query(data);
 		};
 
-		/** Применить конфигурацию расхода */
-		const onFuelConfigApply = (res: any): void =>
+		/** Применить конфигурацию расхода
+		 * @param {IFuelConfig} data Новая конфигурация расхода
+		 * */
+		const onFuelConfigApply = (data: IFuelConfig): void =>
 		{
-			const config = new FuelConfig();
-			config.ratio = (res?.ratio ?? ratio.value) * 1000;
-			canbus.query(config);
+			canbus.query(data);
 		};
-
-		/** Входящие конфигурации расхода топлива */
-		const onFuelConfigReceive = (res: IFuelConfig): void =>
-		{
-			fuelConfigLoaded.value = res.isData;
-			if (res.isData) ratio.value = res.ratio / 1000;
-		};
-		/** Входящие значения расхода топлива */
-		const onFuelValueReceive = (res: IFuelValue): void =>
-		{
-			fuelValueLoaded.value = res.isData;
-			if (res.isData)
-			{
-				current.value = (res.current / 10).toFixed(1);
-				avg.value = (res.avg / 10).toFixed(1);
-			}
-		};
-		/** Входящие значения отображения расхода топлива */
-		const onFuelViewReceive = (res: IFuelViews): void =>
-		{
-			fuelViewLoaded.value = res.isData;
-			fuelViews = res;
-		};
-
-		const choiceId = Math.round(Math.random() * 1000000);
-		const onBegin = (status: boolean): void =>
-		{
-			if (status)
-			{
-				const choice = new ChoiceValue();
-				choice.id = choiceId;
-				choice.listID = [API_FUEL_CONFIG_EXEC, API_FUEL_VIEW_EXEC];
-				canbus.query(choice, true);
-			}
-		};
-		onMounted(() =>
-		{
-			canbus.addListener(API_FUEL_CONFIG_EVENT, onFuelConfigReceive);
-			canbus.addListener(API_FUEL_VALUE_EVENT, onFuelValueReceive);
-			canbus.addListener(API_FUEL_VIEW_EVENT, onFuelViewReceive);
-			canbus.addListener(API_CANBUS_EVENT, onBegin);
-			onBegin(canbus.begin);
-		});
-		onUnmounted(() =>
-		{
-			canbus.removeListener(API_FUEL_CONFIG_EVENT, onFuelConfigReceive);
-			canbus.removeListener(API_FUEL_VALUE_EVENT, onFuelValueReceive);
-			canbus.removeListener(API_FUEL_VIEW_EVENT, onFuelViewReceive);
-			canbus.removeListener(API_CANBUS_EVENT, onBegin);
-		});
 
 		return {
 			fuelConfigLoaded,
