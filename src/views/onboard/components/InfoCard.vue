@@ -19,9 +19,19 @@
 						:description="$t('onboard.info.worktime.description')"
 						type="time"
 						:nodata="!deviceValueLoaded"
-						:disabled="!sensorViewLoaded"
+						:disabled="!worktimeViewLoaded"
 					/>
 				</v-col>
+                <v-col v-if="isVoltmeter" cols="12" class="pt-0 pb-0">
+                    <input-card-item
+                        :value="voltmeter"
+                        :title="$t('onboard.info.voltmeter.title')"
+                        :description="$t('onboard.info.voltmeter.description')"
+                        type="volts"
+                        :nodata="!deviceValueLoaded"
+                        :disabled="!voltmeterViewLoaded"
+                    />
+                </v-col>
 				<v-col v-if="carModel === TCarModel.CAR_MODEL_MAZDA_3_BK" cols="12" class="pt-0 pb-0">
 					<input-card-item
 						:value="temperature"
@@ -84,41 +94,23 @@
 		:title="menuSelected.title"
 		:view="menuSelected.view"
 		:disabled="menuSelected.disabled"
-		@click:apply="onViewSettingApply"
 	/>
 </template>
 
 <script lang="ts">
-import { computed, onMounted, onUnmounted, ref } from "vue";
+import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import store from "@/store";
-import canbus from "@/api/canbus";
 
 import Card from "@/components/cards/Card.vue";
 import InputCardItem from "@/components/cards/InputCardItem.vue";
 import SwitchCardItem from "@/components/cards/SwitchCardItem.vue";
 import IconCardItem from "@/components/cards/IconCardItem.vue";
-import ViewSettingDialog from "../../../components/ViewSettingDialog.vue";
-import { IMenuItem } from "@/components/MenuDots.vue";
+import ViewSettingDialog from "@/components/ViewSettingDialog.vue";
 
-import {
-	API_SENSORS_VALUE_EVENT,
-	API_SENSORS_VIEW_EVENT,
-	API_SENSORS_VIEW_EXEC,
-	ISensorsValue,
-	ISensorsViews
-} from "@/models/pjcan/sensors";
-import {
-	API_TEMPERATURE_VALUE_EVENT,
-	API_TEMPERATURE_VIEW_EVENT,
-	API_TEMPERATURE_VIEW_EXEC,
-	ITemperatureValue
-} from "@/models/pjcan/temperature";
-import { API_DEVICE_VALUE_EVENT, IDeviceValue } from "@/models/pjcan/device";
-import { IViewConfig } from "@/models/pjcan/view";
+import { IMenuItem } from "@/components/MenuDots.vue";
 import { TCarModel } from "@/models/pjcan/mazda";
-import { API_CANBUS_EVENT } from "@/models/pjcan/base/BaseModel";
-import { ChoiceValue } from "@/models/pjcan/choice";
+import { IDeviceHardware } from "@/models/pjcan/device/IDeviceValue";
 
 export default {
 	name: "InfoCard",
@@ -133,52 +125,68 @@ export default {
 	{
 		const { t } = useI18n();
 
-		const deviceValueLoaded = ref(false);
-		const sensorValueLoaded = ref(false);
-		const temperatureValueLoaded = ref(false);
-		const sensorViewLoaded = ref(false);
-		const temperatureViewLoaded = ref(false);
+		const deviceValueLoaded = computed((): boolean => store.getters["value/device"].isData);
+		const sensorValueLoaded = computed((): boolean => store.getters["value/sensors"].isData);
+		const temperatureValueLoaded = computed((): boolean => store.getters["value/temperature"].isData);
+		const worktimeViewLoaded = computed((): boolean => store.getters["view/worktime"].isData);
+		const voltmeterViewLoaded = computed((): boolean => store.getters["view/voltmeter"].isData);
+		const sensorViewLoaded = computed((): boolean => store.getters["view/sensors"].isData);
+		const temperatureViewLoaded = computed((): boolean => store.getters["view/temperature"].isData);
 
-		const acc = ref(false);
-		const worktime = ref(0);
-		const temperature = ref(0);
-		const handbrake = ref(false);
-		const reverse = ref(false);
-		const seatbeltDriver = ref(false);
-		const seatbeltPassenger = ref(false);
-		const signalLeft = ref(false);
-		const signalRight = ref(false);
-		const carModel = computed((): TCarModel => store.getters["app/carModel"]);
+		const isVoltmeter = computed((): boolean =>
+		{
+			const hardware: IDeviceHardware = store.getters["value/device"].hardware;
+			return hardware.major === 4 && hardware.minor >= 1 || hardware.major > 4;
+		});
 
-		let sensorsViews: ISensorsViews;
-		let temperatureView: IViewConfig;
+		const acc = computed((): boolean => store.getters["value/sensors"].acc);
+		const worktime = computed((): number => store.getters["value/device"].worktime);
+		const voltmeter = computed((): number => store.getters["value/device"].voltmeter / 100);
+		const temperature = computed((): number => store.getters["value/temperature"].out / 10);
+		const handbrake = computed((): boolean => store.getters["value/sensors"].handbrake);
+		const reverse = computed((): boolean => store.getters["value/sensors"].reverse);
+		const seatbeltDriver = computed((): boolean => store.getters["value/sensors"].seatbeltDriver);
+		const seatbeltPassenger = computed((): boolean => store.getters["value/sensors"].seatbeltPassenger);
+		const signalLeft = computed((): boolean => store.getters["value/sensors"].turnSignalLeft);
+		const signalRight = computed((): boolean => store.getters["value/sensors"].turnSignalRight);
+		const carModel = computed((): TCarModel => store.getters["config/carModel"]);
 
 		const menu = computed((): IMenuItem[] =>
 			carModel.value === TCarModel.CAR_MODEL_MAZDA_3_BK
 				? [
 					{
+						title: t("onboard.info.worktime.menu"),
+						view: store.getters["view/worktime"],
+						disabled: !worktimeViewLoaded.value
+					},
+					{
+						title: t("onboard.info.voltmeter.menu"),
+						view: store.getters["view/voltmeter"],
+						disabled: !voltmeterViewLoaded.value
+					},
+					{
 						title: t("onboard.info.temperature.menu"),
-						view: temperatureView,
+						view: store.getters["view/temperature"],
 						disabled: !temperatureViewLoaded.value
 					},
 					{
 						title: t("onboard.info.handbrake.menu"),
-						view: sensorsViews?.handbrake,
+						view: store.getters["view/sensors"].handbrake,
 						disabled: !sensorViewLoaded.value
 					},
 					{
 						title: t("onboard.info.reverse.menu"),
-						view: sensorsViews?.reverse,
+						view: store.getters["view/sensors"].reverse,
 						disabled: !sensorViewLoaded.value
 					},
 					{
 						title: t("onboard.info.safetyBelt.menu"),
-						view: sensorsViews?.seatbelt,
+						view: store.getters["view/sensors"].seatbelt,
 						disabled: !sensorViewLoaded.value
 					},
 					{
 						title: t("onboard.info.signal.menu"),
-						view: sensorsViews?.turnSignal,
+						view: store.getters["view/sensors"].turnSignal,
 						disabled: !sensorViewLoaded.value
 					}
 				]
@@ -196,113 +204,19 @@ export default {
 			menuVisible.value = true;
 			menuSelected.value = item;
 		};
-		/**
-		 * Применить параметры отображения на информационном экране
-		 * @param {IViewConfig} data Новые параметры отображения
-		 */
-		const onViewSettingApply = (data: IViewConfig): void =>
-		{
-			canbus.query(data);
-		};
-
-		/**
-		 * Входящие значения устройства
-		 * @param {IDeviceValue} res
-		 */
-		const onReceiveDeviceValue = (res: IDeviceValue): void =>
-		{
-			deviceValueLoaded.value = res.isData;
-			if (res.isData) worktime.value = res.worktime;
-		};
-		/**
-		 * Входящие значения датчиков
-		 * @param {ISensorsValue} res
-		 */
-		const onReceiveSensorValue = (res: ISensorsValue): void =>
-		{
-			sensorValueLoaded.value = res.isData;
-			if (res.isData)
-			{
-				acc.value = true;
-				handbrake.value = res.handbrake;
-				reverse.value = res.reverse;
-				seatbeltDriver.value = res.seatbeltDriver;
-				seatbeltPassenger.value = res.seatbeltPassenger;
-				signalLeft.value = res.turnSignalLeft;
-				signalRight.value = res.turnSignalRight;
-			}
-		};
-		/**
-		 * Входящие значения температуры
-		 * @param {ITemperatureValue} res
-		 */
-		const onReceiveTemperatureValue = (res: ITemperatureValue): void =>
-		{
-			temperatureValueLoaded.value = res.isData;
-			if (res.isData)
-			{
-				temperature.value = res.out / 10;
-			}
-		};
-
-		/**
-		 * Входящие значения отображения датчиков
-		 * @param {ISensorsViews} res
-		 */
-		const onReceiveSensorView = (res: ISensorsViews): void =>
-		{
-			sensorViewLoaded.value = res.isData;
-			sensorsViews = res;
-		};
-		/**
-		 * Входящие значения отображения температуры
-		 * @param {ITemperatureView} res
-		 */
-		const onReceiveTemperatureView = (res: IViewConfig): void =>
-		{
-			temperatureViewLoaded.value = res.isData;
-			temperatureView = res;
-		};
-
-		const choiceId = Math.round(Math.random() * 1000000);
-		const onBegin = (status: boolean): void =>
-		{
-			if (status)
-			{
-				const choice = new ChoiceValue();
-				choice.id = choiceId;
-				choice.listID = [API_SENSORS_VIEW_EXEC, API_TEMPERATURE_VIEW_EXEC];
-				canbus.query(choice, true);
-			}
-		};
-		onMounted(() =>
-		{
-			canbus.addListener(API_DEVICE_VALUE_EVENT, onReceiveDeviceValue);
-			canbus.addListener(API_SENSORS_VALUE_EVENT, onReceiveSensorValue);
-			canbus.addListener(API_TEMPERATURE_VALUE_EVENT, onReceiveTemperatureValue);
-			canbus.addListener(API_SENSORS_VIEW_EVENT, onReceiveSensorView);
-			canbus.addListener(API_TEMPERATURE_VIEW_EVENT, onReceiveTemperatureView);
-			canbus.addListener(API_CANBUS_EVENT, onBegin);
-			onBegin(canbus.begin);
-		});
-		onUnmounted(() =>
-		{
-			canbus.removeListener(API_DEVICE_VALUE_EVENT, onReceiveDeviceValue);
-			canbus.removeListener(API_SENSORS_VALUE_EVENT, onReceiveSensorValue);
-			canbus.removeListener(API_TEMPERATURE_VALUE_EVENT, onReceiveTemperatureValue);
-			canbus.removeListener(API_SENSORS_VIEW_EVENT, onReceiveSensorView);
-			canbus.removeListener(API_TEMPERATURE_VIEW_EVENT, onReceiveTemperatureView);
-			canbus.removeListener(API_CANBUS_EVENT, onBegin);
-		});
 
 		return {
 			deviceValueLoaded,
 			sensorValueLoaded,
-			sensorViewLoaded,
 			temperatureValueLoaded,
+			worktimeViewLoaded,
+			voltmeterViewLoaded,
+			sensorViewLoaded,
 			temperatureViewLoaded,
+			isVoltmeter,
 			acc,
 			worktime,
+			voltmeter,
 			temperature,
 			handbrake,
 			reverse,
@@ -314,8 +228,7 @@ export default {
 			menu,
 			menuVisible,
 			menuSelected,
-			onMenuClick,
-			onViewSettingApply
+			onMenuClick
 		};
 	}
 };
