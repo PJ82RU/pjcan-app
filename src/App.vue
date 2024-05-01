@@ -27,13 +27,13 @@ import { API_TEYES_CONFIG_EVENT, API_TEYES_CONFIG_EXEC } from "@/models/pjcan/te
 import { API_BUTTONS_SW1_CONFIG_EVENT } from "@/models/pjcan/buttons";
 import { API_BOSE_CONFIG_EVENT, API_BOSE_VIEW_EVENT, API_BOSE_VIEW_EXEC } from "@/models/pjcan/bose";
 import {
-	API_ENGINE_CONFIG_EVENT,
+	API_ENGINE_CONFIG_EVENT, API_ENGINE_CONFIG_EXEC,
 	API_ENGINE_VALUE_EVENT,
 	API_ENGINE_VIEW_EVENT,
 	API_ENGINE_VIEW_EXEC
 } from "@/models/pjcan/engine";
 import {
-	API_FUEL_CONFIG_EVENT,
+	API_FUEL_CONFIG_EVENT, API_FUEL_CONFIG_EXEC,
 	API_FUEL_VALUE_EVENT,
 	API_FUEL_VIEW_EVENT,
 	API_FUEL_VIEW_EXEC
@@ -100,6 +100,8 @@ export default {
 				const choice = new ChoiceValue();
 				if (!store.getters["config/mazda"].isData) choice.listID.push(API_MAZDA_CONFIG_EXEC);
 				if (!store.getters["config/teyes"].isData) choice.listID.push(API_TEYES_CONFIG_EXEC);
+				if (!store.getters["config/engine"].isData) choice.listID.push(API_ENGINE_CONFIG_EXEC);
+				if (!store.getters["config/fuel"].isData) choice.listID.push(API_FUEL_CONFIG_EXEC);
 				if (choice.listID.length) canbus.query(choice, true);
 
 				choice.listID = [];
