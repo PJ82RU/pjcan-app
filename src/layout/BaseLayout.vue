@@ -67,8 +67,8 @@ import IconCustom from "@/components/common/icon-custom/IconCustom.vue";
 
 import { IMessage } from "@/models/interfaces/message/IMessage";
 import { Timeout } from "@/models/types/Timeout";
-import { API_VERSION_EVENT } from "@/models/pjcan/version";
-import { API_MAZDA_CONFIG_EVENT, TCarModel, IMazdaConfig } from "@/models/pjcan/mazda";
+import { TCarModel } from "@/models/pjcan/mazda";
+import { API_NEW_VERSION_EVENT, IVersion } from "@/models/pjcan/version";
 
 export default {
 	name: "BaseLayout",
@@ -91,6 +91,9 @@ export default {
 		const visibleTest = ref(false);
 		const visibleUpdate = ref(false);
 
+		const pageWidth = ref(0);
+		const pageHeight = ref(0);
+
 		const title = computed((): string =>
 		{
 			const result = router.currentRoute.value.meta?.title as string;
@@ -108,23 +111,18 @@ export default {
 				{ id: 60, title: t("menu.settings.options"), disabled: name === "Options" },
 				{} as IMenuItem,
 				{ id: 10, title: t("menu.settings.buttonsSW1"), disabled: name === "Buttons" && query?.type === "sw1" },
-				{ id: 11, title: t("menu.settings.buttonsSW3"), disabled: name === "Buttons" && query?.type === "sw3" },
 				{} as IMenuItem,
+				{ id: 20, title: t("menu.language." + (locale.value !== "ru" ? "russian" : "english")) }
 			);
-			result.push({
-				id: 20,
-				title: t("menu.language." + (locale.value !== "ru" ? "russian" : "english"))
-			});
 			if (typeof newVersionFirmware.value === "string")
 			{
 				result.push({ id: 70, title: t("menu.update", { version: newVersionFirmware.value }) });
 			}
-			if (store.getters["app/carModel"] !== TCarModel.CAR_MODEL_MAZDA_CX9_REST)
+			if (store.getters["config/carModel"] !== TCarModel.CAR_MODEL_MAZDA_CX9_REST)
 			{
 				result.push({ id: 50, title: t("menu.test") });
 			}
 			result.push({} as IMenuItem, { id: 30, title: t("menu.about") });
-
 			return result;
 		});
 
@@ -138,9 +136,6 @@ export default {
 					break;
 				case 10:
 					router.push({ name: "Buttons", query: { type: "sw1" } });
-					break;
-				case 11:
-					router.push({ name: "Buttons", query: { type: "sw3" } });
 					break;
 				case 20:
 					locale.value = locale.value !== "ru" ? "ru" : "en";
@@ -170,7 +165,7 @@ export default {
 			if (ScreenFull.isEnabled) ScreenFull.toggle();
 		};
 
-		// Вывод сообщений ---
+		// Вывод сообщений
 
 		const visibleMessage = computed({
 			get: (): boolean => store.getters["app/visibleMessage"],
@@ -194,70 +189,33 @@ export default {
 
 		// ---
 
-		/** Проверка версии прошивки */
-		const onCheckVersion = (): void =>
+		/** Доступна новая версия прошивки */
+		const onNewVersion = (newVersion: IVersion): void =>
 		{
-			if (!newVersionFirmware.value)
+			newVersionFirmware.value = newVersion.toString;
+			setTimeout(() =>
 			{
-				newVersionFirmware.value = true;
-				canbus
-					.checkVersion()
-					.then((newVersion) =>
-					{
-						newVersionFirmware.value = newVersion.toString;
-						if (!newVersion.is)
-						{
-							store.commit("app/setMessage", {
-								title: t("update.warning"),
-								icon: "mdi-alert-outline",
-								text: t("update.dialog.browserOutdated"),
-								btns: [{ title: t("btn.ok") }],
-								width: 700
-							} as IMessage);
-						}
-						else
-						{
-							setTimeout(() =>
-							{
-								toast.warning(t("update.notify.newVersion", { version: newVersionFirmware.value }));
-							}, 5000);
-						}
-					})
-					.catch(() => {});
-			}
+				toast.warning(t("update.notify.newVersion", { version: newVersionFirmware.value }));
+			}, 5000);
 		};
 
-		const pageWidth = ref(0);
-		const pageHeight = ref(0);
+		/** Изменение размеров страницы */
 		const windowSize = () =>
 		{
 			pageWidth.value = document.documentElement.clientWidth;
 			pageHeight.value = document.documentElement.clientHeight;
 		};
 
-		const onReceiveMazdaConfig = (res: IMazdaConfig): void =>
-		{
-			if (res.isData) store.commit("app/setCarModel", res.carModel);
-		};
 		onMounted(() =>
 		{
+			canbus.addListener(API_NEW_VERSION_EVENT, onNewVersion);
 			window.addEventListener("resize", windowSize);
 			windowSize();
-
-			canbus.addListener(API_VERSION_EVENT, onCheckVersion);
-			canbus.addListener(API_MAZDA_CONFIG_EVENT, onReceiveMazdaConfig);
-			if (canbus.begin)
-			{
-				onCheckVersion();
-				onReceiveMazdaConfig(canbus.mazda);
-			}
 		});
 		onUnmounted(() =>
 		{
+			canbus.removeListener(API_NEW_VERSION_EVENT, onNewVersion);
 			window.removeEventListener("resize", windowSize);
-
-			canbus.removeListener(API_VERSION_EVENT, onCheckVersion);
-			canbus.removeListener(API_MAZDA_CONFIG_EVENT, onReceiveMazdaConfig);
 		});
 
 		return {
