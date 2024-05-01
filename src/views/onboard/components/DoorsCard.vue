@@ -66,18 +66,17 @@
 </template>
 
 <script lang="ts">
-import { computed, onMounted, onUnmounted, ref } from "vue";
+import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
+import store from "@/store";
 import canbus from "@/api/canbus";
 
 import Card from "@/components/cards/Card.vue";
 import SwitchCardItem from "@/components/cards/SwitchCardItem.vue";
-import ViewSettingDialog from "../../../components/ViewSettingDialog.vue";
-import { IMenuItem } from "@/components/MenuDots.vue";
+import ViewSettingDialog from "@/components/ViewSettingDialog.vue";
 
-import { IViewConfig, ViewConfig } from "@/models/pjcan/view";
-import { API_DOORS_VALUE_EVENT, API_DOORS_VIEW_EVENT, API_DOORS_VIEW_EXEC, IDoorsValue } from "@/models/pjcan/doors";
-import { API_CANBUS_EVENT } from "@/models/pjcan/base/BaseModel";
+import { IMenuItem } from "@/components/MenuDots.vue";
+import { IViewConfig } from "@/models/pjcan/view";
 
 export default {
 	name: "DoorsCard",
@@ -86,19 +85,17 @@ export default {
 	{
 		const { t } = useI18n();
 
-		const doorsValueLoaded = ref(false);
-		const doorsViewLoaded = ref(false);
+		const doorsValueLoaded = computed((): boolean => store.getters["value/doors"].isData);
+		const doorsViewLoaded = computed((): boolean => store.getters["view/doors"].isData);
 
-		const doorFL = ref(false);
-		const doorFR = ref(false);
-		const doorBL = ref(false);
-		const doorBR = ref(false);
-		const trunk = ref(false);
-
-		let doorsView: IViewConfig;
+		const doorFL = computed((): boolean => store.getters["value/doors"].frontLeft);
+		const doorFR = computed((): boolean => store.getters["value/doors"].frontRight);
+		const doorBL = computed((): boolean => store.getters["value/doors"].backLeft);
+		const doorBR = computed((): boolean => store.getters["value/doors"].backRight);
+		const trunk = computed((): boolean => store.getters["value/doors"].trunk);
 
 		const menu = computed((): IMenuItem[] => [
-			{ title: t("onboard.doors.menu"), view: doorsView, disabled: !doorsViewLoaded.value }
+			{ title: t("onboard.doors.menu"), view: store.getters["view/doors"], disabled: !doorsViewLoaded.value }
 		]);
 		const menuVisible = ref(false);
 		const menuSelected = ref({} as IMenuItem);
@@ -121,44 +118,6 @@ export default {
 		{
 			canbus.query(data);
 		};
-
-		/** Входящие значения открытых дверей */
-		const onDoorsValueReceive = (res: IDoorsValue): void =>
-		{
-			doorsValueLoaded.value = res.isData;
-			if (res.isData)
-			{
-				doorFL.value = res.frontLeft;
-				doorFR.value = res.frontRight;
-				doorBL.value = res.backLeft;
-				doorBR.value = res.backRight;
-				trunk.value = res.trunk;
-			}
-		};
-		/** Входящие значения отображения открытых дверей */
-		const onDoorsViewReceive = (res: IViewConfig): void =>
-		{
-			doorsViewLoaded.value = res.isData;
-			doorsView = res;
-		};
-
-		const onBegin = (status: boolean): void =>
-		{
-			if (status) canbus.query(new ViewConfig(API_DOORS_VIEW_EXEC), true);
-		};
-		onMounted(() =>
-		{
-			canbus.addListener(API_DOORS_VALUE_EVENT, onDoorsValueReceive);
-			canbus.addListener(API_DOORS_VIEW_EVENT, onDoorsViewReceive);
-			canbus.addListener(API_CANBUS_EVENT, onBegin);
-			onBegin(canbus.begin);
-		});
-		onUnmounted(() =>
-		{
-			canbus.removeListener(API_DOORS_VALUE_EVENT, onDoorsValueReceive);
-			canbus.removeListener(API_DOORS_VIEW_EVENT, onDoorsViewReceive);
-			canbus.removeListener(API_CANBUS_EVENT, onBegin);
-		});
 
 		return {
 			doorsViewLoaded,
