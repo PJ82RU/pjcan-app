@@ -42,27 +42,25 @@
 </template>
 
 <script lang="ts">
-import { computed, onMounted, onUnmounted, ref, toRefs, watch } from "vue";
-import { useI18n } from "vue-i18n";
+import { computed, ref, toRefs, watch } from "vue";
 import store from "@/store";
-import canbus from "@/api/canbus";
+import { useI18n } from "vue-i18n";
+import { arrayToHex, toMac } from "@/utils/conversion";
 
 import DialogTemplate from "@/layout/components/DialogTemplate.vue";
 import DeviceResetDialog from "./DeviceResetDialog.vue";
 import Scanner from "@/components/Scanner.vue";
 
-import { toMac } from "@/utils/conversion";
-
-import { API_DEVICE_INFO_EVENT, DeviceInfo, IDeviceInfo } from "@/models/pjcan/device";
 import { IMessage } from "@/models/interfaces/message/IMessage";
-import { API_CANBUS_EVENT } from "@/models/pjcan/base/BaseModel";
-import { Timeout } from "@/models/types/Timeout";
 
 export default {
 	name: "DeviceInfoDialog",
 	components: { Scanner, DialogTemplate, DeviceResetDialog },
 	props: {
-		modelValue: Boolean
+		modelValue: {
+			type: Boolean,
+			required: true
+		}
 	},
 	emits: ["update:modelValue"],
 	setup(props: any, context: any)
@@ -74,30 +72,25 @@ export default {
 			set: (val: boolean): void => context.emit("update:modelValue", val)
 		});
 
-		const isLoadedValue = ref(false);
+		const isLoadedValue = computed(() => store.getters["config/info"].isData);
 		const visibleReset = ref(false);
 		const startedScanner = ref(false);
-		const modelDeviceInfo = ref({
-			hardware: "",
-			temperatureChip: "",
-			// chipCores: "",
-			// chipRevision: "",
-			cpuFreqMHz: "",
-			sketchSize: "",
-			freeSketchSpace: "",
-			sdkVersion: "",
-			efuseMac: "",
-			// flashChipMode: "",
-			// flashChipSize: "",
-			// flashChipSpeed: "",
-			sketchMD5: "",
-			sha: ""
+		const modelDeviceInfo = computed(() =>
+		{
+			const info = store.getters["config/info"];
+			return {
+				hardware: info.hardware,
+				temperatureChip: (info.temperatureChip / 100).toFixed(2) + "°C",
+				sdkVersion: info.sdkVersion,
+				efuseMac: toMac(info.efuseMac),
+				sha: arrayToHex(info.sha)
+			};
 		});
 
-		/** Повторный запрос данных при отображении попап */
+		/** Циклический запрос данных Info */
 		watch(modelValue, (val: boolean): void =>
 		{
-			onLoop(val && canbus.begin);
+			store.dispatch("config/infoUpdateLoop", val);
 		});
 
 		/** Показать диалог сброса настроек */
@@ -127,60 +120,6 @@ export default {
 				]
 			} as IMessage);
 		};
-
-		/** Входящие значения об устройстве */
-		const onReceiveDeviceInfo = (res: IDeviceInfo): void =>
-		{
-			isLoadedValue.value = res.isData;
-			if (res.isData)
-			{
-				const { value } = modelDeviceInfo;
-				// value.chipCores = res.chipCores.toString();
-				// value.chipRevision = res.chipRevision.toString();
-				value.cpuFreqMHz = res.cpuFreqMHz.toString();
-				value.efuseMac = toMac(res.efuseMac);
-				// value.flashChipMode = res.flashChipMode.toString();
-				// value.flashChipSize = res.flashChipSize.toString();
-				// value.flashChipSpeed = res.flashChipSpeed.toString();
-				value.freeSketchSpace = res.freeSketchSpace.toString();
-				value.sdkVersion = res.sdkVersion;
-				value.sketchMD5 = res.sketchMD5;
-				value.sketchSize = res.sketchSize.toString();
-				value.temperatureChip = (res.temperatureChip / 100).toFixed(2) + "°C";
-				value.sha = canbus.sha ?? "";
-				value.hardware = res.hardware;
-			}
-		};
-
-		let loop: Timeout;
-		const onLoop = (enabled: boolean) =>
-		{
-			if (enabled)
-			{
-				if (!loop) loop = setInterval(() => canbus.query(new DeviceInfo(), true), 10000);
-				canbus.query(new DeviceInfo(), true);
-			}
-			else
-			{
-				clearInterval(loop);
-				loop = undefined;
-			}
-		};
-		const onBegin = (status: boolean): void =>
-		{
-			onLoop(modelValue.value && status);
-		};
-		onMounted(() =>
-		{
-			canbus.addListener(API_CANBUS_EVENT, onBegin);
-			canbus.addListener(API_DEVICE_INFO_EVENT, onReceiveDeviceInfo);
-			onBegin(canbus.begin);
-		});
-		onUnmounted(() =>
-		{
-			canbus.removeListener(API_CANBUS_EVENT, onBegin);
-			canbus.removeListener(API_DEVICE_INFO_EVENT, onReceiveDeviceInfo);
-		});
 
 		return {
 			visible,
