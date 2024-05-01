@@ -72,7 +72,7 @@ import DialogTemplate from "@/layout/components/DialogTemplate.vue";
 import SwitchCardItem from "@/components/cards/SwitchCardItem.vue";
 import NumberField from "@/components/common/NumberField.vue";
 
-import { IViewConfig, ViewConfig } from "@/models/pjcan/view";
+import { IViewConfig } from "@/models/pjcan/view";
 
 export default {
 	name: "ViewSettingDialog",
@@ -128,13 +128,13 @@ export default {
 		const onApplyClick = (): void =>
 		{
 			visible.value = false;
-
-			const res = new ViewConfig(view.value.exec);
-			res.enabled = viewEnabled.value;
-			res.type = viewType.value;
-			res.time = viewTime.value;
-			res.delay = viewDelay.value;
-			emit("click:apply", res);
+			emit("click:apply", {
+				exec: view.value.exec,
+				enabled: viewEnabled.value,
+				type: viewType.value,
+				time: viewTime.value,
+				delay: viewDelay.value
+			});
 		};
 
 		return {

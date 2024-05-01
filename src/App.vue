@@ -25,7 +25,12 @@ import {
 } from "@/models/pjcan/mazda";
 import { API_TEYES_CONFIG_EVENT, API_TEYES_CONFIG_EXEC } from "@/models/pjcan/teyes";
 import { API_BUTTONS_SW1_CONFIG_EVENT } from "@/models/pjcan/buttons";
-import { API_BOSE_CONFIG_EVENT, API_BOSE_VIEW_EVENT, API_BOSE_VIEW_EXEC } from "@/models/pjcan/bose";
+import {
+	API_BOSE_CONFIG_EVENT,
+	API_BOSE_CONFIG_EXEC,
+	API_BOSE_VIEW_EVENT,
+	API_BOSE_VIEW_EXEC
+} from "@/models/pjcan/bose";
 import {
 	API_ENGINE_CONFIG_EVENT, API_ENGINE_CONFIG_EXEC,
 	API_ENGINE_VALUE_EVENT,
@@ -38,7 +43,12 @@ import {
 	API_FUEL_VIEW_EVENT,
 	API_FUEL_VIEW_EXEC
 } from "@/models/pjcan/fuel";
-import { API_VOLUME_CONFIG_EVENT, API_VOLUME_VIEW_EVENT, API_VOLUME_VIEW_EXEC } from "@/models/pjcan/volume";
+import {
+	API_VOLUME_CONFIG_EVENT,
+	API_VOLUME_CONFIG_EXEC,
+	API_VOLUME_VIEW_EVENT,
+	API_VOLUME_VIEW_EXEC
+} from "@/models/pjcan/volume";
 import { API_CANBUS_EVENT } from "@/models/pjcan/base/BaseModel";
 import { API_CLIMATE_VALUE_EVENT, API_CLIMATE_VIEW_EVENT, API_CLIMATE_VIEW_EXEC } from "@/models/pjcan/climate";
 import { API_DOORS_VALUE_EVENT, API_DOORS_VIEW_EVENT, API_DOORS_VIEW_EXEC } from "@/models/pjcan/doors";
@@ -102,6 +112,8 @@ export default {
 				if (!store.getters["config/teyes"].isData) choice.listID.push(API_TEYES_CONFIG_EXEC);
 				if (!store.getters["config/engine"].isData) choice.listID.push(API_ENGINE_CONFIG_EXEC);
 				if (!store.getters["config/fuel"].isData) choice.listID.push(API_FUEL_CONFIG_EXEC);
+				if (!store.getters["config/volume"].isData) choice.listID.push(API_VOLUME_CONFIG_EXEC);
+				if (!store.getters["config/bose"].isData) choice.listID.push(API_BOSE_CONFIG_EXEC);
 				if (choice.listID.length) canbus.query(choice, true);
 
 				choice.listID = [];

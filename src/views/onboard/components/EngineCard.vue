@@ -76,7 +76,7 @@
 		:title="menuSelected.title"
 		:view="menuSelected.view"
 		:disabled="menuSelected.disabled"
-		@click:apply="onEngineViewApply"
+		@click:apply="onViewApply"
 	/>
 
 	<engine-config-dialog
@@ -93,7 +93,6 @@
 import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import store from "@/store";
-import canbus from "@/api/canbus";
 
 import Card from "@/components/cards/Card.vue";
 import InputCardItem from "@/components/cards/InputCardItem.vue";
@@ -103,8 +102,6 @@ import ViewSettingDialog from "@/components/ViewSettingDialog.vue";
 import EngineConfigDialog from "./EngineConfigDialog.vue";
 
 import { IMenuItem } from "@/components/MenuDots.vue";
-import { IViewConfig } from "@/models/pjcan/view";
-import { IEngineConfig } from "@/models/pjcan/engine";
 import { TCarModel } from "@/models/pjcan/mazda";
 
 export default {
@@ -211,19 +208,23 @@ export default {
 
 		/**
 		 * Применить параметры отображения на информационном экране
-		 * @param {IViewConfig} data Новые параметры отображения
+		 * @param {any} value Новые параметры отображения
 		 */
-		const onEngineViewApply = (data: IViewConfig): void =>
+		const onViewApply = (value: any): void =>
 		{
-			canbus.query(data);
+			store.commit("view/setView", value);
 		};
 
 		/** Применить конфигурацию ДВС
-		 * @param {IEngineConfig} data Новая конфигурация ДВС
+		 * @param {any} value Новая конфигурация ДВС
 		 */
-		const onEngineConfigApply = (data: IEngineConfig): void =>
+		const onEngineConfigApply = (value: any): void =>
 		{
-			canbus.query(data);
+			store.commit("config/setEngineConfig", {
+				showDays: value.showDays,
+				totalWorktime: BigInt(value.totalWorktime) * 60n,
+				totalCountRPM: BigInt(value.totalCountRPM) * 1000n
+			});
 		};
 
 		return {
@@ -246,7 +247,7 @@ export default {
 			menuSelected,
 			engineConfigVisible,
 			onMenuClick,
-			onEngineViewApply,
+			onViewApply,
 			onEngineConfigApply
 		};
 	}

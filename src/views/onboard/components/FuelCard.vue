@@ -35,7 +35,7 @@
 		:title="menuSelected.title"
 		:view="menuSelected.view"
 		:disabled="menuSelected.disabled"
-		@click:apply="onFuelViewApply"
+		@click:apply="onViewApply"
 	/>
 
 	<fuel-config-dialog
@@ -50,7 +50,6 @@
 import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import store from "@/store";
-import canbus from "@/api/canbus";
 
 import Card from "@/components/cards/Card.vue";
 import InputCardItem from "@/components/cards/InputCardItem.vue";
@@ -59,8 +58,6 @@ import FuelConfigDialog from "./FuelConfigDialog.vue";
 
 import { IMenuItem } from "@/components/MenuDots.vue";
 import { TCarModel } from "@/models/pjcan/mazda";
-import { IViewConfig } from "@/models/pjcan/view";
-import { IFuelConfig } from "@/models/pjcan/fuel";
 
 export default {
 	name: "FuelCard",
@@ -112,20 +109,20 @@ export default {
 		};
 
 		/**
-		 * Применить параметры отображения на информационном экране
-		 * @param {IViewConfig} data Новые параметры отображения
-		 */
-		const onFuelViewApply = (data: IViewConfig): void =>
+         * Применить параметры отображения на информационном экране
+         * @param {any} value Новые параметры отображения
+         */
+		const onViewApply = (value: any): void =>
 		{
-			canbus.query(data);
+			store.commit("view/setView", value);
 		};
 
 		/** Применить конфигурацию расхода
-		 * @param {IFuelConfig} data Новая конфигурация расхода
+		 * @param {number} ratio Новое значение
 		 * */
-		const onFuelConfigApply = (data: IFuelConfig): void =>
+		const onFuelConfigApply = (ratio: number): void =>
 		{
-			canbus.query(data);
+			store.commit("config/setFuelRatio", ratio * 1000);
 		};
 
 		return {
@@ -141,7 +138,7 @@ export default {
 			menuSelected,
 			fuelConfigVisible,
 			onMenuClick,
-			onFuelViewApply,
+			onViewApply,
 			onFuelConfigApply
 		};
 	}

@@ -1,6 +1,7 @@
 import canbus from "@/api/canbus";
 import { TCarModel } from "@/models/pjcan/mazda";
 import { TCenterPoint } from "@/models/pjcan/bose";
+import { IEngineConfig } from "@/models/pjcan/engine";
 
 /**
  * Записать версию прошивки
@@ -175,6 +176,21 @@ export const setEngine = (state: any, data: DataView) =>
 {
 	state.engine.set(data);
 };
+/**
+ * Изменить значения конфигурации ДВС
+ * @param {any} state
+ * @param {IEngineConfig} value Новые значения
+ */
+export const setEngineConfig = (
+	state: any,
+	{ showDays, totalWorktime, totalCountRPM }: { showDays: boolean; totalWorktime: BigInt; totalCountRPM: BigInt }
+) =>
+{
+	state.engine.showDays = showDays;
+	state.engine.totalWorktime = totalWorktime;
+	state.engine.totalCountRPM = totalCountRPM;
+	canbus.query(state.engine);
+};
 
 /**
  * Изменить конфигурацию расхода
@@ -185,7 +201,17 @@ export const setFuel = (state: any, data: DataView) =>
 {
 	state.fuel.set(data);
 };
-
+/**
+ * Fuel: Ratio
+ * @param {any} state
+ * @param {number} value Новое значение
+ */
+export const setFuelRatio = (state: any, value: number) =>
+{
+	state.fuel.ratio = value;
+	canbus.query(state.fuel);
+};
+	
 /**
  * Изменить конфигурацию уровня звука
  * @param {any} state

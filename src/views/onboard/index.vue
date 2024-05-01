@@ -7,10 +7,9 @@
 </template>
 
 <script lang="ts">
-import { computed, onMounted, onUnmounted, provide, ref } from "vue";
+import { computed, onMounted, onUnmounted, provide, ref, watch } from "vue";
 import { useDisplay } from "vuetify";
 import store from "@/store";
-import canbus from "@/api/canbus";
 
 import Flicking from "@egjs/vue3-flicking";
 import InfoCard from "./components/InfoCard.vue";
@@ -22,8 +21,6 @@ import ClimateCard from "./components/ClimateCard.vue";
 import BoseCard from "./components/BoseCard.vue";
 
 import { IOnboardCard } from "@/models/interfaces/IOnboardCard";
-import { ChoiceValue } from "@/models/pjcan/choice";
-import { Timeout } from "@/models/types/Timeout";
 import { API_DEVICE_VALUE_EXEC } from "@/models/pjcan/device";
 import { API_SENSORS_VALUE_EXEC } from "@/models/pjcan/sensors";
 import { API_TEMPERATURE_VALUE_EXEC } from "@/models/pjcan/temperature";
@@ -32,7 +29,6 @@ import { API_FUEL_VALUE_EXEC } from "@/models/pjcan/fuel";
 import { API_MOVEMENT_VALUE_EXEC } from "@/models/pjcan/movement";
 import { API_DOORS_VALUE_EXEC } from "@/models/pjcan/doors";
 import { API_CLIMATE_VALUE_EXEC } from "@/models/pjcan/climate";
-import { API_CANBUS_EVENT } from "@/models/pjcan/base/BaseModel";
 
 export default {
 	name: "onboard",
@@ -55,10 +51,10 @@ export default {
 		const cards = computed(() =>
 		{
 			return store.getters["app/onboardCardList"]?.filter(
-				(x: IOnboardCard) => x.enabled && x.car?.indexOf(store.getters["app/carModel"]) >= 0
+				(x: IOnboardCard) => x.enabled && x.car?.indexOf(store.getters["config/carModel"]) >= 0
 			);
 		});
-		const listExec = computed(() =>
+		const listExec = computed((): number[] =>
 		{
 			const result: number[] = [];
 			cards.value?.forEach((card: IOnboardCard) =>
@@ -89,40 +85,17 @@ export default {
 			});
 			return result;
 		});
-
-		let loop: Timeout;
-		const onBegin = (status: boolean): void =>
+		watch(listExec, (val: number[]) =>
 		{
-			if (status)
-			{
-				if (!loop)
-				{
-					loop = setInterval(() =>
-					{
-						if (listExec.value?.length)
-						{
-							const choice = new ChoiceValue();
-							choice.listID = listExec.value;
-							canbus.query(choice, true);
-						}
-					}, 250);
-				}
-			}
-			else
-			{
-				clearInterval(loop);
-				loop = undefined;
-			}
-		};
+			store.dispatch("value/updateLoop", val);
+		});
 		onMounted(() =>
 		{
-			canbus.addListener(API_CANBUS_EVENT, onBegin);
-			onBegin(canbus.begin);
+			store.dispatch("value/updateLoop", listExec.value);
 		});
 		onUnmounted(() =>
 		{
-			canbus.removeListener(API_CANBUS_EVENT, onBegin);
-			onBegin(false);
+			store.dispatch("value/updateLoop");
 		});
 
 		return {

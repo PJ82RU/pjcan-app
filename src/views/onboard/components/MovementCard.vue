@@ -44,7 +44,7 @@
 		:title="menuSelected.title"
 		:view="menuSelected.view"
 		:disabled="menuSelected.disabled"
-		@click:apply="onMovementViewApply"
+		@click:apply="onViewApply"
 	/>
 </template>
 
@@ -52,7 +52,6 @@
 import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import store from "@/store";
-import canbus from "@/api/canbus";
 
 import Card from "@/components/cards/Card.vue";
 import InputCardItem from "@/components/cards/InputCardItem.vue";
@@ -60,7 +59,6 @@ import ViewSettingDialog from "@/components/ViewSettingDialog.vue";
 
 import { IMenuItem } from "@/components/MenuDots.vue";
 import { TCarModel } from "@/models/pjcan/mazda";
-import { IViewConfig } from "@/models/pjcan/view";
 
 export default {
 	name: "MovementCard",
@@ -117,12 +115,12 @@ export default {
 		};
 
 		/**
-		 * Применить параметры отображения на информационном экране
-		 * @param {IViewConfig} data Новые параметры отображения
-		 */
-		const onMovementViewApply = (data: IViewConfig): void =>
+         * Применить параметры отображения на информационном экране
+         * @param {any} value Новые параметры отображения
+         */
+		const onViewApply = (value: any): void =>
 		{
-			canbus.query(data);
+			store.commit("view/setView", value);
 		};
 
 		return {
@@ -139,7 +137,7 @@ export default {
 			menuVisible,
 			menuSelected,
 			onMenuClick,
-			onMovementViewApply
+			onViewApply
 		};
 	}
 };

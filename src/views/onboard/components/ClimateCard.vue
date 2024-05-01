@@ -73,7 +73,7 @@
 		:title="menuSelected.title"
 		:view="menuSelected.view"
 		:disabled="menuSelected.disabled"
-		@click:apply="onViewSettingApply"
+		@click:apply="onViewApply"
 	/>
 </template>
 
@@ -81,7 +81,6 @@
 import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import store from "@/store";
-import canbus from "@/api/canbus";
 
 import Card from "@/components/cards/Card.vue";
 import InputCardItem from "@/components/cards/InputCardItem.vue";
@@ -90,7 +89,6 @@ import SwitchCardItem from "@/components/cards/SwitchCardItem.vue";
 import ViewSettingDialog from "@/components/ViewSettingDialog.vue";
 
 import { IMenuItem } from "@/components/MenuDots.vue";
-import { IViewConfig } from "@/models/pjcan/view";
 
 export default {
 	name: "ClimateCard",
@@ -162,12 +160,12 @@ export default {
 		};
 
 		/**
-		 * Применить параметры отображения на информационном экране
-		 * @param {IViewConfig} data Новые параметры отображения
-		 */
-		const onViewSettingApply = (data: IViewConfig): void =>
+         * Применить параметры отображения на информационном экране
+         * @param {any} value Новые параметры отображения
+         */
+		const onViewApply = (value: any): void =>
 		{
-			canbus.query(data);
+			store.commit("view/setView", value);
 		};
 
 		return {
@@ -187,7 +185,7 @@ export default {
 			menuVisible,
 			menuSelected,
 			onMenuClick,
-			onViewSettingApply
+			onViewApply
 		};
 	}
 };

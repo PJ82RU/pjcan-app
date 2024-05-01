@@ -46,7 +46,6 @@ import { computed, ref, toRefs, watch } from "vue";
 import DialogTemplate from "@/layout/components/DialogTemplate.vue";
 import SwitchCardItem from "@/components/cards/SwitchCardItem.vue";
 import NumberField from "@/components/common/NumberField.vue";
-import { FuelConfig } from "@/models/pjcan/fuel";
 
 export default {
 	name: "FuelConfigDialog",
@@ -86,9 +85,7 @@ export default {
 		const onApplyClick = (): void =>
 		{
 			visible.value = false;
-			const config = new FuelConfig();
-			config.ratio = configRatio.value * 1000;
-			context.emit("click:apply", config);
+			context.emit("click:apply", configRatio.value);
 		};
 
 		return {

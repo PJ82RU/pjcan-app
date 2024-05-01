@@ -1,3 +1,30 @@
+import canbus from "@/api/canbus";
+import { IViewConfig, TViewType, ViewConfig } from "@/models/pjcan/view";
+
+/**
+ * Записать значения отображения
+ * @param {any} state
+ * @param {IViewConfig} value
+ */
+export const setView = (
+	state: any,
+	{
+		exec,
+		enabled,
+		type,
+		time,
+		delay
+	}: { exec: number; enabled: boolean; type: TViewType; time: number; delay: number }
+) =>
+{
+	const res = new ViewConfig(exec);
+	res.enabled = enabled;
+	res.type = type;
+	res.time = time;
+	res.delay = delay;
+	canbus.query(res);
+};
+
 /**
  * Записать значения отображения времени работы устройства
  * @param {any} state
