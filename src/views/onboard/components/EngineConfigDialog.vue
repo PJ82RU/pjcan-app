@@ -65,6 +65,8 @@ import DialogTemplate from "@/layout/components/DialogTemplate.vue";
 import SwitchCardItem from "@/components/cards/SwitchCardItem.vue";
 import NumberField from "@/components/common/NumberField.vue";
 
+import { EngineConfig } from "@/models/pjcan/engine";
+
 export default {
 	name: "EngineConfig",
 	components: { DialogTemplate, SwitchCardItem, NumberField },
@@ -116,11 +118,11 @@ export default {
 		const onApplyClick = (): void =>
 		{
 			visible.value = false;
-			context.emit("click:apply", {
-				showDays: configShowDays.value,
-				totalWorktime: configTotalWorktime.value,
-				totalCountRPM: configTotalCountRPM.value
-			});
+			const config = new EngineConfig();
+			config.showDays = configShowDays.value;
+			config.totalWorktime = BigInt(configTotalWorktime.value) * 60n;
+			config.totalCountRPM = BigInt(configTotalCountRPM.value) * 1000n;
+			context.emit("click:apply", config);
 		};
 
 		return {

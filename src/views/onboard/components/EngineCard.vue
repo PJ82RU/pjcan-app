@@ -90,7 +90,7 @@
 </template>
 
 <script lang="ts">
-import { computed, onMounted, onUnmounted, ref } from "vue";
+import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import store from "@/store";
 import canbus from "@/api/canbus";
@@ -99,25 +99,13 @@ import Card from "@/components/cards/Card.vue";
 import InputCardItem from "@/components/cards/InputCardItem.vue";
 import IconCardItem from "@/components/cards/IconCardItem.vue";
 import ProgressCardItem from "@/components/cards/ProgressCardItem.vue";
-import ViewSettingDialog from "../../../components/ViewSettingDialog.vue";
+import ViewSettingDialog from "@/components/ViewSettingDialog.vue";
 import EngineConfigDialog from "./EngineConfigDialog.vue";
-import { IMenuItem } from "@/components/MenuDots.vue";
 
+import { IMenuItem } from "@/components/MenuDots.vue";
 import { IViewConfig } from "@/models/pjcan/view";
-import {
-	API_ENGINE_CONFIG_EVENT,
-	API_ENGINE_CONFIG_EXEC,
-	API_ENGINE_VALUE_EVENT,
-	API_ENGINE_VIEW_EVENT,
-	API_ENGINE_VIEW_EXEC,
-	EngineConfig,
-	IEngineConfig,
-	IEngineValue,
-	IEngineViews
-} from "@/models/pjcan/engine";
-import { API_CANBUS_EVENT } from "@/models/pjcan/base/BaseModel";
+import { IEngineConfig } from "@/models/pjcan/engine";
 import { TCarModel } from "@/models/pjcan/mazda";
-import { ChoiceValue } from "@/models/pjcan/choice";
 
 export default {
 	name: "EngineCard",
@@ -132,49 +120,77 @@ export default {
 	{
 		const { t } = useI18n();
 
-		const engineConfigLoaded = ref(false);
-		const engineValueLoaded = ref(false);
-		const engineViewLoaded = ref(false);
+		const engineConfigLoaded = computed((): boolean => store.getters["config/engine"].isData);
+		const engineValueLoaded = computed((): boolean => store.getters["value/engine"].isData);
+		const engineViewLoaded = computed((): boolean => store.getters["view/engine"].isData);
 
-		const enabled = ref(false);
-		const rpm = ref("");
-		const countRPM = ref("");
-		const load = ref(0);
-		const worktime = ref("");
-		const throttle = ref(0);
-		const coolant = ref(0);
-		const showDays = ref(false);
-		const totalWorktime = ref(0);
-		const totalCountRPM = ref(0);
-		const carModel = computed((): TCarModel => store.getters["app/carModel"]);
+		const showDays = computed((): boolean => store.getters["config/engine"].showDays);
+		const totalWorktime = computed((): number =>
+		{
+			const res = store.getters["config/engine"];
+			return res.totalWorktime > 0 ? Math.round(Number(res.totalWorktime / 60n)) : 0;
+		});
+		const totalCountRPM = computed((): number =>
+		{
+			const res = store.getters["config/engine"];
+			return res.totalCountRPM > 0 ? Math.round(Number(res.totalCountRPM / 1000n)) : 0;
+		});
 
-		let engineViews: IEngineViews;
+		const enabled = computed((): boolean => store.getters["value/engine"].on);
+		const rpm = computed((): string => store.getters["value/engine"].rpm.toFixed());
+		const countRPM = computed((): string => store.getters["value/engine"].viewCountRPM.toString());
+		const load = computed((): number => store.getters["value/engine"].load / 1000);
+		const worktime = computed((): string =>
+		{
+			const res = store.getters["value/engine"];
+			const viewHours = !showDays.value ? res.viewHours + res.viewDays * 24 : res.viewHours;
+			let result = showDays.value && res.viewDays > 0 ? res.viewDays + "." : "";
+			result += (viewHours < 10 ? "0" : "") + viewHours + ":";
+			result += (res.viewMinutes < 10 ? "0" : "") + res.viewMinutes + ":";
+			result += (res.viewSeconds < 10 ? "0" : "") + res.viewSeconds;
+			return result;
+		});
+		const throttle = computed((): number => store.getters["value/engine"].throttle / 100);
+		const coolant = computed((): number => store.getters["value/engine"].coolant);
+		const carModel = computed((): TCarModel => store.getters["config/carModel"]);
 
 		const menu = computed((): IMenuItem[] => [
 			{ title: t("onboard.engine.settings.menu") },
 			{
 				title: t("onboard.engine.enabled.menu"),
-				view: engineViews?.enabled,
+				view: store.getters["view/engine"].enabled,
 				disabled: !engineViewLoaded.value
 			},
-			{ title: t("onboard.engine.RPM.menu"), view: engineViews?.rpm, disabled: !engineViewLoaded.value },
+			{
+				title: t("onboard.engine.RPM.menu"),
+				view: store.getters["view/engine"].rpm,
+				disabled: !engineViewLoaded.value
+			},
 			{
 				title: t("onboard.engine.countRPM.menu"),
-				view: engineViews?.totalCountRPM,
+				view: store.getters["view/engine"].totalCountRPM,
 				disabled: !engineViewLoaded.value
 			},
-			{ title: t("onboard.engine.load.menu"), view: engineViews?.load, disabled: !engineViewLoaded.value },
+			{
+				title: t("onboard.engine.load.menu"),
+				view: store.getters["view/engine"].load,
+				disabled: !engineViewLoaded.value
+			},
 			{
 				title: t("onboard.engine.worktime.menu"),
-				view: engineViews?.totalWorktime,
+				view: store.getters["view/engine"].totalWorktime,
 				disabled: !engineViewLoaded.value
 			},
 			{
 				title: t("onboard.engine.throttle.menu"),
-				view: engineViews?.throttle,
+				view: store.getters["view/engine"].throttle,
 				disabled: !engineViewLoaded.value
 			},
-			{ title: t("onboard.engine.coolant.menu"), view: engineViews?.coolant, disabled: !engineViewLoaded.value }
+			{
+				title: t("onboard.engine.coolant.menu"),
+				view: store.getters["view/engine"].coolant,
+				disabled: !engineViewLoaded.value
+			}
 		]);
 		const menuVisible = ref(false);
 		const menuSelected = ref({} as IMenuItem);
@@ -203,86 +219,13 @@ export default {
 			canbus.query(data);
 		};
 
-		/** Применить конфигурацию ДВС */
-		const onEngineConfigApply = (res: any): void =>
+		/** Применить конфигурацию ДВС
+		 * @param {IEngineConfig} data Новая конфигурация ДВС
+		 */
+		const onEngineConfigApply = (data: IEngineConfig): void =>
 		{
-			const config = new EngineConfig();
-			config.showDays = res?.showDays ?? showDays.value;
-			config.totalWorktime = BigInt(res?.totalWorktime ?? totalWorktime.value) * 60n;
-			config.totalCountRPM = BigInt(res?.totalCountRPM ?? totalCountRPM.value) * 1000n;
-			canbus.query(config);
+			canbus.query(data);
 		};
-
-		/** Входящие значения ДВС */
-		const onEngineValueReceive = (res: IEngineValue): void =>
-		{
-			engineValueLoaded.value = res.isData;
-			if (res.isData)
-			{
-				enabled.value = true; // res.on;
-				rpm.value = res.rpm.toFixed();
-				countRPM.value = res.viewCountRPM.toString();
-				load.value = res.load / 1000;
-
-				if (!showDays.value)
-				{
-					res.viewHours += res.viewDays * 24;
-					res.viewDays = 0;
-				}
-				let wt = res.viewDays > 0 ? res.viewDays + "." : "";
-				wt += (res.viewHours < 10 ? "0" : "") + res.viewHours + ":";
-				wt += (res.viewMinutes < 10 ? "0" : "") + res.viewMinutes + ":";
-				wt += (res.viewSeconds < 10 ? "0" : "") + res.viewSeconds;
-				worktime.value = wt;
-
-				throttle.value = res.throttle / 100;
-				coolant.value = res.coolant;
-			}
-		};
-		const onEngineConfigReceive = (res: IEngineConfig): void =>
-		{
-			engineConfigLoaded.value = res.isData;
-			if (res.isData)
-			{
-				showDays.value = res.showDays;
-				totalWorktime.value = res.totalWorktime > 0 ? Math.round(Number(res.totalWorktime / 60n)) : 0;
-				totalCountRPM.value = res.totalCountRPM > 0 ? Math.round(Number(res.totalCountRPM / 1000n)) : 0;
-			}
-		};
-
-		/** Входящие значения отображения ДВС */
-		const onEngineViewReceive = (res: IEngineViews): void =>
-		{
-			engineViewLoaded.value = res.isData;
-			engineViews = res;
-		};
-
-		const choiceId = Math.round(Math.random() * 1000000);
-		const onBegin = (status: boolean): void =>
-		{
-			if (status)
-			{
-				const choice = new ChoiceValue();
-				choice.id = choiceId;
-				choice.listID = [API_ENGINE_CONFIG_EXEC, API_ENGINE_VIEW_EXEC];
-				canbus.query(choice, true);
-			}
-		};
-		onMounted(() =>
-		{
-			canbus.addListener(API_ENGINE_CONFIG_EVENT, onEngineConfigReceive);
-			canbus.addListener(API_ENGINE_VALUE_EVENT, onEngineValueReceive);
-			canbus.addListener(API_ENGINE_VIEW_EVENT, onEngineViewReceive);
-			canbus.addListener(API_CANBUS_EVENT, onBegin);
-			onBegin(canbus.begin);
-		});
-		onUnmounted(() =>
-		{
-			canbus.removeListener(API_ENGINE_CONFIG_EVENT, onEngineConfigReceive);
-			canbus.removeListener(API_ENGINE_VALUE_EVENT, onEngineValueReceive);
-			canbus.removeListener(API_ENGINE_VIEW_EVENT, onEngineViewReceive);
-			canbus.removeListener(API_CANBUS_EVENT, onBegin);
-		});
 
 		return {
 			engineConfigLoaded,
