@@ -94,6 +94,7 @@
 		:title="menuSelected.title"
 		:view="menuSelected.view"
 		:disabled="menuSelected.disabled"
+        @click:apply="onEngineViewApply"
 	/>
 </template>
 
@@ -101,6 +102,7 @@
 import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import store from "@/store";
+import canbus from "@/api/canbus";
 
 import Card from "@/components/cards/Card.vue";
 import InputCardItem from "@/components/cards/InputCardItem.vue";
@@ -111,6 +113,7 @@ import ViewSettingDialog from "@/components/ViewSettingDialog.vue";
 import { IMenuItem } from "@/components/MenuDots.vue";
 import { TCarModel } from "@/models/pjcan/mazda";
 import { IDeviceHardware } from "@/models/pjcan/device/IDeviceValue";
+import { IViewConfig } from "@/models/pjcan/view";
 
 export default {
 	name: "InfoCard",
@@ -205,6 +208,15 @@ export default {
 			menuSelected.value = item;
 		};
 
+		/**
+         * Применить параметры отображения на информационном экране
+         * @param {IViewConfig} data Новые параметры отображения
+         */
+		const onEngineViewApply = (data: IViewConfig): void =>
+		{
+			canbus.query(data);
+		};
+
 		return {
 			deviceValueLoaded,
 			sensorValueLoaded,
@@ -228,7 +240,8 @@ export default {
 			menu,
 			menuVisible,
 			menuSelected,
-			onMenuClick
+			onMenuClick,
+			onEngineViewApply
 		};
 	}
 };
