@@ -17,6 +17,12 @@ export const voltmeter = (state: any) => state.voltmeter;
 export const mazda = (state: any) => state.mazda;
 
 /**
+ * Значения отображения текста ГУ
+ * @param {any} state
+ */
+export const teyesText = (state: any) => state.teyesText;
+
+/**
  * Значения отображения Bose
  * @param {any} state
  */

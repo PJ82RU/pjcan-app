@@ -1,5 +1,5 @@
 import canbus from "@/api/canbus";
-import { IViewConfig, TViewType, ViewConfig } from "@/models/pjcan/view";
+import { TViewType, ViewConfig } from "@/models/pjcan/view";
 
 /**
  * Записать значения отображения
@@ -53,6 +53,16 @@ export const setVoltmeter = (state: any, data: DataView) =>
 export const setMazda = (state: any, data: DataView) =>
 {
 	state.mazda.set(data);
+};
+
+/**
+ * Записать значения отображения текста ГУ
+ * @param {any} state
+ * @param {DataView} data Данные
+ */
+export const setTeyesText = (state: any, data: DataView) =>
+{
+	state.teyesText.set(data);
 };
 
 /**

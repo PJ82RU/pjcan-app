@@ -23,7 +23,12 @@ import {
 	API_MAZDA_VIEW_EVENT,
 	API_MAZDA_VIEW_EXEC
 } from "@/models/pjcan/mazda";
-import { API_TEYES_CONFIG_EVENT, API_TEYES_CONFIG_EXEC } from "@/models/pjcan/teyes";
+import {
+	API_TEYES_CONFIG_EVENT,
+	API_TEYES_CONFIG_EXEC,
+	API_TEYES_TEXT_VIEW_EVENT,
+	API_TEYES_TEXT_VIEW_EXEC
+} from "@/models/pjcan/teyes";
 import { API_BUTTONS_SW1_CONFIG_EVENT } from "@/models/pjcan/buttons";
 import {
 	API_BOSE_CONFIG_EVENT,
@@ -32,13 +37,15 @@ import {
 	API_BOSE_VIEW_EXEC
 } from "@/models/pjcan/bose";
 import {
-	API_ENGINE_CONFIG_EVENT, API_ENGINE_CONFIG_EXEC,
+	API_ENGINE_CONFIG_EVENT,
+	API_ENGINE_CONFIG_EXEC,
 	API_ENGINE_VALUE_EVENT,
 	API_ENGINE_VIEW_EVENT,
 	API_ENGINE_VIEW_EXEC
 } from "@/models/pjcan/engine";
 import {
-	API_FUEL_CONFIG_EVENT, API_FUEL_CONFIG_EXEC,
+	API_FUEL_CONFIG_EVENT,
+	API_FUEL_CONFIG_EXEC,
 	API_FUEL_VALUE_EVENT,
 	API_FUEL_VIEW_EVENT,
 	API_FUEL_VIEW_EXEC
@@ -93,6 +100,7 @@ export default {
 			store.commit("view/setVoltmeter", data)
 		);
 		canbus.addListener(API_MAZDA_VIEW_EVENT, (data: DataView) => store.commit("view/setMazda", data));
+		canbus.addListener(API_TEYES_TEXT_VIEW_EVENT, (data: DataView) => store.commit("view/setTeyesText", data));
 		canbus.addListener(API_BOSE_VIEW_EVENT, (data: DataView) => store.commit("view/setBose", data));
 		canbus.addListener(API_CLIMATE_VIEW_EVENT, (data: DataView) => store.commit("view/setClimate", data));
 		canbus.addListener(API_DOORS_VIEW_EVENT, (data: DataView) => store.commit("view/setDoors", data));
@@ -120,6 +128,7 @@ export default {
 				if (!store.getters["view/worktime"].isData) choice.listID.push(API_DEVICE_VIEW_WORKTIME_EXEC);
 				if (!store.getters["view/voltmeter"].isData) choice.listID.push(API_DEVICE_VIEW_VOLTMETER_EXEC);
 				if (!store.getters["view/mazda"].isData) choice.listID.push(API_MAZDA_VIEW_EXEC);
+				if (!store.getters["view/teyesText"].isData) choice.listID.push(API_TEYES_TEXT_VIEW_EXEC);
 				if (!store.getters["view/bose"].isData) choice.listID.push(API_BOSE_VIEW_EXEC);
 				if (!store.getters["view/climate"].isData) choice.listID.push(API_CLIMATE_VIEW_EXEC);
 				if (!store.getters["view/doors"].isData) choice.listID.push(API_DOORS_VIEW_EXEC);

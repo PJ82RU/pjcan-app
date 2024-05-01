@@ -1,6 +1,7 @@
 import canbus from "@/api/canbus";
 import { TCarModel } from "@/models/pjcan/mazda";
 import { TCenterPoint } from "@/models/pjcan/bose";
+import { TProtocol } from "@/models/pjcan/teyes";
 
 /**
  * Записать версию прошивки
@@ -93,6 +94,136 @@ export const setMazdaHello = (state: any, value: string) =>
 export const setTeyes = (state: any, data: DataView) =>
 {
 	state.teyes.set(data);
+};
+/**
+ * Teyes: Protocol
+ * @param {any} state
+ * @param {TProtocol} value Новое значение
+ */
+export const setTeyesProtocol = (state: any, value: TProtocol) =>
+{
+	if (state.teyes.isData)
+	{
+		state.teyes.protocol = value;
+		canbus.query(state.teyes);
+	}
+};
+/**
+ * Teyes: ReverseUart
+ * @param {any} state
+ * @param {boolean} value Новое значение
+ */
+export const setTeyesReverseUart = (state: any, value: boolean) =>
+{
+	if (state.teyes.isData)
+	{
+		state.teyes.reverseUart = value;
+		canbus.query(state.teyes);
+	}
+};
+/**
+ * Teyes: LcdShow
+ * @param {any} state
+ * @param {boolean} value Новое значение
+ */
+export const setTeyesLcdShow = (state: any, value: boolean) =>
+{
+	if (state.teyes.isData)
+	{
+		state.teyes.lcdShow = value;
+		canbus.query(state.teyes);
+	}
+};
+/**
+ * Teyes: SendButton
+ * @param {any} state
+ * @param {boolean} value Новое значение
+ */
+export const setTeyesSendButton = (state: any, value: boolean) =>
+{
+	if (state.teyes.isData)
+	{
+		state.teyes.sendButton = value;
+		canbus.query(state.teyes);
+	}
+};
+/**
+ * Teyes: SendClimate
+ * @param {any} state
+ * @param {boolean} value Новое значение
+ */
+export const setTeyesSendClimate = (state: any, value: boolean) =>
+{
+	if (state.teyes.isData)
+	{
+		state.teyes.sendClimate = value;
+		canbus.query(state.teyes);
+	}
+};
+/**
+ * Teyes: SendDoors
+ * @param {any} state
+ * @param {boolean} value Новое значение
+ */
+export const setTeyesSendDoors = (state: any, value: boolean) =>
+{
+	if (state.teyes.isData)
+	{
+		state.teyes.sendDoors = value;
+		canbus.query(state.teyes);
+	}
+};
+/**
+ * Teyes: ParseVolume
+ * @param {any} state
+ * @param {boolean} value Новое значение
+ */
+export const setTeyesParseVolume = (state: any, value: boolean) =>
+{
+	if (state.teyes.isData)
+	{
+		state.teyes.parseVolume = value;
+		canbus.query(state.teyes);
+	}
+};
+/**
+ * Teyes: ReceiveClock
+ * @param {any} state
+ * @param {boolean} value Новое значение
+ */
+export const setTeyesReceiveClock = (state: any, value: boolean) =>
+{
+	if (state.teyes.isData)
+	{
+		state.teyes.receiveClock = value;
+		canbus.query(state.teyes);
+	}
+};
+/**
+ * Teyes: ReceiveText
+ * @param {any} state
+ * @param {boolean} value Новое значение
+ */
+export const setTeyesReceiveText = (state: any, value: boolean) =>
+{
+	if (state.teyes.isData)
+	{
+		state.teyes.receiveText = value;
+		canbus.query(state.teyes);
+	}
+};
+/**
+ * Teyes: ReceiveButtons
+ * @param {any} state
+ * @param {boolean} value Новое значение
+ */
+export const setTeyesReceiveButtons = (state: any, value: boolean) =>
+{
+	if (state.teyes.isData)
+	{
+		state.teyes.receiveButtons = value;
+		canbus.query(state.teyes);
+	}
 };
 
 /**

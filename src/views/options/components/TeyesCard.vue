@@ -23,7 +23,6 @@
 						color="success"
 						:nodata="!teyesConfigLoaded"
 						:disabled="!teyesConfigLoaded"
-						@change="onApplyTeyesConfig"
 					/>
 				</v-col>
 				<v-col v-if="carModel !== TCarModel.CAR_MODEL_MAZDA_CX9_REST" cols="12" class="pt-0 pb-0">
@@ -34,7 +33,6 @@
 						color="success"
 						:nodata="!teyesConfigLoaded"
 						:disabled="!teyesConfigLoaded"
-						@change="onApplyTeyesConfig"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0 pb-0">
@@ -45,7 +43,6 @@
 						color="success"
 						:nodata="!teyesConfigLoaded"
 						:disabled="!teyesConfigLoaded"
-						@change="onApplyTeyesConfig"
 					/>
 				</v-col>
 				<v-col
@@ -60,7 +57,6 @@
 						color="success"
 						:nodata="!teyesConfigLoaded"
 						:disabled="!teyesConfigLoaded"
-						@change="onApplyTeyesConfig"
 					/>
 				</v-col>
 				<v-col v-if="carModel === TCarModel.CAR_MODEL_MAZDA_3_BK" cols="12" class="pt-0 pb-0">
@@ -71,7 +67,6 @@
 						color="success"
 						:nodata="!teyesConfigLoaded"
 						:disabled="!teyesConfigLoaded"
-						@change="onApplyTeyesConfig"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0 pb-0">
@@ -82,7 +77,6 @@
 						color="success"
 						:nodata="!teyesConfigLoaded"
 						:disabled="!teyesConfigLoaded"
-						@change="onApplyTeyesConfig"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0 pb-0">
@@ -93,7 +87,6 @@
 						color="success"
 						:nodata="!teyesConfigLoaded"
 						:disabled="!teyesConfigLoaded"
-						@change="onApplyTeyesConfig"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0 pb-0">
@@ -104,7 +97,6 @@
 						color="success"
 						:nodata="!teyesConfigLoaded"
 						:disabled="!teyesConfigLoaded"
-						@change="onApplyTeyesConfig"
 					/>
 				</v-col>
 				<!--<v-col cols="12" class="pt-0 pb-0">-->
@@ -115,7 +107,6 @@
 				<!--		color="success"-->
 				<!--		:nodata="!teyesConfigLoaded"-->
 				<!--		:disabled="!teyesConfigLoaded"-->
-				<!--		@change="onApplyTeyesConfig"-->
 				<!--	/>-->
 				<!--</v-col>-->
 			</v-row>
@@ -127,33 +118,22 @@
 		:title="menuSelected.title"
 		:view="menuSelected.view"
 		:disabled="menuSelected.disabled"
-		@click:apply="onViewSettingApply"
+		@click:apply="onViewApply"
 	/>
 </template>
 
 <script lang="ts">
-import { computed, onMounted, onUnmounted, ref, watch } from "vue";
+import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import store from "@/store";
-import canbus from "@/api/canbus";
 
 import Card from "@/components/cards/Card.vue";
 import SwitchCardItem from "@/components/cards/SwitchCardItem.vue";
 import ViewSettingDialog from "@/components/ViewSettingDialog.vue";
-import { IMenuItem } from "@/components/MenuDots.vue";
 
-import {
-	API_TEYES_CONFIG_EVENT,
-	API_TEYES_CONFIG_EXEC,
-	API_TEYES_TEXT_VIEW_EVENT,
-	API_TEYES_TEXT_VIEW_EXEC,
-	ITeyesConfig,
-	TeyesConfig
-} from "@/models/pjcan/teyes";
-import { IViewConfig } from "@/models/pjcan/view";
+import { IMenuItem } from "@/components/MenuDots.vue";
+import { TProtocol } from "@/models/pjcan/teyes";
 import { TCarModel } from "@/models/pjcan/mazda";
-import { ChoiceValue } from "@/models/pjcan/choice";
-import { API_CANBUS_EVENT } from "@/models/pjcan/base/BaseModel";
 
 export default {
 	name: "TeyesCard",
@@ -168,21 +148,49 @@ export default {
 	{
 		const { t, tm } = useI18n();
 
-		const teyesConfigLoaded = ref(true);
-		const teyesTextViewLoaded = ref(false);
+		const teyesConfigLoaded = computed((): boolean => store.getters["config/teyes"].isData);
 
-		const protocol = ref(2);
-		const reverseUart = ref(false);
-		const lcdShow = ref(false);
-		const sendButton = ref(false);
-		const sendClimate = ref(false);
-		const sendDoors = ref(false);
-		const parseVolume = ref(false);
-		const receiveClock = ref(false);
-		const receiveText = ref(false);
-		const receiveButtons = ref(false);
-
-		const carModel = computed((): TCarModel => store.getters["app/carModel"]);
+		const protocol = computed({
+			get: (): TProtocol => store.getters["config/teyes"].protocol,
+			set: (val: TProtocol) => store.commit("config/setTeyesProtocol", val)
+		});
+		const reverseUart = computed({
+			get: (): boolean => store.getters["config/teyes"].reverseUart,
+			set: (val: boolean) => store.commit("config/setTeyesReverseUart", val)
+		});
+		const lcdShow = computed({
+			get: (): boolean => store.getters["config/teyes"].lcdShow,
+			set: (val: boolean) => store.commit("config/setTeyesLcdShow", val)
+		});
+		const sendButton = computed({
+			get: (): boolean => store.getters["config/teyes"].sendButton,
+			set: (val: boolean) => store.commit("config/setTeyesSendButton", val)
+		});
+		const sendClimate = computed({
+			get: (): boolean => store.getters["config/teyes"].sendClimate,
+			set: (val: boolean) => store.commit("config/setTeyesSendClimate", val)
+		});
+		const sendDoors = computed({
+			get: (): boolean => store.getters["config/teyes"].sendDoors,
+			set: (val: boolean) => store.commit("config/setTeyesSendDoors", val)
+		});
+		const parseVolume = computed({
+			get: (): boolean => store.getters["config/teyes"].parseVolume,
+			set: (val: boolean) => store.commit("config/setTeyesParseVolume", val)
+		});
+		const receiveClock = computed({
+			get: (): boolean => store.getters["config/teyes"].receiveClock,
+			set: (val: boolean) => store.commit("config/setTeyesReceiveClock", val)
+		});
+		const receiveText = computed({
+			get: (): boolean => store.getters["config/teyes"].receiveText,
+			set: (val: boolean) => store.commit("config/setTeyesReceiveText", val)
+		});
+		const receiveButtons = computed({
+			get: (): boolean => store.getters["config/teyes"].receiveButtons,
+			set: (val: boolean) => store.commit("config/setTeyesReceiveButtons", val)
+		});
+		const carModel = computed((): TCarModel => store.getters["config/carModel"]);
 
 		/** Список протоколов */
 		const listProtocol = computed((): object[] =>
@@ -193,15 +201,12 @@ export default {
 			return result;
 		});
 
-		watch(protocol, (val) =>
-		{
-			if (val && teyesConfigLoaded.value) onApplyTeyesConfig();
-		});
-
-		let teyesView: IViewConfig;
-
 		const menu = computed((): IMenuItem[] => [
-			{ title: t("options.teyes.lcdShow.menu"), view: teyesView, disabled: !teyesTextViewLoaded.value }
+			{
+				title: t("options.teyes.lcdShow.menu"),
+				view: store.getters["view/teyesText"],
+				disabled: !store.getters["view/teyesText"].isData
+			}
 		]);
 		const menuVisible = ref(false);
 		const menuSelected = ref({} as IMenuItem);
@@ -218,90 +223,15 @@ export default {
 
 		/**
 		 * Применить параметры отображения на информационном экране
-		 * @param {IViewConfig} data Новые параметры отображения
+		 * @param {any} value Новые параметры отображения
 		 */
-		const onViewSettingApply = (data: IViewConfig): void =>
+		const onViewApply = (value: any): void =>
 		{
-			canbus.query(data);
+			store.commit("view/setView", value);
 		};
-
-		/**
-		 * Входящие значения отображения
-		 * @param {ITeyesView} res
-		 */
-		const onReceiveTeyesTextView = (res: IViewConfig): void =>
-		{
-			teyesTextViewLoaded.value = res.isData;
-			teyesView = res;
-		};
-
-		/**
-		 * Входящая конфигурация Teyes
-		 * @param {ITeyesConfig} res
-		 */
-		const onReceiveTeyesConfig = (res: ITeyesConfig): void =>
-		{
-			teyesConfigLoaded.value = res.isData;
-			if (res.isData)
-			{
-				protocol.value = res.protocol;
-				reverseUart.value = res.reverseUart;
-				lcdShow.value = res.lcdShow;
-				sendButton.value = res.sendButton;
-				sendClimate.value = res.sendClimate;
-				sendDoors.value = res.sendDoors;
-				parseVolume.value = res.parseVolume;
-				receiveClock.value = res.receiveClock;
-				receiveText.value = res.receiveText;
-				receiveButtons.value = res.receiveButtons;
-			}
-		};
-
-		/** Применить новые значения конфигурации Teyes */
-		const onApplyTeyesConfig = (): void =>
-		{
-			const conf = new TeyesConfig();
-			conf.protocol = protocol.value;
-			conf.reverseUart = reverseUart.value;
-			conf.lcdShow = lcdShow.value;
-			conf.sendButton = sendButton.value;
-			conf.sendClimate = sendClimate.value;
-			conf.sendDoors = sendDoors.value;
-			conf.parseVolume = parseVolume.value;
-			conf.receiveClock = receiveClock.value;
-			conf.receiveText = receiveText.value;
-			conf.receiveButtons = receiveButtons.value;
-			canbus.query(conf);
-		};
-
-		const choiceId = Math.round(Math.random() * 1000000);
-		const onBegin = (status: boolean): void =>
-		{
-			if (status)
-			{
-				const choice = new ChoiceValue();
-				choice.id = choiceId;
-				choice.listID = [API_TEYES_CONFIG_EXEC, API_TEYES_TEXT_VIEW_EXEC];
-				canbus.query(choice, true);
-			}
-		};
-		onMounted(() =>
-		{
-			canbus.addListener(API_TEYES_CONFIG_EVENT, onReceiveTeyesConfig);
-			canbus.addListener(API_TEYES_TEXT_VIEW_EVENT, onReceiveTeyesTextView);
-			canbus.addListener(API_CANBUS_EVENT, onBegin);
-			onBegin(canbus.begin);
-		});
-		onUnmounted(() =>
-		{
-			canbus.removeListener(API_TEYES_CONFIG_EVENT, onReceiveTeyesConfig);
-			canbus.removeListener(API_TEYES_TEXT_VIEW_EVENT, onReceiveTeyesTextView);
-			canbus.removeListener(API_CANBUS_EVENT, onBegin);
-		});
 
 		return {
 			teyesConfigLoaded,
-			teyesTextViewLoaded,
 			protocol,
 			reverseUart,
 			lcdShow,
@@ -317,9 +247,8 @@ export default {
 			menu,
 			menuVisible,
 			menuSelected,
-			onApplyTeyesConfig,
 			onMenuClick,
-			onViewSettingApply
+			onViewApply
 		};
 	}
 };
