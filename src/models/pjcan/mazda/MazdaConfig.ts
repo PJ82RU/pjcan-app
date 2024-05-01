@@ -51,12 +51,4 @@ export class MazdaConfig extends BaseModel implements IMazdaConfig
 			? this._get(this, this.exec)
 			: this._get(this, this.exec, MazdaConfig.size, new BluetoothStruct(MazdaConfig.struct));
 	}
-
-	/** Копирование объекта */
-	copy(): IMazdaConfig
-	{
-		const res: any = new MazdaConfig();
-		for (const key in this) res[key] = this[key];
-		return res;
-	}
 }
