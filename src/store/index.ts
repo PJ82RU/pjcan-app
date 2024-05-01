@@ -1,11 +1,13 @@
 import { createStore } from "vuex";
 import app from "./modules/app";
-import canbus from "./modules/canbus";
+import config from "./modules/config";
+import value from "./modules/value";
 
 const store = createStore({
 	modules: {
 		app,
-		canbus
+		config,
+		value
 	},
 	strict: process.env.NODE_ENV === "development"
 });

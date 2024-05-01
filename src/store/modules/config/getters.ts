@@ -1,6 +1,12 @@
 import { TCarModel } from "@/models/pjcan/mazda";
 
 /**
+ * Версия прошивки
+ * @param {any} state
+ */
+export const version = (state: any) => state.version;
+
+/**
  * Информация об устройстве
  * @param {any} state
  */
@@ -16,7 +22,7 @@ export const mazda = (state: any) => state.mazda;
  * Модель автомобиля
  * @param {any} state
  */
-export const carModel = (state: any) => state.mazda?.carModel ?? TCarModel.CAR_MODEL_UNKNOWN;
+export const carModel = (state: any) => state.mazda.isData ? state.mazda.carModel : TCarModel.CAR_MODEL_UNKNOWN;
 
 /**
  * Конфигурация Teyes

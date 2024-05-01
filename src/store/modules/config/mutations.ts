@@ -2,6 +2,16 @@ import canbus from "@/api/canbus";
 import { TCarModel } from "@/models/pjcan/mazda";
 
 /**
+ * Записать версию прошивки
+ * @param {any} state
+ * @param {DataView} data Данные
+ */
+export const setVersion = (state: any, data: DataView) =>
+{
+	state.version.set(data);
+};
+
+/**
  * Изменить информацию об устройстве
  * @param {any} state
  * @param {DataView} data Данные
