@@ -32,7 +32,11 @@ import {
 	DeviceAction,
 	DeviceConfig,
 	DeviceValue,
-	DeviceUpdate
+	DeviceUpdate,
+	API_DEVICE_VIEW_WORKTIME_EXEC,
+	API_DEVICE_VIEW_WORKTIME_EVENT,
+	API_DEVICE_VIEW_VOLTMETER_EXEC,
+	API_DEVICE_VIEW_VOLTMETER_EVENT
 } from "@/models/pjcan/device";
 import {
 	API_BUTTONS_SW1_CONFIG_EXEC,
@@ -415,6 +419,12 @@ export class Canbus extends EventEmitter
 				break;
 			case API_DEVICE_SCANNER_VALUE_EXEC: // Значения сканирования
 				this.emit(API_DEVICE_SCANNER_VALUE_EVENT, data);
+				break;
+			case API_DEVICE_VIEW_WORKTIME_EXEC: // Отображение времени работы устройства
+				this.emit(API_DEVICE_VIEW_WORKTIME_EVENT, data);
+				break;
+			case API_DEVICE_VIEW_VOLTMETER_EXEC: // Отображение напряжения бортовой сети
+				this.emit(API_DEVICE_VIEW_VOLTMETER_EVENT, data);
 				break;
 
 			case API_CHOICE_EXEC: // Выборочные данные

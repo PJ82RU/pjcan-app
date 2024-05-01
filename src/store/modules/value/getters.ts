@@ -44,4 +44,4 @@ export const sensors = (state: any) => state.sensors;
  * Значения температуры
  * @param {any} state
  */
-export const temperature = (state: any) => state.fuel;
+export const temperature = (state: any) => state.temperature;

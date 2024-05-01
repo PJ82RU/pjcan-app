@@ -5,6 +5,12 @@ import { IDeviceConfig } from "./IDeviceConfig";
 export const API_DEVICE_CONFIG_EXEC = 0x02;
 export const API_DEVICE_CONFIG_EVENT = "DeviceConfig";
 
+export const API_DEVICE_VIEW_WORKTIME_EXEC = 0x0a;
+export const API_DEVICE_VIEW_WORKTIME_EVENT = "DeviceWorktime";
+
+export const API_DEVICE_VIEW_VOLTMETER_EXEC = 0x0b;
+export const API_DEVICE_VIEW_VOLTMETER_EVENT = "DeviceVoltmeter";
+
 /** Модель параметров устройства */
 export class DeviceConfig extends BaseModel implements IDeviceConfig
 {

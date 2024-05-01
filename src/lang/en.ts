@@ -63,7 +63,8 @@ export default {
 	},
 
 	error: {
-		title: "What are you watching,\nwrite PJ82"
+		title: "What are you watching,\nwrite PJ82",
+		version: "Error requesting the device version. Reconnect the PJCAN device"
 	},
 
 	rules: {
@@ -165,6 +166,11 @@ export default {
 				title: "Worktime",
 				description: "Operating time of the device from the moment of switching on",
 				menu: "LCD: Worktime"
+			},
+			voltmeter: {
+				title: "Voltage",
+				description: "On-board mains voltage in volts",
+				menu: "LCD: Voltage"
 			},
 			temperature: {
 				title: "Air temperature",
