@@ -21,7 +21,7 @@
 						:disabled="!mazdaConfigLoaded"
 						persistent-hint
 						dense
-						@blur="onMazdaConfigApply"
+						@blur="setMazdaLogo"
 					/>
 				</v-col>
 				<v-col cols="12" class="pb-0">
@@ -33,7 +33,7 @@
 						:disabled="!mazdaConfigLoaded"
 						persistent-hint
 						dense
-						@blur="onMazdaConfigApply"
+						@blur="setMazdaHello"
 					/>
 				</v-col>
 			</v-row>
@@ -46,28 +46,20 @@
 		:view="menuSelected.view"
 		:disabled="menuSelected.disabled"
 		delay-disabled
-		@click:apply="onMazdaViewApply"
+		@click:apply="onViewApply"
 	/>
 </template>
 
 <script lang="ts">
-import { computed, nextTick, onMounted, onUnmounted, Ref, ref, watch } from "vue";
+import { computed, nextTick, Ref, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
-import canbus from "@/api/canbus";
+import store from "@/store";
 
 import Card from "@/components/cards/Card.vue";
 import SwitchCardItem from "@/components/cards/SwitchCardItem.vue";
 import ViewSettingDialog from "@/components/ViewSettingDialog.vue";
-import { IMenuItem } from "@/components/MenuDots.vue";
 
-import {
-	API_MAZDA_CONFIG_EVENT,
-	API_MAZDA_VIEW_EVENT,
-	API_MAZDA_VIEW_EXEC,
-	IMazdaConfig
-} from "@/models/pjcan/mazda";
-import { IViewConfig, ViewConfig } from "@/models/pjcan/view";
-import { API_CANBUS_EVENT } from "@/models/pjcan/base/BaseModel";
+import { IMenuItem } from "@/components/MenuDots.vue";
 
 export default {
 	name: "LcdCard",
@@ -76,17 +68,49 @@ export default {
 	{
 		const { t } = useI18n();
 
-		const mazdaConfigLoaded = ref(false);
-		const mazdaViewLoaded = ref(false);
+		const mazdaConfigLoaded = computed((): boolean => store.getters["config/mazda"].isData);
+		const mazdaViewLoaded = computed((): boolean => store.getters["view/mazda"].isData);
 
-		const enabled = ref(false);
-		const logo = ref("");
-		const hello = ref("");
+		const enabled = computed({
+			get: (): boolean => store.getters["config/mazda"].lcd,
+			set: (val: boolean) => store.commit("config/setMazdaLcd", val)
+		});
 
-		let mazdaView: IViewConfig;
+		/**
+         * Проверка ввода
+         * @param {Ref<string>} input Объект ввода
+         * @param {number} max Максимальное количество символов
+         */
+		const onInput = (input: Ref<string>, max: number): void =>
+		{
+			const { value } = input;
+			const length = value.length;
+			if (length > max) input.value = value.substring(0, max);
+			else if (!/^[^а-яА-я]*$/.test(value)) input.value = value.substring(0, length - 1);
+		};
+
+		// Логотип
+		const __logo = computed(() => store.getters["config/mazda"].logo);
+		const logo = ref(__logo.value);
+		watch(__logo, (val: string) => (logo.value = val));
+		watch(logo, (): void =>
+		{
+			nextTick(() => onInput(logo, 12));
+		});
+		const setMazdaLogo = (): void => store.commit("config/setMazdaLogo", logo.value);
+
+		// Текст приветствия
+		const __hello = computed(() => store.getters["config/mazda"].hello);
+		const hello = ref(__hello.value);
+		watch(__hello, (val: string) => (hello.value = val));
+		watch(hello, (): void =>
+		{
+			nextTick(() => onInput(hello, 32));
+		});
+		const setMazdaHello = (): void => store.commit("config/setMazdaHello", hello.value);
 
 		const menu = computed((): IMenuItem[] => [
-			{ title: t("options.lcd.hello.menu"), view: mazdaView, disabled: !mazdaViewLoaded.value }
+			{ title: t("options.lcd.hello.menu"), view: store.getters["view/mazda"], disabled: !mazdaViewLoaded.value }
 		]);
 		const menuVisible = ref(false);
 		const menuSelected = ref({} as IMenuItem);
@@ -102,116 +126,28 @@ export default {
 		};
 
 		/**
-		 * Проверка ввода
-		 * @param {Ref<string>} input Объект ввода
-		 * @param {number} max Максимальное количество символов
-		 */
-		const onInput = (input: Ref<string>, max: number): void =>
-		{
-			const { value } = input;
-			const length = value.length;
-			if (length > max) input.value = value.substring(0, max);
-			else if (!/^[^а-яА-я]*$/.test(value)) input.value = value.substring(0, length - 1);
-		};
-
-		watch(enabled, (): void =>
-		{
-			nextTick(() => onMazdaConfigApply());
-		});
-		watch(logo, (): void =>
-		{
-			nextTick(() => onInput(logo, 12));
-		});
-		watch(hello, (): void =>
-		{
-			nextTick(() => onInput(hello, 32));
-		});
-
-		/** Применить новые значения конфигурации автомобиля */
-		const onMazdaConfigApply = (): void =>
-		{
-			if (
-				canbus.mazda.lcd !== enabled.value ||
-				canbus.mazda.logo !== logo.value ||
-				canbus.mazda.hello !== hello.value
-			)
-			{
-				canbus.mazda.lcd = enabled.value;
-				canbus.mazda.logo = logo.value;
-				canbus.mazda.hello = hello.value;
-				canbus.query(canbus.mazda);
-			}
-		};
-
-		/**
 		 * Применить параметры отображения на информационном экране
-		 * @param {IViewConfig} data Новые параметры отображения
+		 * @param {any} value Новые параметры отображения
 		 */
-		const onMazdaViewApply = (data: IViewConfig): void =>
+		const onViewApply = (value: any): void =>
 		{
-			canbus.query(data);
+			store.commit("view/setView", value);
 		};
-
-		/**
-		 * Входящие настройки автомобиля
-		 * @param {IMazdaConfig} res
-		 */
-		const onMazdaConfigReceive = (res: IMazdaConfig): void =>
-		{
-			mazdaConfigLoaded.value = res.isData;
-			if (res.isData)
-			{
-				enabled.value = res.lcd;
-				logo.value = res.logo;
-				hello.value = res.hello;
-			}
-		};
-
-		/**
-		 * Входящие значения отображения
-		 * @param {IViewConfig} res
-		 */
-		const onMazdaViewReceive = (res: IViewConfig): void =>
-		{
-			mazdaViewLoaded.value = res.isData;
-			mazdaView = res;
-		};
-
-		const onBegin = (status: boolean): void =>
-		{
-			if (status)
-			{
-				onMazdaConfigReceive(canbus.mazda);
-				canbus.query(new ViewConfig(API_MAZDA_VIEW_EXEC), true);
-			}
-		};
-		onMounted(() =>
-		{
-			canbus.addListener(API_MAZDA_CONFIG_EVENT, onMazdaConfigReceive);
-			canbus.addListener(API_MAZDA_VIEW_EVENT, onMazdaViewReceive);
-			canbus.addListener(API_CANBUS_EVENT, onBegin);
-			onBegin(canbus.begin);
-		});
-		onUnmounted(() =>
-		{
-			canbus.removeListener(API_MAZDA_CONFIG_EVENT, onMazdaConfigReceive);
-			canbus.removeListener(API_MAZDA_VIEW_EVENT, onMazdaViewReceive);
-			canbus.removeListener(API_CANBUS_EVENT, onBegin);
-		});
 
 		return {
 			mazdaConfigLoaded,
 			mazdaViewLoaded,
 			enabled,
 			logo,
+			setMazdaLogo,
 			hello,
+			setMazdaHello,
 			menu,
 			menuVisible,
 			menuSelected,
 			onInput,
-			onMazdaConfigApply,
 			onMenuClick,
-			onMazdaViewApply
+			onViewApply
 		};
 	}
 };

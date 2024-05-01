@@ -1,7 +1,6 @@
 import canbus from "@/api/canbus";
 import { TCarModel } from "@/models/pjcan/mazda";
 import { TCenterPoint } from "@/models/pjcan/bose";
-import { IEngineConfig } from "@/models/pjcan/engine";
 
 /**
  * Записать версию прошивки
@@ -34,7 +33,7 @@ export const setMazda = (state: any, data: DataView) =>
 };
 
 /**
- * Изменить модель автомобиля
+ * Mazda: CarModel
  * @param {any} state
  * @param {TCarModel} value Новое значение
  */
@@ -43,6 +42,45 @@ export const setMazdaCarModel = (state: any, value: TCarModel) =>
 	if (state.mazda.isData)
 	{
 		state.mazda.carModel = value;
+		canbus.query(state.mazda);
+	}
+};
+/**
+ * Mazda: LCD
+ * @param {any} state
+ * @param {boolean} value Новое значение
+ */
+export const setMazdaLcd = (state: any, value: boolean) =>
+{
+	if (state.mazda.isData)
+	{
+		state.mazda.lcd = value;
+		canbus.query(state.mazda);
+	}
+};
+/**
+ * Mazda: Logo
+ * @param {any} state
+ * @param {boolean} value Новое значение
+ */
+export const setMazdaLogo = (state: any, value: string) =>
+{
+	if (state.mazda.isData)
+	{
+		state.mazda.logo = value;
+		canbus.query(state.mazda);
+	}
+};
+/**
+ * Mazda: Hello
+ * @param {any} state
+ * @param {boolean} value Новое значение
+ */
+export const setMazdaHello = (state: any, value: string) =>
+{
+	if (state.mazda.isData)
+	{
+		state.mazda.hello = value;
 		canbus.query(state.mazda);
 	}
 };
@@ -83,8 +121,11 @@ export const setBose = (state: any, data: DataView) =>
  */
 export const setBoseEnabled = (state: any, value: boolean) =>
 {
-	state.bose.on = value;
-	canbus.query(state.bose);
+	if (state.bose.isData)
+	{
+		state.bose.on = value;
+		canbus.query(state.bose);
+	}
 };
 /**
  * Bose: AudioPilot
@@ -93,8 +134,11 @@ export const setBoseEnabled = (state: any, value: boolean) =>
  */
 export const setBoseAudioPlt = (state: any, value: boolean) =>
 {
-	state.bose.audioPlt = value;
-	canbus.query(state.bose);
+	if (state.bose.isData)
+	{
+		state.bose.audioPlt = value;
+		canbus.query(state.bose);
+	}
 };
 /**
  * Bose: RadioFM
@@ -103,8 +147,11 @@ export const setBoseAudioPlt = (state: any, value: boolean) =>
  */
 export const setBoseRadioFM = (state: any, value: boolean) =>
 {
-	state.bose.radioFM = value;
-	canbus.query(state.bose);
+	if (state.bose.isData)
+	{
+		state.bose.radioFM = value;
+		canbus.query(state.bose);
+	}
 };
 /**
  * Bose: Звук wow
@@ -113,8 +160,11 @@ export const setBoseRadioFM = (state: any, value: boolean) =>
  */
 export const setBoseWow = (state: any, value: boolean) =>
 {
-	state.bose.wow = value;
-	canbus.query(state.bose);
+	if (state.bose.isData)
+	{
+		state.bose.wow = value;
+		canbus.query(state.bose);
+	}
 };
 /**
  * Bose: Balance
@@ -123,8 +173,11 @@ export const setBoseWow = (state: any, value: boolean) =>
  */
 export const setBoseBalance = (state: any, value: number) =>
 {
-	state.bose.balance = value;
-	canbus.query(state.bose);
+	if (state.bose.isData)
+	{
+		state.bose.balance = value;
+		canbus.query(state.bose);
+	}
 };
 /**
  * Bose: Bass
@@ -133,8 +186,11 @@ export const setBoseBalance = (state: any, value: number) =>
  */
 export const setBoseBass = (state: any, value: number) =>
 {
-	state.bose.bass = value;
-	canbus.query(state.bose);
+	if (state.bose.isData)
+	{
+		state.bose.bass = value;
+		canbus.query(state.bose);
+	}
 };
 /**
  * Bose: Fade
@@ -143,8 +199,11 @@ export const setBoseBass = (state: any, value: number) =>
  */
 export const setBoseFade = (state: any, value: number) =>
 {
-	state.bose.fade = value;
-	canbus.query(state.bose);
+	if (state.bose.isData)
+	{
+		state.bose.fade = value;
+		canbus.query(state.bose);
+	}
 };
 /**
  * Bose: Treble
@@ -153,8 +212,11 @@ export const setBoseFade = (state: any, value: number) =>
  */
 export const setBoseTreble = (state: any, value: number) =>
 {
-	state.bose.treble = value;
-	canbus.query(state.bose);
+	if (state.bose.isData)
+	{
+		state.bose.treble = value;
+		canbus.query(state.bose);
+	}
 };
 /**
  * Bose: CenterPoint
@@ -163,8 +225,11 @@ export const setBoseTreble = (state: any, value: number) =>
  */
 export const setBoseCenterPoint = (state: any, value: TCenterPoint) =>
 {
-	state.bose.centerPoint = value;
-	canbus.query(state.bose);
+	if (state.bose.isData)
+	{
+		state.bose.centerPoint = value;
+		canbus.query(state.bose);
+	}
 };
 
 /**
@@ -186,10 +251,13 @@ export const setEngineConfig = (
 	{ showDays, totalWorktime, totalCountRPM }: { showDays: boolean; totalWorktime: BigInt; totalCountRPM: BigInt }
 ) =>
 {
-	state.engine.showDays = showDays;
-	state.engine.totalWorktime = totalWorktime;
-	state.engine.totalCountRPM = totalCountRPM;
-	canbus.query(state.engine);
+	if (state.engine.isData)
+	{
+		state.engine.showDays = showDays;
+		state.engine.totalWorktime = totalWorktime;
+		state.engine.totalCountRPM = totalCountRPM;
+		canbus.query(state.engine);
+	}
 };
 
 /**
@@ -208,8 +276,11 @@ export const setFuel = (state: any, data: DataView) =>
  */
 export const setFuelRatio = (state: any, value: number) =>
 {
-	state.fuel.ratio = value;
-	canbus.query(state.fuel);
+	if (state.fuel.isData)
+	{
+		state.fuel.ratio = value;
+		canbus.query(state.fuel);
+	}
 };
 	
 /**
@@ -228,8 +299,11 @@ export const setVolume = (state: any, data: DataView) =>
  */
 export const setVolumeMuteBose = (state: any, value: boolean) =>
 {
-	state.volume.muteBose = value;
-	canbus.query(state.volume);
+	if (state.volume.isData)
+	{
+		state.volume.muteBose = value;
+		canbus.query(state.volume);
+	}
 };
 /**
  * Volume: Volume Bose
@@ -238,6 +312,9 @@ export const setVolumeMuteBose = (state: any, value: boolean) =>
  */
 export const setVolumeValueBose = (state: any, value: number) =>
 {
-	state.volume.volumeBose = value;
-	canbus.query(state.volume);
+	if (state.volume.isData)
+	{
+		state.volume.volumeBose = value;
+		canbus.query(state.volume);
+	}
 };

@@ -28,7 +28,7 @@ export default {
 		provide("flicking", flicking);
 
 		const cards = computed(() =>
-			store.getters["app/carModel"] !== TCarModel.CAR_MODEL_MAZDA_CX9_REST
+			store.getters["config/carModel"] !== TCarModel.CAR_MODEL_MAZDA_CX9_REST
 				? ["lcd", "teyes", "onboard"]
 				: ["teyes", "onboard"]
 		);
