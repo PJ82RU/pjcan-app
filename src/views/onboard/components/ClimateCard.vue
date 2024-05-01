@@ -78,25 +78,19 @@
 </template>
 
 <script lang="ts">
-import { computed, onMounted, onUnmounted, ref } from "vue";
+import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
+import store from "@/store";
 import canbus from "@/api/canbus";
 
 import Card from "@/components/cards/Card.vue";
 import InputCardItem from "@/components/cards/InputCardItem.vue";
 import IconCardItem from "@/components/cards/IconCardItem.vue";
 import SwitchCardItem from "@/components/cards/SwitchCardItem.vue";
-import ViewSettingDialog from "../../../components/ViewSettingDialog.vue";
-import { IMenuItem } from "@/components/MenuDots.vue";
+import ViewSettingDialog from "@/components/ViewSettingDialog.vue";
 
-import { IViewConfig, ViewConfig } from "@/models/pjcan/view";
-import {
-	API_CLIMATE_VIEW_EXEC,
-	API_CLIMATE_VIEW_EVENT,
-	IClimateValue,
-	API_CLIMATE_VALUE_EVENT
-} from "@/models/pjcan/climate";
-import { API_CANBUS_EVENT } from "@/models/pjcan/base/BaseModel";
+import { IMenuItem } from "@/components/MenuDots.vue";
+import { IViewConfig } from "@/models/pjcan/view";
 
 export default {
 	name: "ClimateCard",
@@ -105,24 +99,54 @@ export default {
 	{
 		const { t } = useI18n();
 
-		const climateValueLoaded = ref(false);
-		const climateViewLoaded = ref(false);
+		const climateValueLoaded = computed((): boolean => store.getters["value/climate"].isData);
+		const climateViewLoaded = computed((): boolean => store.getters["view/climate"].isData);
 
-		const enabled = ref(false);
-		const rotation = ref(0);
-		const autoMode = ref(false);
-		const ac = ref(false);
-		const temperature = ref(0);
-		const airEnabled = ref(false);
-		const airIconName = ref("");
-		const blowEnabled = ref(false);
-		const blowName = ref("");
-		const blowWindshield = ref(false);
-
-		let climateView: IViewConfig;
+		const enabled = computed((): boolean => store.getters["value/climate"].on);
+		const rotation = computed((): number =>
+		{
+			const res = store.getters["value/climate"];
+			return res.airRate > 0 && res.airRate < 8 ? 7 - res.airRate : 0;
+		});
+		const autoMode = computed((): boolean => store.getters["value/climate"].automode);
+		const ac = computed((): boolean => store.getters["value/climate"].ac);
+		const temperature = computed((): number =>
+		{
+			const res = store.getters["value/climate"];
+			return res.temperature > 0 ? res.temperature / 10 : 0;
+		});
+		const airEnabled = computed((): boolean =>
+		{
+			const res = store.getters["value/climate"];
+			return res.airInside || res.airOutside;
+		});
+		const airIconName = computed((): string =>
+			store.getters["value/climate"].airInside ? "air-inside" : "air-outside"
+		);
+		const blowEnabled = computed((): boolean =>
+		{
+			const res = store.getters["value/climate"];
+			return res.airDBody || res.airDLegs;
+		});
+		const blowName = computed((): string =>
+		{
+			const res = store.getters["value/climate"];
+			return res.airDLegs && res.airDBody
+				? "blow-feet-body"
+				: res.airDLegs
+					? "blow-feet"
+					: res.airDBody
+						? "blow-body"
+						: "blow-none";
+		});
+		const blowWindshield = computed((): boolean => store.getters["value/climate"].airDWindshield);
 
 		const menu = computed((): IMenuItem[] => [
-			{ title: t("onboard.climate.menu"), view: climateView, disabled: !climateViewLoaded.value }
+			{
+				title: t("onboard.climate.menu"),
+				view: store.getters["view/climate"],
+				disabled: !climateViewLoaded.value
+			}
 		]);
 		const menuVisible = ref(false);
 		const menuSelected = ref({} as IMenuItem);
@@ -145,56 +169,6 @@ export default {
 		{
 			canbus.query(data);
 		};
-
-		/** Входящие значения климат-контроля */
-		const onClimateValueReceive = (res: IClimateValue): void =>
-		{
-			climateValueLoaded.value = res.isData;
-			if (res.isData)
-			{
-				enabled.value = res.on;
-				rotation.value = res.airRate > 0 && res.airRate < 8 ? 7 - res.airRate : 0;
-				autoMode.value = res.automode;
-				ac.value = res.ac;
-				temperature.value = res.temperature > 0 ? res.temperature / 10 : 0;
-				airEnabled.value = res.airInside || res.airOutside;
-				airIconName.value = res.airInside ? "air-inside" : "air-outside";
-				blowEnabled.value = res.airDBody || res.airDLegs;
-				blowName.value =
-					res.airDLegs && res.airDBody
-						? "blow-feet-body"
-						: res.airDLegs
-							? "blow-feet"
-							: res.airDBody
-								? "blow-body"
-								: "blow-none";
-				blowWindshield.value = res.airDWindshield;
-			}
-		};
-		/** Входящие значения отображения климат-контроля */
-		const onClimateViewReceive = (res: IViewConfig): void =>
-		{
-			climateViewLoaded.value = res.isData;
-			climateView = res;
-		};
-
-		const onBegin = (status: boolean): void =>
-		{
-			if (status) canbus.query(new ViewConfig(API_CLIMATE_VIEW_EXEC), true);
-		};
-		onMounted(() =>
-		{
-			canbus.addListener(API_CLIMATE_VALUE_EVENT, onClimateValueReceive);
-			canbus.addListener(API_CLIMATE_VIEW_EVENT, onClimateViewReceive);
-			canbus.addListener(API_CANBUS_EVENT, onBegin);
-			onBegin(canbus.begin);
-		});
-		onUnmounted(() =>
-		{
-			canbus.removeListener(API_CLIMATE_VALUE_EVENT, onClimateValueReceive);
-			canbus.removeListener(API_CLIMATE_VIEW_EVENT, onClimateViewReceive);
-			canbus.removeListener(API_CANBUS_EVENT, onBegin);
-		});
 
 		return {
 			climateValueLoaded,
