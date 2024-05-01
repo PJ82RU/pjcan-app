@@ -49,27 +49,18 @@
 </template>
 
 <script lang="ts">
-import { computed, onMounted, onUnmounted, ref } from "vue";
+import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
+import store from "@/store";
+import canbus from "@/api/canbus";
 
 import Card from "@/components/cards/Card.vue";
 import InputCardItem from "@/components/cards/InputCardItem.vue";
-import ViewSettingDialog from "../../../components/ViewSettingDialog.vue";
+import ViewSettingDialog from "@/components/ViewSettingDialog.vue";
+
 import { IMenuItem } from "@/components/MenuDots.vue";
 import { TCarModel } from "@/models/pjcan/mazda";
-
 import { IViewConfig } from "@/models/pjcan/view";
-import {
-	API_MOVEMENT_VALUE_EVENT,
-	API_MOVEMENT_VIEW_EVENT,
-	IMovementValue,
-	IMovementViews,
-	MovementViews
-} from "@/models/pjcan/movement";
-
-import canbus from "@/api/canbus";
-import { API_CANBUS_EVENT } from "@/models/pjcan/base/BaseModel";
-import store from "@/store";
 
 export default {
 	name: "MovementCard",
@@ -84,33 +75,31 @@ export default {
 	{
 		const { t } = useI18n();
 
-		const movementValueLoaded = ref(false);
-		const movementViewLoaded = ref(false);
+		const movementValueLoaded = computed((): boolean => store.getters["value/movement"].isData);
+		const movementViewLoaded = computed((): boolean => store.getters["view/movement"].isData);
 
-		const speed = ref("");
-		const speedAVG = ref("");
-		const restWay = ref("");
-		const isSpeed = ref(false);
-		const isSpeedAVG = ref(false);
-		const isRestWay = ref(false);
-		const carModel = computed((): TCarModel => store.getters["app/carModel"]);
-
-		let movementViews: IMovementViews;
+		const speed = computed((): string => (store.getters["value/movement"].speed / 100).toFixed(2));
+		const speedAVG = computed((): string => store.getters["value/movement"].speedAVG.toFixed(0));
+		const restWay = computed((): string => (store.getters["value/movement"].restWay / 100).toFixed(2));
+		const isSpeed = computed((): boolean => store.getters["value/movement"].speed > 0);
+		const isSpeedAVG = computed((): boolean => store.getters["value/movement"].speedAVG > 0);
+		const isRestWay = computed((): boolean => store.getters["value/movement"].restWay > 0);
+		const carModel = computed((): TCarModel => store.getters["config/carModel"]);
 
 		const menu = computed((): IMenuItem[] => [
 			{
 				title: t("onboard.movement.speed.menu"),
-				view: movementViews?.speed,
+				view: store.getters["view/movement"].speed,
 				disabled: !movementViewLoaded.value
 			},
 			{
 				title: t("onboard.movement.speedAVG.menu"),
-				view: movementViews?.speedAVG,
+				view: store.getters["view/movement"].speedAVG,
 				disabled: !movementViewLoaded.value
 			},
 			{
 				title: t("onboard.movement.restWay.menu"),
-				view: movementViews?.restWay,
+				view: store.getters["view/movement"].restWay,
 				disabled: !movementViewLoaded.value
 			}
 		]);
@@ -135,45 +124,6 @@ export default {
 		{
 			canbus.query(data);
 		};
-
-		/** Входящие значения движения */
-		const onMovementValueReceive = (res: IMovementValue): void =>
-		{
-			movementValueLoaded.value = res.isData;
-			if (res.isData)
-			{
-				speed.value = (res.speed / 100).toFixed(2);
-				speedAVG.value = res.speedAVG.toFixed(0);
-				restWay.value = (res.restWay / 100).toFixed(2);
-				isSpeed.value = res.speed > 0;
-				isSpeedAVG.value = res.speedAVG > 0;
-				isRestWay.value = res.restWay > 0;
-			}
-		};
-		/** Входящие значения отображения движения */
-		const onMovementViewReceive = (res: IMovementViews): void =>
-		{
-			movementViewLoaded.value = res.isData;
-			movementViews = res;
-		};
-
-		const onBegin = (status: boolean): void =>
-		{
-			if (status) canbus.query(new MovementViews(), true);
-		};
-		onMounted(() =>
-		{
-			canbus.addListener(API_MOVEMENT_VALUE_EVENT, onMovementValueReceive);
-			canbus.addListener(API_MOVEMENT_VIEW_EVENT, onMovementViewReceive);
-			canbus.addListener(API_CANBUS_EVENT, onBegin);
-			onBegin(canbus.begin);
-		});
-		onUnmounted(() =>
-		{
-			canbus.removeListener(API_MOVEMENT_VALUE_EVENT, onMovementValueReceive);
-			canbus.removeListener(API_MOVEMENT_VIEW_EVENT, onMovementViewReceive);
-			canbus.removeListener(API_CANBUS_EVENT, onBegin);
-		});
 
 		return {
 			movementViewLoaded,
