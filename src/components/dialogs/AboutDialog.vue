@@ -41,10 +41,9 @@
 </template>
 
 <script lang="ts">
-import { computed, onMounted, onUnmounted, ref, toRefs } from "vue";
+import { computed, ref, toRefs } from "vue";
 import { useI18n } from "vue-i18n";
 import store from "@/store";
-import canbus from "@/api/canbus";
 
 import DialogTemplate from "@/layout/components/DialogTemplate.vue";
 import DeviceInfoDialog from "@/components/dialogs/DeviceInfoDialog.vue";
@@ -52,7 +51,6 @@ import ChoosingCarModelDialog from "@/components/dialogs/ChoosingCarModelDialog.
 
 import { ILooseObject } from "@/models/interfaces/ILooseObject";
 import { TCarModel } from "@/models/pjcan/mazda";
-import { API_CANBUS_EVENT } from "@/models/pjcan/base/BaseModel";
 
 const pkg = require("/package.json");
 
@@ -60,7 +58,10 @@ export default {
 	name: "AboutDialog",
 	components: { ChoosingCarModelDialog, DialogTemplate, DeviceInfoDialog },
 	props: {
-		modelValue: Boolean
+		modelValue: {
+			type: Boolean,
+			required: true
+		}
 	},
 	emits: ["update:modelValue"],
 	setup(props: any, { emit }: { emit: any })
@@ -74,8 +75,8 @@ export default {
 		});
 		const visibleDeviceInfo = ref(false);
 		const visibleCarModel = ref(false);
-		const versionFirmware = ref("");
-		const carModel = computed((): TCarModel => store.getters["app/carModel"]);
+		const versionFirmware = computed((): String => store.getters["config/version"].toString);
+		const carModel = computed((): TCarModel => store.getters["config/carModel"]);
 		const carSupport = computed((): string =>
 		{
 			const key = "choosingCarModel.carModels." + carModel.value;
@@ -103,7 +104,7 @@ export default {
 		 * Выбор модели автомобиля
 		 * @param {string} key Ключ
 		 */
-		const onEditClick = (key: string): void =>
+		const onEditClick = (key: string | number): void =>
 		{
 			if (key === "carSupport") visibleCarModel.value = true;
 		};
@@ -114,26 +115,11 @@ export default {
 		const onCarModelApplyClick = (id: number): void =>
 		{
 			visibleCarModel.value = false;
-			if (canbus.mazda.carModel !== id)
+			if (store.getters["config/mazda"].carModel !== id)
 			{
-				canbus.mazda.carModel = id;
-				canbus.query(canbus.mazda);
+				store.commit("config/setMazdaCarModel", id);
 			}
 		};
-
-		const onBegin = (status: boolean): void =>
-		{
-			if (status) versionFirmware.value = canbus.version.toString;
-		};
-		onMounted(() =>
-		{
-			canbus.addListener(API_CANBUS_EVENT, onBegin);
-			onBegin(canbus.begin);
-		});
-		onUnmounted(() =>
-		{
-			canbus.removeListener(API_CANBUS_EVENT, onBegin);
-		});
 
 		return {
 			visible,

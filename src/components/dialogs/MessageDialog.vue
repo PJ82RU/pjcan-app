@@ -29,10 +29,7 @@ export default {
 	components: { DialogTemplate },
 	props: {
 		/** Показать диалог */
-		modelValue: {
-			type: Boolean,
-			default: false
-		},
+		modelValue: Boolean,
 		/** Заголовок */
 		title: String,
 		/** Иконка заголовка */

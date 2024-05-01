@@ -17,7 +17,7 @@
 			class="icon-card-item__icon"
 			:style="{
 				right: `${parseInt(size) * index + (margin ? margin * index : 0)}px`,
-				animation: rotation > 0 ? 'rotating ' + rotation + 's linear infinite' : undefined
+				animation: rotation != undefined && rotation > 0 ? 'rotating ' + rotation + 's linear infinite' : undefined
 			}"
 			:name="item.name"
 			:colors="item.colors"
