@@ -1,5 +1,6 @@
 import canbus from "@/api/canbus";
 import { TCarModel } from "@/models/pjcan/mazda";
+import { TCenterPoint } from "@/models/pjcan/bose";
 
 /**
  * Записать версию прошивки
@@ -74,6 +75,96 @@ export const setBose = (state: any, data: DataView) =>
 {
 	state.bose.set(data);
 };
+/**
+ * Включить/выключить Bose
+ * @param {any} state
+ * @param {boolean} value Значение
+ */
+export const setBoseEnabled = (state: any, value: boolean) =>
+{
+	state.bose.on = value;
+	canbus.query(state.bose);
+};
+/**
+ * Bose: AudioPilot
+ * @param {any} state
+ * @param {boolean} value Значение
+ */
+export const setBoseAudioPlt = (state: any, value: boolean) =>
+{
+	state.bose.audioPlt = value;
+	canbus.query(state.bose);
+};
+/**
+ * Bose: RadioFM
+ * @param {any} state
+ * @param {boolean} value Значение
+ */
+export const setBoseRadioFM = (state: any, value: boolean) =>
+{
+	state.bose.radioFM = value;
+	canbus.query(state.bose);
+};
+/**
+ * Bose: Звук wow
+ * @param {any} state
+ * @param {boolean} value Значение
+ */
+export const setBoseWow = (state: any, value: boolean) =>
+{
+	state.bose.wow = value;
+	canbus.query(state.bose);
+};
+/**
+ * Bose: Balance
+ * @param {any} state
+ * @param {number} value Значение
+ */
+export const setBoseBalance = (state: any, value: number) =>
+{
+	state.bose.balance = value;
+	canbus.query(state.bose);
+};
+/**
+ * Bose: Bass
+ * @param {any} state
+ * @param {number} value Значение
+ */
+export const setBoseBass = (state: any, value: number) =>
+{
+	state.bose.bass = value;
+	canbus.query(state.bose);
+};
+/**
+ * Bose: Fade
+ * @param {any} state
+ * @param {number} value Значение
+ */
+export const setBoseFade = (state: any, value: number) =>
+{
+	state.bose.fade = value;
+	canbus.query(state.bose);
+};
+/**
+ * Bose: Treble
+ * @param {any} state
+ * @param {number} value Значение
+ */
+export const setBoseTreble = (state: any, value: number) =>
+{
+	state.bose.treble = value;
+	canbus.query(state.bose);
+};
+/**
+ * Bose: CenterPoint
+ * @param {any} state
+ * @param {TCenterPoint} value Значение
+ */
+export const setBoseCenterPoint = (state: any, value: TCenterPoint) =>
+{
+	state.bose.centerPoint = value;
+	canbus.query(state.bose);
+};
 
 /**
  * Изменить конфигурацию ДВС
@@ -103,4 +194,24 @@ export const setFuel = (state: any, data: DataView) =>
 export const setVolume = (state: any, data: DataView) =>
 {
 	state.volume.set(data);
+};
+/**
+ * Volume: Mute Bose
+ * @param {any} state
+ * @param {boolean} value Значение
+ */
+export const setVolumeMuteBose = (state: any, value: boolean) =>
+{
+	state.volume.muteBose = value;
+	canbus.query(state.volume);
+};
+/**
+ * Volume: Volume Bose
+ * @param {any} state
+ * @param {boolean} value Значение
+ */
+export const setVolumeValueBose = (state: any, value: number) =>
+{
+	state.volume.volumeBose = value;
+	canbus.query(state.volume);
 };

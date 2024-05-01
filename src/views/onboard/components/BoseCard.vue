@@ -10,7 +10,6 @@
 						:icon-name="['bose']"
 						:nodata="!boseConfigLoaded"
 						:disabled="!boseViewLoaded"
-						@change="onApplyBoseConfig"
 					/>
 				</v-col>
 				<v-col cols="12" class="pb-0">
@@ -21,7 +20,6 @@
 						:max="63"
 						:nodata="!volumeConfigLoaded"
 						:disabled="!enabled[0]"
-						@change="onApplyVolumeConfig"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0 pb-0">
@@ -32,7 +30,6 @@
 						color="warning"
 						:nodata="!volumeConfigLoaded"
 						:disabled="!enabled[0]"
-						@change="onApplyVolumeConfig"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0">
@@ -43,7 +40,6 @@
 						color="success"
 						:nodata="!boseConfigLoaded"
 						:disabled="!boseViewLoaded || !enabled[0]"
-						@change="onApplyBoseConfig"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0">
@@ -53,7 +49,6 @@
 						:description="$t('onboard.bose.centerPoint.description')"
 						:items="centerPointList"
 						:disabled="!boseViewLoaded || !enabled[0]"
-						@change="onApplyBoseConfig"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0">
@@ -66,7 +61,6 @@
 						prepend-icon="volume-l"
 						append-icon="volume-r"
 						:disabled="!boseViewLoaded || !enabled[0]"
-						@change="onApplyBoseConfig"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0">
@@ -79,7 +73,6 @@
 						prepend-icon="volume-fade-r"
 						append-icon="volume-fade-f"
 						:disabled="!boseViewLoaded || !enabled[0]"
-						@change="onApplyBoseConfig"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0">
@@ -92,7 +85,6 @@
 						prepend-icon-mdi="mdi-volume-medium"
 						append-icon-mdi="mdi-volume-high"
 						:disabled="!boseViewLoaded || !enabled[0]"
-						@change="onApplyBoseConfig"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0 pb-0">
@@ -105,7 +97,6 @@
 						prepend-icon-mdi="mdi-volume-medium"
 						append-icon-mdi="mdi-volume-high"
 						:disabled="!boseViewLoaded || !enabled[0]"
-						@change="onApplyBoseConfig"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0">
@@ -116,7 +107,6 @@
 						color="success"
 						:nodata="!boseConfigLoaded"
 						:disabled="!boseViewLoaded || !enabled[0]"
-						@change="onApplyBoseConfig"
 					/>
 				</v-col>
 			</v-row>
@@ -133,9 +123,9 @@
 </template>
 
 <script lang="ts">
-import { computed, onMounted, onUnmounted, ref } from "vue";
+import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
-import { createDebounce } from "@/utils/debounce";
+import store from "@/store";
 import canbus from "@/api/canbus";
 
 import Card from "@/components/cards/Card.vue";
@@ -145,26 +135,10 @@ import IconCardItem from "@/components/cards/IconCardItem.vue";
 import SliderCardItem from "@/components/cards/SliderCardItem.vue";
 import SelectCardItem from "@/components/cards/SelectCardItem.vue";
 import ViewSettingDialog from "@/components/ViewSettingDialog.vue";
-import { IMenuItem } from "@/components/MenuDots.vue";
 
-import {
-	API_BOSE_CONFIG_EVENT,
-	API_BOSE_CONFIG_EXEC,
-	API_BOSE_VIEW_EVENT,
-	API_BOSE_VIEW_EXEC,
-	BoseConfig,
-	IBoseConfig,
-	TCenterPoint
-} from "@/models/pjcan/bose";
-import {
-	API_VOLUME_CONFIG_EVENT,
-	API_VOLUME_CONFIG_EXEC,
-	IVolumeConfig,
-	VolumeConfig
-} from "@/models/pjcan/volume";
+import { IMenuItem } from "@/components/MenuDots.vue";
+import { TCenterPoint } from "@/models/pjcan/bose";
 import { IViewConfig } from "@/models/pjcan/view";
-import { API_CANBUS_EVENT } from "@/models/pjcan/base/BaseModel";
-import { ChoiceValue } from "@/models/pjcan/choice";
 
 export default {
 	name: "BoseCard",
@@ -187,19 +161,46 @@ export default {
 	{
 		const { t } = useI18n();
 
-		const boseConfigLoaded = ref(false);
-		const boseViewLoaded = ref(false);
-		const volumeConfigLoaded = ref(false);
+		const volumeConfigLoaded = computed((): boolean => store.getters["config/volume"].isData);
+		const boseConfigLoaded = computed((): boolean => store.getters["config/bose"].isData);
+		const boseViewLoaded = computed((): boolean => store.getters["view/bose"].isData);
 
-		const enabled = ref([false]);
-		const audioPLT = ref(false);
-		const radioFM = ref(false);
-		const wow = ref(false);
-		const balance = ref(0);
-		const bass = ref(0);
-		const fade = ref(0);
-		const treble = ref(0);
-		const centerPoint = ref(TCenterPoint.CENTERPOINT_OFF);
+		const enabled = computed({
+			get: (): boolean[] => [store.getters["config/bose"].on],
+			set: (val: boolean[]) => store.commit("config/setBoseEnabled", val[0])
+		});
+		const audioPLT = computed({
+			get: (): boolean => store.getters["config/bose"].audioPlt,
+			set: (val: boolean) => store.commit("config/setBoseAudioPlt", val)
+		});
+		const radioFM = computed({
+			get: (): boolean => store.getters["config/bose"].radioFM,
+			set: (val: boolean) => store.commit("config/setBoseRadioFM", val)
+		});
+		const wow = computed({
+			get: (): boolean => store.getters["config/bose"].wow,
+			set: (val: boolean) => store.commit("config/setBoseWow", val)
+		});
+		const balance = computed({
+			get: (): number => store.getters["config/bose"].balance,
+			set: (val: number) => store.commit("config/setBoseBalance", val)
+		});
+		const bass = computed({
+			get: (): number => store.getters["config/bose"].bass,
+			set: (val: number) => store.commit("config/setBoseBass", val)
+		});
+		const fade = computed({
+			get: (): number => store.getters["config/bose"].fade,
+			set: (val: number) => store.commit("config/setBoseFade", val)
+		});
+		const treble = computed({
+			get: (): number => store.getters["config/bose"].treble,
+			set: (val: number) => store.commit("config/setBoseTreble", val)
+		});
+		const centerPoint = computed({
+			get: (): TCenterPoint => store.getters["config/bose"].centerPoint,
+			set: (val: TCenterPoint) => store.commit("config/setBoseCenterPoint", val)
+		});
 		const centerPointList = computed(() => [
 			{ title: "OFF", value: TCenterPoint.CENTERPOINT_OFF },
 			{ title: "MIN", value: TCenterPoint.CENTERPOINT_MIN },
@@ -208,13 +209,17 @@ export default {
 			{ title: "HI", value: TCenterPoint.CENTERPOINT_HI },
 			{ title: "MAX", value: TCenterPoint.CENTERPOINT_MAX }
 		]);
-		const mute = ref(false);
-		const volume = ref(0);
-
-		let boseView: IViewConfig;
+		const mute = computed({
+			get: (): boolean => store.getters["config/volume"].muteBose,
+			set: (val: boolean) => store.commit("config/setVolumeMuteBose", val)
+		});
+		const volume = computed({
+			get: (): number => store.getters["config/volume"].volumeBose,
+			set: (val: number) => store.commit("config/setVolumeValueBose", val)
+		});
 
 		const menu = computed((): IMenuItem[] => [
-			{ id: 0, title: t("onboard.bose.menu"), view: boseView, disabled: !boseViewLoaded.value }
+			{ id: 0, title: t("onboard.bose.menu"), view: store.getters["view/bose"], disabled: !boseViewLoaded.value }
 		]);
 		const menuVisible = ref(false);
 		const menuSelected = ref({} as IMenuItem);
@@ -238,118 +243,6 @@ export default {
 			canbus.query(data);
 		};
 
-		let disabledBoseConfig = false;
-		const debounceBoseConfig = createDebounce();
-
-		/** Применить значения Bose */
-		const onApplyBoseConfig = (): void =>
-		{
-			if (boseConfigLoaded.value && !disabledBoseConfig)
-			{
-				disabledBoseConfig = true;
-				debounceBoseConfig(() => (disabledBoseConfig = false), 1000);
-
-				const config = new BoseConfig();
-				config.on = enabled.value[0];
-				config.audioPlt = audioPLT.value;
-				config.radioFM = radioFM.value;
-				config.wow = wow.value;
-				config.balance = balance.value;
-				config.bass = bass.value;
-				config.fade = fade.value;
-				config.treble = treble.value;
-				config.centerPoint = centerPoint.value;
-				canbus.query(config);
-			}
-		};
-
-		let disabledVolumeConfig = false;
-		const debounceVolumeConfig = createDebounce();
-
-		/** Применить значения звука */
-		const onApplyVolumeConfig = (): void =>
-		{
-			if (volumeConfigLoaded.value && !disabledVolumeConfig)
-			{
-				disabledVolumeConfig = true;
-				debounceVolumeConfig(() => (disabledVolumeConfig = false), 1000);
-
-				const config = new VolumeConfig();
-				config.muteBose = mute.value;
-				config.volumeBose = volume.value;
-				canbus.query(config);
-			}
-		};
-
-		/** Входящие значения Bose */
-		const onBoseConfigReceive = (res: IBoseConfig): void =>
-		{
-			boseConfigLoaded.value = res.isData;
-			if (res.isData)
-			{
-				enabled.value[0] = res.on;
-				audioPLT.value = res.audioPlt;
-				radioFM.value = res.radioFM;
-				wow.value = res.wow;
-				balance.value = res.balance;
-				bass.value = res.bass;
-				fade.value = res.fade;
-				treble.value = res.treble;
-				centerPoint.value = res.centerPoint as TCenterPoint;
-
-				disabledBoseConfig = false;
-			}
-		};
-		/** Входящие значения отображения климат-контроля */
-		const onBoseViewReceive = (res: IViewConfig): void =>
-		{
-			boseViewLoaded.value = res.isData;
-			boseView = res;
-		};
-		/** Входящие конфигурация звука */
-		const onVolumeConfigReceive = (res: IVolumeConfig): void =>
-		{
-			volumeConfigLoaded.value = res.isData;
-			if (res.isData)
-			{
-				mute.value = res.muteBose;
-				volume.value = res.volumeBose;
-
-				disabledVolumeConfig = false;
-			}
-		};
-
-		const choiceId = Math.round(Math.random() * 1000000);
-		const onBegin = (status: boolean): void =>
-		{
-			if (status)
-			{
-				const choice = new ChoiceValue();
-				choice.id = choiceId;
-				choice.listID = [
-					API_BOSE_CONFIG_EXEC,
-					API_BOSE_VIEW_EXEC,
-					API_VOLUME_CONFIG_EXEC
-				];
-				canbus.query(choice, true);
-			}
-		};
-		onMounted(() =>
-		{
-			canbus.addListener(API_BOSE_CONFIG_EVENT, onBoseConfigReceive);
-			canbus.addListener(API_BOSE_VIEW_EVENT, onBoseViewReceive);
-			canbus.addListener(API_VOLUME_CONFIG_EVENT, onVolumeConfigReceive);
-			canbus.addListener(API_CANBUS_EVENT, onBegin);
-			onBegin(canbus.begin);
-		});
-		onUnmounted(() =>
-		{
-			canbus.removeListener(API_BOSE_CONFIG_EVENT, onBoseConfigReceive);
-			canbus.removeListener(API_BOSE_VIEW_EVENT, onBoseViewReceive);
-			canbus.removeListener(API_VOLUME_CONFIG_EVENT, onVolumeConfigReceive);
-			canbus.removeListener(API_CANBUS_EVENT, onBegin);
-		});
-
 		return {
 			boseConfigLoaded,
 			boseViewLoaded,
@@ -369,8 +262,6 @@ export default {
 			menu,
 			menuVisible,
 			menuSelected,
-			onApplyBoseConfig,
-			onApplyVolumeConfig,
 			onMenuClick,
 			onViewSettingApply
 		};
