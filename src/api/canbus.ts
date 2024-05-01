@@ -182,11 +182,15 @@ export class Canbus extends EventEmitter
 	/** Статус активации устройства */
 	activation: boolean = false;
 
+	private __onVersion = (ev: any): void => canbus.onVersion(ev);
+	private __onIsActivation = (ev: any): void => canbus.onIsActivation(ev);
+	private __onActivation = (ev: any): void => canbus.onActivation(ev);
+
 	constructor()
 	{
 		super();
-		this.bluetooth.addListener(BLUETOOTH_EVENT_CONNECTED, (ev: any) => this.onConnected(ev));
-		this.bluetooth.addListener(BLUETOOTH_EVENT_RECEIVE, (ev: any) => this.onReceive(ev));
+		this.bluetooth.addListener(BLUETOOTH_EVENT_CONNECTED, (ev) => this.onConnected(ev));
+		this.bluetooth.addListener(BLUETOOTH_EVENT_RECEIVE, (ev) => this.onReceive(ev));
 	}
 
 	/** Статус работы Canbus */
@@ -281,7 +285,7 @@ export class Canbus extends EventEmitter
 			if (!this.version.is)
 			{
 				// Запрос версии прошивки
-				this.addListener(API_VERSION_EVENT, (ev: any) => this.onVersion(ev));
+				this.addListener(API_VERSION_EVENT, this.__onVersion);
 				this.query(new Version());
 				return;
 			}
@@ -295,7 +299,7 @@ export class Canbus extends EventEmitter
 	 */
 	private onVersion(data: DataView): void
 	{
-		this.removeListener(API_VERSION_EVENT, (ev: any) => this.onVersion(ev));
+		this.removeListener(API_VERSION_EVENT, this.__onVersion);
 		this.version.set(data);
 		if (this.version.is)
 		{
@@ -303,7 +307,7 @@ export class Canbus extends EventEmitter
 			console.log(t("BLE.server.versionProtocol", { mj: major, mn: minor, bl: build, rv: revision }));
 
 			// Запрос значения активации устройства
-			this.addListener(API_DEVICE_VALUE_EVENT, (ev: any) => this.onIsActivation(ev));
+			this.addListener(API_DEVICE_VALUE_EVENT, this.__onIsActivation);
 			this.query(new DeviceValue());
 
 			// Проверка наличия новой версии прошивки
@@ -330,12 +334,12 @@ export class Canbus extends EventEmitter
 		const device = new DeviceValue(data);
 		if (device.isData)
 		{
-			this.removeListener(API_DEVICE_VALUE_EVENT, (ev: any) => this.onIsActivation(ev));
+			this.removeListener(API_DEVICE_VALUE_EVENT, this.__onIsActivation);
 			this.activation = device.activation;
 			if (!this.activation)
 			{
 				// для активации устройства получаем хеш устройства
-				this.addListener(API_DEVICE_INFO_EVENT, (ev: any) => this.onActivation(ev));
+				this.addListener(API_DEVICE_INFO_EVENT, this.__onActivation);
 				this.query(new DeviceInfo());
 			}
 			else this.emit(API_CANBUS_EVENT, this.status);
@@ -351,7 +355,7 @@ export class Canbus extends EventEmitter
 		const info = new DeviceInfo(data);
 		if (info.isData)
 		{
-			this.removeListener(API_DEVICE_INFO_EVENT, (ev: any) => this.onActivation(ev));
+			this.removeListener(API_DEVICE_INFO_EVENT, this.__onActivation);
 			const sha = arrayToHex(info.sha);
 			if (sha?.length)
 			{
