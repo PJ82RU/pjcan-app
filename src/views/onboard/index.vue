@@ -48,6 +48,7 @@ export default {
 		const flicking = ref(null);
 		provide("flicking", flicking);
 
+		store.dispatch("app/readOnboardCardList");
 		const cards = computed(() =>
 		{
 			return store.getters["app/onboardCardList"]?.filter(

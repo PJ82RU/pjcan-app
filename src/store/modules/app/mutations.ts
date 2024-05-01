@@ -1,7 +1,6 @@
 import store from "@/store";
 import { IMessage } from "@/models/interfaces/message/IMessage";
 import { IOnboardCard } from "@/models/interfaces/IOnboardCard";
-import { TCarModel } from "@/models/pjcan/mazda";
 
 import { createDebounce } from "@/utils/debounce";
 import { IButtonCard } from "@/models/interfaces/IButtonCard";

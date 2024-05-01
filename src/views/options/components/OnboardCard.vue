@@ -46,18 +46,17 @@
 </template>
 
 <script lang="ts">
-import { computed, inject, onMounted, onUnmounted, ref } from "vue";
+import { computed, inject, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import store from "@/store";
 import draggable from "vuedraggable";
-import canbus from "@/api/canbus";
 
 import Card from "@/components/cards/Card.vue";
 import IconCustom from "@/components/common/icon-custom/IconCustom.vue";
 
 import { IMenuItem } from "@/components/MenuDots.vue";
 import { IOnboardCard } from "@/models/interfaces/IOnboardCard";
-import { API_CANBUS_EVENT } from "@/models/pjcan/base/BaseModel";
+import { TCarModel } from "@/models/pjcan/mazda";
 
 export default {
 	name: "OnboardCard",
@@ -68,14 +67,31 @@ export default {
 		const flicking = inject("flicking") as any;
 
 		store.dispatch("app/readOnboardCardList");
-		const isLoading = ref(false);
-		const cardList = ref(
-			[...store.getters["app/onboardCardList"]].map((x: IOnboardCard) => ({
+		const carModel = computed((): TCarModel => store.getters["config/carModel"]);
+		const isLoading = computed((): boolean => carModel.value !== TCarModel.CAR_MODEL_UNKNOWN);
+		const cardList = ref([] as any);
+		const setCardList = (model: TCarModel): void =>
+		{
+			cardList.value = [...store.getters["app/onboardCardList"]].map((x: IOnboardCard) => ({
 				...x,
-				disabled: true,
-				visible: x.car.indexOf(0) >= 0
-			}))
-		);
+				disabled: false,
+				visible: x.car.indexOf(model) >= 0
+			}));
+		};
+		setCardList(carModel.value);
+
+		watch(carModel, (val: TCarModel) => setCardList(val));
+		watch(isLoading, (val: boolean) =>
+		{
+			if (val)
+			{
+				cardList.value.forEach((x: IOnboardCard) =>
+				{
+					x.disabled = false;
+					x.visible = x.car.indexOf(carModel.value) >= 0;
+				});
+			}
+		});
 
 		/** Изменение списка */
 		const onCardListChange = (): void =>
@@ -94,40 +110,9 @@ export default {
 		 */
 		const onMenuClick = (item: IMenuItem): void =>
 		{
-			switch (item.id)
-			{
-				case 0:
-					store.dispatch("app/resetOnboardCardList");
-					cardList.value = [...store.getters["app/onboardCardList"]].map((x: IOnboardCard) => ({
-						...x,
-						disabled: false,
-						visible: x.car.indexOf(canbus.mazda.carModel) >= 0
-					}));
-					break;
-			}
+			store.dispatch("app/resetOnboardCardList");
+			setCardList(carModel.value);
 		};
-
-		const onBegin = (status: boolean): void =>
-		{
-			if (status)
-			{
-				cardList.value.forEach((x: IOnboardCard) =>
-				{
-					x.disabled = false;
-					x.visible = x.car.indexOf(canbus.mazda.carModel) >= 0;
-				});
-				isLoading.value = true;
-			}
-		};
-		onMounted(() =>
-		{
-			canbus.addListener(API_CANBUS_EVENT, onBegin);
-			onBegin(canbus.begin);
-		});
-		onUnmounted(() =>
-		{
-			canbus.removeListener(API_CANBUS_EVENT, onBegin);
-		});
 
 		return {
 			isLoading,
