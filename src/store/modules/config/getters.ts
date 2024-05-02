@@ -31,10 +31,10 @@ export const carModel = (state: any) => state.mazda.isData ? state.mazda.carMode
 export const teyes = (state: any) => state.teyes;
 
 /**
- * Конфигурация кнопок
+ * Конфигурация кнопок sw1
  * @param {any} state
  */
-export const buttons = (state: any) => state.buttons;
+export const sw1 = (state: any) => state.sw1;
 
 /**
  * Конфигурация Bose

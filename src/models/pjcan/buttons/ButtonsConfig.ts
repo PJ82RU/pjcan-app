@@ -71,4 +71,24 @@ export class ButtonsConfig extends BaseModel implements IButtonsConfig
 			? this._get(this, this.exec)
 			: this._get(this, this.exec, ButtonsConfig.size, new BluetoothStruct(ButtonsConfig.struct));
 	}
+
+	/**
+	 * Запись параметров кнопки
+	 * @param {IButtonConfigItem} value Новое значение
+	 */
+	setItem(value: IButtonConfigItem): boolean
+	{
+		const index = this.items.findIndex((x: IButtonConfigItem) => x.id === value.id);
+		if (index < 0) return false;
+
+		const item = this.items[index];
+		item.extended = value.extended;
+		item.id = value.id;
+		item.hold = value.hold;
+		item.resistanceMin = value.resistanceMin;
+		item.resistanceMax = value.resistanceMax;
+		item.exec = [...value.exec];
+		item.execMode = [...value.execMode];
+		return true;
+	}
 }

@@ -29,7 +29,7 @@ import {
 	API_TEYES_TEXT_VIEW_EVENT,
 	API_TEYES_TEXT_VIEW_EXEC
 } from "@/models/pjcan/teyes";
-import { API_BUTTONS_SW1_CONFIG_EVENT } from "@/models/pjcan/buttons";
+import { API_BUTTON_SW1_VALUE_EVENT, API_BUTTONS_SW1_CONFIG_EVENT } from "@/models/pjcan/buttons";
 import {
 	API_BOSE_CONFIG_EVENT,
 	API_BOSE_CONFIG_EXEC,
@@ -78,13 +78,14 @@ export default {
 		canbus.addListener(API_DEVICE_INFO_EVENT, (data: DataView) => store.commit("config/setInfo", data));
 		canbus.addListener(API_MAZDA_CONFIG_EVENT, (data: DataView) => store.commit("config/setMazda", data));
 		canbus.addListener(API_TEYES_CONFIG_EVENT, (data: DataView) => store.commit("config/setTeyes", data));
-		canbus.addListener(API_BUTTONS_SW1_CONFIG_EVENT, (data: DataView) => store.commit("config/setButtons", data));
+		canbus.addListener(API_BUTTONS_SW1_CONFIG_EVENT, (data: DataView) => store.commit("config/setSW1", data));
 		canbus.addListener(API_BOSE_CONFIG_EVENT, (data: DataView) => store.commit("config/setBose", data));
 		canbus.addListener(API_ENGINE_CONFIG_EVENT, (data: DataView) => store.commit("config/setEngine", data));
 		canbus.addListener(API_FUEL_CONFIG_EVENT, (data: DataView) => store.commit("config/setFuel", data));
 		canbus.addListener(API_VOLUME_CONFIG_EVENT, (data: DataView) => store.commit("config/setVolume", data));
 
 		// записываем входящие значения в store
+		canbus.addListener(API_BUTTON_SW1_VALUE_EVENT, (data: DataView) => store.commit("value/setSW1", data));
 		canbus.addListener(API_CLIMATE_VALUE_EVENT, (data: DataView) => store.commit("value/setClimate", data));
 		canbus.addListener(API_DEVICE_VALUE_EVENT, (data: DataView) => store.commit("value/setDevice", data));
 		canbus.addListener(API_DOORS_VALUE_EVENT, (data: DataView) => store.commit("value/setDoors", data));
@@ -123,6 +124,8 @@ export default {
 				if (!store.getters["config/volume"].isData) choice.listID.push(API_VOLUME_CONFIG_EXEC);
 				if (!store.getters["config/bose"].isData) choice.listID.push(API_BOSE_CONFIG_EXEC);
 				if (choice.listID.length) canbus.query(choice, true);
+
+				if (!store.getters["config/sw1"].isData) canbus.query(store.getters["config/sw1"], true);
 
 				choice.listID = [];
 				if (!store.getters["view/worktime"].isData) choice.listID.push(API_DEVICE_VIEW_WORKTIME_EXEC);

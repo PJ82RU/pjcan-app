@@ -1,3 +1,4 @@
+import { ButtonValue } from "@/models/pjcan/buttons";
 import { ClimateValue } from "@/models/pjcan/climate";
 import { DeviceValue } from "@/models/pjcan/device";
 import { DoorsValue } from "@/models/pjcan/doors";
@@ -8,6 +9,7 @@ import { SensorsValue } from "@/models/pjcan/sensors";
 import { TemperatureValue } from "@/models/pjcan/temperature";
 
 const state = {
+	sw1: new ButtonValue(),
 	climate: new ClimateValue(),
 	device: new DeviceValue(),
 	doors: new DoorsValue(),

@@ -2,6 +2,7 @@ import canbus from "@/api/canbus";
 import { TCarModel } from "@/models/pjcan/mazda";
 import { TCenterPoint } from "@/models/pjcan/bose";
 import { TProtocol } from "@/models/pjcan/teyes";
+import { IButtonConfigItem } from "@/models/pjcan/buttons";
 
 /**
  * Записать версию прошивки
@@ -227,13 +228,53 @@ export const setTeyesReceiveButtons = (state: any, value: boolean) =>
 };
 
 /**
- * Изменить конфигурацию кнопок
+ * Изменить конфигурацию кнопок sw1
  * @param {any} state
  * @param {DataView} data Данные
  */
-export const setButtons = (state: any, data: DataView) =>
+export const setSW1 = (state: any, data: DataView) =>
 {
-	state.buttons.set(data);
+	state.sw1.set(data);
+};
+/**
+ * SW1: Programming
+ * @param {any} state
+ * @param {boolean} value Новое значение
+ */
+export const setSW1Programming = (state: any, value: boolean) =>
+{
+	if (state.sw1.isData)
+	{
+		state.sw1.programming = value;
+		canbus.query(state.sw1);
+	}
+};
+/**
+ * SW1: Programming
+ * @param {any} state
+ * @param {IButtonConfigItem} value Новое значение
+ */
+export const setSW1Item = (state: any, value: IButtonConfigItem) =>
+{
+	if (state.sw1.isData && state.sw1.setItem(value)) canbus.query(state.sw1);
+};
+/**
+ * SW1: Resistance
+ * @param {any} state
+ * @param {any} value Новое значение
+ */
+export const setSW1Resistance = (state: any, { id, min, max }: { id: number, min: number, max: number }) =>
+{
+	if (state.sw1.isData)
+	{
+		const item: IButtonConfigItem | undefined = state.sw1.items.find((x: IButtonConfigItem) => x.id === id);
+		if (item)
+		{
+			item.resistanceMin = min;
+			item.resistanceMax = max;
+			canbus.query(state.sw1);
+		}
+	}
 };
 
 /**

@@ -1,5 +1,5 @@
 import onboardCardListDefault from "./onboard-card-list-default";
-import listButtonsDefault from "./list-buttons-default";
+import buttonsDefault from "./buttons-default";
 
 /**
  * Чтение списка onboardCardList из local storage
@@ -50,17 +50,17 @@ export const resetOnboardCardList = ({ commit, dispatch }: { commit: any, dispat
  * Чтение списка кнопок SW1 из local storage
  * @param {any} commit
  */
-export const readListButtonsSW1 = ({ commit }: { commit: any }) =>
+export const readSW1 = ({ commit }: { commit: any }) =>
 {
 	const res = window.localStorage.getItem("ListButtonsSW1");
 	if (res?.length)
 	{
 		try
 		{
-			const listButtonsSW1 = JSON.parse(res);
-			if (Array.isArray(listButtonsSW1))
+			const list = JSON.parse(res);
+			if (Array.isArray(list))
 			{
-				commit("setListButtonsSW1", listButtonsSW1);
+				commit("setSW1", list);
 			}
 		}
 		catch (e)
@@ -74,9 +74,9 @@ export const readListButtonsSW1 = ({ commit }: { commit: any }) =>
  * Запись списка кнопок SW1 в local storage
  * @param {any} commit
  */
-export const writeListButtonsSW1 = ({ getters }: { getters: any }) =>
+export const writeSW1 = ({ getters }: { getters: any }) =>
 {
-	const res = JSON.stringify(getters.listButtonsSW1);
+	const res = JSON.stringify(getters.sw1);
 	window.localStorage.setItem("ListButtonsSW1", res);
 };
 
@@ -85,8 +85,8 @@ export const writeListButtonsSW1 = ({ getters }: { getters: any }) =>
  * @param {any} commit
  * @param {any} dispatch
  */
-export const resetListButtonsSW1 = ({ commit, dispatch }: { commit: any, dispatch: any }) =>
+export const resetSW1 = ({ commit, dispatch }: { commit: any, dispatch: any }) =>
 {
-	commit("setListButtonsSW1", listButtonsDefault);
-	dispatch("writeListButtonsSW1");
+	commit("setSW1", buttonsDefault);
+	dispatch("writeSW1");
 };

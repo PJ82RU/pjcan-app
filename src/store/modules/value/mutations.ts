@@ -1,4 +1,14 @@
 /**
+ * Записать значения кнопки sw1
+ * @param {any} state
+ * @param {DataView} data Данные
+ */
+export const setSW1 = (state: any, data: DataView) =>
+{
+	state.sw1.set(data);
+};
+
+/**
  * Записать значения климата
  * @param {any} state
  * @param {DataView} data Данные

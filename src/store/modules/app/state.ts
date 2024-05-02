@@ -1,5 +1,5 @@
 import onboardCardListDefault from "./onboard-card-list-default";
-import listButtonsDefault from "./list-buttons-default";
+import buttonsDefault from "./buttons-default";
 import { IMazdaConfig } from "@/models/pjcan/mazda";
 
 const state = {
@@ -7,7 +7,7 @@ const state = {
 	visibleMessage: false,
 	mazda: null as IMazdaConfig | null,
 	onboardCardList: onboardCardListDefault,
-	listButtonsSW1: listButtonsDefault
+	sw1: buttonsDefault
 };
 
 export default state;

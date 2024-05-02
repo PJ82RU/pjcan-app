@@ -7,7 +7,7 @@
 						:value="resistanceMax > 0 ? resistanceMin + ' - ' + resistanceMax : ''"
 						:title="$t('buttons.resistance.title')"
 						:description="$t('buttons.resistance.description')"
-						:disabled="!configLoaded"
+						:disabled="!config"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0">
@@ -20,7 +20,7 @@
 						item-title="label"
 						item-value="value"
 						persistent-hint
-						:disabled="!configLoaded"
+						:disabled="!config"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0">
@@ -29,7 +29,7 @@
 						:title="$t('buttons.extended.title')"
 						:description="$t('buttons.extended.description')"
 						color="primary"
-						:disabled="!configLoaded"
+						:disabled="!config"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0">
@@ -42,7 +42,7 @@
 						item-title="label"
 						item-value="value"
 						persistent-hint
-						:disabled="!configLoaded || !extended"
+						:disabled="!config || !extended"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0">
@@ -55,7 +55,7 @@
 						item-title="label"
 						item-value="value"
 						persistent-hint
-						:disabled="!configLoaded || !extended"
+						:disabled="!config || !extended"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0">
@@ -68,7 +68,7 @@
 						item-title="label"
 						item-value="value"
 						persistent-hint
-						:disabled="!configLoaded || !extended"
+						:disabled="!config || !extended"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0">
@@ -78,7 +78,7 @@
 						:hint="$t('buttons.pressHold.time.description')"
 						:min="1"
 						:max="255"
-						:disabled="!configLoaded || !extended"
+						:disabled="!config || !extended"
 						@change="$emit('update', config)"
 					/>
 				</v-col>
@@ -95,7 +95,7 @@
 						item-title="label"
 						item-value="value"
 						persistent-hint
-						:disabled="!configLoaded || !extended"
+						:disabled="!config || !extended"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0">
@@ -108,7 +108,7 @@
 						item-title="label"
 						item-value="value"
 						persistent-hint
-						:disabled="!configLoaded || !extended"
+						:disabled="!config || !extended"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0">
@@ -121,7 +121,7 @@
 						item-title="label"
 						item-value="value"
 						persistent-hint
-						:disabled="!configLoaded || !extended"
+						:disabled="!config || !extended"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0">
@@ -134,7 +134,7 @@
 						item-title="label"
 						item-value="value"
 						persistent-hint
-						:disabled="!configLoaded || !extended"
+						:disabled="!config || !extended"
 					/>
 				</v-col>
 			</v-row>
@@ -143,7 +143,7 @@
 </template>
 
 <script lang="ts">
-import { computed, toRefs } from "vue";
+import { computed, ref, toRefs, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
 import Card from "@/components/cards/Card.vue";
@@ -165,136 +165,147 @@ export default {
 		/** Иконка */
 		icon: String,
 		/** Конфигурация кнопки */
-		config: Object as () => IButtonConfigItem,
-		/** Конфигурация загружена */
-		configLoaded: Boolean
+		config: Object as () => IButtonConfigItem
 	},
 	emits: ["update"],
 	setup(props: any, { emit }: { emit: any })
 	{
-		const { config, configLoaded } = toRefs(props);
+		const { config } = toRefs(props);
 		const { tm } = useI18n();
+
+		const __config = ref({} as IButtonConfigItem);
+		const copyConfig = (): void =>
+		{
+			__config.value = {
+				extended: config.value.extended,
+				id: config.value.id,
+				hold: config.value.hold,
+				resistanceMin: config.value.resistanceMin,
+				resistanceMax: config.value.resistanceMax,
+				exec: [...config.value.exec],
+				execMode: [...config.value.execMode]
+			} as IButtonConfigItem;
+		};
+		if (config.value) copyConfig();
+		watch(config, () => copyConfig());
 
 		/** Расширенный функционал кнопок */
 		const extended = computed({
-			get: (): boolean => config.value?.extended ?? false,
+			get: (): boolean => __config.value?.extended ?? false,
 			set: (val: boolean): void =>
 			{
-				if (configLoaded.value)
+				if (config.value)
 				{
-					config.value.extended = val;
-					emit("update", config.value);
+					__config.value.extended = val;
+					emit("update", __config.value);
 				}
 			}
 		});
 		/** Время удержания кнопки, сек. */
 		const hold = computed({
-			get: (): number => config.value?.hold ?? 0,
+			get: (): number => __config.value?.hold ?? 0,
 			set: (val: number): void =>
 			{
-				if (configLoaded.value)
-				{
-					config.value.hold = val;
-				}
+				if (config.value) __config.value.hold = val;
 			}
 		});
 		/** Минимальное сопротивление кнопки */
-		const resistanceMin = computed((): number => config.value?.resistanceMin ?? 0);
+		const resistanceMin = computed((): number => __config.value?.resistanceMin ?? 0);
 		/** Максимальное сопротивление кнопки */
-		const resistanceMax = computed((): number => config.value?.resistanceMax ?? 0);
+		const resistanceMax = computed((): number => __config.value?.resistanceMax ?? 0);
 		/** Кнопка нажата один раз */
 		const pressSingle = computed({
-			get: (): number => config.value?.exec[TButtonType.PRESS_SINGLE] ?? 0,
+			get: (): number => __config.value?.exec?.[TButtonType.PRESS_SINGLE] ?? 0,
 			set: (val: number): void =>
 			{
-				if (configLoaded.value)
+				if (config.value)
 				{
-					config.value.exec[TButtonType.PRESS_SINGLE] = val;
-					emit("update", config.value);
+					__config.value.exec[TButtonType.PRESS_SINGLE] = val;
+					emit("update", __config.value);
 				}
 			}
 		});
 		/** Кнопка нажата два раза */
 		const pressDual = computed({
-			get: (): number => config.value?.exec[TButtonType.PRESS_DUAL] ?? 0,
+			get: (): number => __config.value?.exec?.[TButtonType.PRESS_DUAL] ?? 0,
 			set: (val: number): void =>
 			{
-				if (configLoaded.value)
+				if (config.value)
 				{
-					config.value.exec[TButtonType.PRESS_DUAL] = val;
-					emit("update", config.value);
+					__config.value.exec[TButtonType.PRESS_DUAL] = val;
+					emit("update", __config.value);
 				}
 			}
 		});
 		/** Кнопка нажата три раза */
 		const pressTriple = computed({
-			get: (): number => config.value?.exec[TButtonType.PRESS_TRIPLE] ?? 0,
+			get: (): number => __config.value?.exec?.[TButtonType.PRESS_TRIPLE] ?? 0,
 			set: (val: number): void =>
 			{
-				if (configLoaded.value)
+				if (config.value)
 				{
-					config.value.exec[TButtonType.PRESS_TRIPLE] = val;
-					emit("update", config.value);
+					__config.value.exec[TButtonType.PRESS_TRIPLE] = val;
+					emit("update", __config.value);
 				}
 			}
 		});
 		/** Удержание кнопки */
 		const pressHold = computed({
-			get: (): number => config.value?.exec[TButtonType.PRESS_HOLD] ?? 0,
+			get: (): number => __config.value?.exec?.[TButtonType.PRESS_HOLD] ?? 0,
 			set: (val: number): void =>
 			{
-				if (configLoaded.value)
+				if (config.value)
 				{
-					config.value.exec[TButtonType.PRESS_HOLD] = val;
-					emit("update", config.value);
+					__config.value.exec[TButtonType.PRESS_HOLD] = val;
+					emit("update", __config.value);
 				}
 			}
 		});
 		/** Кнопка нажата один раз в режиме Mode */
 		const modePressSingle = computed({
-			get: (): number => config.value?.execMode[TButtonType.PRESS_SINGLE] ?? 0,
+			get: (): number => __config.value?.execMode?.[TButtonType.PRESS_SINGLE] ?? 0,
 			set: (val: number): void =>
 			{
-				if (configLoaded.value)
+				if (config.value)
 				{
-					config.value.execMode[TButtonType.PRESS_SINGLE] = val;
-					emit("update", config.value);
+					__config.value.execMode[TButtonType.PRESS_SINGLE] = val;
+					emit("update", __config.value);
 				}
 			}
 		});
 		/** Кнопка нажата два раза в режиме Mode */
 		const modePressDual = computed({
-			get: (): number => config.value?.execMode[TButtonType.PRESS_DUAL] ?? 0,
+			get: (): number => __config.value?.execMode?.[TButtonType.PRESS_DUAL] ?? 0,
 			set: (val: number): void =>
 			{
-				if (configLoaded.value)
+				if (config.value)
 				{
-					config.value.execMode[TButtonType.PRESS_DUAL] = val;
-					emit("update", config.value);
+					__config.value.execMode[TButtonType.PRESS_DUAL] = val;
+					emit("update", __config.value);
 				}
 			}
 		});
 		/** Кнопка нажата три раза в режиме Mode */
 		const modePressTriple = computed({
-			get: (): number => config.value?.execMode[TButtonType.PRESS_TRIPLE] ?? 0,
+			get: (): number => __config.value?.execMode?.[TButtonType.PRESS_TRIPLE] ?? 0,
 			set: (val: number): void =>
 			{
-				if (configLoaded.value)
+				if (config.value)
 				{
-					config.value.execMode[TButtonType.PRESS_TRIPLE] = val;
-					emit("update", config.value);
+					__config.value.execMode[TButtonType.PRESS_TRIPLE] = val;
+					emit("update", __config.value);
 				}
 			}
 		});
 		/** Удержание кнопки в режиме Mode */
 		const modePressHold = computed({
-			get: (): number => config.value?.execMode[TButtonType.PRESS_HOLD] ?? 0,
+			get: (): number => __config.value?.execMode?.[TButtonType.PRESS_HOLD] ?? 0,
 			set: (val: number): void =>
 			{
-				if (configLoaded.value)
+				if (config.value)
 				{
-					config.value.execMode[TButtonType.PRESS_HOLD] = val;
-					emit("update", config.value);
+					__config.value.execMode[TButtonType.PRESS_HOLD] = val;
+					emit("update", __config.value);
 				}
 			}
 		});

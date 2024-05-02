@@ -63,9 +63,9 @@ export const setOnboardCardList = (state: any, value: IOnboardCard[]) =>
  * @param {any} state
  * @param {IButtonCard[]} value Новый список
  */
-export const setListButtonsSW1 = (state: any, value: IButtonCard[]) =>
+export const setSW1 = (state: any, value: IButtonCard[]) =>
 {
-	state.listButtonsSW1 = [...value].map((x: IButtonCard) => ({
+	state.sw1 = [...value].map((x: IButtonCard) => ({
 		id: x.id,
 		title: x.title,
 		icon: x.icon

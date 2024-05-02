@@ -23,4 +23,4 @@ export const onboardCardList = (state: any): IOnboardCard[] => state.onboardCard
  * Список кнопок SW1
  * @param {any} state
  */
-export const listButtonsSW1 = (state: any): IButtonCard[] => state.listButtonsSW1;
+export const sw1 = (state: any): IButtonCard[] => state.sw1;

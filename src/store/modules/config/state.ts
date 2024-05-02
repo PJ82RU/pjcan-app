@@ -13,7 +13,7 @@ const state = {
 	info: new DeviceInfo(),
 	mazda: new MazdaConfig(),
 	teyes: new TeyesConfig(),
-	buttons: new ButtonsConfig(),
+	sw1: new ButtonsConfig(),
 	bose: new BoseConfig(),
 	engine: new EngineConfig(),
 	fuel: new FuelConfig(),

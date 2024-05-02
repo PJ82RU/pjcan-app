@@ -1,4 +1,10 @@
 /**
+ * Значения кнопки sw1
+ * @param {any} state
+ */
+export const sw1 = (state: any) => state.sw1;
+
+/**
  * Значения климата
  * @param {any} state
  */
