@@ -14,6 +14,7 @@ export const API_BUTTON_SW3_VALUE_EVENT = "ButtonSW3Value";
 export class ButtonValue extends BaseModel implements IButtonValue
 {
 	static struct: any = {
+		layered: BluetoothStruct.bit(),
 		id: BluetoothStruct.uint8(),
 		btnExec: BluetoothStruct.uint8(),
 		btnExecMode: BluetoothStruct.uint8(),
@@ -21,8 +22,9 @@ export class ButtonValue extends BaseModel implements IButtonValue
 		type: BluetoothStruct.uint8(),
 		resistance: BluetoothStruct.uint16()
 	};
-	static size: number = 7;
+	static size: number = 8;
 
+	layered = false;
 	id = 0;
 	btnExec = TButtonExec.BUTTON_EXEC_NONE;
 	btnExecMode = TButtonExec.BUTTON_EXEC_NONE;
