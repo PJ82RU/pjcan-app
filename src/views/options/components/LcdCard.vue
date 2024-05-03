@@ -90,14 +90,28 @@ export default {
 		};
 
 		// Логотип
-		const __logo = computed(() => store.getters["config/mazda"].logo);
+		const __logo = computed(() => store.getters["config/mazda"].logo.trim());
 		const logo = ref(__logo.value);
 		watch(__logo, (val: string) => (logo.value = val));
 		watch(logo, (): void =>
 		{
 			nextTick(() => onInput(logo, 12));
 		});
-		const setMazdaLogo = (): void => store.commit("config/setMazdaLogo", logo.value);
+		const setMazdaLogo = (): void =>
+		{
+			const val = logo.value.trim();
+			if (logo.value.length < 12)
+			{
+				const countSpace = Math.floor((12 - val.length) / 2);
+				if (countSpace > 0)
+				{
+					let spaces = "";
+					for (let i = 0; i < countSpace; i++) spaces += " ";
+					logo.value = spaces + val;
+				}
+			}
+			store.commit("config/setMazdaLogo", logo.value);
+		};
 
 		// Текст приветствия
 		const __hello = computed(() => store.getters["config/mazda"].hello);
