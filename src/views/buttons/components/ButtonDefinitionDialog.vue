@@ -12,7 +12,7 @@
 			<v-row>
 				<v-col cols="12">
 					<number-field
-						:model-value="resistance"
+						:model-value="valueResistance"
 						:label="$t('buttons.resistance.cur.title')"
 						:hint="$t('buttons.resistance.cur.description')"
 						readonly
@@ -20,9 +20,9 @@
 				</v-col>
 				<v-col cols="12" class="pt-0">
 					<v-select
-						v-model="modelId"
+						v-model="id"
 						:label="$t('buttons.definition.type.title')"
-						:items="list"
+						:items="types"
 						:hint="$t('buttons.definition.type.description')"
 						variant="underlined"
 						item-title="title"
@@ -64,7 +64,6 @@ import DialogTemplate from "@/layout/components/DialogTemplate.vue";
 import NumberField from "@/components/common/NumberField.vue";
 
 import { IButtonCard } from "@/models/interfaces/IButtonCard";
-import { IButtonConfigItem } from "@/models/pjcan/buttons";
 
 export default {
 	name: "ButtonDefinitionDialog",
@@ -75,61 +74,50 @@ export default {
 			type: Boolean,
 			default: false
 		},
-		/** Список типов кнопок */
-		list: {
+		/** Список типов/наименований кнопок */
+		types: {
 			type: Array as () => IButtonCard[],
 			required: true
 		},
-		/** ID кнопки */
-		id: Number,
-		/** Сопротивление кнопки */
-		resistance: Number
+		/** ID нажатой кнопки */
+		valueId: Number,
+		/** Сопротивление нажатой кнопки */
+		valueResistance: Number
 	},
 	emits: ["update:modelValue", "click:apply"],
 	setup(props: any, { emit }: { emit: any })
 	{
-		const { modelValue, list, id } = toRefs(props);
+		const { modelValue, types, valueId } = toRefs(props);
 
 		const visible = computed({
 			get: (): boolean => modelValue.value,
 			set: (val: boolean): void => emit("update:modelValue", val)
 		});
 
-		const modelId = ref(undefined as number | undefined);
+		const id = ref(undefined as number | undefined);
 		const resistanceMin = ref(0);
 		const resistanceMax = ref(0);
-		const disabled = computed(() => modelId.value === undefined);
+		const disabled = computed(() => id.value === undefined);
 
-		const resistanceUpdate = (id: number | undefined): void =>
+		watch(modelValue, () =>
 		{
-			const config = id ? list.value?.find((x: IButtonConfigItem) => x.id === modelId.value)?.config : undefined;
-			if (config)
-			{
-				resistanceMin.value = config.resistanceMin;
-				resistanceMax.value = config.resistanceMax;
-			}
-		};
-
-		watch(visible, (val) =>
-		{
-			if (val)
-			{
-				modelId.value = id.value > 0 ? id.value : undefined;
-				resistanceUpdate(modelId.value);
-			}
+			id.value = valueId.value;
+			const selectedType = types.value?.find((x: IButtonCard) => x.id === id.value);
+			resistanceMin.value = selectedType?.config?.resistanceMin ?? 0;
+			resistanceMax.value = selectedType?.config?.resistanceMax ?? 0;
 		});
-		watch(modelId, (val) => resistanceUpdate(val));
 
 		/** Применить */
 		const onApplyClick = () =>
 		{
 			visible.value = false;
-			emit("click:apply", modelId.value, resistanceMin.value, resistanceMax.value);
+			emit("click:apply", id.value, resistanceMin.value, resistanceMax.value);
 		};
 
 		return {
 			visible,
-			modelId,
+			types,
+			id,
 			resistanceMin,
 			resistanceMax,
 			disabled,

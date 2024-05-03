@@ -1,5 +1,5 @@
 <template>
-	<card class="settings-card" :title="title" :custom="icon">
+	<card class="settings-card" :title="title" :custom="icon" @click:custom="$emit('click', $event)">
 		<template #body>
 			<v-row>
 				<v-col cols="12">
@@ -152,10 +152,11 @@ import NumberField from "@/components/common/NumberField.vue";
 import SwitchCardItem from "@/components/cards/SwitchCardItem.vue";
 
 import { IButtonConfigItem, TButtonType } from "@/models/pjcan/buttons";
+import IconCustom from "@/components/common/icon-custom/IconCustom.vue";
 
 export default {
 	name: "SettingsCard",
-	components: { InputCardItem, SwitchCardItem, Card, NumberField },
+	components: { IconCustom, InputCardItem, SwitchCardItem, Card, NumberField },
 	props: {
 		/** Заголовок */
 		title: {
@@ -169,7 +170,7 @@ export default {
 		/** Показывать параметры режима Mode */
 		mode: Boolean
 	},
-	emits: ["update"],
+	emits: ["update", "click"],
 	setup(props: any, { emit }: { emit: any })
 	{
 		const { config } = toRefs(props);

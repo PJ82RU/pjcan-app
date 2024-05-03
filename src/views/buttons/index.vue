@@ -1,6 +1,11 @@
 <template>
-	<flicking ref="flicking" class="listSW1" :options="{ bound: true, align: 'prev' }">
-		<div v-for="(item, index) in list" :key="`button-item_${index}`" class="mr-4" :class="`flicking-${display}`">
+	<flicking v-if="configLoaded" ref="flicking" class="listSW1" :options="{ bound: true, align: 'prev' }">
+		<div
+			v-for="(item, index) in listWithoutEmpty"
+			:key="`button-item_${index}`"
+			class="mr-4"
+			:class="`flicking-${display}`"
+		>
 			<settings-card
 				:class="`settings-card-${index}`"
 				:title="item.title"
@@ -8,16 +13,26 @@
 				:config="item.config"
 				:mode="isMode"
 				@update="onButtonConfigUpdate"
+                @click="onButtonEdit(item)"
 			/>
 		</div>
 	</flicking>
 
 	<button-definition-dialog
-		v-model="buttonDefinitionDialog"
-		:list="list"
-		:resistance="buttonDefinitionResistance"
-		:id="buttonDefinitionId"
+		v-model="definitionDialog"
+		:types="list"
+        :value-id="value?.id"
+        :value-resistance="value?.resistance"
 		@click:apply="onButtonDefinitionApply"
+	/>
+	<button-edit-dialog
+		v-model="addDialog"
+		:name="selectedItem?.title"
+		:press="selectedItem?.config?.exec[1]"
+        :value-resistance="value?.resistance"
+        :resistance-min="selectedItem?.config?.resistanceMin"
+        :resistance-max="selectedItem?.config?.resistanceMax"
+		@click:apply="onButtonAddApply"
 	/>
 </template>
 
@@ -31,14 +46,15 @@ import canbus from "@/api/canbus";
 import Flicking from "@egjs/vue3-flicking";
 import SettingsCard from "./components/SettingsCard.vue";
 import ButtonDefinitionDialog from "./components/ButtonDefinitionDialog.vue";
+import ButtonEditDialog from "./components/ButtonEditDialog.vue";
 
-import { API_BUTTON_SW1_VALUE_EVENT, IButtonConfigItem, TButtonExec } from "@/models/pjcan/buttons";
+import { API_BUTTON_SW1_VALUE_EVENT, IButtonConfigItem, IButtonValue, TButtonExec } from "@/models/pjcan/buttons";
 import { IButtonCard } from "@/models/interfaces/IButtonCard";
 import { IButtonKey } from "@/models/interfaces/IButtonKey";
 
 export default {
 	name: "Buttons",
-	components: { Flicking, SettingsCard, ButtonDefinitionDialog },
+	components: { Flicking, SettingsCard, ButtonDefinitionDialog, ButtonEditDialog },
 	setup()
 	{
 		const { name: display } = useDisplay();
@@ -66,12 +82,8 @@ export default {
 		};
 
 		const keys = computed((): IButtonKey | undefined => __getKey(__type.value));
-		const buttonsConfigLoaded = computed((): boolean => keys.value && store.getters[keys.value.config].isData);
-		const buttonDefinitionDialog = ref(false);
-		const buttonDefinitionResistance = computed((): number =>
-			keys.value ? store.getters[keys.value.value].resistance : 0
-		);
-		const buttonDefinitionId = computed((): number => (keys.value ? store.getters[keys.value.value].id : 0));
+		const configLoaded = computed((): boolean => keys.value && store.getters[keys.value.config].isData);
+		const value = computed((): IButtonValue | undefined => keys.value ? store.getters[keys.value.value] : undefined);
 		const isMode = computed(() =>
 		{
 			return (
@@ -86,6 +98,10 @@ export default {
 			);
 		});
 		const list = ref([] as IButtonCard[]);
+		const listWithoutEmpty = computed((): IButtonCard[] => list.value?.filter((x: IButtonCard) => x.title?.length));
+		const definitionDialog = ref(false);
+		const addDialog = ref(false);
+		const selectedItem = ref(undefined as IButtonCard | undefined);
 
 		/** Загрузка списка кнопок */
 		const loadButtons = (type: any): IButtonKey | undefined =>
@@ -94,29 +110,24 @@ export default {
 			if (key)
 			{
 				store.dispatch(key.read);
-				list.value =
-					store.getters[key.app]?.map((x: IButtonCard) =>
-					{
-						const config =
-							store.getters[key.config]?.items?.find((item: IButtonConfigItem) => item.id === x.id) ??
-							undefined;
-						return { ...x, config };
-					}) ?? ([] as IButtonCard[]);
+				list.value = store.getters[key.config].items.map((config: IButtonConfigItem) => ({
+					...(store.getters[key.app]?.find((x: IButtonCard) => x.id === config.id) ??
+						({ id: config.id, title: "", icon: "" } as IButtonCard)),
+					config: { ...config }
+				}));
 			}
 			return key;
 		};
 		loadButtons(__type.value);
 
 		/** Сохранить список кнопок */
-		const saveButtons = (type: any): IButtonKey | undefined =>
+		const saveButtons = (): void =>
 		{
-			const key = __getKey(type);
-			if (key)
+			if (keys.value)
 			{
-				store.commit(key.set, list.value);
-				store.dispatch(key.write);
+				store.commit(keys.value.set, list.value);
+				store.dispatch(keys.value.write);
 			}
-			return key;
 		};
 
 		/** Изменение значений конфигурации кнопок */
@@ -136,9 +147,60 @@ export default {
 			if (id && keys.value) store.commit(keys.value?.setResistance, { id, min, max });
 		};
 
+		/**
+         * Применить создание кнопки
+         * @param {string} name Наименование/тип кнопки
+         * @param {TButtonExec} press Функция кнопки
+         * @param {number} min Минимальное значение сопротивления
+         * @param {number} max Максимальное значение сопротивления
+         */
+		const onButtonAddApply = (name: string, press: TButtonExec, min: number, max: number): void =>
+		{
+			if (selectedItem.value)
+			{
+				selectedItem.value.title = name;
+				if (!selectedItem.value.icon?.length) selectedItem.value.icon = "mdi-card-outline";
+				if (selectedItem.value.config)
+				{
+					const exec = [...selectedItem.value.config.exec];
+					exec[1] = press;
+					selectedItem.value.config = {
+						...selectedItem.value.config,
+						exec,
+						resistanceMin: min,
+						resistanceMax: max
+					};
+				}
+				saveButtons();
+			}
+		};
+
+		/**
+         * Редактирование кнопки
+         * @param {IButtonCard} item Значения кнопки
+         */
+		const onButtonEdit = (item: IButtonCard): void =>
+		{
+			selectedItem.value = item;
+			addDialog.value = true;
+		};
+
+		/** Событие нажатия кнопки */
 		const onButtonsValueReceive = (): void =>
 		{
-			buttonDefinitionDialog.value = true;
+			if (keys.value)
+			{
+				const res = store.getters[keys.value.value];
+				if (res.isData)
+				{
+					selectedItem.value = list.value?.find((x: IButtonCard) => x.id === res.id);
+					if (selectedItem.value)
+					{
+						if (selectedItem.value.title?.length) definitionDialog.value = true;
+						else addDialog.value = true;
+					}
+				}
+			}
 		};
 		const onBegin = (type: any): void =>
 		{
@@ -154,7 +216,7 @@ export default {
 			canbus.removeListener(API_BUTTON_SW1_VALUE_EVENT, onButtonsValueReceive);
 			store.commit("config/setSW1Programming", false);
 		};
-		watch(buttonsConfigLoaded, () => onBegin(__type.value));
+		watch(configLoaded, () => onBegin(__type.value));
 		watch(__type, (val: any) =>
 		{
 			if (val.name === "Buttons")
@@ -165,7 +227,7 @@ export default {
 		});
 		onMounted(() =>
 		{
-			if (buttonsConfigLoaded.value) onBegin(__type.value);
+			if (configLoaded.value) onBegin(__type.value);
 		});
 		onUnmounted(() =>
 		{
@@ -175,14 +237,18 @@ export default {
 		return {
 			flicking,
 			display,
-			buttonsConfigLoaded,
+			configLoaded,
+			value,
 			isMode,
 			list,
-			buttonDefinitionDialog,
-			buttonDefinitionResistance,
-			buttonDefinitionId,
+			listWithoutEmpty,
+			definitionDialog,
+			addDialog,
+			selectedItem,
 			onButtonConfigUpdate,
-			onButtonDefinitionApply
+			onButtonDefinitionApply,
+			onButtonAddApply,
+			onButtonEdit
 		};
 	}
 };

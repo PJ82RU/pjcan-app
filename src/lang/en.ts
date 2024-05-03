@@ -502,7 +502,11 @@ export default {
 				title: "Button type",
 				description: "Select the button type for further use"
 			}
-		}
+		},
+
+		adding: "Adding a button",
+		edit: "Editing a button",
+		name: "Name of the button"
 	},
 
 	onboardButtons: {
