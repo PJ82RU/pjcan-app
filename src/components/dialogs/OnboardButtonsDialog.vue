@@ -22,8 +22,8 @@
 						<v-btn
 							color="primary"
 							size="x-large"
-							@mousedown="onPress(TMazdaButton.MAZDA_BUTTON_CLOCK, 300)"
-							@touchstart="onTouchPress(TMazdaButton.MAZDA_BUTTON_CLOCK, 300)"
+							@mousedown="onPress(TMazdaButton.MAZDA_BUTTON_CLOCK, 300, false)"
+							@touchstart="onTouchPress(TMazdaButton.MAZDA_BUTTON_CLOCK, 300, false)"
 							@mouseup="onRelease(TMazdaButton.MAZDA_BUTTON_CLOCK)"
 							@mouseleave="onRelease(TMazdaButton.MAZDA_BUTTON_CLOCK)"
 							@touchend="onTouchRelease(TMazdaButton.MAZDA_BUTTON_CLOCK)"
@@ -34,8 +34,8 @@
 						<v-btn
 							color="primary"
 							size="x-large"
-							@mousedown="onPress(TMazdaButton.MAZDA_BUTTON_INFO, 300)"
-							@touchstart="onTouchPress(TMazdaButton.MAZDA_BUTTON_INFO, 300)"
+							@mousedown="onPress(TMazdaButton.MAZDA_BUTTON_INFO, 300, false)"
+							@touchstart="onTouchPress(TMazdaButton.MAZDA_BUTTON_INFO, 300, false)"
 							@mouseup="onRelease(TMazdaButton.MAZDA_BUTTON_INFO)"
 							@mouseleave="onRelease(TMazdaButton.MAZDA_BUTTON_INFO)"
 							@touchend="onTouchRelease(TMazdaButton.MAZDA_BUTTON_INFO)"
@@ -57,24 +57,24 @@
 						<v-btn
 							color="secondary"
 							size="x-large"
-							@mousedown="onPress(TMazdaButton.MAZDA_BUTTON_CLOCK, 2000)"
-							@touchstart="onTouchPress(TMazdaButton.MAZDA_BUTTON_CLOCK, 2000)"
-							@mouseup="onRelease(TMazdaButton.MAZDA_BUTTON_CLOCK, false)"
-							@mouseleave="onRelease(TMazdaButton.MAZDA_BUTTON_CLOCK, false)"
-							@touchend="onTouchRelease(TMazdaButton.MAZDA_BUTTON_CLOCK, false)"
-							@touchcancel="onTouchRelease(TMazdaButton.MAZDA_BUTTON_CLOCK, false)"
+							@mousedown="onPress(TMazdaButton.MAZDA_BUTTON_CLOCK, 2000, false)"
+							@touchstart="onTouchPress(TMazdaButton.MAZDA_BUTTON_CLOCK, 2000, false)"
+							@mouseup="onRelease(TMazdaButton.MAZDA_BUTTON_CLOCK)"
+							@mouseleave="onRelease(TMazdaButton.MAZDA_BUTTON_CLOCK)"
+							@touchend="onTouchRelease(TMazdaButton.MAZDA_BUTTON_CLOCK)"
+							@touchcancel="onTouchRelease(TMazdaButton.MAZDA_BUTTON_CLOCK)"
 						>
 							{{ $t("onboardButtons.buttons.modeClock") }}
 						</v-btn>
 						<v-btn
 							color="secondary"
 							size="x-large"
-							@mousedown="onPress(TMazdaButton.MAZDA_BUTTON_INFO, 2000)"
-							@touchstart="onTouchPress(TMazdaButton.MAZDA_BUTTON_INFO, 2000)"
-							@mouseup="onRelease(TMazdaButton.MAZDA_BUTTON_INFO, false)"
-							@mouseleave="onRelease(TMazdaButton.MAZDA_BUTTON_INFO, false)"
-							@touchend="onTouchRelease(TMazdaButton.MAZDA_BUTTON_INFO, false)"
-							@touchcancel="onTouchRelease(TMazdaButton.MAZDA_BUTTON_INFO, false)"
+							@mousedown="onPress(TMazdaButton.MAZDA_BUTTON_INFO, 2000, false)"
+							@touchstart="onTouchPress(TMazdaButton.MAZDA_BUTTON_INFO, 2000, false)"
+							@mouseup="onRelease(TMazdaButton.MAZDA_BUTTON_INFO)"
+							@mouseleave="onRelease(TMazdaButton.MAZDA_BUTTON_INFO)"
+							@touchend="onTouchRelease(TMazdaButton.MAZDA_BUTTON_INFO)"
+							@touchcancel="onTouchRelease(TMazdaButton.MAZDA_BUTTON_INFO)"
 						>
 							{{ $t("onboardButtons.buttons.modeInfo") }}
 						</v-btn>
@@ -185,7 +185,7 @@ export default {
 			get: (): boolean => modelValue.value,
 			set: (val: boolean): void => emit("update:modelValue", val)
 		});
-		const carModel = computed((): TCarModel => store.getters["app/carModel"]);
+		const carModel = computed((): TCarModel => store.getters["config/carModel"]);
 
 		const isTouchDevice = (): boolean =>
 		{

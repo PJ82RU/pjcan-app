@@ -95,7 +95,7 @@
 						item-title="label"
 						item-value="value"
 						persistent-hint
-						:disabled="!config || !extended"
+						:disabled="!config || !mode"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0">
@@ -108,7 +108,7 @@
 						item-title="label"
 						item-value="value"
 						persistent-hint
-						:disabled="!config || !extended"
+						:disabled="!config || !mode"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0">
@@ -121,7 +121,7 @@
 						item-title="label"
 						item-value="value"
 						persistent-hint
-						:disabled="!config || !extended"
+						:disabled="!config || !mode"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0">
@@ -134,7 +134,7 @@
 						item-title="label"
 						item-value="value"
 						persistent-hint
-						:disabled="!config || !extended"
+						:disabled="!config || !mode"
 					/>
 				</v-col>
 			</v-row>
@@ -165,7 +165,9 @@ export default {
 		/** Иконка */
 		icon: String,
 		/** Конфигурация кнопки */
-		config: Object as () => IButtonConfigItem
+		config: Object as () => IButtonConfigItem,
+		/** Показывать параметры режима Mode */
+		mode: Boolean
 	},
 	emits: ["update"],
 	setup(props: any, { emit }: { emit: any })

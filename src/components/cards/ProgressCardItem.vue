@@ -18,7 +18,7 @@
 			:width="6"
 			:disabled="nodata || disabled"
 		>
-			{{ !nodata && !disabled ? value.toFixed() : "" }}
+			{{ !nodata && !disabled && value ? value.toFixed() : "" }}
 		</v-progress-circular>
 	</div>
 </template>

@@ -24,7 +24,7 @@ export default {
 	name: "InputCardItem",
 	props: {
 		/** Значение */
-		value: [String, Number, BigInt],
+		value: [String, Number],
 		/** Заголовок */
 		title: String,
 		/** Описание */
@@ -80,6 +80,17 @@ export default {
 						}
 					}
 					return "-.-°C";
+
+				case "volts":
+					if (!nodata.value)
+					{
+						switch (typeof value.value)
+						{
+							case "number": return "+" + value.value.toFixed(2) + "V";
+							case "string": return value.value;
+						}
+					}
+					return "-";
 
 				default:
 					if (!nodata.value)
