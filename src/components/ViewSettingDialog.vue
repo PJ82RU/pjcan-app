@@ -47,7 +47,7 @@
 						:label="$t('onboard.viewSetting.delay.title')"
 						:hint="$t('onboard.viewSetting.delay.description')"
 						:disabled="disabled"
-						:min="1"
+						:min="0"
 						:max="300"
 					/>
 				</v-col>
