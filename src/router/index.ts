@@ -1,11 +1,15 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 import { t } from "@/lang";
 
+import Onboard from "@/views/onboard/index.vue";
+import Buttons from "@/views/buttons/index.vue";
+import Options from "@/views/options/index.vue";
+
 const routes: Array<RouteRecordRaw> = [
 	{
 		path: "/",
 		name: "Onboard",
-		component: () => import("@/views/onboard/Loader.vue"),
+		component: Onboard,
 		meta: {
 			title: "onboard.title"
 		}
@@ -13,7 +17,7 @@ const routes: Array<RouteRecordRaw> = [
 	{
 		path: "/buttons",
 		name: "Buttons",
-		component: () => import("@/views/buttons/Loader.vue"),
+		component: Buttons,
 		meta: {
 			title: "buttons.title"
 		}
@@ -21,7 +25,7 @@ const routes: Array<RouteRecordRaw> = [
 	{
 		path: "/options",
 		name: "Options",
-		component: () => import("@/views/options/Loader.vue"),
+		component: Options,
 		meta: {
 			title: "options.title"
 		}

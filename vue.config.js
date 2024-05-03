@@ -101,6 +101,9 @@ module.exports = defineConfig({
 		// настройки манифеста
 		manifestOptions: {
 			background_color: "#121517"
+		},
+		workboxOptions: {
+			navigateFallback: "index.html"
 		}
 	}
 });
