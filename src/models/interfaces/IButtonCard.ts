@@ -5,5 +5,4 @@ export interface IButtonCard {
 	title: string;
 	icon: string;
 	config?: IButtonConfigItem;
-	configLoaded?: boolean;
 }

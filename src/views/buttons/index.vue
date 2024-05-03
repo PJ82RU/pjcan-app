@@ -6,6 +6,7 @@
 				:title="item.title"
 				:icon="item.icon"
 				:config="item.config"
+				:mode="isMode"
 				@update="onButtonConfigUpdate"
 			/>
 		</div>
@@ -31,8 +32,9 @@ import Flicking from "@egjs/vue3-flicking";
 import SettingsCard from "./components/SettingsCard.vue";
 import ButtonDefinitionDialog from "./components/ButtonDefinitionDialog.vue";
 
-import { API_BUTTON_SW1_VALUE_EVENT, IButtonConfigItem } from "@/models/pjcan/buttons";
+import { API_BUTTON_SW1_VALUE_EVENT, IButtonConfigItem, TButtonExec } from "@/models/pjcan/buttons";
 import { IButtonCard } from "@/models/interfaces/IButtonCard";
+import { IButtonKey } from "@/models/interfaces/IButtonKey";
 
 export default {
 	name: "Buttons",
@@ -44,57 +46,83 @@ export default {
 		provide("flicking", flicking);
 
 		const __type = computed(() => router.currentRoute.value.query?.type);
-		const buttonsConfigLoaded = computed((): boolean => store.getters["config/sw1"].isData);
-		const buttonDefinitionDialog = ref(false);
-		const buttonDefinitionResistance = computed((): number => store.getters["value/sw1"].resistance);
-		const buttonDefinitionId = computed((): number => store.getters["value/sw1"].id);
-		const list = ref([] as IButtonCard[]);
-
-		/** Загрузка списка кнопок */
-		const loadButtons = (type: any): void =>
+		const __getKey = (type: any): IButtonKey | undefined =>
 		{
-			let res: any, items: IButtonConfigItem[];
 			switch (type)
 			{
 				case "sw1":
-					store.dispatch("app/readSW1");
-					res = store.getters["app/sw1"];
-					items = store.getters["config/sw1"]?.items;
-					break;
-				default:
-					return;
+					return {
+						app: "app/sw1",
+						set: "app/setSW1",
+						read: "app/readSW1",
+						write: "app/writeSW1",
+						config: "config/sw1",
+						setItem: "config/setSW1Item",
+						setResistance: "config/setSW1Resistance",
+						setProgramming: "config/setSW1Programming",
+						value: "value/sw1"
+					} as IButtonKey;
 			}
+		};
 
-			list.value =
-				res?.map((x: IButtonCard) =>
-				{
-					const config = items?.find((item: IButtonConfigItem) => item.id === x.id) ?? undefined;
-					return { ...x, config };
-				}) ?? ([] as IButtonCard[]);
+		const keys = computed((): IButtonKey | undefined => __getKey(__type.value));
+		const buttonsConfigLoaded = computed((): boolean => keys.value && store.getters[keys.value.config].isData);
+		const buttonDefinitionDialog = ref(false);
+		const buttonDefinitionResistance = computed((): number =>
+			keys.value ? store.getters[keys.value.value].resistance : 0
+		);
+		const buttonDefinitionId = computed((): number => (keys.value ? store.getters[keys.value.value].id : 0));
+		const isMode = computed(() =>
+		{
+			return (
+				keys.value &&
+				(store.getters[keys.value.config].items
+					?.filter((x: IButtonConfigItem) => x.extended)
+					?.findIndex(
+						(x: IButtonConfigItem) =>
+							x.exec.findIndex((y: TButtonExec) => y === TButtonExec.BUTTON_EXEC_ENTERING_MODE) >= 0
+					) >= 0 ??
+					false)
+			);
+		});
+		const list = ref([] as IButtonCard[]);
+
+		/** Загрузка списка кнопок */
+		const loadButtons = (type: any): IButtonKey | undefined =>
+		{
+			const key = __getKey(type);
+			if (key)
+			{
+				store.dispatch(key.read);
+				list.value =
+					store.getters[key.app]?.map((x: IButtonCard) =>
+					{
+						const config =
+							store.getters[key.config]?.items?.find((item: IButtonConfigItem) => item.id === x.id) ??
+							undefined;
+						return { ...x, config };
+					}) ?? ([] as IButtonCard[]);
+			}
+			return key;
 		};
 		loadButtons(__type.value);
 
 		/** Сохранить список кнопок */
-		const saveButtons = (type: any): void =>
+		const saveButtons = (type: any): IButtonKey | undefined =>
 		{
-			switch (type)
+			const key = __getKey(type);
+			if (key)
 			{
-				case "sw1":
-					store.commit("app/setSW1", list.value);
-					store.dispatch("app/writeSW1");
-					break;
+				store.commit(key.set, list.value);
+				store.dispatch(key.write);
 			}
+			return key;
 		};
 
 		/** Изменение значений конфигурации кнопок */
 		const onButtonConfigUpdate = (item: IButtonConfigItem): void =>
 		{
-			switch (__type.value)
-			{
-				case "sw1":
-					store.commit("config/setSW1Item", item);
-					break;
-			}
+			if (keys.value) store.commit(keys.value.setItem, item);
 		};
 
 		/**
@@ -105,15 +133,7 @@ export default {
 		 */
 		const onButtonDefinitionApply = (id: number | undefined, min: number, max: number): void =>
 		{
-			if (id)
-			{
-				switch (__type.value)
-				{
-					case "sw1":
-						store.commit("config/setSW1Resistance", { id, min, max });
-						break;
-				}
-			}
+			if (id && keys.value) store.commit(keys.value?.setResistance, { id, min, max });
 		};
 
 		const onButtonsValueReceive = (): void =>
@@ -122,13 +142,11 @@ export default {
 		};
 		const onBegin = (type: any): void =>
 		{
-			loadButtons(type);
-			switch (type)
+			const key = loadButtons(type);
+			if (key)
 			{
-				case "sw1":
-					canbus.addListener(API_BUTTON_SW1_VALUE_EVENT, onButtonsValueReceive);
-					store.commit("config/setSW1Programming", true);
-					break;
+				canbus.addListener(API_BUTTON_SW1_VALUE_EVENT, onButtonsValueReceive);
+				store.commit(key.setProgramming, true);
 			}
 		};
 		const onEnd = (): void =>
@@ -158,6 +176,7 @@ export default {
 			flicking,
 			display,
 			buttonsConfigLoaded,
+			isMode,
 			list,
 			buttonDefinitionDialog,
 			buttonDefinitionResistance,
