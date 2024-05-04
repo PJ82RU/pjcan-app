@@ -1,6 +1,6 @@
 <template>
 	<dialog-template
-		content-class="device-reset"
+		content-class="fuel-config"
 		v-model="visible"
 		:title="$t('onboard.fuel.settings.title')"
 		icon="engine-statistic"

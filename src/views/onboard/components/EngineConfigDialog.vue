@@ -1,6 +1,6 @@
 <template>
 	<dialog-template
-		content-class="device-reset"
+		content-class="engine-config"
 		v-model="visible"
 		:title="$t('onboard.engine.settings.title')"
 		icon="engine-statistic"
@@ -66,7 +66,7 @@ import SwitchCardItem from "@/components/cards/SwitchCardItem.vue";
 import NumberField from "@/components/common/NumberField.vue";
 
 export default {
-	name: "EngineConfig",
+	name: "EngineConfigDialog",
 	components: { DialogTemplate, SwitchCardItem, NumberField },
 	props: {
 		/** Отображение диалога */
