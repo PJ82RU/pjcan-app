@@ -7,7 +7,8 @@ const state = {
 	visibleMessage: false,
 	mazda: null as IMazdaConfig | null,
 	onboardCardList: onboardCardListDefault,
-	sw1: buttonsDefault
+	sw1: buttonsDefault,
+	notify: false
 };
 
 export default state;

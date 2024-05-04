@@ -24,3 +24,9 @@ export const onboardCardList = (state: any): IOnboardCard[] => state.onboardCard
  * @param {any} state
  */
 export const sw1 = (state: any): IButtonCard[] => state.sw1;
+
+/**
+ * Уведомления
+ * @param {any} state
+ */
+export const notify = (state: any): boolean => state.notify;

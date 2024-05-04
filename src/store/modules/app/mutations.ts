@@ -1,9 +1,8 @@
 import store from "@/store";
 import { IMessage } from "@/models/interfaces/message/IMessage";
 import { IOnboardCard } from "@/models/interfaces/IOnboardCard";
-
-import { createDebounce } from "@/utils/debounce";
 import { IButtonCard } from "@/models/interfaces/IButtonCard";
+import { createDebounce } from "@/utils/debounce";
 const debounce = createDebounce();
 
 /**
@@ -70,4 +69,14 @@ export const setSW1 = (state: any, value: IButtonCard[]) =>
 		title: x.title,
 		icon: x.icon
 	}));
+};
+
+/**
+ * Записать уведомление
+ * @param {any} state
+ * @param {boolean} value Значение
+ */
+export const setNotify = (state: any, value: boolean) =>
+{
+	state.notify = value;
 };

@@ -213,7 +213,7 @@ export default {
 				canbus.addListener(API_BUTTON_SW1_VALUE_EVENT, onButtonsValueReceive);
 				store.commit(key.setProgramming, true);
 
-				setTimeout(() => toast.warning(t("buttons.notify"), { autoClose: false }), 1000);
+				setTimeout(() => toast.warning(t("help.buttons.notify"), { autoClose: false }), 1000);
 			}
 		};
 		const onEnd = (): void =>

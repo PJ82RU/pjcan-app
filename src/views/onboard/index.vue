@@ -9,6 +9,8 @@
 <script lang="ts">
 import { computed, onMounted, onUnmounted, provide, ref, watch } from "vue";
 import { useDisplay } from "vuetify";
+import { toast } from "vue3-toastify";
+import { useI18n } from "vue-i18n";
 import store from "@/store";
 import canbus from "@/api/canbus";
 
@@ -46,6 +48,7 @@ export default {
 	setup()
 	{
 		const { name: display } = useDisplay();
+		const { t } = useI18n();
 		const flicking = ref(null);
 		provide("flicking", flicking);
 
@@ -87,13 +90,24 @@ export default {
 			});
 			return result;
 		});
+
+		const notify = (): void =>
+		{
+			if (!store.getters["app/notify"])
+			{
+				setTimeout(() => toast.info(t("help.onboard.notify")), 5000);
+				store.commit("app/setNotify", true);
+			}
+		};
 		watch(listExec, (val: number[]) =>
 		{
 			canbus.loop(val);
+			if (val?.length > 0) notify();
 		});
 		onMounted(() =>
 		{
 			canbus.loop(listExec.value);
+			if (listExec.value?.length > 0) notify();
 		});
 		onUnmounted(() =>
 		{

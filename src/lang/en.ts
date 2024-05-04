@@ -518,9 +518,7 @@ export default {
 
 		adding: "Adding a button",
 		edit: "Editing a button",
-		name: "Name of the button",
-
-		notify: "Warning! In this section of the menu, the steering wheel buttons operate in programming mode"
+		name: "Name of the button"
 	},
 
 	onboardButtons: {
@@ -713,6 +711,15 @@ export default {
 			6: "Mazda CX-7 rest",
 			7: "Mazda CX-9",
 			8: "Mazda CX-9 rest"
+		}
+	},
+
+	help: {
+		buttons: {
+			notify: "Warning! In this section of the menu, the steering wheel buttons operate in programming mode"
+		},
+		onboard: {
+			notify: "Swipe left/right allows you to scroll through the blocks with information"
 		}
 	}
 };
