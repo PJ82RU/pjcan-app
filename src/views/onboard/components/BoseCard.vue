@@ -122,8 +122,8 @@
 	/>
 	<bose-start-dialog
 		v-model="startConfigVisible"
-		:enabled="startEnabled"
-		:level="startLevel"
+		:enabled="startConfig.startBose"
+		:level="startConfig.startLevelBose"
 		@click:apply="onStartApply"
 	/>
 </template>
@@ -144,6 +144,7 @@ import BoseStartDialog from "./BoseStartDialog.vue";
 
 import { IMenuItem } from "@/components/MenuDots.vue";
 import { TCenterPoint } from "@/models/pjcan/bose";
+import { IVolumeConfig } from "@/models/pjcan/volume";
 
 export default {
 	name: "BoseCard",
@@ -225,8 +226,7 @@ export default {
 		});
 
 		const startConfigVisible = ref(false);
-		const startEnabled = computed((): boolean => store.getters["config/volume"].startBose);
-		const startLevel = computed((): number => store.getters["config/volume"].startLevelBose);
+		const startConfig = computed((): IVolumeConfig => store.getters["config/volume"]);
 
 		const menu = computed((): IMenuItem[] => [
 			{ id: 0, title: t("onboard.bose.volumeConfig.title") },
@@ -290,8 +290,7 @@ export default {
 			mute,
 			volume,
 			startConfigVisible,
-			startEnabled,
-			startLevel,
+			startConfig,
 			menu,
 			menuVisible,
 			menuSelected,
