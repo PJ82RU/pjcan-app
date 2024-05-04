@@ -212,6 +212,8 @@ export default {
 			{
 				canbus.addListener(API_BUTTON_SW1_VALUE_EVENT, onButtonsValueReceive);
 				store.commit(key.setProgramming, true);
+
+				setTimeout(() => toast.warning(t("buttons.notify"), { autoClose: false }), 1000);
 			}
 		};
 		const onEnd = (): void =>
@@ -231,7 +233,6 @@ export default {
 		onMounted(() =>
 		{
 			if (configLoaded.value) onBegin(__type.value);
-			setTimeout(() => toast.warning(t("buttons.notify"), { autoClose: false }), 1000);
 		});
 		onUnmounted(() =>
 		{
