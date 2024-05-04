@@ -518,7 +518,9 @@ export default {
 
 		adding: "Adding a button",
 		edit: "Editing a button",
-		name: "Name of the button"
+		name: "Name of the button",
+
+		notify: "Warning! In this section of the menu, the steering wheel buttons operate in programming mode"
 	},
 
 	onboardButtons: {

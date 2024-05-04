@@ -39,6 +39,8 @@
 <script lang="ts">
 import { computed, onMounted, onUnmounted, provide, ref, watch } from "vue";
 import { useDisplay } from "vuetify";
+import { useI18n } from "vue-i18n";
+import { toast } from "vue3-toastify";
 import router from "@/router";
 import store from "@/store";
 import canbus from "@/api/canbus";
@@ -58,6 +60,7 @@ export default {
 	setup()
 	{
 		const { name: display } = useDisplay();
+		const { t } = useI18n();
 		const flicking = ref(null);
 		provide("flicking", flicking);
 
@@ -228,10 +231,12 @@ export default {
 		onMounted(() =>
 		{
 			if (configLoaded.value) onBegin(__type.value);
+			setTimeout(() => toast.warning(t("buttons.notify"), { autoClose: false }), 1000);
 		});
 		onUnmounted(() =>
 		{
 			onEnd();
+			toast.clearAll();
 		});
 
 		return {
