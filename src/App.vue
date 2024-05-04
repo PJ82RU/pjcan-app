@@ -59,7 +59,13 @@ import {
 } from "@/models/pjcan/volume";
 import { API_CANBUS_EVENT } from "@/models/pjcan/base/BaseModel";
 import { API_CLIMATE_VALUE_EVENT, API_CLIMATE_VIEW_EVENT, API_CLIMATE_VIEW_EXEC } from "@/models/pjcan/climate";
-import { API_DOORS_VALUE_EVENT, API_DOORS_VIEW_EVENT, API_DOORS_VIEW_EXEC } from "@/models/pjcan/doors";
+import {
+	API_DOORS_CONFIG_EVENT,
+	API_DOORS_CONFIG_EXEC,
+	API_DOORS_VALUE_EVENT,
+	API_DOORS_VIEW_EVENT,
+	API_DOORS_VIEW_EXEC
+} from "@/models/pjcan/doors";
 import { API_MOVEMENT_VALUE_EVENT, API_MOVEMENT_VIEW_EVENT, API_MOVEMENT_VIEW_EXEC } from "@/models/pjcan/movement";
 import { API_SENSORS_VALUE_EVENT, API_SENSORS_VIEW_EVENT, API_SENSORS_VIEW_EXEC } from "@/models/pjcan/sensors";
 import {
@@ -81,6 +87,7 @@ export default {
 		canbus.addListener(API_TEYES_CONFIG_EVENT, (data: DataView) => store.commit("config/setTeyes", data));
 		canbus.addListener(API_BUTTONS_SW1_CONFIG_EVENT, (data: DataView) => store.commit("config/setSW1", data));
 		canbus.addListener(API_BOSE_CONFIG_EVENT, (data: DataView) => store.commit("config/setBose", data));
+		canbus.addListener(API_DOORS_CONFIG_EVENT, (data: DataView) => store.commit("config/setDoors", data));
 		canbus.addListener(API_ENGINE_CONFIG_EVENT, (data: DataView) => store.commit("config/setEngine", data));
 		canbus.addListener(API_FUEL_CONFIG_EVENT, (data: DataView) => store.commit("config/setFuel", data));
 		canbus.addListener(API_VOLUME_CONFIG_EVENT, (data: DataView) => store.commit("config/setVolume", data));
@@ -121,6 +128,7 @@ export default {
 				const choice = new ChoiceValue();
 				choice.listID.push(API_MAZDA_CONFIG_EXEC);
 				choice.listID.push(API_TEYES_CONFIG_EXEC);
+				choice.listID.push(API_DOORS_CONFIG_EXEC);
 				choice.listID.push(API_ENGINE_CONFIG_EXEC);
 				choice.listID.push(API_FUEL_CONFIG_EXEC);
 				choice.listID.push(API_VOLUME_CONFIG_EXEC);

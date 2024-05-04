@@ -263,7 +263,7 @@ export const setSW1Item = (state: any, value: IButtonConfigItem) =>
  * @param {any} state
  * @param {any} value Новое значение
  */
-export const setSW1Resistance = (state: any, { id, min, max }: { id: number, min: number, max: number }) =>
+export const setSW1Resistance = (state: any, { id, min, max }: { id: number; min: number; max: number }) =>
 {
 	if (state.sw1.isData)
 	{
@@ -405,6 +405,38 @@ export const setBoseCenterPoint = (state: any, value: TCenterPoint) =>
 };
 
 /**
+ * Изменить конфигурацию дверей
+ * @param {any} state
+ * @param {DataView} data Данные
+ */
+export const setDoors = (state: any, data: DataView) =>
+{
+	state.doors.set(data);
+};
+/**
+ * Doors: FrontReverse, BackReverse, FrontBackReverse
+ * @param {any} state
+ * @param {any} value Значение
+ */
+export const setDoorsConfig = (
+	state: any,
+	{
+		frontReverse,
+		backReverse,
+		frontBackReverse
+	}: { frontReverse: boolean; backReverse: boolean; frontBackReverse: boolean }
+) =>
+{
+	if (state.doors.isData)
+	{
+		state.doors.frontReverse = frontReverse;
+		state.doors.backReverse = backReverse;
+		state.doors.frontBackReverse = frontBackReverse;
+		canbus.query(state.doors);
+	}
+};
+
+/**
  * Изменить конфигурацию ДВС
  * @param {any} state
  * @param {DataView} data Данные
@@ -454,7 +486,7 @@ export const setFuelRatio = (state: any, value: number) =>
 		canbus.query(state.fuel);
 	}
 };
-	
+
 /**
  * Изменить конфигурацию уровня звука
  * @param {any} state
@@ -495,7 +527,7 @@ export const setVolumeValueBose = (state: any, value: number) =>
  * @param {any} state
  * @param {boolean} value Значение
  */
-export const setVolumeStartBose = (state: any, { enabled, level }: {enabled: boolean, level: number}) =>
+export const setVolumeStartBose = (state: any, { enabled, level }: { enabled: boolean; level: number }) =>
 {
 	if (state.volume.isData)
 	{

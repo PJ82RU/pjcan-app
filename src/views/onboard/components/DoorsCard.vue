@@ -63,6 +63,13 @@
 		:disabled="menuSelected.disabled"
 		@click:apply="onViewApply"
 	/>
+	<doors-config-dialog
+		v-model="doorsConfigVisible"
+		:front-reverse="doorsConfig.frontReverse"
+		:back-reverse="doorsConfig.backReverse"
+		:front-back-reverse="doorsConfig.frontBackReverse"
+		@click:apply="onConfigApply"
+	/>
 </template>
 
 <script lang="ts">
@@ -75,10 +82,12 @@ import SwitchCardItem from "@/components/cards/SwitchCardItem.vue";
 import ViewSettingDialog from "@/components/ViewSettingDialog.vue";
 
 import { IMenuItem } from "@/components/MenuDots.vue";
+import DoorsConfigDialog from "@/views/onboard/components/DoorsConfigDialog.vue";
+import { IDoorsConfig } from "@/models/pjcan/doors";
 
 export default {
 	name: "DoorsCard",
-	components: { Card, SwitchCardItem, ViewSettingDialog },
+	components: { DoorsConfigDialog, Card, SwitchCardItem, ViewSettingDialog },
 	setup()
 	{
 		const { t } = useI18n();
@@ -92,7 +101,11 @@ export default {
 		const doorBR = computed((): boolean => store.getters["value/doors"].backRight);
 		const trunk = computed((): boolean => store.getters["value/doors"].trunk);
 
+		const doorsConfigVisible = ref(false);
+		const doorsConfig = computed((): IDoorsConfig => store.getters["config/doors"]);
+
 		const menu = computed((): IMenuItem[] => [
+			{ title: t("onboard.doors.settings.title") },
 			{ title: t("onboard.doors.menu"), view: store.getters["view/doors"], disabled: !doorsViewLoaded.value }
 		]);
 		const menuVisible = ref(false);
@@ -104,14 +117,29 @@ export default {
 		 */
 		const onMenuClick = (item: IMenuItem): void =>
 		{
-			menuVisible.value = true;
-			menuSelected.value = item;
+			if (item.view)
+			{
+				menuVisible.value = true;
+				menuSelected.value = item;
+			}
+			else doorsConfigVisible.value = true;
 		};
 
 		/**
-         * Применить параметры отображения на информационном экране
-         * @param {any} value Новые параметры отображения
-         */
+		 * Применить конфигурацию
+		 * @param {boolean} frontReverse Поменять местами передние двери
+		 * @param {boolean} backReverse Поменять местами задние двери
+		 * @param {boolean} frontBackReverse Поменять местами передние с задними дверьми
+		 */
+		const onConfigApply = (frontReverse: boolean, backReverse: boolean, frontBackReverse: boolean): void =>
+		{
+			store.commit("config/setDoorsConfig", { frontReverse, backReverse, frontBackReverse });
+		};
+
+		/**
+		 * Применить параметры отображения на информационном экране
+		 * @param {any} value Новые параметры отображения
+		 */
 		const onViewApply = (value: any): void =>
 		{
 			store.commit("view/setView", value);
@@ -125,10 +153,13 @@ export default {
 			doorBL,
 			doorBR,
 			trunk,
+			doorsConfigVisible,
+			doorsConfig,
 			menu,
 			menuVisible,
 			menuSelected,
 			onMenuClick,
+			onConfigApply,
 			onViewApply
 		};
 	}

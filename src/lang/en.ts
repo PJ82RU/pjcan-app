@@ -321,6 +321,22 @@ export default {
 			trunk: {
 				title: "Trunk",
 				description: "The current state of the trunk"
+			},
+
+			settings: {
+				title: "Door configuration",
+				frontReverse: {
+					title: "Change the front doors",
+					description: "Swap the front doors"
+				},
+				backReverse: {
+					title: "Change the rear doors",
+					description: "Swap the rear doors"
+				},
+				frontBackReverse: {
+					title: "Swap the front with the rear doors",
+					description: "Swap the left and right doors"
+				}
 			}
 		},
 

@@ -85,6 +85,8 @@ import {
 	API_CLIMATE_VIEW_EVENT
 } from "@/models/pjcan/climate";
 import {
+	API_DOORS_CONFIG_EXEC,
+	API_DOORS_CONFIG_EVENT,
 	API_DOORS_VALUE_EXEC,
 	API_DOORS_VALUE_EVENT,
 	API_DOORS_VIEW_EXEC,
@@ -486,6 +488,9 @@ export class Canbus extends EventEmitter
 				this.emit(API_CLIMATE_VIEW_EVENT, data);
 				break;
 
+			case API_DOORS_CONFIG_EXEC:
+				this.emit(API_DOORS_CONFIG_EVENT, data);
+				break;
 			case API_DOORS_VALUE_EXEC: // Значения дверей
 				this.emit(API_DOORS_VALUE_EVENT, data);
 				break;

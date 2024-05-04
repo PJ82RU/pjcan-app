@@ -338,6 +338,22 @@ export default {
 			trunk: {
 				title: "Багажник",
 				description: "Текущее состояние багажника"
+			},
+
+			settings: {
+				title: "Конфигурация дверей",
+				frontReverse: {
+					title: "Поменять передние двери",
+					description: "Поменять местами передние двери"
+				},
+				backReverse: {
+					title: "Поменять задние двери",
+					description: "Поменять местами задние двери"
+				},
+				frontBackReverse: {
+					title: "Поменять передние с задними дверьми",
+					description: "Поменять местами левые и правые двери"
+				}
 			}
 		},
 

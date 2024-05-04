@@ -22,7 +22,7 @@ export const mazda = (state: any) => state.mazda;
  * Модель автомобиля
  * @param {any} state
  */
-export const carModel = (state: any) => state.mazda.isData ? state.mazda.carModel : TCarModel.CAR_MODEL_UNKNOWN;
+export const carModel = (state: any) => (state.mazda.isData ? state.mazda.carModel : TCarModel.CAR_MODEL_UNKNOWN);
 
 /**
  * Конфигурация Teyes
@@ -41,6 +41,12 @@ export const sw1 = (state: any) => state.sw1;
  * @param {any} state
  */
 export const bose = (state: any) => state.bose;
+
+/**
+ * Конфигурация дверей
+ * @param {any} state
+ */
+export const doors = (state: any) => state.doors;
 
 /**
  * Конфигурация ДВС
