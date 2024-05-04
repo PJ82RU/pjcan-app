@@ -119,31 +119,31 @@ export default {
 			if (status)
 			{
 				const choice = new ChoiceValue();
-				if (!store.getters["config/mazda"].isData) choice.listID.push(API_MAZDA_CONFIG_EXEC);
-				if (!store.getters["config/teyes"].isData) choice.listID.push(API_TEYES_CONFIG_EXEC);
-				if (!store.getters["config/engine"].isData) choice.listID.push(API_ENGINE_CONFIG_EXEC);
-				if (!store.getters["config/fuel"].isData) choice.listID.push(API_FUEL_CONFIG_EXEC);
-				if (!store.getters["config/volume"].isData) choice.listID.push(API_VOLUME_CONFIG_EXEC);
-				if (!store.getters["config/bose"].isData) choice.listID.push(API_BOSE_CONFIG_EXEC);
-				if (choice.listID.length) canbus.query(choice, true);
+				choice.listID.push(API_MAZDA_CONFIG_EXEC);
+				choice.listID.push(API_TEYES_CONFIG_EXEC);
+				choice.listID.push(API_ENGINE_CONFIG_EXEC);
+				choice.listID.push(API_FUEL_CONFIG_EXEC);
+				choice.listID.push(API_VOLUME_CONFIG_EXEC);
+				choice.listID.push(API_BOSE_CONFIG_EXEC);
+				canbus.query(choice, true);
 
-				if (!store.getters["config/sw1"].isData) canbus.query(store.getters["config/sw1"], true);
+				canbus.query(store.getters["config/sw1"], true);
 
 				choice.listID = [];
-				if (!store.getters["view/worktime"].isData) choice.listID.push(API_DEVICE_VIEW_WORKTIME_EXEC);
-				if (!store.getters["view/voltmeter"].isData) choice.listID.push(API_DEVICE_VIEW_VOLTMETER_EXEC);
-				if (!store.getters["view/mazda"].isData) choice.listID.push(API_MAZDA_VIEW_EXEC);
-				if (!store.getters["view/teyesText"].isData) choice.listID.push(API_TEYES_TEXT_VIEW_EXEC);
-				if (!store.getters["view/bose"].isData) choice.listID.push(API_BOSE_VIEW_EXEC);
-				if (!store.getters["view/climate"].isData) choice.listID.push(API_CLIMATE_VIEW_EXEC);
-				if (!store.getters["view/doors"].isData) choice.listID.push(API_DOORS_VIEW_EXEC);
-				if (!store.getters["view/engine"].isData) choice.listID.push(API_ENGINE_VIEW_EXEC);
-				if (!store.getters["view/fuel"].isData) choice.listID.push(API_FUEL_VIEW_EXEC);
-				if (!store.getters["view/movement"].isData) choice.listID.push(API_MOVEMENT_VIEW_EXEC);
-				if (!store.getters["view/sensors"].isData) choice.listID.push(API_SENSORS_VIEW_EXEC);
-				if (!store.getters["view/temperature"].isData) choice.listID.push(API_TEMPERATURE_VIEW_EXEC);
-				if (!store.getters["view/volume"].isData) choice.listID.push(API_VOLUME_VIEW_EXEC);
-				if (choice.listID.length) canbus.query(choice, true);
+				choice.listID.push(API_DEVICE_VIEW_WORKTIME_EXEC);
+				choice.listID.push(API_DEVICE_VIEW_VOLTMETER_EXEC);
+				choice.listID.push(API_MAZDA_VIEW_EXEC);
+				choice.listID.push(API_TEYES_TEXT_VIEW_EXEC);
+				choice.listID.push(API_BOSE_VIEW_EXEC);
+				choice.listID.push(API_CLIMATE_VIEW_EXEC);
+				choice.listID.push(API_DOORS_VIEW_EXEC);
+				choice.listID.push(API_ENGINE_VIEW_EXEC);
+				choice.listID.push(API_FUEL_VIEW_EXEC);
+				choice.listID.push(API_MOVEMENT_VIEW_EXEC);
+				choice.listID.push(API_SENSORS_VIEW_EXEC);
+				choice.listID.push(API_TEMPERATURE_VIEW_EXEC);
+				choice.listID.push(API_VOLUME_VIEW_EXEC);
+				canbus.query(choice, true);
 			}
 		};
 		canbus.addListener(API_CANBUS_EVENT, onBegin);
