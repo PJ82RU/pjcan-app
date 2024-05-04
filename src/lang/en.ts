@@ -735,7 +735,8 @@ export default {
 			notify: "Warning! In this section of the menu, the steering wheel buttons operate in programming mode"
 		},
 		onboard: {
-			notify: "Swipe left/right allows you to scroll through the blocks with information"
+			notify: "Swipe left/right allows you to scroll through the blocks with information",
+			noModelSelected: "Warning! The car model is not selected. Go to the menu - About the program - Car support"
 		}
 	}
 };

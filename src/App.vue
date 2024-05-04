@@ -3,6 +3,8 @@
 </template>
 
 <script lang="ts">
+import { toast } from "vue3-toastify";
+import { useI18n } from "vue-i18n";
 import store from "@/store";
 import canbus from "@/api/canbus";
 
@@ -22,7 +24,8 @@ import {
 	API_MAZDA_CONFIG_EVENT,
 	API_MAZDA_CONFIG_EXEC,
 	API_MAZDA_VIEW_EVENT,
-	API_MAZDA_VIEW_EXEC
+	API_MAZDA_VIEW_EXEC,
+	TCarModel
 } from "@/models/pjcan/mazda";
 import {
 	API_TEYES_CONFIG_EVENT,
@@ -80,10 +83,19 @@ export default {
 	components: { BaseLayout },
 	setup()
 	{
+		const { t } = useI18n();
+
 		// записываем входящую конфигурацию в store
 		canbus.addListener(API_VERSION_EVENT, (data: DataView) => store.commit("config/setVersion", data));
 		canbus.addListener(API_DEVICE_INFO_EVENT, (data: DataView) => store.commit("config/setInfo", data));
-		canbus.addListener(API_MAZDA_CONFIG_EVENT, (data: DataView) => store.commit("config/setMazda", data));
+		canbus.addListener(API_MAZDA_CONFIG_EVENT, (data: DataView) =>
+		{
+			store.commit("config/setMazda", data);
+			if (store.getters["config/mazda"].carModel === TCarModel.CAR_MODEL_UNKNOWN)
+			{
+				toast.warning(t("help.onboard.noModelSelected"), { autoClose: false });
+			}
+		});
 		canbus.addListener(API_TEYES_CONFIG_EVENT, (data: DataView) => store.commit("config/setTeyes", data));
 		canbus.addListener(API_BUTTONS_SW1_CONFIG_EVENT, (data: DataView) => store.commit("config/setSW1", data));
 		canbus.addListener(API_BOSE_CONFIG_EVENT, (data: DataView) => store.commit("config/setBose", data));
