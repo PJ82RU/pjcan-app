@@ -75,3 +75,9 @@ export const temperature = (state: any) => state.temperature;
  * @param {any} state
  */
 export const volume = (state: any) => state.volume;
+
+/**
+ * Значения отображения даты и времени
+ * @param {any} state
+ */
+export const datetime = (state: any) => state.datetime;

@@ -65,3 +65,9 @@ export const fuel = (state: any) => state.fuel;
  * @param {any} state
  */
 export const volume = (state: any) => state.volume;
+
+/**
+ * Конфигурация даты и времени
+ * @param {any} state
+ */
+export const datetime = (state: any) => state.datetime;

@@ -536,3 +536,91 @@ export const setVolumeStartBose = (state: any, { enabled, level }: { enabled: bo
 		canbus.query(state.volume);
 	}
 };
+
+/**
+ * Изменить конфигурацию даты и времени
+ * @param {any} state
+ * @param {DataView} data Данные
+ */
+export const setDatetime = (state: any, data: DataView) =>
+{
+	state.datetime.set(data);
+};
+/**
+ * Datetime: ShowDate
+ * @param {any} state
+ * @param {boolean} value Значение
+ */
+export const setDatetimeShowDate = (state: any, value: boolean) =>
+{
+	if (state.datetime.isData)
+	{
+		state.datetime.showDate = value;
+		canbus.query(state.datetime);
+	}
+};
+/**
+ * Datetime: ShowTime
+ * @param {any} state
+ * @param {boolean} value Значение
+ */
+export const setDatetimeShowTime = (state: any, value: boolean) =>
+{
+	if (state.datetime.isData)
+	{
+		state.datetime.showTime = value;
+		canbus.query(state.datetime);
+	}
+};
+/**
+ * Datetime: ShowDayWeek
+ * @param {any} state
+ * @param {boolean} value Значение
+ */
+export const setDatetimeShowDayWeek = (state: any, value: boolean) =>
+{
+	if (state.datetime.isData)
+	{
+		state.datetime.showDayWeek = value;
+		canbus.query(state.datetime);
+	}
+};
+/**
+ * Datetime: ShowDateAndDayWeek
+ * @param {any} state
+ * @param {boolean} value Значение
+ */
+export const setDatetimeShowDateAndDayWeek = (state: any, value: boolean) =>
+{
+	if (state.datetime.isData)
+	{
+		state.datetime.showDateAndDayWeek = value;
+		canbus.query(state.datetime);
+	}
+};
+/**
+ * Datetime: ShowTimeAndDayWeek
+ * @param {any} state
+ * @param {boolean} value Значение
+ */
+export const setDatetimeShowTimeAndDayWeek = (state: any, value: boolean) =>
+{
+	if (state.datetime.isData)
+	{
+		state.datetime.showTimeAndDayWeek = value;
+		canbus.query(state.datetime);
+	}
+};
+/**
+ * Datetime: ShowFullDatetime
+ * @param {any} state
+ * @param {boolean} value Значение
+ */
+export const setDatetimeShowFullDatetime = (state: any, value: boolean) =>
+{
+	if (state.datetime.isData)
+	{
+		state.datetime.showFullDatetime = value;
+		canbus.query(state.datetime);
+	}
+};

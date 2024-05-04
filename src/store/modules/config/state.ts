@@ -8,6 +8,7 @@ import { EngineConfig } from "@/models/pjcan/engine";
 import { FuelConfig } from "@/models/pjcan/fuel";
 import { VolumeConfig } from "@/models/pjcan/volume";
 import { Version } from "@/models/pjcan/version";
+import { DatetimeConfig } from "@/models/pjcan/datetime";
 
 const state = {
 	version: new Version(),
@@ -19,7 +20,8 @@ const state = {
 	doors: new DoorsConfig(),
 	engine: new EngineConfig(),
 	fuel: new FuelConfig(),
-	volume: new VolumeConfig()
+	volume: new VolumeConfig(),
+	datetime: new DatetimeConfig()
 };
 
 export default state;

@@ -77,6 +77,12 @@ import {
 	API_TEMPERATURE_VIEW_EXEC
 } from "@/models/pjcan/temperature";
 import { ChoiceValue } from "@/models/pjcan/choice";
+import {
+	API_DATETIME_CONFIG_EVENT,
+	API_DATETIME_CONFIG_EXEC,
+	API_DATETIME_VIEW_EVENT,
+	API_DATETIME_VIEW_EXEC
+} from "@/models/pjcan/datetime";
 
 export default {
 	name: "App",
@@ -103,6 +109,12 @@ export default {
 		canbus.addListener(API_ENGINE_CONFIG_EVENT, (data: DataView) => store.commit("config/setEngine", data));
 		canbus.addListener(API_FUEL_CONFIG_EVENT, (data: DataView) => store.commit("config/setFuel", data));
 		canbus.addListener(API_VOLUME_CONFIG_EVENT, (data: DataView) => store.commit("config/setVolume", data));
+		canbus.addListener(API_DATETIME_CONFIG_EVENT, (data: DataView) =>
+		{
+			store.commit("config/setDatetime", data);
+			// синхронизация времени
+			if (store.getters["config/datetime"].unixtime === 0n) canbus.query(store.getters["config/datetime"]);
+		});
 
 		// записываем входящие значения в store
 		canbus.addListener(API_BUTTON_SW1_VALUE_EVENT, (data: DataView) => store.commit("value/setSW1", data));
@@ -132,6 +144,7 @@ export default {
 		canbus.addListener(API_SENSORS_VIEW_EVENT, (data: DataView) => store.commit("view/setSensors", data));
 		canbus.addListener(API_TEMPERATURE_VIEW_EVENT, (data: DataView) => store.commit("view/setTemperature", data));
 		canbus.addListener(API_VOLUME_VIEW_EVENT, (data: DataView) => store.commit("view/setVolume", data));
+		canbus.addListener(API_DATETIME_VIEW_EVENT, (data: DataView) => store.commit("view/setDatetime", data));
 
 		const onBegin = (status: boolean): void =>
 		{
@@ -145,6 +158,7 @@ export default {
 				choice.listID.push(API_FUEL_CONFIG_EXEC);
 				choice.listID.push(API_VOLUME_CONFIG_EXEC);
 				choice.listID.push(API_BOSE_CONFIG_EXEC);
+				choice.listID.push(API_DATETIME_CONFIG_EXEC);
 				canbus.query(choice, true);
 
 				canbus.query(store.getters["config/sw1"], true);
@@ -163,6 +177,7 @@ export default {
 				choice.listID.push(API_SENSORS_VIEW_EXEC);
 				choice.listID.push(API_TEMPERATURE_VIEW_EXEC);
 				choice.listID.push(API_VOLUME_VIEW_EXEC);
+				choice.listID.push(API_DATETIME_VIEW_EXEC);
 				canbus.query(choice, true);
 			}
 		};

@@ -154,3 +154,13 @@ export const setVolume = (state: any, data: DataView) =>
 {
 	state.volume.set(data);
 };
+
+/**
+ * Записать значения отображения даты и времени
+ * @param {any} state
+ * @param {DataView} data Данные
+ */
+export const setDatetime = (state: any, data: DataView) =>
+{
+	state.datetime.set(data);
+};

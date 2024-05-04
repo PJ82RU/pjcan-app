@@ -11,6 +11,7 @@ import { MovementViews } from "@/models/pjcan/movement";
 import { SensorsViews } from "@/models/pjcan/sensors";
 import { API_TEMPERATURE_VIEW_EXEC } from "@/models/pjcan/temperature";
 import { API_VOLUME_VIEW_EXEC } from "@/models/pjcan/volume";
+import { API_DATETIME_VIEW_EXEC } from "@/models/pjcan/datetime";
 
 const state = {
 	worktime: new ViewConfig(API_DEVICE_VIEW_WORKTIME_EXEC),
@@ -25,7 +26,8 @@ const state = {
 	movement: new MovementViews(),
 	sensors: new SensorsViews(),
 	temperature: new ViewConfig(API_TEMPERATURE_VIEW_EXEC),
-	volume: new ViewConfig(API_VOLUME_VIEW_EXEC)
+	volume: new ViewConfig(API_VOLUME_VIEW_EXEC),
+	datetime: new ViewConfig(API_DATETIME_VIEW_EXEC)
 };
 
 export default state;
