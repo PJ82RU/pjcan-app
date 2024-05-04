@@ -409,6 +409,18 @@ export default {
 				title: "CenterPoint",
 				description:
 					"CenterPoint technology converts stereo signals into multi-channel audio and simultaneously creates a wider/surround sound area"
+			},
+
+			volumeConfig: {
+				title: "Setting up the startup",
+				start: {
+					title: "Change the sound level",
+					description: "Set the sound level specified below when turning on the PJCAN adapter"
+				},
+				level: {
+					title: "Sound level",
+					description: "The sound level set when the PJCAN adapter is turned on"
+				}
 			}
 		}
 	},

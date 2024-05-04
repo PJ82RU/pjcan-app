@@ -490,3 +490,17 @@ export const setVolumeValueBose = (state: any, value: number) =>
 		canbus.query(state.volume);
 	}
 };
+/**
+ * Volume: Start Bose
+ * @param {any} state
+ * @param {boolean} value Значение
+ */
+export const setVolumeStartBose = (state: any, { enabled, level }: {enabled: boolean, level: number}) =>
+{
+	if (state.volume.isData)
+	{
+		state.volume.startBose = enabled;
+		state.volume.startLevelBose = level;
+		canbus.query(state.volume);
+	}
+};

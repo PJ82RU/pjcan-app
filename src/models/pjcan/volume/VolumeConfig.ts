@@ -14,15 +14,23 @@ export class VolumeConfig extends BaseModel implements IVolumeConfig
 	static struct: any = {
 		mute: BluetoothStruct.bit(),
 		muteBose: BluetoothStruct.bit(),
+		start: BluetoothStruct.bit(),
+		startBose: BluetoothStruct.bit(),
 		volume: BluetoothStruct.uint8(),
-		volumeBose: BluetoothStruct.uint8()
+		volumeBose: BluetoothStruct.uint8(),
+		startLevel: BluetoothStruct.uint8(),
+		startLevelBose: BluetoothStruct.uint8()
 	};
-	static size: number = 3;
+	static size: number = 5;
 
 	mute = false;
 	muteBose = false;
+	start = false;
+	startBose = false;
 	volume = 0;
 	volumeBose = 0;
+	startLevel = 0;
+	startLevelBose = 0;
 
 	constructor(data?: DataView)
 	{

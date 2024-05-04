@@ -120,6 +120,12 @@
 		:disabled="menuSelected.disabled"
 		@click:apply="onViewApply"
 	/>
+	<bose-start-dialog
+		v-model="startConfigVisible"
+		:enabled="startEnabled"
+		:level="startLevel"
+		@click:apply="onStartApply"
+	/>
 </template>
 
 <script lang="ts">
@@ -134,6 +140,7 @@ import IconCardItem from "@/components/cards/IconCardItem.vue";
 import SliderCardItem from "@/components/cards/SliderCardItem.vue";
 import SelectCardItem from "@/components/cards/SelectCardItem.vue";
 import ViewSettingDialog from "@/components/ViewSettingDialog.vue";
+import BoseStartDialog from "./BoseStartDialog.vue";
 
 import { IMenuItem } from "@/components/MenuDots.vue";
 import { TCenterPoint } from "@/models/pjcan/bose";
@@ -142,6 +149,7 @@ export default {
 	name: "BoseCard",
 	components: {
 		ViewSettingDialog,
+		BoseStartDialog,
 		IconCardItem,
 		InputCardItem,
 		SwitchCardItem,
@@ -216,8 +224,18 @@ export default {
 			set: (val: number) => store.commit("config/setVolumeValueBose", val)
 		});
 
+		const startConfigVisible = ref(false);
+		const startEnabled = computed((): boolean => store.getters["config/volume"].startBose);
+		const startLevel = computed((): number => store.getters["config/volume"].startLevelBose);
+
 		const menu = computed((): IMenuItem[] => [
-			{ id: 0, title: t("onboard.bose.menu"), view: store.getters["view/bose"], disabled: !boseViewLoaded.value }
+			{ id: 0, title: t("onboard.bose.volumeConfig.title") },
+			{
+				id: 1,
+				title: t("onboard.bose.menu"),
+				view: store.getters["view/bose"],
+				disabled: !boseViewLoaded.value
+			}
 		]);
 		const menuVisible = ref(false);
 		const menuSelected = ref({} as IMenuItem);
@@ -228,17 +246,31 @@ export default {
 		 */
 		const onMenuClick = (item: IMenuItem): void =>
 		{
-			menuVisible.value = true;
-			menuSelected.value = item;
+			if (item.view)
+			{
+				menuVisible.value = true;
+				menuSelected.value = item;
+			}
+			else startConfigVisible.value = true;
 		};
 
 		/**
-         * Применить параметры отображения на информационном экране
-         * @param {any} value Новые параметры отображения
-         */
+		 * Применить параметры отображения на информационном экране
+		 * @param {any} value Новые параметры отображения
+		 */
 		const onViewApply = (value: any): void =>
 		{
 			store.commit("view/setView", value);
+		};
+
+		/**
+		 * Применить настройки запуска
+		 * @param {boolean} enabled Вкл/выкл
+		 * @param {number} level Уровень звука
+		 */
+		const onStartApply = (enabled: boolean, level: number): void =>
+		{
+			store.commit("config/setVolumeStartBose", { enabled, level });
 		};
 
 		return {
@@ -257,11 +289,15 @@ export default {
 			centerPointList,
 			mute,
 			volume,
+			startConfigVisible,
+			startEnabled,
+			startLevel,
 			menu,
 			menuVisible,
 			menuSelected,
 			onMenuClick,
-			onViewApply
+			onViewApply,
+			onStartApply
 		};
 	}
 };
