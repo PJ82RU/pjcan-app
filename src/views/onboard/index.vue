@@ -10,6 +10,7 @@
 import { computed, onMounted, onUnmounted, provide, ref, watch } from "vue";
 import { useDisplay } from "vuetify";
 import store from "@/store";
+import canbus from "@/api/canbus";
 
 import Flicking from "@egjs/vue3-flicking";
 import InfoCard from "./components/InfoCard.vue";
@@ -88,15 +89,15 @@ export default {
 		});
 		watch(listExec, (val: number[]) =>
 		{
-			store.dispatch("value/updateLoop", val);
+			canbus.loop(val);
 		});
 		onMounted(() =>
 		{
-			store.dispatch("value/updateLoop", listExec.value);
+			canbus.loop(listExec.value);
 		});
 		onUnmounted(() =>
 		{
-			store.dispatch("value/updateLoop");
+			canbus.loopFree();
 		});
 
 		return {

@@ -1,6 +1,7 @@
 import EventEmitter from "eventemitter3";
 import { toast } from "vue3-toastify";
 import { t } from "@/lang";
+import { Timeout } from "@/models/types/Timeout";
 
 import { getFirmware, getFirmwareVersion } from "@/api/firmware";
 import { getSerial } from "@/api/hash";
@@ -27,16 +28,19 @@ import {
 	API_DEVICE_UPDATE_EVENT_ERROR,
 	API_DEVICE_SCANNER_VALUE_EXEC,
 	API_DEVICE_SCANNER_VALUE_EVENT,
+	API_DEVICE_VIEW_WORKTIME_EXEC,
+	API_DEVICE_VIEW_WORKTIME_EVENT,
+	API_DEVICE_VIEW_VOLTMETER_EXEC,
+	API_DEVICE_VIEW_VOLTMETER_EVENT,
 	IDeviceAction,
 	DeviceInfo,
 	DeviceAction,
 	DeviceConfig,
 	DeviceValue,
 	DeviceUpdate,
-	API_DEVICE_VIEW_WORKTIME_EXEC,
-	API_DEVICE_VIEW_WORKTIME_EVENT,
-	API_DEVICE_VIEW_VOLTMETER_EXEC,
-	API_DEVICE_VIEW_VOLTMETER_EVENT
+	DeviceScannerAction,
+	DeviceScannerValue,
+	IDeviceScannerValue
 } from "@/models/pjcan/device";
 import {
 	API_BUTTONS_SW1_CONFIG_EXEC,
@@ -159,7 +163,7 @@ import {
 	API_VOLUME_VIEW_EVENT
 } from "@/models/pjcan/volume";
 import { API_NEW_VERSION_EVENT, API_VERSION_EVENT, API_VERSION_EXEC, IVersion, Version } from "@/models/pjcan/version";
-import { API_CHOICE_EXEC, ChoiceValue } from "@/models/pjcan/choice";
+import { API_CHOICE_EXEC, ChoiceValue, IChoiceValue } from "@/models/pjcan/choice";
 
 import { IQuery } from "@/models/interfaces/IQuery";
 import { API_CANBUS_EVENT } from "@/models/pjcan/base/BaseModel";
@@ -675,6 +679,81 @@ export class Canbus extends EventEmitter
 		action.resetConfig = resetConfig;
 		action.resetView = resetView;
 		this.query(action);
+	}
+
+	private scannerInterval: Timeout;
+	private scannerValue: IDeviceScannerValue | undefined;
+
+	/**
+	 * Запуск/остановка сканера
+	 * @param {boolean} status Статус
+	 * @param {function} fn Функция обратного вызова
+	 */
+	scanner(status: boolean, fn: (success: boolean) => void)
+	{
+		const action = new DeviceScannerAction();
+		this.queueDisabled = status;
+		action.enabled = status;
+		this.query(action, false, (success) =>
+		{
+			if (success && status)
+			{
+				if (!this.scannerValue) this.scannerValue = new DeviceScannerValue();
+				if (!this.scannerInterval)
+				{
+					this.scannerInterval = setInterval(() =>
+					{
+						if (this.scannerValue) this.query(this.scannerValue, true);
+						else this.scannerFree();
+					}, 500);
+				}
+			}
+			fn(success);
+		});
+
+		if (!status) this.scannerFree();
+	}
+
+	/** Очистить значения сканера */
+	private scannerFree(): void
+	{
+		clearInterval(this.scannerInterval);
+		this.scannerInterval = undefined;
+		this.scannerValue = undefined;
+	}
+
+	private loopInterval: Timeout;
+	private loopChoice: IChoiceValue | undefined;
+
+	/**
+	 * Циклический опрос
+	 * @param {number[]} list Список ChoiceValue
+	 */
+	loop(list: number[])
+	{
+		if (list.length)
+		{
+			if (!this.loopChoice) this.loopChoice = new ChoiceValue();
+			this.loopChoice.listID = [...list];
+
+			if (!this.loopInterval)
+			{
+				this.loopInterval = setInterval(() =>
+				{
+					if (this.loopChoice) this.query(this.loopChoice, true);
+					else this.loopFree();
+				}, 250);
+				if (this.loopChoice) this.query(this.loopChoice, true);
+			}
+		}
+	}
+
+	/** Очистить цикл */
+	loopFree(): void
+	{
+		clearInterval(this.loopInterval);
+		this.loopInterval = undefined;
+		this.loopChoice = undefined;
 	}
 }
 
