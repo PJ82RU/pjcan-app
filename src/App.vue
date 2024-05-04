@@ -11,6 +11,7 @@ import BaseLayout from "./layout/BaseLayout.vue";
 import { API_VERSION_EVENT } from "@/models/pjcan/version";
 import {
 	API_DEVICE_INFO_EVENT,
+	API_DEVICE_SCANNER_VALUE_EVENT,
 	API_DEVICE_VALUE_EVENT,
 	API_DEVICE_VIEW_VOLTMETER_EVENT,
 	API_DEVICE_VIEW_VOLTMETER_EXEC,
@@ -94,6 +95,7 @@ export default {
 		canbus.addListener(API_MOVEMENT_VALUE_EVENT, (data: DataView) => store.commit("value/setMovement", data));
 		canbus.addListener(API_SENSORS_VALUE_EVENT, (data: DataView) => store.commit("value/setSensors", data));
 		canbus.addListener(API_TEMPERATURE_VALUE_EVENT, (data: DataView) => store.commit("value/setTemperature", data));
+		canbus.addListener(API_DEVICE_SCANNER_VALUE_EVENT, (data: DataView) => store.commit("value/setScanner", data));
 
 		// записываем входящие значения отображения в store
 		canbus.addListener(API_DEVICE_VIEW_WORKTIME_EVENT, (data: DataView) => store.commit("view/setWorktime", data));

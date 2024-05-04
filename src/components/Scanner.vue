@@ -15,7 +15,6 @@
 </template>
 
 <script lang="ts">
-import moment from "moment";
 import { computed, ref, toRefs, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { toast } from "vue3-toastify";
@@ -26,23 +25,16 @@ import { setScanCan } from "@/api/google";
 import DialogTemplate from "@/layout/components/DialogTemplate.vue";
 
 import { IMessage } from "@/models/interfaces/message/IMessage";
-import { IDeviceScannerFrame } from "@/models/pjcan/device/IDeviceScannerFrame";
-import { IScanCanRow } from "@/models/interfaces/IScanCanRow";
-import {
-	API_DEVICE_SCANNER_VALUE_EVENT,
-	DeviceScannerAction,
-	DeviceScannerValue,
-	IDeviceScannerValue
-} from "@/models/pjcan/device";
-import { Timeout } from "@/models/types/Timeout";
-
-import { toHex } from "@/utils/conversion";
+import { IDeviceScannerValue } from "@/models/pjcan/device";
 
 export default {
 	name: "Scanner",
 	components: { DialogTemplate },
 	props: {
-		modelValue: Boolean
+		modelValue: {
+			type: Boolean,
+			required: true
+		}
 	},
 	emits: ["update:modelValue"],
 	setup(props: any, { emit }: { emit: any })
@@ -50,63 +42,32 @@ export default {
 		const { modelValue } = toRefs(props);
 		const { t } = useI18n();
 
-		const scannerAction = new DeviceScannerAction();
-		const scannerValue: IDeviceScannerValue = new DeviceScannerValue();
-		let scannerInterval: Timeout;
-		const scannerBuffer: IScanCanRow[] = [];
-		let efuseMac: string = "";
-		let scanUploading = false;
-		let scanClose = false;
-
+		const scanner = computed((): IDeviceScannerValue => store.getters["value/scanner"]);
+		const efuseMac = computed((): string => store.getters["config/info"].efuseMac);
 		const visibleUploading = ref(false);
 		const leftUploading = ref(0);
 		const started = computed({
 			get: (): boolean => modelValue.value,
 			set: (val: boolean): void => emit("update:modelValue", val)
 		});
+		let scanUploading = false;
+		let scanClose = false;
 
 		watch(started, (val: boolean): void =>
 		{
-			if (val)
-			{
-				if (!canbus.bluetooth.connected)
+			if (
+				!canbus.scanner(val, (success) =>
 				{
-					toast.error(t("scanner.notify.errorStart"));
-					return;
-				}
-
-				// включаем сканирование
-				canbus.queueDisabled = true;
-				scannerAction.enabled = true;
-				canbus.query(scannerAction, false, (success) =>
-				{
-					if (success)
+					if (val && success)
 					{
-						if (canbus.efuseMac) efuseMac = canbus.efuseMac;
-						scanClose = false;
-
-						// запускаем циклический запрос значений сканирования
-						scannerInterval = setInterval(() => canbus.query(scannerValue), 500);
-						canbus.addListener(API_DEVICE_SCANNER_VALUE_EVENT, onReceiveValue);
 						// запускаем диалог
+						scanClose = false;
 						store.commit("app/clearMessages");
 						steps();
 					}
-				});
-			}
-			else
-			{
-				if (scannerValue)
-				{
-					// останавливаем циклический запрос значений сканирования
-					canbus.removeListener(API_DEVICE_SCANNER_VALUE_EVENT, onReceiveValue);
-					clearInterval(scannerInterval);
-					// выключаем сканирование
-					scannerAction.enabled = false;
-					canbus.query(scannerAction);
-					canbus.queueDisabled = false;
-				}
-			}
+				})
+			)
+			{ toast.error(t("scanner.notify.errorStart")); }
 		});
 
 		/**
@@ -124,12 +85,7 @@ export default {
 				width: "800px"
 			} as IMessage;
 
-			scannerBuffer.push({
-				datetime: message.title,
-				time: "",
-				hexId: "",
-				hexData: ""
-			} as IScanCanRow);
+			store.commit("value/setScannerBufferTitle", message.title);
 
 			if (index < 4)
 			{
@@ -167,42 +123,13 @@ export default {
 			store.commit("app/setMessage", message);
 		};
 
-		/** Входящие значения сканирования */
-		const onReceiveValue = (res: IDeviceScannerValue): void =>
-		{
-			if (res.isData && res.count > 0)
-			{
-				scannerBuffer.push(
-					...res.frames.slice(0, res.count).map((x: IDeviceScannerFrame) =>
-					{
-						const mm = moment.duration(Number(x.timestamp), "milliseconds");
-						const mm_time = {
-							hours: mm.hours(),
-							minutes: mm.minutes(),
-							seconds: mm.seconds(),
-							milliseconds: mm.milliseconds()
-						};
-						return {
-							datetime: moment().format("YYYY.MM.DD HH:mm:ss"),
-							time:
-								mm_time.hours + ":" +
-								(mm_time.minutes < 10 ? "0" : "") + mm.minutes() + ":" +
-								(mm_time.seconds < 10 ? "0" : "") + mm.seconds() + "." +
-								(mm_time.milliseconds < 10 ? "00" : mm_time.milliseconds < 100 ? "0" : "") + mm.milliseconds(),
-							hexId: "0x" + toHex(x.id),
-							hexData: "0x" + x.data.map((x) => toHex(x)).join(":")
-						} as IScanCanRow;
-					})
-				);
-				sendScannerBuffer();
-			}
-		};
-
 		/** Отправка буфера */
 		const sendScannerBuffer = (): void =>
 		{
 			if (scanUploading) return;
-			if (!scannerBuffer.length)
+
+			leftUploading.value = store.getters["value/scannerBuffer"].length;
+			if (!leftUploading.value)
 			{
 				if (started.value) toast.warning(t("scanner.notify.warningSend"));
 				visibleUploading.value = false;
@@ -210,8 +137,7 @@ export default {
 			}
 
 			scanUploading = true;
-			leftUploading.value = scannerBuffer.length;
-			setScanCan({ mac: efuseMac, rows: scannerBuffer.splice(0, 30) })
+			setScanCan({ mac: efuseMac.value, rows: store.getters["value/scannerBufferRead"] })
 				.then((res: any) =>
 				{
 					if (res?.success && !scanClose) setTimeout(() => sendScannerBuffer(), 100);
@@ -223,6 +149,8 @@ export default {
 					scanUploading = false;
 				});
 		};
+
+		watch(scanner, () => sendScannerBuffer());
 
 		return {
 			visibleUploading,

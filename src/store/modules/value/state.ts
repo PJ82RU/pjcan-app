@@ -1,12 +1,13 @@
 import { ButtonValue } from "@/models/pjcan/buttons";
 import { ClimateValue } from "@/models/pjcan/climate";
-import { DeviceValue } from "@/models/pjcan/device";
+import { DeviceScannerValue, DeviceValue } from "@/models/pjcan/device";
 import { DoorsValue } from "@/models/pjcan/doors";
 import { EngineValue } from "@/models/pjcan/engine";
 import { FuelValue } from "@/models/pjcan/fuel";
 import { MovementValue } from "@/models/pjcan/movement";
 import { SensorsValue } from "@/models/pjcan/sensors";
 import { TemperatureValue } from "@/models/pjcan/temperature";
+import { IScanCanRow } from "@/models/interfaces/IScanCanRow";
 
 const state = {
 	sw1: new ButtonValue(),
@@ -17,7 +18,10 @@ const state = {
 	fuel: new FuelValue(),
 	movement: new MovementValue(),
 	sensors: new SensorsValue(),
-	temperature: new TemperatureValue()
+	temperature: new TemperatureValue(),
+	scanner: new DeviceScannerValue(),
+	scannerBuffer: [] as IScanCanRow[],
+	scannerBufferReadNumber: 30
 };
 
 export default state;

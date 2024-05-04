@@ -1,3 +1,8 @@
+import moment from "moment/moment";
+import { toHex } from "@/utils/conversion";
+import { IDeviceScannerFrame } from "@/models/pjcan/device/IDeviceScannerFrame";
+import { IScanCanRow } from "@/models/interfaces/IScanCanRow";
+
 /**
  * Записать значения кнопки sw1
  * @param {any} state
@@ -86,4 +91,65 @@ export const setSensors = (state: any, data: DataView) =>
 export const setTemperature = (state: any, data: DataView) =>
 {
 	state.temperature.set(data);
+};
+
+/**
+ * Записать значения сканера
+ * @param {any} state
+ * @param {DataView} data Данные
+ */
+export const setScanner = (state: any, data: DataView) =>
+{
+	state.scanner.set(data);
+	setScannerBuffer(state, false);
+};
+
+/**
+ * Записать значения сканирования в буфер
+ * @param {any} state
+ * @param {boolean} free Очистить данные перед записью
+ */
+export const setScannerBuffer = (state: any, free: boolean) =>
+{
+	if (free) state.scannerBuffer = [] as IScanCanRow[];
+	if (state.scanner.isData && state.scanner.count > 0)
+	{
+		state.scannerBuffer.push(
+			...state.scanner.frames.slice(0, state.scanner.count).map((x: IDeviceScannerFrame) =>
+			{
+				const mm = moment.duration(Number(x.timestamp), "milliseconds");
+				const mm_time = {
+					hours: mm.hours(),
+					minutes: mm.minutes(),
+					seconds: mm.seconds(),
+					milliseconds: mm.milliseconds()
+				};
+				return {
+					datetime: moment().format("YYYY.MM.DD HH:mm:ss"),
+					time:
+							mm_time.hours + ":" +
+							(mm_time.minutes < 10 ? "0" : "") + mm.minutes() + ":" +
+							(mm_time.seconds < 10 ? "0" : "") + mm.seconds() + "." +
+							(mm_time.milliseconds < 10 ? "00" : mm_time.milliseconds < 100 ? "0" : "") + mm.milliseconds(),
+					hexId: "0x" + toHex(x.id),
+					hexData: "0x" + x.data.map((x) => toHex(x)).join(":")
+				} as IScanCanRow;
+			})
+		);
+	}
+};
+
+/**
+ * Записать заголовок в буфер
+ * @param {any} state
+ * @param {string} value Текст
+ */
+export const setScannerBufferTitle = (state: any, value: string) =>
+{
+	state.scannerBuffer.push({
+		datetime: value,
+		time: "",
+		hexId: "",
+		hexData: ""
+	} as IScanCanRow);
 };

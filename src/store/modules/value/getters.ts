@@ -51,3 +51,21 @@ export const sensors = (state: any) => state.sensors;
  * @param {any} state
  */
 export const temperature = (state: any) => state.temperature;
+
+/**
+ * Значения сканера
+ * @param {any} state
+ */
+export const scanner = (state: any) => state.scanner;
+
+/**
+ * Значения буфера сканера
+ * @param {any} state
+ */
+export const scannerBuffer = (state: any) => state.scannerBuffer;
+
+/**
+ * Чтение 30-ти элементов буфера сканера
+ * @param {any} state
+ */
+export const scannerBufferRead = (state: any) => state.scannerBuffer.splice(0, state.scannerBufferReadNumber);

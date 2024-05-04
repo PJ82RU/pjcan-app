@@ -689,8 +689,10 @@ export class Canbus extends EventEmitter
 	 * @param {boolean} status Статус
 	 * @param {function} fn Функция обратного вызова
 	 */
-	scanner(status: boolean, fn: (success: boolean) => void)
+	scanner(status: boolean, fn: (success: boolean) => void): boolean
 	{
+		if (status && !this.status) return false;
+
 		const action = new DeviceScannerAction();
 		this.queueDisabled = status;
 		action.enabled = status;
@@ -712,6 +714,7 @@ export class Canbus extends EventEmitter
 		});
 
 		if (!status) this.scannerFree();
+		return true;
 	}
 
 	/** Очистить значения сканера */
@@ -729,9 +732,10 @@ export class Canbus extends EventEmitter
 	 * Циклический опрос
 	 * @param {number[]} list Список ChoiceValue
 	 */
-	loop(list: number[])
+	loop(list: number[]): boolean
 	{
-		if (list.length)
+		const result: boolean = list.length > 0 && this.status;
+		if (result)
 		{
 			if (!this.loopChoice) this.loopChoice = new ChoiceValue();
 			this.loopChoice.listID = [...list];
@@ -746,6 +750,7 @@ export class Canbus extends EventEmitter
 				if (this.loopChoice) this.query(this.loopChoice, true);
 			}
 		}
+		return result;
 	}
 
 	/** Очистить цикл */
