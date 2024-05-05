@@ -175,7 +175,10 @@ export default {
 	},
 	components: { DialogTemplate },
 	props: {
-		modelValue: Boolean
+		modelValue: {
+			type: Boolean,
+			required: true
+		}
 	},
 	emits: ["update:modelValue"],
 	setup(props: any, { emit }: { emit: any })
@@ -193,6 +196,12 @@ export default {
 			return "ontouchstart" in window || navigator?.maxTouchPoints > 0 || navigator?.msMaxTouchPoints > 0;
 		};
 
+		/**
+         * Отправить нажатие
+         * @param {TMazdaButton} btn Кнопка
+         * @param {boolean} press Нажата
+         * @param {number} timeout Время удержания
+         */
 		const send = (btn: TMazdaButton, press: boolean, timeout: number): void =>
 		{
 			const action = new MazdaAction();
@@ -204,6 +213,12 @@ export default {
 		};
 
 		const timeouts: ITimeoutButton[] = [{}, {}, {}, {}, {}, {}, {}] as ITimeoutButton[];
+		/**
+         * Нажать
+         * @param {TMazdaButton} btn Кнопка
+         * @param {number} timeout Время удержания
+         * @param {boolean} reSend Повторно отправить
+         */
 		const press = (btn: TMazdaButton, timeout: number, reSend: boolean): void =>
 		{
 			const item = timeouts[btn];
@@ -223,6 +238,10 @@ export default {
 			}
 		};
 
+		/**
+         * Отпустить
+         * @param {TMazdaButton} btn Кнопка
+         */
 		const release = (btn: TMazdaButton): void =>
 		{
 			const item = timeouts[btn];
