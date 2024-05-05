@@ -637,7 +637,7 @@ export default {
 		datetime: {
 			title: "Date and time",
 			description:
-				"To display the date and time on the LCD screen, it is necessary to launch a web application to synchronize data with the PJCAN adapter every time the ignition is turned on.",
+				"To display the date and time on the LCD screen, it is necessary to launch a web application to synchronize data with the PJCAN adapter every time the car ignition is turned on.",
 			menu: "LCD: Display options",
 			date: {
 				title: "Show date",
