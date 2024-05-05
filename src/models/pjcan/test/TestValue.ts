@@ -16,7 +16,7 @@ export class TestValue extends BaseModel implements ITestValue
 	};
 	static size: number = 32;
 
-	text = "";
+	text = " -- TEST -- ";
 
 	constructor(data?: DataView)
 	{

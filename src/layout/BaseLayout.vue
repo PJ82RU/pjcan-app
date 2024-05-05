@@ -25,7 +25,6 @@
 			<menu-dots :menu="menu" @click:item="onMenuClick" />
 			<about-dialog v-model="visibleAbout" />
 			<onboard-buttons-dialog v-model="visibleOnboardButtons" />
-			<test-dialog v-model="visibleTest" />
 		</v-app-bar>
 		<v-main>
 			<div class="base-layout__bg" />
@@ -61,13 +60,11 @@ import UpdateFirmwareDialog from "../components/dialogs/UpdateFirmwareDialog.vue
 import MenuDots, { IMenuItem } from "@/components/MenuDots.vue";
 import AboutDialog from "../components/dialogs/AboutDialog.vue";
 import OnboardButtonsDialog from "../components/dialogs/OnboardButtonsDialog.vue";
-import TestDialog from "../components/dialogs/TestDialog.vue";
 import MessageDialog from "@/components/dialogs/MessageDialog.vue";
 import IconCustom from "@/components/common/icon-custom/IconCustom.vue";
 
 import { IMessage } from "@/models/interfaces/message/IMessage";
 import { Timeout } from "@/models/types/Timeout";
-import { TCarModel } from "@/models/pjcan/mazda";
 import { API_NEW_VERSION_EVENT, IVersion } from "@/models/pjcan/version";
 
 export default {
@@ -78,7 +75,6 @@ export default {
 		MenuDots,
 		AboutDialog,
 		OnboardButtonsDialog,
-		TestDialog,
 		MessageDialog,
 		IconCustom
 	},
@@ -88,7 +84,6 @@ export default {
 
 		const visibleAbout = ref(false);
 		const visibleOnboardButtons = ref(false);
-		const visibleTest = ref(false);
 		const visibleUpdate = ref(false);
 
 		const pageWidth = ref(0);
@@ -118,10 +113,6 @@ export default {
 			{
 				result.push({ id: 70, title: t("menu.update", { version: newVersionFirmware.value }) });
 			}
-			if (store.getters["config/carModel"] !== TCarModel.CAR_MODEL_MAZDA_CX9_REST)
-			{
-				result.push({ id: 50, title: t("menu.test") });
-			}
 			result.push({} as IMenuItem, { id: 30, title: t("menu.about") });
 			return result;
 		});
@@ -146,9 +137,6 @@ export default {
 					break;
 				case 40:
 					visibleOnboardButtons.value = true;
-					break;
-				case 50:
-					visibleTest.value = true;
 					break;
 				case 60:
 					router.push({ name: "Options" });
@@ -224,7 +212,6 @@ export default {
 			newVersionFirmware,
 			visibleAbout,
 			visibleOnboardButtons,
-			visibleTest,
 			visibleUpdate,
 			pageWidth,
 			pageHeight,

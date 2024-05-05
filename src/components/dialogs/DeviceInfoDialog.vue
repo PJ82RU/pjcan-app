@@ -29,6 +29,13 @@
 		</template>
 
 		<template #btns>
+			<v-btn
+				v-if="showButtonTest"
+				color="secondary"
+				icon="mdi-ab-testing"
+				:disabled="!isLoadedValue"
+				@click="visibleTest = true"
+			/>
 			<v-btn color="secondary" icon="mdi-magnify-scan" :disabled="!isLoadedValue" @click="onScanClick" />
 			<v-btn color="secondary" icon="mdi-restart" :disabled="!isLoadedValue" @click="onResetClick" />
 			<v-btn color="primary" prepend-icon="mdi-close" @click="visible = false">
@@ -39,6 +46,7 @@
 
 	<device-reset-dialog v-model="visibleReset" />
 	<scanner v-model="startedScanner" />
+	<test-dialog v-model="visibleTest" />
 </template>
 
 <script lang="ts">
@@ -50,12 +58,14 @@ import { arrayToHex, toMac } from "@/utils/conversion";
 import DialogTemplate from "@/layout/components/DialogTemplate.vue";
 import DeviceResetDialog from "./DeviceResetDialog.vue";
 import Scanner from "@/components/Scanner.vue";
+import TestDialog from "@/components/dialogs/TestDialog.vue";
 
 import { IMessage } from "@/models/interfaces/message/IMessage";
+import { TCarModel } from "@/models/pjcan/mazda";
 
 export default {
 	name: "DeviceInfoDialog",
-	components: { Scanner, DialogTemplate, DeviceResetDialog },
+	components: { TestDialog, Scanner, DialogTemplate, DeviceResetDialog },
 	props: {
 		modelValue: {
 			type: Boolean,
@@ -75,6 +85,10 @@ export default {
 		const isLoadedValue = computed(() => store.getters["config/info"].isData);
 		const visibleReset = ref(false);
 		const startedScanner = ref(false);
+		const visibleTest = ref(false);
+		const showButtonTest = computed(
+			(): boolean => store.getters["config/carModel"] !== TCarModel.CAR_MODEL_MAZDA_CX9_REST
+		);
 		const modelDeviceInfo = computed(() =>
 		{
 			const info = store.getters["config/info"];
@@ -127,6 +141,8 @@ export default {
 			modelDeviceInfo,
 			visibleReset,
 			startedScanner,
+			visibleTest,
+			showButtonTest,
 			onResetClick,
 			onScanClick
 		};

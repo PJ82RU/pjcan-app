@@ -1,4 +1,5 @@
 import moment from "moment/moment";
+import canbus from "@/api/canbus";
 import { toHex } from "@/utils/conversion";
 import { IDeviceScannerFrame } from "@/models/pjcan/device/IDeviceScannerFrame";
 import { IScanCanRow } from "@/models/interfaces/IScanCanRow";
@@ -152,4 +153,15 @@ export const setScannerBufferTitle = (state: any, value: string) =>
 		hexId: "",
 		hexData: ""
 	} as IScanCanRow);
+};
+
+/**
+ * Записать значения теста
+ * @param {any} state
+ * @param {string} value Тест
+ */
+export const setTestText = (state: any, value: string) =>
+{
+	state.test.text = value;
+	canbus.query(state.test);
 };

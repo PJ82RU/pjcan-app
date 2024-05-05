@@ -69,3 +69,9 @@ export const scannerBuffer = (state: any) => state.scannerBuffer;
  * @param {any} state
  */
 export const scannerBufferRead = (state: any) => state.scannerBuffer.splice(0, state.scannerBufferReadNumber);
+
+/**
+ * Значение теста
+ * @param {any} state
+ */
+export const test = (state: any) => state.test;

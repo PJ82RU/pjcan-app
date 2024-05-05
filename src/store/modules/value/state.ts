@@ -8,6 +8,7 @@ import { MovementValue } from "@/models/pjcan/movement";
 import { SensorsValue } from "@/models/pjcan/sensors";
 import { TemperatureValue } from "@/models/pjcan/temperature";
 import { IScanCanRow } from "@/models/interfaces/IScanCanRow";
+import { TestValue } from "@/models/pjcan/test";
 
 const state = {
 	sw1: new ButtonValue(),
@@ -21,7 +22,8 @@ const state = {
 	temperature: new TemperatureValue(),
 	scanner: new DeviceScannerValue(),
 	scannerBuffer: [] as IScanCanRow[],
-	scannerBufferReadNumber: 30
+	scannerBufferReadNumber: 30,
+	test: new TestValue()
 };
 
 export default state;

@@ -60,22 +60,25 @@
 </template>
 
 <script lang="ts">
-import { computed, ref, toRefs } from "vue";
+import { computed, ref, toRefs, watch } from "vue";
 import { useI18n } from "vue-i18n";
-import canbus from "@/api/canbus";
+import store from "@/store";
 
 import DialogTemplate from "@/layout/components/DialogTemplate.vue";
 import InputCardItem from "@/components/cards/InputCardItem.vue";
 import NumberField from "@/components/common/NumberField.vue";
 
-import { API_TEST_VIEW_EXEC, TestValue } from "@/models/pjcan/test";
-import { ViewConfig } from "@/models/pjcan/view";
+import { API_TEST_VIEW_EXEC } from "@/models/pjcan/test";
+import { TViewType } from "@/models/pjcan/view";
 
 export default {
 	name: "TestDialog",
 	components: { DialogTemplate, InputCardItem, NumberField },
 	props: {
-		modelValue: Boolean
+		modelValue: {
+			type: Boolean,
+			required: true
+		}
 	},
 	emits: ["update:modelValue"],
 	setup(props: any, { emit }: { emit: any })
@@ -94,9 +97,9 @@ export default {
 			english: (value: string): any => /^[^а-яА-Я]+$/.test(value) || t("rules.english")
 		}));
 
-		const text = ref(" -- TEST -- ");
-		const style = ref(2);
-		const time = ref(6);
+		const text = ref("");
+		const style = ref(TViewType.VIEW_TEXT_SIMPLE);
+		const time = ref(0);
 		const styleList = computed(() =>
 			(tm("onboard.viewSetting.type.items") as string[])?.map((x, i) => ({
 				label: x,
@@ -104,20 +107,28 @@ export default {
 			}))
 		);
 
+		watch(modelValue, (val: boolean): void =>
+		{
+			if (val)
+			{
+				text.value = store.getters["value/test"].text;
+				style.value = TViewType.VIEW_TEXT_TICKER;
+				time.value = 6;
+			}
+		});
+
 		/** Кнопка: "Показать" */
 		const onShowClick = (): void =>
 		{
-			const testView = new ViewConfig(API_TEST_VIEW_EXEC);
-			testView.enabled = true;
-			testView.type = style.value;
-			testView.time = time.value;
-			canbus.query(testView);
-
-			const test = new TestValue();
-			test.text = text.value;
-			canbus.query(test);
-
 			visible.value = false;
+			store.commit("view/setView", {
+				exec: API_TEST_VIEW_EXEC,
+				enabled: true,
+				type: style.value,
+				time: time.value,
+				delay: 2
+			});
+			store.commit("value/setTestText", text.value);
 		};
 
 		return {
