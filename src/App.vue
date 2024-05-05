@@ -97,7 +97,7 @@ export default {
 		canbus.addListener(API_MAZDA_CONFIG_EVENT, (data: DataView) =>
 		{
 			store.commit("config/setMazda", data);
-			if (store.getters["config/mazda"].carModel === TCarModel.CAR_MODEL_UNKNOWN)
+			if (store.getters["config/carModel"] === TCarModel.CAR_MODEL_UNKNOWN)
 			{
 				toast.warning(t("help.onboard.noModelSelected"), { autoClose: false });
 			}

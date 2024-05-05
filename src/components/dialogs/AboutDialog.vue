@@ -115,7 +115,7 @@ export default {
 		const onCarModelApplyClick = (id: number): void =>
 		{
 			visibleCarModel.value = false;
-			if (store.getters["config/mazda"].carModel !== id)
+			if (store.getters["config/carModel"] !== id)
 			{
 				store.commit("config/setMazdaCarModel", id);
 			}
