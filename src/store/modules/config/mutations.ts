@@ -547,6 +547,15 @@ export const setDatetime = (state: any, data: DataView) =>
 	state.datetime.set(data);
 };
 /**
+ * Синхронизация даты и времени
+ * @param {any} state
+ */
+export const synchDatetime = (state: any) =>
+{
+	state.datetime.updateUnixtime();
+	canbus.query(state.datetime);
+};
+/**
  * Datetime: ShowDate
  * @param {any} state
  * @param {boolean} value Значение
@@ -556,7 +565,7 @@ export const setDatetimeShowDate = (state: any, value: boolean) =>
 	if (state.datetime.isData)
 	{
 		state.datetime.showDate = value;
-		canbus.query(state.datetime);
+		synchDatetime(state);
 	}
 };
 /**
@@ -569,7 +578,7 @@ export const setDatetimeShowTime = (state: any, value: boolean) =>
 	if (state.datetime.isData)
 	{
 		state.datetime.showTime = value;
-		canbus.query(state.datetime);
+		synchDatetime(state);
 	}
 };
 /**
@@ -582,7 +591,7 @@ export const setDatetimeShowDayWeek = (state: any, value: boolean) =>
 	if (state.datetime.isData)
 	{
 		state.datetime.showDayWeek = value;
-		canbus.query(state.datetime);
+		synchDatetime(state);
 	}
 };
 /**
@@ -595,7 +604,7 @@ export const setDatetimeShowDateAndDayWeek = (state: any, value: boolean) =>
 	if (state.datetime.isData)
 	{
 		state.datetime.showDateAndDayWeek = value;
-		canbus.query(state.datetime);
+		synchDatetime(state);
 	}
 };
 /**
@@ -608,7 +617,7 @@ export const setDatetimeShowTimeAndDayWeek = (state: any, value: boolean) =>
 	if (state.datetime.isData)
 	{
 		state.datetime.showTimeAndDayWeek = value;
-		canbus.query(state.datetime);
+		synchDatetime(state);
 	}
 };
 /**
@@ -621,6 +630,6 @@ export const setDatetimeShowFullDatetime = (state: any, value: boolean) =>
 	if (state.datetime.isData)
 	{
 		state.datetime.showFullDatetime = value;
-		canbus.query(state.datetime);
+		synchDatetime(state);
 	}
 };

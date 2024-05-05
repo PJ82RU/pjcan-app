@@ -113,7 +113,7 @@ export default {
 		{
 			store.commit("config/setDatetime", data);
 			// синхронизация времени
-			if (store.getters["config/datetime"].unixtime === 0n) canbus.query(store.getters["config/datetime"]);
+			if (store.getters["config/datetime"].unixtime === 0) store.commit("config/synchDatetime");
 		});
 
 		// записываем входящие значения в store

@@ -9,5 +9,5 @@ export interface IDatetimeConfig extends IBaseModel {
 	showTimeAndDayWeek: boolean; // Показать время и день недели
 	showFullDatetime: boolean; // Показать полную дату и время
 	timezone: number; // Временная зона
-	unixtime: BigInt; // UnixTime
+	unixtime: number; // UnixTime
 }

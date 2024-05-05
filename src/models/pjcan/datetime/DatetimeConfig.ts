@@ -19,9 +19,9 @@ export class DatetimeConfig extends BaseModel implements IDatetimeConfig
 		showTimeAndDayWeek: BluetoothStruct.bit(),
 		showFullDatetime: BluetoothStruct.bit(),
 		timezone: BluetoothStruct.int8(),
-		unixtime: BluetoothStruct.uint64()
+		unixtime: BluetoothStruct.uint32()
 	};
-	static size: number = 10;
+	static size: number = 6;
 
 	showDate = false;
 	showTime = false;
@@ -30,7 +30,7 @@ export class DatetimeConfig extends BaseModel implements IDatetimeConfig
 	showTimeAndDayWeek = false;
 	showFullDatetime = false;
 	timezone = 0;
-	unixtime = BigInt(0);
+	unixtime = 0;
 
 	constructor(data?: DataView)
 	{
@@ -53,20 +53,16 @@ export class DatetimeConfig extends BaseModel implements IDatetimeConfig
 	 */
 	get(request?: boolean): DataView
 	{
-		if (!request)
-		{
-			this.updateUnixtime();
-			return this._get(this, this.exec, DatetimeConfig.size, new BluetoothStruct(DatetimeConfig.struct));
-		}
-		return this._get(this, this.exec);
+		return request
+			? this._get(this, this.exec)
+			: this._get(this, this.exec, DatetimeConfig.size, new BluetoothStruct(DatetimeConfig.struct));
 	}
 
 	/** Обновить текущее время */
 	updateUnixtime(): void
 	{
 		const now = new Date();
-		const unixtime = Math.round(now.getTime() / 1000);
-		this.unixtime = BigInt(unixtime);
+		this.unixtime = Math.round(now.getTime() / 1000);
 		this.timezone = now.getTimezoneOffset() / 60;
 	};
 }
