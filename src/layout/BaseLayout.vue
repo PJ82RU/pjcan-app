@@ -103,17 +103,17 @@ export default {
 			result.push(
 				{ id: 0, title: t("menu.onboard"), disabled: name === "Onboard" },
 				{ id: 40, title: t("menu.onboardButtons") },
+				{} as IMenuItem,
 				{ id: 60, title: t("menu.settings.options"), disabled: name === "Options" },
-				{} as IMenuItem,
 				{ id: 10, title: t("menu.settings.buttonsSW1"), disabled: name === "Buttons" && query?.type === "sw1" },
-				{} as IMenuItem,
-				{ id: 20, title: t("menu.language." + (locale.value !== "ru" ? "russian" : "english")) }
+				{ id: 20, title: t("menu.language." + (locale.value !== "ru" ? "russian" : "english")) },
+				{} as IMenuItem
 			);
 			if (typeof newVersionFirmware.value === "string")
 			{
 				result.push({ id: 70, title: t("menu.update", { version: newVersionFirmware.value }) });
 			}
-			result.push({} as IMenuItem, { id: 30, title: t("menu.about") });
+			result.push({ id: 30, title: t("menu.about") });
 			return result;
 		});
 

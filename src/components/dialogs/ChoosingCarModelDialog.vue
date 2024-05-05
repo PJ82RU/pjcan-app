@@ -46,7 +46,10 @@ export default {
 	name: "ChoosingCarModelDialog",
 	components: { DialogTemplate },
 	props: {
-		modelValue: Boolean,
+		modelValue: {
+			type: Boolean,
+			required: true
+		},
 		carModel: Number
 	},
 	emits: ["update:modelValue", "click:apply"],

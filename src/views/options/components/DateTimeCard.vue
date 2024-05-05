@@ -74,7 +74,6 @@
 		:title="menuSelected.title"
 		:view="menuSelected.view"
 		:disabled="menuSelected.disabled"
-		delay-disabled
 		@click:apply="onViewApply"
 	/>
 </template>

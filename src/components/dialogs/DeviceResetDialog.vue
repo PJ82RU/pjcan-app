@@ -31,17 +31,19 @@
 </template>
 
 <script lang="ts">
-import { computed, ref, toRefs } from "vue";
+import { computed, ref, toRefs, watch } from "vue";
+import canbus from "@/api/canbus";
 
 import DialogTemplate from "@/layout/components/DialogTemplate.vue";
-
-import canbus from "@/api/canbus";
 
 export default {
 	name: "DeviceResetDialog",
 	components: { DialogTemplate },
 	props: {
-		modelValue: Boolean
+		modelValue: {
+			type: Boolean,
+			required: true
+		}
 	},
 	emits: ["update:modelValue"],
 	setup(props: any, context: any)
@@ -55,16 +57,20 @@ export default {
 		const resetConfig = ref(false);
 		const resetView = ref(false);
 
+		watch(modelValue, (val: boolean): void =>
+		{
+			if (val)
+			{
+				resetConfig.value = false;
+				resetView.value = false;
+			}
+		});
+
 		/** Применить */
 		const onApply = (): void =>
 		{
 			canbus.rebootDevice(!resetConfig.value && !resetView.value, resetConfig.value, resetView.value);
 			visible.value = false;
-			setTimeout(() =>
-			{
-				resetConfig.value = false;
-				resetView.value = false;
-			}, 500);
 		};
 
 		return {
