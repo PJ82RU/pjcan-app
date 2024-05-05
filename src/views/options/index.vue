@@ -14,13 +14,14 @@ import Flicking from "@egjs/vue3-flicking";
 
 import LcdCard from "./components/LcdCard.vue";
 import TeyesCard from "./components/TeyesCard.vue";
+import DatetimeCard from "./components/DateTimeCard.vue";
 import OnboardCard from "./components/OnboardCard.vue";
 
 import { TCarModel } from "@/models/pjcan/mazda";
 
 export default {
 	name: "setting",
-	components: { Flicking, LcdCard, TeyesCard, OnboardCard },
+	components: { Flicking, LcdCard, TeyesCard, DatetimeCard, OnboardCard },
 	setup()
 	{
 		const { name: display } = useDisplay();
@@ -29,8 +30,8 @@ export default {
 
 		const cards = computed(() =>
 			store.getters["config/carModel"] !== TCarModel.CAR_MODEL_MAZDA_CX9_REST
-				? ["lcd", "teyes", "onboard"]
-				: ["teyes", "onboard"]
+				? ["lcd", "teyes", "datetime", "onboard"]
+				: ["teyes", "datetime", "onboard"]
 		);
 
 		return {

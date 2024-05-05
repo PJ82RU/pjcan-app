@@ -466,11 +466,13 @@ export default {
 			},
 			min: {
 				title: "Minimum resistance",
-				description: "Specify the minimum value of the button, but do not allow the values to overlap with other buttons"
+				description:
+					"Specify the minimum value of the button, but do not allow the values to overlap with other buttons"
 			},
 			max: {
 				title: "Maximum resistance",
-				description: "Specify the maximum value of the button, but do not allow the values to overlap with other buttons"
+				description:
+					"Specify the maximum value of the button, but do not allow the values to overlap with other buttons"
 			}
 		},
 		pressSingle: {
@@ -573,8 +575,7 @@ export default {
 			logo: {
 				title: "Logo",
 				description:
-					"The test displayed at the time of the absence of data for output to LCD. Maximum 12 characters",
-				menu: "LCD: Logo"
+					"The test displayed at the time of the absence of data for output to LCD. Maximum 12 characters"
 			},
 			hello: {
 				title: "Hello",
@@ -631,6 +632,36 @@ export default {
 			receiveButtons: {
 				title: "Teyes Buttons",
 				description: "Support for Teyes buttons: CLOCK, HOUR, MIN (if the protocol supports this functionality)"
+			}
+		},
+		datetime: {
+			title: "Date and time",
+			description:
+				"To display the date and time on the LCD screen, it is necessary to launch a web application to synchronize data with the PJCAN adapter every time the ignition is turned on.",
+			menu: "LCD: Display options",
+			date: {
+				title: "Show date",
+				description: "Display the current date on the LCD screen"
+			},
+			time: {
+				title: "Show time",
+				description: "Display the current time on the LCD screen"
+			},
+			dayWeek: {
+				title: "Show day of week",
+				description: "Display the current day of the week on the LCD screen"
+			},
+			dateAndDayWeek: {
+				title: "Show date and day of week",
+				description: "Display the current date and day of the week on the LCD screen"
+			},
+			timeAndDayWeek: {
+				title: "Show time and day of week",
+				description: "Display the current time and day of the week on the LCD screen"
+			},
+			fullDatetime: {
+				title: "Show full date and time",
+				description: "Display the current date and time on the LCD screen in full format"
 			}
 		},
 		onboard: {
