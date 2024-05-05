@@ -37,7 +37,7 @@
 				@click="visibleTest = true"
 			/>
 			<v-btn color="secondary" icon="mdi-magnify-scan" :disabled="!isLoadedValue" @click="onScanClick" />
-			<v-btn color="secondary" icon="mdi-restart" :disabled="!isLoadedValue" @click="onResetClick" />
+			<v-btn color="secondary" icon="mdi-restart" :disabled="!isLoadedValue" @click="visibleReset = true" />
 			<v-btn color="primary" prepend-icon="mdi-close" @click="visible = false">
 				{{ $t("btn.close") }}
 			</v-btn>
@@ -107,13 +107,6 @@ export default {
 			store.dispatch("config/infoUpdateLoop", val);
 		});
 
-		/** Показать диалог сброса настроек */
-		const onResetClick = (): void =>
-		{
-			visible.value = false;
-			visibleReset.value = true;
-		};
-
 		/** Показать диалог запроса на сканирование can-шины */
 		const onScanClick = (): void =>
 		{
@@ -143,7 +136,6 @@ export default {
 			startedScanner,
 			visibleTest,
 			showButtonTest,
-			onResetClick,
 			onScanClick
 		};
 	}
