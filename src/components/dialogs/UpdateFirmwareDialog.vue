@@ -37,7 +37,7 @@
 </template>
 
 <script lang="ts">
-import { computed, onMounted, onUnmounted, ref, toRefs } from "vue";
+import { computed, onMounted, onUnmounted, ref, toRefs, watch } from "vue";
 import { toast } from "vue3-toastify";
 import { useI18n } from "vue-i18n";
 import router from "@/router";
@@ -77,34 +77,20 @@ export default {
 		const uploading = ref("");
 		const timeLeft = ref("");
 
-		/** Отменить обновление */
-		const onCancel = (): void =>
+		watch(modelValue, (val: boolean): void =>
 		{
-			visibleUpdate.value = false;
-			visibleProcess.value = false;
-
-			canbus.removeListener(API_DEVICE_UPDATE_EVENT_ERROR, onErrorUpdate);
-			canbus.update.clear();
-		};
-
-		/** Завершение прошивки */
-		const onCompletingFirmware = () =>
-		{
-			if (canbus.update.total > 0)
+			if (val)
 			{
-				if (canbus.version.is)
-				{
-					canbus
-						.checkVersion()
-						.then(() => toast.error(t("update.notify.warning")))
-						.catch(() => toast.success(t("update.notify.completed")));
-
-					setTimeout(() => router.go(0), 5000);
-					onCancel();
-				}
-				else canbus.bluetooth.disconnect();
+				visibleProcess.value = false;
+				version.value = "";
+				message.value = "";
+				progress.value = 0;
+				uploading.value = "";
+				timeLeft.value = "";
 			}
-		};
+		});
+
+		let remainingTime: RemainingTime | undefined;
 
 		/** Событие запуска прошивки */
 		const onUpdateStart = (): void =>
@@ -114,18 +100,14 @@ export default {
 			progress.value = 0;
 			visibleUpdate.value = false;
 			visibleProcess.value = true;
-
-			canbus.addListener(API_DEVICE_UPDATE_EVENT_ERROR, onErrorUpdate);
 			canbus.updateStart();
 		};
 
-		let remainingTime: RemainingTime | undefined;
-
 		/**
-		 * Событие загрузки прошивки на устройство PJCAN
-		 * @param {number} error Код ошибки
-		 */
-		const onUpdate = (error: number) =>
+         * Событие загрузки прошивки на устройство PJCAN
+         * @param {number} error Код ошибки
+         */
+		const onUpdateStatus = (error: number) =>
 		{
 			if (error === 0)
 			{
@@ -134,7 +116,6 @@ export default {
 					message.value = t("update.process.upload");
 					progress.value = canbus.update.uploading * 100;
 					uploading.value = progress.value.toFixed(2) + "%";
-					canbus.updateUpload();
 
 					// подсчет оставшегося времени
 					if (!remainingTime)
@@ -159,10 +140,34 @@ export default {
 					canbus.version.clear();
 				}
 			}
-			else
+			else onErrorUpdate(t("update.notify.error"));
+		};
+
+		/** Завершение прошивки */
+		const onCompletingFirmware = () =>
+		{
+			if (canbus.update.total > 0)
 			{
-				onErrorUpdate(t("update.notify.error"));
+				if (canbus.version.is)
+				{
+					canbus
+						.checkVersion()
+						.then(() => toast.error(t("update.notify.warning")))
+						.catch(() => toast.success(t("update.notify.completed")));
+
+					setTimeout(() => router.go(0), 5000);
+					onCancel();
+				}
+				else canbus.bluetooth.disconnect();
 			}
+		};
+
+		/** Отменить обновление */
+		const onCancel = (): void =>
+		{
+			visibleUpdate.value = false;
+			visibleProcess.value = false;
+			canbus.update.clear();
 		};
 
 		/** Ошибка обновления */
@@ -175,13 +180,14 @@ export default {
 		onMounted(() =>
 		{
 			canbus.addListener(API_VERSION_EVENT, onCompletingFirmware);
-			canbus.update.addListener(API_DEVICE_UPDATE_EVENT, onUpdate);
+			canbus.update.addListener(API_DEVICE_UPDATE_EVENT, onUpdateStatus);
+			canbus.addListener(API_DEVICE_UPDATE_EVENT_ERROR, onErrorUpdate);
 		});
 
 		onUnmounted(() =>
 		{
 			canbus.removeListener(API_VERSION_EVENT, onCompletingFirmware);
-			canbus.update.removeListener(API_DEVICE_UPDATE_EVENT, onUpdate);
+			canbus.update.removeListener(API_DEVICE_UPDATE_EVENT, onUpdateStatus);
 			canbus.removeListener(API_DEVICE_UPDATE_EVENT_ERROR, onErrorUpdate);
 		});
 

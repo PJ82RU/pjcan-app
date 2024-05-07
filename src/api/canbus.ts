@@ -421,6 +421,8 @@ export class Canbus extends EventEmitter
 				break;
 			case API_DEVICE_UPDATE_EXEC: // Обновление прошивки
 				this.update.set(data);
+				if (this.update.offset < this.update.total) this.updateUpload();
+				else if (this.update.end) this.rebootDevice(true);
 				this.emit(API_DEVICE_UPDATE_EVENT, this.update);
 				break;
 			case API_DEVICE_SCANNER_VALUE_EXEC: // Значения сканирования
@@ -621,7 +623,14 @@ export class Canbus extends EventEmitter
 		if (this.bluetooth.connected && this.update.error === 0 && this.update.offset <= this.update.total)
 		{
 			this.queueDisabled = true;
-			await this.bluetooth.send(this.update.get());
+			try
+			{
+				await this.bluetooth.send(this.update.get());
+			}
+			catch (e)
+			{
+				console.log(e);
+			}
 		}
 		else if (this.update.error !== 0)
 		{
