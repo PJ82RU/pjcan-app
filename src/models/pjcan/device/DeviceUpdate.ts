@@ -1,6 +1,7 @@
 import EventEmitter from "eventemitter3";
 import { IDeviceUpdate } from "./IDeviceUpdate";
 import { BluetoothStruct } from "@/components/bluetooth";
+import { EDeviceUpdateError } from "./EDeviceUpdateError";
 
 export const API_DEVICE_UPDATE_EXEC = 0x05;
 export const API_DEVICE_UPDATE_EVENT = "DeviceUpdate";
@@ -23,7 +24,7 @@ export class DeviceUpdate extends EventEmitter implements IDeviceUpdate
 	firmwareUrl = "";
 	firmwareData = new Uint8Array(0);
 	offset = 0;
-	error = 0;
+	error = EDeviceUpdateError.UPD_OK;
 	get uploading(): number
 	{
 		return this.offset > 0 ? this.offset / this.total : 0;

@@ -50,13 +50,16 @@ class RemainingTime
 	{
 		const now = Date.now();
 		const value = Math.floor(((this._total - val) / (val - this._offset)) * (now - this._now));
-		this._index++;
-		if (this._index > this._countValues) this._index = 0;
-		if (this._values.length <= this._index) this._values.push(value);
-		else this._values[this._index] = value;
+		if (value !== Infinity)
+		{
+			this._index++;
+			if (this._index > this._countValues) this._index = 0;
+			if (this._values.length <= this._index) this._values.push(value);
+			else this._values[this._index] = value;
 
-		this._offset = val;
-		this._now = now;
+			this._offset = val;
+			this._now = now;
+		}
 	}
 	/** Последнее значение */
 	get value(): number

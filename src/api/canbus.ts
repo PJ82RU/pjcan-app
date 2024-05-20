@@ -169,6 +169,7 @@ import { API_CHOICE_EXEC, ChoiceValue, IChoiceValue } from "@/models/pjcan/choic
 
 import { IQuery } from "@/models/interfaces/IQuery";
 import { API_CANBUS_EVENT } from "@/models/pjcan/base/BaseModel";
+import { EDeviceUpdateError } from "@/models/pjcan/device/EDeviceUpdateError";
 
 const dev = process.env.NODE_ENV === "development";
 
@@ -422,7 +423,6 @@ export class Canbus extends EventEmitter
 			case API_DEVICE_UPDATE_EXEC: // Обновление прошивки
 				this.update.set(data);
 				if (this.update.offset < this.update.total) this.updateUpload();
-				else if (this.update.end) this.rebootDevice(true);
 				this.emit(API_DEVICE_UPDATE_EVENT, this.update);
 				break;
 			case API_DEVICE_SCANNER_VALUE_EXEC: // Значения сканирования
@@ -609,7 +609,7 @@ export class Canbus extends EventEmitter
 					this.update.firmwareData = new Uint8Array(res);
 					this.update.total = res.byteLength;
 					this.update.offset = 0;
-					this.update.error = 0;
+					this.update.error = EDeviceUpdateError.UPD_OK;
 					this.update.encrypt = this.update.iv;
 					setTimeout(() => this.updateUpload(), 1000);
 				}
