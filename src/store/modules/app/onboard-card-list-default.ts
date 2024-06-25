@@ -26,6 +26,7 @@ export default [
 		enabled: true,
 		car: [
 			TCarModel.CAR_MODEL_MAZDA_3_BK,
+			TCarModel.CAR_MODEL_MAZDA_3_BL,
 			TCarModel.CAR_MODEL_MAZDA_CX7,
 			TCarModel.CAR_MODEL_MAZDA_CX7_REST,
 			TCarModel.CAR_MODEL_MAZDA_CX9,
@@ -34,6 +35,7 @@ export default [
 	},
 	{ name: "fuel", enabled: true, car: [
 		TCarModel.CAR_MODEL_MAZDA_3_BK,
+		TCarModel.CAR_MODEL_MAZDA_3_BL,
 		TCarModel.CAR_MODEL_MAZDA_CX7,
 		TCarModel.CAR_MODEL_MAZDA_CX7_REST,
 		TCarModel.CAR_MODEL_MAZDA_CX9,
@@ -41,6 +43,7 @@ export default [
 	] },
 	{ name: "movement", enabled: true, car: [
 		TCarModel.CAR_MODEL_MAZDA_3_BK,
+		TCarModel.CAR_MODEL_MAZDA_3_BL,
 		TCarModel.CAR_MODEL_MAZDA_CX7,
 		TCarModel.CAR_MODEL_MAZDA_CX7_REST,
 		TCarModel.CAR_MODEL_MAZDA_CX9,
@@ -49,6 +52,7 @@ export default [
 	{ name: "doors", enabled: true, car: [TCarModel.CAR_MODEL_MAZDA_3_BK] },
 	{ name: "climate", enabled: true, car: [
 		TCarModel.CAR_MODEL_MAZDA_3_BK,
+		TCarModel.CAR_MODEL_MAZDA_3_BL,
 		TCarModel.CAR_MODEL_MAZDA_6_GG,
 		TCarModel.CAR_MODEL_MAZDA_CX7,
 		TCarModel.CAR_MODEL_MAZDA_CX7_REST,

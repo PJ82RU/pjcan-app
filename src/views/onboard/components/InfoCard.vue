@@ -22,16 +22,16 @@
 						:disabled="!worktimeViewLoaded"
 					/>
 				</v-col>
-                <v-col v-if="isVoltmeter" cols="12" class="pt-0 pb-0">
-                    <input-card-item
-                        :value="voltmeter"
-                        :title="$t('onboard.info.voltmeter.title')"
-                        :description="$t('onboard.info.voltmeter.description')"
-                        type="volts"
-                        :nodata="!deviceValueLoaded"
-                        :disabled="!voltmeterViewLoaded"
-                    />
-                </v-col>
+				<v-col v-if="isVoltmeter" cols="12" class="pt-0 pb-0">
+					<input-card-item
+						:value="voltmeter"
+						:title="$t('onboard.info.voltmeter.title')"
+						:description="$t('onboard.info.voltmeter.description')"
+						type="volts"
+						:nodata="!deviceValueLoaded"
+						:disabled="!voltmeterViewLoaded"
+					/>
+				</v-col>
 				<v-col v-if="carModel === TCarModel.CAR_MODEL_MAZDA_3_BK" cols="12" class="pt-0 pb-0">
 					<input-card-item
 						:value="temperature"
@@ -52,7 +52,7 @@
 						:disabled="!sensorViewLoaded"
 					/>
 				</v-col>
-				<v-col v-if="carModel === TCarModel.CAR_MODEL_MAZDA_3_BK" cols="12" class="pt-0 pb-0">
+				<v-col v-if="isReverse" cols="12" class="pt-0 pb-0">
 					<switch-card-item
 						:model-value="reverse"
 						:title="$t('onboard.info.reverse.title')"
@@ -94,7 +94,7 @@
 		:title="menuSelected.title"
 		:view="menuSelected.view"
 		:disabled="menuSelected.disabled"
-        @click:apply="onViewApply"
+		@click:apply="onViewApply"
 	/>
 </template>
 
@@ -137,7 +137,19 @@ export default {
 		const isVoltmeter = computed((): boolean =>
 		{
 			const hardware: IDeviceHardware = store.getters["value/device"].hardware;
-			return hardware.major === 4 && hardware.minor >= 1 || hardware.major > 4;
+			return (hardware.major === 4 && hardware.minor >= 1) || hardware.major > 4;
+		});
+		const isReverse = computed((): boolean =>
+		{
+			const carModel = store.getters["config/carModel"];
+			return (
+				carModel === TCarModel.CAR_MODEL_MAZDA_3_BK ||
+				carModel === TCarModel.CAR_MODEL_MAZDA_3_BL ||
+				carModel === TCarModel.CAR_MODEL_MAZDA_CX7 ||
+				carModel === TCarModel.CAR_MODEL_MAZDA_CX7_REST ||
+				carModel === TCarModel.CAR_MODEL_MAZDA_CX9 ||
+				carModel === TCarModel.CAR_MODEL_MAZDA_CX9_REST
+			);
 		});
 
 		const acc = computed((): boolean => store.getters["value/sensors"].acc);
@@ -153,46 +165,63 @@ export default {
 		const carModel = computed((): TCarModel => store.getters["config/carModel"]);
 
 		const menu = computed((): IMenuItem[] =>
-			carModel.value === TCarModel.CAR_MODEL_MAZDA_3_BK
-				? [
-					{
-						title: t("onboard.info.worktime.menu"),
-						view: store.getters["view/worktime"],
-						disabled: !worktimeViewLoaded.value
-					},
-					{
-						title: t("onboard.info.voltmeter.menu"),
-						view: store.getters["view/voltmeter"],
-						disabled: !voltmeterViewLoaded.value
-					},
-					{
-						title: t("onboard.info.temperature.menu"),
-						view: store.getters["view/temperature"],
-						disabled: !temperatureViewLoaded.value
-					},
-					{
-						title: t("onboard.info.handbrake.menu"),
-						view: store.getters["view/sensors"].handbrake,
-						disabled: !sensorViewLoaded.value
-					},
-					{
-						title: t("onboard.info.reverse.menu"),
-						view: store.getters["view/sensors"].reverse,
-						disabled: !sensorViewLoaded.value
-					},
-					{
-						title: t("onboard.info.safetyBelt.menu"),
-						view: store.getters["view/sensors"].seatbelt,
-						disabled: !sensorViewLoaded.value
-					},
-					{
-						title: t("onboard.info.signal.menu"),
-						view: store.getters["view/sensors"].turnSignal,
-						disabled: !sensorViewLoaded.value
-					}
-				]
-				: []
-		);
+		{
+			const result = [
+				{
+					title: t("onboard.info.worktime.menu"),
+					view: store.getters["view/worktime"],
+					disabled: !worktimeViewLoaded.value
+				}
+			];
+
+			if (isVoltmeter.value)
+			{
+				result.push({
+					title: t("onboard.info.voltmeter.menu"),
+					view: store.getters["view/voltmeter"],
+					disabled: !voltmeterViewLoaded.value
+				});
+			}
+
+			if (carModel.value === TCarModel.CAR_MODEL_MAZDA_3_BK)
+			{
+				result.push({
+					title: t("onboard.info.temperature.menu"),
+					view: store.getters["view/temperature"],
+					disabled: !temperatureViewLoaded.value
+				});
+				result.push({
+					title: t("onboard.info.handbrake.menu"),
+					view: store.getters["view/sensors"].handbrake,
+					disabled: !sensorViewLoaded.value
+				});
+			}
+
+			if (isReverse.value)
+			{
+				result.push({
+					title: t("onboard.info.reverse.menu"),
+					view: store.getters["view/sensors"].reverse,
+					disabled: !sensorViewLoaded.value
+				});
+			}
+
+			if (carModel.value === TCarModel.CAR_MODEL_MAZDA_3_BK)
+			{
+				result.push({
+					title: t("onboard.info.safetyBelt.menu"),
+					view: store.getters["view/sensors"].seatbelt,
+					disabled: !sensorViewLoaded.value
+				});
+				result.push({
+					title: t("onboard.info.signal.menu"),
+					view: store.getters["view/sensors"].turnSignal,
+					disabled: !sensorViewLoaded.value
+				});
+			}
+
+			return result;
+		});
 		const menuVisible = ref(false);
 		const menuSelected = ref({} as IMenuItem);
 
@@ -207,9 +236,9 @@ export default {
 		};
 
 		/**
-         * Применить параметры отображения на информационном экране
-         * @param {any} value Новые параметры отображения
-         */
+		 * Применить параметры отображения на информационном экране
+		 * @param {any} value Новые параметры отображения
+		 */
 		const onViewApply = (value: any): void =>
 		{
 			store.commit("view/setView", value);
@@ -224,6 +253,7 @@ export default {
 			sensorViewLoaded,
 			temperatureViewLoaded,
 			isVoltmeter,
+			isReverse,
 			acc,
 			worktime,
 			voltmeter,

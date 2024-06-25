@@ -751,7 +751,7 @@ export default {
 		carModels: {
 			0: "Mazda",
 			1: "Mazda 3 BK",
-			2: "Mazda 3 BL (not supported)",
+			2: "Mazda 3 BL (tested)",
 			3: "Mazda 6 GG",
 			4: "Mazda 6 GH (not supported)",
 			5: "Mazda CX-7",
