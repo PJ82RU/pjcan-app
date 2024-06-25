@@ -27,9 +27,9 @@ const toMac = (value: BigInt): string =>
 {
 	let result: string = "";
 
-	const mac: string = toHex(value);
+	let mac: string = toHex(value);
+	if (mac.length < 12) mac = "0".repeat(12 - mac.length) + mac;
 	for (let i: number = mac.length - 2; i >= 0; i -= 2) result += mac[i] + mac[i + 1] + (i > 0 ? ":" : "");
-
 	return result;
 };
 

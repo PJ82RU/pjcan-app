@@ -95,7 +95,7 @@ export default {
 			return {
 				hardware: info.hardware,
 				temperatureChip: (info.temperatureChip / 100).toFixed(2) + "°C",
-				sdkVersion: info.sdkVersion,
+				sdkVersion: info.sdkVersion.replaceAll("-", ""),
 				efuseMac: toMac(info.efuseMac),
 				sha: arrayToHex(info.sha)
 			};
