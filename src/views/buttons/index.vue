@@ -13,7 +13,7 @@
 				:config="item.config"
 				:mode="isMode"
 				@update="onButtonConfigUpdate"
-                @click="onButtonEdit(item)"
+				@click="onButtonEdit(item)"
 			/>
 		</div>
 	</flicking>
@@ -21,17 +21,17 @@
 	<button-definition-dialog
 		v-model="definitionDialog"
 		:types="list"
-        :value-id="value?.id"
-        :value-resistance="value?.resistance"
+		:value-id="value?.id"
+		:value-resistance="value?.resistance"
 		@click:apply="onButtonDefinitionApply"
 	/>
 	<button-edit-dialog
 		v-model="addDialog"
 		:name="selectedItem?.title"
 		:press="selectedItem?.config?.exec[1]"
-        :value-resistance="value?.resistance"
-        :resistance-min="selectedItem?.config?.resistanceMin"
-        :resistance-max="selectedItem?.config?.resistanceMax"
+		:value-resistance="value?.resistance"
+		:resistance-min="selectedItem?.config?.resistanceMin"
+		:resistance-max="selectedItem?.config?.resistanceMax"
 		@click:apply="onButtonAddApply"
 	/>
 </template>
@@ -50,7 +50,13 @@ import SettingsCard from "./components/SettingsCard.vue";
 import ButtonDefinitionDialog from "./components/ButtonDefinitionDialog.vue";
 import ButtonEditDialog from "./components/ButtonEditDialog.vue";
 
-import { API_BUTTON_SW1_VALUE_EVENT, IButtonConfigItem, IButtonValue, TButtonExec } from "@/models/pjcan/buttons";
+import {
+	API_BUTTON_SW1_VALUE_EVENT,
+	API_BUTTONS_SW1_CONFIG_EVENT,
+	IButtonConfigItem,
+	IButtonValue,
+	TButtonExec
+} from "@/models/pjcan/buttons";
 import { IButtonCard } from "@/models/interfaces/IButtonCard";
 import { IButtonKey } from "@/models/interfaces/IButtonKey";
 
@@ -86,7 +92,9 @@ export default {
 
 		const keys = computed((): IButtonKey | undefined => __getKey(__type.value));
 		const configLoaded = computed((): boolean => keys.value && store.getters[keys.value.config].isData);
-		const value = computed((): IButtonValue | undefined => keys.value ? store.getters[keys.value.value] : undefined);
+		const value = computed((): IButtonValue | undefined =>
+			keys.value ? store.getters[keys.value.value] : undefined
+		);
 		const isMode = computed(() =>
 		{
 			return (
@@ -121,7 +129,7 @@ export default {
 			}
 			return key;
 		};
-		loadButtons(__type.value);
+		// loadButtons(__type.value);
 
 		/** Сохранить список кнопок */
 		const saveButtons = (): void =>
@@ -151,12 +159,12 @@ export default {
 		};
 
 		/**
-         * Применить создание кнопки
-         * @param {string} name Наименование/тип кнопки
-         * @param {TButtonExec} press Функция кнопки
-         * @param {number} min Минимальное значение сопротивления
-         * @param {number} max Максимальное значение сопротивления
-         */
+		 * Применить создание кнопки
+		 * @param {string} name Наименование/тип кнопки
+		 * @param {TButtonExec} press Функция кнопки
+		 * @param {number} min Минимальное значение сопротивления
+		 * @param {number} max Максимальное значение сопротивления
+		 */
 		const onButtonAddApply = (name: string, press: TButtonExec, min: number, max: number): void =>
 		{
 			if (selectedItem.value)
@@ -179,13 +187,19 @@ export default {
 		};
 
 		/**
-         * Редактирование кнопки
-         * @param {IButtonCard} item Значения кнопки
-         */
+		 * Редактирование кнопки
+		 * @param {IButtonCard} item Значения кнопки
+		 */
 		const onButtonEdit = (item: IButtonCard): void =>
 		{
 			selectedItem.value = item;
 			addDialog.value = true;
+		};
+
+		/** Событие входящей конфигурации */
+		const onButtonsConfigReceive = (): void =>
+		{
+			if (keys.value) loadButtons(__type.value);
 		};
 
 		/** Событие нажатия кнопки */
@@ -210,6 +224,7 @@ export default {
 			const key = loadButtons(type);
 			if (key)
 			{
+				canbus.addListener(API_BUTTONS_SW1_CONFIG_EVENT, onButtonsConfigReceive);
 				canbus.addListener(API_BUTTON_SW1_VALUE_EVENT, onButtonsValueReceive);
 				store.commit(key.setProgramming, true);
 
@@ -218,6 +233,7 @@ export default {
 		};
 		const onEnd = (): void =>
 		{
+			canbus.removeListener(API_BUTTONS_SW1_CONFIG_EVENT, onButtonsConfigReceive);
 			canbus.removeListener(API_BUTTON_SW1_VALUE_EVENT, onButtonsValueReceive);
 			store.commit("config/setSW1Programming", false);
 		};

@@ -45,6 +45,7 @@ export const setMazdaCarModel = (state: any, value: TCarModel) =>
 	{
 		state.mazda.carModel = value;
 		canbus.query(state.mazda);
+		canbus.query(state.sw1, true);
 	}
 };
 /**
