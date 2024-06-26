@@ -169,7 +169,12 @@ export default {
 				description: "On-board mains voltage in volts",
 				menu: "LCD: Voltage"
 			},
-			temperature: {
+			temperatureIn: {
+				title: "Air temperature",
+				description: "Temperature readings in the car interior",
+				menu: "LCD: Air temperature"
+			},
+			temperatureOut: {
 				title: "Air temperature",
 				description: "Reading the outside temperature of the car",
 				menu: "LCD: Air temperature"

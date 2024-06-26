@@ -32,13 +32,23 @@
 						:disabled="!voltmeterViewLoaded"
 					/>
 				</v-col>
+                <v-col v-if="carModel === TCarModel.CAR_MODEL_MAZDA_3_BL" cols="12" class="pt-0 pb-0">
+                    <input-card-item
+                        :value="temperatureIn"
+                        :title="$t('onboard.info.temperatureIn.title')"
+                        :description="$t('onboard.info.temperatureIn.description')"
+                        type="temperature"
+                        :nodata="!temperatureValueLoaded || temperatureIn === 0"
+                        :disabled="!temperatureViewLoaded"
+                    />
+                </v-col>
 				<v-col v-if="carModel === TCarModel.CAR_MODEL_MAZDA_3_BK" cols="12" class="pt-0 pb-0">
 					<input-card-item
-						:value="temperature"
-						:title="$t('onboard.info.temperature.title')"
-						:description="$t('onboard.info.temperature.description')"
+						:value="temperatureOut"
+						:title="$t('onboard.info.temperatureOut.title')"
+						:description="$t('onboard.info.temperatureOut.description')"
 						type="temperature"
-						:nodata="!temperatureValueLoaded"
+						:nodata="!temperatureValueLoaded || temperatureOut === 0"
 						:disabled="!temperatureViewLoaded"
 					/>
 				</v-col>
@@ -155,7 +165,8 @@ export default {
 		const acc = computed((): boolean => store.getters["value/sensors"].acc);
 		const worktime = computed((): number => store.getters["value/device"].worktime);
 		const voltmeter = computed((): number => store.getters["value/device"].voltmeter / 100);
-		const temperature = computed((): number => store.getters["value/temperature"].out / 10);
+		const temperatureIn = computed((): number => store.getters["value/temperature"].in / 10);
+		const temperatureOut = computed((): number => store.getters["value/temperature"].out / 10);
 		const handbrake = computed((): boolean => store.getters["value/sensors"].handbrake);
 		const reverse = computed((): boolean => store.getters["value/sensors"].reverse);
 		const seatbeltDriver = computed((): boolean => store.getters["value/sensors"].seatbeltDriver);
@@ -257,7 +268,8 @@ export default {
 			acc,
 			worktime,
 			voltmeter,
-			temperature,
+			temperatureIn,
+			temperatureOut,
 			handbrake,
 			reverse,
 			seatbeltDriver,

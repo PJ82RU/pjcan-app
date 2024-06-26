@@ -185,7 +185,12 @@ export default {
 				description: "Напряжение бортовой сети в вольтах",
 				menu: "LCD: Напряжение"
 			},
-			temperature: {
+			temperatureIn: {
+				title: "Температура воздуха",
+				description: "Показания температуры в салоне автомобиля",
+				menu: "LCD: Температура воздуха"
+			},
+			temperatureOut: {
 				title: "Температура воздуха",
 				description: "Показания внешней температуры автомобиля",
 				menu: "LCD: Температура воздуха"
