@@ -1,5 +1,10 @@
 <template>
-	<card class="teyes-card" :title="$t('options.teyes.title')" :menu="menu" @click:menu="onMenuClick">
+	<card
+		class="teyes-card"
+		:title="$t('options.teyes.title')"
+		:menu="carModel !== TCarModel.CAR_MODEL_MAZDA_CX9_REST ? menu : undefined"
+		@click:menu="onMenuClick"
+	>
 		<template #body>
 			<v-row>
 				<v-col cols="12" class="pt-0 pb-0">

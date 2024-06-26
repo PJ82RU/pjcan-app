@@ -1,5 +1,10 @@
 <template>
-	<card class="datetime-card" :title="$t('options.datetime.title')" :menu="menu" @click:menu="onMenuClick">
+	<card
+		class="datetime-card"
+		:title="$t('options.datetime.title')"
+		:menu="carModel !== TCarModel.CAR_MODEL_MAZDA_CX9_REST ? menu : undefined"
+		@click:menu="onMenuClick"
+	>
 		<template #body>
 			<v-row>
 				<v-col cols="12" class="pt-0 pb-0">
@@ -88,9 +93,16 @@ import SwitchCardItem from "@/components/cards/SwitchCardItem.vue";
 import ViewSettingDialog from "@/components/ViewSettingDialog.vue";
 
 import { IMenuItem } from "@/components/MenuDots.vue";
+import { TCarModel } from "@/models/pjcan/mazda";
 
 export default {
 	name: "DatetimeCard",
+	computed: {
+		TCarModel()
+		{
+			return TCarModel;
+		}
+	},
 	components: { Card, SwitchCardItem, ViewSettingDialog },
 	setup()
 	{
@@ -123,6 +135,7 @@ export default {
 			get: (): boolean => store.getters["config/datetime"].showFullDatetime,
 			set: (val: boolean) => store.commit("config/setDatetimeShowFullDatetime", val)
 		});
+		const carModel = computed((): TCarModel => store.getters["config/carModel"]);
 
 		const menu = computed((): IMenuItem[] => [
 			{ title: t("options.datetime.menu"), view: store.getters["view/datetime"], disabled: !viewLoaded.value }
@@ -158,6 +171,7 @@ export default {
 			showDateAndDayWeek,
 			showTimeAndDayWeek,
 			showFullDatetime,
+			carModel,
 			menu,
 			menuVisible,
 			menuSelected,

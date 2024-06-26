@@ -28,9 +28,7 @@ export default [
 			TCarModel.CAR_MODEL_MAZDA_3_BK,
 			TCarModel.CAR_MODEL_MAZDA_3_BL,
 			TCarModel.CAR_MODEL_MAZDA_CX7,
-			TCarModel.CAR_MODEL_MAZDA_CX7_REST,
-			TCarModel.CAR_MODEL_MAZDA_CX9,
-			TCarModel.CAR_MODEL_MAZDA_CX9_REST
+			TCarModel.CAR_MODEL_MAZDA_CX7_REST
 		]
 	},
 	{ name: "fuel", enabled: true, car: [
@@ -55,8 +53,6 @@ export default [
 		TCarModel.CAR_MODEL_MAZDA_3_BL,
 		TCarModel.CAR_MODEL_MAZDA_6_GG,
 		TCarModel.CAR_MODEL_MAZDA_CX7,
-		TCarModel.CAR_MODEL_MAZDA_CX7_REST,
-		TCarModel.CAR_MODEL_MAZDA_CX9,
-		TCarModel.CAR_MODEL_MAZDA_CX9_REST
+		TCarModel.CAR_MODEL_MAZDA_CX7_REST
 	] }
 ] as IOnboardCard[];

@@ -1,5 +1,10 @@
 <template>
-	<card class="info-card" :title="$t('onboard.info.title')" :menu="menu" @click:menu="onMenuClick">
+	<card
+		class="info-card"
+		:title="$t('onboard.info.title')"
+		:menu="carModel !== TCarModel.CAR_MODEL_MAZDA_CX9_REST ? menu : undefined"
+		@click:menu="onMenuClick"
+	>
 		<template #body>
 			<v-row>
 				<v-col cols="12" class="pb-0">
@@ -32,16 +37,16 @@
 						:disabled="!voltmeterViewLoaded"
 					/>
 				</v-col>
-                <v-col v-if="carModel === TCarModel.CAR_MODEL_MAZDA_3_BL" cols="12" class="pt-0 pb-0">
-                    <input-card-item
-                        :value="temperatureIn"
-                        :title="$t('onboard.info.temperatureIn.title')"
-                        :description="$t('onboard.info.temperatureIn.description')"
-                        type="temperature"
-                        :nodata="!temperatureValueLoaded || temperatureIn === 0"
-                        :disabled="!temperatureViewLoaded"
-                    />
-                </v-col>
+				<v-col v-if="carModel === TCarModel.CAR_MODEL_MAZDA_3_BL" cols="12" class="pt-0 pb-0">
+					<input-card-item
+						:value="temperatureIn"
+						:title="$t('onboard.info.temperatureIn.title')"
+						:description="$t('onboard.info.temperatureIn.description')"
+						type="temperature"
+						:nodata="!temperatureValueLoaded || temperatureIn === 0"
+						:disabled="!temperatureViewLoaded"
+					/>
+				</v-col>
 				<v-col v-if="carModel === TCarModel.CAR_MODEL_MAZDA_3_BK" cols="12" class="pt-0 pb-0">
 					<input-card-item
 						:value="temperatureOut"
