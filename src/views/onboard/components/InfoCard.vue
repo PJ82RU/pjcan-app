@@ -202,7 +202,7 @@ export default {
 			if (carModel.value === TCarModel.CAR_MODEL_MAZDA_3_BK)
 			{
 				result.push({
-					title: t("onboard.info.temperature.menu"),
+					title: t("onboard.info.temperatureOut.menu"),
 					view: store.getters["view/temperature"],
 					disabled: !temperatureViewLoaded.value
 				});
