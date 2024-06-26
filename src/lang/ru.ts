@@ -78,10 +78,7 @@ export default {
 		onboard: "Бортовой компьютер",
 		onboardButtons: "Кнопки БК",
 		test: "Тестирование",
-		language: {
-			russian: "Russian language",
-			english: "English language"
-		},
+		language: "Выбор языка",
 		settings: {
 			buttonsSW1: "Кнопки руля",
 			buttonsSW3: "Кнопки SW3",
@@ -785,5 +782,10 @@ export default {
 			noModelSelected:
 				"Внимание! Не выбрана модель автомобиля. Перейдите в меню - О программе - Поддержка автомобиля"
 		}
+	},
+	language: {
+		title: "Выбор языка",
+		label: "Язык интерфейса",
+		description: "Выберите подходящий вам язык интерфейса"
 	}
 };

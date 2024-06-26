@@ -25,6 +25,7 @@
 			<menu-dots :menu="menu" @click:item="onMenuClick" />
 			<about-dialog v-model="visibleAbout" />
 			<onboard-buttons-dialog v-model="visibleOnboardButtons" />
+            <locale-dialog v-model="visibleLocale" />
 		</v-app-bar>
 		<v-main>
 			<div class="base-layout__bg" />
@@ -52,7 +53,6 @@ import store from "@/store";
 import { useI18n } from "vue-i18n";
 import { toast } from "vue3-toastify";
 import ScreenFull from "screenfull";
-import moment from "moment/moment";
 import canbus from "@/api/canbus";
 
 import BluetoothBtn from "../components/BluetoothBtn.vue";
@@ -62,6 +62,7 @@ import AboutDialog from "../components/dialogs/AboutDialog.vue";
 import OnboardButtonsDialog from "../components/dialogs/OnboardButtonsDialog.vue";
 import MessageDialog from "@/components/dialogs/MessageDialog.vue";
 import IconCustom from "@/components/common/icon-custom/IconCustom.vue";
+import LocaleDialog from "@/components/dialogs/LocaleDialog.vue";
 
 import { IMessage } from "@/models/interfaces/message/IMessage";
 import { Timeout } from "@/models/types/Timeout";
@@ -76,15 +77,17 @@ export default {
 		AboutDialog,
 		OnboardButtonsDialog,
 		MessageDialog,
-		IconCustom
+		IconCustom,
+		LocaleDialog
 	},
 	setup()
 	{
-		const { t, locale } = useI18n();
+		const { t } = useI18n();
 
 		const visibleAbout = ref(false);
 		const visibleOnboardButtons = ref(false);
 		const visibleUpdate = ref(false);
+		const visibleLocale = ref(false);
 
 		const pageWidth = ref(0);
 		const pageHeight = ref(0);
@@ -106,7 +109,7 @@ export default {
 				{} as IMenuItem,
 				{ id: 60, title: t("menu.settings.options"), disabled: name === "Options" },
 				{ id: 10, title: t("menu.settings.buttonsSW1"), disabled: name === "Buttons" && query?.type === "sw1" },
-				{ id: 20, title: t("menu.language." + (locale.value !== "ru" ? "russian" : "english")) },
+				{ id: 20, title: t("menu.language") },
 				{} as IMenuItem
 			);
 			if (typeof newVersionFirmware.value === "string")
@@ -129,8 +132,7 @@ export default {
 					router.push({ name: "Buttons", query: { type: "sw1" } });
 					break;
 				case 20:
-					locale.value = locale.value !== "ru" ? "ru" : "en";
-					moment.locale(locale.value);
+					visibleLocale.value = true;
 					break;
 				case 30:
 					visibleAbout.value = true;
@@ -213,6 +215,7 @@ export default {
 			visibleAbout,
 			visibleOnboardButtons,
 			visibleUpdate,
+			visibleLocale,
 			pageWidth,
 			pageHeight,
 			visibleMessage,

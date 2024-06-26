@@ -30,3 +30,9 @@ export const sw1 = (state: any): IButtonCard[] => state.sw1;
  * @param {any} state
  */
 export const notify = (state: any): boolean => state.notify;
+
+/**
+ * Язык интерфейса
+ * @param state
+ */
+export const language = (state: any): boolean => state.language;

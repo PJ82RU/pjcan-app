@@ -5,6 +5,7 @@
 <script lang="ts">
 import { toast } from "vue3-toastify";
 import { useI18n } from "vue-i18n";
+import moment from "moment/moment";
 import store from "@/store";
 import canbus from "@/api/canbus";
 
@@ -89,7 +90,12 @@ export default {
 	components: { BaseLayout },
 	setup()
 	{
-		const { t } = useI18n();
+		const { t, locale } = useI18n();
+
+		// загружаем и применяем язык интерфейса
+		store.dispatch("app/readLanguage");
+		locale.value = store.getters["app/language"];
+		moment.locale(locale.value);
 
 		// записываем входящую конфигурацию в store
 		canbus.addListener(API_VERSION_EVENT, (data: DataView) => store.commit("config/setVersion", data));

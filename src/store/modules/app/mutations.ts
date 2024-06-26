@@ -80,3 +80,13 @@ export const setNotify = (state: any, value: boolean) =>
 {
 	state.notify = value;
 };
+
+/**
+ * Записать значение языка интерфейса
+ * @param {any} state
+ * @param {boolean} value Значение
+ */
+export const setLanguage = (state: any, value: string) =>
+{
+	state.language = value;
+};

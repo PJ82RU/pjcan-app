@@ -90,3 +90,34 @@ export const resetSW1 = ({ commit, dispatch }: { commit: any, dispatch: any }) =
 	commit("setSW1", buttonsDefault);
 	dispatch("writeSW1");
 };
+
+/**
+ * Чтение языка из local storage
+ * @param {any} commit
+ */
+export const readLanguage = ({ commit }: { commit: any }) =>
+{
+	const res = window.localStorage.getItem("Language");
+	if (res?.length)
+	{
+		try
+		{
+			const language = JSON.parse(res);
+			commit("setLanguage", language);
+		}
+		catch (e)
+		{
+			console.log(e);
+		}
+	}
+};
+
+/**
+ * Запись языка в local storage
+ * @param {any} commit
+ */
+export const writeLanguage = ({ getters }: { getters: any }) =>
+{
+	const res = JSON.stringify(getters.language);
+	window.localStorage.setItem("Language", res);
+};

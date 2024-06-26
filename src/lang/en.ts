@@ -77,10 +77,7 @@ export default {
 		onboard: "On-board",
 		onboardButtons: "On-board computer buttons",
 		test: "Testing",
-		language: {
-			russian: "Русский язык",
-			english: "Английский язык"
-		},
+		language: "Language",
 		settings: {
 			buttonsSW1: "Steering wheel buttons",
 			buttonsSW3: "SW3 buttons",
@@ -769,5 +766,10 @@ export default {
 			notify: "Swipe left/right allows you to scroll through the blocks with information",
 			noModelSelected: "Warning! The car model is not selected. Go to the menu - About the program - Car support"
 		}
+	},
+	language: {
+		title: "Language",
+		label: "Interface language",
+		description: "Choose the interface language that suits you"
 	}
 };

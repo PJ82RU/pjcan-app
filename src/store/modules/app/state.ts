@@ -8,7 +8,8 @@ const state = {
 	mazda: null as IMazdaConfig | null,
 	onboardCardList: onboardCardListDefault,
 	sw1: buttonsDefault,
-	notify: false
+	notify: false,
+	language: "ru"
 };
 
 export default state;
