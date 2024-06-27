@@ -87,7 +87,7 @@ export default {
 	emits: ["update:modelValue", "click:apply"],
 	setup(props: any, { emit }: { emit: any })
 	{
-		const { modelValue, types, valueId } = toRefs(props);
+		const { modelValue, types, valueId, valueResistance } = toRefs(props);
 
 		const visible = computed({
 			get: (): boolean => modelValue.value,
@@ -99,13 +99,17 @@ export default {
 		const resistanceMax = ref(0);
 		const disabled = computed(() => id.value === undefined);
 
-		watch(modelValue, () =>
+		/** Обновление данных */
+		const updateData = () =>
 		{
 			id.value = valueId.value;
 			const selectedType = types.value?.find((x: IButtonCard) => x.id === id.value);
 			resistanceMin.value = selectedType?.config?.resistanceMin ?? 0;
 			resistanceMax.value = selectedType?.config?.resistanceMax ?? 0;
-		});
+		};
+
+		watch(modelValue, () => updateData());
+		watch(valueResistance, () => updateData());
 
 		/** Применить */
 		const onApplyClick = () =>
