@@ -79,7 +79,7 @@ export default {
 		const speed = computed((): string => (store.getters["value/movement"].speed / 100).toFixed(2));
 		const speedAVG = computed((): string => store.getters["value/movement"].speedAVG.toFixed(0));
 		const restWay = computed((): string => (store.getters["value/movement"].restWay / 100).toFixed(0));
-		const isSpeed = computed((): boolean => store.getters["value/movement"].speed > 0);
+		const isSpeed = computed((): boolean => store.getters["value/engine"].on);
 		const isSpeedAVG = computed((): boolean => store.getters["value/movement"].speedAVG > 0);
 		const isRestWay = computed((): boolean => store.getters["value/movement"].restWay > 0);
 		const carModel = computed((): TCarModel => store.getters["config/carModel"]);

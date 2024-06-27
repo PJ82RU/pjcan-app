@@ -83,6 +83,7 @@
 				<v-col
 					v-if="
 						carModel === TCarModel.CAR_MODEL_MAZDA_3_BK ||
+						carModel === TCarModel.CAR_MODEL_MAZDA_3_BL ||
 						carModel === TCarModel.CAR_MODEL_MAZDA_CX7_REST ||
 						carModel === TCarModel.CAR_MODEL_MAZDA_CX9_REST
 					"
