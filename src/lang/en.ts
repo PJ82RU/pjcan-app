@@ -593,7 +593,7 @@ export default {
 				list: {
 					1: "Raise HM_ND00 2017.12.11 (19200)",
 					2: "Raise HM_ND01 2019.06.21 (38400)",
-					3: "SimpleSoft MZ_SS_07A (38400)",
+					3: "SimpleSoft MZ_SS_07A (19200)",
 					4: "SimpleSoft RP5_MZ_002 (38400)"
 				}
 			},
