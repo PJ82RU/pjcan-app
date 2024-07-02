@@ -462,8 +462,8 @@ export default {
 
 	buttons: {
 		title: "Настройки кнопок",
-		extendedMode: "Режим Mode",
-		hintMode: " (режим Mode)",
+		extendedMode: "Режим Fn",
+		hintMode: " (режим Fn)",
 
 		mode: "Кнопка MODE",
 		setUp: "Кнопка SET UP",

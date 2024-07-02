@@ -445,8 +445,8 @@ export default {
 
 	buttons: {
 		title: "Button settings",
-		extendedMode: "Advanced mode",
-		hintMode: " (advanced mode)",
+		extendedMode: "Advanced Fn",
+		hintMode: " (advanced Fn)",
 
 		mode: "MODE button",
 		seekUp: "SET UP button",
