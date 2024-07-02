@@ -57,7 +57,11 @@
 						:disabled="!temperatureViewLoaded"
 					/>
 				</v-col>
-				<v-col v-if="carModel === TCarModel.CAR_MODEL_MAZDA_3_BK" cols="12" class="pt-0 pb-0">
+				<v-col
+					v-if="carModel === TCarModel.CAR_MODEL_MAZDA_3_BK || carModel === TCarModel.CAR_MODEL_MAZDA_3_BL"
+					cols="12"
+					class="pt-0 pb-0"
+				>
 					<switch-card-item
 						:model-value="handbrake"
 						:title="$t('onboard.info.handbrake.title')"
@@ -199,6 +203,14 @@ export default {
 				});
 			}
 
+			if (carModel.value === TCarModel.CAR_MODEL_MAZDA_3_BL)
+			{
+				result.push({
+					title: t("onboard.info.temperatureIn.menu"),
+					view: store.getters["view/temperature"],
+					disabled: !temperatureViewLoaded.value
+				});
+			}
 			if (carModel.value === TCarModel.CAR_MODEL_MAZDA_3_BK)
 			{
 				result.push({
@@ -206,6 +218,12 @@ export default {
 					view: store.getters["view/temperature"],
 					disabled: !temperatureViewLoaded.value
 				});
+			}
+			if (
+				carModel.value === TCarModel.CAR_MODEL_MAZDA_3_BK ||
+				carModel.value === TCarModel.CAR_MODEL_MAZDA_3_BL
+			)
+			{
 				result.push({
 					title: t("onboard.info.handbrake.menu"),
 					view: store.getters["view/sensors"].handbrake,

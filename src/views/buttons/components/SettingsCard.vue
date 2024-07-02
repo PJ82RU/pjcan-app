@@ -14,7 +14,7 @@
 					<v-select
 						v-model="pressSingle"
 						:label="$t('buttons.pressSingle.title')"
-						:items="functionsList"
+						:items="functionsListWithoutMode"
 						:hint="$t('buttons.pressSingle.description')"
 						variant="underlined"
 						item-title="label"
@@ -313,6 +313,15 @@ export default {
 			}
 		});
 
+		/** Список функций без режима Mode */
+		const functionsListWithoutMode = computed((): object[] =>
+		{
+			const list: any = tm("buttons.functions");
+			const result = [];
+			for (const key in list)
+			{ if (key !== "1" && key !== "2") result.push({ label: list[key], value: Number(key) }); }
+			return result;
+		});
 		/** Список функций */
 		const functionsList = computed((): object[] =>
 		{
@@ -323,6 +332,7 @@ export default {
 		});
 
 		return {
+			functionsListWithoutMode,
 			functionsList,
 			extended,
 			hold,

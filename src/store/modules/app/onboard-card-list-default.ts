@@ -31,28 +31,40 @@ export default [
 			TCarModel.CAR_MODEL_MAZDA_CX7_REST
 		]
 	},
-	{ name: "fuel", enabled: true, car: [
-		TCarModel.CAR_MODEL_MAZDA_3_BK,
-		TCarModel.CAR_MODEL_MAZDA_3_BL,
-		TCarModel.CAR_MODEL_MAZDA_CX7,
-		TCarModel.CAR_MODEL_MAZDA_CX7_REST,
-		TCarModel.CAR_MODEL_MAZDA_CX9,
-		TCarModel.CAR_MODEL_MAZDA_CX9_REST
-	] },
-	{ name: "movement", enabled: true, car: [
-		TCarModel.CAR_MODEL_MAZDA_3_BK,
-		TCarModel.CAR_MODEL_MAZDA_3_BL,
-		TCarModel.CAR_MODEL_MAZDA_CX7,
-		TCarModel.CAR_MODEL_MAZDA_CX7_REST,
-		TCarModel.CAR_MODEL_MAZDA_CX9,
-		TCarModel.CAR_MODEL_MAZDA_CX9_REST
-	] },
-	{ name: "doors", enabled: true, car: [TCarModel.CAR_MODEL_MAZDA_3_BK] },
-	{ name: "climate", enabled: true, car: [
-		TCarModel.CAR_MODEL_MAZDA_3_BK,
-		TCarModel.CAR_MODEL_MAZDA_3_BL,
-		TCarModel.CAR_MODEL_MAZDA_6_GG,
-		TCarModel.CAR_MODEL_MAZDA_CX7,
-		TCarModel.CAR_MODEL_MAZDA_CX7_REST
-	] }
+	{
+		name: "fuel",
+		enabled: true,
+		car: [
+			TCarModel.CAR_MODEL_MAZDA_3_BK,
+			TCarModel.CAR_MODEL_MAZDA_3_BL,
+			TCarModel.CAR_MODEL_MAZDA_CX7,
+			TCarModel.CAR_MODEL_MAZDA_CX7_REST,
+			TCarModel.CAR_MODEL_MAZDA_CX9,
+			TCarModel.CAR_MODEL_MAZDA_CX9_REST
+		]
+	},
+	{
+		name: "movement",
+		enabled: true,
+		car: [
+			TCarModel.CAR_MODEL_MAZDA_3_BK,
+			TCarModel.CAR_MODEL_MAZDA_3_BL,
+			TCarModel.CAR_MODEL_MAZDA_CX7,
+			TCarModel.CAR_MODEL_MAZDA_CX7_REST,
+			TCarModel.CAR_MODEL_MAZDA_CX9,
+			TCarModel.CAR_MODEL_MAZDA_CX9_REST
+		]
+	},
+	{ name: "doors", enabled: true, car: [TCarModel.CAR_MODEL_MAZDA_3_BK, TCarModel.CAR_MODEL_MAZDA_3_BL] },
+	{
+		name: "climate",
+		enabled: true,
+		car: [
+			TCarModel.CAR_MODEL_MAZDA_3_BK,
+			TCarModel.CAR_MODEL_MAZDA_3_BL,
+			TCarModel.CAR_MODEL_MAZDA_6_GG,
+			TCarModel.CAR_MODEL_MAZDA_CX7,
+			TCarModel.CAR_MODEL_MAZDA_CX7_REST
+		]
+	}
 ] as IOnboardCard[];

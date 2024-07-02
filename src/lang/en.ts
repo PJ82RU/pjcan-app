@@ -166,7 +166,7 @@ export default {
 			},
 			voltmeter: {
 				title: "Voltage",
-				description: "On-board mains voltage in volts",
+				description: "On-board mains voltage in volts (the average value for 10 sec.)",
 				menu: "LCD: Voltage"
 			},
 			temperatureIn: {
@@ -500,8 +500,8 @@ export default {
 
 		functions: {
 			0: "No action",
-			1: "Switch to the Mode",
-			2: "Exiting the Mode",
+			1: "Switch to the Fn",
+			2: "Exiting the Fn",
 			3: "Pressing the MODE button",
 			4: "Pressing the SET UP button",
 			5: "Pressing the SET DOWN button",
