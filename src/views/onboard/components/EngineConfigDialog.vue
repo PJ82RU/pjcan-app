@@ -91,7 +91,7 @@ export default {
 			get: (): boolean => modelValue.value,
 			set: (val: boolean): void => context.emit("update:modelValue", val)
 		});
-		const configShowDays = ref(true);
+		const configShowDays = ref(false);
 		const configTotalWorktime = ref(0);
 		const configTotalCountRPM = ref(0);
 
@@ -108,7 +108,7 @@ export default {
 		/** Сбросить */
 		const onResetClick = (): void =>
 		{
-			configShowDays.value = true;
+			configShowDays.value = false;
 			configTotalWorktime.value = 0;
 			configTotalCountRPM.value = 0;
 		};
