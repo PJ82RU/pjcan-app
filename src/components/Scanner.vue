@@ -25,7 +25,8 @@ import { setScanCan } from "@/api/google";
 import DialogTemplate from "@/layout/components/DialogTemplate.vue";
 
 import { IMessage } from "@/models/interfaces/message/IMessage";
-import { IDeviceScannerValue } from "@/models/pjcan/device";
+import { API_DEVICE_SCANNER_VALUE_EVENT } from "@/models/pjcan/device";
+import { toMac } from "@/utils/conversion";
 
 export default {
 	name: "Scanner",
@@ -42,8 +43,7 @@ export default {
 		const { modelValue } = toRefs(props);
 		const { t } = useI18n();
 
-		const scanner = computed((): IDeviceScannerValue => store.getters["value/scanner"]);
-		const efuseMac = computed((): string => store.getters["config/info"].efuseMac);
+		const efuseMac = computed((): string => toMac(store.getters["config/info"].efuseMac));
 		const visibleUploading = ref(false);
 		const leftUploading = ref(0);
 		const started = computed({
@@ -140,6 +140,7 @@ export default {
 			setScanCan({ mac: efuseMac.value, rows: store.getters["value/scannerBufferRead"] })
 				.then((res: any) =>
 				{
+					store.commit("value/nextScannerBuffer", -1);
 					if (res?.success && !scanClose) setTimeout(() => sendScannerBuffer(), 100);
 					else if (res?.error) toast.error(res?.message);
 				})
@@ -149,8 +150,7 @@ export default {
 					scanUploading = false;
 				});
 		};
-
-		watch(scanner, () => sendScannerBuffer());
+		canbus.addListener(API_DEVICE_SCANNER_VALUE_EVENT, () => sendScannerBuffer());
 
 		return {
 			visibleUploading,

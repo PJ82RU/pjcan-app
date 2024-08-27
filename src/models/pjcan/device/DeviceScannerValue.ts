@@ -32,7 +32,7 @@ export class DeviceScannerValue extends BaseModel implements IDeviceScannerValue
 		for (let i = 0; i < 16; i++)
 		{
 			this.frames.push({
-				receive: false,
+				receive: true,
 				send: false,
 				id: 0,
 				data: [0, 0, 0, 0, 0, 0, 0, 0],

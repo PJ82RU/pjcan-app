@@ -155,6 +155,11 @@ export const setScannerBufferTitle = (state: any, value: string) =>
 	} as IScanCanRow);
 };
 
+export const nextScannerBuffer = (state: any, readNumber: number) =>
+{
+	state.scannerBuffer.splice(0, readNumber > 0 ? readNumber : state.scannerBufferReadNumber);
+};
+
 /**
  * Записать значения теста
  * @param {any} state

@@ -68,7 +68,7 @@ export const scannerBuffer = (state: any) => state.scannerBuffer;
  * Чтение 30-ти элементов буфера сканера
  * @param {any} state
  */
-export const scannerBufferRead = (state: any) => state.scannerBuffer.splice(0, state.scannerBufferReadNumber);
+export const scannerBufferRead = (state: any) => state.scannerBuffer.slice(0, state.scannerBufferReadNumber);
 
 /**
  * Значение теста
