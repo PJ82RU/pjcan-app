@@ -24,6 +24,7 @@ import {
 	API_DEVICE_INFO_EXEC,
 	API_DEVICE_INFO_EVENT,
 	API_DEVICE_UPDATE_EXEC,
+	API40_DEVICE_UPDATE_EXEC,
 	API_DEVICE_UPDATE_EVENT,
 	API_DEVICE_UPDATE_EVENT_ERROR,
 	API_DEVICE_SCANNER_VALUE_EXEC,
@@ -164,7 +165,15 @@ import {
 	API_VOLUME_VIEW_EXEC,
 	API_VOLUME_VIEW_EVENT
 } from "@/models/pjcan/volume";
-import { API_NEW_VERSION_EVENT, API_VERSION_EVENT, API_VERSION_EXEC, IVersion, Version } from "@/models/pjcan/version";
+import {
+	API_NEW_VERSION_EVENT,
+	API_VERSION_EVENT,
+	API_VERSION_EXEC,
+	API40_VERSION_EVENT,
+	API40_VERSION_EXEC,
+	IVersion,
+	Version
+} from "@/models/pjcan/version";
 import { API_CHOICE_EXEC, ChoiceValue, IChoiceValue } from "@/models/pjcan/choice";
 
 import { IQuery } from "@/models/interfaces/IQuery";
@@ -193,7 +202,8 @@ export class Canbus extends EventEmitter
 	/** Статус активации устройства */
 	activation: boolean = false;
 
-	private __onVersion = (ev: any): void => canbus.onVersion(ev);
+	private __onVersion = (ev: any): void => canbus.onVersion(ev, false);
+	private __onVersion40 = (ev: any): void => canbus.onVersion(ev, true);
 	private __onIsActivation = (ev: any): void => canbus.onIsActivation(ev);
 	private __onActivation = (ev: any): void => canbus.onActivation(ev);
 
@@ -297,7 +307,11 @@ export class Canbus extends EventEmitter
 			{
 				// Запрос версии прошивки
 				this.addListener(API_VERSION_EVENT, this.__onVersion);
-				this.query(new Version());
+				this.query(new Version(), true);
+
+				// Запрос версии прошивки 4.0
+				this.addListener(API40_VERSION_EVENT, this.__onVersion40);
+				this.query(new Version(undefined, 40), true);
 				return;
 			}
 		}
@@ -307,19 +321,35 @@ export class Canbus extends EventEmitter
 	/**
 	 * Входящее значение версии
 	 * @param {DataView} data Данные
+	 * @param {boolean} oldProtocol Старая версия протокола
 	 */
-	private onVersion(data: DataView): void
+	private onVersion(data: DataView, oldProtocol: boolean): void
 	{
 		this.removeListener(API_VERSION_EVENT, this.__onVersion);
-		this.version.set(data);
+		this.removeListener(API40_VERSION_EVENT, this.__onVersion40);
+		this.queue = [];
+		if (oldProtocol)
+		{
+			const ver40 = new Version(data, 40);
+			this.version.major = ver40.major;
+			this.version.minor = ver40.minor;
+			this.version.build = ver40.build;
+			this.version.revision = ver40.revision;
+			this.update.protocol = 40;
+			this.emit(API_VERSION_EVENT, this.version.get(false));
+		}
+		else this.version.set(data);
 		if (this.version.is)
 		{
 			const { major, minor, build, revision } = this.version;
 			console.log(t("BLE.server.versionProtocol", { mj: major, mn: minor, bl: build, rv: revision }));
 
 			// Запрос значения активации устройства
-			this.addListener(API_DEVICE_VALUE_EVENT, this.__onIsActivation);
-			this.query(new DeviceValue());
+			if (!oldProtocol)
+			{
+				this.addListener(API_DEVICE_VALUE_EVENT, this.__onIsActivation);
+				this.query(new DeviceValue());
+			}
 
 			// Проверка наличия новой версии прошивки
 			this.checkVersion()
@@ -411,6 +441,11 @@ export class Canbus extends EventEmitter
 				this.emit(API_VERSION_EVENT, data);
 				break;
 			}
+			case API40_VERSION_EXEC: {
+				// Версия прошивки 4.0
+				this.emit(API40_VERSION_EVENT, data);
+				break;
+			}
 			case API_DEVICE_INFO_EXEC: // Информация об устройстве
 				this.emit(API_DEVICE_INFO_EVENT, data);
 				break;
@@ -421,6 +456,7 @@ export class Canbus extends EventEmitter
 				this.emit(API_DEVICE_VALUE_EVENT, data);
 				break;
 			case API_DEVICE_UPDATE_EXEC: // Обновление прошивки
+			case API40_DEVICE_UPDATE_EXEC:
 				this.update.set(data);
 				if (this.update.offset < this.update.total) this.updateUpload();
 				this.emit(API_DEVICE_UPDATE_EVENT, this.update);

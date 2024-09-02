@@ -3,6 +3,7 @@ import { EDeviceUpdateError } from "./EDeviceUpdateError";
 
 /** Интерфейс загрузки данных прошивки */
 export interface IDeviceUpdate extends EventEmitter {
+	protocol: number; // Протокол
 	firmwareUrl: string; // Путь к файлу прошивки
 	firmwareData: Uint8Array; // Данные прошивки
 	offset: number; // Позиция чтения данных прошивки

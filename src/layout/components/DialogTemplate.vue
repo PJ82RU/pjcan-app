@@ -4,7 +4,7 @@
 		:content-class="contentClass"
 		transition="dialog-bottom-transition"
 		:width="widthModel"
-		:persistent="!actions"
+		:persistent="!actions || persistent"
 	>
 		<v-card>
 			<v-card-title v-if="title?.length > 0" class="d-flex align-center">
@@ -59,7 +59,8 @@ export default {
 		text: Boolean,
 		actions: Boolean,
 		close: Boolean,
-		width: [String, Number]
+		width: [String, Number],
+		persistent: Boolean
 	},
 	emits: ["update:modelValue"],
 	setup(props: any, { emit }: { emit: any })

@@ -7,6 +7,7 @@ export interface IVersion extends IBaseModel {
 	build: number;
 	revision: number;
 	is: boolean;
+	supported: boolean;
 	toString: string;
 
 	compare: (ver: IVersion, len: number) => number;

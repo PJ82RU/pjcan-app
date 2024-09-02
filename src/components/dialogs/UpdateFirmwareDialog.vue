@@ -1,5 +1,13 @@
 <template>
-	<dialog-template v-model="visibleUpdate" icon="mdi-update" :title="$t('update.title')" width="700" text actions>
+	<dialog-template
+		v-model="visibleUpdate"
+		icon="mdi-update"
+		:title="$t('update.title')"
+		width="700"
+        :persistent="!visibleLater"
+		text
+		actions
+	>
 		<template #body>
 			<span>{{ $t("update.dialog.updateTo", { version: newVersion }) }}</span>
 		</template>
@@ -7,7 +15,7 @@
 			<v-btn color="primary" @click="onUpdateStart">
 				{{ $t("update.btn.update") }}
 			</v-btn>
-			<v-btn color="primary" @click="onCancel">
+			<v-btn v-if="visibleLater" color="primary" @click="onCancel">
 				{{ $t("update.btn.later") }}
 			</v-btn>
 		</template>
@@ -40,13 +48,14 @@
 import { computed, onMounted, onUnmounted, ref, toRefs, watch } from "vue";
 import { toast } from "vue3-toastify";
 import { useI18n } from "vue-i18n";
+import store from "@/store";
 import router from "@/router";
 import canbus from "@/api/canbus";
 
 import DialogTemplate from "@/layout/components/DialogTemplate.vue";
 
 import { API_DEVICE_UPDATE_EVENT, API_DEVICE_UPDATE_EVENT_ERROR } from "@/models/pjcan/device";
-import { API_VERSION_EVENT } from "@/models/pjcan/version";
+import { API_VERSION_EVENT, IVersion } from "@/models/pjcan/version";
 
 import { RemainingTime } from "@/utils/time";
 
@@ -71,6 +80,7 @@ export default {
 			set: (val: boolean): void => emit("update:modelValue", val)
 		});
 		const visibleProcess = ref(false);
+		const visibleLater = computed((): boolean => (store.getters["config/version"] as IVersion).supported);
 		const version = ref("");
 		const message = ref("");
 		const progress = ref(0);
@@ -104,9 +114,9 @@ export default {
 		};
 
 		/**
-         * Событие загрузки прошивки на устройство PJCAN
-         * @param {number} error Код ошибки
-         */
+		 * Событие загрузки прошивки на устройство PJCAN
+		 * @param {number} error Код ошибки
+		 */
 		const onUpdateStatus = (error: number) =>
 		{
 			if (error === 0)
@@ -194,6 +204,7 @@ export default {
 		return {
 			visibleUpdate,
 			visibleProcess,
+			visibleLater,
 			version,
 			message,
 			uploading,

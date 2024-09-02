@@ -6,6 +6,9 @@ export const API_VERSION_EXEC = 0x00;
 export const API_VERSION_EVENT = "Version";
 export const API_NEW_VERSION_EVENT = "NewVersion";
 
+export const API40_VERSION_EXEC = 0x06;
+export const API40_VERSION_EVENT = "Version40";
+
 /** Модель версии */
 export class Version extends BaseModel implements IVersion
 {
@@ -28,15 +31,23 @@ export class Version extends BaseModel implements IVersion
 		return this.major > 0;
 	}
 
+	/** Поддерживаемая версия прошивки */
+	get supported(): boolean
+	{
+		return this.major === 4 && this.minor === 1;
+	}
+
 	/** Строковое представление */
 	get toString(): string
 	{
 		return `${this.major}.${this.minor}.${this.build}.${this.revision}`;
 	}
 
-	constructor(data?: DataView)
+	constructor(data?: DataView, protocol?: number)
 	{
-		super(API_VERSION_EXEC, true);
+		if (protocol === 40) super(API40_VERSION_EXEC, true, 40);
+		else super(API_VERSION_EXEC, true);
+
 		this.skipActivationCheck = true;
 		if (data) this.set(data);
 	}
@@ -117,8 +128,10 @@ export class Version extends BaseModel implements IVersion
 	}
 
 	/** Чтение данных */
-	get(): DataView
+	get(request?: boolean): DataView
 	{
-		return this._get(this, this.exec);
+		return request
+			? this._get(this, this.exec)
+			: this._get(this, this.exec, Version.size, new BluetoothStruct(Version.struct));
 	}
 }

@@ -2,6 +2,7 @@ import { Timeout } from "../../types/Timeout";
 
 /** Базовый интерфейс */
 export interface IBaseModel {
+	protocol: number;
 	exec: number;
 	highPriority: boolean;
 	skipActivationCheck: boolean;

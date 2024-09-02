@@ -7,14 +7,16 @@ export class BaseModel
 {
 	readonly exec;
 	readonly highPriority;
+	readonly protocol;
 	skipActivationCheck = false;
 	id = 0;
 	isData = false;
 
-	constructor(exec: number, highPriority: boolean = false)
+	constructor(exec: number, highPriority: boolean = false, protocol: number = 41)
 	{
 		this.exec = exec;
 		this.highPriority = highPriority;
+		this.protocol = protocol;
 	}
 
 	/**
@@ -28,14 +30,18 @@ export class BaseModel
 	 */
 	protected _set(th: any, exec: number, size: number, struct: IBluetoothStruct, buf: DataView): boolean
 	{
+		const offset = this.protocol === 40 ? 1 : 3;
 		const id = buf.getUint8(0);
-		const sizeData = buf.byteLength >= 3 ? buf.getUint16(1, true) : 0;
-		const result = id === exec && sizeData === size;
+		const result =
+			this.protocol === 40
+				? id === exec
+				: id === exec && (buf.byteLength >= 3 ? buf.getUint16(1, true) : 0) === size;
+
 		if (result)
 		{
 			try
 			{
-				struct.decode(buf, th, 3);
+				struct.decode(buf, th, offset);
 				this.isData = true;
 			}
 			catch (e)
@@ -55,19 +61,20 @@ export class BaseModel
 	 */
 	protected _get(th: any, exec: number, size: number = 0, struct?: IBluetoothStruct): DataView
 	{
-		const buf: DataView = new DataView(new ArrayBuffer(size + 3));
+		const offset = this.protocol === 40 ? 1 : 3;
+		const buf: DataView = new DataView(new ArrayBuffer(size + offset));
 		buf.setUint8(0, exec);
-		buf.setUint16(1, size, true);
+		if (offset === 3) buf.setUint16(1, size, true);
 		if (size > 0)
 		{
 			try
 			{
-				struct?.encode(buf, th, 3);
+				struct?.encode(buf, th, offset);
 			}
 			catch (e)
 			{
 				console.log(e);
-				buf.setUint16(1, 0, true);
+				if (offset === 3) buf.setUint16(1, 0, true);
 			}
 		}
 		return buf;

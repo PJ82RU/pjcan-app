@@ -183,10 +183,15 @@ export default {
 		const onNewVersion = (newVersion: IVersion): void =>
 		{
 			newVersionFirmware.value = newVersion.toString;
-			setTimeout(() =>
+			const version = store.getters["config/version"] as IVersion;
+			if (version.supported)
 			{
-				toast.warning(t("update.notify.newVersion", { version: newVersionFirmware.value }));
-			}, 5000);
+				setTimeout(() =>
+				{
+					toast.warning(t("update.notify.newVersion", { version: newVersionFirmware.value }));
+				}, 5000);
+			}
+			else visibleUpdate.value = true;
 		};
 
 		/** Изменение размеров страницы */
