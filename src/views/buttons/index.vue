@@ -52,7 +52,6 @@ import ButtonEditDialog from "./components/ButtonEditDialog.vue";
 
 import {
 	API_BUTTON_SW1_VALUE_EVENT,
-	API_BUTTONS_SW1_CONFIG_EVENT,
 	IButtonConfigItem,
 	IButtonValue,
 	TButtonExec
@@ -109,7 +108,7 @@ export default {
 			);
 		});
 		const list = ref([] as IButtonCard[]);
-		const listWithoutEmpty = computed((): IButtonCard[] => list.value?.filter((x: IButtonCard) => x.title?.length));
+		const listWithoutEmpty = computed((): IButtonCard[] => list.value?.filter((x: IButtonCard) => x.title?.length) ?? []);
 		const definitionDialog = ref(false);
 		const addDialog = ref(false);
 		const selectedItem = ref(undefined as IButtonCard | undefined);
@@ -129,7 +128,8 @@ export default {
 			}
 			return key;
 		};
-		// loadButtons(__type.value);
+		// заполняем массив списка (значения могут быть пустыми, нужно для работы реактивности vue)
+		loadButtons(__type.value);
 
 		/** Сохранить список кнопок */
 		const saveButtons = (): void =>
@@ -196,12 +196,6 @@ export default {
 			addDialog.value = true;
 		};
 
-		/** Событие входящей конфигурации */
-		const onButtonsConfigReceive = (): void =>
-		{
-			if (keys.value) loadButtons(__type.value);
-		};
-
 		/** Событие нажатия кнопки */
 		const onButtonsValueReceive = (): void =>
 		{
@@ -221,10 +215,10 @@ export default {
 		};
 		const onBegin = (type: any): void =>
 		{
-			const key = loadButtons(type);
+			// загружаем список, если он пуст
+			const key = listWithoutEmpty.value.length ? __getKey(type) : loadButtons(type);
 			if (key)
 			{
-				canbus.addListener(API_BUTTONS_SW1_CONFIG_EVENT, onButtonsConfigReceive);
 				canbus.addListener(API_BUTTON_SW1_VALUE_EVENT, onButtonsValueReceive);
 				store.commit(key.setProgramming, true);
 
@@ -233,7 +227,6 @@ export default {
 		};
 		const onEnd = (): void =>
 		{
-			canbus.removeListener(API_BUTTONS_SW1_CONFIG_EVENT, onButtonsConfigReceive);
 			canbus.removeListener(API_BUTTON_SW1_VALUE_EVENT, onButtonsValueReceive);
 			store.commit("config/setSW1Programming", false);
 		};
