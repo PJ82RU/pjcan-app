@@ -436,16 +436,9 @@ export class Canbus extends EventEmitter
 		const id = data.getUint8(0);
 		switch (id)
 		{
-			case API_VERSION_EXEC: {
-				// Версия прошивки
+			case API_VERSION_EXEC: // Версия прошивки
 				this.emit(API_VERSION_EVENT, data);
 				break;
-			}
-			case API40_VERSION_EXEC: {
-				// Версия прошивки 4.0
-				this.emit(API40_VERSION_EVENT, data);
-				break;
-			}
 			case API_DEVICE_INFO_EXEC: // Информация об устройстве
 				this.emit(API_DEVICE_INFO_EVENT, data);
 				break;
@@ -461,8 +454,10 @@ export class Canbus extends EventEmitter
 				if (this.update.offset < this.update.total) this.updateUpload();
 				this.emit(API_DEVICE_UPDATE_EVENT, this.update);
 				break;
-			case API_DEVICE_SCANNER_VALUE_EXEC: // Значения сканирования
-				this.emit(API_DEVICE_SCANNER_VALUE_EVENT, data);
+			case API_DEVICE_SCANNER_VALUE_EXEC: // Значения сканирования (устаревший ID API40_VERSION_EXEC, нужен для обновления до 4.1)
+				// Версия прошивки 4.0
+				if (!this.version.is) this.emit(API40_VERSION_EVENT, data);
+				else this.emit(API_DEVICE_SCANNER_VALUE_EVENT, data);
 				break;
 			case API_DEVICE_VIEW_WORKTIME_EXEC: // Отображение времени работы устройства
 				this.emit(API_DEVICE_VIEW_WORKTIME_EVENT, data);
