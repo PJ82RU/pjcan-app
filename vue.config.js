@@ -5,8 +5,18 @@ const resolve = (dir) => path.join(__dirname, dir);
 
 module.exports = defineConfig({
 	transpileDependencies: true,
-	publicPath: process.env.VUE_APP_MODE === "test" ? "/pjcan-test/" : "/pjcan-app/",
-	outputDir: process.env.VUE_APP_MODE === "test" ? "../pjcan-test/docs" : "./dist",
+	publicPath:
+		process.env.VUE_APP_MODE === "test"
+			? "/pjcan-test/"
+			: process.env.VUE_APP_MODE === "pjcan41"
+				? "/pjcan41-app/"
+				: "/pjcan-app/",
+	outputDir:
+		process.env.VUE_APP_MODE === "test"
+			? "../pjcan-test/docs"
+			: process.env.VUE_APP_MODE === "pjcan41"
+				? "../pjcan41-app/docs"
+				: "./dist",
 	productionSourceMap: false,
 
 	configureWebpack: {
@@ -31,41 +41,42 @@ module.exports = defineConfig({
 			return definitions;
 		});
 
-		config.when(
-			process.env.NODE_ENV !== "development",
-			config =>
-			{
-				config.plugin("ScriptExtHtmlWebpackPlugin").after("html").use("script-ext-html-webpack-plugin", [
+		config.when(process.env.NODE_ENV !== "development", (config) =>
+		{
+			config
+				.plugin("ScriptExtHtmlWebpackPlugin")
+				.after("html")
+				.use("script-ext-html-webpack-plugin", [
 					{
 						inline: /runtime\..*\.js$/
 					}
-				]).end();
-				config.optimization.splitChunks({
-					chunks: "all",
-					cacheGroups: {
-						libs: {
-							name: "chunk-libs",
-							test: /[\\/]node_modules[\\/]/,
-							priority: 10,
-							chunks: "initial"
-						},
-						vuetify: {
-							name: "chunk-vuetify",
-							priority: 20,
-							test: /[\\/]node_modules[\\/]vuetify(.*)/
-						},
-						commons: {
-							name: "chunk-commons",
-							test: resolve("src/components"),
-							minChunks: 3,
-							priority: 5,
-							reuseExistingChunk: true
-						}
+				])
+				.end();
+			config.optimization.splitChunks({
+				chunks: "all",
+				cacheGroups: {
+					libs: {
+						name: "chunk-libs",
+						test: /[\\/]node_modules[\\/]/,
+						priority: 10,
+						chunks: "initial"
+					},
+					vuetify: {
+						name: "chunk-vuetify",
+						priority: 20,
+						test: /[\\/]node_modules[\\/]vuetify(.*)/
+					},
+					commons: {
+						name: "chunk-commons",
+						test: resolve("src/components"),
+						minChunks: 3,
+						priority: 5,
+						reuseExistingChunk: true
 					}
-				});
-				config.optimization.runtimeChunk("single");
-			}
-		);
+				}
+			});
+			config.optimization.runtimeChunk("single");
+		});
 	},
 
 	pluginOptions: {
@@ -94,8 +105,18 @@ module.exports = defineConfig({
 		icons: [
 			{ "src": "./img/icons/android-chrome-192x192.png", "sizes": "192x192", "type": "image/png" },
 			{ "src": "./img/icons/android-chrome-512x512.png", "sizes": "512x512", "type": "image/png" },
-			{ "src": "./img/icons/android-chrome-maskable-192x192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
-			{ "src": "./img/icons/android-chrome-maskable-512x512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+			{
+				"src": "./img/icons/android-chrome-maskable-192x192.png",
+				"sizes": "192x192",
+				"type": "image/png",
+				"purpose": "maskable"
+			},
+			{
+				"src": "./img/icons/android-chrome-maskable-512x512.png",
+				"sizes": "512x512",
+				"type": "image/png",
+				"purpose": "maskable"
+			}
 		],
 
 		// настройки манифеста

@@ -1,3 +1,4 @@
+/* eslint-disable */
 export enum EDeviceUpdateError {
     UPD_OK, // Все хорошо
     UPD_ERROR_NODATA, // Нет данных
