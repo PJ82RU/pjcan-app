@@ -18,7 +18,7 @@
 				<icon-custom name="steering-wheel" :colors="{ primary: 'white', secondary: 'white' }" />
 				<span class="pl-2">ONBOARD</span>
 			</v-btn>
-			<v-btn icon>
+			<v-btn v-if="$vuetify.display.smAndUp" icon>
 				<icon-custom name="save" :color="colorConfigSave" />
 			</v-btn>
 			<v-btn icon="mdi-fit-to-screen-outline" @click="toggleFullscreen" />
