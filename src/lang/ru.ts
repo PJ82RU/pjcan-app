@@ -39,10 +39,12 @@ export default {
 		warning: "Внимание!",
 		btn: {
 			update: "Обновить",
+			rollback: "Откатить",
 			later: "Позже"
 		},
 		dialog: {
 			updateTo: "Обновить прошивку PJCAN до версии {version} ?",
+			rollbackTo: "Откатить прошивку PJCAN до версии {version} ?",
 			browserOutdated: "Версия вашего браузера устарела.\n" + "Обновите его и откройте web-приложение заново."
 		},
 		process: {
@@ -85,6 +87,7 @@ export default {
 			options: "Параметры"
 		},
 		update: "Обновить до {version}",
+		rollback: "Откатить до {version}",
 		about: "О программе"
 	},
 

@@ -9,11 +9,11 @@
 		actions
 	>
 		<template #body>
-			<span>{{ $t("update.dialog.updateTo", { version: newVersion }) }}</span>
+			<span>{{ $t("update.dialog." + (!rollback ? "updateTo" : "rollbackTo"), { version }) }}</span>
 		</template>
 		<template #btns>
 			<v-btn color="primary" @click="onUpdateStart">
-				{{ $t("update.btn.update") }}
+				{{ $t("update.btn." + (!rollback ? "update" : "rollback")) }}
 			</v-btn>
 			<v-btn v-if="visibleLater" color="primary" @click="onCancel">
 				{{ $t("update.btn.later") }}
@@ -68,11 +68,17 @@ export default {
 			type: Boolean,
 			default: false
 		},
-		newVersion: [String, Boolean]
+		/** Версия прошивки */
+		version: String,
+		/** Откатит прошивки */
+		rollback: {
+			type: Boolean,
+			default: false
+		}
 	},
 	setup(props: any, { emit }: { emit: any })
 	{
-		const { modelValue } = toRefs(props);
+		const { modelValue, rollback } = toRefs(props);
 		const { t } = useI18n();
 
 		const visibleUpdate = computed({
@@ -81,7 +87,6 @@ export default {
 		});
 		const visibleProcess = ref(false);
 		const visibleLater = computed((): boolean => (store.getters["config/version"] as IVersion).supported);
-		const version = ref("");
 		const message = ref("");
 		const progress = ref(0);
 		const uploading = ref("");
@@ -92,7 +97,6 @@ export default {
 			if (val)
 			{
 				visibleProcess.value = false;
-				version.value = "";
 				message.value = "";
 				progress.value = 0;
 				uploading.value = "";
@@ -148,6 +152,7 @@ export default {
 					timeLeft.value = "";
 
 					canbus.version.clear();
+					if (rollback.value) window.location.reload();
 				}
 			}
 			else onErrorUpdate(t("update.notify.error"));
@@ -205,7 +210,6 @@ export default {
 			visibleUpdate,
 			visibleProcess,
 			visibleLater,
-			version,
 			message,
 			uploading,
 			timeLeft,

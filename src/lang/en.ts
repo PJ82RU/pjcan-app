@@ -39,10 +39,12 @@ export default {
 		warning: "Attention!",
 		btn: {
 			update: "Update",
+			rollback: "Rollback",
 			later: "Later"
 		},
 		dialog: {
 			updateTo: "Update PJCAN firmware to version {version} ?",
+			rollbackTo: "Rollback PJCAN firmware to version {version} ?",
 			browserOutdated: "Your browser version is outdated.\n" + "Update it and open the web application again."
 		},
 		process: {
@@ -84,6 +86,7 @@ export default {
 			options: "Options"
 		},
 		update: "Upgrade to {version}",
+		rollback: "Rollback to {version}",
 		about: "About"
 	},
 

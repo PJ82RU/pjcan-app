@@ -41,7 +41,9 @@ import {
 	DeviceUpdate,
 	DeviceScannerAction,
 	DeviceScannerValue,
-	IDeviceScannerValue
+	IDeviceScannerValue,
+	IDeviceFirmwareUrl,
+	API_DEVICE_ROLLBACK_EVENT
 } from "@/models/pjcan/device";
 import {
 	API_BUTTONS_SW1_CONFIG_EXEC,
@@ -170,7 +172,6 @@ import {
 	API_VERSION_EVENT,
 	API_VERSION_EXEC,
 	API40_VERSION_EVENT,
-	API40_VERSION_EXEC,
 	IVersion,
 	Version
 } from "@/models/pjcan/version";
@@ -179,6 +180,7 @@ import { API_CHOICE_EXEC, ChoiceValue, IChoiceValue } from "@/models/pjcan/choic
 import { IQuery } from "@/models/interfaces/IQuery";
 import { API_CANBUS_EVENT } from "@/models/pjcan/base/BaseModel";
 import { EDeviceUpdateError } from "@/models/pjcan/device/EDeviceUpdateError";
+import { IDeviceHardware } from "@/models/pjcan/device/IDeviceValue";
 
 const dev = process.env.NODE_ENV === "development";
 
@@ -199,6 +201,8 @@ export class Canbus extends EventEmitter
 
 	/** Версия прошивки PJCAN */
 	version: IVersion = new Version();
+	/** Версия платы */
+	hardware: IDeviceHardware = {} as IDeviceHardware;
 	/** Статус активации устройства */
 	activation: boolean = false;
 
@@ -376,6 +380,7 @@ export class Canbus extends EventEmitter
 		if (device.isData)
 		{
 			this.removeListener(API_DEVICE_VALUE_EVENT, this.__onIsActivation);
+			this.hardware = device.hardware;
 			this.activation = device.activation;
 			if (!this.activation)
 			{
@@ -383,7 +388,16 @@ export class Canbus extends EventEmitter
 				this.addListener(API_DEVICE_INFO_EVENT, this.__onActivation);
 				this.query(new DeviceInfo());
 			}
-			else this.emit(API_CANBUS_EVENT, this.status);
+			else
+			{
+				this.emit(API_CANBUS_EVENT, this.status);
+				this.rollbackVersion()
+					.then((rollback: IDeviceFirmwareUrl) =>
+					{
+						this.emit(API_DEVICE_ROLLBACK_EVENT, rollback);
+					})
+					.catch(() => {});
+			}
 		}
 	}
 
@@ -630,9 +644,9 @@ export class Canbus extends EventEmitter
 	}
 
 	/** Запустить процесс загрузки прошивки на устройство */
-	updateStart(): void
+	updateStart(rollback: boolean = false): void
 	{
-		getFirmware(this.update.firmwareUrl)
+		getFirmware(!rollback ? this.update.firmware.url : this.update.rollback.url)
 			.then((res: any) =>
 			{
 				if (res?.byteLength > 0)
@@ -641,7 +655,9 @@ export class Canbus extends EventEmitter
 					this.update.total = res.byteLength;
 					this.update.offset = 0;
 					this.update.error = EDeviceUpdateError.UPD_OK;
-					this.update.encrypt = this.update.iv;
+					this.update.encrypt = this.update.setIV(
+						!rollback ? this.update.firmware.iv : this.update.rollback.iv
+					);
 					setTimeout(() => this.updateUpload(), 1000);
 				}
 			})
@@ -686,8 +702,9 @@ export class Canbus extends EventEmitter
 			getFirmwareVersion()
 				.then((res: any) =>
 				{
-					this.update.firmwareUrl = res?.url ?? "";
-					this.update.setIV(res?.iv);
+					const { firmware } = this.update;
+					firmware.url = res?.url ?? "";
+					firmware.iv = res?.iv ?? "";
 
 					// проверяем версию прошивки
 					if (res.current?.length === 4)
@@ -702,6 +719,27 @@ export class Canbus extends EventEmitter
 						if (this.version.compare(newVersion, 4) > 0) resolve(newVersion);
 						else reject("Current version");
 					}
+					else reject("No data");
+				})
+				.catch((e) => reject(e));
+		});
+	}
+
+	/** Получить версию прошивки для отката */
+	rollbackVersion(): Promise<IDeviceFirmwareUrl>
+	{
+		return new Promise((resolve, reject) =>
+		{
+			getFirmwareVersion()
+				.then((res: any) =>
+				{
+					const { rollback } = this.update;
+					const resVer: any = this.hardware.major === 4 ? (this.hardware.minor === 0 ? res?.v40 : this.hardware.minor === 1 ? res?.v41 : null) : null;
+					rollback.current = resVer?.current?.length === 4 ? `${resVer.current[0]}.${resVer.current[1]}.${resVer.current[2]}.${resVer.current[3]}` : "";
+					rollback.url = resVer?.url ?? "";
+					rollback.iv = resVer?.iv ?? "";
+
+					if (rollback.url.length && rollback.current.length) resolve(rollback);
 					else reject("No data");
 				})
 				.catch((e) => reject(e));

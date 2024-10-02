@@ -20,12 +20,16 @@
 			<v-btn icon="mdi-fit-to-screen-outline" @click="toggleFullscreen" />
 
 			<bluetooth-btn />
-			<update-firmware-dialog v-model="visibleUpdate" :new-version="newVersionFirmware" />
+			<update-firmware-dialog
+				v-model="visibleUpdate"
+				:version="!rollback ? newVersionFirmware : rollbackFirmware"
+				:rollback="rollback"
+			/>
 
 			<menu-dots :menu="menu" @click:item="onMenuClick" />
 			<about-dialog v-model="visibleAbout" />
 			<onboard-buttons-dialog v-model="visibleOnboardButtons" />
-            <locale-dialog v-model="visibleLocale" />
+			<locale-dialog v-model="visibleLocale" />
 		</v-app-bar>
 		<v-main>
 			<div class="base-layout__bg" />
@@ -67,6 +71,7 @@ import LocaleDialog from "@/components/dialogs/LocaleDialog.vue";
 import { IMessage } from "@/models/interfaces/message/IMessage";
 import { Timeout } from "@/models/types/Timeout";
 import { API_NEW_VERSION_EVENT, IVersion } from "@/models/pjcan/version";
+import { API_DEVICE_ROLLBACK_EVENT, IDeviceFirmwareUrl } from "@/models/pjcan/device";
 
 export default {
 	name: "BaseLayout",
@@ -97,7 +102,9 @@ export default {
 			const result = router.currentRoute.value.meta?.title as string;
 			return "PJCAN: " + (result?.length > 0 ? t(result) : "");
 		});
-		const newVersionFirmware = ref(false as string | boolean);
+		const newVersionFirmware = ref("");
+		const rollbackFirmware = ref("");
+		const rollback = ref(false);
 		const menu = computed((): IMenuItem[] =>
 		{
 			const result = [] as IMenuItem[];
@@ -112,9 +119,13 @@ export default {
 				{ id: 20, title: t("menu.language") },
 				{} as IMenuItem
 			);
-			if (typeof newVersionFirmware.value === "string")
+			if (newVersionFirmware.value.length)
 			{
 				result.push({ id: 70, title: t("menu.update", { version: newVersionFirmware.value }) });
+			}
+			if (rollbackFirmware.value.length)
+			{
+				result.push({ id: 71, title: t("menu.rollback", { version: rollbackFirmware.value }) });
 			}
 			result.push({ id: 30, title: t("menu.about") });
 			return result;
@@ -144,6 +155,11 @@ export default {
 					router.push({ name: "Options" });
 					break;
 				case 70:
+					rollback.value = false;
+					visibleUpdate.value = true;
+					break;
+				case 71:
+					rollback.value = true;
 					visibleUpdate.value = true;
 					break;
 			}
@@ -194,6 +210,12 @@ export default {
 			else visibleUpdate.value = true;
 		};
 
+		/** Доступна версия прошивки отката */
+		const onRollback = (rollback: IDeviceFirmwareUrl): void =>
+		{
+			if (rollback.current?.length) rollbackFirmware.value = rollback.current;
+		};
+
 		/** Изменение размеров страницы */
 		const windowSize = () =>
 		{
@@ -204,12 +226,14 @@ export default {
 		onMounted(() =>
 		{
 			canbus.addListener(API_NEW_VERSION_EVENT, onNewVersion);
+			canbus.addListener(API_DEVICE_ROLLBACK_EVENT, onRollback);
 			window.addEventListener("resize", windowSize);
 			windowSize();
 		});
 		onUnmounted(() =>
 		{
 			canbus.removeListener(API_NEW_VERSION_EVENT, onNewVersion);
+			canbus.removeListener(API_DEVICE_ROLLBACK_EVENT, onRollback);
 			window.removeEventListener("resize", windowSize);
 		});
 
@@ -217,6 +241,7 @@ export default {
 			title,
 			menu,
 			newVersionFirmware,
+			rollbackFirmware,
 			visibleAbout,
 			visibleOnboardButtons,
 			visibleUpdate,
@@ -225,6 +250,7 @@ export default {
 			pageHeight,
 			visibleMessage,
 			message,
+			rollback,
 			onMenuClick,
 			toggleFullscreen
 		};

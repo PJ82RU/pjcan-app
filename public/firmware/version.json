@@ -1,5 +1,15 @@
 {
 	"current": [ 4, 1, 0, 18 ],
 	"iv": "11d0963b6240dda4959064ace6068382",
-	"url": "/firmware/firmware.bin.11d0963b6240dda4959064ace6068382"
+	"url": "/firmware/firmware.bin.11d0963b6240dda4959064ace6068382",
+	"v40": {
+		"current": [ 4, 0, 3, 139 ],
+		"iv": "9f2374547b5c49095f4c9da5155d2ee4",
+		"url": "/firmware/firmware.bin.9f2374547b5c49095f4c9da5155d2ee4"
+	},
+	"v41": {
+		"current": [ 4, 0, 3, 141 ],
+		"iv": "a41e2c6dcb649dc943558ad6f3b9dbd1",
+		"url": "/firmware/firmware.bin.a41e2c6dcb649dc943558ad6f3b9dbd1"
+	}
 }

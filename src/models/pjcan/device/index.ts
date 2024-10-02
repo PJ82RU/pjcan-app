@@ -23,23 +23,25 @@ import {
 	API40_DEVICE_UPDATE_EXEC,
 	API_DEVICE_UPDATE_EVENT,
 	API_DEVICE_UPDATE_EVENT_ERROR,
+	API_DEVICE_ROLLBACK_EVENT,
 	DeviceUpdate
 } from "./DeviceUpdate";
-import { IDeviceUpdate } from "../device/IDeviceUpdate";
+import { IDeviceUpdate } from "./IDeviceUpdate";
 
 import {
 	API_DEVICE_SCANNER_CONFIG_EXEC,
 	API_DEVICE_SCANNER_CONFIG_EVENT,
 	DeviceScannerAction
 } from "./DeviceScannerAction";
-import { IDeviceScannerAction } from "../device/IDeviceScannerAction";
+import { IDeviceScannerAction } from "./IDeviceScannerAction";
 
 import {
 	API_DEVICE_SCANNER_VALUE_EXEC,
 	API_DEVICE_SCANNER_VALUE_EVENT,
 	DeviceScannerValue
 } from "./DeviceScannerValue";
-import { IDeviceScannerValue } from "../device/IDeviceScannerValue";
+import { IDeviceScannerValue } from "./IDeviceScannerValue";
+import { IDeviceFirmwareUrl } from "./IDeviceFirmwareUrl";
 
 export {
 	API_DEVICE_CONFIG_EXEC,
@@ -58,6 +60,7 @@ export {
 	API40_DEVICE_UPDATE_EXEC,
 	API_DEVICE_UPDATE_EVENT,
 	API_DEVICE_UPDATE_EVENT_ERROR,
+	API_DEVICE_ROLLBACK_EVENT,
 	DeviceUpdate,
 	API_DEVICE_SCANNER_CONFIG_EXEC,
 	API_DEVICE_SCANNER_CONFIG_EVENT,
@@ -77,5 +80,6 @@ export type {
 	IDeviceInfo,
 	IDeviceUpdate,
 	IDeviceScannerAction,
-	IDeviceScannerValue
+	IDeviceScannerValue,
+	IDeviceFirmwareUrl
 };

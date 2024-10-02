@@ -7,6 +7,7 @@ export const API_DEVICE_UPDATE_EXEC = 0x05;
 export const API40_DEVICE_UPDATE_EXEC = 0x5a;
 export const API_DEVICE_UPDATE_EVENT = "DeviceUpdate";
 export const API_DEVICE_UPDATE_EVENT_ERROR = "DeviceUpdateError";
+export const API_DEVICE_ROLLBACK_EVENT = "DeviceRollback";
 
 /** Модель обновления прошивки */
 export class DeviceUpdate extends EventEmitter implements IDeviceUpdate
@@ -23,7 +24,8 @@ export class DeviceUpdate extends EventEmitter implements IDeviceUpdate
 	static size: number = 503;
 
 	protocol = 41;
-	firmwareUrl = "";
+	firmware = { url: "", iv: "" };
+	rollback = { current: "", url: "", iv: "" };
 	firmwareData = new Uint8Array(0);
 	offset = 0;
 	error = EDeviceUpdateError.UPD_OK;
