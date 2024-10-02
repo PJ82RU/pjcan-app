@@ -12,10 +12,14 @@
 			<v-btn
 				v-if="$vuetify.display.mdAndUp"
 				class="base-layout__onboard-buttons"
+				rounded
 				@click="visibleOnboardButtons = true"
 			>
 				<icon-custom name="steering-wheel" :colors="{ primary: 'white', secondary: 'white' }" />
 				<span class="pl-2">ONBOARD</span>
+			</v-btn>
+			<v-btn icon>
+				<icon-custom name="save" :color="colorConfigSave" />
 			</v-btn>
 			<v-btn icon="mdi-fit-to-screen-outline" @click="toggleFullscreen" />
 
@@ -102,6 +106,9 @@ export default {
 			const result = router.currentRoute.value.meta?.title as string;
 			return "PJCAN: " + (result?.length > 0 ? t(result) : "");
 		});
+		const colorConfigSave = computed((): string =>
+			store.getters["value/device"].config_save ? "success" : "error"
+		);
 		const newVersionFirmware = ref("");
 		const rollbackFirmware = ref("");
 		const rollback = ref(false);
@@ -250,6 +257,7 @@ export default {
 			pageHeight,
 			visibleMessage,
 			message,
+			colorConfigSave,
 			rollback,
 			onMenuClick,
 			toggleFullscreen

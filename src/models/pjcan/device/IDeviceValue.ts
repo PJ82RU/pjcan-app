@@ -14,6 +14,7 @@ export interface IDeviceValue extends IBaseModel {
 	state_reverse: boolean; // Текущее состояние контакта REVERSE
 	state_r_position: boolean; // Текущее состояние контакта R_POSITION
 	state_amp_illum: boolean; // Текущее состояние контакта AMP_ILLUM
+	config_save: boolean; // Статус сохранения конфигурации
 	hardware: IDeviceHardware; // Версия платы
 	led: number; // Состояние мигания светодиода
 	voltmeter: number; // Значение вольтметра (n/100)
