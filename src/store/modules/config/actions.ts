@@ -4,7 +4,7 @@ import { Timeout } from "@/models/types/Timeout";
 let loop: Timeout;
 /**
  * Циклическое обновление информацию об устройстве, каждые 10 сек.
- * @param {any} state
+ * @param getters
  * @param {boolean} enabled Запустить цикл обновления
  */
 export const infoUpdateLoop = ({ getters }: { getters: any }, enabled: Boolean) =>

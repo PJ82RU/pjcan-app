@@ -14,6 +14,7 @@ export class MazdaConfig extends BaseModel implements IMazdaConfig
 {
 	static struct: any = {
 		lcd: BluetoothStruct.bit(),
+		lcdClock24: BluetoothStruct.bit(),
 		carModel: BluetoothStruct.uint8(),
 		logo: BluetoothStruct.char(12),
 		hello: BluetoothStruct.char(32)
@@ -21,6 +22,7 @@ export class MazdaConfig extends BaseModel implements IMazdaConfig
 	static size: number = 46;
 
 	lcd = false;
+	lcdClock24 = false;
 	carModel = TCarModel.CAR_MODEL_UNKNOWN;
 	logo = "";
 	hello = "";

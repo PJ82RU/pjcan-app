@@ -10,11 +10,7 @@
 	>
 		<template #body>
 			<v-row class="pb-2">
-				<v-col
-					v-if="visibleClockInfo"
-					cols="12"
-					class="pb-0 d-flex justify-center"
-				>
+				<v-col v-if="visibleClockInfo" cols="12" class="pb-0 d-flex justify-center">
 					<v-btn-group class="onboard-buttons__btns-main">
 						<v-btn
 							color="primary"
@@ -42,11 +38,7 @@
 						</v-btn>
 					</v-btn-group>
 				</v-col>
-				<v-col
-					v-if="visibleClockInfo"
-					cols="12"
-					class="pb-0 d-flex justify-center"
-				>
+				<v-col v-if="visibleClockInfo" cols="12" class="pb-0 d-flex justify-center">
 					<v-btn-group class="onboard-buttons__btns-mode">
 						<v-btn
 							color="secondary"
@@ -74,11 +66,7 @@
 						</v-btn>
 					</v-btn-group>
 				</v-col>
-				<v-col
-					v-if="visibleHourMinute"
-					cols="12"
-					class="d-flex justify-center"
-				>
+				<v-col v-if="visibleHourMinute" cols="12" class="d-flex justify-center">
 					<v-btn-group class="onboard-buttons__btns-added">
 						<v-btn
 							color="secondary"
@@ -107,14 +95,16 @@
 						<v-btn
 							color="secondary"
 							size="x-large"
-							@mousedown="onPress(TMazdaButton.MAZDA_BUTTON_CLOCK_24, 500, false)"
-							@touchstart="onTouchPress(TMazdaButton.MAZDA_BUTTON_CLOCK_24, 500, false)"
+							@mousedown="onPress(TMazdaButton.MAZDA_BUTTON_CLOCK_24, 0, false)"
+							@touchstart="onTouchPress(TMazdaButton.MAZDA_BUTTON_CLOCK_24, 0, false)"
 							@mouseup="onRelease(TMazdaButton.MAZDA_BUTTON_CLOCK_24)"
 							@mouseleave="onRelease(TMazdaButton.MAZDA_BUTTON_CLOCK_24)"
 							@touchend="onTouchRelease(TMazdaButton.MAZDA_BUTTON_CLOCK_24)"
 							@touchcancel="onTouchRelease(TMazdaButton.MAZDA_BUTTON_CLOCK_24)"
 						>
-							{{ $t("onboardButtons.buttons.clock24") }}
+							<span :class="{ selected: clock24 }">24</span>
+							/
+							<span :class="{ selected: !clock24 }">12</span>
 						</v-btn>
 						<v-btn
 							color="secondary"
@@ -174,6 +164,7 @@ export default {
 			get: (): boolean => modelValue.value,
 			set: (val: boolean): void => emit("update:modelValue", val)
 		});
+		const clock24 = computed((): TCarModel => store.getters["config/mazda"].lcdClock24);
 		const carModel = computed((): TCarModel => store.getters["config/carModel"]);
 		const visibleClockInfo = computed(
 			(): boolean =>
@@ -213,6 +204,8 @@ export default {
 			action.timePress = timeout;
 			canbus.query(action);
 			navigator.vibrate(30);
+
+			if (btn === TMazdaButton.MAZDA_BUTTON_CLOCK_24) canbus.query(store.getters["config/mazda"], true);
 		};
 
 		const timeouts: ITimeoutButton[] = [{}, {}, {}, {}, {}, {}, {}] as ITimeoutButton[];
@@ -305,6 +298,7 @@ export default {
 			visible,
 			visibleClockInfo,
 			visibleHourMinute,
+			clock24,
 			carModel,
 			onPress,
 			onTouchPress,
@@ -359,6 +353,11 @@ export default {
 		::v-deep(.v-btn) {
 			width: 100% !important;
 		}
+	}
+
+	.selected {
+		color: $success;
+		font-weight: bold;
 	}
 }
 </style>
