@@ -777,7 +777,8 @@ export default {
 			5: "Mazda CX-7",
 			6: "Mazda CX-7 rest",
 			7: "Mazda CX-9",
-			8: "Mazda CX-9 rest"
+			8: "Mazda CX-9 rest",
+			9: "Mazda 5 (тестируется)"
 		}
 	},
 

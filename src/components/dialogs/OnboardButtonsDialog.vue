@@ -11,10 +11,7 @@
 		<template #body>
 			<v-row class="pb-2">
 				<v-col
-					v-if="
-						carModel !== TCarModel.CAR_MODEL_MAZDA_CX7_REST &&
-						carModel !== TCarModel.CAR_MODEL_MAZDA_CX9_REST
-					"
+					v-if="visibleClockInfo"
 					cols="12"
 					class="pb-0 d-flex justify-center"
 				>
@@ -46,10 +43,7 @@
 					</v-btn-group>
 				</v-col>
 				<v-col
-					v-if="
-						carModel !== TCarModel.CAR_MODEL_MAZDA_CX7_REST &&
-						carModel !== TCarModel.CAR_MODEL_MAZDA_CX9_REST
-					"
+					v-if="visibleClockInfo"
 					cols="12"
 					class="pb-0 d-flex justify-center"
 				>
@@ -81,12 +75,7 @@
 					</v-btn-group>
 				</v-col>
 				<v-col
-					v-if="
-						carModel === TCarModel.CAR_MODEL_MAZDA_3_BK ||
-						carModel === TCarModel.CAR_MODEL_MAZDA_3_BL ||
-						carModel === TCarModel.CAR_MODEL_MAZDA_CX7_REST ||
-						carModel === TCarModel.CAR_MODEL_MAZDA_CX9_REST
-					"
+					v-if="visibleHourMinute"
 					cols="12"
 					class="d-flex justify-center"
 				>
@@ -165,10 +154,6 @@ import { ITimeoutButton } from "@/models/interfaces/ITimeoutButton";
 export default {
 	name: "OnboardButtonsDialog",
 	computed: {
-		TCarModel()
-		{
-			return TCarModel;
-		},
 		TMazdaButton()
 		{
 			return TMazdaButton;
@@ -190,6 +175,23 @@ export default {
 			set: (val: boolean): void => emit("update:modelValue", val)
 		});
 		const carModel = computed((): TCarModel => store.getters["config/carModel"]);
+		const visibleClockInfo = computed(
+			(): boolean =>
+				carModel.value === TCarModel.CAR_MODEL_MAZDA_3_BK ||
+				carModel.value === TCarModel.CAR_MODEL_MAZDA_6_GG ||
+				carModel.value === TCarModel.CAR_MODEL_MAZDA_CX7 ||
+				carModel.value === TCarModel.CAR_MODEL_MAZDA_CX9 ||
+				carModel.value === TCarModel.CAR_MODEL_MAZDA_5
+		);
+		const visibleHourMinute = computed(
+			(): boolean =>
+				carModel.value === TCarModel.CAR_MODEL_MAZDA_3_BK ||
+				carModel.value === TCarModel.CAR_MODEL_MAZDA_3_BL ||
+				carModel.value === TCarModel.CAR_MODEL_MAZDA_CX7_REST ||
+				carModel.value === TCarModel.CAR_MODEL_MAZDA_CX9 ||
+				carModel.value === TCarModel.CAR_MODEL_MAZDA_CX9_REST ||
+				carModel.value === TCarModel.CAR_MODEL_MAZDA_5
+		);
 
 		const isTouchDevice = (): boolean =>
 		{
@@ -198,11 +200,11 @@ export default {
 		};
 
 		/**
-         * Отправить нажатие
-         * @param {TMazdaButton} btn Кнопка
-         * @param {boolean} press Нажата
-         * @param {number} timeout Время удержания
-         */
+		 * Отправить нажатие
+		 * @param {TMazdaButton} btn Кнопка
+		 * @param {boolean} press Нажата
+		 * @param {number} timeout Время удержания
+		 */
 		const send = (btn: TMazdaButton, press: boolean, timeout: number): void =>
 		{
 			const action = new MazdaAction();
@@ -215,11 +217,11 @@ export default {
 
 		const timeouts: ITimeoutButton[] = [{}, {}, {}, {}, {}, {}, {}] as ITimeoutButton[];
 		/**
-         * Нажать
-         * @param {TMazdaButton} btn Кнопка
-         * @param {number} timeout Время удержания
-         * @param {boolean} reSend Повторно отправить
-         */
+		 * Нажать
+		 * @param {TMazdaButton} btn Кнопка
+		 * @param {number} timeout Время удержания
+		 * @param {boolean} reSend Повторно отправить
+		 */
 		const press = (btn: TMazdaButton, timeout: number, reSend: boolean): void =>
 		{
 			const item = timeouts[btn];
@@ -240,9 +242,9 @@ export default {
 		};
 
 		/**
-         * Отпустить
-         * @param {TMazdaButton} btn Кнопка
-         */
+		 * Отпустить
+		 * @param {TMazdaButton} btn Кнопка
+		 */
 		const release = (btn: TMazdaButton): void =>
 		{
 			const item = timeouts[btn];
@@ -301,6 +303,8 @@ export default {
 
 		return {
 			visible,
+			visibleClockInfo,
+			visibleHourMinute,
 			carModel,
 			onPress,
 			onTouchPress,
@@ -344,9 +348,16 @@ export default {
 		&-mode,
 		&-main,
 		&-added {
-			box-shadow: 0 3px 1px -2px var(--v-shadow-key-umbra-opacity, rgba(0, 0, 0, 0.2)),
+			box-shadow:
+				0 3px 1px -2px var(--v-shadow-key-umbra-opacity, rgba(0, 0, 0, 0.2)),
 				0px 2px 2px 0px var(--v-shadow-key-penumbra-opacity, rgba(0, 0, 0, 0.14)),
 				0px 1px 5px 0px var(--v-shadow-key-penumbra-opacity, rgba(0, 0, 0, 0.12));
+		}
+	}
+
+	.entire-block {
+		::v-deep(.v-btn) {
+			width: 100% !important;
 		}
 	}
 }

@@ -10,7 +10,7 @@
 			<v-spacer />
 
 			<v-btn
-				v-if="$vuetify.display.mdAndUp"
+				v-if="$vuetify.display.mdAndUp && visibleOnBoard"
 				class="base-layout__onboard-buttons"
 				rounded
 				@click="visibleOnboardButtons = true"
@@ -76,6 +76,7 @@ import { IMessage } from "@/models/interfaces/message/IMessage";
 import { Timeout } from "@/models/types/Timeout";
 import { API_NEW_VERSION_EVENT, IVersion } from "@/models/pjcan/version";
 import { API_DEVICE_ROLLBACK_EVENT, IDeviceFirmwareUrl } from "@/models/pjcan/device";
+import { TCarModel } from "@/models/pjcan/mazda";
 
 export default {
 	name: "BaseLayout",
@@ -101,6 +102,11 @@ export default {
 		const pageWidth = ref(0);
 		const pageHeight = ref(0);
 
+		const carModel = computed((): TCarModel => store.getters["config/carModel"]);
+		const visibleOnBoard = computed(
+			(): boolean =>
+				carModel.value !== TCarModel.CAR_MODEL_UNKNOWN && carModel.value !== TCarModel.CAR_MODEL_MAZDA_6_GH
+		);
 		const title = computed((): string =>
 		{
 			const result = router.currentRoute.value.meta?.title as string;
@@ -245,10 +251,12 @@ export default {
 		});
 
 		return {
+			carModel,
 			title,
 			menu,
 			newVersionFirmware,
 			rollbackFirmware,
+			visibleOnBoard,
 			visibleAbout,
 			visibleOnboardButtons,
 			visibleUpdate,
