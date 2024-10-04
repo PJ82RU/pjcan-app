@@ -734,8 +734,20 @@ export class Canbus extends EventEmitter
 				.then((res: any) =>
 				{
 					const { rollback } = this.update;
-					const resVer: any = this.hardware.major === 4 ? (this.hardware.minor === 0 ? res?.v40 : this.hardware.minor === 1 ? res?.v41 : null) : null;
-					rollback.current = resVer?.current?.length === 4 ? `${resVer.current[0]}.${resVer.current[1]}.${resVer.current[2]}.${resVer.current[3]}` : "";
+					const resVer: any =
+						this.hardware.major === 4
+							? this.hardware.minor === 0
+								? res?.v40
+								: this.hardware.minor === 1
+									? this.hardware.build === 0
+										? res?.v41a
+										: res?.v41b
+									: null
+							: null;
+					rollback.current =
+						resVer?.current?.length === 4
+							? `${resVer.current[0]}.${resVer.current[1]}.${resVer.current[2]}.${resVer.current[3]}`
+							: "";
 					rollback.url = resVer?.url ?? "";
 					rollback.iv = resVer?.iv ?? "";
 

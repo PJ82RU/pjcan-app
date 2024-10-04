@@ -1,13 +1,18 @@
 {
-	"current": [ 4, 1, 0, 22 ],
-	"iv": "0073b31badb315ecf90f96137a861154",
-	"url": "/firmware/firmware.bin.0073b31badb315ecf90f96137a861154",
+	"current": [ 4, 1, 0, 23 ],
+	"iv": "6f595c7a0ef3c929219a41f712645a5b",
+	"url": "/firmware/firmware.bin.6f595c7a0ef3c929219a41f712645a5b",
 	"v40": {
 		"current": [ 4, 0, 3, 139 ],
 		"iv": "9f2374547b5c49095f4c9da5155d2ee4",
 		"url": "/firmware/firmware.bin.9f2374547b5c49095f4c9da5155d2ee4"
 	},
-	"v41": {
+	"v41a": {
+		"current": [ 4, 0, 3, 142 ],
+		"iv": "e49c2b19192a68015153092d1141cb12",
+		"url": "/firmware/firmware.bin.e49c2b19192a68015153092d1141cb12"
+	},
+	"v41b": {
 		"current": [ 4, 0, 3, 141 ],
 		"iv": "a41e2c6dcb649dc943558ad6f3b9dbd1",
 		"url": "/firmware/firmware.bin.a41e2c6dcb649dc943558ad6f3b9dbd1"

@@ -114,7 +114,7 @@ export default {
 			progress.value = 0;
 			visibleUpdate.value = false;
 			visibleProcess.value = true;
-			canbus.updateStart();
+			canbus.updateStart(rollback.value);
 		};
 
 		/**
