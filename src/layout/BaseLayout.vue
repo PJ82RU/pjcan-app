@@ -55,7 +55,7 @@
 </template>
 
 <script lang="ts">
-import { computed, onMounted, onUnmounted, ref, watch } from "vue";
+import { computed, onBeforeMount, onMounted, onUnmounted, ref, watch } from "vue";
 import router from "@/router";
 import store from "@/store";
 import { useI18n } from "vue-i18n";
@@ -93,6 +93,8 @@ export default {
 	setup()
 	{
 		const { t } = useI18n();
+
+		const installPrompt = ref(undefined as undefined | Event);
 
 		const visibleAbout = ref(false);
 		const visibleOnboardButtons = ref(false);
@@ -140,6 +142,10 @@ export default {
 			{
 				result.push({ id: 71, title: t("menu.rollback", { version: rollbackFirmware.value }) });
 			}
+			if (installPrompt.value)
+			{
+				result.push({ id: 72, title: t("menu.install") });
+			}
 			result.push({ id: 30, title: t("menu.about") });
 			return result;
 		});
@@ -174,6 +180,14 @@ export default {
 				case 71:
 					rollback.value = true;
 					visibleUpdate.value = true;
+					break;
+				case 72:
+					if (installPrompt.value)
+					{
+						// @ts-ignore
+						installPrompt.value.prompt();
+						installPrompt.value = undefined;
+					}
 					break;
 			}
 		};
@@ -235,6 +249,15 @@ export default {
 			pageWidth.value = document.documentElement.clientWidth;
 			pageHeight.value = document.documentElement.clientHeight;
 		};
+
+		onBeforeMount(() =>
+		{
+			window.addEventListener("beforeinstallprompt", (e: Event) =>
+			{
+				e.preventDefault();
+				installPrompt.value = e;
+			});
+		});
 
 		onMounted(() =>
 		{

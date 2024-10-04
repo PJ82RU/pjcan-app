@@ -3,20 +3,27 @@ const path = require("path");
 
 const resolve = (dir) => path.join(__dirname, dir);
 
+let pathApp, outApp;
+switch (process.env.VUE_APP_MODE)
+{
+	case "test":
+		pathApp = "/pjcan-test/";
+		outApp = "../pjcan-test/docs";
+		break;
+	case "pjcan41":
+		pathApp = "/pjcan41-app/";
+		outApp = "../pjcan41-app/docs";
+		break;
+	default:
+		pathApp = "/pjcan-app/";
+		outApp = "./dist";
+		break;
+}
+
 module.exports = defineConfig({
 	transpileDependencies: true,
-	publicPath:
-		process.env.VUE_APP_MODE === "test"
-			? "/pjcan-test/"
-			: process.env.VUE_APP_MODE === "pjcan41"
-				? "/pjcan41-app/"
-				: "/pjcan-app/",
-	outputDir:
-		process.env.VUE_APP_MODE === "test"
-			? "../pjcan-test/docs"
-			: process.env.VUE_APP_MODE === "pjcan41"
-				? "../pjcan41-app/docs"
-				: "./dist",
+	publicPath: pathApp,
+	outputDir: outApp,
 	productionSourceMap: false,
 
 	configureWebpack: {
@@ -97,11 +104,15 @@ module.exports = defineConfig({
 	},
 
 	pwa: {
+		lang: "ru",
 		name: "PJCAN",
+		short_name: "PJCAN",
+		description: "CANBUS адаптер",
 		themeColor: "#0b677b",
 		msTileColor: "#25323e",
 		appleMobileWebAppCapable: "yes",
 		appleMobileWebAppStatusBarStyle: "#0b677b",
+		id: pathApp,
 		icons: [
 			{ "src": "./img/icons/android-chrome-192x192.png", "sizes": "192x192", "type": "image/png" },
 			{ "src": "./img/icons/android-chrome-512x512.png", "sizes": "512x512", "type": "image/png" },
@@ -124,7 +135,8 @@ module.exports = defineConfig({
 			background_color: "#121517"
 		},
 		workboxOptions: {
-			navigateFallback: "index.html"
+			navigateFallback: "index.html",
+			exclude: [/runtime/]
 		}
 	}
 });

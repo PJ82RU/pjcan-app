@@ -87,6 +87,7 @@ export default {
 		},
 		update: "Upgrade to {version}",
 		rollback: "Rollback to {version}",
+		install: "Install",
 		about: "About"
 	},
 

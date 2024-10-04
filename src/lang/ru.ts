@@ -88,6 +88,7 @@ export default {
 		},
 		update: "Обновить до {version}",
 		rollback: "Откатить до {version}",
+		install: "Установить",
 		about: "О программе"
 	},
 
