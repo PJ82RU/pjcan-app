@@ -188,6 +188,9 @@ export default {
 			}
 		};
 		canbus.addListener(API_CANBUS_EVENT, onBegin);
+
+		// Отключаемся от адаптера, перед тем как обновиться страница
+		window.onbeforeunload = (ev: BeforeUnloadEvent) => canbus.bluetooth.disconnect();
 	}
 };
 </script>

@@ -28,7 +28,10 @@ module.exports = defineConfig({
 
 	configureWebpack: {
 		optimization: {
-			splitChunks: false,
+			splitChunks: {
+				minSize: 20000,
+				maxSize: 250000
+			},
 			minimize: false
 		}
 	},

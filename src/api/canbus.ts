@@ -390,13 +390,16 @@ export class Canbus extends EventEmitter
 			}
 			else
 			{
-				this.emit(API_CANBUS_EVENT, this.status);
 				this.rollbackVersion()
 					.then((rollback: IDeviceFirmwareUrl) =>
 					{
 						this.emit(API_DEVICE_ROLLBACK_EVENT, rollback);
 					})
-					.catch(() => {});
+					.catch(() => {})
+					.finally(() =>
+					{
+						this.emit(API_CANBUS_EVENT, this.status);
+					});
 			}
 		}
 	}
