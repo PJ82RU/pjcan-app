@@ -18,19 +18,27 @@ export class BoseConfig extends BaseModel implements IBoseConfig
 		radioFM: BluetoothStruct.bit(),
 		wow: BluetoothStruct.bit(),
 		press: BluetoothStruct.bit(),
+		mute: BluetoothStruct.bit(),
+		start: BluetoothStruct.bit(),
+		volume: BluetoothStruct.uint8(),
+		start_volume: BluetoothStruct.uint8(),
 		balance: BluetoothStruct.int8(),
 		bass: BluetoothStruct.int8(),
 		fade: BluetoothStruct.int8(),
 		treble: BluetoothStruct.int8(),
 		centerPoint: BluetoothStruct.uint8()
 	};
-	static size: number = 6;
+	static size: number = 8;
 
 	on = false;
 	audioPlt = false;
 	radioFM = false;
 	wow = false;
 	press = false;
+	mute = false;
+	start = false;
+	volume = 0;
+	start_volume = 0;
 	balance = 0;
 	bass = 0;
 	fade = 0;

@@ -12,6 +12,7 @@ export class DeviceAction extends BaseModel implements IDeviceAction
 		reboot: BluetoothStruct.bit(),
 		resetConfig: BluetoothStruct.bit(),
 		resetView: BluetoothStruct.bit(),
+		resetButtons: BluetoothStruct.bit(),
 		save: BluetoothStruct.bit(),
 		format: BluetoothStruct.bit()
 	};
@@ -20,8 +21,11 @@ export class DeviceAction extends BaseModel implements IDeviceAction
 	reboot = false;
 	resetConfig = false;
 	resetView = false;
+	resetButtons = false;
 	save = false;
 	format = false;
+
+	highPriority = true;
 
 	constructor()
 	{

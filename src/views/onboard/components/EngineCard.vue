@@ -102,7 +102,7 @@ import ViewSettingDialog from "@/components/ViewSettingDialog.vue";
 import EngineConfigDialog from "./EngineConfigDialog.vue";
 
 import { IMenuItem } from "@/components/MenuDots.vue";
-import { TCarModel } from "@/models/pjcan/mazda";
+import { TCarModel } from "@/models/pjcan/onboard";
 
 export default {
 	name: "EngineCard",

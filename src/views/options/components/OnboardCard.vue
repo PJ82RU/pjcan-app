@@ -56,7 +56,7 @@ import IconCustom from "@/components/common/icon-custom/IconCustom.vue";
 
 import { IMenuItem } from "@/components/MenuDots.vue";
 import { IOnboardCard } from "@/models/interfaces/IOnboardCard";
-import { TCarModel } from "@/models/pjcan/mazda";
+import { TCarModel } from "@/models/pjcan/onboard";
 
 export default {
 	name: "OnboardCard",
@@ -66,13 +66,13 @@ export default {
 		const { t } = useI18n();
 		const flicking = inject("flicking") as any;
 
-		store.dispatch("app/readOnboardCardList");
+		store.dispatch("app/readOnboardCards");
 		const carModel = computed((): TCarModel => store.getters["config/carModel"]);
 		const isLoading = computed((): boolean => carModel.value !== TCarModel.CAR_MODEL_UNKNOWN);
 		const cardList = ref([] as any);
 		const setCardList = (model: TCarModel): void =>
 		{
-			cardList.value = [...store.getters["app/onboardCardList"]].map((x: IOnboardCard) => ({
+			cardList.value = [...store.getters["app/onboardCards"]].map((x: IOnboardCard) => ({
 				...x,
 				disabled: false,
 				visible: x.car.indexOf(model) >= 0
@@ -96,8 +96,8 @@ export default {
 		/** Изменение списка */
 		const onCardListChange = (): void =>
 		{
-			store.commit("app/setOnboardCardList", cardList.value);
-			store.dispatch("app/writeOnboardCardList");
+			store.commit("app/setOnboardCards", cardList.value);
+			store.dispatch("app/writeOnboardCards");
 		};
 
 		const menu = computed((): IMenuItem[] => [
@@ -110,7 +110,7 @@ export default {
 		 */
 		const onMenuClick = (item: IMenuItem): void =>
 		{
-			store.dispatch("app/resetOnboardCardList");
+			store.dispatch("app/resetOnboardCards");
 			setCardList(carModel.value);
 		};
 

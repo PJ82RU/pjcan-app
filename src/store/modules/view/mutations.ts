@@ -50,9 +50,9 @@ export const setVoltmeter = (state: any, data: DataView) =>
  * @param {any} state
  * @param {DataView} data Данные
  */
-export const setMazda = (state: any, data: DataView) =>
+export const setOnboard = (state: any, data: DataView) =>
 {
-	state.mazda.set(data);
+	state.onboard.set(data);
 };
 
 /**
@@ -60,9 +60,9 @@ export const setMazda = (state: any, data: DataView) =>
  * @param {any} state
  * @param {DataView} data Данные
  */
-export const setTeyesText = (state: any, data: DataView) =>
+export const setHeadText = (state: any, data: DataView) =>
 {
-	state.teyesText.set(data);
+	state.headText.set(data);
 };
 
 /**
@@ -143,16 +143,6 @@ export const setSensors = (state: any, data: DataView) =>
 export const setTemperature = (state: any, data: DataView) =>
 {
 	state.temperature.set(data);
-};
-
-/**
- * Записать значения отображения уровня звука
- * @param {any} state
- * @param {DataView} data Данные
- */
-export const setVolume = (state: any, data: DataView) =>
-{
-	state.volume.set(data);
 };
 
 /**

@@ -1,8 +1,8 @@
 import canbus from "@/api/canbus";
-import { TCarModel } from "@/models/pjcan/mazda";
+import { TCarModel } from "@/models/pjcan/onboard";
 import { TCenterPoint } from "@/models/pjcan/bose";
-import { TProtocol } from "@/models/pjcan/teyes";
-import { IButtonConfigItem } from "@/models/pjcan/buttons";
+import { TProtocol } from "@/models/pjcan/head-unit";
+import { ISW1ConfigButton } from "@/models/pjcan/buttons";
 
 /**
  * Записать версию прошивки
@@ -29,202 +29,163 @@ export const setInfo = (state: any, data: DataView) =>
  * @param {any} state
  * @param {DataView} data Данные
  */
-export const setMazda = (state: any, data: DataView) =>
+export const setOnboard = (state: any, data: DataView) =>
 {
-	state.mazda.set(data);
+	state.onboard.set(data);
 };
 
 /**
- * Mazda: CarModel
+ * Onboard: CarModel
  * @param {any} state
  * @param {TCarModel} value Новое значение
  */
-export const setMazdaCarModel = (state: any, value: TCarModel) =>
+export const setOnboardCarModel = (state: any, value: TCarModel) =>
 {
-	if (state.mazda.isData)
+	if (state.onboard.isData)
 	{
-		state.mazda.carModel = value;
-		canbus.query(state.mazda);
+		state.onboard.carModel = value;
+		canbus.query(state.onboard);
 		canbus.query(state.sw1, true);
 	}
 };
 /**
- * Mazda: LCD
+ * Onboard: LCD
  * @param {any} state
  * @param {boolean} value Новое значение
  */
-export const setMazdaLcd = (state: any, value: boolean) =>
+export const setOnboardLcd = (state: any, value: boolean) =>
 {
-	if (state.mazda.isData)
+	if (state.onboard.isData)
 	{
-		state.mazda.lcd = value;
-		canbus.query(state.mazda);
+		state.onboard.lcd = value;
+		canbus.query(state.onboard);
 	}
 };
 /**
- * Mazda: Logo
+ * Onboard: Logo
  * @param {any} state
  * @param {boolean} value Новое значение
  */
-export const setMazdaLogo = (state: any, value: string) =>
+export const setOnboardLogo = (state: any, value: string) =>
 {
-	if (state.mazda.isData)
+	if (state.onboard.isData)
 	{
-		state.mazda.logo = value;
-		canbus.query(state.mazda);
+		state.onboard.logo = value;
+		canbus.query(state.onboard);
 	}
 };
 /**
- * Mazda: Hello
+ * Onboard: Hello
  * @param {any} state
  * @param {boolean} value Новое значение
  */
-export const setMazdaHello = (state: any, value: string) =>
+export const setOnboardHello = (state: any, value: string) =>
 {
-	if (state.mazda.isData)
+	if (state.onboard.isData)
 	{
-		state.mazda.hello = value;
-		canbus.query(state.mazda);
+		state.onboard.hello = value;
+		canbus.query(state.onboard);
 	}
 };
 
 /**
- * Изменить конфигурацию Teyes
+ * Изменить конфигурацию Head Unit
  * @param {any} state
  * @param {DataView} data Данные
  */
-export const setTeyes = (state: any, data: DataView) =>
+export const setHead = (state: any, data: DataView) =>
 {
-	state.teyes.set(data);
+	state.head.set(data);
 };
 /**
- * Teyes: Protocol
+ * Head Unit: Protocol
  * @param {any} state
  * @param {TProtocol} value Новое значение
  */
-export const setTeyesProtocol = (state: any, value: TProtocol) =>
+export const setHeadProtocol = (state: any, value: TProtocol) =>
 {
-	if (state.teyes.isData)
+	if (state.head.isData)
 	{
-		state.teyes.protocol = value;
-		canbus.query(state.teyes);
+		state.head.protocol = value;
+		canbus.query(state.head);
 	}
 };
 /**
- * Teyes: ReverseUart
+ * Head Unit: ReverseUart
  * @param {any} state
  * @param {boolean} value Новое значение
  */
-export const setTeyesReverseUart = (state: any, value: boolean) =>
+export const setHeadReverseUart = (state: any, value: boolean) =>
 {
-	if (state.teyes.isData)
+	if (state.head.isData)
 	{
-		state.teyes.reverseUart = value;
-		canbus.query(state.teyes);
+		state.head.reverseUart = value;
+		canbus.query(state.head);
 	}
 };
 /**
- * Teyes: LcdShow
+ * Head Unit: SendButton
  * @param {any} state
  * @param {boolean} value Новое значение
  */
-export const setTeyesLcdShow = (state: any, value: boolean) =>
+export const setHeadSendButton = (state: any, value: boolean) =>
 {
-	if (state.teyes.isData)
+	if (state.head.isData)
 	{
-		state.teyes.lcdShow = value;
-		canbus.query(state.teyes);
+		state.head.sendButton = value;
+		canbus.query(state.head);
 	}
 };
 /**
- * Teyes: SendButton
+ * Head Unit: SendClimate
  * @param {any} state
  * @param {boolean} value Новое значение
  */
-export const setTeyesSendButton = (state: any, value: boolean) =>
+export const setHeadSendClimate = (state: any, value: boolean) =>
 {
-	if (state.teyes.isData)
+	if (state.head.isData)
 	{
-		state.teyes.sendButton = value;
-		canbus.query(state.teyes);
+		state.head.sendClimate = value;
+		canbus.query(state.head);
 	}
 };
 /**
- * Teyes: SendClimate
+ * Head Unit: SendDoors
  * @param {any} state
  * @param {boolean} value Новое значение
  */
-export const setTeyesSendClimate = (state: any, value: boolean) =>
+export const setHeadSendDoors = (state: any, value: boolean) =>
 {
-	if (state.teyes.isData)
+	if (state.head.isData)
 	{
-		state.teyes.sendClimate = value;
-		canbus.query(state.teyes);
+		state.head.sendDoors = value;
+		canbus.query(state.head);
 	}
 };
 /**
- * Teyes: SendDoors
+ * Head Unit: SendOnboard
  * @param {any} state
  * @param {boolean} value Новое значение
  */
-export const setTeyesSendDoors = (state: any, value: boolean) =>
+export const setHeadSendOnboard = (state: any, value: boolean) =>
 {
-	if (state.teyes.isData)
+	if (state.head.isData)
 	{
-		state.teyes.sendDoors = value;
-		canbus.query(state.teyes);
+		state.head.sendOnboard = value;
+		canbus.query(state.head);
 	}
 };
 /**
- * Teyes: ParseVolume
+ * Head Unit: ShowTextOfLogo
  * @param {any} state
  * @param {boolean} value Новое значение
  */
-export const setTeyesParseVolume = (state: any, value: boolean) =>
+export const setHeadShowTextOfLogo = (state: any, value: boolean) =>
 {
-	if (state.teyes.isData)
+	if (state.head.isData)
 	{
-		state.teyes.parseVolume = value;
-		canbus.query(state.teyes);
-	}
-};
-/**
- * Teyes: ReceiveClock
- * @param {any} state
- * @param {boolean} value Новое значение
- */
-export const setTeyesReceiveClock = (state: any, value: boolean) =>
-{
-	if (state.teyes.isData)
-	{
-		state.teyes.receiveClock = value;
-		canbus.query(state.teyes);
-	}
-};
-/**
- * Teyes: ReceiveText
- * @param {any} state
- * @param {boolean} value Новое значение
- */
-export const setTeyesReceiveText = (state: any, value: boolean) =>
-{
-	if (state.teyes.isData)
-	{
-		state.teyes.receiveText = value;
-		canbus.query(state.teyes);
-	}
-};
-/**
- * Teyes: ReceiveButtons
- * @param {any} state
- * @param {boolean} value Новое значение
- */
-export const setTeyesReceiveButtons = (state: any, value: boolean) =>
-{
-	if (state.teyes.isData)
-	{
-		state.teyes.receiveButtons = value;
-		canbus.query(state.teyes);
+		state.head.showTextOfLogo = value;
+		canbus.query(state.head);
 	}
 };
 
@@ -238,41 +199,74 @@ export const setSW1 = (state: any, data: DataView) =>
 	state.sw1.set(data);
 };
 /**
- * SW1: Programming
+ * SW1: SetButton
  * @param {any} state
- * @param {boolean} value Новое значение
+ * @param {ISW1ConfigButton} value Новое значение
  */
-export const setSW1Programming = (state: any, value: boolean) =>
+export const setSW1Button = (state: any, value: ISW1ConfigButton): void =>
 {
-	if (state.sw1.isData)
+	if (state.sw1.isData && state.sw1.setButton(value)) canbus.query(state.sw1);
+};
+/**
+ * SW1: Изменить список сопротивлений кнопок
+ * @param {any} state
+ * @param {number[]} list Новое значение
+ */
+export const setSW1ListOfResistance = (state: any, list: number[]): void =>
+{
+	if (state.sw1.isData && state.sw1.buttons.length === list.length)
 	{
-		state.sw1.programming = value;
+		for (let i: number = 0; i < list.length; i++) state.sw1.buttons[i].resistanceTo = list[i];
 		canbus.query(state.sw1);
 	}
 };
 /**
- * SW1: Programming
- * @param {any} state
- * @param {IButtonConfigItem} value Новое значение
- */
-export const setSW1Item = (state: any, value: IButtonConfigItem) =>
-{
-	if (state.sw1.isData && state.sw1.setItem(value)) canbus.query(state.sw1);
-};
-/**
- * SW1: Resistance
+ * SW1: Изменить расширенный режим кнопки
  * @param {any} state
  * @param {any} value Новое значение
  */
-export const setSW1Resistance = (state: any, { id, min, max }: { id: number; min: number; max: number }) =>
+export const setSW1Extended = (state: any, { id, value }: { id: number, value: boolean }): void =>
 {
 	if (state.sw1.isData)
 	{
-		const item: IButtonConfigItem | undefined = state.sw1.items.find((x: IButtonConfigItem) => x.id === id);
-		if (item)
+		const button: ISW1ConfigButton | undefined = state.sw1.buttons.find((x: ISW1ConfigButton) => x.id === id);
+		if (button)
 		{
-			item.resistanceMin = min;
-			item.resistanceMax = max;
+			button.extended = value;
+			canbus.query(state.sw1);
+		}
+	}
+};
+/**
+ * SW1: Изменить функцию кнопки
+ * @param {any} state
+ * @param {any} value Новое значение
+ */
+export const setSW1Exec = (state: any, { id, value }: { id: number, value: number[] }): void =>
+{
+	if (state.sw1.isData)
+	{
+		const button: ISW1ConfigButton | undefined = state.sw1.buttons.find((x: ISW1ConfigButton) => x.id === id);
+		if (button)
+		{
+			button.exec = value;
+			canbus.query(state.sw1);
+		}
+	}
+};
+/**
+ * SW1: Изменить функцию кнопки расширенного режима
+ * @param {any} state
+ * @param {any} value Новое значение
+ */
+export const setSW1ExecMode = (state: any, { id, value }: { id: number, value: number[] }): void =>
+{
+	if (state.sw1.isData)
+	{
+		const button: ISW1ConfigButton | undefined = state.sw1.buttons.find((x: ISW1ConfigButton) => x.id === id);
+		if (button)
+		{
+			button.execMode = value;
 			canbus.query(state.sw1);
 		}
 	}
@@ -297,6 +291,32 @@ export const setBoseEnabled = (state: any, value: boolean) =>
 	if (state.bose.isData)
 	{
 		state.bose.on = value;
+		canbus.query(state.bose);
+	}
+};
+/**
+ * Выкл/вкл звук Bose
+ * @param {any} state
+ * @param {boolean} value Значение
+ */
+export const setBoseMute = (state: any, value: boolean) =>
+{
+	if (state.bose.isData)
+	{
+		state.bose.mute = value;
+		canbus.query(state.bose);
+	}
+};
+/**
+ * Уровень звука Bose
+ * @param {any} state
+ * @param {boolean} value Значение
+ */
+export const setBoseVolume = (state: any, value: number) =>
+{
+	if (state.bose.isData)
+	{
+		state.bose.volume = value;
 		canbus.query(state.bose);
 	}
 };
@@ -404,6 +424,20 @@ export const setBoseCenterPoint = (state: any, value: TCenterPoint) =>
 		canbus.query(state.bose);
 	}
 };
+/**
+ * Bose: Volume Start
+ * @param {any} state
+ * @param {boolean} value Значение
+ */
+export const setBoseVolumeStart = (state: any, { enabled, level }: { enabled: boolean; level: number }) =>
+{
+	if (state.bose.isData)
+	{
+		state.bose.start = enabled;
+		state.bose.start_volume = level;
+		canbus.query(state.bose);
+	}
+};
 
 /**
  * Изменить конфигурацию дверей
@@ -485,56 +519,6 @@ export const setFuelRatio = (state: any, value: number) =>
 	{
 		state.fuel.ratio = value;
 		canbus.query(state.fuel);
-	}
-};
-
-/**
- * Изменить конфигурацию уровня звука
- * @param {any} state
- * @param {DataView} data Данные
- */
-export const setVolume = (state: any, data: DataView) =>
-{
-	state.volume.set(data);
-};
-/**
- * Volume: Mute Bose
- * @param {any} state
- * @param {boolean} value Значение
- */
-export const setVolumeMuteBose = (state: any, value: boolean) =>
-{
-	if (state.volume.isData)
-	{
-		state.volume.muteBose = value;
-		canbus.query(state.volume);
-	}
-};
-/**
- * Volume: Volume Bose
- * @param {any} state
- * @param {boolean} value Значение
- */
-export const setVolumeValueBose = (state: any, value: number) =>
-{
-	if (state.volume.isData)
-	{
-		state.volume.volumeBose = value;
-		canbus.query(state.volume);
-	}
-};
-/**
- * Volume: Start Bose
- * @param {any} state
- * @param {boolean} value Значение
- */
-export const setVolumeStartBose = (state: any, { enabled, level }: { enabled: boolean; level: number }) =>
-{
-	if (state.volume.isData)
-	{
-		state.volume.startBose = enabled;
-		state.volume.startLevelBose = level;
-		canbus.query(state.volume);
 	}
 };
 

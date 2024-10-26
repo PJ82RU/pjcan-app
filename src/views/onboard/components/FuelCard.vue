@@ -57,7 +57,7 @@ import ViewSettingDialog from "../../../components/ViewSettingDialog.vue";
 import FuelConfigDialog from "./FuelConfigDialog.vue";
 
 import { IMenuItem } from "@/components/MenuDots.vue";
-import { TCarModel } from "@/models/pjcan/mazda";
+import { TCarModel } from "@/models/pjcan/onboard";
 
 export default {
 	name: "FuelCard",

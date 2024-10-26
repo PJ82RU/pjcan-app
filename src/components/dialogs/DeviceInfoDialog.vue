@@ -61,7 +61,7 @@ import Scanner from "@/components/Scanner.vue";
 import TestDialog from "@/components/dialogs/TestDialog.vue";
 
 import { IMessage } from "@/models/interfaces/message/IMessage";
-import { TCarModel } from "@/models/pjcan/mazda";
+import { TCarModel } from "@/models/pjcan/onboard";
 
 export default {
 	name: "DeviceInfoDialog",

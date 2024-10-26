@@ -2,7 +2,7 @@
 	<card class="climate-card" :title="$t('onboard.bose.title')" :menu="menu" @click:menu="onMenuClick">
 		<template #body>
 			<v-row>
-				<v-col cols="12" class="pb-0">
+				<v-col cols="12">
 					<icon-card-item
 						v-model="enabled"
 						:title="$t('onboard.bose.enabled.title')"
@@ -18,7 +18,7 @@
 						:title="$t('onboard.volume.level.title')"
 						:description="$t('onboard.volume.level.description')"
 						:max="63"
-						:nodata="!volumeConfigLoaded"
+						:nodata="!boseConfigLoaded"
 						:disabled="!enabled[0]"
 					/>
 				</v-col>
@@ -28,7 +28,7 @@
 						:title="$t('onboard.volume.mute.title')"
 						:description="$t('onboard.volume.mute.description')"
 						color="warning"
-						:nodata="!volumeConfigLoaded"
+						:nodata="!boseConfigLoaded"
 						:disabled="!enabled[0]"
 					/>
 				</v-col>
@@ -122,8 +122,8 @@
 	/>
 	<bose-start-dialog
 		v-model="startConfigVisible"
-		:enabled="startConfig.startBose"
-		:level="startConfig.startLevelBose"
+		:enabled="startConfig.start"
+		:level="startConfig.start_volume"
 		@click:apply="onStartApply"
 	/>
 </template>
@@ -143,8 +143,7 @@ import ViewSettingDialog from "@/components/ViewSettingDialog.vue";
 import BoseStartDialog from "./BoseStartDialog.vue";
 
 import { IMenuItem } from "@/components/MenuDots.vue";
-import { TCenterPoint } from "@/models/pjcan/bose";
-import { IVolumeConfig } from "@/models/pjcan/volume";
+import { IBoseConfig, TCenterPoint } from "@/models/pjcan/bose";
 
 export default {
 	name: "BoseCard",
@@ -168,13 +167,20 @@ export default {
 	{
 		const { t } = useI18n();
 
-		const volumeConfigLoaded = computed((): boolean => store.getters["config/volume"].isData);
 		const boseConfigLoaded = computed((): boolean => store.getters["config/bose"].isData);
 		const boseViewLoaded = computed((): boolean => store.getters["view/bose"].isData);
 
 		const enabled = computed({
 			get: (): boolean[] => [store.getters["config/bose"].on],
 			set: (val: boolean[]) => store.commit("config/setBoseEnabled", val[0])
+		});
+		const mute = computed({
+			get: (): boolean => store.getters["config/bose"].mute,
+			set: (val: boolean) => store.commit("config/setBoseMute", val)
+		});
+		const volume = computed({
+			get: (): number => store.getters["config/bose"].volume,
+			set: (val: number) => store.commit("config/setBoseVolume", val)
 		});
 		const audioPLT = computed({
 			get: (): boolean => store.getters["config/bose"].audioPlt,
@@ -216,17 +222,9 @@ export default {
 			{ title: "HI", value: TCenterPoint.CENTERPOINT_HI },
 			{ title: "MAX", value: TCenterPoint.CENTERPOINT_MAX }
 		]);
-		const mute = computed({
-			get: (): boolean => store.getters["config/volume"].muteBose,
-			set: (val: boolean) => store.commit("config/setVolumeMuteBose", val)
-		});
-		const volume = computed({
-			get: (): number => store.getters["config/volume"].volumeBose,
-			set: (val: number) => store.commit("config/setVolumeValueBose", val)
-		});
 
 		const startConfigVisible = ref(false);
-		const startConfig = computed((): IVolumeConfig => store.getters["config/volume"]);
+		const startConfig = computed((): IBoseConfig => store.getters["config/bose"]);
 
 		const menu = computed((): IMenuItem[] => [
 			{ id: 0, title: t("onboard.bose.volumeConfig.title") },
@@ -270,13 +268,12 @@ export default {
 		 */
 		const onStartApply = (enabled: boolean, level: number): void =>
 		{
-			store.commit("config/setVolumeStartBose", { enabled, level });
+			store.commit("config/setBoseVolumeStart", { enabled, level });
 		};
 
 		return {
 			boseConfigLoaded,
 			boseViewLoaded,
-			volumeConfigLoaded,
 			enabled,
 			audioPLT,
 			radioFM,

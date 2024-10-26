@@ -16,6 +16,14 @@
 				<v-col cols="12" class="pt-1">
 					<v-checkbox v-model="resetView" :label="$t('deviceReset.view')" hide-details />
 				</v-col>
+				<v-col cols="12" class="pt-1">
+					<v-checkbox
+						v-model="resetButtons"
+						:label="$t('deviceReset.buttons')"
+						:disabled="resetConfig"
+						hide-details
+					/>
+				</v-col>
 			</v-row>
 		</template>
 
@@ -56,6 +64,7 @@ export default {
 
 		const resetConfig = ref(false);
 		const resetView = ref(false);
+		const resetButtons = ref(false);
 
 		watch(modelValue, (val: boolean): void =>
 		{
@@ -63,13 +72,19 @@ export default {
 			{
 				resetConfig.value = false;
 				resetView.value = false;
+				resetButtons.value = false;
 			}
 		});
 
 		/** Применить */
 		const onApply = (): void =>
 		{
-			canbus.rebootDevice(!resetConfig.value && !resetView.value, resetConfig.value, resetView.value);
+			canbus.rebootDevice(
+				!resetConfig.value && !resetView.value && !resetButtons.value,
+				resetConfig.value,
+				resetView.value,
+				resetButtons.value
+			);
 			visible.value = false;
 		};
 
@@ -77,6 +92,7 @@ export default {
 			visible,
 			resetConfig,
 			resetView,
+			resetButtons,
 			onApply
 		};
 	}

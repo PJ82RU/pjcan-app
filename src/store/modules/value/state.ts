@@ -1,4 +1,4 @@
-import { ButtonValue } from "@/models/pjcan/buttons";
+import { SWValue } from "@/models/pjcan/buttons";
 import { ClimateValue } from "@/models/pjcan/climate";
 import { DeviceScannerValue, DeviceValue } from "@/models/pjcan/device";
 import { DoorsValue } from "@/models/pjcan/doors";
@@ -11,7 +11,7 @@ import { IScanCanRow } from "@/models/interfaces/IScanCanRow";
 import { TestValue } from "@/models/pjcan/test";
 
 const state = {
-	sw1: new ButtonValue(),
+	sw1: new SWValue(),
 	climate: new ClimateValue(),
 	device: new DeviceValue(),
 	doors: new DoorsValue(),

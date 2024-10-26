@@ -1,4 +1,4 @@
-import { TCarModel } from "@/models/pjcan/mazda";
+import { TCarModel } from "@/models/pjcan/onboard";
 
 /**
  * Версия прошивки
@@ -16,19 +16,19 @@ export const info = (state: any) => state.info;
  * Конфигурация автомобиля
  * @param {any} state
  */
-export const mazda = (state: any) => state.mazda;
+export const onboard = (state: any) => state.onboard;
 
 /**
  * Модель автомобиля
  * @param {any} state
  */
-export const carModel = (state: any) => (state.mazda.isData ? state.mazda.carModel : TCarModel.CAR_MODEL_UNKNOWN);
+export const carModel = (state: any) => (state.onboard.isData ? state.onboard.carModel : TCarModel.CAR_MODEL_UNKNOWN);
 
 /**
- * Конфигурация Teyes
+ * Конфигурация Head Unit
  * @param {any} state
  */
-export const teyes = (state: any) => state.teyes;
+export const head = (state: any) => state.head;
 
 /**
  * Конфигурация кнопок sw1

@@ -9,18 +9,20 @@
 
 			<v-spacer />
 
-			<v-btn
-				v-if="$vuetify.display.mdAndUp && visibleOnBoard"
-				class="base-layout__onboard-buttons"
-				rounded
-				@click="visibleOnboardButtons = true"
-			>
-				<icon-custom name="steering-wheel" :colors="{ primary: 'white', secondary: 'white' }" />
-				<span class="pl-2">ONBOARD</span>
-			</v-btn>
-			<v-btn v-if="$vuetify.display.smAndUp" icon>
-				<icon-custom name="save" :color="colorConfigSave" />
-			</v-btn>
+			<template v-if="visibleOnBoard">
+				<v-btn
+					v-if="$vuetify.display.mdAndUp"
+					class="base-layout__onboard-buttons"
+					rounded
+					@click="visibleOnboardButtons = true"
+				>
+					<icon-custom name="steering-wheel" :colors="{ primary: 'white', secondary: 'white' }" />
+					<span class="pl-2">ONBOARD</span>
+				</v-btn>
+				<v-btn v-if="$vuetify.display.smAndUp" icon>
+					<icon-custom name="save" :color="colorConfigSave" />
+				</v-btn>
+			</template>
 			<v-btn icon="mdi-fit-to-screen-outline" @click="toggleFullscreen" />
 
 			<bluetooth-btn />
@@ -34,6 +36,12 @@
 			<about-dialog v-model="visibleAbout" />
 			<onboard-buttons-dialog v-model="visibleOnboardButtons" />
 			<locale-dialog v-model="visibleLocale" />
+			<choosing-car-model-dialog
+				v-model="visibleCarModel"
+				:car-model="carModel"
+				no-closed
+				@click:apply="onCarModelApplyClick"
+			/>
 		</v-app-bar>
 		<v-main>
 			<div class="base-layout__bg" />
@@ -43,7 +51,7 @@
 
 			<message-dialog
 				v-if="message"
-				v-model="visibleMessage"
+				v-model="messageVisible"
 				:title="message.title"
 				:icon="message?.icon"
 				:text="message.text"
@@ -71,12 +79,13 @@ import OnboardButtonsDialog from "../components/dialogs/OnboardButtonsDialog.vue
 import MessageDialog from "@/components/dialogs/MessageDialog.vue";
 import IconCustom from "@/components/common/icon-custom/IconCustom.vue";
 import LocaleDialog from "@/components/dialogs/LocaleDialog.vue";
+import ChoosingCarModelDialog from "@/components/dialogs/ChoosingCarModelDialog.vue";
 
 import { IMessage } from "@/models/interfaces/message/IMessage";
 import { Timeout } from "@/models/types/Timeout";
 import { API_NEW_VERSION_EVENT, IVersion } from "@/models/pjcan/version";
 import { API_DEVICE_ROLLBACK_EVENT, IDeviceFirmwareUrl } from "@/models/pjcan/device";
-import { TCarModel } from "@/models/pjcan/mazda";
+import { API_ONBOARD_CONFIG_EVENT, TCarModel } from "@/models/pjcan/onboard";
 
 export default {
 	name: "BaseLayout",
@@ -88,7 +97,8 @@ export default {
 		OnboardButtonsDialog,
 		MessageDialog,
 		IconCustom,
-		LocaleDialog
+		LocaleDialog,
+		ChoosingCarModelDialog
 	},
 	setup()
 	{
@@ -100,6 +110,7 @@ export default {
 		const visibleOnboardButtons = ref(false);
 		const visibleUpdate = ref(false);
 		const visibleLocale = ref(false);
+		const visibleCarModel = ref(false);
 
 		const pageWidth = ref(0);
 		const pageHeight = ref(0);
@@ -115,7 +126,7 @@ export default {
 			return "PJCAN: " + (result?.length > 0 ? t(result) : "");
 		});
 		const colorConfigSave = computed((): string =>
-			store.getters["value/device"].config_save ? "success" : "error"
+			store.getters["value/device"].configSave ? "success" : "error"
 		);
 		const newVersionFirmware = ref("");
 		const rollbackFirmware = ref("");
@@ -200,9 +211,9 @@ export default {
 
 		// Вывод сообщений
 
-		const visibleMessage = computed({
-			get: (): boolean => store.getters["app/visibleMessage"],
-			set: (val: boolean): void => store.commit("app/setVisibleMessage", val)
+		const messageVisible = computed({
+			get: (): boolean => store.getters["app/messageVisible"],
+			set: (val: boolean): void => store.commit("app/setMessageVisible", val)
 		});
 		const message = computed((): IMessage => store.getters["app/message"]);
 
@@ -214,13 +225,32 @@ export default {
 			{
 				timer = setTimeout(() =>
 				{
-					store.commit("app/freeMessage");
+					store.commit("app/messageFree");
 					timer = undefined;
 				}, msg.timeout);
 			}
 		});
 
 		// ---
+
+		/** Проверяем модель автомобиля */
+		const onChoosingCarModel = (): void =>
+		{
+			visibleCarModel.value = store.getters["config/carModel"] === TCarModel.CAR_MODEL_UNKNOWN;
+			// toast.warning(t("help.onboard.noModelSelected"), { autoClose: false });
+		};
+		/**
+		 * Применить выбранную модель автомобиля
+		 * @param {number} id ID модели
+		 */
+		const onCarModelApplyClick = (id: number): void =>
+		{
+			visibleCarModel.value = false;
+			if (store.getters["config/carModel"] !== id)
+			{
+				store.commit("config/setOnboardCarModel", id);
+			}
+		};
 
 		/** Доступна новая версия прошивки */
 		const onNewVersion = (newVersion: IVersion): void =>
@@ -261,6 +291,7 @@ export default {
 
 		onMounted(() =>
 		{
+			canbus.addListener(API_ONBOARD_CONFIG_EVENT, onChoosingCarModel);
 			canbus.addListener(API_NEW_VERSION_EVENT, onNewVersion);
 			canbus.addListener(API_DEVICE_ROLLBACK_EVENT, onRollback);
 			window.addEventListener("resize", windowSize);
@@ -268,6 +299,7 @@ export default {
 		});
 		onUnmounted(() =>
 		{
+			canbus.removeListener(API_ONBOARD_CONFIG_EVENT, onChoosingCarModel);
 			canbus.removeListener(API_NEW_VERSION_EVENT, onNewVersion);
 			canbus.removeListener(API_DEVICE_ROLLBACK_EVENT, onRollback);
 			window.removeEventListener("resize", windowSize);
@@ -284,14 +316,16 @@ export default {
 			visibleOnboardButtons,
 			visibleUpdate,
 			visibleLocale,
+			visibleCarModel,
 			pageWidth,
 			pageHeight,
-			visibleMessage,
+			messageVisible,
 			message,
 			colorConfigSave,
 			rollback,
 			onMenuClick,
-			toggleFullscreen
+			toggleFullscreen,
+			onCarModelApplyClick
 		};
 	}
 };

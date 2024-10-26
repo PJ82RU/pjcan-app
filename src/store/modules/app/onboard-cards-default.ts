@@ -1,5 +1,5 @@
 import { IOnboardCard } from "@/models/interfaces/IOnboardCard";
-import { TCarModel } from "@/models/pjcan/mazda";
+import { TCarModel } from "@/models/pjcan/onboard";
 
 export default [
 	{

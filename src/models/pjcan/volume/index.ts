@@ -1,11 +1,11 @@
 import {
-	API_VOLUME_CONFIG_EXEC,
-	API_VOLUME_CONFIG_EVENT,
+	API_VOLUME_VALUE_EXEC,
+	API_VOLUME_VALUE_EVENT,
 	API_VOLUME_VIEW_EXEC,
 	API_VOLUME_VIEW_EVENT,
-	VolumeConfig
-} from "./VolumeConfig";
-import { IVolumeConfig } from "./IVolumeConfig";
+	VolumeValue
+} from "./VolumeValue";
+import { IVolumeValue } from "./IVolumeValue";
 
-export { API_VOLUME_CONFIG_EXEC, API_VOLUME_CONFIG_EVENT, API_VOLUME_VIEW_EXEC, API_VOLUME_VIEW_EVENT, VolumeConfig };
-export type { IVolumeConfig };
+export { API_VOLUME_VALUE_EXEC, API_VOLUME_VALUE_EVENT, API_VOLUME_VIEW_EXEC, API_VOLUME_VIEW_EVENT, VolumeValue };
+export type { IVolumeValue };

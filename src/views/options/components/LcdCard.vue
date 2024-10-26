@@ -8,8 +8,8 @@
 						:title="$t('options.lcd.enabled.title')"
 						:description="$t('options.lcd.enabled.description')"
 						color="success"
-						:nodata="!mazdaConfigLoaded"
-						:disabled="!mazdaConfigLoaded"
+						:nodata="!onboardConfigLoaded"
+						:disabled="!onboardConfigLoaded"
 					/>
 				</v-col>
 				<v-col cols="12" class="pb-0">
@@ -18,10 +18,10 @@
 						:label="$t('options.lcd.logo.title')"
 						:hint="$t('options.lcd.logo.description')"
 						variant="underlined"
-						:disabled="!mazdaConfigLoaded"
+						:disabled="!onboardConfigLoaded"
 						persistent-hint
 						dense
-						@blur="setMazdaLogo"
+						@blur="setOnboardLogo"
 					/>
 				</v-col>
 				<v-col cols="12" class="pb-0">
@@ -30,10 +30,10 @@
 						:label="$t('options.lcd.hello.title')"
 						:hint="$t('options.lcd.hello.description')"
 						variant="underlined"
-						:disabled="!mazdaConfigLoaded"
+						:disabled="!onboardConfigLoaded"
 						persistent-hint
 						dense
-						@blur="setMazdaHello"
+						@blur="setOnboardHello"
 					/>
 				</v-col>
 			</v-row>
@@ -68,12 +68,12 @@ export default {
 	{
 		const { t } = useI18n();
 
-		const mazdaConfigLoaded = computed((): boolean => store.getters["config/mazda"].isData);
-		const mazdaViewLoaded = computed((): boolean => store.getters["view/mazda"].isData);
+		const onboardConfigLoaded = computed((): boolean => store.getters["config/onboard"].isData);
+		const onboardViewLoaded = computed((): boolean => store.getters["view/onboard"].isData);
 
 		const enabled = computed({
-			get: (): boolean => store.getters["config/mazda"].lcd,
-			set: (val: boolean) => store.commit("config/setMazdaLcd", val)
+			get: (): boolean => store.getters["config/onboard"].lcd,
+			set: (val: boolean) => store.commit("config/setOnboardLcd", val)
 		});
 
 		/**
@@ -90,14 +90,14 @@ export default {
 		};
 
 		// Логотип
-		const __logo = computed(() => store.getters["config/mazda"].logo.trim());
+		const __logo = computed(() => store.getters["config/onboard"].logo.trim());
 		const logo = ref(__logo.value);
 		watch(__logo, (val: string) => (logo.value = val));
 		watch(logo, (): void =>
 		{
 			nextTick(() => onInput(logo, 12));
 		});
-		const setMazdaLogo = (): void =>
+		const setOnboardLogo = (): void =>
 		{
 			const val = logo.value.trim();
 			if (logo.value.length < 12)
@@ -110,21 +110,21 @@ export default {
 					logo.value = spaces + val;
 				}
 			}
-			store.commit("config/setMazdaLogo", logo.value);
+			store.commit("config/setOnboardLogo", logo.value);
 		};
 
 		// Текст приветствия
-		const __hello = computed(() => store.getters["config/mazda"].hello);
+		const __hello = computed(() => store.getters["config/onboard"].hello);
 		const hello = ref(__hello.value);
 		watch(__hello, (val: string) => (hello.value = val));
 		watch(hello, (): void =>
 		{
 			nextTick(() => onInput(hello, 32));
 		});
-		const setMazdaHello = (): void => store.commit("config/setMazdaHello", hello.value);
+		const setOnboardHello = (): void => store.commit("config/setOnboardHello", hello.value);
 
 		const menu = computed((): IMenuItem[] => [
-			{ title: t("options.lcd.hello.menu"), view: store.getters["view/mazda"], disabled: !mazdaViewLoaded.value }
+			{ title: t("options.lcd.hello.menu"), view: store.getters["view/onboard"], disabled: !onboardViewLoaded.value }
 		]);
 		const menuVisible = ref(false);
 		const menuSelected = ref({} as IMenuItem);
@@ -149,13 +149,13 @@ export default {
 		};
 
 		return {
-			mazdaConfigLoaded,
-			mazdaViewLoaded,
+			onboardConfigLoaded,
+			onboardViewLoaded,
 			enabled,
 			logo,
-			setMazdaLogo,
+			setOnboardLogo,
 			hello,
-			setMazdaHello,
+			setOnboardHello,
 			menu,
 			menuVisible,
 			menuSelected,

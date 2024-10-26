@@ -21,6 +21,7 @@ export interface IDeviceUpdate extends EventEmitter {
 	abort: boolean; // Отмена прошивки
 	total: number; // Размер прошивки, в байтах
 	size: number; // Размер данных в пакете, в байтах
+	is_rollback: boolean; // Откат прошивки
 
 	clear: () => void;
 	setIV: (res: string) => boolean;

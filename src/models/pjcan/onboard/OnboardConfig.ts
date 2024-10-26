@@ -1,16 +1,16 @@
 import { BluetoothStruct } from "@/components/bluetooth";
 import { BaseModel } from "../base";
-import { IMazdaConfig } from "./IMazdaConfig";
+import { IOnboardConfig } from "./IOnboardConfig";
 import { TCarModel } from "./TCarModel";
 
-export const API_MAZDA_CONFIG_EXEC = 0x40;
-export const API_MAZDA_CONFIG_EVENT = "MazdaConfig";
+export const API_ONBOARD_CONFIG_EXEC = 0x40;
+export const API_ONBOARD_CONFIG_EVENT = "OnboardConfig";
 
-export const API_MAZDA_VIEW_EXEC = 0x43;
-export const API_MAZDA_VIEW_EVENT = "MazdaView";
+export const API_ONBOARD_VIEW_EXEC = 0x43;
+export const API_ONBOARD_VIEW_EVENT = "OnboardView";
 
 /** Модель параметров автомобиля */
-export class MazdaConfig extends BaseModel implements IMazdaConfig
+export class OnboardConfig extends BaseModel implements IOnboardConfig
 {
 	static struct: any = {
 		lcd: BluetoothStruct.bit(),
@@ -29,7 +29,7 @@ export class MazdaConfig extends BaseModel implements IMazdaConfig
 
 	constructor(data?: DataView)
 	{
-		super(API_MAZDA_CONFIG_EXEC);
+		super(API_ONBOARD_CONFIG_EXEC);
 		this.skipActivationCheck = true;
 		if (data) this.set(data);
 	}
@@ -40,7 +40,7 @@ export class MazdaConfig extends BaseModel implements IMazdaConfig
 	 */
 	set(buf: DataView): boolean
 	{
-		return this._set(this, this.exec, MazdaConfig.size, new BluetoothStruct(MazdaConfig.struct), buf);
+		return this._set(this, this.exec, OnboardConfig.size, new BluetoothStruct(OnboardConfig.struct), buf);
 	}
 
 	/**
@@ -51,6 +51,6 @@ export class MazdaConfig extends BaseModel implements IMazdaConfig
 	{
 		return request
 			? this._get(this, this.exec)
-			: this._get(this, this.exec, MazdaConfig.size, new BluetoothStruct(MazdaConfig.struct));
+			: this._get(this, this.exec, OnboardConfig.size, new BluetoothStruct(OnboardConfig.struct));
 	}
 }

@@ -37,44 +37,30 @@
 						:disabled="!voltmeterViewLoaded"
 					/>
 				</v-col>
-				<!--<v-col v-if="carModel === TCarModel.CAR_MODEL_MAZDA_3_BL" cols="12" class="pt-0 pb-0">-->
-				<!--    <input-card-item-->
-				<!--        :value="temperatureIn"-->
-				<!--        :title="$t('onboard.info.temperatureIn.title')"-->
-				<!--        :description="$t('onboard.info.temperatureIn.description')"-->
-				<!--        type="temperature"-->
-				<!--        :nodata="!temperatureValueLoaded || temperatureIn === 0"-->
-				<!--        :disabled="!temperatureViewLoaded"-->
-				<!--    />-->
-				<!--</v-col>-->
-				<v-col
+				<template
 					v-if="carModel === TCarModel.CAR_MODEL_MAZDA_3_BK || carModel === TCarModel.CAR_MODEL_MAZDA_3_BL"
-					cols="12"
-					class="pt-0 pb-0"
 				>
-					<input-card-item
-						:value="temperatureOut"
-						:title="$t('onboard.info.temperatureOut.title')"
-						:description="$t('onboard.info.temperatureOut.description')"
-						type="temperature"
-						:nodata="!temperatureValueLoaded || temperatureOut === 0"
-						:disabled="!temperatureViewLoaded"
-					/>
-				</v-col>
-				<v-col
-					v-if="carModel === TCarModel.CAR_MODEL_MAZDA_3_BK || carModel === TCarModel.CAR_MODEL_MAZDA_3_BL"
-					cols="12"
-					class="pt-0 pb-0"
-				>
-					<switch-card-item
-						:model-value="handbrake"
-						:title="$t('onboard.info.handbrake.title')"
-						:description="$t('onboard.info.handbrake.description')"
-						color="error"
-						:nodata="!sensorValueLoaded"
-						:disabled="!sensorViewLoaded"
-					/>
-				</v-col>
+					<v-col cols="12" class="pt-0 pb-0">
+						<input-card-item
+							:value="temperatureOut"
+							:title="$t('onboard.info.temperatureOut.title')"
+							:description="$t('onboard.info.temperatureOut.description')"
+							type="temperature"
+							:nodata="!temperatureValueLoaded || temperatureOut === 0"
+							:disabled="!temperatureViewLoaded"
+						/>
+					</v-col>
+					<v-col cols="12" class="pt-0 pb-0">
+						<switch-card-item
+							:model-value="handbrake"
+							:title="$t('onboard.info.handbrake.title')"
+							:description="$t('onboard.info.handbrake.description')"
+							color="error"
+							:nodata="!sensorValueLoaded"
+							:disabled="!sensorViewLoaded"
+						/>
+					</v-col>
+				</template>
 				<v-col v-if="isReverse" cols="12" class="pt-0 pb-0">
 					<switch-card-item
 						:model-value="reverse"
@@ -133,7 +119,7 @@ import IconCardItem from "@/components/cards/IconCardItem.vue";
 import ViewSettingDialog from "@/components/ViewSettingDialog.vue";
 
 import { IMenuItem } from "@/components/MenuDots.vue";
-import { TCarModel } from "@/models/pjcan/mazda";
+import { TCarModel } from "@/models/pjcan/onboard";
 import { IDeviceHardware } from "@/models/pjcan/device/IDeviceValue";
 
 export default {
@@ -178,7 +164,6 @@ export default {
 		const acc = computed((): boolean => store.getters["value/sensors"].acc);
 		const worktime = computed((): number => store.getters["value/device"].worktime);
 		const voltmeter = computed((): number => store.getters["value/device"].voltmeter / 100);
-		const temperatureIn = computed((): number => store.getters["value/temperature"].in / 10);
 		const temperatureOut = computed((): number => store.getters["value/temperature"].out / 10);
 		const handbrake = computed((): boolean => store.getters["value/sensors"].handbrake);
 		const reverse = computed((): boolean => store.getters["value/sensors"].reverse);
@@ -207,27 +192,16 @@ export default {
 				});
 			}
 
-			if (carModel.value === TCarModel.CAR_MODEL_MAZDA_3_BL)
-			{
-				result.push({
-					title: t("onboard.info.temperatureIn.menu"),
-					view: store.getters["view/temperature"],
-					disabled: !temperatureViewLoaded.value
-				});
-			}
-			if (carModel.value === TCarModel.CAR_MODEL_MAZDA_3_BK)
+			if (
+				carModel.value === TCarModel.CAR_MODEL_MAZDA_3_BK ||
+				carModel.value === TCarModel.CAR_MODEL_MAZDA_3_BL
+			)
 			{
 				result.push({
 					title: t("onboard.info.temperatureOut.menu"),
 					view: store.getters["view/temperature"],
 					disabled: !temperatureViewLoaded.value
 				});
-			}
-			if (
-				carModel.value === TCarModel.CAR_MODEL_MAZDA_3_BK ||
-				carModel.value === TCarModel.CAR_MODEL_MAZDA_3_BL
-			)
-			{
 				result.push({
 					title: t("onboard.info.handbrake.menu"),
 					view: store.getters["view/sensors"].handbrake,
@@ -295,7 +269,6 @@ export default {
 			acc,
 			worktime,
 			voltmeter,
-			temperatureIn,
 			temperatureOut,
 			handbrake,
 			reverse,

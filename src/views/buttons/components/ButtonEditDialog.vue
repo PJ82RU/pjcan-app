@@ -3,51 +3,49 @@
 		v-model="visible"
 		content-class="button-edit-dialog"
 		icon="mdi-plus-box"
-		:title="$t(name?.length ? 'buttons.edit' : 'buttons.adding')"
-		width="550px"
+		:title="title"
 		text
 		actions
 	>
 		<template #body>
 			<v-row>
-				<v-col cols="12">
-					<v-text-field
-						v-model="modelName"
-						:label="$t('buttons.name')"
-						variant="underlined"
-						persistent-hint
+				<v-col cols="12" style="overflow: hidden">
+					<multi-range
+						:points="list"
+						:min="SW1_CONFIG_RESISTANCE_MIN()"
+						:max="SW1_CONFIG_RESISTANCE_MAX()"
+						:number-of-ticks="51"
+						:select-point="resist"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0">
-					<v-select
-						v-model="modelPress"
-						:label="$t('buttons.pressSingle.title')"
-						:items="functionsList"
-						:hint="$t('buttons.pressSingle.description')"
-						variant="underlined"
-						item-title="label"
-						item-value="value"
-						persistent-hint
+					<number-card-item
+						:model-value="beginResistance"
+						:title="$t('buttons.edit.beginValue.title')"
+						:description="$t('buttons.edit.beginValue.description')"
+						:min="minResistance"
+						:max="maxResistance"
+						:step="20"
+						disabled
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0">
-					<number-field
-						v-model="modelResistanceMin"
-						:label="$t('buttons.resistance.min.title')"
-						:hint="$t('buttons.resistance.min.description')"
-					/>
-				</v-col>
-				<v-col cols="12" class="pt-0">
-					<number-field
-						v-model="modelResistanceMax"
-						:label="$t('buttons.resistance.max.title')"
-						:hint="$t('buttons.resistance.max.description')"
+					<number-card-item
+						v-model="resist"
+						:title="$t('buttons.edit.endValue.title')"
+						:description="$t('buttons.edit.endValue.description')"
+						:min="minResistance"
+						:max="maxResistance"
+						:step="20"
 					/>
 				</v-col>
 			</v-row>
 		</template>
 		<template #btns>
-			<v-btn color="primary" @click="onApplyClick" :disabled="disabled">
+			<v-btn color="primary" @click="reset" :disabled="resist === resistance">
+				{{ $t("btn.reset") }}
+			</v-btn>
+			<v-btn color="primary" @click="apply" :disabled="resist === resistance">
 				{{ $t("btn.apply") }}
 			</v-btn>
 			<v-btn color="primary" @click="visible = false">
@@ -61,12 +59,24 @@ import { computed, ref, toRefs, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
 import DialogTemplate from "@/layout/components/DialogTemplate.vue";
-import NumberField from "@/components/common/NumberField.vue";
-import { TButtonExec } from "@/models/pjcan/buttons";
+import MultiRange from "@/components/MultiRange.vue";
+import NumberCardItem from "@/components/cards/NumberCardItem.vue";
+
+import { SW1_CONFIG_RESISTANCE_MAX, SW1_CONFIG_RESISTANCE_MIN } from "@/models/pjcan/buttons";
 
 export default {
 	name: "ButtonEditDialog",
-	components: { DialogTemplate, NumberField },
+	methods: {
+		SW1_CONFIG_RESISTANCE_MAX()
+		{
+			return SW1_CONFIG_RESISTANCE_MAX;
+		},
+		SW1_CONFIG_RESISTANCE_MIN()
+		{
+			return SW1_CONFIG_RESISTANCE_MIN;
+		}
+	},
+	components: { DialogTemplate, MultiRange, NumberCardItem },
 	props: {
 		/** Отображение диалога */
 		modelValue: {
@@ -76,94 +86,75 @@ export default {
 		/** Наименование кнопки */
 		name: {
 			type: String,
-			default: ""
+			default: "Тест"
 		},
-		/** Функция нажатой кнопки */
-		press: {
+		/** Сопротивление */
+		resistance: {
 			type: Number,
 			default: 0
 		},
-		/** Сопротивление нажатой кнопки */
-		valueResistance: {
-			type: Number,
-			default: 0
-		},
-		/** Минимальное сопротивление */
-		resistanceMin: {
-			type: Number,
-			default: 0
-		},
-		/** Максимальное сопротивление */
-		resistanceMax: {
-			type: Number,
-			default: 0
+		/** Список сопротивлений */
+		listOfResistance: {
+			type: Array as () => number[],
+			default: () => []
 		}
 	},
 	emits: ["update:modelValue", "click:apply"],
 	setup(props: any, { emit }: { emit: any })
 	{
-		const { modelValue, name, press, valueResistance, resistanceMin, resistanceMax } = toRefs(props);
-		const { tm } = useI18n();
+		const { modelValue, name, resistance, listOfResistance } = toRefs(props);
+		const { t } = useI18n();
 
 		const visible = computed({
 			get: (): boolean => modelValue.value,
 			set: (val: boolean): void => emit("update:modelValue", val)
 		});
-		const modelName = ref("");
-		const modelPress = ref(TButtonExec.BUTTON_EXEC_NONE);
-		const modelResistanceMin = ref(0);
-		const modelResistanceMax = ref(0);
-		const disabled = computed(
-			(): boolean =>
-				!(
-					modelName.value?.length > 0 &&
-					modelPress.value > 0 &&
-					modelResistanceMin.value < modelResistanceMax.value
-				)
-		);
-		watch(modelValue, (val: boolean) =>
-		{
-			if (val)
-			{
-				modelName.value = name.value;
-				modelPress.value = press.value as TButtonExec;
-				modelResistanceMin.value = resistanceMin.value;
-				modelResistanceMax.value = resistanceMax.value;
+		const title = computed((): string => t("buttons.edit.title", { name: name.value }));
 
-				if (modelResistanceMin.value === 0 && modelResistanceMax.value === 0)
-				{
-					modelResistanceMin.value = valueResistance.value - 150;
-					if (modelResistanceMin.value < 0) modelResistanceMin.value = 0;
-					modelResistanceMax.value = valueResistance.value + 150;
-				}
+		const list = ref([...listOfResistance.value]);
+		watch(listOfResistance, (val) => (list.value = [...val]));
+
+		const indexList = computed(
+			(): number => listOfResistance.value?.findIndex((r: number) => r === resistance.value) ?? 0
+		);
+		const minResistance = computed((): number => (indexList.value > 0 ? list.value[indexList.value - 1] + 20 : 20));
+		const maxResistance = computed((): number =>
+			indexList.value < listOfResistance.value?.length - 1
+				? listOfResistance.value[indexList.value + 1] - 20
+				: SW1_CONFIG_RESISTANCE_MAX
+		);
+		const resist = computed({
+			get: (): number => list.value[indexList.value],
+			set: (val: number): void =>
+			{
+				list.value[indexList.value] = val;
 			}
 		});
+		const beginResistance = computed((): number => (indexList.value > 0 ? list.value[indexList.value - 1] + 1 : 1));
 
-		/** Применить */
-		const onApplyClick = () =>
+		/** Сбросить изменения */
+		const reset = () =>
+		{
+			list.value = [...listOfResistance.value];
+		};
+		/** Применить изменения */
+		const apply = () =>
 		{
 			visible.value = false;
-			emit("click:apply", modelName.value, modelPress.value, modelResistanceMin.value, modelResistanceMax.value);
+			emit("click:apply", list.value);
 		};
-
-		/** Список функций */
-		const functionsList = computed((): object[] =>
-		{
-			const list: any = tm("buttons.functions");
-			const result = [];
-			for (const key in list) result.push({ label: list[key], value: Number(key) });
-			return result;
-		});
 
 		return {
 			visible,
-			disabled,
-			modelName,
-			modelPress,
-			modelResistanceMin,
-			modelResistanceMax,
-			functionsList,
-			onApplyClick
+			title,
+			list,
+			resist,
+			indexList,
+			minResistance,
+			maxResistance,
+			beginResistance,
+			reset,
+			apply
 		};
 	}
 };

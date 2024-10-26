@@ -52,10 +52,10 @@ export default {
 		const flicking = ref(null);
 		provide("flicking", flicking);
 
-		store.dispatch("app/readOnboardCardList");
+		store.dispatch("app/readOnboardCards");
 		const cards = computed(() =>
 		{
-			return store.getters["app/onboardCardList"]?.filter(
+			return store.getters["app/onboardCards"]?.filter(
 				(x: IOnboardCard) => x.enabled && x.car?.indexOf(store.getters["config/carModel"]) >= 0
 			);
 		});

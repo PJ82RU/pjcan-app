@@ -2,7 +2,6 @@
 	<div class="input-card-item d-flex">
 		<v-text-field
 			class="input-card-item__message"
-			:class="{ nodata }"
 			:model-value="title"
 			:hint="description"
 			:suffix="textValue"

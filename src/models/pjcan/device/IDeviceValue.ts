@@ -10,11 +10,11 @@ export interface IDeviceHardware {
 /** Интерфейс значений устройства */
 export interface IDeviceValue extends IBaseModel {
 	activation: boolean; // Статус активации
-	state_led_work: boolean; // Текущее состояние контакта LED_WORK
-	state_reverse: boolean; // Текущее состояние контакта REVERSE
-	state_r_position: boolean; // Текущее состояние контакта R_POSITION
-	state_amp_illum: boolean; // Текущее состояние контакта AMP_ILLUM
-	config_save: boolean; // Статус сохранения конфигурации
+	stateLedWork: boolean; // Текущее состояние контакта LED_WORK
+	stateReverse: boolean; // Текущее состояние контакта REVERSE
+	stateRPosition: boolean; // Текущее состояние контакта R_POSITION
+	stateAmpIllum: boolean; // Текущее состояние контакта AMP
+	configSave: boolean; // Статус сохранения конфигурации
 	hardware: IDeviceHardware; // Версия платы
 	led: number; // Состояние мигания светодиода
 	voltmeter: number; // Значение вольтметра (n/100)

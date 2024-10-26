@@ -50,7 +50,7 @@ import DeviceInfoDialog from "@/components/dialogs/DeviceInfoDialog.vue";
 import ChoosingCarModelDialog from "@/components/dialogs/ChoosingCarModelDialog.vue";
 
 import { ILooseObject } from "@/models/interfaces/ILooseObject";
-import { TCarModel } from "@/models/pjcan/mazda";
+import { TCarModel } from "@/models/pjcan/onboard";
 
 const pkg = require("/package.json");
 
@@ -117,7 +117,7 @@ export default {
 			visibleCarModel.value = false;
 			if (store.getters["config/carModel"] !== id)
 			{
-				store.commit("config/setMazdaCarModel", id);
+				store.commit("config/setOnboardCarModel", id);
 			}
 		};
 

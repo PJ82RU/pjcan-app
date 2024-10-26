@@ -3,155 +3,133 @@
 		<template #body>
 			<v-row>
 				<v-col cols="12">
-					<input-card-item
-						:value="resistanceMax > 0 ? resistanceMin + ' - ' + resistanceMax : ''"
-						:title="$t('buttons.resistance.title')"
-						:description="$t('buttons.resistance.description')"
-						:disabled="!config"
-					/>
-				</v-col>
-				<v-col cols="12" class="pt-0">
 					<v-select
 						v-model="pressSingle"
 						:label="$t('buttons.pressSingle.title')"
-						:items="functionsListWithoutMode"
+						:items="listOfFunctions"
 						:hint="$t('buttons.pressSingle.description')"
 						variant="underlined"
 						item-title="label"
 						item-value="value"
 						persistent-hint
-						:disabled="!config"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0">
 					<switch-card-item
-						v-model="extended"
+						v-model="modelExtended"
 						:title="$t('buttons.extended.title')"
 						:description="$t('buttons.extended.description')"
 						color="primary"
-						:disabled="!config"
 					/>
 				</v-col>
-				<v-col cols="12" class="pt-0">
-					<v-select
-						v-model="pressDual"
-						:label="$t('buttons.pressDual.title')"
-						:items="functionsList"
-						:hint="$t('buttons.pressDual.description')"
-						variant="underlined"
-						item-title="label"
-						item-value="value"
-						persistent-hint
-						:disabled="!config || !extended"
-					/>
-				</v-col>
-				<v-col cols="12" class="pt-0">
-					<v-select
-						v-model="pressTriple"
-						:label="$t('buttons.pressTriple.title')"
-						:items="functionsList"
-						:hint="$t('buttons.pressTriple.description')"
-						variant="underlined"
-						item-title="label"
-						item-value="value"
-						persistent-hint
-						:disabled="!config || !extended"
-					/>
-				</v-col>
-				<v-col cols="12" class="pt-0">
-					<v-select
-						v-model="pressHold"
-						:label="$t('buttons.pressHold.title')"
-						:items="functionsList"
-						:hint="$t('buttons.pressHold.description')"
-						variant="underlined"
-						item-title="label"
-						item-value="value"
-						persistent-hint
-						:disabled="!config || !extended"
-					/>
-				</v-col>
-				<v-col cols="12" class="pt-0">
-					<number-field
-						v-model="hold"
-						:label="$t('buttons.pressHold.time.title')"
-						:hint="$t('buttons.pressHold.time.description')"
-						:min="1"
-						:max="255"
-						:disabled="!config || !extended"
-						@change="$emit('update', config)"
-					/>
-				</v-col>
-				<v-col cols="12" class="pt-6">
-					<span class="settings-card__mode-title">{{ $t("buttons.extendedMode") }}</span>
-				</v-col>
-				<v-col cols="12" class="pt-0">
-					<v-select
-						v-model="modePressSingle"
-						:label="$t('buttons.pressSingle.title') + $t('buttons.hintMode')"
-						:items="functionsList"
-						:hint="$t('buttons.pressSingle.description')"
-						variant="underlined"
-						item-title="label"
-						item-value="value"
-						persistent-hint
-						:disabled="!config || !mode"
-					/>
-				</v-col>
-				<v-col cols="12" class="pt-0">
-					<v-select
-						v-model="modePressDual"
-						:label="$t('buttons.pressDual.title') + $t('buttons.hintMode')"
-						:items="functionsList"
-						:hint="$t('buttons.pressDual.description')"
-						variant="underlined"
-						item-title="label"
-						item-value="value"
-						persistent-hint
-						:disabled="!config || !mode"
-					/>
-				</v-col>
-				<v-col cols="12" class="pt-0">
-					<v-select
-						v-model="modePressTriple"
-						:label="$t('buttons.pressTriple.title') + $t('buttons.hintMode')"
-						:items="functionsList"
-						:hint="$t('buttons.pressTriple.description')"
-						variant="underlined"
-						item-title="label"
-						item-value="value"
-						persistent-hint
-						:disabled="!config || !mode"
-					/>
-				</v-col>
-				<v-col cols="12" class="pt-0">
-					<v-select
-						v-model="modePressHold"
-						:label="$t('buttons.pressHold.title') + $t('buttons.hintMode')"
-						:items="functionsList"
-						:hint="$t('buttons.pressHold.description')"
-						variant="underlined"
-						item-title="label"
-						item-value="value"
-						persistent-hint
-						:disabled="!config || !mode"
-					/>
-				</v-col>
+				<template v-if="extended">
+					<v-col cols="12" class="pt-0">
+						<v-select
+							v-model="pressDual"
+							:label="$t('buttons.pressDual.title')"
+							:items="listOfFunctions"
+							:hint="$t('buttons.pressDual.description')"
+							variant="underlined"
+							item-title="label"
+							item-value="value"
+							persistent-hint
+						/>
+					</v-col>
+					<v-col cols="12" class="pt-0">
+						<v-select
+							v-model="pressTriple"
+							:label="$t('buttons.pressTriple.title')"
+							:items="listOfFunctions"
+							:hint="$t('buttons.pressTriple.description')"
+							variant="underlined"
+							item-title="label"
+							item-value="value"
+							persistent-hint
+						/>
+					</v-col>
+					<v-col cols="12" class="pt-0">
+						<v-select
+							v-model="pressHold"
+							:label="$t('buttons.pressHold.title')"
+							:items="listOfFunctions"
+							:hint="$t('buttons.pressHold.description')"
+							variant="underlined"
+							item-title="label"
+							item-value="value"
+							persistent-hint
+						/>
+					</v-col>
+				</template>
+				<template v-if="visibleExtended">
+					<v-col cols="12" class="pt-6">
+						<span class="settings-card__mode-title">{{ $t("buttons.extendedMode") }}</span>
+					</v-col>
+					<v-col cols="12" class="pt-0">
+						<v-select
+							v-model="pressSingleExtended"
+							:label="$t('buttons.pressSingle.title') + $t('buttons.hintMode')"
+							:items="listOfFunctions"
+							:hint="$t('buttons.pressSingle.description')"
+							variant="underlined"
+							item-title="label"
+							item-value="value"
+							persistent-hint
+							:disabled="!visibleExtended"
+						/>
+					</v-col>
+					<template v-if="extended">
+						<v-col cols="12" class="pt-0">
+							<v-select
+								v-model="pressDualExtended"
+								:label="$t('buttons.pressDual.title') + $t('buttons.hintMode')"
+								:items="listOfFunctions"
+								:hint="$t('buttons.pressDual.description')"
+								variant="underlined"
+								item-title="label"
+								item-value="value"
+								persistent-hint
+							/>
+						</v-col>
+						<v-col cols="12" class="pt-0">
+							<v-select
+								v-model="pressTripleExtended"
+								:label="$t('buttons.pressTriple.title') + $t('buttons.hintMode')"
+								:items="listOfFunctions"
+								:hint="$t('buttons.pressTriple.description')"
+								variant="underlined"
+								item-title="label"
+								item-value="value"
+								persistent-hint
+							/>
+						</v-col>
+						<v-col cols="12" class="pt-0">
+							<v-select
+								v-model="pressHoldExtended"
+								:label="$t('buttons.pressHold.title') + $t('buttons.hintMode')"
+								:items="listOfFunctions"
+								:hint="$t('buttons.pressHold.description')"
+								variant="underlined"
+								item-title="label"
+								item-value="value"
+								persistent-hint
+							/>
+						</v-col>
+					</template>
+				</template>
 			</v-row>
 		</template>
 	</card>
 </template>
 
 <script lang="ts">
-import { computed, ref, toRefs, watch } from "vue";
-import { useI18n } from "vue-i18n";
+import { computed, toRefs } from "vue";
 
 import Card from "@/components/cards/Card.vue";
 import InputCardItem from "@/components/cards/InputCardItem.vue";
 import NumberField from "@/components/common/NumberField.vue";
 import SwitchCardItem from "@/components/cards/SwitchCardItem.vue";
 
-import { IButtonConfigItem, TButtonType } from "@/models/pjcan/buttons";
+import { TButtonExec, TButtonPress } from "@/models/pjcan/buttons";
 import IconCustom from "@/components/common/icon-custom/IconCustom.vue";
 
 export default {
@@ -165,187 +143,138 @@ export default {
 		},
 		/** Иконка */
 		icon: String,
-		/** Конфигурация кнопки */
-		config: Object as () => IButtonConfigItem,
-		/** Показывать параметры режима Mode */
-		mode: Boolean
+		/** Расширенный функционал кнопок (двойное, тройное нажатие) */
+		extended: {
+			type: Boolean,
+			default: false
+		},
+		/** ID кнопки (0 - кнопка не определена) */
+		id: {
+			type: Number,
+			default: 0
+		},
+		/** Список ID функций кнопки */
+		exec: {
+			type: Array as () => TButtonExec[],
+			default: () => [0, 0, 0, 0]
+		},
+		/** Список ID функций кнопки в расширенном режиме */
+		execMode: {
+			type: Array as () => TButtonExec[],
+			default: () => [0, 0, 0, 0]
+		},
+		/** Список функций */
+		listOfFunctions: {
+			type: Array as () => object[],
+			default: () => []
+		},
+		/** Показать расширенные параметры */
+		visibleExtended: {
+			type: Boolean,
+			default: false
+		}
 	},
-	emits: ["update", "click"],
+	emits: ["update:extended", "update:exec", "update:execMode", "click"],
 	setup(props: any, { emit }: { emit: any })
 	{
-		const { config } = toRefs(props);
-		const { tm } = useI18n();
-
-		const __config = ref({} as IButtonConfigItem);
-		const copyConfig = (): void =>
-		{
-			__config.value = {
-				extended: config.value.extended,
-				id: config.value.id,
-				hold: config.value.hold,
-				resistanceMin: config.value.resistanceMin,
-				resistanceMax: config.value.resistanceMax,
-				exec: [...config.value.exec],
-				execMode: [...config.value.execMode]
-			} as IButtonConfigItem;
-		};
-		if (config.value) copyConfig();
-		watch(config, () => copyConfig());
+		const { extended, exec, execMode } = toRefs(props);
 
 		/** Расширенный функционал кнопок */
-		const extended = computed({
-			get: (): boolean => __config.value?.extended ?? false,
-			set: (val: boolean): void =>
-			{
-				if (config.value)
-				{
-					__config.value.extended = val;
-					emit("update", __config.value);
-				}
-			}
+		const modelExtended = computed({
+			get: (): boolean => extended.value,
+			set: (val: boolean): void => emit("update:extended", val)
 		});
-		/** Время удержания кнопки, сек. */
-		const hold = computed({
-			get: (): number => __config.value?.hold ?? 0,
-			set: (val: number): void =>
-			{
-				if (config.value) __config.value.hold = val;
-			}
-		});
-		/** Минимальное сопротивление кнопки */
-		const resistanceMin = computed((): number => __config.value?.resistanceMin ?? 0);
-		/** Максимальное сопротивление кнопки */
-		const resistanceMax = computed((): number => __config.value?.resistanceMax ?? 0);
 		/** Кнопка нажата один раз */
 		const pressSingle = computed({
-			get: (): number => __config.value?.exec?.[TButtonType.PRESS_SINGLE] ?? 0,
+			get: (): number => exec.value[TButtonPress.PRESS_PRESSED],
 			set: (val: number): void =>
 			{
-				if (config.value)
-				{
-					__config.value.exec[TButtonType.PRESS_SINGLE] = val;
-					emit("update", __config.value);
-				}
+				const execNew = [...exec.value];
+				execNew[TButtonPress.PRESS_PRESSED] = val;
+				emit("update:exec", execNew);
 			}
 		});
 		/** Кнопка нажата два раза */
 		const pressDual = computed({
-			get: (): number => __config.value?.exec?.[TButtonType.PRESS_DUAL] ?? 0,
+			get: (): number => exec.value[TButtonPress.PRESS_DUAL],
 			set: (val: number): void =>
 			{
-				if (config.value)
-				{
-					__config.value.exec[TButtonType.PRESS_DUAL] = val;
-					emit("update", __config.value);
-				}
+				const execNew = [...exec.value];
+				execNew[TButtonPress.PRESS_DUAL] = val;
+				emit("update:exec", execNew);
 			}
 		});
 		/** Кнопка нажата три раза */
 		const pressTriple = computed({
-			get: (): number => __config.value?.exec?.[TButtonType.PRESS_TRIPLE] ?? 0,
+			get: (): number => exec.value[TButtonPress.PRESS_TRIPLE],
 			set: (val: number): void =>
 			{
-				if (config.value)
-				{
-					__config.value.exec[TButtonType.PRESS_TRIPLE] = val;
-					emit("update", __config.value);
-				}
+				const execNew = [...exec.value];
+				execNew[TButtonPress.PRESS_TRIPLE] = val;
+				emit("update:exec", execNew);
 			}
 		});
-		/** Удержание кнопки */
+		/** Удержание кнопки в расширенном режиме */
 		const pressHold = computed({
-			get: (): number => __config.value?.exec?.[TButtonType.PRESS_HOLD] ?? 0,
+			get: (): number => exec.value[TButtonPress.PRESS_HOLD],
 			set: (val: number): void =>
 			{
-				if (config.value)
-				{
-					__config.value.exec[TButtonType.PRESS_HOLD] = val;
-					emit("update", __config.value);
-				}
+				const execNew = [...exec.value];
+				execNew[TButtonPress.PRESS_HOLD] = val;
+				emit("update:exec", execNew);
 			}
 		});
-		/** Кнопка нажата один раз в режиме Mode */
-		const modePressSingle = computed({
-			get: (): number => __config.value?.execMode?.[TButtonType.PRESS_SINGLE] ?? 0,
+		/** Кнопка нажата один раз в расширенном режиме */
+		const pressSingleExtended = computed({
+			get: (): number => execMode.value[TButtonPress.PRESS_PRESSED],
 			set: (val: number): void =>
 			{
-				if (config.value)
-				{
-					__config.value.execMode[TButtonType.PRESS_SINGLE] = val;
-					emit("update", __config.value);
-				}
+				const execNew = [...exec.value];
+				execNew[TButtonPress.PRESS_PRESSED] = val;
+				emit("update:execMode", execNew);
 			}
 		});
-		/** Кнопка нажата два раза в режиме Mode */
-		const modePressDual = computed({
-			get: (): number => __config.value?.execMode?.[TButtonType.PRESS_DUAL] ?? 0,
+		/** Кнопка нажата два раза в расширенном режиме */
+		const pressDualExtended = computed({
+			get: (): number => execMode.value[TButtonPress.PRESS_DUAL],
 			set: (val: number): void =>
 			{
-				if (config.value)
-				{
-					__config.value.execMode[TButtonType.PRESS_DUAL] = val;
-					emit("update", __config.value);
-				}
+				const execNew = [...exec.value];
+				execNew[TButtonPress.PRESS_DUAL] = val;
+				emit("update:execMode", execNew);
 			}
 		});
-		/** Кнопка нажата три раза в режиме Mode */
-		const modePressTriple = computed({
-			get: (): number => __config.value?.execMode?.[TButtonType.PRESS_TRIPLE] ?? 0,
+		/** Кнопка нажата три раза в расширенном режиме */
+		const pressTripleExtended = computed({
+			get: (): number => execMode.value[TButtonPress.PRESS_TRIPLE],
 			set: (val: number): void =>
 			{
-				if (config.value)
-				{
-					__config.value.execMode[TButtonType.PRESS_TRIPLE] = val;
-					emit("update", __config.value);
-				}
+				const execNew = [...exec.value];
+				execNew[TButtonPress.PRESS_TRIPLE] = val;
+				emit("update:execMode", execNew);
 			}
 		});
-		/** Удержание кнопки в режиме Mode */
-		const modePressHold = computed({
-			get: (): number => __config.value?.execMode?.[TButtonType.PRESS_HOLD] ?? 0,
+		/** Удержание кнопки в расширенном режиме */
+		const pressHoldExtended = computed({
+			get: (): number => execMode.value[TButtonPress.PRESS_HOLD],
 			set: (val: number): void =>
 			{
-				if (config.value)
-				{
-					__config.value.execMode[TButtonType.PRESS_HOLD] = val;
-					emit("update", __config.value);
-				}
+				const execNew = [...exec.value];
+				execNew[TButtonPress.PRESS_HOLD] = val;
+				emit("update:execMode", execNew);
 			}
-		});
-
-		/** Список функций без режима Mode */
-		const functionsListWithoutMode = computed((): object[] =>
-		{
-			const list: any = tm("buttons.functions");
-			const result = [];
-			for (const key in list)
-			{ if (key !== "1" && key !== "2") result.push({ label: list[key], value: Number(key) }); }
-			return result;
-		});
-		/** Список функций */
-		const functionsList = computed((): object[] =>
-		{
-			const list: any = tm("buttons.functions");
-			const result = [];
-			for (const key in list) result.push({ label: list[key], value: Number(key) });
-			return result;
 		});
 
 		return {
-			functionsListWithoutMode,
-			functionsList,
-			extended,
-			hold,
-			resistanceMin,
-			resistanceMax,
+			modelExtended,
 			pressSingle,
 			pressDual,
 			pressTriple,
 			pressHold,
-			modePressSingle,
-			modePressDual,
-			modePressTriple,
-			modePressHold
+			pressSingleExtended,
+			pressDualExtended,
+			pressTripleExtended,
+			pressHoldExtended
 		};
 	}
 };

@@ -58,7 +58,7 @@ import InputCardItem from "@/components/cards/InputCardItem.vue";
 import ViewSettingDialog from "@/components/ViewSettingDialog.vue";
 
 import { IMenuItem } from "@/components/MenuDots.vue";
-import { TCarModel } from "@/models/pjcan/mazda";
+import { TCarModel } from "@/models/pjcan/onboard";
 
 export default {
 	name: "MovementCard",

@@ -1,38 +1,34 @@
 <template>
-	<flicking v-if="configLoaded" ref="flicking" class="listSW1" :options="{ bound: true, align: 'prev' }">
+	<flicking v-if="configLoaded" ref="flicking" class="list-sw1" :options="{ bound: true, align: 'prev' }">
 		<div
-			v-for="(item, index) in listWithoutEmpty"
+			v-for="(cardButton, index) in cardButtons"
 			:key="`button-item_${index}`"
 			class="mr-4"
 			:class="`flicking-${display}`"
 		>
 			<settings-card
 				:class="`settings-card-${index}`"
-				:title="item.title"
-				:icon="item.icon"
-				:config="item.config"
-				:mode="isMode"
-				@update="onButtonConfigUpdate"
-				@click="onButtonEdit(item)"
+				:title="cardButton.title"
+				:icon="cardButton.icon"
+				:extended="cardButton.extended"
+				:id="cardButton.id"
+				:exec="checkExecList(cardButton.exec, cardButton.extended)"
+				:exec-mode="checkExecList(cardButton.execMode, cardButton.extended)"
+				:list-of-functions="cardButton.extended ? listOfFunctionsExtended : listOfFunctions"
+				:visible-extended="extendedVisible"
+				@update:extended="onUpdateExtended(cardButton.id, $event)"
+				@update:exec="onUpdateExec(cardButton.id, $event)"
+				@update:exec-mode="onUpdateExecMode(cardButton.id, $event)"
+				@click="onButtonEdit(cardButton)"
 			/>
 		</div>
 	</flicking>
-
-	<button-definition-dialog
-		v-model="definitionDialog"
-		:types="list"
-		:value-id="value?.id"
-		:value-resistance="value?.resistance"
-		@click:apply="onButtonDefinitionApply"
-	/>
 	<button-edit-dialog
-		v-model="addDialog"
-		:name="selectedItem?.title"
-		:press="selectedItem?.config?.exec[1]"
-		:value-resistance="value?.resistance"
-		:resistance-min="selectedItem?.config?.resistanceMin"
-		:resistance-max="selectedItem?.config?.resistanceMax"
-		@click:apply="onButtonAddApply"
+		v-model="buttonEditVisible"
+		:name="selected.title"
+		:resistance="selected.resistanceTo"
+		:list-of-resistance="listOfResistance"
+		@click:apply="onButtonApply"
 	/>
 </template>
 
@@ -41,241 +37,251 @@ import { computed, onMounted, onUnmounted, provide, ref, watch } from "vue";
 import { useDisplay } from "vuetify";
 import { useI18n } from "vue-i18n";
 import { toast } from "vue3-toastify";
-import router from "@/router";
 import store from "@/store";
 import canbus from "@/api/canbus";
 
 import Flicking from "@egjs/vue3-flicking";
 import SettingsCard from "./components/SettingsCard.vue";
-import ButtonDefinitionDialog from "./components/ButtonDefinitionDialog.vue";
 import ButtonEditDialog from "./components/ButtonEditDialog.vue";
 
-import {
-	API_BUTTON_SW1_VALUE_EVENT,
-	IButtonConfigItem,
-	IButtonValue,
-	TButtonExec
-} from "@/models/pjcan/buttons";
-import { IButtonCard } from "@/models/interfaces/IButtonCard";
-import { IButtonKey } from "@/models/interfaces/IButtonKey";
+import { API_SW1_VALUE_EVENT, ISW1ConfigButton, TButtonExec } from "@/models/pjcan/buttons";
+import { ISW1Card } from "@/models/interfaces/ISW1Card";
+import { TProtocol } from "@/models/pjcan/head-unit";
+import { TCarModel } from "@/models/pjcan/onboard";
 
 export default {
 	name: "Buttons",
-	components: { Flicking, SettingsCard, ButtonDefinitionDialog, ButtonEditDialog },
+	components: { Flicking, SettingsCard, ButtonEditDialog },
 	setup()
 	{
 		const { name: display } = useDisplay();
-		const { t } = useI18n();
+		const { t, tm } = useI18n();
 		const flicking = ref(null);
 		provide("flicking", flicking);
 
-		const __type = computed(() => router.currentRoute.value.query?.type);
-		const __getKey = (type: any): IButtonKey | undefined =>
-		{
-			switch (type)
-			{
-				case "sw1":
-					return {
-						app: "app/sw1",
-						set: "app/setSW1",
-						read: "app/readSW1",
-						write: "app/writeSW1",
-						config: "config/sw1",
-						setItem: "config/setSW1Item",
-						setResistance: "config/setSW1Resistance",
-						setProgramming: "config/setSW1Programming",
-						value: "value/sw1"
-					} as IButtonKey;
-			}
-		};
-
-		const keys = computed((): IButtonKey | undefined => __getKey(__type.value));
-		const configLoaded = computed((): boolean => keys.value && store.getters[keys.value.config].isData);
-		const value = computed((): IButtonValue | undefined =>
-			keys.value ? store.getters[keys.value.value] : undefined
+		const buttonEditVisible = ref(false);
+		const configLoaded = computed((): boolean => store.getters["config/sw1"].isData);
+		const cardButtons = computed((): ISW1Card[] =>
+			store.getters["app/sw1"]
+				.map((cardButton: ISW1Card) => ({
+					...cardButton,
+					...(store.getters["config/sw1"].buttons.find(
+						(button: ISW1ConfigButton) => button.id === cardButton.id
+					) ?? ({} as ISW1ConfigButton))
+				}))
+				.filter((cardButton: ISW1Card) => cardButton.resistanceTo > 0)
 		);
-		const isMode = computed(() =>
+		const listOfResistance = computed((): number[] =>
+			store.getters["config/sw1"].buttons.map((x: ISW1Card) => x.resistanceTo)
+		);
+
+		/**
+		 * Список функций
+		 * @param {number[]} excludeId Список ID функций, который нужно исключить
+		 * @param {TProtocol} protocol Протокол UART
+		 * @param {TCarModel} carModel Модель автомобиля
+		 */
+		const getListOfFunctions = (excludeId: number[], protocol: TProtocol, carModel: TCarModel): object[] =>
 		{
-			return (
-				keys.value &&
-				(store.getters[keys.value.config].items
-					?.filter((x: IButtonConfigItem) => x.extended)
-					?.findIndex(
-						(x: IButtonConfigItem) =>
-							x.exec.findIndex((y: TButtonExec) => y === TButtonExec.BUTTON_EXEC_ENTERING_MODE) >= 0
-					) >= 0 ??
-					false)
+			if (!(protocol === TProtocol.PROTOCOL_RAISE_HM_ND00 || protocol === TProtocol.PROTOCOL_RAISE_HM_ND03))
+			{
+				// список не доступных для данного протокола функций
+				excludeId.push(
+					...[
+						TButtonExec.BUTTON_EXEC_HEAD_UNIT_VOICE,
+						TButtonExec.BUTTON_EXEC_HEAD_UNIT_EQUALIZER,
+						TButtonExec.BUTTON_EXEC_HEAD_UNIT_RADIO,
+						TButtonExec.BUTTON_EXEC_HEAD_UNIT_RADIO_SEARCH,
+						TButtonExec.BUTTON_EXEC_HEAD_UNIT_CAMERA,
+						TButtonExec.BUTTON_EXEC_HEAD_UNIT_PHONE
+					]
+				);
+			}
+
+			if (
+				!(
+					carModel === TCarModel.CAR_MODEL_MAZDA_CX7 ||
+					carModel === TCarModel.CAR_MODEL_MAZDA_CX7_REST ||
+					carModel === TCarModel.CAR_MODEL_MAZDA_CX9
+				)
+			)
+			{
+				// список функций Bose, который доступен только для моделей автомобилей CX
+				excludeId.push(
+					...[
+						TButtonExec.BUTTON_EXEC_BOSE_ON,
+						TButtonExec.BUTTON_EXEC_BOSE_AUDIO_PLT,
+						TButtonExec.BUTTON_EXEC_BOSE_MUTE,
+						TButtonExec.BUTTON_EXEC_BOSE_VOL_UP,
+						TButtonExec.BUTTON_EXEC_BOSE_VOL_DOWN,
+						TButtonExec.BUTTON_EXEC_BOSE_BALANCE_UP,
+						TButtonExec.BUTTON_EXEC_BOSE_BALANCE_DOWN,
+						TButtonExec.BUTTON_EXEC_BOSE_BASS_UP,
+						TButtonExec.BUTTON_EXEC_BOSE_BASS_DOWN,
+						TButtonExec.BUTTON_EXEC_BOSE_FADE_UP,
+						TButtonExec.BUTTON_EXEC_BOSE_FADE_DOWN,
+						TButtonExec.BUTTON_EXEC_BOSE_TREBLE_UP,
+						TButtonExec.BUTTON_EXEC_BOSE_TREBLE_DOWN,
+						TButtonExec.BUTTON_EXEC_BOSE_CENTER_POINT
+					]
+				);
+			}
+
+			const list: any = tm("buttons.functions");
+			const result = [];
+			for (const key in list)
+			{
+				const index = parseInt(key);
+				if (excludeId.indexOf(index) < 0)
+				{
+					result.push({ label: list[key], value: index });
+				}
+			}
+			return result;
+		};
+		const listOfFunctionsExtended = computed((): object[] =>
+		{
+			return getListOfFunctions([], store.getters["config/head"].protocol, store.getters["config/carModel"]);
+		});
+		const listOfFunctions = computed((): object[] =>
+		{
+			return getListOfFunctions(
+				[TButtonExec.BUTTON_EXEC_ON_BOARD_LONG_PRESS_INFO, TButtonExec.BUTTON_EXEC_ON_BOARD_LONG_PRESS_CLOCK],
+				store.getters["config/head"].protocol,
+				store.getters["config/carModel"]
 			);
 		});
-		const list = ref([] as IButtonCard[]);
-		const listWithoutEmpty = computed((): IButtonCard[] => list.value?.filter((x: IButtonCard) => x.title?.length) ?? []);
-		const definitionDialog = ref(false);
-		const addDialog = ref(false);
-		const selectedItem = ref(undefined as IButtonCard | undefined);
-
-		/** Загрузка списка кнопок */
-		const loadButtons = (type: any): IButtonKey | undefined =>
+		const extendedVisible = computed(
+			(): boolean =>
+				cardButtons.value.findIndex((cardButton: ISW1Card) =>
+					cardButton.extended
+						? cardButton.exec.indexOf(TButtonExec.BUTTON_EXEC_CHANGE_CONTROL_MODE) >= 0
+						: cardButton.exec[0] === TButtonExec.BUTTON_EXEC_CHANGE_CONTROL_MODE
+				) >= 0
+		);
+		/**
+		 * Проверяем наличие функции в списке
+		 * @param {number[]} exec Список ID функций
+		 * @param extended Расширенный режим
+		 */
+		const checkExecList = (exec: number[], extended: boolean): number[] =>
 		{
-			const key = __getKey(type);
-			if (key)
-			{
-				store.dispatch(key.read);
-				list.value = store.getters[key.config].items.map((config: IButtonConfigItem) => ({
-					...(store.getters[key.app]?.find((x: IButtonCard) => x.id === config.id) ??
-						({ id: config.id, title: "", icon: "" } as IButtonCard)),
-					config: { ...config }
-				}));
-			}
-			return key;
-		};
-		// заполняем массив списка (значения могут быть пустыми, нужно для работы реактивности vue)
-		loadButtons(__type.value);
-
-		/** Сохранить список кнопок */
-		const saveButtons = (): void =>
-		{
-			if (keys.value)
-			{
-				store.commit(keys.value.set, list.value);
-				store.dispatch(keys.value.write);
-			}
+			const funcs = extended ? listOfFunctionsExtended.value : listOfFunctions.value;
+			return exec.map((x: number) => (funcs.findIndex((val: any) => val.value === x) >= 0 ? x : 0));
 		};
 
-		/** Изменение значений конфигурации кнопок */
-		const onButtonConfigUpdate = (item: IButtonConfigItem): void =>
+		const selected = ref({} as ISW1Card);
+		/**
+		 * Открыть окно редактирования кнопки
+		 * @param {ISW1Card} cardButton Значения кнопки
+		 */
+		const onButtonEdit = (cardButton: ISW1Card): void =>
 		{
-			if (keys.value) store.commit(keys.value.setItem, item);
+			selected.value = cardButton;
+			buttonEditVisible.value = true;
+		};
+		/**
+		 * Применить значения сопротивлений кнопок
+		 * @param {number[]} list Список сопротивлений кнопок (см. listOfResistance)
+		 */
+		const onButtonApply = (list: number[]) =>
+		{
+			store.commit("config/setSW1ListOfResistance", list);
 		};
 
 		/**
-		 * Применить конфигурацию определенной кнопки
-		 * @param {number | undefined} id ID кнопки
-		 * @param {number} min Минимальное сопротивление кнопки
-		 * @param {number} max Максимальное сопротивление кнопки
+		 * Обновление значения расширенного режима
+		 * @param {number} id ID кнопки
+		 * @param {boolean} value Значение
 		 */
-		const onButtonDefinitionApply = (id: number | undefined, min: number, max: number): void =>
+		const onUpdateExtended = (id: number, value: boolean): void =>
 		{
-			if (id && keys.value) store.commit(keys.value?.setResistance, { id, min, max });
+			store.commit("config/setSW1Extended", { id, value });
 		};
-
 		/**
-		 * Применить создание кнопки
-		 * @param {string} name Наименование/тип кнопки
-		 * @param {TButtonExec} press Функция кнопки
-		 * @param {number} min Минимальное значение сопротивления
-		 * @param {number} max Максимальное значение сопротивления
+		 * Обновление функций кнопки
+		 * @param {number} id ID кнопки
+		 * @param {boolean} value Значение
 		 */
-		const onButtonAddApply = (name: string, press: TButtonExec, min: number, max: number): void =>
+		const onUpdateExec = (id: number, value: number[]): void =>
 		{
-			if (selectedItem.value)
-			{
-				selectedItem.value.title = name;
-				if (!selectedItem.value.icon?.length) selectedItem.value.icon = "mdi-card-outline";
-				if (selectedItem.value.config)
-				{
-					const exec = [...selectedItem.value.config.exec];
-					exec[1] = press;
-					selectedItem.value.config = {
-						...selectedItem.value.config,
-						exec,
-						resistanceMin: min,
-						resistanceMax: max
-					};
-				}
-				saveButtons();
-			}
+			store.commit("config/setSW1Exec", { id, value });
 		};
-
 		/**
-		 * Редактирование кнопки
-		 * @param {IButtonCard} item Значения кнопки
+		 * Обновление функций кнопки в расширенном режиме
+		 * @param {number} id ID кнопки
+		 * @param {boolean} value Значение
 		 */
-		const onButtonEdit = (item: IButtonCard): void =>
+		const onUpdateExecMode = (id: number, value: number[]): void =>
 		{
-			selectedItem.value = item;
-			addDialog.value = true;
+			store.commit("config/setSW1ExecMode", { id, value });
 		};
 
+		let lastIdPressed = 0;
 		/** Событие нажатия кнопки */
 		const onButtonsValueReceive = (): void =>
 		{
-			if (keys.value)
+			const res = store.getters["value/sw1"];
+			if (res.isData && res.pressed && lastIdPressed !== res.id)
 			{
-				const res = store.getters[keys.value.value];
-				if (res.isData)
-				{
-					selectedItem.value = list.value?.find((x: IButtonCard) => x.id === res.id);
-					if (selectedItem.value)
-					{
-						if (selectedItem.value.title?.length) definitionDialog.value = true;
-						else addDialog.value = true;
-					}
-				}
+				lastIdPressed = res.id;
+				setTimeout(() => (lastIdPressed = 0), 4000);
+
+				const detected: ISW1Card =
+					cardButtons.value.find((button: ISW1Card) => button.id === res.id) ?? ({} as ISW1Card);
+				if (detected.resistanceTo > 0) toast.success(t("buttons.notify.detected", { id: detected.title }));
+				else toast.warning(t("buttons.notify.notDefined"));
 			}
 		};
-		const onBegin = (type: any): void =>
-		{
-			// загружаем список, если он пуст
-			const key = listWithoutEmpty.value.length ? __getKey(type) : loadButtons(type);
-			if (key)
-			{
-				canbus.addListener(API_BUTTON_SW1_VALUE_EVENT, onButtonsValueReceive);
-				store.commit(key.setProgramming, true);
 
-				setTimeout(() => toast.warning(t("help.buttons.notify"), { autoClose: false }), 1000);
-			}
+		const onBegin = (): void =>
+		{
+			canbus.addListener(API_SW1_VALUE_EVENT, onButtonsValueReceive);
 		};
 		const onEnd = (): void =>
 		{
-			canbus.removeListener(API_BUTTON_SW1_VALUE_EVENT, onButtonsValueReceive);
-			store.commit("config/setSW1Programming", false);
+			canbus.removeListener(API_SW1_VALUE_EVENT, onButtonsValueReceive);
 		};
-		watch(configLoaded, () => onBegin(__type.value));
-		watch(__type, (val: any) =>
-		{
-			if (val.name === "Buttons")
-			{
-				onEnd();
-				onBegin(val);
-			}
-		});
+		watch(configLoaded, () => onBegin());
 		onMounted(() =>
 		{
-			if (configLoaded.value) onBegin(__type.value);
+			if (configLoaded.value) onBegin();
 		});
 		onUnmounted(() =>
 		{
 			onEnd();
-			toast.clearAll();
 		});
 
 		return {
 			flicking,
 			display,
 			configLoaded,
-			value,
-			isMode,
-			list,
-			listWithoutEmpty,
-			definitionDialog,
-			addDialog,
-			selectedItem,
-			onButtonConfigUpdate,
-			onButtonDefinitionApply,
-			onButtonAddApply,
-			onButtonEdit
+			cardButtons,
+			listOfResistance,
+			listOfFunctionsExtended,
+			listOfFunctions,
+			selected,
+			buttonEditVisible,
+			extendedVisible,
+			checkExecList,
+			onButtonEdit,
+			onButtonApply,
+			onUpdateExtended,
+			onUpdateExec,
+			onUpdateExecMode
 		};
 	}
 };
 </script>
 
 <style lang="scss" scoped>
-.listSW1 {
+.list-sw1 {
 	height: 100%;
 
 	::v-deep(.settings-card-1 .mdi-play) {
 		transform: rotate(-90deg);
 	}
+
 	::v-deep(.settings-card-2 .mdi-play) {
 		transform: rotate(90deg);
 	}

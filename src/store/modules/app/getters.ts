@@ -1,5 +1,11 @@
 import { IOnboardCard } from "@/models/interfaces/IOnboardCard";
-import { IButtonCard } from "@/models/interfaces/IButtonCard";
+import { ISW1Card } from "@/models/interfaces/ISW1Card";
+
+/**
+ * Язык интерфейса
+ * @param state
+ */
+export const language = (state: any): boolean => state.language;
 
 /**
  * Сообщение из очереди сообщений
@@ -11,19 +17,7 @@ export const message = (state: any) => state.messages?.[0];
  * Отображение диалога сообщения
  * @param {any} state
  */
-export const visibleMessage = (state: any) => state.visibleMessage;
-
-/**
- * Список карточек бортового компьютера
- * @param {any} state
- */
-export const onboardCardList = (state: any): IOnboardCard[] => state.onboardCardList;
-
-/**
- * Список кнопок SW1
- * @param {any} state
- */
-export const sw1 = (state: any): IButtonCard[] => state.sw1;
+export const messageVisible = (state: any) => state.messageVisible;
 
 /**
  * Уведомления
@@ -32,7 +26,13 @@ export const sw1 = (state: any): IButtonCard[] => state.sw1;
 export const notify = (state: any): boolean => state.notify;
 
 /**
- * Язык интерфейса
- * @param state
+ * Список карточек бортового компьютера
+ * @param {any} state
  */
-export const language = (state: any): boolean => state.language;
+export const onboardCards = (state: any): IOnboardCard[] => state.onboardCards;
+
+/**
+ * Список кнопок SW1
+ * @param {any} state
+ */
+export const sw1 = (state: any): ISW1Card[] => state.sw1;

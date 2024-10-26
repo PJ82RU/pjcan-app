@@ -1,39 +1,44 @@
 <template>
-    <dialog-template
-        content-class="choosing-car-model"
-        v-model="visible"
-        :title="$t('choosingCarModel.title')"
-        icon="on-board"
-        width="480px"
-        text
-        actions
-    >
-        <template #body>
-            <v-row class="pb-2">
-                <v-col cols="12">
-                    <v-select
-                        v-model="modelCarModel"
-                        :label="$t('choosingCarModel.label')"
-                        :items="carModels"
-                        :hint="$t('choosingCarModel.description')"
-                        variant="underlined"
-                        item-title="label"
-                        item-value="value"
-                        persistent-hint
-                    />
-                </v-col>
-            </v-row>
-        </template>
+	<dialog-template
+		content-class="choosing-car-model"
+		v-model="visible"
+		:title="$t('choosingCarModel.title')"
+		icon="on-board"
+		width="480px"
+		:persistent="noClosed"
+		text
+		actions
+	>
+		<template #body>
+			<v-row class="pb-2">
+				<v-col cols="12">
+					<v-select
+						v-model="modelCarModel"
+						:label="$t('choosingCarModel.label')"
+						:items="carModels"
+						:hint="$t('choosingCarModel.description')"
+						variant="underlined"
+						item-title="label"
+						item-value="value"
+						persistent-hint
+					/>
+				</v-col>
+			</v-row>
+		</template>
 
-        <template #btns>
-            <v-btn color="primary" @click="$emit('click:apply', modelCarModel)">
-                {{ $t("btn.apply") }}
-            </v-btn>
-            <v-btn color="primary" prepend-icon="mdi-close" @click="visible = false">
-                {{ $t("btn.close") }}
-            </v-btn>
-        </template>
-    </dialog-template>
+		<template #btns>
+			<v-btn
+				color="primary"
+				:disabled="modelCarModel === 0"
+				@click="$emit('click:apply', modelCarModel)"
+			>
+				{{ $t("btn.apply") }}
+			</v-btn>
+			<v-btn v-if="!noClosed" color="primary" prepend-icon="mdi-close" @click="visible = false">
+				{{ $t("btn.close") }}
+			</v-btn>
+		</template>
+	</dialog-template>
 </template>
 
 <script lang="ts">
@@ -50,7 +55,11 @@ export default {
 			type: Boolean,
 			required: true
 		},
-		carModel: Number
+		carModel: Number,
+		noClosed: {
+			type: Boolean,
+			default: false
+		}
 	},
 	emits: ["update:modelValue", "click:apply"],
 	setup(props: any, { emit }: { emit: any })

@@ -121,7 +121,8 @@ export default {
 	deviceReset: {
 		title: "Reset device configuration",
 		config: "Reset configuration defaults",
-		view: "Reset default display configuration values"
+		view: "Reset default display configuration values",
+		buttons: "Reset the default button configuration values"
 	},
 
 	btn: {
@@ -449,8 +450,8 @@ export default {
 
 	buttons: {
 		title: "Button settings",
-		extendedMode: "Advanced Fn",
-		hintMode: " (advanced Fn)",
+		extendedMode: "Extended mode",
+		hintMode: " (extended mode)",
 
 		mode: "MODE button",
 		seekUp: "SET UP button",
@@ -503,53 +504,60 @@ export default {
 		},
 
 		functions: {
-			0: "No action",
-			1: "Switch to the Fn",
-			2: "Exiting the Fn",
-			3: "Pressing the MODE button",
-			4: "Pressing the SET UP button",
-			5: "Pressing the SET DOWN button",
-			6: "Pressing the sound level + button",
-			7: "Pressing the sound level - button",
-			8: "Pressing the mute sound button",
-			9: "Hold the CLOCK button for 2 sec.",
-			10: "Pressing the CLOCK button",
-			11: "Pressing the CLOCK H button",
-			12: "Pressing the CLOCK M button",
-			13: "Pressing the CLOCK 24/12 button",
-			14: "Hold the INFO button for 2 sec.",
-			15: "Pressing the INFO button",
-			16: "Show the values of the engine",
-			17: "Show flow values",
-			18: "Show movement values",
-			19: "Show temperature values",
-			20: "Voice control",
-			21: "Radio",
-			22: "Camera",
-			23: "Radio: search",
-			24: "Equalizer",
-			25: "Turning off the display",
-			26: "Phone"
+			0: "Function is missing",
+			1: "PJCAN: change the control mode",
+			2: "PJCAN: show engine values",
+			3: "PJCAN: show fuel consumption values",
+			4: "PJCAN: show vehicle movement values",
+			5: "PJCAN: show temperature values",
+			6: "PJCAN: show date and time",
+			7: "Head Unit: MUTE button on the steering wheel",
+			8: "Head Unit: MODE button on the steering wheel",
+			9: "Head Unit: SET DOWN button on the steering wheel",
+			10: "Head Unit: SET UP button on the steering wheel",
+			11: "Head Unit: Vol+ button on the steering wheel",
+			12: "Head Unit: Vol- button on the steering wheel",
+			13: "Head Unit: open voice control",
+			14: "Head Unit: open the equalizer",
+			15: "Head Unit: open the radio",
+			16: "Head Unit: search for a radio wave",
+			17: "Head Unit: open the camera",
+			18: "Head Unit: open the phone",
+			19: "On-board: INFO button (on-board information)",
+			20: "On-board: CLOCK button (time on the on-board)",
+			21: "On-board: CLOCK H button (hour)",
+			22: "On-board: CLOCK M button (minutes)",
+			23: "On-board: CLOCK 24/12 button (time format change)",
+			24: "On-board: Reset button for minutes to 0",
+			25: "On-board: change the INFO mode to CLOCK and back",
+			26: "On-board: pressing and holding the INFO button (flow reset)",
+			27: "On-board: pressing and holding the CLOCK button (setting the clock)",
+			28: "BOSE: on/off the amplifier",
+			29: "BOSE: on/off Audio PLT",
+			30: "BOSE: MUTE",
+			31: "BOSE: VOL +",
+			32: "BOSE: VOL -",
+			33: "BOSE: BALANCE +",
+			34: "BOSE: BALANCE -",
+			35: "BOSE: BASS +",
+			36: "BOSE: BASS -",
+			37: "BOSE: FADE +",
+			38: "BOSE: FADE -",
+			39: "BOSE: TREBLE +",
+			40: "BOSE: TREBLE -",
+			41: "BOSE: switching Center Point modes (cyclically)"
 		},
 
-		definition: {
-			title: "Button press detected",
-			type: {
-				title: "Button type",
-				description: "Select the button type for further use"
-			}
-		},
-
-		adding: "Adding a button",
-		edit: "Editing a button",
-		name: "Name of the button"
+		edit: {
+			title: "Editing the \"{name}\" button"
+		}
 	},
 
 	onboardButtons: {
 		title: "On-board buttons",
 		buttons: {
-			modeClock: "Mode CLOCK",
-			modeInfo: "Mode INFO",
+			holdClock: "hold CLOCK",
+			holdInfo: "hold INFO",
 			clock: "CLOCK",
 			info: "INFO",
 			clockH: "H",
@@ -573,31 +581,31 @@ export default {
 	options: {
 		title: "Options",
 		lcd: {
-			title: "LCD",
+			title: "On-board screen",
 			enabled: {
-				title: "LCD",
+				title: "On-board screen",
 				description: "Turn on/off the output of the information on the information screen"
 			},
 			logo: {
 				title: "Logo",
 				description:
-					"The test displayed at the time of the absence of data for output to LCD. Maximum 12 characters"
+					"The test displayed at the time of the absence of data for output to On-board screen. Maximum 12 characters"
 			},
 			hello: {
 				title: "Hello",
 				description: "Displayed test when switched by ACC. Maximum 32 characters",
-				menu: "LCD: Hello"
+				menu: "On-board: Hello"
 			}
 		},
-		teyes: {
-			title: "Teyes",
+		head: {
+			title: "Head Unit",
 			protocol: {
 				title: "UART Protocol",
-				description: "UART protocol for PJCAN communication with Teyes",
+				description: "UART protocol for PJCAN communication with Head Unit",
 				list: {
 					1: "Raise HM_ND00 2017.12.11 (19200)",
 					2: "Raise HM_ND01 2019.06.21 (38400)",
-					3: "SimpleSoft MZ_SS_07A (19200)",
+					3: "Raise HM_ND03 2022.11.11 (19200)",
 					4: "SimpleSoft RP5_MZ_002 (38400)"
 				}
 			},
@@ -605,39 +613,26 @@ export default {
 				title: "Change UART contacts",
 				description: "Enable if there is no PJCAN connection with multimedia"
 			},
-			lcdShow: {
-				title: "Show the text Teyes",
-				description: "Show the text of the Teyes on the information screen instead of the logo",
-				menu: "LCD: Show the text Teyes"
+			onboardShow: {
+				title: "Show the text Head Unit",
+				description: "Show the text of the Head Unit on the On-board screen of the logo",
+				menu: "LCD: Show the text Head Unit"
 			},
 			sendButton: {
 				title: "Steering wheel buttons",
-				description: "Control of Teyes by buttons on the steering wheel"
+				description: "Control of Head Unit by buttons on the steering wheel"
 			},
 			sendClimate: {
-				title: "Show climate on Teyes",
-				description: "Show climate control values on Teyes (if the protocol supports this functionality)"
+				title: "Show climate on Head Unit",
+				description: "Show climate control values on Head Unit (if the protocol supports this functionality)"
 			},
 			sendDoors: {
-				title: "Show the status of doors on Teyes",
-				description: "Show the status of the car doors on Teyes (if the protocol supports this functionality)"
+				title: "Show the status of doors on Head Unit",
+				description: "Show the status of the car doors on Head Unit (if the protocol supports this functionality)"
 			},
-			parseVolume: {
-				title: "Control the sound level on Teyes",
-				description:
-					"It is recommended to turn off this parameter to directly control the sound of the Bose amplifier"
-			},
-			receiveText: {
-				title: "Accept Teyes information",
-				description: "Accept incoming Teyes values: name of radio stations, etc."
-			},
-			receiveClock: {
-				title: "Teyes time",
-				description: "Accept incoming time value from Teyes (if the protocol supports this functionality)"
-			},
-			receiveButtons: {
-				title: "Teyes Buttons",
-				description: "Support for Teyes buttons: CLOCK, HOUR, MIN (if the protocol supports this functionality)"
+			sendOnboard: {
+				title: "Show on-board data on the Head Unit",
+				description: "Show the status of the doors and the values of the vehicle's on-board computer on the Head Unit (if the protocol supports this functionality)"
 			}
 		},
 		datetime: {
@@ -759,7 +754,7 @@ export default {
 			1: "Mazda 3 BK",
 			2: "Mazda 3 BL (tested)",
 			3: "Mazda 6 GG",
-			4: "Mazda 6 GH (not supported)",
+			4: "Mazda 6 GH (tested)",
 			5: "Mazda CX-7",
 			6: "Mazda CX-7 rest",
 			7: "Mazda CX-9",

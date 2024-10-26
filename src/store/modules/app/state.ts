@@ -1,15 +1,18 @@
-import onboardCardListDefault from "./onboard-card-list-default";
-import buttonsDefault from "./buttons-default";
-import { IMazdaConfig } from "@/models/pjcan/mazda";
+import onboardCardsDefault from "./onboard-cards-default";
+import sw1Default from "./sw1-default";
+import { IOnboardConfig } from "@/models/pjcan/onboard";
 
 const state = {
+	language: "ru",
+
 	messages: [],
-	visibleMessage: false,
-	mazda: null as IMazdaConfig | null,
-	onboardCardList: onboardCardListDefault,
-	sw1: buttonsDefault,
+	messageVisible: false,
 	notify: false,
-	language: "ru"
+
+	onboard: null as IOnboardConfig | null,
+	onboardCards: onboardCardsDefault,
+
+	sw1: sw1Default
 };
 
 export default state;

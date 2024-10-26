@@ -62,7 +62,7 @@ export default {
 					{
 						// запускаем диалог
 						scanClose = false;
-						store.commit("app/clearMessages");
+						store.commit("app/messagesClear");
 						steps();
 					}
 				})

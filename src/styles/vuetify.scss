@@ -210,3 +210,7 @@ html{
 		transform: rotate(360deg);
 	}
 }
+
+.v-btn--disabled.v-btn--variant-elevated, .v-btn--disabled.v-btn--variant-flat {
+	color: rgba(var(--v-theme-on-surface), 0.26) !important;
+}

@@ -43,6 +43,7 @@ export class DeviceUpdate extends EventEmitter implements IDeviceUpdate
 	abort = false;
 	total = 0;
 	size = 0;
+	is_rollback = false;
 
 	highPriority = true;
 

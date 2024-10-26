@@ -14,13 +14,13 @@ export const voltmeter = (state: any) => state.voltmeter;
  * Значения отображения автомобиля
  * @param {any} state
  */
-export const mazda = (state: any) => state.mazda;
+export const onboard = (state: any) => state.onboard;
 
 /**
  * Значения отображения текста ГУ
  * @param {any} state
  */
-export const teyesText = (state: any) => state.teyesText;
+export const headText = (state: any) => state.headText;
 
 /**
  * Значения отображения Bose
@@ -69,12 +69,6 @@ export const sensors = (state: any) => state.sensors;
  * @param {any} state
  */
 export const temperature = (state: any) => state.temperature;
-
-/**
- * Значения отображения уровня звука
- * @param {any} state
- */
-export const volume = (state: any) => state.volume;
 
 /**
  * Значения отображения даты и времени

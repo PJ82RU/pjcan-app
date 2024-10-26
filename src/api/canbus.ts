@@ -46,29 +46,29 @@ import {
 	API_DEVICE_ROLLBACK_EVENT
 } from "@/models/pjcan/device";
 import {
-	API_BUTTONS_SW1_CONFIG_EXEC,
-	API_BUTTONS_SW1_CONFIG_EVENT,
-	API_BUTTON_SW1_VALUE_EXEC,
-	API_BUTTON_SW1_VALUE_EVENT,
-	API_BUTTONS_SW3_CONFIG_EXEC,
-	API_BUTTONS_SW3_CONFIG_EVENT,
-	API_BUTTON_SW3_VALUE_EXEC,
-	API_BUTTON_SW3_VALUE_EVENT
+	API_SW1_CONFIG_EXEC,
+	API_SW1_CONFIG_EVENT,
+	API_SW1_VALUE_EXEC,
+	API_SW1_VALUE_EVENT,
+	API_SW3_CONFIG_EXEC,
+	API_SW3_CONFIG_EVENT,
+	API_SW3_VALUE_EXEC,
+	API_SW3_VALUE_EVENT
 } from "@/models/pjcan/buttons";
 import {
-	API_TEYES_CONFIG_EXEC,
-	API_TEYES_CONFIG_EVENT,
-	API_TEYES_TEXT_EXEC,
-	API_TEYES_TEXT_EVENT,
-	API_TEYES_TEXT_VIEW_EXEC,
-	API_TEYES_TEXT_VIEW_EVENT
-} from "@/models/pjcan/teyes";
+	API_HEAD_UNIT_CONFIG_EXEC,
+	API_HEAD_UNIT_CONFIG_EVENT,
+	API_HEAD_UNIT_VALUE_EXEC,
+	API_HEAD_UNIT_VALUE_EVENT,
+	API_HEAD_UNIT_VIEW_EXEC,
+	API_HEAD_UNIT_VIEW_EVENT
+} from "@/models/pjcan/head-unit";
 import {
-	API_MAZDA_CONFIG_EXEC,
-	API_MAZDA_CONFIG_EVENT,
-	API_MAZDA_VIEW_EXEC,
-	API_MAZDA_VIEW_EVENT
-} from "@/models/pjcan/mazda";
+	API_ONBOARD_CONFIG_EXEC,
+	API_ONBOARD_CONFIG_EVENT,
+	API_ONBOARD_VIEW_EXEC,
+	API_ONBOARD_VIEW_EVENT
+} from "@/models/pjcan/onboard";
 import {
 	API_DATETIME_CONFIG_EVENT,
 	API_DATETIME_CONFIG_EXEC,
@@ -162,8 +162,8 @@ import {
 	API_TEMPERATURE_VIEW_EVENT
 } from "@/models/pjcan/temperature";
 import {
-	API_VOLUME_CONFIG_EXEC,
-	API_VOLUME_CONFIG_EVENT,
+	API_VOLUME_VALUE_EXEC,
+	API_VOLUME_VALUE_EVENT,
 	API_VOLUME_VIEW_EXEC,
 	API_VOLUME_VIEW_EVENT
 } from "@/models/pjcan/volume";
@@ -468,7 +468,7 @@ export class Canbus extends EventEmitter
 			case API_DEVICE_UPDATE_EXEC: // Обновление прошивки
 			case API40_DEVICE_UPDATE_EXEC:
 				this.update.set(data);
-				if (this.update.offset < this.update.total) this.updateUpload();
+				if (this.update.offset < this.update.total) this.updateUpload().then();
 				this.emit(API_DEVICE_UPDATE_EVENT, this.update);
 				break;
 			case API_DEVICE_SCANNER_VALUE_EXEC: // Значения сканирования (устаревший ID API40_VERSION_EXEC, нужен для обновления до 4.1)
@@ -487,24 +487,24 @@ export class Canbus extends EventEmitter
 				new ChoiceValue(data, (res: DataView) => this.onReceive(res));
 				break;
 
-			case API_BUTTONS_SW1_CONFIG_EXEC: // Конфигурация кнопок SW1
-				this.emit(API_BUTTONS_SW1_CONFIG_EVENT, data);
+			case API_SW1_CONFIG_EXEC: // Конфигурация кнопок SW1
+				this.emit(API_SW1_CONFIG_EVENT, data);
 				break;
-			case API_BUTTON_SW1_VALUE_EXEC: // Значения кнопки SW1
-				this.emit(API_BUTTON_SW1_VALUE_EVENT, data);
+			case API_SW1_VALUE_EXEC: // Значения кнопки SW1
+				this.emit(API_SW1_VALUE_EVENT, data);
 				break;
-			case API_BUTTONS_SW3_CONFIG_EXEC: // Конфигурация кнопок SW3
-				this.emit(API_BUTTONS_SW3_CONFIG_EVENT, data);
+			case API_SW3_CONFIG_EXEC: // Конфигурация кнопок SW3
+				this.emit(API_SW3_CONFIG_EVENT, data);
 				break;
-			case API_BUTTON_SW3_VALUE_EXEC: // Значения кнопки SW3
-				this.emit(API_BUTTON_SW3_VALUE_EVENT, data);
+			case API_SW3_VALUE_EXEC: // Значения кнопки SW3
+				this.emit(API_SW3_VALUE_EVENT, data);
 				break;
 
-			case API_MAZDA_CONFIG_EXEC: // Конфигурация автомобиля
-				this.emit(API_MAZDA_CONFIG_EVENT, data);
+			case API_ONBOARD_CONFIG_EXEC: // Конфигурация автомобиля
+				this.emit(API_ONBOARD_CONFIG_EVENT, data);
 				break;
-			case API_MAZDA_VIEW_EXEC: // Конфигурация отображения текста приветствия
-				this.emit(API_MAZDA_VIEW_EVENT, data);
+			case API_ONBOARD_VIEW_EXEC: // Конфигурация отображения текста приветствия
+				this.emit(API_ONBOARD_VIEW_EVENT, data);
 				break;
 
 			case API_DATETIME_CONFIG_EXEC: // Конфигурация времени
@@ -514,14 +514,14 @@ export class Canbus extends EventEmitter
 				this.emit(API_DATETIME_VIEW_EVENT, data);
 				break;
 
-			case API_TEYES_CONFIG_EXEC: // Конфигурация Teyes
-				this.emit(API_TEYES_CONFIG_EVENT, data);
+			case API_HEAD_UNIT_CONFIG_EXEC: // Конфигурация Head Unit
+				this.emit(API_HEAD_UNIT_CONFIG_EVENT, data);
 				break;
-			case API_TEYES_TEXT_EXEC: // Текст Teyes
-				this.emit(API_TEYES_TEXT_EVENT, data);
+			case API_HEAD_UNIT_VALUE_EXEC: // Текст Head Unit
+				this.emit(API_HEAD_UNIT_VALUE_EVENT, data);
 				break;
-			case API_TEYES_TEXT_VIEW_EXEC: // Параметры отображения Teyes
-				this.emit(API_TEYES_TEXT_VIEW_EVENT, data);
+			case API_HEAD_UNIT_VIEW_EXEC: // Параметры отображения Head Unit
+				this.emit(API_HEAD_UNIT_VIEW_EVENT, data);
 				break;
 
 			case API_BOSE_CONFIG_EXEC: // Конфигурация Bose
@@ -637,8 +637,8 @@ export class Canbus extends EventEmitter
 				this.emit(API_TEMPERATURE_VIEW_EVENT, data);
 				break;
 
-			case API_VOLUME_CONFIG_EXEC: // Конфигурация уровня звука
-				this.emit(API_VOLUME_CONFIG_EVENT, data);
+			case API_VOLUME_VALUE_EXEC: // Конфигурация уровня звука
+				this.emit(API_VOLUME_VALUE_EVENT, data);
 				break;
 			case API_VOLUME_VIEW_EXEC: // Параметры отображения уровня звука
 				this.emit(API_VOLUME_VIEW_EVENT, data);
@@ -661,6 +661,7 @@ export class Canbus extends EventEmitter
 					this.update.encrypt = this.update.setIV(
 						!rollback ? this.update.firmware.iv : this.update.rollback.iv
 					);
+					this.update.is_rollback = rollback;
 					setTimeout(() => this.updateUpload(), 1000);
 				}
 			})
@@ -689,6 +690,10 @@ export class Canbus extends EventEmitter
 
 		if (this.update.end)
 		{
+			const action: IDeviceAction = new DeviceAction();
+			action.reboot = true;
+			action.format = this.update.is_rollback;
+			this.query(action);
 			this.debounce(() => this.emit(API_DEVICE_UPDATE_EVENT_ERROR, t("update.notify.errorWaitUpdate")), 60000);
 		}
 		else
@@ -766,8 +771,14 @@ export class Canbus extends EventEmitter
 	 * @param {boolean} save Сохранить настройки перед загрузкой
 	 * @param {boolean} resetConfig Сбросить конфигурацию устройства
 	 * @param {boolean} resetView Сбросить параметры отображения
+	 * @param {boolean} resetButtons Сбросить конфигурацию кнопок
 	 */
-	rebootDevice(save: boolean = false, resetConfig: boolean = false, resetView: boolean = false)
+	rebootDevice(
+		save: boolean = false,
+		resetConfig: boolean = false,
+		resetView: boolean = false,
+		resetButtons: boolean = false
+	)
 	{
 		this.version.clear();
 		this.queue = [];
@@ -776,6 +787,7 @@ export class Canbus extends EventEmitter
 		action.save = save;
 		action.resetConfig = resetConfig;
 		action.resetView = resetView;
+		action.resetButtons = resetButtons;
 		this.query(action);
 	}
 

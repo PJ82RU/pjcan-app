@@ -10,10 +10,10 @@ export class MovementValue extends BaseModel implements IMovementValue
 {
 	static struct: any = {
 		speed: BluetoothStruct.uint32(),
-		speedAVG: BluetoothStruct.uint16(),
+		speedAVG: BluetoothStruct.uint8(),
 		restWay: BluetoothStruct.uint32()
 	};
-	static size: number = 10;
+	static size: number = 9;
 
 	speed = 0;
 	speedAVG = 0;

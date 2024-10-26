@@ -6,6 +6,5 @@ export interface IButtonKey {
     config: string;
     setItem: string;
     setResistance: string;
-    setProgramming: string;
     value: string;
 }

@@ -17,11 +17,11 @@ export class DeviceValue extends BaseModel implements IDeviceValue
 
 	static struct: any = {
 		activation: BluetoothStruct.bit(),
-		state_led_work: BluetoothStruct.bit(),
-		state_reverse: BluetoothStruct.bit(),
-		state_r_position: BluetoothStruct.bit(),
-		state_amp_illum: BluetoothStruct.bit(),
-		config_save: BluetoothStruct.bit(),
+		stateLedWork: BluetoothStruct.bit(),
+		stateReverse: BluetoothStruct.bit(),
+		stateRPosition: BluetoothStruct.bit(),
+		stateAmpIllum: BluetoothStruct.bit(),
+		configSave: BluetoothStruct.bit(),
 		hardware: BluetoothStruct.struct(this.structHardware),
 		led: BluetoothStruct.uint8(),
 		voltmeter: BluetoothStruct.uint16(),
@@ -30,11 +30,11 @@ export class DeviceValue extends BaseModel implements IDeviceValue
 	static size: number = 12;
 
 	activation = false;
-	state_led_work = false;
-	state_reverse = false;
-	state_r_position = false;
-	state_amp_illum = false;
-	config_save = false;
+	stateLedWork = false;
+	stateReverse = false;
+	stateRPosition = false;
+	stateAmpIllum = false;
+	configSave = false;
 	hardware = {
 		major: 0,
 		minor: 0,
