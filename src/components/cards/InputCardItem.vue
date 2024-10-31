@@ -16,32 +16,47 @@
 </template>
 
 <script lang="ts">
-import { computed, toRefs } from "vue";
+import { computed, ComputedRef, toRefs } from "vue";
 import { getFormatTime } from "@/utils/time";
 
 export default {
 	name: "InputCardItem",
 	props: {
 		/** Значение */
-		value: [String, Number],
+		value: {
+			type: [String, Number],
+			required: true
+		},
 		/** Заголовок */
-		title: String,
+		title: {
+			type: String,
+			required: true
+		},
 		/** Описание */
-		description: String,
+		description: {
+			type: String,
+			default: undefined
+		},
 		/** Тип: text, time, temperature */
 		type: {
 			type: String,
 			default: "text"
 		},
 		/** Нет данных */
-		nodata: Boolean,
+		nodata: {
+			type: Boolean,
+			default: false
+		},
 		/** Выкл. */
-		disabled: Boolean
+		disabled: {
+			type: Boolean,
+			default: false
+		}
 	},
 	setup(props: any)
 	{
 		const { value, type, nodata } = toRefs(props);
-		const textValue = computed(() =>
+		const textValue: ComputedRef<string | number> = computed((): string | number =>
 		{
 			switch (type.value)
 			{
@@ -51,8 +66,10 @@ export default {
 						switch (typeof value.value)
 						{
 							case "number":
-							case "bigint": return getFormatTime(value.value);
-							case "string": return value.value;
+							case "bigint":
+								return getFormatTime(value.value);
+							case "string":
+								return value.value;
 						}
 					}
 					return "--:--:--";
@@ -63,8 +80,10 @@ export default {
 						switch (typeof value.value)
 						{
 							case "number":
-							case "bigint": return getFormatTime(value.value, false);
-							case "string": return value.value;
+							case "bigint":
+								return getFormatTime(value.value, false);
+							case "string":
+								return value.value;
 						}
 					}
 					return "--:--:--";
@@ -74,8 +93,10 @@ export default {
 					{
 						switch (typeof value.value)
 						{
-							case "number": return value.value.toFixed(1) + "°C";
-							case "string": return value.value + "°C";
+							case "number":
+								return value.value.toFixed(1) + "°C";
+							case "string":
+								return value.value + "°C";
 						}
 					}
 					return "-.-°C";
@@ -85,8 +106,10 @@ export default {
 					{
 						switch (typeof value.value)
 						{
-							case "number": return "+" + value.value.toFixed(2) + "V";
-							case "string": return value.value;
+							case "number":
+								return "+" + value.value.toFixed(2) + "V";
+							case "string":
+								return value.value;
 						}
 					}
 					return "-";
@@ -96,8 +119,10 @@ export default {
 					{
 						switch (typeof value.value)
 						{
-							case "number": return value.value.toFixed();
-							case "string": return value.value;
+							case "number":
+								return value.value.toFixed();
+							case "string":
+								return value.value;
 						}
 					}
 					return "--";

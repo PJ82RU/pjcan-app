@@ -30,7 +30,11 @@ export default {
 	components: { MenuDots },
 	props: {
 		title: String,
-		menu: Array as () => IMenuItem[],
+		/** Меню */
+		menu: {
+			type: Array as ()=> IMenuItem[],
+			default: undefined
+		},
 		like: {
 			type: Boolean,
 			default: undefined

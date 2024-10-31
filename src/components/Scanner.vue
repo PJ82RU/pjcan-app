@@ -7,7 +7,7 @@
 	>
 		<template #body>
 			<div>{{ $t("scanner.upload.text") }}</div>
-			<div class="mb-2">{{ $t("scanner.upload.leftToLoad", { n: leftUploading }) }}</div>
+			<div class="mb-2">{{ $t("scanner.upload.leftToLoad", leftUploading, { n: leftUploading }) }}</div>
 
 			<v-progress-linear color="primary" height="10" indeterminate stream rounded />
 		</template>

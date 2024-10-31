@@ -15,7 +15,7 @@ export const setView = (
 		time,
 		delay
 	}: { exec: number; enabled: boolean; type: TViewType; time: number; delay: number }
-) =>
+): void =>
 {
 	const res = new ViewConfig(exec);
 	res.enabled = enabled;
@@ -30,7 +30,7 @@ export const setView = (
  * @param {any} state
  * @param {DataView} data Данные
  */
-export const setWorktime = (state: any, data: DataView) =>
+export const setWorktime = (state: any, data: DataView): void =>
 {
 	state.worktime.set(data);
 };

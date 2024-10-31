@@ -176,6 +176,19 @@ export const setHeadSendOnboard = (state: any, value: boolean) =>
 	}
 };
 /**
+ * Head Unit: HoldToFlip
+ * @param {any} state
+ * @param {boolean} value Новое значение
+ */
+export const setHoldToFlip = (state: any, value: boolean) =>
+{
+	if (state.head.isData)
+	{
+		state.head.holdToFlip = value;
+		canbus.query(state.head);
+	}
+};
+/**
  * Head Unit: ShowTextOfLogo
  * @param {any} state
  * @param {boolean} value Новое значение

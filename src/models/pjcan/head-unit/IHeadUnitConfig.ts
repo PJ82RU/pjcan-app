@@ -9,5 +9,6 @@ export interface IHeadUnitConfig extends IBaseModel {
 	sendDoors: boolean; // Отправлять ГУ статусы дверей автомобиля
 	sendOnboard: boolean; // Отправлять ГУ статусы дверей и данные БК
 	reverseUart: boolean; // Поменять местами контакты RX и TX
+	holdToFlip: boolean; // Листать значение уровня громкости при удержании кнопки, если ГУ не поддерживает данный функционал
 	protocol: TProtocol; // Протокол
 }

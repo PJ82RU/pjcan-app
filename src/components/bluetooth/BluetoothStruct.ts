@@ -124,7 +124,7 @@ export class BluetoothStruct implements IBluetoothStruct
 
 	/**
 	 * Чтение Int8
-	 * @param u      UInt8
+	 * @param u UInt8
 	 * @param length Количество значений массива
 	 */
 	getInt8(u: boolean, length: number): number[]
@@ -132,7 +132,7 @@ export class BluetoothStruct implements IBluetoothStruct
 		const result: number[] = [];
 		if (this.buffer)
 		{
-			for (let i = 0; i < length; i++)
+			for (let i: number = 0; i < length; i++)
 			{
 				result.push(u ? this.buffer.getUint8(this.offset++) : this.buffer.getInt8(this.offset++));
 			}
@@ -142,15 +142,15 @@ export class BluetoothStruct implements IBluetoothStruct
 
 	/**
 	 * Запись Int8
-	 * @param u      UInt8
-	 * @param val    Массив значений
+	 * @param u UInt8
+	 * @param val Массив значений
 	 * @param length Количество значений массива
 	 */
 	setInt8(u: boolean, val: number[], length: number): void
 	{
 		if (this.buffer)
 		{
-			for (let i = 0; i < length; i++)
+			for (let i: number = 0; i < length; i++)
 			{
 				if (u) this.buffer.setUint8(this.offset++, val[i]);
 				else this.buffer.setInt8(this.offset++, val[i]);
@@ -160,7 +160,7 @@ export class BluetoothStruct implements IBluetoothStruct
 
 	/**
 	 * Чтение Int16
-	 * @param u      UInt16
+	 * @param u UInt16
 	 * @param length Количество значений массива
 	 */
 	getInt16(u: boolean, length: number): number[]
@@ -168,7 +168,7 @@ export class BluetoothStruct implements IBluetoothStruct
 		const result: number[] = [];
 		if (this.buffer)
 		{
-			for (let i = 0; i < length; i++)
+			for (let i: number = 0; i < length; i++)
 			{
 				result.push(
 					u
@@ -183,15 +183,15 @@ export class BluetoothStruct implements IBluetoothStruct
 
 	/**
 	 * Запись Int16
-	 * @param u      UInt16
-	 * @param val    Значение
+	 * @param u UInt16
+	 * @param val Значение
 	 * @param length Количество значений массива
 	 */
 	setInt16(u: boolean, val: number[], length: number): void
 	{
 		if (this.buffer)
 		{
-			for (let i = 0; i < length; i++)
+			for (let i: number = 0; i < length; i++)
 			{
 				if (u) this.buffer.setUint16(this.offset, val[i], this.littleEndian);
 				else this.buffer.setInt16(this.offset, val[i], this.littleEndian);
@@ -201,8 +201,8 @@ export class BluetoothStruct implements IBluetoothStruct
 	}
 
 	/**
-	 * Чтение        Int32
-	 * @param u      UInt32
+	 * Чтение Int32
+	 * @param u UInt32
 	 * @param length Количество значений массива
 	 */
 	getInt32(u: boolean, length: number): number[]
@@ -210,7 +210,7 @@ export class BluetoothStruct implements IBluetoothStruct
 		const result: number[] = [];
 		if (this.buffer)
 		{
-			for (let i = 0; i < length; i++)
+			for (let i: number = 0; i < length; i++)
 			{
 				result.push(
 					u
@@ -225,15 +225,15 @@ export class BluetoothStruct implements IBluetoothStruct
 
 	/**
 	 * Запись Int32
-	 * @param u      UInt32
-	 * @param val    Значение
+	 * @param u UInt32
+	 * @param val Значение
 	 * @param length Количество значений массива
 	 */
 	setInt32(u: boolean, val: number[], length: number): void
 	{
 		if (this.buffer)
 		{
-			for (let i = 0; i < length; i++)
+			for (let i: number = 0; i < length; i++)
 			{
 				if (u) this.buffer.setUint32(this.offset, val[i], this.littleEndian);
 				else this.buffer.setInt32(this.offset, val[i], this.littleEndian);
@@ -243,7 +243,7 @@ export class BluetoothStruct implements IBluetoothStruct
 	}
 
 	/**
-	 * Чтение        Float32
+	 * Чтение Float32
 	 * @param length Количество значений массива
 	 */
 	getFloat32(length: number): number[]
@@ -251,7 +251,7 @@ export class BluetoothStruct implements IBluetoothStruct
 		const result: number[] = [];
 		if (this.buffer)
 		{
-			for (let i = 0; i < length; i++)
+			for (let i: number = 0; i < length; i++)
 			{
 				result.push(this.buffer.getFloat32(this.offset, this.littleEndian));
 				this.offset += 4;
@@ -262,14 +262,14 @@ export class BluetoothStruct implements IBluetoothStruct
 
 	/**
 	 * Запись Float32
-	 * @param val    Значение
+	 * @param val Значение
 	 * @param length Количество значений массива
 	 */
 	setFloat32(val: number[], length: number): void
 	{
 		if (this.buffer)
 		{
-			for (let i = 0; i < length; i++)
+			for (let i: number = 0; i < length; i++)
 			{
 				this.buffer.setFloat32(this.offset, val[i], this.littleEndian);
 				this.offset += 4;
@@ -279,7 +279,7 @@ export class BluetoothStruct implements IBluetoothStruct
 
 	/**
 	 * Чтение Int64
-	 * @param u      UInt64
+	 * @param u UInt64
 	 * @param length Количество значений массива
 	 */
 	getInt64(u: boolean, length: number): bigint[]
@@ -287,7 +287,7 @@ export class BluetoothStruct implements IBluetoothStruct
 		const result: bigint[] = [];
 		if (this.buffer)
 		{
-			for (let i = 0; i < length; i++)
+			for (let i: number = 0; i < length; i++)
 			{
 				result.push(
 					u
@@ -302,15 +302,15 @@ export class BluetoothStruct implements IBluetoothStruct
 
 	/**
 	 * Запись Int64
-	 * @param u      UInt64
-	 * @param val    Значение
+	 * @param u UInt64
+	 * @param val Значение
 	 * @param length Количество значений массива
 	 */
 	setInt64(u: boolean, val: bigint[], length: number): void
 	{
 		if (this.buffer)
 		{
-			for (let i = 0; i < length; i++)
+			for (let i: number = 0; i < length; i++)
 			{
 				if (u) this.buffer.setBigUint64(this.offset, val[i], this.littleEndian);
 				else this.buffer.setBigInt64(this.offset, val[i], this.littleEndian);
@@ -320,7 +320,7 @@ export class BluetoothStruct implements IBluetoothStruct
 	}
 
 	/**
-	 * Чтение        Float64
+	 * Чтение Float64
 	 * @param length Количество значений массива
 	 */
 	getFloat64(length: number): number[]
@@ -328,7 +328,7 @@ export class BluetoothStruct implements IBluetoothStruct
 		const result: number[] = [];
 		if (this.buffer)
 		{
-			for (let i = 0; i < length; i++)
+			for (let i: number = 0; i < length; i++)
 			{
 				result.push(this.buffer.getFloat64(this.offset, this.littleEndian));
 				this.offset += 8;
@@ -339,14 +339,14 @@ export class BluetoothStruct implements IBluetoothStruct
 
 	/**
 	 * Запись Float64
-	 * @param val    Значение
+	 * @param val Значение
 	 * @param length Количество значений массива
 	 */
 	setFloat64(val: number[], length: number): void
 	{
 		if (this.buffer)
 		{
-			for (let i = 0; i < length; i++)
+			for (let i: number = 0; i < length; i++)
 			{
 				this.buffer.setFloat64(this.offset, val[i], this.littleEndian);
 				this.offset += 8;
@@ -363,9 +363,9 @@ export class BluetoothStruct implements IBluetoothStruct
 		let result: string = "";
 		if (this.buffer)
 		{
-			for (let i = 0; i < length; i++)
+			for (let i: number = 0; i < length; i++)
 			{
-				const byte = this.buffer.getUint8(this.offset++);
+				const byte: number = this.buffer.getUint8(this.offset++);
 				if (byte > 19 && byte < 127) result += String.fromCharCode(byte);
 			}
 		}
@@ -374,7 +374,7 @@ export class BluetoothStruct implements IBluetoothStruct
 
 	/**
 	 * Запись строки
-	 * @param str    Строка
+	 * @param str Строка
 	 * @param length Длина копирования
 	 */
 	setChars(str: string, length: number): void
@@ -382,8 +382,11 @@ export class BluetoothStruct implements IBluetoothStruct
 		if (this.buffer)
 		{
 			// noinspection SpellCheckingInspection
-			const lenstr = str.length;
-			for (let i = 0; i < length; i++) this.buffer.setInt8(this.offset++, i < lenstr ? str.charCodeAt(i) : 0);
+			const lenstr: number = str.length;
+			for (let i: number = 0; i < length; i++)
+			{
+				this.buffer.setInt8(this.offset++, i < lenstr ? str.charCodeAt(i) : 0);
+			}
 		}
 	}
 
@@ -463,7 +466,7 @@ export class BluetoothStruct implements IBluetoothStruct
 					case TTypeValue.TYPE_STRUCT:
 						if (value[2] > 0)
 						{
-							for (let i = 0; i < value[2]; i++)
+							for (let i: number = 0; i < value[2]; i++)
 							{
 								this.offset = new BluetoothStruct(value[1]).decode(buffer, data[key][i], this.offset);
 							}
@@ -488,7 +491,7 @@ export class BluetoothStruct implements IBluetoothStruct
 	/**
 	 * Кодировать значения
 	 * @param buffer Буфер данных
-	 * @param data   Структура для данных
+	 * @param data Структура для данных
 	 * @param offset Начало смещения
 	 */
 	encode(buffer: DataView, data: ILooseObject, offset: number = 0): number
@@ -563,7 +566,7 @@ export class BluetoothStruct implements IBluetoothStruct
 						case TTypeValue.TYPE_STRUCT:
 							if (value[2] > 0)
 							{
-								for (let i = 0; i < value[2]; i++)
+								for (let i: number = 0; i < value[2]; i++)
 								{
 									this.offset = new BluetoothStruct(value[1]).encode(
 										buffer,

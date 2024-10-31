@@ -32,18 +32,27 @@
 
 <script lang="ts">
 import { VNumberInput } from "vuetify/labs/VNumberInput";
-import { computed, toRefs } from "vue";
+import { computed, toRefs, WritableComputedRef } from "vue";
 
 export default {
 	name: "NumberCardItem",
 	components: { VNumberInput },
 	props: {
 		/** Значение */
-		modelValue: Number,
+		modelValue: {
+			type: Number,
+			default: 0
+		},
 		/** Заголовок */
-		title: String,
+		title: {
+			type: String,
+			required: true
+		},
 		/** Описание */
-		description: String,
+		description: {
+			type: String,
+			default: undefined
+		},
 		/** Минимальное значение */
 		min: {
 			type: Number,
@@ -60,15 +69,21 @@ export default {
 			default: 1
 		},
 		/** Нет данных */
-		nodata: Boolean,
+		nodata: {
+			type: Boolean,
+			default: false
+		},
 		/** Выкл. */
-		disabled: Boolean
+		disabled: {
+			type: Boolean,
+			default: false
+		}
 	},
 	emits: ["update:modelValue"],
 	setup(props: any, { emit }: { emit: any })
 	{
 		const { modelValue } = toRefs(props);
-		const value = computed({
+		const value: WritableComputedRef<number, number> = computed({
 			get: (): number => modelValue.value,
 			set: (val: number) => emit("update:modelValue", val)
 		});

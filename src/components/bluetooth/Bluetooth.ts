@@ -58,8 +58,11 @@ export class Bluetooth extends EventEmitter
 		return this._device
 			? Promise.resolve()
 			: this.requestBluetoothDevice()
-				.then((device: BluetoothDevice) => this.reconnect(device))
-				.catch((e: any) =>
+				.then((device: BluetoothDevice): void =>
+				{
+					this.reconnect(device);
+				})
+				.catch((e: any): void =>
 				{
 					this.emit(BLUETOOTH_EVENT_CONNECTED, TConnectedStatus.NO_CONNECT);
 					console.log(e);
@@ -86,7 +89,7 @@ export class Bluetooth extends EventEmitter
 	{
 		if (this._device)
 		{
-			const device = this._device;
+			const device: BluetoothDevice = this._device;
 			this.clear();
 			device.gatt?.disconnect();
 
@@ -96,11 +99,11 @@ export class Bluetooth extends EventEmitter
 	}
 
 	/** Запрос выбора Bluetooth устройства */
-	requestBluetoothDevice(): Promise<BluetoothDevice>
+	async requestBluetoothDevice(): Promise<BluetoothDevice>
 	{
 		return navigator.bluetooth
 			.requestDevice({ filters: [{ services: [BLUETOOTH_SERVICE_UUID] }] })
-			.then((device: BluetoothDevice) =>
+			.then((device: BluetoothDevice): BluetoothDevice =>
 			{
 				if (dev) console.log(t("BLE.server.deviceSelected", { n: device.name }));
 				// device.removeEventListener("gattserverdisconnected", null);
@@ -120,17 +123,17 @@ export class Bluetooth extends EventEmitter
 		if (dev) console.log(t("BLE.server.GATTConnect"));
 		return device.gatt
 			?.connect()
-			.then((server: BluetoothRemoteGATTServer) =>
+			.then((server: BluetoothRemoteGATTServer): Promise<BluetoothRemoteGATTService> =>
 			{
 				if (dev) console.log(t("BLE.server.getService"));
 				return server.getPrimaryService(BLUETOOTH_SERVICE_UUID);
 			})
-			.then((service: BluetoothRemoteGATTService) =>
+			.then((service: BluetoothRemoteGATTService): Promise<BluetoothRemoteGATTCharacteristic> =>
 			{
 				if (dev) console.log(t("BLE.server.getCharacteristic"));
 				return service.getCharacteristic(BLUETOOTH_CHARACTERISTIC_UUID);
 			})
-			.then((characteristic: BluetoothRemoteGATTCharacteristic) =>
+			.then((characteristic: BluetoothRemoteGATTCharacteristic): BluetoothRemoteGATTCharacteristic =>
 			{
 				if (dev) console.log(t("BLE.server.characteristicDone"));
 				// characteristic.removeEventListener("characteristicvaluechanged", null);
@@ -174,8 +177,11 @@ export class Bluetooth extends EventEmitter
 	): void
 	{
 		toTry()
-			.then((server: BluetoothRemoteGATTServer) => success(server))
-			.catch(() =>
+			.then((server: BluetoothRemoteGATTServer): void =>
+			{
+				success(server);
+			})
+			.catch((): void =>
 			{
 				if (max === 0) return fail();
 				if (dev) console.log(t("BLE.server.reconnect", { n: delay, c: max }));
@@ -195,17 +201,17 @@ export class Bluetooth extends EventEmitter
 		this.exponentialBackoff(
 			3,
 			2,
-			() =>
+			(): Promise<void> | undefined =>
 			{
 				this.emit(BLUETOOTH_EVENT_CONNECTED, TConnectedStatus.WAIT_CONNECT);
 				if (this._device) return this.reconnect(this._device);
 			},
-			() =>
+			(): void =>
 			{
 				if (dev) console.log(t("BLE.server.reconnectRestored"));
 				// this.emit(BLUETOOTH_EVENT_CONNECTED, TConnectedStatus.CONNECT);
 			},
-			() =>
+			(): void =>
 			{
 				if (dev) console.log(t("BLE.server.connectionLost"));
 				this.emit(BLUETOOTH_EVENT_CONNECTED, TConnectedStatus.NO_CONNECT);
@@ -247,15 +253,18 @@ export class Bluetooth extends EventEmitter
 		return (
 			this._characteristic
 				?.writeValue(data)
-				.then(() =>
+				.then((): void =>
 				{
 					this._counterReSend = 0;
 				})
-				.catch(() =>
+				.catch((): Promise<void> | undefined =>
 				{
 					return Promise.resolve()
-						.then(() => this.delayPromise(50))
-						.then(() =>
+						.then((): void =>
+						{
+							this.delayPromise(50).then();
+						})
+						.then((): Promise<any> =>
 						{
 							this._counterReSend++;
 							return this._counterReSend < this.counterReSendMax

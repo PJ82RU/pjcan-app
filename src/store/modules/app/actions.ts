@@ -5,7 +5,7 @@ import sw1Default from "./sw1-default";
  * Чтение языка из local storage
  * @param {any} commit
  */
-export const readLanguage = ({ commit }: { commit: any }) =>
+export const readLanguage = ({ commit }: { commit: any }): void =>
 {
 	const res = window.localStorage.getItem("Language");
 	if (res?.length)
@@ -26,7 +26,7 @@ export const readLanguage = ({ commit }: { commit: any }) =>
  * Запись языка в local storage
  * @param {any} commit
  */
-export const writeLanguage = ({ getters }: { getters: any }) =>
+export const writeLanguage = ({ getters }: { getters: any }): void =>
 {
 	const res = JSON.stringify(getters.language);
 	window.localStorage.setItem("Language", res);

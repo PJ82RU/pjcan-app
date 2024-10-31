@@ -633,6 +633,10 @@ export default {
 			sendOnboard: {
 				title: "Show on-board data on the Head Unit",
 				description: "Show the status of the doors and the values of the vehicle's on-board computer on the Head Unit (if the protocol supports this functionality)"
+			},
+			holdToFlip: {
+				title: "Volume control",
+				description: "Smooth change of sound level when holding the Vol+/Vol- button (recommended if the Head Unit does not support this functionality)"
 			}
 		},
 		datetime: {

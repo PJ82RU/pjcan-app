@@ -15,7 +15,7 @@ const toHex = (value: number | BigInt): string =>
 const arrayToHex = (value: (number | BigInt)[]): string =>
 {
 	let sha = "";
-	value?.forEach((x) => (sha += toHex(x)));
+	value?.forEach((x): void => { sha += toHex(x); });
 	return sha;
 };
 

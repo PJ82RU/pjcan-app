@@ -10,7 +10,7 @@ const debounce = createDebounce();
  * @param {any} state
  * @param {boolean} value Значение
  */
-export const setLanguage = (state: any, value: string) =>
+export const setLanguage = (state: any, value: string): void =>
 {
 	state.language = value;
 };
@@ -20,7 +20,7 @@ export const setLanguage = (state: any, value: string) =>
  * @param state
  * @param {IMessage} msg Сообщение
  */
-export const setMessage = (state: any, msg: IMessage) =>
+export const setMessage = (state: any, msg: IMessage): void =>
 {
 	state.messages.push(msg);
 	state.messageVisible = true;

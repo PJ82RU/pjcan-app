@@ -16,6 +16,7 @@ export class HeadUnitConfig extends BaseModel implements IHeadUnitConfig
 		sendDoors: BluetoothStruct.bit(),
 		sendOnboard: BluetoothStruct.bit(),
 		reverseUart: BluetoothStruct.bit(),
+		holdToFlip: BluetoothStruct.bit(),
 		protocol: BluetoothStruct.uint8()
 	};
 	static size: number = 2;
@@ -26,6 +27,7 @@ export class HeadUnitConfig extends BaseModel implements IHeadUnitConfig
 	sendDoors = false;
 	sendOnboard = false;
 	reverseUart = false;
+	holdToFlip = false;
 	protocol = TProtocol.PROTOCOL_RAISE_HM_ND03;
 
 	constructor(data?: DataView)

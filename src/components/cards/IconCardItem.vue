@@ -17,7 +17,8 @@
 			class="icon-card-item__icon"
 			:style="{
 				right: `${parseInt(size) * index + (margin ? margin * index : 0)}px`,
-				animation: rotation != undefined && rotation > 0 ? 'rotating ' + rotation + 's linear infinite' : undefined
+				animation:
+					rotation != undefined && rotation > 0 ? 'rotating ' + rotation + 's linear infinite' : undefined
 			}"
 			:name="item.name"
 			:colors="item.colors"
@@ -28,7 +29,7 @@
 </template>
 
 <script lang="ts">
-import { computed, toRefs } from "vue";
+import { computed, ComputedRef, toRefs } from "vue";
 
 import IconCustom from "@/components/common/icon-custom/IconCustom.vue";
 
@@ -37,13 +38,25 @@ export default {
 	components: { IconCustom },
 	props: {
 		/** Список значений иконок */
-		modelValue: Array as () => boolean[],
+		modelValue: {
+			type: Array as () => boolean[],
+			required: true
+		},
 		/** Заголовок */
-		title: String,
+		title: {
+			type: String,
+			required: true
+		},
 		/** Описание */
-		description: String,
+		description: {
+			type: String,
+			default: undefined
+		},
 		/** Список имен иконок */
-		iconName: Array as () => string[],
+		iconName: {
+			type: Array as () => string[],
+			default: undefined
+		},
 		/** Цвета вкл. иконки */
 		colorsTrue: {
 			type: Object,
@@ -60,13 +73,25 @@ export default {
 			default: "44px"
 		},
 		/** Скорость вращения иконки */
-		rotation: Number,
+		rotation: {
+			type: Number,
+			default: undefined
+		},
 		/** Отступ */
-		margin: Number,
+		margin: {
+			type: Number,
+			default: undefined
+		},
 		/** Нет данных */
-		nodata: Boolean,
+		nodata: {
+			type: Boolean,
+			default: false
+		},
 		/** Выкл. */
-		disabled: Boolean
+		disabled: {
+			type: Boolean,
+			default: false
+		}
 	},
 	emits: ["update:modelValue", "change"],
 	setup(props: any, { emit }: { emit: any })
@@ -77,7 +102,7 @@ export default {
 		 * Изменение состояния
 		 * @param {number} index
 		 */
-		const onChange = (index: number): void =>
+		const onChange: (index: number) => void = (index: number): void =>
 		{
 			if (!disabled.value)
 			{
@@ -88,7 +113,7 @@ export default {
 		};
 
 		/** Список параметров иконок */
-		const iconList = computed((): any[] =>
+		const iconList: ComputedRef<any[]> = computed((): any[] =>
 		{
 			const result: any[] = [];
 			modelValue.value?.forEach((x: boolean, i: number) =>

@@ -43,7 +43,12 @@ import {
 	DeviceScannerValue,
 	IDeviceScannerValue,
 	IDeviceFirmwareUrl,
-	API_DEVICE_ROLLBACK_EVENT
+	API_DEVICE_ROLLBACK_EVENT,
+	IDeviceUpdate,
+	IDeviceValue,
+	IDeviceInfo,
+	IDeviceConfig,
+	IDeviceScannerAction
 } from "@/models/pjcan/device";
 import {
 	API_SW1_CONFIG_EXEC,
@@ -195,9 +200,9 @@ export class Canbus extends EventEmitter
 	/** Запрет на отправку данных */
 	queueDisabled: boolean = false;
 	/** Обновление прошивки */
-	update = new DeviceUpdate();
+	update: IDeviceUpdate = new DeviceUpdate();
 	/** Таймер */
-	private debounce = createDebounce();
+	private debounce: (fn: () => void, delay: number) => void = createDebounce();
 
 	/** Версия прошивки PJCAN */
 	version: IVersion = new Version();
@@ -206,16 +211,16 @@ export class Canbus extends EventEmitter
 	/** Статус активации устройства */
 	activation: boolean = false;
 
-	private __onVersion = (ev: any): void => canbus.onVersion(ev, false);
-	private __onVersion40 = (ev: any): void => canbus.onVersion(ev, true);
-	private __onIsActivation = (ev: any): void => canbus.onIsActivation(ev);
-	private __onActivation = (ev: any): void => canbus.onActivation(ev);
+	private __onVersion: (ev: any) => void = (ev: any): void => canbus.onVersion(ev, false);
+	private __onVersion40: (ev: any) => void = (ev: any): void => canbus.onVersion(ev, true);
+	private __onIsActivation: (ev: any) => void = (ev: any): void => canbus.onIsActivation(ev);
+	private __onActivation: (ev: any) => void = (ev: any): void => canbus.onActivation(ev);
 
 	constructor()
 	{
 		super();
-		this.bluetooth.addListener(BLUETOOTH_EVENT_CONNECTED, (ev) => this.onConnected(ev));
-		this.bluetooth.addListener(BLUETOOTH_EVENT_RECEIVE, (ev) => this.onReceive(ev));
+		this.bluetooth.addListener(BLUETOOTH_EVENT_CONNECTED, (ev): void => this.onConnected(ev));
+		this.bluetooth.addListener(BLUETOOTH_EVENT_RECEIVE, (ev): void => this.onReceive(ev));
 	}
 
 	/** Статус работы Canbus */
@@ -225,7 +230,7 @@ export class Canbus extends EventEmitter
 	}
 
 	/** Отправка сообщений из очереди */
-	private sendBluetoothQueue()
+	private sendBluetoothQueue(): void
 	{
 		if (this.bluetooth.connected)
 		{
@@ -234,22 +239,22 @@ export class Canbus extends EventEmitter
 			this.queueWait = true;
 			while (this.queue.length)
 			{
-				const next = this.queue[0];
+				const next: IQuery = this.queue[0];
 				this.queue.shift();
 				if (!this.queueDisabled || (this.queueDisabled && next.highPriority))
 				{
 					this.bluetooth
 						.send(next.data)
-						.then(() =>
+						.then((): void =>
 						{
 							next.fn?.(true);
 						})
-						.catch((err) =>
+						.catch((err): void =>
 						{
 							next.fn?.(false);
 							if (dev) console.log("Query:", err);
 						})
-						.finally(() =>
+						.finally((): void =>
 						{
 							this.queueWait = false;
 							this.sendBluetoothQueue();
@@ -271,7 +276,7 @@ export class Canbus extends EventEmitter
 	 * @param {boolean} request Только запрос данных
 	 * @param {function} fn Функция обратного вызова
 	 */
-	query(obj: IBaseModel, request?: boolean, fn?: (success: boolean) => void)
+	query(obj: IBaseModel, request?: boolean, fn?: (success: boolean) => void): void
 	{
 		if (!this.activation && !obj.skipActivationCheck) return;
 		if (this.queue.length)
@@ -302,7 +307,7 @@ export class Canbus extends EventEmitter
 	 * Событие подключения Bluetooth
 	 * @param {TConnectedStatus} status Статус подключения
 	 */
-	onConnected(status: TConnectedStatus)
+	onConnected(status: TConnectedStatus): void
 	{
 		this.queue = [];
 		if (status === TConnectedStatus.CONNECT)
@@ -357,11 +362,11 @@ export class Canbus extends EventEmitter
 
 			// Проверка наличия новой версии прошивки
 			this.checkVersion()
-				.then((newVersion: IVersion) =>
+				.then((newVersion: IVersion): void =>
 				{
 					this.emit(API_NEW_VERSION_EVENT, newVersion);
 				})
-				.catch(() => {});
+				.catch((): void => {});
 		}
 		else
 		{
@@ -376,7 +381,7 @@ export class Canbus extends EventEmitter
 	 */
 	private onIsActivation(data: DataView): void
 	{
-		const device = new DeviceValue(data);
+		const device: IDeviceValue = new DeviceValue(data);
 		if (device.isData)
 		{
 			this.removeListener(API_DEVICE_VALUE_EVENT, this.__onIsActivation);
@@ -391,12 +396,12 @@ export class Canbus extends EventEmitter
 			else
 			{
 				this.rollbackVersion()
-					.then((rollback: IDeviceFirmwareUrl) =>
+					.then((rollback: IDeviceFirmwareUrl): void =>
 					{
 						this.emit(API_DEVICE_ROLLBACK_EVENT, rollback);
 					})
-					.catch(() => {})
-					.finally(() =>
+					.catch((): void => {})
+					.finally((): void =>
 					{
 						this.emit(API_CANBUS_EVENT, this.status);
 					});
@@ -410,7 +415,7 @@ export class Canbus extends EventEmitter
 	 */
 	private onActivation(data: DataView): void
 	{
-		const info = new DeviceInfo(data);
+		const info: IDeviceInfo = new DeviceInfo(data);
 		if (info.isData)
 		{
 			this.removeListener(API_DEVICE_INFO_EVENT, this.__onActivation);
@@ -418,13 +423,13 @@ export class Canbus extends EventEmitter
 			if (sha?.length)
 			{
 				getSerial(sha)
-					.then((res: any) =>
+					.then((res: any): void =>
 					{
 						if (res?.sha?.length)
 						{
-							const device = new DeviceConfig();
+							const device: IDeviceConfig = new DeviceConfig();
 							device.serial = res.sha;
-							this.query(device, false, (success) =>
+							this.query(device, false, (success): void =>
 							{
 								if (success)
 								{
@@ -436,7 +441,7 @@ export class Canbus extends EventEmitter
 						}
 						else toast.error(t("activation.error"));
 					})
-					.catch(() =>
+					.catch((): void =>
 					{
 						toast.error(t("activation.error"));
 					});
@@ -450,7 +455,7 @@ export class Canbus extends EventEmitter
 	 */
 	onReceive(data: DataView): void
 	{
-		const id = data.getUint8(0);
+		const id: number = data.getUint8(0);
 		switch (id)
 		{
 			case API_VERSION_EXEC: // Версия прошивки
@@ -484,7 +489,7 @@ export class Canbus extends EventEmitter
 				break;
 
 			case API_CHOICE_EXEC: // Выборочные данные
-				new ChoiceValue(data, (res: DataView) => this.onReceive(res));
+				new ChoiceValue(data, (res: DataView): void => this.onReceive(res));
 				break;
 
 			case API_SW1_CONFIG_EXEC: // Конфигурация кнопок SW1
@@ -650,7 +655,7 @@ export class Canbus extends EventEmitter
 	updateStart(rollback: boolean = false): void
 	{
 		getFirmware(!rollback ? this.update.firmware.url : this.update.rollback.url)
-			.then((res: any) =>
+			.then((res: any): void =>
 			{
 				if (res?.byteLength > 0)
 				{
@@ -665,11 +670,14 @@ export class Canbus extends EventEmitter
 					setTimeout(() => this.updateUpload(), 1000);
 				}
 			})
-			.catch(() => this.emit(API_DEVICE_UPDATE_EVENT_ERROR, t("update.notify.errorDownload")));
+			.catch((): void =>
+			{
+				this.emit(API_DEVICE_UPDATE_EVENT_ERROR, t("update.notify.errorDownload"));
+			});
 	}
 
 	/** Пишем данные файла прошивки в устройство PJCAN */
-	async updateUpload()
+	async updateUpload(): Promise<void>
 	{
 		if (this.bluetooth.connected && this.update.error === 0 && this.update.offset <= this.update.total)
 		{
@@ -694,21 +702,27 @@ export class Canbus extends EventEmitter
 			action.reboot = true;
 			action.format = this.update.is_rollback;
 			this.query(action);
-			this.debounce(() => this.emit(API_DEVICE_UPDATE_EVENT_ERROR, t("update.notify.errorWaitUpdate")), 60000);
+			this.debounce((): void =>
+			{
+				this.emit(API_DEVICE_UPDATE_EVENT_ERROR, t("update.notify.errorWaitUpdate"));
+			}, 60000);
 		}
 		else
 		{
-			this.debounce(() => this.emit(API_DEVICE_UPDATE_EVENT_ERROR, t("update.notify.errorUpload")), 5000);
+			this.debounce((): void =>
+			{
+				this.emit(API_DEVICE_UPDATE_EVENT_ERROR, t("update.notify.errorUpload"));
+			}, 5000);
 		}
 	}
 
 	/** Проверить версию прошивки */
 	checkVersion(): Promise<IVersion>
 	{
-		return new Promise((resolve, reject) =>
+		return new Promise((resolve, reject): void =>
 		{
 			getFirmwareVersion()
-				.then((res: any) =>
+				.then((res: any): void =>
 				{
 					const { firmware } = this.update;
 					firmware.url = res?.url ?? "";
@@ -717,7 +731,7 @@ export class Canbus extends EventEmitter
 					// проверяем версию прошивки
 					if (res.current?.length === 4)
 					{
-						const ver = res.current;
+						const ver: any = res.current;
 						const newVersion: IVersion = new Version();
 						newVersion.major = ver[0];
 						newVersion.minor = ver[1];
@@ -729,17 +743,17 @@ export class Canbus extends EventEmitter
 					}
 					else reject("No data");
 				})
-				.catch((e) => reject(e));
+				.catch((e): void => reject(e));
 		});
 	}
 
 	/** Получить версию прошивки для отката */
 	rollbackVersion(): Promise<IDeviceFirmwareUrl>
 	{
-		return new Promise((resolve, reject) =>
+		return new Promise((resolve, reject): void =>
 		{
 			getFirmwareVersion()
-				.then((res: any) =>
+				.then((res: any): void =>
 				{
 					const { rollback } = this.update;
 					const resVer: any =
@@ -762,7 +776,7 @@ export class Canbus extends EventEmitter
 					if (rollback.url.length && rollback.current.length) resolve(rollback);
 					else reject("No data");
 				})
-				.catch((e) => reject(e));
+				.catch((e): void => reject(e));
 		});
 	}
 
@@ -778,7 +792,7 @@ export class Canbus extends EventEmitter
 		resetConfig: boolean = false,
 		resetView: boolean = false,
 		resetButtons: boolean = false
-	)
+	): void
 	{
 		this.version.clear();
 		this.queue = [];
@@ -803,17 +817,17 @@ export class Canbus extends EventEmitter
 	{
 		if (status && !this.status) return false;
 
-		const action = new DeviceScannerAction();
+		const action: IDeviceScannerAction = new DeviceScannerAction();
 		this.queueDisabled = status;
 		action.enabled = status;
-		this.query(action, false, (success) =>
+		this.query(action, false, (success): void =>
 		{
 			if (success && status)
 			{
 				if (!this.scannerValue) this.scannerValue = new DeviceScannerValue();
 				if (!this.scannerInterval)
 				{
-					this.scannerInterval = setInterval(() =>
+					this.scannerInterval = setInterval((): void =>
 					{
 						if (this.scannerValue) this.query(this.scannerValue, true);
 						else this.scannerFree();
@@ -852,7 +866,7 @@ export class Canbus extends EventEmitter
 
 			if (!this.loopInterval)
 			{
-				this.loopInterval = setInterval(() =>
+				this.loopInterval = setInterval((): void =>
 				{
 					if (this.loopChoice) this.query(this.loopChoice, true);
 					else this.loopFree();
@@ -872,5 +886,5 @@ export class Canbus extends EventEmitter
 	}
 }
 
-const canbus = new Canbus();
+const canbus: Canbus = new Canbus();
 export default canbus;

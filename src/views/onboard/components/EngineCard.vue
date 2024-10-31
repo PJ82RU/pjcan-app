@@ -26,7 +26,6 @@
 						:value="countRPM"
 						:title="$t('onboard.engine.countRPM.title')"
 						:description="$t('onboard.engine.countRPM.description')"
-						:nodata="!enabled"
 						:disabled="!engineViewLoaded"
 					/>
 				</v-col>
@@ -35,7 +34,6 @@
 						:value="worktime"
 						:title="$t('onboard.engine.worktime.title')"
 						:description="$t('onboard.engine.worktime.description')"
-						:nodata="!enabled"
 						:disabled="!engineViewLoaded"
 					/>
 				</v-col>

@@ -72,7 +72,7 @@ class RemainingTime
 		if (this._values.length === 0) return 0;
 
 		let result = 0;
-		this._values.forEach((x: number) => (result += x));
+		this._values.forEach((x: number): void => { result += x; });
 		return Math.floor(result / this._values.length);
 	}
 

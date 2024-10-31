@@ -50,6 +50,16 @@
 						:disabled="!headConfigLoaded"
 					/>
 				</v-col>
+				<v-col cols="12" class="pt-0 pb-0">
+					<switch-card-item
+						v-model="holdToFlip"
+						:title="$t('options.head.holdToFlip.title')"
+						:description="$t('options.head.holdToFlip.description')"
+						color="success"
+						:nodata="!headConfigLoaded"
+						:disabled="!headConfigLoaded"
+					/>
+				</v-col>
 				<v-col
 					v-if="carModel !== TCarModel.CAR_MODEL_MAZDA_CX9 && carModel !== TCarModel.CAR_MODEL_MAZDA_CX9_REST"
 					cols="12"
@@ -153,6 +163,10 @@ export default {
 			get: (): boolean => store.getters["config/head"].sendOnboard,
 			set: (val: boolean) => store.commit("config/setHeadSendOnboard", val)
 		});
+		const holdToFlip = computed({
+			get: (): boolean => store.getters["config/head"].holdToFlip,
+			set: (val: boolean) => store.commit("config/setHoldToFlip", val)
+		});
 		const carModel = computed((): TCarModel => store.getters["config/carModel"]);
 
 		/** Список протоколов */
@@ -202,6 +216,7 @@ export default {
 			sendClimate,
 			sendDoors,
 			sendOnboard,
+			holdToFlip,
 			listProtocol,
 			carModel,
 			menu,
