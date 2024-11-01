@@ -32,6 +32,7 @@ import { API_FUEL_VALUE_EXEC } from "@/models/pjcan/fuel";
 import { API_MOVEMENT_VALUE_EXEC } from "@/models/pjcan/movement";
 import { API_DOORS_VALUE_EXEC } from "@/models/pjcan/doors";
 import { API_CLIMATE_VALUE_EXEC } from "@/models/pjcan/climate";
+import { API_CANBUS_EVENT } from "@/models/pjcan/base/BaseModel";
 
 export default {
 	name: "onboard",
@@ -91,12 +92,14 @@ export default {
 			return result;
 		});
 
+		let notifyShow = false;
 		const notify = (): void =>
 		{
-			if (!store.getters["app/notify"])
+			if (!store.getters["app/notify"] && !notifyShow)
 			{
 				setTimeout(() => toast.info(t("help.onboard.notify")), 5000);
 				store.commit("app/setNotify", true);
+				notifyShow = true;
 			}
 		};
 		watch(listExec, (val: number[]) =>
@@ -104,13 +107,21 @@ export default {
 			canbus.loop(val);
 			if (val?.length > 0) notify();
 		});
+		const onBegin = (status: boolean): void =>
+		{
+			if (status)
+			{
+				canbus.loop(listExec.value);
+				if (listExec.value?.length > 0) notify();
+			}
+		};
 		onMounted(() =>
 		{
-			canbus.loop(listExec.value);
-			if (listExec.value?.length > 0) notify();
+			canbus.addListener(API_CANBUS_EVENT, onBegin);
 		});
 		onUnmounted(() =>
 		{
+			canbus.removeListener(API_CANBUS_EVENT, onBegin);
 			canbus.loopFree();
 		});
 
