@@ -131,15 +131,20 @@ export default {
 		const visibleClockInfo = computed(
 			(): boolean =>
 				carModel.value === TCarModel.CAR_MODEL_MAZDA_3_BK ||
+				carModel.value === TCarModel.CAR_MODEL_MAZDA_3_BL ||
 				carModel.value === TCarModel.CAR_MODEL_MAZDA_6_GG ||
+				carModel.value === TCarModel.CAR_MODEL_MAZDA_6_GH ||
 				carModel.value === TCarModel.CAR_MODEL_MAZDA_CX7 ||
+				carModel.value === TCarModel.CAR_MODEL_MAZDA_CX7_REST ||
 				carModel.value === TCarModel.CAR_MODEL_MAZDA_CX9 ||
+				carModel.value === TCarModel.CAR_MODEL_MAZDA_CX9_REST ||
 				carModel.value === TCarModel.CAR_MODEL_MAZDA_5
 		);
 		const visibleHourMinute = computed(
 			(): boolean =>
 				carModel.value === TCarModel.CAR_MODEL_MAZDA_3_BK ||
 				carModel.value === TCarModel.CAR_MODEL_MAZDA_3_BL ||
+				carModel.value === TCarModel.CAR_MODEL_MAZDA_6_GH ||
 				carModel.value === TCarModel.CAR_MODEL_MAZDA_CX7_REST ||
 				carModel.value === TCarModel.CAR_MODEL_MAZDA_CX9 ||
 				carModel.value === TCarModel.CAR_MODEL_MAZDA_CX9_REST ||
@@ -164,8 +169,10 @@ export default {
 				canbus.query(store.getters["config/onboard"], true);
 			}
 
-			if (exec === TButtonExec.BUTTON_EXEC_ON_BOARD_LONG_PRESS_INFO ||
-				exec === TButtonExec.BUTTON_EXEC_ON_BOARD_LONG_PRESS_CLOCK)
+			if (
+				exec === TButtonExec.BUTTON_EXEC_ON_BOARD_LONG_PRESS_INFO ||
+				exec === TButtonExec.BUTTON_EXEC_ON_BOARD_LONG_PRESS_CLOCK
+			)
 			{
 				disabled.value = true;
 				setTimeout(() => (disabled.value = false), 2000);

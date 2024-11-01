@@ -118,6 +118,7 @@ export default {
 		onMounted(() =>
 		{
 			canbus.addListener(API_CANBUS_EVENT, onBegin);
+			onBegin(canbus.status);
 		});
 		onUnmounted(() =>
 		{

@@ -117,8 +117,7 @@ export default {
 
 		const carModel = computed((): TCarModel => store.getters["config/carModel"]);
 		const visibleOnBoard = computed(
-			(): boolean =>
-				carModel.value !== TCarModel.CAR_MODEL_UNKNOWN && carModel.value !== TCarModel.CAR_MODEL_MAZDA_6_GH
+			(): boolean => carModel.value !== TCarModel.CAR_MODEL_UNKNOWN
 		);
 		const title = computed((): string =>
 		{

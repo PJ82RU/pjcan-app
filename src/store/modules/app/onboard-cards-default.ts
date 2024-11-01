@@ -28,6 +28,7 @@ export default [
 		car: [
 			TCarModel.CAR_MODEL_MAZDA_3_BK,
 			TCarModel.CAR_MODEL_MAZDA_3_BL,
+			TCarModel.CAR_MODEL_MAZDA_6_GH,
 			TCarModel.CAR_MODEL_MAZDA_CX7,
 			TCarModel.CAR_MODEL_MAZDA_CX7_REST,
 			TCarModel.CAR_MODEL_MAZDA_5
@@ -39,6 +40,7 @@ export default [
 		car: [
 			TCarModel.CAR_MODEL_MAZDA_3_BK,
 			TCarModel.CAR_MODEL_MAZDA_3_BL,
+			TCarModel.CAR_MODEL_MAZDA_6_GH,
 			TCarModel.CAR_MODEL_MAZDA_CX7,
 			TCarModel.CAR_MODEL_MAZDA_CX7_REST,
 			TCarModel.CAR_MODEL_MAZDA_CX9,
@@ -52,6 +54,7 @@ export default [
 		car: [
 			TCarModel.CAR_MODEL_MAZDA_3_BK,
 			TCarModel.CAR_MODEL_MAZDA_3_BL,
+			TCarModel.CAR_MODEL_MAZDA_6_GH,
 			TCarModel.CAR_MODEL_MAZDA_CX7,
 			TCarModel.CAR_MODEL_MAZDA_CX7_REST,
 			TCarModel.CAR_MODEL_MAZDA_CX9,
@@ -66,6 +69,7 @@ export default [
 		car: [
 			TCarModel.CAR_MODEL_MAZDA_3_BK,
 			TCarModel.CAR_MODEL_MAZDA_3_BL,
+			TCarModel.CAR_MODEL_MAZDA_6_GH,
 			TCarModel.CAR_MODEL_MAZDA_6_GG,
 			TCarModel.CAR_MODEL_MAZDA_CX7,
 			TCarModel.CAR_MODEL_MAZDA_CX7_REST,
