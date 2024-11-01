@@ -849,9 +849,6 @@ export class Canbus extends EventEmitter
 		this.scannerValue = undefined;
 	}
 
-	private loopInterval: Timeout;
-	private loopChoice: IChoiceValue | undefined;
-
 	/**
 	 * Циклический опрос
 	 * @param {number[]} list Список ChoiceValue
@@ -861,18 +858,10 @@ export class Canbus extends EventEmitter
 		const result: boolean = list.length > 0 && this.status;
 		if (result)
 		{
-			if (!this.loopChoice) this.loopChoice = new ChoiceValue();
-			this.loopChoice.listID = [...list];
-
-			if (!this.loopInterval)
-			{
-				this.loopInterval = setInterval((): void =>
-				{
-					if (this.loopChoice) this.query(this.loopChoice, true);
-					else this.loopFree();
-				}, 250);
-				if (this.loopChoice) this.query(this.loopChoice, true);
-			}
+			const choice: IChoiceValue = new ChoiceValue();
+			choice.repeat = 2;
+			choice.listID = [...list];
+			this.query(choice, true);
 		}
 		return result;
 	}
@@ -880,9 +869,12 @@ export class Canbus extends EventEmitter
 	/** Очистить цикл */
 	loopFree(): void
 	{
-		clearInterval(this.loopInterval);
-		this.loopInterval = undefined;
-		this.loopChoice = undefined;
+		if (this.status)
+		{
+			const choice: IChoiceValue = new ChoiceValue();
+			choice.repeat = 0;
+			this.query(choice, true);
+		}
 	}
 }
 

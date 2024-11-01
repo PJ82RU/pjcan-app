@@ -6,6 +6,7 @@ export const API_CHOICE_EXEC = 0x10;
 /** Модель выборочного запроса данных */
 export class ChoiceValue extends BaseModel implements IChoiceValue
 {
+	repeat = 0;
 	listID = [] as number[];
 
 	constructor(data?: DataView, fn?: (res: DataView) => void)
@@ -45,10 +46,13 @@ export class ChoiceValue extends BaseModel implements IChoiceValue
 	/** Чтение данных */
 	get(): DataView
 	{
-		const buf: DataView = new DataView(new ArrayBuffer(this.listID.length + 3));
+		this.id = this.listID.reduce((sum, a) => sum + a, 0);
+
+		const buf: DataView = new DataView(new ArrayBuffer(this.listID.length + 4));
 		buf.setUint8(0, this.exec);
-		buf.setUint16(1, this.listID.length, true);
-		this.listID.forEach((id: number, index: number) => buf.setUint8(3 + index, id));
+		buf.setUint16(1, this.listID.length + 1, true);
+		buf.setUint8(3, this.repeat);
+		this.listID.forEach((id: number, index: number) => buf.setUint8(4 + index, id));
 		return buf;
 	}
 }
