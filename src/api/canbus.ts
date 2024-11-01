@@ -659,6 +659,7 @@ export class Canbus extends EventEmitter
 			{
 				if (res?.byteLength > 0)
 				{
+					this.loopFree();
 					this.update.firmwareData = new Uint8Array(res);
 					this.update.total = res.byteLength;
 					this.update.offset = 0;
