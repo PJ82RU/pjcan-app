@@ -104,7 +104,7 @@ export default {
 		const rotation = computed((): number =>
 		{
 			const res = store.getters["value/climate"];
-			return res.airRate > 0 && res.airRate < 8 ? 7 - res.airRate : 0;
+			return res.airRate > 0 && res.airRate < 8 ? 1 - res.airRate / 10 : 0;
 		});
 		const autoMode = computed((): boolean => store.getters["value/climate"].automode);
 		const ac = computed((): boolean => store.getters["value/climate"].ac);
