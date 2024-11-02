@@ -138,6 +138,7 @@ module.exports = defineConfig({
 			background_color: "#121517"
 		},
 		workboxOptions: {
+			skipWaiting: true,
 			navigateFallback: "index.html",
 			exclude: [/runtime/]
 		}

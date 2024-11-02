@@ -1,7 +1,7 @@
 {
-	"current": [ 4, 1, 0, 37 ],
-	"iv": "83993925cba791e75e4121599dccfc88",
-	"url": "/firmware/firmware.bin.83993925cba791e75e4121599dccfc88",
+	"current": [ 4, 1, 0, 38 ],
+	"iv": "328b7aa9835dbd1a0256b84f8d90d06e",
+	"url": "/firmware/firmware.bin.328b7aa9835dbd1a0256b84f8d90d06e",
 	"v40": {
 		"current": [ 4, 0, 3, 139 ],
 		"iv": "9f2374547b5c49095f4c9da5155d2ee4",
