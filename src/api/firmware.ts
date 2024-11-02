@@ -15,6 +15,11 @@ export const getFirmware = (url: string | undefined) =>
 		url: url ?? "/firmware/firmware.bin.enc",
 		method: "GET",
 		responseType: "arraybuffer",
-		headers: { "Content-Type": "application/gzip" }
+		headers: {
+			"Content-Type": "application/gzip",
+			"Cache-Control": "no-cache",
+			"Pragma": "no-cache",
+			"Expires": "0"
+		}
 	});
 };
