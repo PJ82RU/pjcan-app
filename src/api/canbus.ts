@@ -360,18 +360,52 @@ export class Canbus extends EventEmitter
 				this.query(new DeviceValue());
 			}
 
-			// Проверка наличия новой версии прошивки
-			this.checkVersion()
-				.then((newVersion: IVersion): void =>
-				{
-					this.emit(API_NEW_VERSION_EVENT, newVersion);
-				})
-				.catch((): void => {});
+			// Проверка наличия новой версии прошивки, каждые 5 минут
+			this.startCheckVersion(300000, true);
 		}
 		else
 		{
 			this.emit(API_CANBUS_EVENT, this.status);
 			toast.error(t("error.version"));
+		}
+	}
+
+	private checkVersionInterval: Timeout;
+
+	/**
+	 * Запустить проверку версии прошивки
+	 * @param {number} interval Интервал не менее 5000 мс
+	 * @param {boolean} force Запустить проверку немедленно
+	 */
+	startCheckVersion(interval: number, force: boolean = false): void
+	{
+		const onCheckVersion = () =>
+		{
+			this.checkVersion()
+				.then((newVersion: IVersion): void =>
+				{
+					this.emit(API_NEW_VERSION_EVENT, newVersion);
+					// Меняем время проверки наличия новой версии прошивки на каждые 15 минут
+					this.startCheckVersion(900000);
+				})
+				.catch((): void => {});
+		};
+
+		if (interval >= 5000)
+		{
+			this.stopCheckVersion();
+			this.checkVersionInterval = setInterval(() => onCheckVersion(), interval);
+		}
+		if (force) onCheckVersion();
+	}
+
+	/** Остановить проверку версии прошивки */
+	stopCheckVersion(): void
+	{
+		if (this.checkVersionInterval)
+		{
+			clearInterval(this.checkVersionInterval);
+			this.checkVersionInterval = undefined;
 		}
 	}
 
@@ -659,6 +693,7 @@ export class Canbus extends EventEmitter
 			{
 				if (res?.byteLength > 0)
 				{
+					this.stopCheckVersion();
 					this.loopFree();
 					this.update.firmwareData = new Uint8Array(res);
 					this.update.total = res.byteLength;
