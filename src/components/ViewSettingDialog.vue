@@ -13,7 +13,7 @@
 				<v-col cols="12" class="pt-0">
 					<switch-card-item
 						v-model="viewEnabled"
-						:title="$t('onboard.viewSetting.enabled.title')"
+						:title="$t('onboard.viewSetting.enabled.' + ($vuetify.display.xs ? 'titleShort' : 'title'))"
 						:description="$t('onboard.viewSetting.enabled.description')"
 						:disabled="disabled"
 					/>
@@ -54,11 +54,13 @@
 			</v-row>
 		</template>
 		<template #btns>
-			<v-btn color="primary" prepend-icon="mdi-check" @click="onApplyClick" :disabled="disabled">
-				{{ $t("btn.apply") }}
+			<v-btn color="primary" @click="onApplyClick" :disabled="disabled">
+				<v-icon v-if="$vuetify.display.xs">mdi-check</v-icon>
+				<span v-else> {{ $t("btn.apply") }} </span>
 			</v-btn>
-			<v-btn color="primary" prepend-icon="mdi-close" @click="visible = false">
-				{{ $t("btn.close") }}
+			<v-btn color="primary" @click="visible = false">
+				<v-icon v-if="$vuetify.display.xs">mdi-close</v-icon>
+				<span v-else> {{ $t("btn.close") }} </span>
 			</v-btn>
 		</template>
 	</dialog-template>

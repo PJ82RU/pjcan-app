@@ -11,15 +11,23 @@
 		<template #body>
 			<v-row class="pb-2">
 				<v-col cols="12" class="pb-0">
-					<v-checkbox v-model="resetConfig" :label="$t('deviceReset.config')" hide-details />
+					<v-checkbox
+						v-model="resetConfig"
+						:label="$t('deviceReset.' + ($vuetify.display.xs ? 'configShort' : 'config'))"
+						hide-details
+					/>
 				</v-col>
 				<v-col cols="12" class="pt-1">
-					<v-checkbox v-model="resetView" :label="$t('deviceReset.view')" hide-details />
+					<v-checkbox
+						v-model="resetView"
+						:label="$t('deviceReset.' + ($vuetify.display.xs ? 'viewShort' : 'view'))"
+						hide-details
+					/>
 				</v-col>
 				<v-col cols="12" class="pt-1">
 					<v-checkbox
 						v-model="resetButtons"
-						:label="$t('deviceReset.buttons')"
+						:label="$t('deviceReset.' + ($vuetify.display.xs ? 'buttonsShort' : 'buttons'))"
 						:disabled="resetConfig"
 						hide-details
 					/>

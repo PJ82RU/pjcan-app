@@ -1,7 +1,7 @@
 <template>
 	<card
 		class="head-card"
-		:title="$t('options.head.title')"
+		:title="$t('options.head.' + ($vuetify.display.xs ? 'titleShort' : 'title'))"
 		:menu="carModel !== TCarModel.CAR_MODEL_MAZDA_CX9_REST ? menu : undefined"
 		@click:menu="onMenuClick"
 	>
@@ -33,7 +33,7 @@
 				<v-col v-if="carModel !== TCarModel.CAR_MODEL_MAZDA_CX9_REST" cols="12" class="pt-0 pb-0">
 					<switch-card-item
 						v-model="onboardShow"
-						:title="$t('options.head.onboardShow.title')"
+						:title="$t('options.head.onboardShow.' + ($vuetify.display.xs ? 'titleShort' : 'title'))"
 						:description="$t('options.head.onboardShow.description')"
 						color="success"
 						:nodata="!headConfigLoaded"
@@ -53,7 +53,7 @@
 				<v-col cols="12" class="pt-0 pb-0">
 					<switch-card-item
 						v-model="holdToFlip"
-						:title="$t('options.head.holdToFlip.title')"
+						:title="$t('options.head.holdToFlip.' + ($vuetify.display.xs ? 'titleShort' : 'title'))"
 						:description="$t('options.head.holdToFlip.description')"
 						color="success"
 						:nodata="!headConfigLoaded"
@@ -77,7 +77,7 @@
 				<v-col v-if="carModel === TCarModel.CAR_MODEL_MAZDA_3_BK || carModel === TCarModel.CAR_MODEL_MAZDA_3_BL" cols="12" class="pt-0 pb-0">
 					<switch-card-item
 						v-model="sendDoors"
-						:title="$t('options.head.sendDoors.title')"
+						:title="$t('options.head.sendDoors.' + ($vuetify.display.xs ? 'titleShort' : 'title'))"
 						:description="$t('options.head.sendDoors.description')"
 						color="success"
 						:nodata="!headConfigLoaded"

@@ -30,7 +30,7 @@
 			<v-btn color="primary" @click="onDeviceInfoClick">
 				{{ $t("btn.deviceInfo") }}
 			</v-btn>
-			<v-btn color="primary" prepend-icon="mdi-close" @click="visible = false">
+			<v-btn color="primary" @click="visible = false">
 				{{ $t("btn.close") }}
 			</v-btn>
 		</template>

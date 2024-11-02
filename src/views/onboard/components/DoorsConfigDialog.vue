@@ -13,21 +13,21 @@
 				<v-col cols="12" class="pt-0 pb-0">
 					<switch-card-item
 						v-model="configFrontReverse"
-						:title="$t('onboard.doors.settings.frontReverse.title')"
+						:title="$t('onboard.doors.settings.frontReverse.' + ($vuetify.display.xs ? 'titleShort' : 'title'))"
 						:description="$t('onboard.doors.settings.frontReverse.description')"
 					/>
 				</v-col>
 				<v-col cols="12" class="pb-0">
 					<switch-card-item
 						v-model="configBackReverse"
-						:title="$t('onboard.doors.settings.backReverse.title')"
+						:title="$t('onboard.doors.settings.backReverse.' + ($vuetify.display.xs ? 'titleShort' : 'title'))"
 						:description="$t('onboard.doors.settings.backReverse.description')"
 					/>
 				</v-col>
 				<v-col cols="12" class="pb-0">
 					<switch-card-item
 						v-model="configFrontBackReverse"
-						:title="$t('onboard.doors.settings.frontBackReverse.title')"
+						:title="$t('onboard.doors.settings.frontBackReverse.' + ($vuetify.display.xs ? 'titleShort' : 'title'))"
 						:description="$t('onboard.doors.settings.frontBackReverse.description')"
 					/>
 				</v-col>

@@ -34,7 +34,7 @@
 			>
 				{{ $t("btn.apply") }}
 			</v-btn>
-			<v-btn v-if="!noClosed" color="primary" prepend-icon="mdi-close" @click="visible = false">
+			<v-btn v-if="!noClosed" color="primary" @click="visible = false">
 				{{ $t("btn.close") }}
 			</v-btn>
 		</template>

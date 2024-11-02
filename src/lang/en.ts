@@ -77,7 +77,7 @@ export default {
 
 	menu: {
 		onboard: "On-board",
-		onboardButtons: "On-board computer buttons",
+		onboardButtons: "On-board buttons",
 		test: "Testing",
 		language: "Language",
 		settings: {
@@ -120,9 +120,12 @@ export default {
 
 	deviceReset: {
 		title: "Reset device configuration",
-		config: "Reset configuration defaults",
-		view: "Reset default display configuration values",
-		buttons: "Reset the default button configuration values"
+		config: "Reset the general default configuration",
+		configShort: "The general configuration",
+		view: "Reset the default display configuration",
+		viewShort: "Display configuration",
+		buttons: "Reset the default button configuration",
+		buttonsShort: "Button configuration"
 	},
 
 	btn: {
@@ -141,6 +144,7 @@ export default {
 		viewSetting: {
 			enabled: {
 				title: "Display information",
+				titleShort: "Display information",
 				description: "Status display information on the information screen"
 			},
 			type: {
@@ -249,6 +253,7 @@ export default {
 				menu: "Statistics settings",
 				showDays: {
 					title: "Show days in statistics",
+					titleShort: "Show days in statistics",
 					description: "Display the mothers on the information screen in d.hh:mm:ss"
 				},
 				worktime: {
@@ -334,14 +339,17 @@ export default {
 				title: "Door configuration",
 				frontReverse: {
 					title: "Change the front doors",
+					titleShort: "Change the front doors",
 					description: "Swap the front doors"
 				},
 				backReverse: {
 					title: "Change the rear doors",
+					titleShort: "Change the rear doors",
 					description: "Swap the rear doors"
 				},
 				frontBackReverse: {
 					title: "Swap the front with the rear doors",
+					titleShort: "The front with the rear",
 					description: "Swap the left and right doors"
 				}
 			}
@@ -549,7 +557,22 @@ export default {
 		},
 
 		edit: {
-			title: "Editing the \"{name}\" button"
+			title: "Editing a button \"{name}\"",
+			beginValue: {
+				title: "Begin value",
+				titleShort: "Begin value",
+				description: "The initial value of the resistance range of the button in units."
+			},
+			endValue: {
+				title: "Final value",
+				titleShort: "Final value",
+				description: "The final value of the resistance range of the button in units."
+			}
+		},
+
+		notify: {
+			detected: "Button \"{id}\" is pressed",
+			notDefined: "The button is not defined!"
 		}
 	},
 
@@ -557,9 +580,12 @@ export default {
 		title: "On-board buttons",
 		buttons: {
 			holdClock: "hold CLOCK",
-			holdInfo: "hold INFO",
+			holdInfo: "hold SET/INFO",
+			holdClockShort: "hold CLOCK",
+			holdInfoShort: "hold INFO",
 			clock: "CLOCK",
-			info: "INFO",
+			info: "SET/INFO",
+			infoShort: "INFO",
 			clockH: "H",
 			clockM: "M",
 			clockRM: "RM",
@@ -599,6 +625,7 @@ export default {
 		},
 		head: {
 			title: "Head Unit",
+			titleShort: "Head Unit",
 			protocol: {
 				title: "UART Protocol",
 				description: "UART protocol for PJCAN communication with Head Unit",
@@ -615,6 +642,7 @@ export default {
 			},
 			onboardShow: {
 				title: "Show the text Head Unit",
+				titleShort: "Show the text Head Unit",
 				description: "Show the text of the Head Unit on the On-board screen of the logo",
 				menu: "LCD: Show the text Head Unit"
 			},
@@ -628,6 +656,7 @@ export default {
 			},
 			sendDoors: {
 				title: "Show the status of doors on Head Unit",
+				titleShort: "Show the doors on Head Unit",
 				description: "Show the status of the car doors on Head Unit (if the protocol supports this functionality)"
 			},
 			sendOnboard: {
@@ -636,6 +665,7 @@ export default {
 			},
 			holdToFlip: {
 				title: "Volume control",
+				titleShort: "Volume control",
 				description: "Smooth change of sound level when holding the Vol+/Vol- button (recommended if the Head Unit does not support this functionality)"
 			}
 		},
@@ -658,19 +688,23 @@ export default {
 			},
 			dateAndDayWeek: {
 				title: "Show date and day of week",
+				titleShort: "Show date and day of week",
 				description: "Display the current date and day of the week on the LCD screen"
 			},
 			timeAndDayWeek: {
 				title: "Show time and day of week",
+				titleShort: "Show time and day of week",
 				description: "Display the current time and day of the week on the LCD screen"
 			},
 			fullDatetime: {
 				title: "Show full date and time",
+				titleShort: "Show full date and time",
 				description: "Display the current date and time on the LCD screen in full format"
 			}
 		},
 		onboard: {
 			title: "On-board",
+			titleShort: "On-board",
 			description:
 				"A list of cards displayed on the On-Board Computer screen. The order is changed by dragging the block up/down. You can also enable/disable the display on the page",
 			reset: {

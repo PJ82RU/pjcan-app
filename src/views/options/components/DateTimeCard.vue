@@ -40,7 +40,7 @@
 				<v-col cols="12" class="pt-0 pb-0">
 					<switch-card-item
 						v-model="showDateAndDayWeek"
-						:title="$t('options.datetime.dateAndDayWeek.title')"
+						:title="$t('options.datetime.dateAndDayWeek.' + ($vuetify.display.xs ? 'titleShort' : 'title'))"
 						:description="$t('options.datetime.dateAndDayWeek.description')"
 						color="success"
 						:nodata="!configLoaded"
@@ -50,7 +50,7 @@
 				<v-col cols="12" class="pt-0 pb-0">
 					<switch-card-item
 						v-model="showTimeAndDayWeek"
-						:title="$t('options.datetime.timeAndDayWeek.title')"
+						:title="$t('options.datetime.timeAndDayWeek.' + ($vuetify.display.xs ? 'titleShort' : 'title'))"
 						:description="$t('options.datetime.timeAndDayWeek.description')"
 						color="success"
 						:nodata="!configLoaded"
@@ -60,7 +60,7 @@
 				<v-col cols="12" class="pt-0 pb-0">
 					<switch-card-item
 						v-model="showFullDatetime"
-						:title="$t('options.datetime.fullDatetime.title')"
+						:title="$t('options.datetime.fullDatetime.' + ($vuetify.display.xs ? 'titleShort' : 'title'))"
 						:description="$t('options.datetime.fullDatetime.description')"
 						color="success"
 						:nodata="!configLoaded"

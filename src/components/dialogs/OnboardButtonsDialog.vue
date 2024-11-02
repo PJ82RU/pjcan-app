@@ -24,7 +24,7 @@
 							size="x-large"
 							@click="send(TButtonExec.BUTTON_EXEC_ON_BOARD_BUTTON_INFO)"
 						>
-							{{ $t("onboardButtons.buttons.info") }}
+							{{ $t("onboardButtons.buttons." + ($vuetify.display.xs ? "infoShort" : "info")) }}
 						</v-btn>
 					</v-btn-group>
 				</v-col>
@@ -36,7 +36,7 @@
 							@click="send(TButtonExec.BUTTON_EXEC_ON_BOARD_LONG_PRESS_CLOCK)"
 							:disabled="disabled"
 						>
-							{{ $t("onboardButtons.buttons.holdClock") }}
+							{{ $t("onboardButtons.buttons." + ($vuetify.display.xs ? "holdClockShort" : "holdClock")) }}
 						</v-btn>
 						<v-btn
 							color="secondary"
@@ -44,7 +44,7 @@
 							@click="send(TButtonExec.BUTTON_EXEC_ON_BOARD_LONG_PRESS_INFO)"
 							:disabled="disabled"
 						>
-							{{ $t("onboardButtons.buttons.holdInfo") }}
+							{{ $t("onboardButtons.buttons." + ($vuetify.display.xs ? "holdInfoShort" : "holdInfo")) }}
 						</v-btn>
 					</v-btn-group>
 				</v-col>
@@ -86,7 +86,7 @@
 		</template>
 
 		<template #btns>
-			<v-btn color="primary" prepend-icon="mdi-close" @click="visible = false">
+			<v-btn color="primary" @click="visible = false">
 				{{ $t("btn.close") }}
 			</v-btn>
 		</template>

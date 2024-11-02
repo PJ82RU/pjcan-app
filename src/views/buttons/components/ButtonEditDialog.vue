@@ -21,7 +21,7 @@
 				<v-col cols="12" class="pt-0">
 					<number-card-item
 						:model-value="beginResistance"
-						:title="$t('buttons.edit.beginValue.title')"
+						:title="$t('buttons.edit.beginValue.' + ($vuetify.display.xs ? 'titleShort' : 'title'))"
 						:description="$t('buttons.edit.beginValue.description')"
 						:min="minResistance"
 						:max="maxResistance"
@@ -32,7 +32,7 @@
 				<v-col cols="12" class="pt-0">
 					<number-card-item
 						v-model="resist"
-						:title="$t('buttons.edit.endValue.title')"
+						:title="$t('buttons.edit.endValue.' + ($vuetify.display.xs ? 'titleShort' : 'title'))"
 						:description="$t('buttons.edit.endValue.description')"
 						:min="minResistance"
 						:max="maxResistance"
@@ -43,13 +43,16 @@
 		</template>
 		<template #btns>
 			<v-btn color="primary" @click="reset" :disabled="resist === resistance">
-				{{ $t("btn.reset") }}
+				<v-icon v-if="$vuetify.display.xs">mdi-restart</v-icon>
+				<span v-else> {{ $t("btn.reset") }} </span>
 			</v-btn>
 			<v-btn color="primary" @click="apply" :disabled="resist === resistance">
-				{{ $t("btn.apply") }}
+				<v-icon v-if="$vuetify.display.xs">mdi-check</v-icon>
+				<span v-else> {{ $t("btn.apply") }} </span>
 			</v-btn>
 			<v-btn color="primary" @click="visible = false">
-				{{ $t("btn.cancel") }}
+				<v-icon v-if="$vuetify.display.xs">mdi-close</v-icon>
+				<span v-else> {{ $t("btn.cancel") }} </span>
 			</v-btn>
 		</template>
 	</dialog-template>

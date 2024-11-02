@@ -1,5 +1,10 @@
 <template>
-	<card class="onboard-card" :title="$t('options.onboard.title')" :menu="menu" @click:menu="onMenuClick">
+	<card
+		class="onboard-card"
+		:title="$t('options.onboard.' + ($vuetify.display.xs ? 'titleShort' : 'title'))"
+		:menu="menu"
+		@click:menu="onMenuClick"
+	>
 		<template #body>
 			<v-row>
 				<v-col cols="12">
@@ -7,13 +12,16 @@
 						v-model="cardList"
 						group="onboard"
 						item-key="name"
-                        :move="() => isLoading"
+						:move="() => isLoading"
 						@start="flicking.disableInput()"
-						@end="flicking.enableInput(); onCardListChange()"
+						@end="
+							flicking.enableInput();
+							onCardListChange();
+						"
 					>
 						<template #item="{ element }">
 							<v-card
-                                v-if="element.visible"
+								v-if="element.visible"
 								class="mt-1 mb-1 onboard-card__item"
 								:class="{ 'onboard-card__item--disabled': element.disabled }"
 							>
@@ -29,7 +37,7 @@
 											color="success"
 											hide-details
 											:disabled="!isLoading || element.disabled"
-                                            @change="onCardListChange"
+											@change="onCardListChange"
 										/>
 									</div>
 								</v-card-text>
@@ -37,9 +45,9 @@
 						</template>
 					</draggable>
 				</v-col>
-                <v-col cols="12" class="pt-0 onboard-card__description">
-                    <span> {{ $t("options.onboard.description") }} </span>
-                </v-col>
+				<v-col cols="12" class="pt-0 onboard-card__description">
+					<span> {{ $t("options.onboard.description") }} </span>
+				</v-col>
 			</v-row>
 		</template>
 	</card>
@@ -100,9 +108,7 @@ export default {
 			store.dispatch("app/writeOnboardCards");
 		};
 
-		const menu = computed((): IMenuItem[] => [
-			{ id: 0, title: t("options.onboard.reset.menu") }
-		]);
+		const menu = computed((): IMenuItem[] => [{ id: 0, title: t("options.onboard.reset.menu") }]);
 
 		/**
 		 * Выбор пункта меню отображения на информационном экране
@@ -133,15 +139,15 @@ export default {
 		background: $primary;
 		border-radius: 6px;
 
-        &--disabled {
-            background: $disable !important;
-        }
+		&--disabled {
+			background: $disable !important;
+		}
 	}
-    &__description {
-        font-weight: 300;
-        font-size: 0.875rem;
-        line-height: 1rem !important;
-        opacity: var(--v-disabled-opacity);
-    }
+	&__description {
+		font-weight: 300;
+		font-size: 0.875rem;
+		line-height: 1rem !important;
+		opacity: var(--v-disabled-opacity);
+	}
 }
 </style>

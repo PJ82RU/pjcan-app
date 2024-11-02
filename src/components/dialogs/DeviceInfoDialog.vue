@@ -38,7 +38,7 @@
 			/>
 			<v-btn color="secondary" icon="mdi-magnify-scan" :disabled="!isLoadedValue" @click="onScanClick" />
 			<v-btn color="secondary" icon="mdi-restart" :disabled="!isLoadedValue" @click="visibleReset = true" />
-			<v-btn color="primary" prepend-icon="mdi-close" @click="visible = false">
+			<v-btn color="primary" @click="visible = false">
 				{{ $t("btn.close") }}
 			</v-btn>
 		</template>
@@ -123,7 +123,7 @@ export default {
 							setTimeout(() => (startedScanner.value = true), 400);
 						}
 					},
-					{ title: t("btn.close"), icon: "mdi-close" }
+					{ title: t("btn.close") }
 				]
 			} as IMessage);
 		};

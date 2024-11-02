@@ -99,7 +99,6 @@ export default {
 				});
 				message.btns?.push({
 					title: t("btn.cancel"),
-					icon: "mdi-close",
 					on: () =>
 					{
 						started.value = false;

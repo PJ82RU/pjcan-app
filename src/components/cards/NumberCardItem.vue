@@ -2,7 +2,10 @@
 	<v-row class="number-card-item">
 		<v-col cols="6" class="pt-0 pr-0">
 			<v-text-field
-				class="number-card-item__label"
+				:class="{
+					'number-card-item__label': !$vuetify.display.xs,
+					'number-card-item__label-xs': $vuetify.display.xs
+				}"
 				:model-value="title"
 				:hint="description"
 				variant="underlined"
@@ -102,6 +105,12 @@ export default {
 		::v-deep(.v-input__details) {
 			position: absolute;
 			bottom: 14px;
+		}
+	}
+	&__label-xs {
+		::v-deep(.v-input__details) {
+			position: absolute;
+			bottom: 2px;
 		}
 	}
 }
