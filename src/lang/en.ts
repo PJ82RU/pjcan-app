@@ -207,6 +207,35 @@ export default {
 				title: "Turn signal",
 				description: "Turn signal and emergency stop",
 				menu: "LCD: Turn signal"
+			},
+			device: {
+				title: "Device parameters",
+				menu: "Device parameters",
+				disableLedWork: {
+					title: "Pin LED_WORK",
+					description: "Control the LED_WORK pin"
+				},
+				disableReverse: {
+					title: "Pin REVERSE",
+					description: "Control the REVERSE pin"
+				},
+				disableRPosition: {
+					title: "Pin R_POSITION",
+					description: "Control the R_POSITION pin"
+				},
+				disableAmpIllum: {
+					title: "Pin AMP_ILLUM",
+					description: "Control the AMP_ILLUM pin"
+				},
+				disableVoltmeter: {
+					title: "Voltmeter",
+					description: "Turn on/off the voltmeter"
+				},
+				calibrationOfVoltmeter: {
+					title: "Calibration of the voltmeter",
+					titleShort: "Calibration",
+					description: "A positive number decreases the value of the voltmeter, a negative number increases"
+				}
 			}
 		},
 

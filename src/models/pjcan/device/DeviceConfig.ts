@@ -2,7 +2,7 @@ import { BluetoothStruct } from "@/components/bluetooth";
 import { BaseModel } from "../base";
 import { IDeviceConfig } from "./IDeviceConfig";
 
-export const API_DEVICE_CONFIG_EXEC = 0x02;
+export const API_DEVICE_CONFIG_EXEC = 0x08;
 export const API_DEVICE_CONFIG_EVENT = "DeviceConfig";
 
 export const API_DEVICE_VIEW_WORKTIME_EXEC = 0x0a;
@@ -15,16 +15,25 @@ export const API_DEVICE_VIEW_VOLTMETER_EVENT = "DeviceVoltmeter";
 export class DeviceConfig extends BaseModel implements IDeviceConfig
 {
 	static struct: any = {
-		serial: BluetoothStruct.char(64)
+		disableLedWork: BluetoothStruct.bit(),
+		disableReverse: BluetoothStruct.bit(),
+		disableRPosition: BluetoothStruct.bit(),
+		disableAmpIllum: BluetoothStruct.bit(),
+		disableVoltmeter: BluetoothStruct.bit(),
+		calibrationOfVoltmeter: BluetoothStruct.int8()
 	};
-	static size: number = 64;
+	static size: number = 2;
 
-	serial = "";
+	disableLedWork = false;
+	disableReverse = false;
+	disableRPosition = false;
+	disableAmpIllum = false;
+	disableVoltmeter = false;
+	calibrationOfVoltmeter = 0;
 
 	constructor(data?: DataView)
 	{
 		super(API_DEVICE_CONFIG_EXEC);
-		this.skipActivationCheck = true;
 		if (data) this.set(data);
 	}
 

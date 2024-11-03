@@ -12,6 +12,8 @@ import BaseLayout from "./layout/BaseLayout.vue";
 
 import { API_VERSION_EVENT } from "@/models/pjcan/version";
 import {
+	API_DEVICE_CONFIG_EVENT,
+	API_DEVICE_CONFIG_EXEC,
 	API_DEVICE_INFO_EVENT,
 	API_DEVICE_SCANNER_VALUE_EVENT,
 	API_DEVICE_VALUE_EVENT,
@@ -92,6 +94,7 @@ export default {
 		// записываем входящую конфигурацию в store
 		canbus.addListener(API_VERSION_EVENT, (data: DataView): void => store.commit("config/setVersion", data));
 		canbus.addListener(API_DEVICE_INFO_EVENT, (data: DataView): void => store.commit("config/setInfo", data));
+		canbus.addListener(API_DEVICE_CONFIG_EVENT, (data: DataView): void => store.commit("config/setDevice", data));
 		canbus.addListener(API_ONBOARD_CONFIG_EVENT, (data: DataView): void =>
 		{
 			store.commit("config/setOnboard", data);
@@ -119,11 +122,17 @@ export default {
 		canbus.addListener(API_FUEL_VALUE_EVENT, (data: DataView): void => store.commit("value/setFuel", data));
 		canbus.addListener(API_MOVEMENT_VALUE_EVENT, (data: DataView): void => store.commit("value/setMovement", data));
 		canbus.addListener(API_SENSORS_VALUE_EVENT, (data: DataView): void => store.commit("value/setSensors", data));
-		canbus.addListener(API_TEMPERATURE_VALUE_EVENT, (data: DataView): void => store.commit("value/setTemperature", data));
-		canbus.addListener(API_DEVICE_SCANNER_VALUE_EVENT, (data: DataView): void => store.commit("value/setScanner", data));
+		canbus.addListener(API_TEMPERATURE_VALUE_EVENT, (data: DataView): void =>
+			store.commit("value/setTemperature", data)
+		);
+		canbus.addListener(API_DEVICE_SCANNER_VALUE_EVENT, (data: DataView): void =>
+			store.commit("value/setScanner", data)
+		);
 
 		// записываем входящие значения отображения в store
-		canbus.addListener(API_DEVICE_VIEW_WORKTIME_EVENT, (data: DataView): void => store.commit("view/setWorktime", data));
+		canbus.addListener(API_DEVICE_VIEW_WORKTIME_EVENT, (data: DataView): void =>
+			store.commit("view/setWorktime", data)
+		);
 		canbus.addListener(API_DEVICE_VIEW_VOLTMETER_EVENT, (data: DataView): void =>
 			store.commit("view/setVoltmeter", data)
 		);
@@ -136,7 +145,9 @@ export default {
 		canbus.addListener(API_FUEL_VIEW_EVENT, (data: DataView): void => store.commit("view/setFuel", data));
 		canbus.addListener(API_MOVEMENT_VIEW_EVENT, (data: DataView): void => store.commit("view/setMovement", data));
 		canbus.addListener(API_SENSORS_VIEW_EVENT, (data: DataView): void => store.commit("view/setSensors", data));
-		canbus.addListener(API_TEMPERATURE_VIEW_EVENT, (data: DataView): void => store.commit("view/setTemperature", data));
+		canbus.addListener(API_TEMPERATURE_VIEW_EVENT, (data: DataView): void =>
+			store.commit("view/setTemperature", data)
+		);
 		// canbus.addListener(API_VOLUME_VIEW_EVENT, (data: DataView): void => store.commit("view/setVolume", data));
 		canbus.addListener(API_DATETIME_VIEW_EVENT, (data: DataView): void => store.commit("view/setDatetime", data));
 
@@ -145,6 +156,7 @@ export default {
 			if (status)
 			{
 				const choice = new ChoiceValue();
+				choice.listID.push(API_DEVICE_CONFIG_EXEC);
 				choice.listID.push(API_ONBOARD_CONFIG_EXEC);
 				choice.listID.push(API_HEAD_UNIT_CONFIG_EXEC);
 				choice.listID.push(API_DOORS_CONFIG_EXEC);

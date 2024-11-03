@@ -1,4 +1,4 @@
-import { DeviceInfo } from "@/models/pjcan/device";
+import { DeviceConfig, DeviceInfo } from "@/models/pjcan/device";
 import { OnboardConfig } from "@/models/pjcan/onboard";
 import { HeadUnitConfig } from "@/models/pjcan/head-unit";
 import { SW1Config } from "@/models/pjcan/buttons";
@@ -13,6 +13,7 @@ import { DatetimeConfig } from "@/models/pjcan/datetime";
 const state = {
 	version: new Version(),
 	info: new DeviceInfo(),
+	device: new DeviceConfig(),
 	onboard: new OnboardConfig(),
 	head: new HeadUnitConfig(),
 	sw1: new SW1Config(),

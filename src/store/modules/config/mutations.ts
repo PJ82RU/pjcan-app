@@ -25,6 +25,56 @@ export const setInfo = (state: any, data: DataView) =>
 };
 
 /**
+ * Изменить информацию устройства
+ * @param {any} state
+ * @param {DataView} data Данные
+ */
+export const setDevice = (state: any, data: DataView) =>
+{
+	state.device.set(data);
+};
+/**
+ * Device: Конфигурация
+ * @param state
+ * @param disableLedWork
+ * @param disableReverse
+ * @param disableRPosition
+ * @param disableAmpIllum
+ * @param disableVoltmeter
+ * @param calibrationOfVoltmeter
+ */
+export const setDeviceConfig = (
+	state: any,
+	{
+		disableLedWork,
+		disableReverse,
+		disableRPosition,
+		disableAmpIllum,
+		disableVoltmeter,
+		calibrationOfVoltmeter
+	}: {
+		disableLedWork: boolean;
+		disableReverse: boolean;
+		disableRPosition: boolean;
+		disableAmpIllum: boolean;
+		disableVoltmeter: boolean;
+		calibrationOfVoltmeter: number;
+	}
+) =>
+{
+	if (state.device.isData)
+	{
+		state.device.disableLedWork = disableLedWork;
+		state.device.disableReverse = disableReverse;
+		state.device.disableRPosition = disableRPosition;
+		state.device.disableAmpIllum = disableAmpIllum;
+		state.device.disableVoltmeter = disableVoltmeter;
+		state.device.calibrationOfVoltmeter = calibrationOfVoltmeter;
+		canbus.query(state.device);
+	}
+};
+
+/**
  * Изменить конфигурацию автомобиля
  * @param {any} state
  * @param {DataView} data Данные
@@ -238,7 +288,7 @@ export const setSW1ListOfResistance = (state: any, list: number[]): void =>
  * @param {any} state
  * @param {any} value Новое значение
  */
-export const setSW1Extended = (state: any, { id, value }: { id: number, value: boolean }): void =>
+export const setSW1Extended = (state: any, { id, value }: { id: number; value: boolean }): void =>
 {
 	if (state.sw1.isData)
 	{
@@ -255,7 +305,7 @@ export const setSW1Extended = (state: any, { id, value }: { id: number, value: b
  * @param {any} state
  * @param {any} value Новое значение
  */
-export const setSW1Exec = (state: any, { id, value }: { id: number, value: number[] }): void =>
+export const setSW1Exec = (state: any, { id, value }: { id: number; value: number[] }): void =>
 {
 	if (state.sw1.isData)
 	{
@@ -272,7 +322,7 @@ export const setSW1Exec = (state: any, { id, value }: { id: number, value: numbe
  * @param {any} state
  * @param {any} value Новое значение
  */
-export const setSW1ExecMode = (state: any, { id, value }: { id: number, value: number[] }): void =>
+export const setSW1ExecMode = (state: any, { id, value }: { id: number; value: number[] }): void =>
 {
 	if (state.sw1.isData)
 	{

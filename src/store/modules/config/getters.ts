@@ -13,6 +13,12 @@ export const version = (state: any) => state.version;
 export const info = (state: any) => state.info;
 
 /**
+ * Конфигурация устройства
+ * @param {any} state
+ */
+export const device = (state: any) => state.device;
+
+/**
  * Конфигурация автомобиля
  * @param {any} state
  */

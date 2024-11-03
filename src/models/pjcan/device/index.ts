@@ -1,8 +1,11 @@
+import { API_DEVICE_ACTIVATION_EXEC, API_DEVICE_ACTIVATION_EVENT, DeviceActivation } from "./DeviceActivation";
+import { IDeviceActivation } from "./IDeviceActivation";
+
 import {
 	API_DEVICE_CONFIG_EXEC,
+	API_DEVICE_CONFIG_EVENT,
 	API_DEVICE_VIEW_WORKTIME_EXEC,
 	API_DEVICE_VIEW_VOLTMETER_EXEC,
-	API_DEVICE_CONFIG_EVENT,
 	API_DEVICE_VIEW_WORKTIME_EVENT,
 	API_DEVICE_VIEW_VOLTMETER_EVENT,
 	DeviceConfig
@@ -44,6 +47,9 @@ import { IDeviceScannerValue } from "./IDeviceScannerValue";
 import { IDeviceFirmwareUrl } from "./IDeviceFirmwareUrl";
 
 export {
+	API_DEVICE_ACTIVATION_EXEC,
+	API_DEVICE_ACTIVATION_EVENT,
+	DeviceActivation,
 	API_DEVICE_CONFIG_EXEC,
 	API_DEVICE_CONFIG_EVENT,
 	DeviceConfig,
@@ -74,6 +80,7 @@ export {
 	API_DEVICE_VIEW_VOLTMETER_EVENT
 };
 export type {
+	IDeviceActivation,
 	IDeviceConfig,
 	IDeviceValue,
 	IDeviceAction,

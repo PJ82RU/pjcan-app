@@ -17,8 +17,8 @@ import {
 } from "@/components/bluetooth";
 import { IBaseModel } from "@/models/pjcan/base";
 import {
-	API_DEVICE_CONFIG_EXEC,
-	API_DEVICE_CONFIG_EVENT,
+	API_DEVICE_ACTIVATION_EXEC,
+	API_DEVICE_ACTIVATION_EVENT,
 	API_DEVICE_VALUE_EXEC,
 	API_DEVICE_VALUE_EVENT,
 	API_DEVICE_INFO_EXEC,
@@ -36,7 +36,7 @@ import {
 	IDeviceAction,
 	DeviceInfo,
 	DeviceAction,
-	DeviceConfig,
+	DeviceActivation,
 	DeviceValue,
 	DeviceUpdate,
 	DeviceScannerAction,
@@ -47,8 +47,8 @@ import {
 	IDeviceUpdate,
 	IDeviceValue,
 	IDeviceInfo,
-	IDeviceConfig,
-	IDeviceScannerAction
+	IDeviceActivation,
+	IDeviceScannerAction, API_DEVICE_CONFIG_EXEC, API_DEVICE_CONFIG_EVENT
 } from "@/models/pjcan/device";
 import {
 	API_SW1_CONFIG_EXEC,
@@ -461,7 +461,7 @@ export class Canbus extends EventEmitter
 					{
 						if (res?.sha?.length)
 						{
-							const device: IDeviceConfig = new DeviceConfig();
+							const device: IDeviceActivation = new DeviceActivation();
 							device.serial = res.sha;
 							this.query(device, false, (success): void =>
 							{
@@ -497,6 +497,9 @@ export class Canbus extends EventEmitter
 				break;
 			case API_DEVICE_INFO_EXEC: // Информация об устройстве
 				this.emit(API_DEVICE_INFO_EVENT, data);
+				break;
+			case API_DEVICE_ACTIVATION_EXEC: // Активация устройства
+				this.emit(API_DEVICE_ACTIVATION_EVENT, data);
 				break;
 			case API_DEVICE_CONFIG_EXEC: // Конфигурация устройства
 				this.emit(API_DEVICE_CONFIG_EVENT, data);

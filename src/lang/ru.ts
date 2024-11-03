@@ -223,6 +223,35 @@ export default {
 				title: "Сигнал поворота",
 				description: "Сигнал поворота и аварийной остановки",
 				menu: "LCD: Сигнал поворота"
+			},
+			device: {
+				title: "Параметры устройства",
+				menu: "Параметры устройства",
+				disableLedWork: {
+					title: "Контакт LED_WORK",
+					description: "Управление контактом LED_WORK"
+				},
+				disableReverse: {
+					title: "Контакт REVERSE",
+					description: "Управление контактом REVERSE"
+				},
+				disableRPosition: {
+					title: "Контакт R_POSITION",
+					description: "Управление контактом R_POSITION"
+				},
+				disableAmpIllum: {
+					title: "Контакт AMP_ILLUM",
+					description: "Управление контактом AMP_ILLUM"
+				},
+				disableVoltmeter: {
+					title: "Вольтметр",
+					description: "Включить/выключить вольтметр"
+				},
+				calibrationOfVoltmeter: {
+					title: "Калибровка вольтметра",
+					titleShort: "Калибровка",
+					description: "Положительное число уменьшает значение вольтметра, отрицательное - увеличивает"
+				}
 			}
 		},
 

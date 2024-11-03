@@ -80,9 +80,9 @@ import store from "@/store";
 import Card from "@/components/cards/Card.vue";
 import SwitchCardItem from "@/components/cards/SwitchCardItem.vue";
 import ViewSettingDialog from "@/components/ViewSettingDialog.vue";
+import DoorsConfigDialog from "./DoorsConfigDialog.vue";
 
 import { IMenuItem } from "@/components/MenuDots.vue";
-import DoorsConfigDialog from "@/views/onboard/components/DoorsConfigDialog.vue";
 import { IDoorsConfig } from "@/models/pjcan/doors";
 
 export default {
