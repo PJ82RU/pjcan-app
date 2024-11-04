@@ -105,18 +105,6 @@
 		:disabled="menuSelected.disabled"
 		@click:apply="onViewApply"
 	/>
-	<device-config-dialog
-		v-model="deviceConfigVisible"
-		:disable-led-work="deviceConfig.disableLedWork"
-		:disable-reverse="deviceConfig.disableReverse"
-		:disable-r-position="deviceConfig.disableRPosition"
-		:disable-amp-illum="deviceConfig.disableAmpIllum"
-		:disable-voltmeter="deviceConfig.disableVoltmeter"
-		:calibration-of-voltmeter="deviceConfig.calibrationOfVoltmeter"
-		:visible-r-position="isRPosition"
-		:visible-voltmeter="isVoltmeter"
-		@click:apply="onDeviceConfigApply"
-	/>
 </template>
 
 <script lang="ts">
@@ -129,7 +117,6 @@ import InputCardItem from "@/components/cards/InputCardItem.vue";
 import SwitchCardItem from "@/components/cards/SwitchCardItem.vue";
 import IconCardItem from "@/components/cards/IconCardItem.vue";
 import ViewSettingDialog from "@/components/ViewSettingDialog.vue";
-import DeviceConfigDialog from "./DeviceConfigDialog.vue";
 
 import { IMenuItem } from "@/components/MenuDots.vue";
 import { TCarModel } from "@/models/pjcan/onboard";
@@ -144,7 +131,7 @@ export default {
 			return TCarModel;
 		}
 	},
-	components: { Card, InputCardItem, SwitchCardItem, IconCardItem, ViewSettingDialog, DeviceConfigDialog },
+	components: { Card, InputCardItem, SwitchCardItem, IconCardItem, ViewSettingDialog },
 	setup()
 	{
 		const { t } = useI18n();
@@ -175,11 +162,6 @@ export default {
 				carModel === TCarModel.CAR_MODEL_MAZDA_CX9_REST
 			);
 		});
-		const isRPosition = computed((): boolean =>
-		{
-			const hardware: IDeviceHardware = store.getters["value/device"].hardware;
-			return hardware.major === 4 && hardware.minor >= 1 && hardware.build >= 1;
-		});
 
 		const acc = computed((): boolean => store.getters["value/sensors"].acc);
 		const worktime = computed((): number => store.getters["value/device"].worktime);
@@ -193,13 +175,9 @@ export default {
 		const signalRight = computed((): boolean => store.getters["value/sensors"].turnSignalRight);
 		const carModel = computed((): TCarModel => store.getters["config/carModel"]);
 
-		const deviceConfigVisible = ref(false);
-		const deviceConfig = computed((): IDeviceConfig => store.getters["config/device"]);
-
 		const menu = computed((): IMenuItem[] =>
 		{
 			const result = [
-				{ title: t("onboard.info.device.menu") },
 				{
 					title: t("onboard.info.worktime.menu"),
 					view: store.getters["view/worktime"],
@@ -266,31 +244,8 @@ export default {
 		 */
 		const onMenuClick = (item: IMenuItem): void =>
 		{
-			if (item.view)
-			{
-				menuVisible.value = true;
-				menuSelected.value = item;
-			}
-			else deviceConfigVisible.value = true;
-		};
-
-		const onDeviceConfigApply = (
-			disableLedWork: boolean,
-			disableReverse: boolean,
-			disableRPosition: boolean,
-			disableAmpIllum: boolean,
-			disableVoltmeter: boolean,
-			calibrationOfVoltmeter: number
-		): void =>
-		{
-			store.commit("config/setDeviceConfig", {
-				disableLedWork,
-				disableReverse,
-				disableRPosition,
-				disableAmpIllum,
-				disableVoltmeter,
-				calibrationOfVoltmeter
-			});
+			menuVisible.value = true;
+			menuSelected.value = item;
 		};
 
 		/**
@@ -310,12 +265,9 @@ export default {
 			voltmeterViewLoaded,
 			sensorViewLoaded,
 			temperatureViewLoaded,
-			deviceConfigVisible,
-			deviceConfig,
 			isVoltmeter,
 			disableVoltmeter,
 			isReverse,
-			isRPosition,
 			acc,
 			worktime,
 			voltmeter,
@@ -331,7 +283,6 @@ export default {
 			menuVisible,
 			menuSelected,
 			onMenuClick,
-			onDeviceConfigApply,
 			onViewApply
 		};
 	}

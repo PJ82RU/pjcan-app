@@ -38,6 +38,12 @@
 			/>
 			<v-btn color="secondary" icon="mdi-magnify-scan" :disabled="!isLoadedValue" @click="onScanClick" />
 			<v-btn color="secondary" icon="mdi-restart" :disabled="!isLoadedValue" @click="visibleReset = true" />
+			<v-btn
+				color="secondary"
+				icon="mdi-cog-outline"
+				:disabled="!isLoadedConfig"
+				@click="deviceConfigVisible = true"
+			/>
 			<v-btn color="primary" @click="visible = false">
 				{{ $t("btn.close") }}
 			</v-btn>
@@ -47,6 +53,18 @@
 	<device-reset-dialog v-model="visibleReset" />
 	<scanner v-model="startedScanner" />
 	<test-dialog v-model="visibleTest" />
+	<device-config-dialog
+		v-model="deviceConfigVisible"
+		:disable-led-work="deviceConfig.disableLedWork"
+		:disable-reverse="deviceConfig.disableReverse"
+		:disable-r-position="deviceConfig.disableRPosition"
+		:disable-amp-illum="deviceConfig.disableAmpIllum"
+		:disable-voltmeter="deviceConfig.disableVoltmeter"
+		:calibration-of-voltmeter="deviceConfig.calibrationOfVoltmeter"
+		:visible-r-position="isRPosition"
+		:visible-voltmeter="isVoltmeter"
+		@click:apply="onDeviceConfigApply"
+	/>
 </template>
 
 <script lang="ts">
@@ -59,13 +77,16 @@ import DialogTemplate from "@/layout/components/DialogTemplate.vue";
 import DeviceResetDialog from "./DeviceResetDialog.vue";
 import Scanner from "@/components/Scanner.vue";
 import TestDialog from "@/components/dialogs/TestDialog.vue";
+import DeviceConfigDialog from "./DeviceConfigDialog.vue";
 
 import { IMessage } from "@/models/interfaces/message/IMessage";
 import { TCarModel } from "@/models/pjcan/onboard";
+import { IDeviceConfig } from "@/models/pjcan/device";
+import { IDeviceHardware } from "@/models/pjcan/device/IDeviceValue";
 
 export default {
 	name: "DeviceInfoDialog",
-	components: { TestDialog, Scanner, DialogTemplate, DeviceResetDialog },
+	components: { DeviceConfigDialog, TestDialog, Scanner, DialogTemplate, DeviceResetDialog },
 	props: {
 		modelValue: {
 			type: Boolean,
@@ -82,6 +103,7 @@ export default {
 			set: (val: boolean): void => context.emit("update:modelValue", val)
 		});
 
+		const isLoadedConfig = computed(() => store.getters["config/device"].isData);
 		const isLoadedValue = computed(() => store.getters["config/info"].isData);
 		const visibleReset = ref(false);
 		const startedScanner = ref(false);
@@ -99,6 +121,18 @@ export default {
 				efuseMac: toMac(info.efuseMac),
 				sha: arrayToHex(info.sha)
 			};
+		});
+		const deviceConfigVisible = ref(false);
+		const deviceConfig = computed((): IDeviceConfig => store.getters["config/device"]);
+		const isVoltmeter = computed((): boolean =>
+		{
+			const hardware: IDeviceHardware = store.getters["value/device"].hardware;
+			return hardware.major === 4 && hardware.minor >= 1 && hardware.build <= 1;
+		});
+		const isRPosition = computed((): boolean =>
+		{
+			const hardware: IDeviceHardware = store.getters["value/device"].hardware;
+			return hardware.major === 4 && hardware.minor >= 1 && hardware.build >= 1;
 		});
 
 		/** Циклический запрос данных Info */
@@ -128,15 +162,49 @@ export default {
 			} as IMessage);
 		};
 
+		/**
+		 * Применить параметры устройства
+		 * @param disableLedWork
+		 * @param disableReverse
+		 * @param disableRPosition
+		 * @param disableAmpIllum
+		 * @param disableVoltmeter
+		 * @param calibrationOfVoltmeter
+		 */
+		const onDeviceConfigApply = (
+			disableLedWork: boolean,
+			disableReverse: boolean,
+			disableRPosition: boolean,
+			disableAmpIllum: boolean,
+			disableVoltmeter: boolean,
+			calibrationOfVoltmeter: number
+		): void =>
+		{
+			store.commit("config/setDeviceConfig", {
+				disableLedWork,
+				disableReverse,
+				disableRPosition,
+				disableAmpIllum,
+				disableVoltmeter,
+				calibrationOfVoltmeter
+			});
+		};
+
 		return {
 			visible,
+			isLoadedConfig,
 			isLoadedValue,
 			modelDeviceInfo,
 			visibleReset,
 			startedScanner,
 			visibleTest,
 			showButtonTest,
-			onScanClick
+			deviceConfigVisible,
+			deviceConfig,
+			isVoltmeter,
+			isRPosition,
+			onScanClick,
+			onDeviceConfigApply
 		};
 	}
 };
