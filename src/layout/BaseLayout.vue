@@ -148,10 +148,10 @@ export default {
 			{
 				result.push({ id: 70, title: t("menu.update", { version: newVersionFirmware.value }) });
 			}
-			if (rollbackFirmware.value.length)
-			{
-				result.push({ id: 71, title: t("menu.rollback", { version: rollbackFirmware.value }) });
-			}
+			// if (rollbackFirmware.value.length)
+			// {
+			// 	result.push({ id: 71, title: t("menu.rollback", { version: rollbackFirmware.value }) });
+			// }
 			if (installPrompt.value)
 			{
 				result.push({ id: 72, title: t("menu.install") });
