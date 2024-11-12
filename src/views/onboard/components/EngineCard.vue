@@ -88,7 +88,7 @@
 </template>
 
 <script lang="ts">
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import store from "@/store";
 
@@ -101,6 +101,7 @@ import EngineConfigDialog from "./EngineConfigDialog.vue";
 
 import { IMenuItem } from "@/components/MenuDots.vue";
 import { TCarModel } from "@/models/pjcan/onboard";
+import canbus from "@/api/canbus";
 
 export default {
 	name: "EngineCard",
@@ -147,6 +148,11 @@ export default {
 		const throttle = computed((): number => store.getters["value/engine"].throttle / 100);
 		const coolant = computed((): number => store.getters["value/engine"].coolant);
 		const carModel = computed((): TCarModel => store.getters["config/carModel"]);
+
+		watch(enabled, (val: boolean): void =>
+		{
+			if (!val) canbus.query(store.getters["config/engine"], true);
+		});
 
 		const menu = computed((): IMenuItem[] => [
 			{ title: t("onboard.engine.settings.menu") },
