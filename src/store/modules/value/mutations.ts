@@ -13,6 +13,15 @@ export const setSW1 = (state: any, data: DataView) =>
 {
 	state.sw1.set(data);
 };
+/**
+ * Записать значение resistance кнопки sw1
+ * @param {any} state
+ * @param {number} value Значение
+ */
+export const setSW1Resistance = (state: any, value: number = 0) =>
+{
+	state.sw1.resistance = value;
+};
 
 /**
  * Записать значения климата

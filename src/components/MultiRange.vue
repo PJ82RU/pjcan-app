@@ -11,6 +11,11 @@
 					</div>
 				</div>
 			</div>
+			<div v-if="rangeSelect" class="multi-range__range-hint" :style="{ left: rangeSelect.left }">
+				<div class="multi-range__handle__value">
+					{{ rangeSelect.value }}
+				</div>
+			</div>
 		</div>
 		<div class="multi-range__ticks">
 			<div v-for="tick in ticks" :data-value="tick"></div>
@@ -48,11 +53,16 @@ export default {
 		selectPoint: {
 			type: Number,
 			default: 0
+		},
+		/** Точка подсказка */
+		hintPoint: {
+			type: Number,
+			default: 0
 		}
 	},
 	setup(props: any)
 	{
-		const { points, min, max, numberOfTicks, selectPoint } = toRefs(props);
+		const { points, min, max, numberOfTicks, selectPoint, hintPoint } = toRefs(props);
 
 		const delta = computed(() => max.value - min.value);
 		const ranges = computed(() =>
@@ -69,10 +79,15 @@ export default {
 			for (let i = 0; i < numberOfTicks.value; i++) result[i] = (tick * i).toFixed();
 			return result;
 		});
+		const rangeSelect = computed(() => (hintPoint.value > 0 ? {
+			value: hintPoint.value,
+			left: (hintPoint.value * 100) / delta.value + "%"
+		} : undefined));
 
 		return {
 			ranges,
-			ticks
+			ticks,
+			rangeSelect
 		};
 	}
 };
@@ -166,6 +181,42 @@ export default {
 					border-width: 4px 5px;
 					transform: translate(-50%, 50%);
 					color: white;
+					font-size: 15px;
+				}
+			}
+		}
+	}
+
+	&__range-hint {
+		height: 100%;
+		position: absolute;
+		z-index: 6;
+
+		.multi-range__handle {
+			&__value {
+				position: absolute;
+				transform: translate(-50%, -6px);
+				min-width: 10px;
+				background: $accent;
+				color: white;
+				padding: 2px 6px;
+				top: 28px;
+				white-space: nowrap;
+				font-size: 14px;
+				text-align: center;
+				border-radius: 4px;
+				cursor: default;
+
+				&::after {
+					content: "";
+					position: absolute;
+					left: 50%;
+					top: -4px;
+					border-color: $accent transparent transparent;
+					border-style: solid;
+					border-width: 4px 5px;
+					transform: rotate(180deg) translate(50%, 50%);
+					color: $accent;
 					font-size: 15px;
 				}
 			}

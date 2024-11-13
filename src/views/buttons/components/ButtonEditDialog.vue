@@ -4,6 +4,7 @@
 		content-class="button-edit-dialog"
 		icon="mdi-plus-box"
 		:title="title"
+		width="90%"
 		text
 		actions
 	>
@@ -16,6 +17,7 @@
 						:max="SW1_CONFIG_RESISTANCE_MAX()"
 						:number-of-ticks="51"
 						:select-point="resist"
+						:hint-point="valueResistance"
 					/>
 				</v-col>
 				<v-col cols="12" class="pt-0">
@@ -60,6 +62,7 @@
 <script lang="ts">
 import { computed, ref, toRefs, watch } from "vue";
 import { useI18n } from "vue-i18n";
+import store from "@/store";
 
 import DialogTemplate from "@/layout/components/DialogTemplate.vue";
 import MultiRange from "@/components/MultiRange.vue";
@@ -134,6 +137,7 @@ export default {
 			}
 		});
 		const beginResistance = computed((): number => (indexList.value > 0 ? list.value[indexList.value - 1] + 1 : 1));
+		const valueResistance = computed((): number => store.getters["value/sw1"].resistance);
 
 		/** Сбросить изменения */
 		const reset = () =>
@@ -156,6 +160,7 @@ export default {
 			minResistance,
 			maxResistance,
 			beginResistance,
+			valueResistance,
 			reset,
 			apply
 		};

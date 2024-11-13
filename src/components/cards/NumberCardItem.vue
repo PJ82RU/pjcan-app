@@ -1,6 +1,6 @@
 <template>
 	<v-row class="number-card-item">
-		<v-col cols="6" class="pt-0 pr-0">
+		<v-col class="pt-0 pr-0" :style="{ width: '100%' }">
 			<v-text-field
 				class="number-card-item__label"
 				:model-value="title"
@@ -13,7 +13,7 @@
 				:disabled="disabled"
 			/>
 		</v-col>
-		<v-col cols="6" class="pt-0 pl-0">
+		<v-col class="pt-0 pl-0" :style="{ width: '50%', maxWidth: '260px', minWidth: '170px' }">
 			<v-number-input
 				class="number-card-item__number"
 				v-model="value"

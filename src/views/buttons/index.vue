@@ -33,18 +33,16 @@
 </template>
 
 <script lang="ts">
-import { computed, onMounted, onUnmounted, provide, ref, watch } from "vue";
+import { computed, provide, ref } from "vue";
 import { useDisplay } from "vuetify";
 import { useI18n } from "vue-i18n";
-import { toast } from "vue3-toastify";
 import store from "@/store";
-import canbus from "@/api/canbus";
 
 import Flicking from "@egjs/vue3-flicking";
 import SettingsCard from "./components/SettingsCard.vue";
 import ButtonEditDialog from "./components/ButtonEditDialog.vue";
 
-import { API_SW1_VALUE_EVENT, ISW1ConfigButton, TButtonExec } from "@/models/pjcan/buttons";
+import { ISW1ConfigButton, TButtonExec } from "@/models/pjcan/buttons";
 import { ISW1Card } from "@/models/interfaces/ISW1Card";
 import { TProtocol } from "@/models/pjcan/head-unit";
 import { TCarModel } from "@/models/pjcan/onboard";
@@ -55,7 +53,7 @@ export default {
 	setup()
 	{
 		const { name: display } = useDisplay();
-		const { t, tm } = useI18n();
+		const { tm } = useI18n();
 		const flicking = ref(null);
 		provide("flicking", flicking);
 
@@ -178,6 +176,7 @@ export default {
 		const onButtonEdit = (cardButton: ISW1Card): void =>
 		{
 			selected.value = cardButton;
+			store.commit("value/setSW1Resistance");
 			buttonEditVisible.value = true;
 		};
 		/**
@@ -216,41 +215,6 @@ export default {
 		{
 			store.commit("config/setSW1ExecMode", { id, value });
 		};
-
-		let lastIdPressed = 0;
-		/** Событие нажатия кнопки */
-		const onButtonsValueReceive = (): void =>
-		{
-			const res = store.getters["value/sw1"];
-			if (res.isData && res.pressed && lastIdPressed !== res.id)
-			{
-				lastIdPressed = res.id;
-				setTimeout(() => (lastIdPressed = 0), 4000);
-
-				const detected: ISW1Card =
-					cardButtons.value.find((button: ISW1Card) => button.id === res.id) ?? ({} as ISW1Card);
-				if (detected.resistanceTo > 0) toast.success(t("buttons.notify.detected", { id: detected.title }));
-				else toast.warning(t("buttons.notify.notDefined"));
-			}
-		};
-
-		const onBegin = (): void =>
-		{
-			canbus.addListener(API_SW1_VALUE_EVENT, onButtonsValueReceive);
-		};
-		const onEnd = (): void =>
-		{
-			canbus.removeListener(API_SW1_VALUE_EVENT, onButtonsValueReceive);
-		};
-		watch(configLoaded, () => onBegin());
-		onMounted(() =>
-		{
-			if (configLoaded.value) onBegin();
-		});
-		onUnmounted(() =>
-		{
-			onEnd();
-		});
 
 		return {
 			flicking,
