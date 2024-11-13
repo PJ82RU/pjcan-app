@@ -259,18 +259,16 @@ export class Bluetooth extends EventEmitter
 				})
 				.catch((): Promise<void> | undefined =>
 				{
-					return Promise.resolve()
-						.then((): void =>
-						{
-							this.delayPromise(50).then();
-						})
-						.then((): Promise<any> =>
+					return Promise.resolve().then((): void =>
+					{
+						this.delayPromise(50).then((): Promise<any> =>
 						{
 							this._counterReSend++;
 							return this._counterReSend < this.counterReSendMax
 								? this.send(data)
 								: Promise.reject("The counter has reached its maximum value");
 						});
+					});
 				}) ?? Promise.reject("No characteristic")
 		);
 	}
