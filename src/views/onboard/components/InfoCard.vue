@@ -46,7 +46,7 @@
 							:title="$t('onboard.info.temperatureOut.title')"
 							:description="$t('onboard.info.temperatureOut.description')"
 							type="temperature"
-							:nodata="!temperatureValueLoaded || temperatureOut === 0"
+							:nodata="!temperatureValueLoaded || temperatureOut > 99"
 							:disabled="!temperatureViewLoaded"
 						/>
 					</v-col>
@@ -121,7 +121,6 @@ import ViewSettingDialog from "@/components/ViewSettingDialog.vue";
 import { IMenuItem } from "@/components/MenuDots.vue";
 import { TCarModel } from "@/models/pjcan/onboard";
 import { IDeviceHardware } from "@/models/pjcan/device/IDeviceValue";
-import { IDeviceConfig } from "@/models/pjcan/device";
 
 export default {
 	name: "InfoCard",

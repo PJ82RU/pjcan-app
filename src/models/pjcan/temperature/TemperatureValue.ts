@@ -17,8 +17,8 @@ export class TemperatureValue extends BaseModel implements ITemperatureValue
 	};
 	static size: number = 4;
 
-	in = 0;
-	out = 0;
+	in = 1000;
+	out = 1000;
 
 	constructor(data?: DataView)
 	{
