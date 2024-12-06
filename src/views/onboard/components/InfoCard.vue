@@ -2,7 +2,7 @@
 	<card
 		class="info-card"
 		:title="$t('onboard.info.title')"
-		:menu="carModel !== TCarModel.CAR_MODEL_MAZDA_CX9_REST ? menu : undefined"
+		:menu="isMenu ? menu : undefined"
 		@click:menu="onMenuClick"
 	>
 		<template #body>
@@ -37,9 +37,7 @@
 						:disabled="!voltmeterViewLoaded"
 					/>
 				</v-col>
-				<template
-					v-if="carModel === TCarModel.CAR_MODEL_MAZDA_3_BK || carModel === TCarModel.CAR_MODEL_MAZDA_3_BL"
-				>
+				<template v-if="isTemperatureOut">
 					<v-col cols="12" class="pt-0 pb-0">
 						<input-card-item
 							:value="temperatureOut"
@@ -71,7 +69,7 @@
 						:disabled="!sensorViewLoaded"
 					/>
 				</v-col>
-				<v-col v-if="carModel === TCarModel.CAR_MODEL_MAZDA_3_BK" cols="12" class="pt-0 pb-0">
+				<v-col v-if="isSeatbelt" cols="12" class="pt-0 pb-0">
 					<icon-card-item
 						:model-value="[seatbeltPassenger, seatbeltDriver]"
 						:title="$t('onboard.info.safetyBelt.title')"
@@ -83,7 +81,7 @@
 						:disabled="!sensorViewLoaded"
 					/>
 				</v-col>
-				<v-col v-if="carModel === TCarModel.CAR_MODEL_MAZDA_3_BK" cols="12" class="pt-0 pb-0">
+				<v-col v-if="isSignal" cols="12" class="pt-0 pb-0">
 					<icon-card-item
 						:model-value="[signalRight, signalLeft]"
 						:title="$t('onboard.info.signal.title')"
@@ -124,12 +122,6 @@ import { IDeviceHardware } from "@/models/pjcan/device/IDeviceValue";
 
 export default {
 	name: "InfoCard",
-	computed: {
-		TCarModel()
-		{
-			return TCarModel;
-		}
-	},
 	components: { Card, InputCardItem, SwitchCardItem, IconCardItem, ViewSettingDialog },
 	setup()
 	{
@@ -149,6 +141,15 @@ export default {
 			return hardware.major === 4 && hardware.minor >= 1 && hardware.build <= 1;
 		});
 		const disableVoltmeter = computed((): boolean => store.getters["config/device"].disableVoltmeter);
+		const isTemperatureOut = computed((): boolean =>
+		{
+			const carModel = store.getters["config/carModel"];
+			return (
+				carModel === TCarModel.CAR_MODEL_MAZDA_3_BK ||
+				carModel === TCarModel.CAR_MODEL_MAZDA_3_BL ||
+				carModel === TCarModel.CAR_MODEL_MAZDA_CX7_REST
+			);
+		});
 		const isReverse = computed((): boolean =>
 		{
 			const carModel = store.getters["config/carModel"];
@@ -160,6 +161,18 @@ export default {
 				carModel === TCarModel.CAR_MODEL_MAZDA_CX9 ||
 				carModel === TCarModel.CAR_MODEL_MAZDA_CX9_REST
 			);
+		});
+		const isSeatbelt = computed((): boolean =>
+		{
+			return store.getters["config/carModel"] === TCarModel.CAR_MODEL_MAZDA_3_BK;
+		});
+		const isSignal = computed((): boolean =>
+		{
+			return store.getters["config/carModel"] === TCarModel.CAR_MODEL_MAZDA_3_BK;
+		});
+		const isMenu = computed((): boolean =>
+		{
+			return store.getters["config/carModel"] !== TCarModel.CAR_MODEL_MAZDA_CX9_REST;
 		});
 
 		const acc = computed((): boolean => store.getters["value/sensors"].acc);
@@ -266,7 +279,11 @@ export default {
 			temperatureViewLoaded,
 			isVoltmeter,
 			disableVoltmeter,
+			isTemperatureOut,
 			isReverse,
+			isSeatbelt,
+			isSignal,
+			isMenu,
 			acc,
 			worktime,
 			voltmeter,

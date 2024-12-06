@@ -62,7 +62,11 @@ export default [
 			TCarModel.CAR_MODEL_MAZDA_5
 		]
 	},
-	{ name: "doors", enabled: true, car: [TCarModel.CAR_MODEL_MAZDA_3_BK, TCarModel.CAR_MODEL_MAZDA_3_BL] },
+	{
+		name: "doors",
+		enabled: true,
+		car: [TCarModel.CAR_MODEL_MAZDA_3_BK, TCarModel.CAR_MODEL_MAZDA_3_BL, TCarModel.CAR_MODEL_MAZDA_CX7_REST]
+	},
 	{
 		name: "climate",
 		enabled: true,
