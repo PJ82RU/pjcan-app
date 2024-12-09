@@ -104,6 +104,34 @@ export const setEngine = (state: any, data: DataView) =>
 {
 	state.engine.set(data);
 };
+export const setEngineEnabled = (state: any, data: DataView) =>
+{
+	state.engine.enabled.set(data);
+};
+export const setEngineTotalWorktime = (state: any, data: DataView) =>
+{
+	state.engine.totalWorktime.set(data);
+};
+export const setEngineTotalCountRPM = (state: any, data: DataView) =>
+{
+	state.engine.totalCountRPM.set(data);
+};
+export const setEngineCoolant = (state: any, data: DataView) =>
+{
+	state.engine.coolant.set(data);
+};
+export const setEngineRPM = (state: any, data: DataView) =>
+{
+	state.engine.rpm.set(data);
+};
+export const setEngineLoad = (state: any, data: DataView) =>
+{
+	state.engine.load.set(data);
+};
+export const setEngineThrottle = (state: any, data: DataView) =>
+{
+	state.engine.throttle.set(data);
+};
 
 /**
  * Записать значения отображения расхода
@@ -113,6 +141,14 @@ export const setEngine = (state: any, data: DataView) =>
 export const setFuel = (state: any, data: DataView) =>
 {
 	state.fuel.set(data);
+};
+export const setFuelCurrent = (state: any, data: DataView) =>
+{
+	state.fuel.current.set(data);
+};
+export const setFuelAVG = (state: any, data: DataView) =>
+{
+	state.fuel.avg.set(data);
 };
 
 /**
@@ -124,6 +160,18 @@ export const setMovement = (state: any, data: DataView) =>
 {
 	state.movement.set(data);
 };
+export const setMovementSpeed = (state: any, data: DataView) =>
+{
+	state.movement.speed.set(data);
+};
+export const setMovementSpeedAVG = (state: any, data: DataView) =>
+{
+	state.movement.speedAVG.set(data);
+};
+export const setMovementRestWay = (state: any, data: DataView) =>
+{
+	state.movement.restWay.set(data);
+};
 
 /**
  * Записать значения отображения датчиков
@@ -133,6 +181,22 @@ export const setMovement = (state: any, data: DataView) =>
 export const setSensors = (state: any, data: DataView) =>
 {
 	state.sensors.set(data);
+};
+export const setSensorsHandbrake = (state: any, data: DataView) =>
+{
+	state.sensors.handbrake.set(data);
+};
+export const setSensorsReverse = (state: any, data: DataView) =>
+{
+	state.sensors.reverse.set(data);
+};
+export const setSensorsSeatbelt = (state: any, data: DataView) =>
+{
+	state.sensors.seatbelt.set(data);
+};
+export const setSensorsTurnSignal = (state: any, data: DataView) =>
+{
+	state.sensors.turnSignal.set(data);
 };
 
 /**

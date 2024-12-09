@@ -45,13 +45,22 @@ import {
 	API_ENGINE_CONFIG_EVENT,
 	API_ENGINE_CONFIG_EXEC,
 	API_ENGINE_VALUE_EVENT,
+	API_ENGINE_VIEW_COOLANT_EVENT,
+	API_ENGINE_VIEW_ENABLED_EVENT,
 	API_ENGINE_VIEW_EVENT,
-	API_ENGINE_VIEW_EXEC
+	API_ENGINE_VIEW_EXEC,
+	API_ENGINE_VIEW_LOAD_EVENT,
+	API_ENGINE_VIEW_RPM_EVENT,
+	API_ENGINE_VIEW_THROTTLE_EVENT,
+	API_ENGINE_VIEW_TOTAL_COUNT_RPM_EVENT,
+	API_ENGINE_VIEW_TOTAL_WORKTIME_EVENT
 } from "@/models/pjcan/engine";
 import {
 	API_FUEL_CONFIG_EVENT,
 	API_FUEL_CONFIG_EXEC,
 	API_FUEL_VALUE_EVENT,
+	API_FUEL_VIEW_AVG_EVENT,
+	API_FUEL_VIEW_CURRENT_EVENT,
 	API_FUEL_VIEW_EVENT,
 	API_FUEL_VIEW_EXEC
 } from "@/models/pjcan/fuel";
@@ -64,8 +73,23 @@ import {
 	API_DOORS_VIEW_EVENT,
 	API_DOORS_VIEW_EXEC
 } from "@/models/pjcan/doors";
-import { API_MOVEMENT_VALUE_EVENT, API_MOVEMENT_VIEW_EVENT, API_MOVEMENT_VIEW_EXEC } from "@/models/pjcan/movement";
-import { API_SENSORS_VALUE_EVENT, API_SENSORS_VIEW_EVENT, API_SENSORS_VIEW_EXEC } from "@/models/pjcan/sensors";
+import {
+	API_MOVEMENT_VALUE_EVENT,
+	API_MOVEMENT_VIEW_EVENT,
+	API_MOVEMENT_VIEW_EXEC,
+	API_MOVEMENT_VIEW_REST_WAY_EVENT,
+	API_MOVEMENT_VIEW_SPEED_AVG_EVENT,
+	API_MOVEMENT_VIEW_SPEED_EVENT
+} from "@/models/pjcan/movement";
+import {
+	API_SENSORS_VALUE_EVENT,
+	API_SENSORS_VIEW_EVENT,
+	API_SENSORS_VIEW_EXEC,
+	API_SENSORS_VIEW_HANDBRAKE_EVENT,
+	API_SENSORS_VIEW_REVERSE_EVENT,
+	API_SENSORS_VIEW_SEATBELT_EVENT,
+	API_SENSORS_VIEW_TURN_SIGNAL_EVENT
+} from "@/models/pjcan/sensors";
 import {
 	API_TEMPERATURE_VALUE_EVENT,
 	API_TEMPERATURE_VIEW_EVENT,
@@ -142,9 +166,55 @@ export default {
 		canbus.addListener(API_CLIMATE_VIEW_EVENT, (data: DataView): void => store.commit("view/setClimate", data));
 		canbus.addListener(API_DOORS_VIEW_EVENT, (data: DataView): void => store.commit("view/setDoors", data));
 		canbus.addListener(API_ENGINE_VIEW_EVENT, (data: DataView): void => store.commit("view/setEngine", data));
+		canbus.addListener(API_ENGINE_VIEW_ENABLED_EVENT, (data: DataView): void =>
+			store.commit("view/setEngineEnabled", data)
+		);
+		canbus.addListener(API_ENGINE_VIEW_TOTAL_WORKTIME_EVENT, (data: DataView): void =>
+			store.commit("view/setEngineTotalWorktime", data)
+		);
+		canbus.addListener(API_ENGINE_VIEW_TOTAL_COUNT_RPM_EVENT, (data: DataView): void =>
+			store.commit("view/setEngineTotalCountRPM", data)
+		);
+		canbus.addListener(API_ENGINE_VIEW_COOLANT_EVENT, (data: DataView): void =>
+			store.commit("view/setEngineCoolant", data)
+		);
+		canbus.addListener(API_ENGINE_VIEW_RPM_EVENT, (data: DataView): void =>
+			store.commit("view/setEngineRPM", data)
+		);
+		canbus.addListener(API_ENGINE_VIEW_LOAD_EVENT, (data: DataView): void =>
+			store.commit("view/setEngineLoad", data)
+		);
+		canbus.addListener(API_ENGINE_VIEW_THROTTLE_EVENT, (data: DataView): void =>
+			store.commit("view/setEngineThrottle", data)
+		);
 		canbus.addListener(API_FUEL_VIEW_EVENT, (data: DataView): void => store.commit("view/setFuel", data));
+		canbus.addListener(API_FUEL_VIEW_CURRENT_EVENT, (data: DataView): void =>
+			store.commit("view/setFuelCurrent", data)
+		);
+		canbus.addListener(API_FUEL_VIEW_AVG_EVENT, (data: DataView): void => store.commit("view/setFuelAVG", data));
 		canbus.addListener(API_MOVEMENT_VIEW_EVENT, (data: DataView): void => store.commit("view/setMovement", data));
+		canbus.addListener(API_MOVEMENT_VIEW_SPEED_EVENT, (data: DataView): void =>
+			store.commit("view/setMovementSpeed", data)
+		);
+		canbus.addListener(API_MOVEMENT_VIEW_SPEED_AVG_EVENT, (data: DataView): void =>
+			store.commit("view/setMovementSpeedAVG", data)
+		);
+		canbus.addListener(API_MOVEMENT_VIEW_REST_WAY_EVENT, (data: DataView): void =>
+			store.commit("view/setMovementRestWay", data)
+		);
 		canbus.addListener(API_SENSORS_VIEW_EVENT, (data: DataView): void => store.commit("view/setSensors", data));
+		canbus.addListener(API_SENSORS_VIEW_HANDBRAKE_EVENT, (data: DataView): void =>
+			store.commit("view/setSensorsHandbrake", data)
+		);
+		canbus.addListener(API_SENSORS_VIEW_REVERSE_EVENT, (data: DataView): void =>
+			store.commit("view/setSensorsReverse", data)
+		);
+		canbus.addListener(API_SENSORS_VIEW_SEATBELT_EVENT, (data: DataView): void =>
+			store.commit("view/setSensorsSeatbelt", data)
+		);
+		canbus.addListener(API_SENSORS_VIEW_TURN_SIGNAL_EVENT, (data: DataView): void =>
+			store.commit("view/setSensorsTurnSignal", data)
+		);
 		canbus.addListener(API_TEMPERATURE_VIEW_EVENT, (data: DataView): void =>
 			store.commit("view/setTemperature", data)
 		);
