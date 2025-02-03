@@ -87,7 +87,7 @@ export default {
 			options: "Параметры"
 		},
 		update: "Обновить до {version}",
-		rollback: "Откатить до {version}",
+		rollback: "Понизить до {version}",
 		install: "Установить",
 		about: "О программе"
 	},
