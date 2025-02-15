@@ -82,7 +82,7 @@ import DeviceConfigDialog from "./DeviceConfigDialog.vue";
 import { IMessage } from "@/models/interfaces/message/IMessage";
 import { TCarModel } from "@/models/pjcan/onboard";
 import { IDeviceConfig } from "@/models/pjcan/device";
-import { IDeviceHardware } from "@/models/pjcan/device/IDeviceValue";
+import { EDeviceType } from "@/models/pjcan/device/EDeviceType";
 
 export default {
 	name: "DeviceInfoDialog",
@@ -126,13 +126,17 @@ export default {
 		const deviceConfig = computed((): IDeviceConfig => store.getters["config/device"]);
 		const isVoltmeter = computed((): boolean =>
 		{
-			const hardware: IDeviceHardware = store.getters["value/device"].hardware;
-			return hardware.major === 4 && hardware.minor >= 1 && hardware.build <= 1;
+			const type: EDeviceType = store.getters["value/device"].type;
+			return type >= EDeviceType.PJCAN_41A;
 		});
 		const isRPosition = computed((): boolean =>
 		{
-			const hardware: IDeviceHardware = store.getters["value/device"].hardware;
-			return hardware.major === 4 && hardware.minor >= 1 && hardware.build >= 1;
+			const type: EDeviceType = store.getters["value/device"].type;
+			return (
+				type === EDeviceType.PJCAN_41B ||
+				type === EDeviceType.PJCAN_41_REV1_1 ||
+				type === EDeviceType.PJCAN_42_REV1_0
+			);
 		});
 
 		/** Циклический запрос данных Info */

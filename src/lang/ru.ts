@@ -214,6 +214,14 @@ export default {
 				description: "Ручка КПП в положении R",
 				menu: "LCD: Задний ход"
 			},
+			light: {
+				title: "Подсветка",
+				description: "Контакт подсветки"
+			},
+			amp: {
+				title: "AMP Cont",
+				description: "Контакт вкл. Bose"
+			},
 			safetyBelt: {
 				title: "Ремень безопасности",
 				description: "Ремень безопасности водителя и пассажира",
@@ -839,8 +847,8 @@ export default {
 			4: "Mazda 6 GH (тестируется)",
 			5: "Mazda CX-7",
 			6: "Mazda CX-7 rest",
-			7: "Mazda CX-9",
-			8: "Mazda CX-9 rest",
+			7: "Mazda CX-9 (gen1)",
+			8: "Mazda CX-9 (gen1) rest",
 			9: "Mazda 5 (тестируется)"
 		}
 	},

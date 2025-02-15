@@ -69,6 +69,16 @@
 						:disabled="!sensorViewLoaded"
 					/>
 				</v-col>
+				<v-col cols="12" class="pt-0 pb-0">
+					<switch-card-item
+						:model-value="amp"
+						:title="$t('onboard.info.'+ (isAmp ? 'amp' : 'light') +'.title')"
+						:description="$t('onboard.info.'+ (isAmp ? 'amp' : 'light') +'.description')"
+						color="warning"
+						:nodata="!sensorValueLoaded"
+						:disabled="!sensorViewLoaded"
+					/>
+				</v-col>
 				<v-col v-if="isSeatbelt" cols="12" class="pt-0 pb-0">
 					<icon-card-item
 						:model-value="[seatbeltPassenger, seatbeltDriver]"
@@ -118,7 +128,7 @@ import ViewSettingDialog from "@/components/ViewSettingDialog.vue";
 
 import { IMenuItem } from "@/components/MenuDots.vue";
 import { TCarModel } from "@/models/pjcan/onboard";
-import { IDeviceHardware } from "@/models/pjcan/device/IDeviceValue";
+import { EDeviceType } from "@/models/pjcan/device/EDeviceType";
 
 export default {
 	name: "InfoCard",
@@ -137,8 +147,8 @@ export default {
 
 		const isVoltmeter = computed((): boolean =>
 		{
-			const hardware: IDeviceHardware = store.getters["value/device"].hardware;
-			return hardware.major === 4 && hardware.minor >= 1 && hardware.build <= 1;
+			const type: EDeviceType = store.getters["value/device"].type;
+			return type >= EDeviceType.PJCAN_41A;
 		});
 		const disableVoltmeter = computed((): boolean => store.getters["config/device"].disableVoltmeter);
 		const isTemperatureOut = computed((): boolean =>
@@ -162,6 +172,15 @@ export default {
 				carModel === TCarModel.CAR_MODEL_MAZDA_CX9_REST
 			);
 		});
+		const isAmp = computed((): boolean =>
+		{
+			const carModel = store.getters["config/carModel"];
+			return (
+				carModel === TCarModel.CAR_MODEL_MAZDA_CX7 ||
+				carModel === TCarModel.CAR_MODEL_MAZDA_CX7_REST ||
+				carModel === TCarModel.CAR_MODEL_MAZDA_CX9
+			);
+		});
 		const isSeatbelt = computed((): boolean =>
 		{
 			return store.getters["config/carModel"] === TCarModel.CAR_MODEL_MAZDA_3_BK;
@@ -180,7 +199,8 @@ export default {
 		const voltmeter = computed((): number => store.getters["value/device"].voltmeter / 100);
 		const temperatureOut = computed((): number => store.getters["value/temperature"].out / 10);
 		const handbrake = computed((): boolean => store.getters["value/sensors"].handbrake);
-		const reverse = computed((): boolean => store.getters["value/sensors"].reverse);
+		const reverse = computed((): boolean => store.getters["value/device"].stateReverse);
+		const amp = computed((): boolean => store.getters["value/device"].stateAmpIllum);
 		const seatbeltDriver = computed((): boolean => store.getters["value/sensors"].seatbeltDriver);
 		const seatbeltPassenger = computed((): boolean => store.getters["value/sensors"].seatbeltPassenger);
 		const signalLeft = computed((): boolean => store.getters["value/sensors"].turnSignalLeft);
@@ -281,6 +301,7 @@ export default {
 			disableVoltmeter,
 			isTemperatureOut,
 			isReverse,
+			isAmp,
 			isSeatbelt,
 			isSignal,
 			isMenu,
@@ -290,6 +311,7 @@ export default {
 			temperatureOut,
 			handbrake,
 			reverse,
+			amp,
 			seatbeltDriver,
 			seatbeltPassenger,
 			signalLeft,

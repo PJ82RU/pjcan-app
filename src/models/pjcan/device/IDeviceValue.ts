@@ -1,4 +1,6 @@
 import { IBaseModel } from "../base";
+import { EDeviceType } from "./EDeviceType";
+import { EDeviceAddons } from "./EDeviceAddons";
 
 export interface IDeviceHardware {
 	major: number;
@@ -19,4 +21,6 @@ export interface IDeviceValue extends IBaseModel {
 	led: number; // Состояние мигания светодиода
 	voltmeter: number; // Значение вольтметра (n/100)
 	worktime: number; // Время работы устройства, сек
+	type: EDeviceType; // Тип устройства
+	addons: EDeviceAddons; // Тип дополнения
 }
