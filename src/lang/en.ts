@@ -179,13 +179,13 @@ export default {
 				menu: "LCD: Voltage"
 			},
 			temperatureIn: {
-				title: "Air temperature",
-				description: "Temperature readings in the car interior",
+				title: "Temperature in the cabin",
+				description: "Temperature readings inside the car",
 				menu: "LCD: Air temperature"
 			},
 			temperatureOut: {
-				title: "Air temperature",
-				description: "Reading the outside temperature of the car",
+				title: "Temperature outside",
+				description: "Vehicle outside temperature readings",
 				menu: "LCD: Air temperature"
 			},
 			handbrake: {

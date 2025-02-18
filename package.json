@@ -1,6 +1,6 @@
 {
 	"name": "pjcan",
-	"version": "1.1.6",
+	"version": "1.1.8",
 	"private": true,
 	"description": "CanBus project for Mazda",
 	"author": "PJ82. Spiridonov Vladislav",
@@ -12,7 +12,7 @@
 	"dependencies": {
 		"@egjs/vue3-flicking": "^4.11.4",
 		"@mdi/font": "7.4.47",
-		"axios": "^1.7.7",
+		"axios": "1.7.8",
 		"bitset": "^5.1.1",
 		"core-js": "^3.38.1",
 		"eventemitter3": "^5.0.1",

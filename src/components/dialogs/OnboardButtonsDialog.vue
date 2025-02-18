@@ -135,7 +135,6 @@ export default {
 				carModel.value === TCarModel.CAR_MODEL_MAZDA_6_GG ||
 				carModel.value === TCarModel.CAR_MODEL_MAZDA_6_GH ||
 				carModel.value === TCarModel.CAR_MODEL_MAZDA_CX7 ||
-				carModel.value === TCarModel.CAR_MODEL_MAZDA_CX7_REST ||
 				carModel.value === TCarModel.CAR_MODEL_MAZDA_CX9 ||
 				carModel.value === TCarModel.CAR_MODEL_MAZDA_CX9_REST ||
 				carModel.value === TCarModel.CAR_MODEL_MAZDA_5

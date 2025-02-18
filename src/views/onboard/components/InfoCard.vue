@@ -37,14 +37,24 @@
 						:disabled="!voltmeterViewLoaded"
 					/>
 				</v-col>
-				<template v-if="isTemperatureOut">
-					<v-col cols="12" class="pt-0 pb-0">
+				<template v-if="isTemperature">
+					<v-col v-if="isTemperatureIn" cols="12" class="pt-0 pb-0">
+						<input-card-item
+							:value="temperatureIn"
+							:title="$t('onboard.info.temperatureIn.title')"
+							:description="$t('onboard.info.temperatureIn.description')"
+							type="temperature"
+							:nodata="!temperatureValueLoaded"
+							:disabled="!temperatureViewLoaded"
+						/>
+					</v-col>
+					<v-col v-if="isTemperatureOut" cols="12" class="pt-0 pb-0">
 						<input-card-item
 							:value="temperatureOut"
 							:title="$t('onboard.info.temperatureOut.title')"
 							:description="$t('onboard.info.temperatureOut.description')"
 							type="temperature"
-							:nodata="!temperatureValueLoaded || temperatureOut > 99"
+							:nodata="!temperatureValueLoaded"
 							:disabled="!temperatureViewLoaded"
 						/>
 					</v-col>
@@ -72,8 +82,8 @@
 				<v-col cols="12" class="pt-0 pb-0">
 					<switch-card-item
 						:model-value="amp"
-						:title="$t('onboard.info.'+ (isAmp ? 'amp' : 'light') +'.title')"
-						:description="$t('onboard.info.'+ (isAmp ? 'amp' : 'light') +'.description')"
+						:title="$t('onboard.info.' + (isAmp ? 'amp' : 'light') + '.title')"
+						:description="$t('onboard.info.' + (isAmp ? 'amp' : 'light') + '.description')"
 						color="warning"
 						:nodata="!sensorValueLoaded"
 						:disabled="!sensorViewLoaded"
@@ -151,7 +161,7 @@ export default {
 			return type >= EDeviceType.PJCAN_41A;
 		});
 		const disableVoltmeter = computed((): boolean => store.getters["config/device"].disableVoltmeter);
-		const isTemperatureOut = computed((): boolean =>
+		const isTemperature = computed((): boolean =>
 		{
 			const carModel = store.getters["config/carModel"];
 			return (
@@ -160,6 +170,8 @@ export default {
 				carModel === TCarModel.CAR_MODEL_MAZDA_CX7_REST
 			);
 		});
+		const isTemperatureIn = computed((): boolean => store.getters["value/temperature"].isIn);
+		const isTemperatureOut = computed((): boolean => store.getters["value/temperature"].isOut);
 		const isReverse = computed((): boolean =>
 		{
 			const carModel = store.getters["config/carModel"];
@@ -197,7 +209,8 @@ export default {
 		const acc = computed((): boolean => store.getters["value/sensors"].acc);
 		const worktime = computed((): number => store.getters["value/device"].worktime);
 		const voltmeter = computed((): number => store.getters["value/device"].voltmeter / 100);
-		const temperatureOut = computed((): number => store.getters["value/temperature"].out / 10);
+		const temperatureIn = computed((): number => store.getters["value/temperature"].in);
+		const temperatureOut = computed((): number => store.getters["value/temperature"].out);
 		const handbrake = computed((): boolean => store.getters["value/sensors"].handbrake);
 		const reverse = computed((): boolean => store.getters["value/device"].stateReverse);
 		const amp = computed((): boolean => store.getters["value/device"].stateAmpIllum);
@@ -299,6 +312,8 @@ export default {
 			temperatureViewLoaded,
 			isVoltmeter,
 			disableVoltmeter,
+			isTemperature,
+			isTemperatureIn,
 			isTemperatureOut,
 			isReverse,
 			isAmp,
@@ -308,6 +323,7 @@ export default {
 			acc,
 			worktime,
 			voltmeter,
+			temperatureIn,
 			temperatureOut,
 			handbrake,
 			reverse,

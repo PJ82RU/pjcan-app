@@ -93,7 +93,8 @@ import {
 import {
 	API_TEMPERATURE_VALUE_EVENT,
 	API_TEMPERATURE_VIEW_EVENT,
-	API_TEMPERATURE_VIEW_EXEC
+	API_TEMPERATURE_VIEW_EXEC,
+	TemperatureValue
 } from "@/models/pjcan/temperature";
 import { ChoiceValue } from "@/models/pjcan/choice";
 import {
@@ -116,7 +117,11 @@ export default {
 		moment.locale(locale.value);
 
 		// записываем входящую конфигурацию в store
-		canbus.addListener(API_VERSION_EVENT, (data: DataView): void => store.commit("config/setVersion", data));
+		canbus.addListener(API_VERSION_EVENT, (data: DataView): void =>
+		{
+			store.commit("config/setVersion", data);
+			TemperatureValue.update(store.getters["config/version"]);
+		});
 		canbus.addListener(API_DEVICE_INFO_EVENT, (data: DataView): void => store.commit("config/setInfo", data));
 		canbus.addListener(API_DEVICE_CONFIG_EVENT, (data: DataView): void => store.commit("config/setDevice", data));
 		canbus.addListener(API_ONBOARD_CONFIG_EVENT, (data: DataView): void =>

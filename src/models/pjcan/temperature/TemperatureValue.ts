@@ -1,6 +1,7 @@
 import { BluetoothStruct } from "@/components/bluetooth";
 import { BaseModel } from "../base";
 import { ITemperatureValue } from "./ITemperatureValue";
+import { IVersion } from "../version";
 
 export const API_TEMPERATURE_VALUE_EXEC = 0xd1;
 export const API_TEMPERATURE_VALUE_EVENT = "TemperatureValue";
@@ -11,14 +12,39 @@ export const API_TEMPERATURE_VIEW_EVENT = "TemperatureView";
 /** Модель значений температуры */
 export class TemperatureValue extends BaseModel implements ITemperatureValue
 {
-	static struct: any = {
-		in: BluetoothStruct.int16(),
-		out: BluetoothStruct.int16()
-	};
-	static size: number = 4;
+	static struct: any;
+	static size: number;
 
-	in = 1000;
-	out = 1000;
+	/**
+	 * Обновить версию структуры
+	 * @param {IVersion} version Версия протокола
+	 */
+	static update(version?: IVersion): void
+	{
+		if (version && version.major >= 4 && version.minor >= 1 && version.build >= 2)
+		{
+			TemperatureValue.struct = {
+				isIn: BluetoothStruct.bit(),
+				isOut: BluetoothStruct.bit(),
+				in: BluetoothStruct.int8(),
+				out: BluetoothStruct.int8()
+			};
+			TemperatureValue.size = 3;
+		}
+		else
+		{
+			TemperatureValue.struct = {
+				in: BluetoothStruct.int16(),
+				out: BluetoothStruct.int16()
+			};
+			TemperatureValue.size = 4;
+		}
+	}
+
+	isIn = false;
+	isOut = false;
+	in = 0;
+	out = 0;
 
 	constructor(data?: DataView)
 	{
@@ -32,7 +58,13 @@ export class TemperatureValue extends BaseModel implements ITemperatureValue
 	 */
 	set(buf: DataView): boolean
 	{
-		return this._set(this, this.exec, TemperatureValue.size, new BluetoothStruct(TemperatureValue.struct), buf);
+		const result: boolean = this._set(this, this.exec, TemperatureValue.size, new BluetoothStruct(TemperatureValue.struct), buf);
+		if (result && TemperatureValue.size === 4)
+		{
+			this.isOut = true;
+			this.out /= 10;
+		}
+		return result;
 	}
 
 	/** Чтение данных */
@@ -41,3 +73,5 @@ export class TemperatureValue extends BaseModel implements ITemperatureValue
 		return this._get(this, this.exec);
 	}
 }
+
+TemperatureValue.update();
