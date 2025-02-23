@@ -79,11 +79,11 @@
 						:disabled="!sensorViewLoaded"
 					/>
 				</v-col>
-				<v-col cols="12" class="pt-0 pb-0">
+				<v-col v-if="isAmp" cols="12" class="pt-0 pb-0">
 					<switch-card-item
 						:model-value="amp"
-						:title="$t('onboard.info.' + (isAmp ? 'amp' : 'light') + '.title')"
-						:description="$t('onboard.info.' + (isAmp ? 'amp' : 'light') + '.description')"
+						:title="$t('onboard.info.amp.title')"
+						:description="$t('onboard.info.amp.description')"
 						color="warning"
 						:nodata="!sensorValueLoaded"
 						:disabled="!sensorViewLoaded"
