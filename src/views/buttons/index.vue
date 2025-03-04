@@ -125,7 +125,11 @@ export default {
 				);
 			}
 
-			const list: any = tm("buttons.functions");
+			const version = store.getters["config/version"];
+			const list: any = tm(
+				"buttons.functions." +
+					(version.major === 4 && version.minor >= 1 && version.build >= 5 ? "v4_1_5" : "default")
+			);
 			const result = [];
 			for (const key in list)
 			{

@@ -32,7 +32,8 @@ import {
 	API_HEAD_UNIT_CONFIG_EVENT,
 	API_HEAD_UNIT_CONFIG_EXEC,
 	API_HEAD_UNIT_VIEW_EVENT,
-	API_HEAD_UNIT_VIEW_EXEC
+	API_HEAD_UNIT_VIEW_EXEC,
+	HeadUnitValue
 } from "@/models/pjcan/head-unit";
 import { API_SW1_VALUE_EVENT, API_SW1_CONFIG_EVENT } from "@/models/pjcan/buttons";
 import {
@@ -120,7 +121,9 @@ export default {
 		canbus.addListener(API_VERSION_EVENT, (data: DataView): void =>
 		{
 			store.commit("config/setVersion", data);
-			TemperatureValue.update(store.getters["config/version"]);
+			const version = store.getters["config/version"];
+			HeadUnitValue.update(version);
+			TemperatureValue.update(version);
 		});
 		canbus.addListener(API_DEVICE_INFO_EVENT, (data: DataView): void => store.commit("config/setInfo", data));
 		canbus.addListener(API_DEVICE_CONFIG_EVENT, (data: DataView): void => store.commit("config/setDevice", data));
