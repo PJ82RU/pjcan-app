@@ -126,17 +126,16 @@ export default {
 			}
 
 			const version = store.getters["config/version"];
-			const list: any = tm(
-				"buttons.functions." +
-					(version.major === 4 && version.minor >= 1 && version.build >= 5 ? "v4_1_5" : "default")
-			);
+			const list: any = tm("buttons.functions");
+			const maxIndex = version.major === 4 && version.minor >= 1 && version.build >= 5 ? 42 : 41;
 			const result = [];
 			for (const key in list)
 			{
 				const index = parseInt(key);
-				if (excludeId.indexOf(index) < 0)
+				if (index <= maxIndex && excludeId.indexOf(index) < 0)
 				{
-					result.push({ label: list[key], value: index });
+					if (index === 42) result.splice(19, 0, { label: list[key], value: index });
+					else result.push({ label: list[key], value: index });
 				}
 			}
 			return result;
