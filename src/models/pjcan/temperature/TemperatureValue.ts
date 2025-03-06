@@ -21,7 +21,7 @@ export class TemperatureValue extends BaseModel implements ITemperatureValue
 	 */
 	static update(version?: IVersion): void
 	{
-		if (version && version.major >= 4 && version.minor >= 1 && version.build >= 2)
+		if (version?.major === 4 && ((version.minor === 1 && version.build >= 2) || version.minor > 1))
 		{
 			TemperatureValue.struct = {
 				isIn: BluetoothStruct.bit(),

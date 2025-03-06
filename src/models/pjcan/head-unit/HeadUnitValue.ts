@@ -22,7 +22,7 @@ export class HeadUnitValue extends BaseModel implements IHeadUnitValue
 	 */
 	static update(version?: IVersion): void
 	{
-		if (version && version.major >= 4 && version.minor >= 1 && version.build >= 5)
+		if (version?.major === 4 && ((version.minor === 1 && version.build >= 5) || version.minor > 1))
 		{
 			HeadUnitValue.struct = {
 				clock: BluetoothStruct.struct({
