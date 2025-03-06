@@ -66,7 +66,12 @@ import {
 	API_FUEL_VIEW_EXEC
 } from "@/models/pjcan/fuel";
 import { API_CANBUS_EVENT } from "@/models/pjcan/base/BaseModel";
-import { API_CLIMATE_VALUE_EVENT, API_CLIMATE_VIEW_EVENT, API_CLIMATE_VIEW_EXEC } from "@/models/pjcan/climate";
+import {
+	API_CLIMATE_VALUE_EVENT,
+	API_CLIMATE_VIEW_EVENT,
+	API_CLIMATE_VIEW_EXEC,
+	ClimateValue
+} from "@/models/pjcan/climate";
 import {
 	API_DOORS_CONFIG_EVENT,
 	API_DOORS_CONFIG_EXEC,
@@ -122,6 +127,7 @@ export default {
 		{
 			store.commit("config/setVersion", data);
 			const version = store.getters["config/version"];
+			ClimateValue.update(version);
 			HeadUnitValue.update(version);
 			TemperatureValue.update(version);
 		});

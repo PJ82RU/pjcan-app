@@ -4,7 +4,7 @@
 			<v-row>
 				<v-col cols="12" class="pb-0">
 					<icon-card-item
-						:model-value="[enabled]"
+						:model-value="[power]"
 						:title="$t('onboard.climate.enabled.title')"
 						:description="$t('onboard.climate.enabled.description')"
 						:icon-name="['climate']"
@@ -45,7 +45,7 @@
 				</v-col>
 				<v-col cols="12" class="pt-0 pb-0">
 					<icon-card-item
-						:model-value="[airEnabled]"
+						:model-value="[power]"
 						:title="$t('onboard.climate.air.title')"
 						:description="$t('onboard.climate.air.description')"
 						:icon-name="[airIconName]"
@@ -55,7 +55,7 @@
 				</v-col>
 				<v-col cols="12" class="pt-0 pb-0">
 					<icon-card-item
-						:model-value="[blowWindshield, blowEnabled]"
+						:model-value="[heatedFrontWindow, blowEnabled]"
 						:title="$t('onboard.climate.blow.title')"
 						:description="$t('onboard.climate.blow.description')"
 						:icon-name="['blow-windshield', blowName]"
@@ -100,44 +100,39 @@ export default {
 		const climateValueLoaded = computed((): boolean => store.getters["value/climate"].isData);
 		const climateViewLoaded = computed((): boolean => store.getters["view/climate"].isData);
 
-		const enabled = computed((): boolean => store.getters["value/climate"].on);
+		const power = computed((): boolean => store.getters["value/climate"].power);
 		const rotation = computed((): number =>
 		{
-			const res = store.getters["value/climate"];
+			const res = store.getters["value/climate"].driver;
 			return res.airRate > 0 && res.airRate < 8 ? 1 - res.airRate / 10 : 0;
 		});
 		const autoMode = computed((): boolean => store.getters["value/climate"].automode);
 		const ac = computed((): boolean => store.getters["value/climate"].ac);
 		const temperature = computed((): number =>
 		{
-			const res = store.getters["value/climate"];
+			const res = store.getters["value/climate"].driver;
 			return res.temperature > 0 ? res.temperature / 10 : 0;
 		});
-		const airEnabled = computed((): boolean =>
-		{
-			const res = store.getters["value/climate"];
-			return res.airInside || res.airOutside;
-		});
 		const airIconName = computed((): string =>
-			store.getters["value/climate"].airInside ? "air-inside" : "air-outside"
+			store.getters["value/climate"].airIntake ? "air-inside" : "air-outside"
 		);
 		const blowEnabled = computed((): boolean =>
 		{
-			const res = store.getters["value/climate"];
-			return res.airDBody || res.airDLegs;
+			const res = store.getters["value/climate"].driver;
+			return res.airFlowBody || res.airFlowLegs;
 		});
 		const blowName = computed((): string =>
 		{
-			const res = store.getters["value/climate"];
-			return res.airDLegs && res.airDBody
+			const res = store.getters["value/climate"].driver;
+			return res.airFlowLegs && res.airFlowBody
 				? "blow-feet-body"
-				: res.airDLegs
+				: res.airFlowLegs
 					? "blow-feet"
-					: res.airDBody
+					: res.airFlowBody
 						? "blow-body"
 						: "blow-none";
 		});
-		const blowWindshield = computed((): boolean => store.getters["value/climate"].airDWindshield);
+		const heatedFrontWindow = computed((): boolean => store.getters["value/climate"].heatedFrontWindow);
 
 		const menu = computed((): IMenuItem[] => [
 			{
@@ -171,16 +166,15 @@ export default {
 		return {
 			climateValueLoaded,
 			climateViewLoaded,
-			enabled,
+			power,
 			rotation,
 			autoMode,
 			ac,
 			temperature,
-			airEnabled,
 			airIconName,
 			blowEnabled,
 			blowName,
-			blowWindshield,
+			heatedFrontWindow,
 			menu,
 			menuVisible,
 			menuSelected,
