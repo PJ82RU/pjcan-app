@@ -19,7 +19,7 @@
 				@update:extended="onUpdateExtended(cardButton.id, $event)"
 				@update:exec="onUpdateExec(cardButton.id, $event)"
 				@update:exec-mode="onUpdateExecMode(cardButton.id, $event)"
-				@click="onButtonEdit(cardButton)"
+				@click="onButtonEdit(cardButton, index)"
 			/>
 		</div>
 	</flicking>
@@ -33,7 +33,7 @@
 </template>
 
 <script lang="ts">
-import { computed, provide, ref } from "vue";
+import { computed, provide, ref, watch } from "vue";
 import { useDisplay } from "vuetify";
 import { useI18n } from "vue-i18n";
 import store from "@/store";
@@ -172,13 +172,24 @@ export default {
 		};
 
 		const selected = ref({} as ISW1Card);
+		let lastIndex = -1;
+		watch(listOfResistance, () =>
+		{
+			if (buttonEditVisible.value && lastIndex >= 0 && lastIndex < cardButtons.value.length)
+			{
+				selected.value = cardButtons.value[lastIndex];
+			}
+		});
+
 		/**
 		 * Открыть окно редактирования кнопки
 		 * @param {ISW1Card} cardButton Значения кнопки
+		 * @param {Number} index Индекс
 		 */
-		const onButtonEdit = (cardButton: ISW1Card): void =>
+		const onButtonEdit = (cardButton: ISW1Card, index: number): void =>
 		{
 			selected.value = cardButton;
+			lastIndex = index;
 			store.commit("value/setSW1Resistance");
 			buttonEditVisible.value = true;
 		};
