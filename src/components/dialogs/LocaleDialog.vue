@@ -65,7 +65,11 @@ export default {
 		});
 		const locales = computed(() => ([
 			{ label: "Русский", value: "ru" },
-			{ label: "English", value: "en" }
+			{ label: "English", value: "en" },
+			{ label: "Español", value: "es" },
+			{ label: "Polski", value: "pl" },
+			{ label: "Deutsch", value: "de" },
+			{ label: "Français", value: "fr" }
 		]));
 		const language = computed({
 			get: (): string => store.getters["app/language"],

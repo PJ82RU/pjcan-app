@@ -43,8 +43,8 @@ export default {
 			later: "Later"
 		},
 		dialog: {
-			updateTo: "Update PJCAN firmware to version {version} ?",
-			rollbackTo: "Rollback PJCAN firmware to version {version} ?",
+			updateTo: "Update PJCAN firmware to version {version}?",
+			rollbackTo: "Rollback PJCAN firmware to version {version}?",
 			browserOutdated: "Your browser version is outdated.\n" + "Update it and open the web application again."
 		},
 		process: {
@@ -55,45 +55,46 @@ export default {
 		},
 		notify: {
 			newVersion: "Update available {version}",
-			completed: "Firmware completed successfully",
-			warning: "The firmware was not completed successfully. Turn your device off and on and try updating again",
+			completed: "Firmware update completed successfully",
+			warning: "The firmware update failed. Turn the device off and on, then try updating again.",
 			error: "Firmware update error",
-			errorDownload: "Error downloading firmware from the server. You may not be connected to the Internet",
-			errorUpload: "Error uploading firmware to PJCAN device. Possibly no Bluetooth connection",
-			errorWaitUpdate: "The PJCAN device timed out. Turn your device off and on and try updating again"
+			errorDownload: "Error downloading firmware from the server. There may be no internet connection.",
+			errorUpload: "Error uploading firmware to PJCAN device. There may be no Bluetooth connection.",
+			errorWaitUpdate:
+				"The PJCAN device has timed out. Turn the device off and on, and then try updating again."
 		}
 	},
 
 	error: {
-		title: "What are you watching,\nwrite PJ82",
-		version: "Error requesting the device version. Reconnect the PJCAN device"
+		title: "What are you looking at,\nwrite to PJ82",
+		version: "Error requesting device version. Reconnect the PJCAN device."
 	},
 
 	rules: {
-		required: "Required",
-		counter: "Max {n} characters | Max {n} character | Max {n} characters | Max {n} characters",
-		english: "Invalid English"
+		required: "Required field",
+		counter: "Maximum {n} characters | Maximum {n} character | Maximum {n} characters | Maximum {n} characters",
+		english: "Only Latin characters and numbers are allowed."
 	},
 
 	menu: {
-		onboard: "On-board",
+		onboard: "On-board computer",
 		onboardButtons: "On-board buttons",
 		test: "Testing",
-		language: "Language",
+		language: "Language selection",
 		settings: {
 			buttonsSW1: "Steering wheel buttons",
 			buttonsSW3: "SW3 buttons",
 			options: "Options"
 		},
-		update: "Upgrade to {version}",
+		update: "Update to {version}",
 		rollback: "Rollback to {version}",
 		install: "Install",
 		about: "About"
 	},
 
 	activation: {
-		success: "Device successfully activated! The device is rebooting...",
-		error: "The device is not activated. Contact the developer."
+		success: "Device activated successfully! Rebooting...",
+		error: "Device not activated. Contact the developer."
 	},
 
 	about: {
@@ -107,24 +108,24 @@ export default {
 
 	deviceInfo: {
 		title: "Technical information",
-		cpuFreqMHz: "CPU freq MHz",
-		efuseMac: "Efuse MAC",
-		freeSketchSpace: "Free sketch space",
+		cpuFreqMHz: "CPU freq, MHz",
+		efuseMac: "MAC address",
+		freeSketchSpace: "Free space for firmware",
 		sdkVersion: "SDK version",
-		sketchMD5: "Sketch MD5",
-		sketchSize: "Sketch size",
-		temperatureChip: "Temperature chip",
+		sketchMD5: "Firmware MD5",
+		sketchSize: "Firmware size",
+		temperatureChip: "Chip temperature",
 		sha: "SHA",
 		hardware: "Board version"
 	},
 
 	deviceReset: {
 		title: "Reset device configuration",
-		config: "Reset the general default configuration",
-		configShort: "The general configuration",
-		view: "Reset the default display configuration",
+		config: "Reset general configuration to factory settings",
+		configShort: "General configuration",
+		view: "Reset display settings to factory defaults",
 		viewShort: "Display configuration",
-		buttons: "Reset the default button configuration",
+		buttons: "Reset button settings to factory defaults",
 		buttonsShort: "Button configuration"
 	},
 
@@ -139,26 +140,26 @@ export default {
 	},
 
 	onboard: {
-		title: "On-board",
+		title: "On-board computer",
 
 		viewSetting: {
 			enabled: {
 				title: "Display information",
-				titleShort: "Display information",
-				description: "Status display information on the information screen"
+				titleShort: "Display",
+				description: "Information display status on the information screen"
 			},
 			type: {
 				title: "Information display style",
-				description: "Display static text, blinking or in a ticker style",
-				items: ["Plain text", "Flashing text", "Ticker"]
+				description: "Display static, blinking, or scrolling text",
+				items: ["Plain text", "Blinking text", "Scrolling text"]
 			},
 			time: {
 				title: "Display time, sec.",
-				description: "Show the specified number of seconds on the information screen"
+				description: "Show on the information screen for the specified number of seconds"
 			},
 			delay: {
 				title: "Display pause time, sec.",
-				description: "Pause the information display for the specified number of seconds"
+				description: "Pause information display for the specified number of seconds"
 			}
 		},
 
@@ -169,83 +170,83 @@ export default {
 				description: "Car power"
 			},
 			worktime: {
-				title: "Worktime",
-				description: "Operating time of the device from the moment of switching on",
-				menu: "LCD: Worktime"
+				title: "Work time",
+				description: "Device operating time since power-on",
+				menu: "LCD: Work time"
 			},
 			voltmeter: {
 				title: "Voltage",
-				description: "On-board mains voltage in volts (the average value for 10 sec.)",
+				description: "On-board network voltage in volts (average value for 10 seconds)",
 				menu: "LCD: Voltage"
 			},
 			temperatureIn: {
-				title: "Temperature in the cabin",
-				description: "Temperature readings inside the car",
+				title: "Interior temperature",
+				description: "Car interior temperature readings",
 				menu: "LCD: Air temperature"
 			},
 			temperatureOut: {
-				title: "Temperature outside",
-				description: "Vehicle outside temperature readings",
+				title: "Exterior temperature",
+				description: "Car exterior temperature readings",
 				menu: "LCD: Air temperature"
 			},
 			signals: {
 				title: "Signals"
 			},
 			handbrake: {
-				title: "Hand brake",
+				title: "Handbrake",
 				description: "Handbrake position",
-				menu: "LCD: Hand brake"
+				menu: "LCD: Handbrake"
 			},
 			reverse: {
-				title: "Reverse",
-				description: "Gear knob in R",
-				menu: "LCD: Reverse"
+				title: "Reverse gear",
+				description: "Gear lever in R position",
+				menu: "LCD: Reverse gear"
 			},
 			light: {
 				title: "Backlight",
-				description: "Backlight pin"
+				description: "Backlight contact"
 			},
 			amp: {
 				title: "AMP Cont",
-				description: "Bose power on pin"
+				description: "Bose power on contact"
 			},
 			safetyBelt: {
-				title: "Safety belt",
-				description: "Seat belt driver and passenger",
-				menu: "LCD: Safety belt"
+				title: "Seat belt",
+				description: "Driver and passenger seat belt",
+				menu: "LCD: Seat belt"
 			},
 			signal: {
 				title: "Turn signal",
-				description: "Turn signal and emergency stop",
+				description: "Turn signal and emergency stop signal",
 				menu: "LCD: Turn signal"
 			},
 			device: {
 				title: "Device parameters",
 				menu: "Device parameters",
 				disableLedWork: {
-					title: "Pin LED_WORK",
-					description: "Control the LED_WORK pin"
+					title: "LED_WORK contact",
+					description: "Control of the LED_WORK contact"
 				},
 				disableReverse: {
-					title: "Pin REVERSE",
-					description: "Control the REVERSE pin"
+					title: "REVERSE contact",
+					description: "Control of the REVERSE contact"
 				},
 				disableRPosition: {
-					title: "Pin R_POSITION",
-					description: "Control the R_POSITION pin"
+					title: "R_POSITION contact",
+					description: "Control of the R_POSITION contact"
 				},
 				disableAmpIllum: {
-					title: "Pin AMP_ILLUM",
-					description: "Control the AMP_ILLUM pin"
+					title: "AMP_ILLUM contact",
+					description: "Control of the AMP_ILLUM contact"
 				},
 				disableVoltmeter: {
 					title: "Voltmeter",
-					description: "Turn on/off the voltmeter"
+					description: "Enable/disable voltmeter"
 				},
 				calibrationOfVoltmeter: {
-					title: "Calibration of the voltmeter",
+					title: "Voltmeter calibration",
 					titleShort: "Calibration",
-					description: "A positive number decreases the value of the voltmeter, a negative number increases"
+					description: "A positive number decreases the voltmeter value, a negative number increases it"
 				}
 			}
 		},
@@ -255,18 +256,18 @@ export default {
 
 			enabled: {
 				title: "Engine operation",
-				description: "Current state of the internal combustion engine",
+				description: "Current engine status",
 				menu: "LCD: Engine operation"
 			},
 			RPM: {
 				title: "Engine RPM",
-				description: "Current number of complete engine revolutions per minute",
+				description: "Current number of full engine crankshaft revolutions per minute",
 				menu: "LCD: Engine RPM"
 			},
 			countRPM: {
 				title: "RPM counter",
 				titleShort: "RPM counter",
-				description: "Total number of complete engine revolutions of the engine crankshaft in thousands",
+				description: "Total number of full engine crankshaft revolutions in thousands",
 				menu: "LCD: RPM counter"
 			},
 			load: {
@@ -276,7 +277,7 @@ export default {
 			},
 			worktime: {
 				title: "Engine hours",
-				description: "Total engine running time",
+				description: "Total engine operating time",
 				menu: "LCD: Engine hours"
 			},
 			throttle: {
@@ -289,21 +290,17 @@ export default {
 				description: "Coolant temperature",
 				menu: "LCD: Coolant temperature"
 			},
-			distanceLeft: {
-				title: "Distance left, km",
-				description: "Forecast of the remaining mileage before oil change"
-			},
 			oilLifePercent: {
-				title: "Remaining oil life, %",
-				titleShort: "Oil life, %",
-				description: "Remaining oil life in percentage",
+				title: "Oil life, %",
+				titleShort: "Life, %",
+				description: "Remaining oil life in percent",
 				menu: "LCD: Oil life, %"
 			},
 			oilLifeDistance: {
-				title: "Remaining oil distance, km",
-				titleShort: "Oil dist., km",
-				description: "Remaining oil distance in kilometers",
-				menu: "LCD: Oil dist., km"
+				title: "Mileage to oil change, km",
+				titleShort: "Mileage, km",
+				description: "Remaining mileage to oil change in kilometers",
+				menu: "LCD: Mileage to change, km"
 			},
 			statistics: {
 				title: "Statistics"
@@ -317,26 +314,26 @@ export default {
 					description: "Display engine hours on the information screen in d.hh:mm:ss format"
 				},
 				worktime: {
-					title: "Engine operating time, min.",
+					title: "Operating time, min.",
 					description: "Total engine operating time"
 				},
 				countRPM: {
 					title: "RPM counter, thous.",
-					description: "Total number of full speed of the crankshaft of the engine in thousands"
+					description: "Total number of full engine crankshaft revolutions in thousands"
 				}
 			},
 			oilSettings: {
 				title: "Oil statistics settings",
 				menu: "Oil statistics",
 				oilDurationHours: {
-					title: "Engine running time on current oil, h.",
-					titleShort: "Oil time, h.",
-					description: "Total engine running time on the current oil"
+					title: "Operating time on oil, h.",
+					titleShort: "Operating time, h.",
+					description: "Total engine operating time on the current oil"
 				},
 				oilDistanceKm: {
-					title: "Car mileage on current oil, km.",
-					titleShort: "Oil mileage, km.",
-					description: "Total mileage of the car on the current oil"
+					title: "Mileage on oil, km",
+					titleShort: "Mileage, km",
+					description: "Total car mileage on the current oil"
 				},
 				oilHoursLimit: {
 					title: "Oil change limit, h.",
@@ -344,15 +341,15 @@ export default {
 					description: "Engine hours limit for oil change"
 				},
 				oilHoursLimitItems: [
-					"ILSAC / Japan (220 h) - for Mazda (Default)",
-					"ACEA / Europe (250 h) - robust oils",
-					"PAO / Premium (300 h) - PAO synthetics",
-					"Mineral (180 h) - simple oils",
+					"ILSAC / Japan (220 h) — for Mazda (Default)",
+					"ACEA / Europe (250 h) — strong oils",
+					"PAO / Premium (300 h) — PAO-synthetics",
+					"Mineral (180 h) — simple oils",
 					"Custom limit..."
 				],
 				oilHoursLimitCustom: {
 					title: "Custom limit, h.",
-					description: "Enter custom oil change limit (150 to 350 hours)"
+					description: "Enter your custom oil change limit (from 150 to 350 hours)"
 				}
 			}
 		},
@@ -362,20 +359,20 @@ export default {
 
 			current: {
 				title: "Fuel consumption",
-				description: "The value of the on-board, l/100 km",
+				description: "On-board computer value, l/100 km",
 				menu: "LCD: Fuel consumption"
 			},
 			avg: {
 				title: "Average consumption",
-				description: "The value of the on-board, l/100 km",
+				description: "On-board computer value, l/100 km",
 				menu: "LCD: Average consumption"
 			},
 			settings: {
-				title: "Fuel consumption settings",
+				title: "Consumption settings",
 				menu: "Consumption settings",
 				ratio: {
 					title: "Fuel consumption coefficient",
-					description: "To configure the gas flow rate or other type of fuel"
+					description: "For adjusting the consumption of LPG or other fuel types"
 				}
 			}
 		},
@@ -385,18 +382,18 @@ export default {
 
 			speed: {
 				title: "Car speed",
-				description: "On-board value, km/h",
+				description: "On-board computer value, km/h",
 				menu: "LCD: Car speed"
 			},
 			speedAVG: {
 				title: "Average speed",
-				description: "On-board value, km/h",
+				description: "On-board computer value, km/h",
 				menu: "LCD: Average speed"
 			},
 			restWay: {
-				title: "The rest of the way, km",
-				description: "On-board value, km",
-				menu: "LCD: Rest of the way"
+				title: "Remaining distance, km",
+				description: "On-board computer value in km",
+				menu: "LCD: Remaining distance"
 			}
 		},
 
@@ -406,55 +403,55 @@ export default {
 
 			doorFL: {
 				title: "Front left",
-				description: "Current state of front left door"
+				description: "Current state of the front left door"
 			},
 			doorFR: {
 				title: "Front right",
-				description: "Current state of front right door"
+				description: "Current state of the front right door"
 			},
 			doorBL: {
 				title: "Rear left",
-				description: "The current state of the rear left door"
+				description: "Current state of the rear left door"
 			},
 			doorBR: {
 				title: "Rear right",
-				description: "The current state of the rear right door"
+				description: "Current state of the rear right door"
 			},
 			trunk: {
 				title: "Trunk",
-				description: "The current state of the trunk"
+				description: "Current state of the trunk"
 			},
 
 			settings: {
 				title: "Door configuration",
 				frontReverse: {
-					title: "Change the front doors",
-					titleShort: "Change the front doors",
+					title: "Swap front doors",
+					titleShort: "Front doors",
 					description: "Swap the front doors"
 				},
 				backReverse: {
-					title: "Change the rear doors",
-					titleShort: "Change the rear doors",
+					title: "Swap rear doors",
+					titleShort: "Rear doors",
 					description: "Swap the rear doors"
 				},
 				frontBackReverse: {
-					title: "Swap the front with the rear doors",
-					titleShort: "The front with the rear",
-					description: "Swap the left and right doors"
+					title: "Swap front with rear doors",
+					titleShort: "Front with rear",
+					description: "Swap the front and rear doors"
 				}
 			}
 		},
 
 		volume: {
-			title: "Volume",
-			menu: "LCD: Volume",
+			title: "Sound",
+			menu: "LCD: Sound",
 
 			mute: {
-				title: "Turn on volume",
-				description: "Temporarily turn on/off the sound without changing the current level"
+				title: "Mute sound",
+				description: "Temporarily mute the sound without changing the current level"
 			},
 			level: {
-				title: "Volume level",
+				title: "Sound level",
 				description: "Current sound level value"
 			}
 		},
@@ -464,12 +461,12 @@ export default {
 			menu: "LCD: Climate control",
 
 			enabled: {
-				title: "Work status",
-				description: "Operation status of the climate control unit"
+				title: "Operating status",
+				description: "Operating status of the climate control unit"
 			},
 			autoMode: {
 				title: "Auto",
-				description: "Automatic mode of operation of the climate unit"
+				description: "Automatic mode of the climate control unit"
 			},
 			ac: {
 				title: "AC",
@@ -477,14 +474,14 @@ export default {
 			},
 			temperature: {
 				title: "Temperature",
-				description: "Climate unit temperature setpoint"
+				description: "Set temperature value of the climate control unit"
 			},
 			air: {
 				title: "Cabin ventilation",
 				description: "Air circulation inside the cabin"
 			},
 			blow: {
-				title: "Air flow",
+				title: "Airflow",
 				description: "Airflow direction"
 			}
 		},
@@ -494,49 +491,49 @@ export default {
 			menu: "LCD: Bose",
 
 			enabled: {
-				title: "Enabling Bose",
-				description: "Turning on/off the Bose sound amplifier"
+				title: "Enable Bose",
+				description: "Enable/disable the Bose sound amplifier"
 			},
 			audioPLT: {
 				title: "Audio PLT",
 				description:
-					"It is a noise suppression system that continuously adjusts the sound to compensate for background noise and vehicle speed"
+					"It is a noise cancellation system that continuously adjusts the sound to compensate for background noise and vehicle speed"
 			},
 			radioFM: {
 				title: "Radio FM",
-				description: "Turning on/off the FM radio"
+				description: "Enable/disable FM radio"
 			},
 			wow: {
 				title: "Wow",
-				description: "Sound signal when changing parameters"
+				description: "Beep on parameter change"
 			},
 			balance: {
 				title: "Balance",
-				description: "Shifting the sound balance to the right or left"
+				description: "Shift the sound balance to the right or left"
 			},
 			bass: {
 				title: "Bass",
-				description: "Amplification of low frequencies"
+				description: "Low frequency enhancement"
 			},
 			fade: {
 				title: "Fade",
-				description: "Shifting the sound balance forward or backward"
+				description: "Shift the sound balance forward or backward"
 			},
 			treble: {
 				title: "Treble",
-				description: "Amplification of high frequencies"
+				description: "High frequency enhancement"
 			},
 			centerPoint: {
 				title: "CenterPoint",
 				description:
-					"CenterPoint technology converts stereo signals into multi-channel audio and simultaneously creates a wider/surround sound area"
+					"CenterPoint technology converts stereo signals into multi-channel audio and simultaneously creates a wider/more immersive soundstage"
 			},
 
 			volumeConfig: {
-				title: "Setting up the startup",
+				title: "Startup settings",
 				start: {
-					title: "Change the sound level",
-					description: "Set the sound level specified below when turning on the PJCAN adapter"
+					title: "Change sound level",
+					description: "Set the sound level specified below when the PJCAN adapter is turned on"
 				},
 				level: {
 					title: "Sound level",
@@ -552,87 +549,87 @@ export default {
 		hintMode: " (extended mode)",
 
 		mode: "MODE button",
-		seekUp: "SET UP button",
-		seekDown: "SET DOWN button",
+		setUp: "SET UP button",
+		setDown: "SET DOWN button",
 		volUp: "VOL + button",
 		volDown: "VOL - button",
 		volMute: "VOL MUTE button",
 
 		extended: {
 			title: "Extended mode",
-			description: "Support for double, triple button pressing and holding"
+			description: "Support for double, triple press and hold of a button"
 		},
 		resistance: {
 			title: "Button resistance",
-			description: "The resistance interval of the button in units",
+			description: "Button resistance interval",
 			cur: {
 				title: "Current resistance",
-				description: "The value of the resistance of the pressed button. You can't change it"
+				description: "Resistance value of the pressed button. Cannot be changed"
 			},
 			min: {
 				title: "Minimum resistance",
 				description:
-					"Specify the minimum value of the button, but do not allow the values to overlap with other buttons"
+					"Specify the minimum button value, but do not allow values to overlap with other buttons"
 			},
 			max: {
 				title: "Maximum resistance",
 				description:
-					"Specify the maximum value of the button, but do not allow the values to overlap with other buttons"
+					"Specify the maximum button value, but do not allow values to overlap with other buttons"
 			}
 		},
 		pressSingle: {
-			title: "Button pressed 1 time",
+			title: "Button pressed once",
 			description: "The function that is executed when the button is pressed"
 		},
 		pressDual: {
-			title: "Button pressed 2 times",
-			description: "Function that is executed when the button is pressed 2 times"
+			title: "Button pressed twice",
+			description: "The function that is executed when the button is pressed twice"
 		},
 		pressTriple: {
 			title: "Button pressed 3 times",
-			description: "Function that is executed when the button is pressed 3 times"
+			description: "The function that is executed when the button is pressed 3 times"
 		},
 		pressHold: {
 			title: "Button hold",
-			description: "A function that is performed when the button is pressed and held for 3 or more seconds.",
+			description: "The function that is executed when the button is held for 3 or more seconds.",
 			time: {
-				title: "Button holding time",
-				description: "Button holding time, sec."
+				title: "Button hold time",
+				description: "Button hold time, sec."
 			}
 		},
 
 		functions: {
-			0: "Function is missing",
-			1: "PJCAN: change the control mode",
+			0: "No function",
+			1: "PJCAN: change control mode",
 			2: "PJCAN: show engine values",
-			3: "PJCAN: show fuel consumption values",
-			4: "PJCAN: show vehicle movement values",
+			3: "PJCAN: show consumption values",
+			4: "PJCAN: show movement values",
 			5: "PJCAN: show temperature values",
 			6: "PJCAN: show date and time",
-			7: "Head Unit: MUTE button on the steering wheel",
-			8: "Head Unit: MODE button on the steering wheel",
-			9: "Head Unit: SET DOWN button on the steering wheel",
-			10: "Head Unit: SET UP button on the steering wheel",
-			11: "Head Unit: Vol+ button on the steering wheel",
-			12: "Head Unit: Vol- button on the steering wheel",
-			13: "Head Unit: open voice control",
-			14: "Head Unit: open the equalizer",
-			15: "Head Unit: open the radio",
-			16: "Head Unit: search for a radio wave",
-			17: "Head Unit: open the camera",
-			18: "Head Unit: open the phone",
-			42: "Head Unit: play/pause",
-			19: "On-board: INFO button (on-board information)",
-			20: "On-board: CLOCK button (time on the on-board)",
-			21: "On-board: CLOCK H button (hour)",
-			22: "On-board: CLOCK M button (minutes)",
-			23: "On-board: CLOCK 24/12 button (time format change)",
-			24: "On-board: Reset button for minutes to 0",
-			25: "On-board: change the INFO mode to CLOCK and back",
-			26: "On-board: pressing and holding the INFO button (flow reset)",
-			27: "On-board: pressing and holding the CLOCK button (setting the clock)",
-			28: "BOSE: on/off the amplifier",
-			29: "BOSE: on/off Audio PLT",
+			7: "HU: MUTE button on steering wheel",
+			8: "HU: MODE button on steering wheel",
+			9: "HU: SET DOWN button on steering wheel",
+			10: "HU: SET UP button on steering wheel",
+			11: "HU: Vol+ button on steering wheel",
+			12: "HU: Vol- button on steering wheel",
+			13: "HU: open voice control",
+			14: "HU: open equalizer",
+			15: "HU: open radio",
+			16: "HU: search for radio wave",
+			17: "HU: open camera",
+			18: "HU: open phone",
+			42: "HU: Pause/Play",
+			19: "BC: INFO button (BC information)",
+			20: "BC: CLOCK button (time on BC)",
+			21: "BC: CLOCK H button (hours)",
+			22: "BC: CLOCK M button (minutes)",
+			23: "BC: CLOCK 24/12 button (time format change)",
+			24: "BC: reset minutes to 0",
+			25: "BC: switch INFO/CLOCK mode",
+			26: "BC: hold INFO (reset consumption)",
+			27: "BC: hold CLOCK (clock setting)",
+			28: "BOSE: enable/disable amplifier",
+			29: "BOSE: enable/disable Audio PLT",
 			30: "BOSE: MUTE",
 			31: "BOSE: VOL +",
 			32: "BOSE: VOL -",
@@ -644,26 +641,26 @@ export default {
 			38: "BOSE: FADE -",
 			39: "BOSE: TREBLE +",
 			40: "BOSE: TREBLE -",
-			41: "BOSE: switching Center Point modes (cyclically)"
+			41: "BOSE: switch CenterPoint modes (cyclically)"
 		},
 
 		edit: {
-			title: "Editing a button \"{name}\"",
+			title: "Editing button \"{name}\"",
 			beginValue: {
-				title: "Begin value",
-				titleShort: "Begin value",
-				description: "The initial value of the resistance range of the button in units."
+				title: "Initial value",
+				titleShort: "Start",
+				description: "Initial value of the button's resistance range in units."
 			},
 			endValue: {
 				title: "Final value",
-				titleShort: "Final value",
-				description: "The final value of the resistance range of the button in units."
+				titleShort: "End",
+				description: "Final value of the button's resistance range in units."
 			}
 		},
 
 		notify: {
-			detected: "Button \"{id}\" is pressed",
-			notDefined: "The button is not defined!"
+			detected: "Button \"{id}\" pressed",
+			notDefined: "Pressed button is not defined!"
 		}
 	},
 
@@ -687,10 +684,10 @@ export default {
 	test: {
 		title: "Testing",
 		description:
-			"Enter the text (only Latin symbols and numbers), select style and leveling, indicate the display time and click \"Show\"",
+			"Enter text (Latin characters and numbers only), select style and alignment, specify display time and click \"Show\"",
 		text: {
 			title: "Text",
-			description: "The text displayed on the information screen"
+			description: "Text displayed on the information screen"
 		},
 		btnShow: "Show"
 	},
@@ -701,25 +698,24 @@ export default {
 			title: "On-board screen",
 			enabled: {
 				title: "On-board screen",
-				description: "Turn on/off the output of the information on the information screen"
+				description: "Enable/disable information output on the on-board information screen"
 			},
 			logo: {
 				title: "Logo",
-				description:
-					"The test displayed at the time of the absence of data for output to On-board screen. Maximum 12 characters"
+				description: "Text displayed when there is no data to output to the on-board screen. Maximum 12 characters."
 			},
 			hello: {
-				title: "Hello",
-				description: "Displayed test when switched by ACC. Maximum 32 characters",
-				menu: "On-board: Hello"
+				title: "Greeting text",
+				description: "Text displayed when ACC is turned on. Maximum 32 characters.",
+				menu: "BC: Greeting text"
 			}
 		},
 		head: {
-			title: "Head Unit",
-			titleShort: "Head Unit",
+			title: "Head unit",
+			titleShort: "HU",
 			protocol: {
 				title: "UART Protocol",
-				description: "UART protocol for PJCAN communication with Head Unit",
+				description: "UART protocol for communication between PJCAN and the head unit",
 				list: {
 					1: "Raise HM_ND00 2017.12.11 (19200)",
 					2: "Raise HM_ND01 2019.06.21 (38400)",
@@ -729,76 +725,76 @@ export default {
 				}
 			},
 			reverseUart: {
-				title: "Change UART contacts",
-				description: "Enable if there is no PJCAN connection with multimedia"
+				title: "Swap UART contacts",
+				description: "Swap UART contacts if there is no communication between PJCAN and the head unit"
 			},
 			onboardShow: {
-				title: "Show the text Head Unit",
-				titleShort: "Show the text Head Unit",
-				description: "Show the text of the Head Unit on the On-board screen of the logo",
-				menu: "LCD: Show the text Head Unit"
+				title: "Show head unit information",
+				titleShort: "Show HU info",
+				description: "Show head unit text on the on-board screen instead of the logo",
+				menu: "LCD: Show head unit text"
 			},
 			sendButton: {
 				title: "Steering wheel buttons",
-				description: "Control of Head Unit by buttons on the steering wheel"
+				description: "Support for head unit control with steering wheel buttons"
 			},
 			sendClimate: {
-				title: "Show climate on Head Unit",
-				description: "Show climate control values on Head Unit (if the protocol supports this functionality)"
+				title: "Show climate on head unit",
+				description: "Show climate panel on the head unit (if the protocol supports this functionality)"
 			},
 			sendDoors: {
-				title: "Show the status of doors on Head Unit",
-				titleShort: "Show the doors on Head Unit",
-				description: "Show the status of the car doors on Head Unit (if the protocol supports this functionality)"
+				title: "Show door status on head unit",
+				titleShort: "Show doors on HU",
+				description: "Show car door status on the head unit (if the protocol supports this functionality)"
 			},
 			sendOnboard: {
-				title: "Show on-board data on the Head Unit",
-				description: "Show the status of the doors and the values of the vehicle's on-board computer on the Head Unit (if the protocol supports this functionality)"
+				title: "Show on-board data on head unit",
+				description: "Show door status and on-board computer values on the head unit (if the protocol supports this functionality)"
 			},
 			holdToFlip: {
-				title: "Volume control",
+				title: "Volume level control",
 				titleShort: "Volume control",
-				description: "Smooth change of sound level when holding the Vol+/Vol- button (recommended if the Head Unit does not support this functionality)"
+				description: "Smooth volume level change when holding Vol+/Vol- buttons (recommended if the head unit does not support this function)."
 			}
 		},
 		datetime: {
 			title: "Date and time",
 			description:
-				"To display the date and time on the LCD screen, it is necessary to launch a web application to synchronize data with the PJCAN adapter every time the car ignition is turned on.",
+				"To display the date and time on the on-board screen, you need to launch the web application every time you turn on the ignition to synchronize data with the PJCAN adapter.",
 			menu: "LCD: Display options",
 			date: {
 				title: "Show date",
-				description: "Display the current date on the LCD screen"
+				description: "Display the current date on the on-board screen"
 			},
 			time: {
 				title: "Show time",
-				description: "Display the current time on the LCD screen"
+				description: "Display the current time on the on-board screen"
 			},
 			dayWeek: {
-				title: "Show day of week",
-				description: "Display the current day of the week on the LCD screen"
+				title: "Show day of the week",
+				description: "Display the current day of the week on the on-board screen"
 			},
 			dateAndDayWeek: {
-				title: "Show date and day of week",
-				titleShort: "Show date and day of week",
-				description: "Display the current date and day of the week on the LCD screen"
+				title: "Show date and day of the week",
+				titleShort: "Show date and day",
+				description: "Display the current date and day of the week on the on-board screen"
 			},
 			timeAndDayWeek: {
-				title: "Show time and day of week",
-				titleShort: "Show time and day of week",
-				description: "Display the current time and day of the week on the LCD screen"
+				title: "Show time and day of the week",
+				titleShort: "Show time and day",
+				description: "Display the current time and day of the week on the on-board screen"
 			},
 			fullDatetime: {
 				title: "Show full date and time",
 				titleShort: "Show full date and time",
-				description: "Display the current date and time on the LCD screen in full format"
+				description: "Display the current date and time in full format on the on-board screen"
 			}
 		},
 		onboard: {
-			title: "On-board",
-			titleShort: "On-board",
+			title: "On-board computer",
+			titleShort: "BC",
 			description:
-				"A list of cards displayed on the On-Board Computer screen. The order is changed by dragging the block up/down. You can also enable/disable the display on the page",
+				"List of cards displayed on the \"On-board computer\" screen. The order is changed by dragging the blocks. You can also enable/disable the display on the page.",
 			reset: {
 				menu: "Arrange by default"
 			}
@@ -807,103 +803,99 @@ export default {
 
 	scanner: {
 		dialog: {
-			title: "Scanning canbus",
-			text: "Start scanning can-shines?\n" + "Scanning values will be automatically sent PJ82."
+			title: "CAN bus scanning",
+			text: "Start CAN bus scanning?\n" + "The scan data will be automatically sent to PJ82."
 		},
 		btn: {
-			start: "Begin",
+			start: "Start",
 			next: "Next",
 			finish: "Finish"
 		},
 		step: {
 			0: {
-				title: "Scanning of engine values",
-				text: "Run the car engine and press the \"Next\" button"
+				title: "Scanning engine values",
+				text: "Start the car engine and press the \"Next\" button"
 			},
 			1: {
-				title: "Scanning doors",
+				title: "Scanning door values",
 				text:
 					"1. Open the driver's door and close it;\n" +
-					"2. Open the passenger door behind the driver and close it;\n" +
+					"2. Open the rear left door and close it;\n" +
 					"3. Open the trunk and close it;\n" +
-					"4. Open the passenger door behind on the right and close it;\n" +
-					"5. Open the passenger door in front on the right and close it.\n" +
+					"4. Open the rear right door and close it;\n" +
+					"5. Open the front right door and close it.\n" +
 					"\n" +
-					"Return to the salon and click the \"Next\" button"
+					"Return to the cabin and press the \"Next\" button"
 			},
 			2: {
-				title: "Scanning of signal values",
+				title: "Scanning signal values",
 				text:
-					"1. Fasten the driver safety belt;\n" +
-					"2. Fasten the front passenger safety belt;\n" +
-					"3. Fasten the seat belts of the rear passengers;\n" +
-					"4. Turn on the left turn signal, then the right, turn off;\n" +
-					"5. Turn on the emergency stop signal, turn it off.\n" +
+					"1. Fasten the driver's seat belt;\n" +
+					"2. Fasten the front passenger's seat belt;\n" +
+					"3. Fasten the rear passengers' seat belts;\n" +
+					"4. Turn on the left turn signal, then the right, then turn it off;\n" +
+					"5. Turn on the emergency stop signal, then turn it off.\n" +
 					"\n" +
-					"Click \"Next\""
+					"Press the \"Next\" button"
 			},
 			3: {
-				title: "Scanning of climate values",
+				title: "Scanning climate values",
 				text:
-					"1. Turn on/off Auto;\n" +
-					"2. Turn on/off the AC;\n" +
-					"3. Change the direction of the air flow;\n" +
-					"4. Change the speed of the air flow.\n" +
+					"1. Turn on/off AUTO;\n" +
+					"2. Turn on/off AC;\n" +
+					"3. Change the airflow direction;\n" +
+					"4. Change the airflow speed.\n" +
 					"\n" +
-					"Click \"Next\""
+					"Press the \"Next\" button"
 			},
 			4: {
-				title: "Scanning of movement values",
+				title: "Scanning movement values",
 				text:
-					"1. Remove the car from the hand brake;\n" +
-					"2. Turn on the rear gear and hand back a little;\n" +
-					"3. Turn on the automatic transmission mode or switch the PMPP transmission and start moving forward.\n" +
+					"1. Release the handbrake;\n" +
+					"2. Engage reverse gear and back up a little;\n" +
+					"3. Engage drive mode in an automatic transmission or shift gears in a manual transmission and start moving forward.\n" +
 					"\n" +
-					"After completing the movement of the car, drown out the engine and press the \"finish\" button"
+					"After the car has stopped, turn off the engine and press the \"Finish\" button"
 			}
 		},
 		notify: {
-			errorStart: "Scanning is not running.\n" + "Check the connection to the PJCAN device.",
+			errorStart: "Scanning not started.\n" + "Check the connection to the PJCAN device.",
 			errorSend: "Error sending scan data packet.",
-			warningSend: "There is no scan data to send."
+			warningSend: "No scan data to send."
 		},
 		upload: {
-			title: "Uploading to the server",
+			title: "Uploading to server",
 			text: "Uploading scanned values to the server.",
 			leftToLoad:
-				"No packages to download | Left to download {n} package | Left to download {n} package | There are {n} packages left to download"
+				"No packages to upload | {n} package left to upload | {n} packages left to upload | {n} packages left to upload"
 		}
 	},
 
 	choosingCarModel: {
 		title: "Choosing a car model",
 		label: "Car model",
-		description: "The ability to change the car model supported by the PJCAN adapter",
+		description: "Ability to change the car model supported by the PJCAN adapter.",
 		carModels: {
 			0: "Mazda",
 			1: "Mazda 3 BK",
-			2: "Mazda 3 BL (tested)",
+			2: "Mazda 3 BL",
 			3: "Mazda 6 GG",
-			4: "Mazda 6 GH (tested)",
+			4: "Mazda 6 GH (testing)",
 			5: "Mazda CX-7",
 			6: "Mazda CX-7 rest",
 			7: "Mazda CX-9 (gen1)",
 			8: "Mazda CX-9 (gen1) rest",
-			9: "Mazda 5 (tested)"
+			9: "Mazda 5"
 		}
 	},
 
 	help: {
-		buttons: {
-			notify: "Warning! In this section of the menu, the steering wheel buttons operate in programming mode"
-		},
 		onboard: {
-			notify: "Swipe left/right allows you to scroll through the blocks with information",
-			noModelSelected: "Warning! The car model is not selected. Go to the menu - About the program - Car support"
+			notify: "Swipe left/right to scroll through the information blocks"
 		}
 	},
 	language: {
-		title: "Language",
+		title: "Language selection",
 		label: "Interface language",
 		description: "Choose the interface language that suits you"
 	}
