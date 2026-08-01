@@ -23,7 +23,8 @@
 </template>
 
 <script lang="ts">
-import MenuDots, { IMenuItem } from "@/components/MenuDots.vue";
+import { IMenuItem } from "@/components/IMenuItem";
+import MenuDots from "@/components/MenuDots.vue";
 
 export default {
 	name: "Card",

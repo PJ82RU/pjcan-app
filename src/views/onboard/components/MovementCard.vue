@@ -57,7 +57,7 @@ import Card from "@/components/cards/Card.vue";
 import InputCardItem from "@/components/cards/InputCardItem.vue";
 import ViewSettingDialog from "@/components/ViewSettingDialog.vue";
 
-import { IMenuItem } from "@/components/MenuDots.vue";
+import { IMenuItem } from "@/components/IMenuItem";
 import { TCarModel } from "@/models/pjcan/onboard";
 
 export default {

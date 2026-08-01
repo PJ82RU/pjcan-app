@@ -22,15 +22,7 @@
 
 <script lang="ts">
 import { ref } from "vue";
-
-import { IViewConfig } from "@/models/pjcan/view";
-
-export interface IMenuItem {
-	id?: number;
-	title: string;
-	disabled?: boolean;
-	view?: IViewConfig;
-}
+import { IMenuItem } from "./IMenuItem";
 
 export default {
 	name: "MenuDots",

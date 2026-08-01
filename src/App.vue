@@ -54,7 +54,7 @@ import {
 	API_ENGINE_VIEW_RPM_EVENT,
 	API_ENGINE_VIEW_THROTTLE_EVENT,
 	API_ENGINE_VIEW_TOTAL_COUNT_RPM_EVENT,
-	API_ENGINE_VIEW_TOTAL_WORKTIME_EVENT
+	API_ENGINE_VIEW_TOTAL_WORKTIME_EVENT, EngineConfig, EngineValue
 } from "@/models/pjcan/engine";
 import {
 	API_FUEL_CONFIG_EVENT,
@@ -104,6 +104,7 @@ import {
 	API_DATETIME_VIEW_EVENT,
 	API_DATETIME_VIEW_EXEC
 } from "@/models/pjcan/datetime";
+import { EngineAction } from "@/models/pjcan/engine/EngineAction";
 
 export default {
 	name: "App",
@@ -122,6 +123,11 @@ export default {
 		{
 			store.commit("config/setVersion", data);
 			const version = store.getters["config/version"];
+
+			EngineConfig.update(version);
+			EngineValue.update(version);
+			EngineAction.update(version);
+
 			HeadUnitValue.update(version);
 			TemperatureValue.update(version);
 		});

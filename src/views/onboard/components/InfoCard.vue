@@ -58,6 +58,9 @@
 							:disabled="!temperatureViewLoaded"
 						/>
 					</v-col>
+					<v-col cols="12" class="pt-6 pb-0">
+						<span class="settings-card__mode-title">{{ $t('onboard.info.signals.title') }}</span>
+					</v-col>
 					<v-col cols="12" class="pt-0 pb-0">
 						<switch-card-item
 							:model-value="handbrake"
@@ -136,7 +139,7 @@ import SwitchCardItem from "@/components/cards/SwitchCardItem.vue";
 import IconCardItem from "@/components/cards/IconCardItem.vue";
 import ViewSettingDialog from "@/components/ViewSettingDialog.vue";
 
-import { IMenuItem } from "@/components/MenuDots.vue";
+import { IMenuItem } from "@/components/IMenuItem";
 import { TCarModel } from "@/models/pjcan/onboard";
 import { EDeviceType } from "@/models/pjcan/device/EDeviceType";
 
@@ -342,3 +345,12 @@ export default {
 	}
 };
 </script>
+
+<style lang="scss" scoped>
+.settings-card {
+	&__mode-title {
+		text-transform: uppercase;
+		color: $success;
+	}
+}
+</style>

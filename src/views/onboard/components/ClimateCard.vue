@@ -88,7 +88,7 @@ import IconCardItem from "@/components/cards/IconCardItem.vue";
 import SwitchCardItem from "@/components/cards/SwitchCardItem.vue";
 import ViewSettingDialog from "@/components/ViewSettingDialog.vue";
 
-import { IMenuItem } from "@/components/MenuDots.vue";
+import { IMenuItem } from "@/components/IMenuItem";
 
 export default {
 	name: "ClimateCard",

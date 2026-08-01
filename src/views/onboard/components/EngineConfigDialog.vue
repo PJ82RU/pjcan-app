@@ -76,14 +76,14 @@ export default {
 		},
 		/** Показывать дни в моточасах */
 		showDays: Boolean,
-		/** Счетчик моточасов, сек. */
+		/** Счетчик моточасов, мин. */
 		totalWorktime: Number,
-		/** Счетчик коленчатого вала (RPM), об. */
+		/** Счетчик коленчатого вала (RPM), тыс. об. */
 		totalCountRPM: Number,
 		/** Выкл. */
 		disabled: Boolean
 	},
-	emits: ["update:modelValue", "click:apply"],
+	emits: ["update:modelValue", "click:apply", "click:resetConfig"],
 	setup(props: any, context: any)
 	{
 		const { modelValue, showDays, totalWorktime, totalCountRPM } = toRefs(props);
@@ -91,6 +91,7 @@ export default {
 			get: (): boolean => modelValue.value,
 			set: (val: boolean): void => context.emit("update:modelValue", val)
 		});
+
 		const configShowDays = ref(false);
 		const configTotalWorktime = ref(0);
 		const configTotalCountRPM = ref(0);
@@ -108,19 +109,19 @@ export default {
 		/** Сбросить */
 		const onResetClick = (): void =>
 		{
-			configShowDays.value = false;
-			configTotalWorktime.value = 0;
-			configTotalCountRPM.value = 0;
+			context.emit("click:resetConfig");
+			visible.value = false;
 		};
 		/** Применить изменения и закрыть диалог */
 		const onApplyClick = (): void =>
 		{
 			visible.value = false;
-			context.emit("click:apply", {
+			const result: any = {
 				showDays: configShowDays.value,
 				totalWorktime: configTotalWorktime.value,
 				totalCountRPM: configTotalCountRPM.value
-			});
+			};
+			context.emit("click:apply", result);
 		};
 
 		return {

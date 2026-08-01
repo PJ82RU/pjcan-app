@@ -73,7 +73,8 @@ import canbus from "@/api/canbus";
 
 import BluetoothBtn from "../components/BluetoothBtn.vue";
 import UpdateFirmwareDialog from "../components/dialogs/UpdateFirmwareDialog.vue";
-import MenuDots, { IMenuItem } from "@/components/MenuDots.vue";
+import { IMenuItem } from "@/components/IMenuItem";
+import MenuDots from "@/components/MenuDots.vue";
 import AboutDialog from "../components/dialogs/AboutDialog.vue";
 import OnboardButtonsDialog from "../components/dialogs/OnboardButtonsDialog.vue";
 import MessageDialog from "@/components/dialogs/MessageDialog.vue";

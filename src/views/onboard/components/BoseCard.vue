@@ -142,7 +142,7 @@ import SelectCardItem from "@/components/cards/SelectCardItem.vue";
 import ViewSettingDialog from "@/components/ViewSettingDialog.vue";
 import BoseStartDialog from "./BoseStartDialog.vue";
 
-import { IMenuItem } from "@/components/MenuDots.vue";
+import { IMenuItem } from "@/components/IMenuItem";
 import { IBoseConfig, TCenterPoint } from "@/models/pjcan/bose";
 
 export default {

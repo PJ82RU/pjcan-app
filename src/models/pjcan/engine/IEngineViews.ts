@@ -10,4 +10,6 @@ export interface IEngineViews extends IBaseModel {
 	rpm: IViewConfig;
 	load: IViewConfig;
 	throttle: IViewConfig;
+	oilLifePercent: IViewConfig;
+	oilLifeDistance: IViewConfig;
 }

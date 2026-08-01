@@ -284,6 +284,7 @@ export default {
 .settings-card {
 	&__mode-title {
 		text-transform: uppercase;
+		color: $primary;
 	}
 }
 </style>

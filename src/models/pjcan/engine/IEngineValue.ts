@@ -9,6 +9,11 @@ export interface IEngineValue extends IBaseModel {
 	countRPM: number; // Счетчик RPM с момента запуска двигателя, об.
 	load: number; // Нагрузка на ДВС, % (n/1000)
 	throttle: number; // Положение дроссельной заслонки, % (n/100)
+	currentSpeed: number; // Текущая скорость автомобиля, км/ч
+	averageSpeed: number; // Средняя скорость из CAN Mazda, км/ч (для мягкого старта)
+	distanceMeters: number; // Пробег с момента запуска двигателя, м
+	distanceLeftKm: number; // Прогноз остатка пробега до замены масла, км
+	oilLifePercent: number; // Остаток ресурса масла, %
 	viewDays: number; // Счетчик моточасов, дней
 	viewHours: number; // Счетчик моточасов, часов
 	viewMinutes: number; // Счетчик моточасов, минут

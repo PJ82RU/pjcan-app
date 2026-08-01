@@ -188,6 +188,9 @@ export default {
 				description: "Vehicle outside temperature readings",
 				menu: "LCD: Air temperature"
 			},
+			signals: {
+				title: "Signals"
+			},
 			handbrake: {
 				title: "Hand brake",
 				description: "Handbrake position",
@@ -252,7 +255,7 @@ export default {
 
 			enabled: {
 				title: "Engine operation",
-				description: "The current state of the internal combustion engine",
+				description: "Current state of the internal combustion engine",
 				menu: "LCD: Engine operation"
 			},
 			RPM: {
@@ -261,19 +264,20 @@ export default {
 				menu: "LCD: Engine RPM"
 			},
 			countRPM: {
-				title: "RPM counter, thous.",
-				description: "The total number of complete revolutions of the engine crankshaft in thousands",
+				title: "RPM counter",
+				titleShort: "RPM counter",
+				description: "Total number of complete engine revolutions of the engine crankshaft in thousands",
 				menu: "LCD: RPM counter"
 			},
 			load: {
 				title: "Engine load",
-				description: "The load of something on something, I don’t know how it is calculated",
+				description: "Engine load percentage",
 				menu: "LCD: Engine load"
 			},
 			worktime: {
-				title: "Hours",
+				title: "Engine hours",
 				description: "Total engine running time",
-				menu: "LCD: Hours"
+				menu: "LCD: Engine hours"
 			},
 			throttle: {
 				title: "Throttle position",
@@ -285,21 +289,70 @@ export default {
 				description: "Coolant temperature",
 				menu: "LCD: Coolant temperature"
 			},
+			distanceLeft: {
+				title: "Distance left, km",
+				description: "Forecast of the remaining mileage before oil change"
+			},
+			oilLifePercent: {
+				title: "Remaining oil life, %",
+				titleShort: "Oil life, %",
+				description: "Remaining oil life in percentage",
+				menu: "LCD: Oil life, %"
+			},
+			oilLifeDistance: {
+				title: "Remaining oil distance, km",
+				titleShort: "Oil dist., km",
+				description: "Remaining oil distance in kilometers",
+				menu: "LCD: Oil dist., km"
+			},
+			statistics: {
+				title: "Statistics"
+			},
 			settings: {
-				title: "Settings of engine statistics",
-				menu: "Statistics settings",
+				title: "Engine statistics settings",
+				menu: "Engine statistics",
 				showDays: {
 					title: "Show days in statistics",
-					titleShort: "Show days in statistics",
-					description: "Display the mothers on the information screen in d.hh:mm:ss"
+					titleShort: "Show days",
+					description: "Display engine hours on the information screen in d.hh:mm:ss format"
 				},
 				worktime: {
-					title: "Opening time, min.",
+					title: "Engine operating time, min.",
 					description: "Total engine operating time"
 				},
 				countRPM: {
 					title: "RPM counter, thous.",
-					description: "The total number of full speed of the crankshaft of the engine in thousands"
+					description: "Total number of full speed of the crankshaft of the engine in thousands"
+				}
+			},
+			oilSettings: {
+				title: "Oil statistics settings",
+				menu: "Oil statistics",
+				oilDurationHours: {
+					title: "Engine running time on current oil, h.",
+					titleShort: "Oil time, h.",
+					description: "Total engine running time on the current oil"
+				},
+				oilDistanceKm: {
+					title: "Car mileage on current oil, km.",
+					titleShort: "Oil mileage, km.",
+					description: "Total mileage of the car on the current oil"
+				},
+				oilHoursLimit: {
+					title: "Oil change limit, h.",
+					titleShort: "Oil limit, h.",
+					description: "Engine hours limit for oil change"
+				},
+				oilHoursLimitItems: [
+					"ILSAC / Japan (220 h) - for Mazda (Default)",
+					"ACEA / Europe (250 h) - robust oils",
+					"PAO / Premium (300 h) - PAO synthetics",
+					"Mineral (180 h) - simple oils",
+					"Custom limit..."
+				],
+				oilHoursLimitCustom: {
+					title: "Custom limit, h.",
+					description: "Enter custom oil change limit (150 to 350 hours)"
 				}
 			}
 		},
@@ -634,7 +687,7 @@ export default {
 	test: {
 		title: "Testing",
 		description:
-			'Enter the text (only Latin symbols and numbers), select style and leveling, indicate the display time and click "Show"',
+			"Enter the text (only Latin symbols and numbers), select style and leveling, indicate the display time and click \"Show\"",
 		text: {
 			title: "Text",
 			description: "The text displayed on the information screen"
@@ -765,7 +818,7 @@ export default {
 		step: {
 			0: {
 				title: "Scanning of engine values",
-				text: 'Run the car engine and press the "Next" button'
+				text: "Run the car engine and press the \"Next\" button"
 			},
 			1: {
 				title: "Scanning doors",
@@ -776,7 +829,7 @@ export default {
 					"4. Open the passenger door behind on the right and close it;\n" +
 					"5. Open the passenger door in front on the right and close it.\n" +
 					"\n" +
-					'Return to the salon and click the "Next" button'
+					"Return to the salon and click the \"Next\" button"
 			},
 			2: {
 				title: "Scanning of signal values",
@@ -787,7 +840,7 @@ export default {
 					"4. Turn on the left turn signal, then the right, turn off;\n" +
 					"5. Turn on the emergency stop signal, turn it off.\n" +
 					"\n" +
-					'Click "Next"'
+					"Click \"Next\""
 			},
 			3: {
 				title: "Scanning of climate values",
@@ -797,7 +850,7 @@ export default {
 					"3. Change the direction of the air flow;\n" +
 					"4. Change the speed of the air flow.\n" +
 					"\n" +
-					'Click "Next"'
+					"Click \"Next\""
 			},
 			4: {
 				title: "Scanning of movement values",
@@ -806,7 +859,7 @@ export default {
 					"2. Turn on the rear gear and hand back a little;\n" +
 					"3. Turn on the automatic transmission mode or switch the PMPP transmission and start moving forward.\n" +
 					"\n" +
-					'After completing the movement of the car, drown out the engine and press the "finish" button'
+					"After completing the movement of the car, drown out the engine and press the \"finish\" button"
 			}
 		},
 		notify: {

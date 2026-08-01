@@ -59,7 +59,7 @@ import Card from "@/components/cards/Card.vue";
 import SwitchCardItem from "@/components/cards/SwitchCardItem.vue";
 import ViewSettingDialog from "@/components/ViewSettingDialog.vue";
 
-import { IMenuItem } from "@/components/MenuDots.vue";
+import { IMenuItem } from "@/components/IMenuItem";
 
 export default {
 	name: "LcdCard",

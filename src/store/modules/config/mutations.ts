@@ -546,7 +546,7 @@ export const setEngine = (state: any, data: DataView) =>
 /**
  * Изменить значения конфигурации ДВС
  * @param {any} state
- * @param {IEngineConfig} value Новые значения
+ * @param {showDays: boolean; totalWorktime: BigInt; totalCountRPM: BigInt } value Новые значения
  */
 export const setEngineConfig = (
 	state: any,
@@ -558,6 +558,25 @@ export const setEngineConfig = (
 		state.engine.showDays = showDays;
 		state.engine.totalWorktime = totalWorktime;
 		state.engine.totalCountRPM = totalCountRPM;
+		canbus.query(state.engine);
+	}
+};
+
+/**
+ * Изменить значения конфигурации масла ДВС
+ * @param {any} state
+ * @param {oilDurationSec: number; oilDistanceMeters: number; oilHoursLimit: number } value Новые значения
+ */
+export const setEngineOilConfig = (
+	state: any,
+	{ oilDurationSec, oilDistanceMeters, oilHoursLimit }: { oilDurationSec: number; oilDistanceMeters: number; oilHoursLimit: number }
+) =>
+{
+	if (state.engine.isData)
+	{
+		state.engine.oilDurationSec = oilDurationSec;
+		state.engine.oilDistanceMeters = oilDistanceMeters;
+		state.engine.oilHoursLimit = oilHoursLimit;
 		canbus.query(state.engine);
 	}
 };

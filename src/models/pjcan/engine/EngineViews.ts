@@ -27,6 +27,12 @@ export const API_ENGINE_VIEW_LOAD_EVENT = "EngineViewLoad";
 export const API_ENGINE_VIEW_THROTTLE_EXEC = 0x9a;
 export const API_ENGINE_VIEW_THROTTLE_EVENT = "EngineViewThrottle";
 
+export const API_ENGINE_VIEW_OIL_LIFE_PERCENT_EXEC = 0x9b;
+export const API_ENGINE_VIEW_OIL_LIFE_PERCENT_EVENT = "EngineViewOilLifePercent";
+
+export const API_ENGINE_VIEW_OIL_LIFE_DISTANCE_EXEC = 0x9c;
+export const API_ENGINE_VIEW_OIL_LIFE_DISTANCE_EVENT = "EngineViewOilLifeDistance";
+
 /** Модель параметров отображения данных ДВС */
 export class EngineViews extends BaseModel implements IEngineViews
 {
@@ -37,9 +43,11 @@ export class EngineViews extends BaseModel implements IEngineViews
 		coolant: BluetoothStruct.struct(ViewConfig.struct),
 		rpm: BluetoothStruct.struct(ViewConfig.struct),
 		load: BluetoothStruct.struct(ViewConfig.struct),
-		throttle: BluetoothStruct.struct(ViewConfig.struct)
+		throttle: BluetoothStruct.struct(ViewConfig.struct),
+		oilLifePercent: BluetoothStruct.struct(ViewConfig.struct),
+		oilLifeDistance: BluetoothStruct.struct(ViewConfig.struct)
 	};
-	static size: number = 28;
+	static size: number = 36;
 
 	enabled = new ViewConfig(API_ENGINE_VIEW_ENABLED_EXEC);
 	totalWorktime = new ViewConfig(API_ENGINE_VIEW_TOTAL_WORKTIME_EXEC);
@@ -48,6 +56,8 @@ export class EngineViews extends BaseModel implements IEngineViews
 	rpm = new ViewConfig(API_ENGINE_VIEW_RPM_EXEC);
 	load = new ViewConfig(API_ENGINE_VIEW_LOAD_EXEC);
 	throttle = new ViewConfig(API_ENGINE_VIEW_THROTTLE_EXEC);
+	oilLifePercent = new ViewConfig(API_ENGINE_VIEW_OIL_LIFE_PERCENT_EXEC);
+	oilLifeDistance = new ViewConfig(API_ENGINE_VIEW_OIL_LIFE_DISTANCE_EXEC);
 
 	constructor(data?: DataView)
 	{
@@ -71,6 +81,8 @@ export class EngineViews extends BaseModel implements IEngineViews
 			this.rpm.isData = true;
 			this.load.isData = true;
 			this.throttle.isData = true;
+			this.oilLifePercent.isData = true;
+			this.oilLifeDistance.isData = true;
 		}
 		return result;
 	}

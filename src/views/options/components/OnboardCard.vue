@@ -62,7 +62,7 @@ import draggable from "vuedraggable";
 import Card from "@/components/cards/Card.vue";
 import IconCustom from "@/components/common/icon-custom/IconCustom.vue";
 
-import { IMenuItem } from "@/components/MenuDots.vue";
+import { IMenuItem } from "@/components/IMenuItem";
 import { IOnboardCard } from "@/models/interfaces/IOnboardCard";
 import { TCarModel } from "@/models/pjcan/onboard";
 
