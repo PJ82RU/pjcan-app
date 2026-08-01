@@ -54,7 +54,7 @@ import {
 	API_ENGINE_VIEW_RPM_EVENT,
 	API_ENGINE_VIEW_THROTTLE_EVENT,
 	API_ENGINE_VIEW_TOTAL_COUNT_RPM_EVENT,
-	API_ENGINE_VIEW_TOTAL_WORKTIME_EVENT, EngineConfig, EngineValue
+	API_ENGINE_VIEW_TOTAL_WORKTIME_EVENT, EngineConfig, EngineValue, EngineViews
 } from "@/models/pjcan/engine";
 import {
 	API_FUEL_CONFIG_EVENT,
@@ -127,6 +127,7 @@ export default {
 			EngineConfig.update(version);
 			EngineValue.update(version);
 			EngineAction.update(version);
+			EngineViews.update(version);
 
 			HeadUnitValue.update(version);
 			TemperatureValue.update(version);

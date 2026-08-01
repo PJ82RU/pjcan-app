@@ -2,6 +2,7 @@ import { BluetoothStruct } from "@/components/bluetooth";
 import { BaseModel } from "../base";
 import { ViewConfig } from "../view";
 import { IEngineViews } from "./IEngineViews";
+import { IVersion } from "@/models/pjcan/version";
 
 export const API_ENGINE_VIEW_EXEC = 0x93;
 export const API_ENGINE_VIEW_EVENT = "EngineView";
@@ -36,18 +37,44 @@ export const API_ENGINE_VIEW_OIL_LIFE_DISTANCE_EVENT = "EngineViewOilLifeDistanc
 /** Модель параметров отображения данных ДВС */
 export class EngineViews extends BaseModel implements IEngineViews
 {
-	static struct: any = {
-		enabled: BluetoothStruct.struct(ViewConfig.struct),
-		totalWorktime: BluetoothStruct.struct(ViewConfig.struct),
-		totalCountRPM: BluetoothStruct.struct(ViewConfig.struct),
-		coolant: BluetoothStruct.struct(ViewConfig.struct),
-		rpm: BluetoothStruct.struct(ViewConfig.struct),
-		load: BluetoothStruct.struct(ViewConfig.struct),
-		throttle: BluetoothStruct.struct(ViewConfig.struct),
-		oilLifePercent: BluetoothStruct.struct(ViewConfig.struct),
-		oilLifeDistance: BluetoothStruct.struct(ViewConfig.struct)
-	};
-	static size: number = 36;
+	static struct: any;
+	static size: number;
+
+	/**
+	 * Обновить версию структуры
+	 * @param {IVersion} version Версия протокола
+	 */
+	static update(version?: IVersion): void
+	{
+		if (version && (version.major > 4 || (version.major === 4 && version.minor >= 2)))
+		{
+			EngineViews.struct = {
+				enabled: BluetoothStruct.struct(ViewConfig.struct),
+				totalWorktime: BluetoothStruct.struct(ViewConfig.struct),
+				totalCountRPM: BluetoothStruct.struct(ViewConfig.struct),
+				coolant: BluetoothStruct.struct(ViewConfig.struct),
+				rpm: BluetoothStruct.struct(ViewConfig.struct),
+				load: BluetoothStruct.struct(ViewConfig.struct),
+				throttle: BluetoothStruct.struct(ViewConfig.struct),
+				oilLifePercent: BluetoothStruct.struct(ViewConfig.struct),
+				oilLifeDistance: BluetoothStruct.struct(ViewConfig.struct)
+			};
+			EngineViews.size = 36;
+		}
+		else
+		{
+			EngineViews.struct = {
+				enabled: BluetoothStruct.struct(ViewConfig.struct),
+				totalWorktime: BluetoothStruct.struct(ViewConfig.struct),
+				totalCountRPM: BluetoothStruct.struct(ViewConfig.struct),
+				coolant: BluetoothStruct.struct(ViewConfig.struct),
+				rpm: BluetoothStruct.struct(ViewConfig.struct),
+				load: BluetoothStruct.struct(ViewConfig.struct),
+				throttle: BluetoothStruct.struct(ViewConfig.struct)
+			};
+			EngineViews.size = 28;
+		}
+	}
 
 	enabled = new ViewConfig(API_ENGINE_VIEW_ENABLED_EXEC);
 	totalWorktime = new ViewConfig(API_ENGINE_VIEW_TOTAL_WORKTIME_EXEC);
@@ -81,8 +108,8 @@ export class EngineViews extends BaseModel implements IEngineViews
 			this.rpm.isData = true;
 			this.load.isData = true;
 			this.throttle.isData = true;
-			this.oilLifePercent.isData = true;
-			this.oilLifeDistance.isData = true;
+			if (EngineViews.struct.oilLifePercent) this.oilLifePercent.isData = true;
+			if (EngineViews.struct.oilLifeDistance) this.oilLifeDistance.isData = true;
 		}
 		return result;
 	}
