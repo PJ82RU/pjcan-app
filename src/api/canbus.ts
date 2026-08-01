@@ -388,7 +388,9 @@ export class Canbus extends EventEmitter
 					// Меняем время проверки наличия новой версии прошивки на каждые 15 минут
 					this.startCheckVersion(900000);
 				})
-				.catch((): void => {});
+				.catch((): void =>
+				{
+				});
 		};
 
 		if (interval >= 5000)
@@ -434,7 +436,9 @@ export class Canbus extends EventEmitter
 					{
 						this.emit(API_DEVICE_ROLLBACK_EVENT, rollback);
 					})
-					.catch((): void => {})
+					.catch((): void =>
+					{
+					})
 					.finally((): void =>
 					{
 						this.emit(API_CANBUS_EVENT, this.status);
@@ -803,7 +807,9 @@ export class Canbus extends EventEmitter
 									? this.hardware.build === 0
 										? res?.v41a
 										: res?.v41b
-									: null
+									: this.hardware.minor === 2
+										? res?.v41
+										: null
 							: null;
 					rollback.current =
 						resVer?.current?.length === 4
