@@ -18,8 +18,8 @@
     "url": "/firmware/firmware.bin.a41e2c6dcb649dc943558ad6f3b9dbd1"
   },
   "v41": {
-    "current": [ 4,1,7,243 ],
-    "iv": "a541ee07282d074533df90aa1bb31e7e",
-    "url": "/firmware/firmware.bin.a541ee07282d074533df90aa1bb31e7e"
+    "current": [ 4,1,8,1 ],
+    "iv": "275d9944bf74667cd8ee921b088c0dcc",
+    "url": "/firmware/firmware.bin.275d9944bf74667cd8ee921b088c0dcc"
   }
 }
